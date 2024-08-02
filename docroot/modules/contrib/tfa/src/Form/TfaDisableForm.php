@@ -191,8 +191,10 @@ class TfaDisableForm extends FormBase {
     ]);
 
     // E-mail account to inform user that it has been disabled.
-    $params = ['account' => $account];
-    $this->mailManager->mail('tfa', 'tfa_disabled_configuration', $account->getEmail(), $account->getPreferredLangcode(), $params);
+    if ($account->getEmail()) {
+      $params = ['account' => $account];
+      $this->mailManager->mail('tfa', 'tfa_disabled_configuration', $account->getEmail(), $account->getPreferredLangcode(), $params);
+    }
 
     $this->messenger()->addStatus($this->t('TFA has been disabled.'));
     $form_state->setRedirect('tfa.overview', ['user' => $account->id()]);
@@ -207,8 +209,9 @@ class TfaDisableForm extends FormBase {
    *   The current state of the form.
    */
   public function cancelForm(array &$form, FormStateInterface $form_state) {
+    $account = $form_state->get('account');
     $this->messenger()->addWarning($this->t('TFA Disable cancelled.'));
-    $form_state->setRedirect('tfa.overview', ['user' => $this->currentUser()->id()]);
+    $form_state->setRedirect('tfa.overview', ['user' => $account->id()]);
   }
 
 }

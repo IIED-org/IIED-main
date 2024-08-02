@@ -2,11 +2,17 @@
 
 namespace Drupal\devel\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Form\ConfirmFormHelper;
+use Drupal\Core\Form\ConfirmFormInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Form\ConfirmFormInterface;
-use Drupal\Core\Form\ConfirmFormHelper;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Edit config variable form.
@@ -14,9 +20,69 @@ use Drupal\Core\Url;
 class ConfigDeleteForm extends FormBase implements ConfirmFormInterface {
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
+   * Logger service.
+   */
+  protected LoggerInterface $logger;
+
+  /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
+   * Constructs a new ConfigDeleteForm object.
+   *
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
+   */
+  public function __construct(
+    MessengerInterface $messenger,
+    LoggerInterface $logger,
+    ConfigFactoryInterface $config_factory,
+    RequestStack $request_stack,
+    TranslationInterface $string_translation
+  ) {
+    $this->messenger = $messenger;
+    $this->logger = $logger;
+    $this->configFactory = $config_factory;
+    $this->requestStack = $request_stack;
+    $this->stringTranslation = $string_translation;
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('messenger'),
+      $container->get('logger.channel.devel'),
+      $container->get('config.factory'),
+      $container->get('request_stack'),
+      $container->get('string_translation'),
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId(): string {
     return 'devel_config_system_delete_form';
   }
 
@@ -24,10 +90,9 @@ class ConfigDeleteForm extends FormBase implements ConfirmFormInterface {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $config_name = '') {
-    $config = $this->config($config_name);
-
+    $config = $this->configFactory->get($config_name);
     if ($config === FALSE || $config->isNew()) {
-      $this->messenger()->addError($this->t('Config @name does not exist in the system.', ['@name' => $config_name]));
+      $this->messenger->addError($this->t('Config @name does not exist in the system.', ['@name' => $config_name]));
       return;
     }
 
@@ -54,7 +119,7 @@ class ConfigDeleteForm extends FormBase implements ConfirmFormInterface {
           [$this, 'submitForm'],
       ],
     ];
-    $form['actions']['cancel'] = ConfirmFormHelper::buildCancelLink($this, $this->getRequest());
+    $form['actions']['cancel'] = ConfirmFormHelper::buildCancelLink($this, $this->requestStack->getCurrentRequest());
 
     return $form;
   }
@@ -62,18 +127,18 @@ class ConfigDeleteForm extends FormBase implements ConfirmFormInterface {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $config_name = $form_state->getValue('name');
     try {
-      $this->configFactory()->getEditable($config_name)->delete();
-      $this->messenger()->addStatus($this->t('Configuration variable %variable was successfully deleted.', ['%variable' => $config_name]));
-      $this->logger('devel')->info('Configuration variable %variable was successfully deleted.', ['%variable' => $config_name]);
+      $this->configFactory->getEditable($config_name)->delete();
+      $this->messenger->addStatus($this->t('Configuration variable %variable was successfully deleted.', ['%variable' => $config_name]));
+      $this->logger->info('Configuration variable %variable was successfully deleted.', ['%variable' => $config_name]);
 
       $form_state->setRedirectUrl($this->getCancelUrl());
     }
     catch (\Exception $e) {
-      $this->messenger()->addError($e->getMessage());
-      $this->logger('devel')->error('Error deleting configuration variable %variable : %error.', ['%variable' => $config_name, '%error' => $e->getMessage()]);
+      $this->messenger->addError($e->getMessage());
+      $this->logger->error('Error deleting configuration variable %variable : %error.', ['%variable' => $config_name, '%error' => $e->getMessage()]);
     }
   }
 
@@ -115,7 +180,7 @@ class ConfigDeleteForm extends FormBase implements ConfirmFormInterface {
   /**
    * {@inheritdoc}
    */
-  public function getFormName() {
+  public function getFormName(): string {
     return 'confirm';
   }
 

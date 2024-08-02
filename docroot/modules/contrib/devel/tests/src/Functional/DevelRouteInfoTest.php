@@ -24,7 +24,7 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
   /**
    * Tests routes info.
    */
-  public function testRouteList() {
+  public function testRouteList(): void {
     // Ensures that the routes info link is present on the devel menu and that
     // it points to the correct page.
     $this->drupalGet('');
@@ -96,12 +96,12 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
       $cell_operations = $cells[3];
       $actual_href = $cell_operations->findLink('Devel')->getAttribute('href');
       if ($expected['dynamic']) {
-        $parameters = ['query' => ['route_name' => $route_name]];
+        $options = ['query' => ['route_name' => $route_name]];
       }
       else {
-        $parameters = ['query' => ['path' => $expected['path']]];
+        $options = ['query' => ['path' => $expected['path']]];
       }
-      $expected_href = Url::fromRoute('devel.route_info.item', [], $parameters)->toString();
+      $expected_href = Url::fromRoute('devel.route_info.item', [], $options)->toString();
       $this->assertEquals($expected_href, $actual_href);
     }
 
@@ -115,7 +115,7 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
   /**
    * Tests route detail page.
    */
-  public function testRouteDetail() {
+  public function testRouteDetail(): void {
     $expected_title = 'Route detail';
     $xpath_warning_messages = '//div[@aria-label="Warning message"]';
 
@@ -127,7 +127,8 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
     $this->clickLink('Current route info');
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains($expected_title);
-    $expected_url = Url::fromRoute('devel.route_info.item', [], ['query' => ['path' => $path]]);
+    // Absolute needed due to https://www.drupal.org/project/drupal/issues/3398551#comment-15313236.
+    $expected_url = Url::fromRoute('devel.route_info.item', [], ['absolute' => TRUE, 'query' => ['path' => $path]]);
     $this->assertSession()->addressEquals($expected_url->toString());
     $this->assertSession()->elementNotExists('xpath', $xpath_warning_messages);
 
@@ -140,7 +141,7 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
     $this->clickLink('Current route info');
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains($expected_title);
-    $expected_url = Url::fromRoute('devel.route_info.item', [], ['query' => ['path' => $path]]);
+    $expected_url = Url::fromRoute('devel.route_info.item', [], ['absolute' => TRUE, 'query' => ['path' => $path]]);
     $this->assertSession()->addressEquals($expected_url->toString());
     $this->assertSession()->elementNotExists('xpath', $xpath_warning_messages);
 

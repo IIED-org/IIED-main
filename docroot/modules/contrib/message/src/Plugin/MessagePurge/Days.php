@@ -2,7 +2,6 @@
 
 namespace Drupal\message\Plugin\MessagePurge;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Queue\QueueInterface;

@@ -62,7 +62,7 @@ final class LocalOverrideTest extends AcquiaSearchTestCase {
     self::assertEquals(FALSE, $event->isReadOnly());
   }
 
-  public function configData() {
+  public static function configData() {
     yield 'config_override_core foo' => [
       'foo',
       '',

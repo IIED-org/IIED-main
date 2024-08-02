@@ -30,6 +30,8 @@ Content translation redirects.
 
 ## Maintainers
 
+<!--- cspell:disable -->
+
 Andrey Tymchuk ([WalkingDexter](https://www.drupal.org/u/walkingdexter))
 
 Ongoing development is sponsored by [Initlab](https://www.drupal.org/initlab).

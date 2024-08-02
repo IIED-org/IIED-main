@@ -2,17 +2,16 @@
 
 namespace Drupal\purge\Plugin\Purge\DiagnosticCheck;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\purge\IteratingServiceBaseTrait;
 use Drupal\purge\ServiceBase;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Provides a service that interacts with diagnostic checks.
  */
 class DiagnosticsService extends ServiceBase implements DiagnosticsServiceInterface {
-  use ContainerAwareTrait;
   use IteratingServiceBaseTrait;
 
   /**
@@ -41,13 +40,23 @@ class DiagnosticsService extends ServiceBase implements DiagnosticsServiceInterf
   private $purgeQueue;
 
   /**
+   * The container service.
+   *
+   * @var \Symfony\Component\DependencyInjection\ContainerInterface
+   */
+  protected $container;
+
+  /**
    * Construct the diagnostics service.
    *
    * @param \Drupal\Component\Plugin\PluginManagerInterface $pluginManager
    *   The plugin manager for this service.
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   The container service.
    */
-  public function __construct(PluginManagerInterface $pluginManager) {
+  public function __construct(PluginManagerInterface $pluginManager, ContainerInterface $container) {
     $this->pluginManager = $pluginManager;
+    $this->container = $container;
   }
 
   /**

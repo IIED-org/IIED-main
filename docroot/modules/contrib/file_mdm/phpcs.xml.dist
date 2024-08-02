@@ -8,10 +8,10 @@
   <exclude-pattern>./README.md</exclude-pattern>
 
   <!--Use Drupal code rule.-->
-  <rule ref="../../../vendor/drupal/coder/coder_sniffer/Drupal"></rule>
+  <rule ref="vendor/drupal/coder/coder_sniffer/Drupal"></rule>
 
   <!--Use DrupalPractice code rule.-->
-  <rule ref="../../../vendor/drupal/coder/coder_sniffer/DrupalPractice"></rule>
+  <rule ref="vendor/drupal/coder/coder_sniffer/DrupalPractice"></rule>
 
   <rule ref="Drupal.Commenting.DocComment">
     <exclude name="Drupal.Commenting.DocComment.LongFullStop"/>

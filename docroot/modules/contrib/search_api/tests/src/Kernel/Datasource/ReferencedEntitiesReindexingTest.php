@@ -180,7 +180,7 @@ class ReferencedEntitiesReindexingTest extends KernelTestBase {
    *
    * @see \Drupal\Tests\search_api\Kernel\ReferencedEntitiesReindexingTest::testReferencedEntityChanged()
    */
-  public function referencedEntityChangedDataProvider(): array {
+  public static function referencedEntityChangedDataProvider(): array {
     $tests = [];
     foreach (['child', 'unrelated'] as $child) {
       foreach (['indexed', 'not_indexed'] as $field) {

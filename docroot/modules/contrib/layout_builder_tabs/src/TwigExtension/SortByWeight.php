@@ -4,6 +4,7 @@ namespace Drupal\layout_builder_tabs\TwigExtension;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+
 /**
  * Class to provide a sort by '#weight' for arrays within Twig.
  */
@@ -14,7 +15,7 @@ class SortByWeight extends AbstractExtension {
    */
   public function getFilters() {
     return [
-      new TwigFilter('sortbyweight', [$this, 'performSort', 'is_safe' => ['html']]),
+      new TwigFilter('sortbyweight', [$this, 'performSort']),
     ];
   }
 
@@ -33,6 +34,9 @@ class SortByWeight extends AbstractExtension {
       return $array;
     }
     uasort($array, function ($item1, $item2) {
+      if (!isset($item1['#weight']) || !isset($item2['#weight'])) {
+        return 1;
+      }
       if (empty($item1['#weight']) || empty($item2['#weight'])) {
         return 0;
       }

@@ -16,6 +16,9 @@ linkchecker.settings:
     base_path:
       type: string
       label: 'Base path of internal URLs'
+    search_published_contents_only:
+      type: boolean
+      label: 'Search published contents only'
     extract:
       type: mapping
       label: 'Link extraction'

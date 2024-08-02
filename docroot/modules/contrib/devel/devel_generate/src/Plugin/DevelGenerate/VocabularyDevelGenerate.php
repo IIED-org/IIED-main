@@ -2,11 +2,16 @@
 
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
-use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Language\Language;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\devel_generate\DevelGenerateBase;
+use Drupal\taxonomy\VocabularyStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -32,10 +37,8 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
 
   /**
    * The vocabulary storage.
-   *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
-  protected $vocabularyStorage;
+  protected VocabularyStorageInterface $vocabularyStorage;
 
   /**
    * Constructs a new VocabularyDevelGenerate object.
@@ -46,29 +49,54 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $entity_storage
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
+   * @param \Drupal\taxonomy\VocabularyStorageInterface $vocabulary_storage
    *   The vocabulary storage.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $entity_storage) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->vocabularyStorage = $entity_storage;
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    EntityTypeManagerInterface $entity_type_manager,
+    MessengerInterface $messenger,
+    LanguageManagerInterface $language_manager,
+    ModuleHandlerInterface $module_handler,
+    TranslationInterface $string_translation,
+    VocabularyStorageInterface $vocabulary_storage
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $messenger, $language_manager, $module_handler, $string_translation);
+    $this->vocabularyStorage = $vocabulary_storage;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
+    $entity_type_manager = $container->get('entity_type.manager');
     return new static(
       $configuration, $plugin_id, $plugin_definition,
-      $container->get('entity_type.manager')->getStorage('taxonomy_vocabulary')
+      $entity_type_manager,
+      $container->get('messenger'),
+      $container->get('language_manager'),
+      $container->get('module_handler'),
+      $container->get('string_translation'),
+      $entity_type_manager->getStorage('taxonomy_vocabulary')
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $form['num'] = [
       '#type' => 'number',
       '#title' => $this->t('Number of vocabularies?'),
@@ -96,7 +124,7 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
   /**
    * {@inheritdoc}
    */
-  public function generateElements(array $values) {
+  public function generateElements(array $values): void {
     if ($values['kill']) {
       $this->deleteVocabularies();
       $this->setMessage($this->t('Deleted existing vocabularies.'));
@@ -111,7 +139,7 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
   /**
    * Deletes all vocabularies.
    */
-  protected function deleteVocabularies() {
+  protected function deleteVocabularies(): void {
     $vocabularies = $this->vocabularyStorage->loadMultiple();
     $this->vocabularyStorage->delete($vocabularies);
   }
@@ -127,7 +155,7 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
    * @return array
    *   Array containing the generated vocabularies id.
    */
-  protected function generateVocabularies($records, $maxlength = 12) {
+  protected function generateVocabularies(int $records, int $maxlength = 12): array {
     $vocabularies = [];
 
     // Insert new data:
@@ -137,7 +165,7 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
       $vocabulary = $this->vocabularyStorage->create([
         'name' => $name,
         'vid' => mb_strtolower($name),
-        'langcode' => Language::LANGCODE_NOT_SPECIFIED,
+        'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
         'description' => "Description of $name",
         'hierarchy' => 1,
         'weight' => mt_rand(0, 10),
@@ -160,7 +188,7 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
   /**
    * {@inheritdoc}
    */
-  public function validateDrushParams(array $args, array $options = []) {
+  public function validateDrushParams(array $args, array $options = []): array {
     $values = [
       'num' => array_shift($args),
       'kill' => $options['kill'],

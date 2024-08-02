@@ -3,6 +3,7 @@
 namespace Drupal\search_api_autocomplete;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\BundlePermissionHandlerTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class Permissions implements ContainerInjectionInterface {
 
+  use BundlePermissionHandlerTrait;
   use StringTranslationTrait;
 
   /**
@@ -47,13 +49,20 @@ class Permissions implements ContainerInjectionInterface {
    *   A list of permission definitions, keyed by permission machine name.
    */
   public function bySearch() {
+    return $this->generatePermissions($this->storage->loadMultiple(), [$this, 'buildPermissions']);
+  }
+
+  /**
+   * Returns a list of permissions for a single configured search.
+   *
+   * @return array
+   *   An associative array of permission names and descriptions.
+   */
+  public function buildPermissions(SearchInterface $search) {
     $perms = [];
-    /** @var \Drupal\search_api_autocomplete\SearchInterface $search */
-    foreach ($this->storage->loadMultiple() as $id => $search) {
-      $perms['use search_api_autocomplete for ' . $id] = [
-        'title' => $this->t('Use autocomplete for the %search search', ['%search' => $search->label()]),
-      ];
-    }
+    $perms['use search_api_autocomplete for ' . $search->id()] = [
+      'title' => $this->t('Use autocomplete for the %search search', ['%search' => $search->label()]),
+    ];
     return $perms;
   }
 

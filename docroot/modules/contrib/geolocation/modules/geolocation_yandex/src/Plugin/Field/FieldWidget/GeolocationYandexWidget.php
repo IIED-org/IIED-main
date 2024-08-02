@@ -4,8 +4,8 @@ namespace Drupal\geolocation_yandex\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidgetBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidgetBase;
 
 /**
  * Plugin implementation of the 'geolocation_yandex' widget.

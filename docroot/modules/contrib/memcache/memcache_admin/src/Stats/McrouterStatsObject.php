@@ -14,25 +14,25 @@ class McrouterStatsObject extends MemcacheStatsObject implements MemcacheStatsIn
   use StringTranslationTrait;
 
   /**
-   * @var array $stats
+   * Statistics list.
+   *
+   * @var array
    */
   protected $stats;
 
-  public function __construct(array $raw_stats) {
-    $this->stats = $raw_stats;
-  }
-
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getExtension(): string {
     return $this->stats['version'] ?? self::NA;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getServerTime(): string {
+    // @phpcs:ignore
+    // @phpstan-ignore-next-line
     return isset($this->stats['time']) ? \Drupal::service('date.formatter')->format($this->stats['time']) : self::NA;
   }
 
@@ -44,14 +44,14 @@ class McrouterStatsObject extends MemcacheStatsObject implements MemcacheStatsIn
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getCurrentConnections(): string {
     return self::NA;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getTotalConnections(): string {
     return self::NA;
@@ -65,59 +65,59 @@ class McrouterStatsObject extends MemcacheStatsObject implements MemcacheStatsIn
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getCounters(): string {
     return self::NA;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getTransferred(): string {
     return self::NA;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getConnectionAvg(): string {
     return self::NA;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getMemory(): string {
     return self::NA;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getEvictions(): string {
     return isset($this->stats['evictions']) ? number_format($this->stats['evictions']) : self::NA;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
-  public function setRaw(array $raw_data) {
+  public function setRaw(array $raw_data): void {
     $this->stats = $raw_data;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getRaw(): array {
     return $this->stats;
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function getVersion(): string {
-    return isset($this->stats['version']) ? (string)$this->stats['version'] : self::NA;
+    return isset($this->stats['version']) ? (string) $this->stats['version'] : self::NA;
   }
 
 }

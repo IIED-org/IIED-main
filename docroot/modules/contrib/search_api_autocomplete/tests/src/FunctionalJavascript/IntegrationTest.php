@@ -3,6 +3,7 @@
 namespace Drupal\Tests\search_api_autocomplete\FunctionalJavascript;
 
 use Behat\Mink\Driver\BrowserKitDriver;
+use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api_autocomplete\Entity\Search;
 use Drupal\search_api_autocomplete\Tests\TestsHelper;
@@ -24,6 +25,7 @@ class IntegrationTest extends IntegrationTestBase {
    */
   protected static $modules = [
     'search_api_autocomplete_test',
+    'language',
   ];
 
   /**
@@ -70,6 +72,12 @@ class IntegrationTest extends IntegrationTestBase {
 
     $this->normalUser = $this->drupalCreateUser();
 
+    // For testing purposes, add a second language.
+    ConfigurableLanguage::create([
+      'id' => 'fr',
+      'label' => 'French',
+    ])->save();
+
     $this->setUpExampleStructure();
     $this->insertExampleContent();
   }
@@ -115,7 +123,7 @@ class IntegrationTest extends IntegrationTestBase {
 
     $this->click('[data-drupal-selector="edit-actions-submit"]');
     $this->logPageChange(NULL, 'POST');
-    $assert_session->pageTextContains('The settings have been saved. Please remember to set the permissions for the newly enabled searches.');
+    $assert_session->pageTextContains('The settings have been saved. Remember to set the permissions for the newly enabled searches.');
   }
 
   /**
@@ -358,9 +366,10 @@ class IntegrationTest extends IntegrationTestBase {
       ->save();
 
     $this->drupalGet($this->getAdminPath('edit'));
-    // This gets the request path to the "tests" directory.
-    $path = str_replace(DRUPAL_ROOT, '', dirname(dirname(__DIR__)));
-    $path .= '/search_api_autocomplete_test/core/custom_autocomplete_script.php';
+    $path = \Drupal::moduleHandler()
+      ->getModule('search_api_autocomplete')
+      ->getPath();
+    $path = "/$path/tests/search_api_autocomplete_test/core/custom_autocomplete_script.php";
     $this->click('input[name="suggesters[enabled][custom_script]"]');
     $page = $this->getSession()->getPage();
     $page->find('css', 'details[data-drupal-selector="edit-suggesters-settings-custom-script"] > summary')

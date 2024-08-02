@@ -2,8 +2,8 @@
 
 namespace Drupal\views_json_source\Plugin\views\sort;
 
-use Drupal\views\Plugin\views\sort\SortPluginBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Plugin\views\sort\SortPluginBase;
 
 /**
  * Base sort handler for views_json_source.

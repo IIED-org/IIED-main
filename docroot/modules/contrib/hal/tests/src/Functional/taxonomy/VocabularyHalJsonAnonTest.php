@@ -35,7 +35,7 @@ class VocabularyHalJsonAnonTest extends VocabularyResourceTestBase {
   /**
    * @todo Remove this override in https://www.drupal.org/node/2805281.
    */
-  public function testGet() {
+  public function testGet(): void {
     $this->markTestSkipped();
   }
 

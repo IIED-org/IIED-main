@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\file_mdm\Plugin\FileMetadata;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file_mdm\FileMetadataException;
+use Drupal\file_mdm\Plugin\Attribute\FileMetadata;
 
 /**
  * FileMetadata plugin for getimagesize.
- *
- * @FileMetadata(
- *   id = "getimagesize",
- *   title = @Translation("Getimagesize"),
- *   help = @Translation("File metadata plugin for PHP getimagesize()."),
- * )
  */
+#[FileMetadata(
+  id: 'getimagesize',
+  title: new TranslatableMarkup('Getimagesize'),
+  help: new TranslatableMarkup('File metadata plugin for PHP getimagesize().')
+)]
 class GetImageSize extends FileMetadataPluginBase {
 
   public function getSupportedKeys(array $options = NULL): array {
@@ -41,7 +42,7 @@ class GetImageSize extends FileMetadataPluginBase {
    */
   protected function validateKey(mixed $key, string $method): bool {
     if (!in_array($key, $this->getSupportedKeys(), TRUE)) {
-      throw new FileMetadataException("Invalid metadata key '{$key}' specified", $this->getPluginId(), $method);
+      throw new FileMetadataException(sprintf("Invalid metadata key '%s' specified", var_export($key, TRUE)), $this->getPluginId(), $method);
     }
     return TRUE;
   }

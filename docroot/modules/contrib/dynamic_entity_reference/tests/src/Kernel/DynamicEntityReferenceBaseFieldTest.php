@@ -2,13 +2,13 @@
 
 namespace Drupal\Tests\dynamic_entity_reference\Kernel;
 
-use Prophecy\PhpUnit\ProphecyTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\entity_test\Entity\EntityTestMul;
 use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\Tests\SchemaCheckTestTrait;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Tests for the dynamic entity reference base field.

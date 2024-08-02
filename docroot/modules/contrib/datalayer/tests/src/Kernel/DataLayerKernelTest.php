@@ -12,6 +12,8 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\node\Entity\NodeType;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -261,6 +263,7 @@ class DataLayerKernelTest extends KernelTestBase {
       $request->attributes->set(RouteObjectInterface::ROUTE_OBJECT, new Route('/node/{node}', ['node' => 1]));
       $request->attributes->set(RouteObjectInterface::ROUTE_NAME, 'entity.node.canonical');
       $request->attributes->set('node', $this->node);
+      $request->setSession(new Session(new MockArraySessionStorage()));
       $this->container->get('request_stack')->push($request);
     }
   }

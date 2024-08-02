@@ -3,8 +3,8 @@
 namespace Drupal\geolocation_geometry_natural_earth_us_states\Plugin\geolocation\GeolocationGeometryData;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Shapefile\ShapefileException;
 use Drupal\geolocation_geometry_data\GeolocationGeometryDataBase;
+use Shapefile\ShapefileException;
 
 /**
  * Import US states.

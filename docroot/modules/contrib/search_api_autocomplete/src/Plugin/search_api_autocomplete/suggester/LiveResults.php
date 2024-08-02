@@ -164,7 +164,7 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
     $form['view_modes'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('View modes'),
-      '#description' => $this->t('Please select the view modes to use for live results.'),
+      '#description' => $this->t('Select the view modes to use for live results.'),
       '#states' => [
         'invisible' => [
           ':input[name="suggesters[settings][live_results][suggest_keys]"]' => [

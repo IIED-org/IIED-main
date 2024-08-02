@@ -77,10 +77,8 @@ services:
   # prevent all purges in the first place.
   purge.diagnostics:
     class: Drupal\purge\Plugin\Purge\DiagnosticCheck\DiagnosticsService
-    arguments: ['@plugin.manager.purge.diagnostics']
+    arguments: ['@plugin.manager.purge.diagnostics', '@service_container']
     public: true
-    calls:
-    - [setContainer, ['@service_container']]
   plugin.manager.purge.diagnostics:
     class:  Drupal\purge\Plugin\Purge\DiagnosticCheck\PluginManager
     parent: default_plugin_manager
@@ -126,10 +124,8 @@ services:
   # of the header to be send out and can override header value formatting.
   purge.tagsheaders:
     class: Drupal\purge\Plugin\Purge\TagsHeader\TagsHeadersService
-    arguments: ['@plugin.manager.purge.tagsheader']
+    arguments: ['@plugin.manager.purge.tagsheader', '@service_container']
     public: true
-    calls:
-    - [setContainer, ['@service_container']]
   purge.tagsheaders.cacheable_response_subscriber:
     class: Drupal\purge\EventSubscriber\CacheableResponseSubscriber
     arguments: ['@purge.tagsheaders']
@@ -140,3 +136,45 @@ services:
     class: Drupal\purge\Plugin\Purge\TagsHeader\PluginManager
     parent: default_plugin_manager
     public: false
+
+  # PURGE_DRUSH services. Moved over from drush.services.yml for Drush 12 compatibility.
+  purge_drush.debug_commands:
+    class: Drupal\purge\Drush\Commands\DebugCommands
+    arguments: ['@purge.logger']
+    tags:
+      - { name: drush.command }
+  purge_drush.diagnostics_command:
+    class: Drupal\purge\Drush\Commands\DiagnosticsCommand
+    arguments: ['@purge.diagnostics']
+    tags:
+      - { name: drush.command }
+  purge_drush.invalidate_command:
+    class: Drupal\purge\Drush\Commands\InvalidateCommand
+    arguments: ['@purge.invalidation.factory', '@purge.processors', '@purge.purgers']
+    tags:
+      - { name: drush.command }
+  purge_drush.processor_commands:
+    class: Drupal\purge\Drush\Commands\ProcessorCommands
+    arguments: ['@purge.processors']
+    tags:
+      - { name: drush.command }
+  purge_drush.purger_commands:
+    class: Drupal\purge\Drush\Commands\PurgerCommands
+    arguments: ['@purge.purgers']
+    tags:
+      - { name: drush.command }
+  purge_drush.queue_commands:
+    class: Drupal\purge\Drush\Commands\QueueCommands
+    arguments: ['@purge.processors', '@purge.purgers', '@purge.invalidation.factory', '@purge.queue', '@purge.queue.stats', '@purge.queuers']
+    tags:
+      - { name: drush.command }
+  purge_drush.queuer_commands:
+    class: Drupal\purge\Drush\Commands\QueuerCommands
+    arguments: ['@purge.queuers']
+    tags:
+      - { name: drush.command }
+  purge_drush.types_command:
+    class: Drupal\purge\Drush\Commands\TypesCommand
+    arguments: ['@purge.invalidation.factory', '@purge.purgers']
+    tags:
+      - { name: drush.command }

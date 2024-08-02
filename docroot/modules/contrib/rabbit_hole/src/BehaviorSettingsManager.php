@@ -49,9 +49,7 @@ class BehaviorSettingsManager implements BehaviorSettingsManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function loadBehaviorSettingsAsConfig($entity_type_id,
-    $entity_id = NULL) {
-
+  public function loadBehaviorSettingsAsConfig($entity_type_id, $entity_id = NULL) {
     $actual = $this->configFactory->get(
       'rabbit_hole.behavior_settings.'
         . $this->generateBehaviorSettingsFullId($entity_type_id, $entity_id));
@@ -87,8 +85,10 @@ class BehaviorSettingsManager implements BehaviorSettingsManagerInterface {
    * @return string
    *   The full id appropriate for a BehaviorSettings config entity.
    */
-  private function generateBehaviorSettingsFullId($entity_type_id,
-    $entity_id = '') {
+  private function generateBehaviorSettingsFullId(
+    $entity_type_id,
+    $entity_id = '',
+  ) {
     return $entity_type_id . (isset($entity_id) ? '_' . $entity_id : '');
   }
 

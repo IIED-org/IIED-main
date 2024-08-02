@@ -5,19 +5,19 @@
  * Contains multiple_registration.module.
  */
 
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
-use Drupal\Core\Render\Element;
-use Drupal\Core\Link;
-use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\WidgetBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\multiple_registration\Controller\MultipleRegistrationController;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\Entity\EntityFormDisplay;
-use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
-use Drupal\Core\Block\BlockPluginInterface;
-use Drupal\Core\Field\WidgetBase;
 use Drupal\user\UserInterface;
 use Drupal\views\ViewExecutable;
 
@@ -200,8 +200,10 @@ function multiple_registration_form_alter(&$form, FormStateInterface $form_state
           $field_roles_required = array_filter($field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form_required', []));
           if (!empty($field_roles)) {
             // If something was selected.
-            $form[$field_name]['#access'] = MultipleRegistrationController::checkFieldAccess($field_roles);
-            $form[$field_name]['widget']['#required'] = MultipleRegistrationController::checkFieldAccess($field_roles_required);
+            if ($form[$field_name]['#access'] !== false) {
+              $form[$field_name]['#access'] = MultipleRegistrationController::checkFieldAccess($field_roles);
+              $form[$field_name]['widget']['#required'] = MultipleRegistrationController::checkFieldAccess($field_roles_required);
+            }
           }
         }
       }
@@ -231,7 +233,7 @@ function multiple_registration_form_alter(&$form, FormStateInterface $form_state
 function _multiple_registration_rid(array $form, FormStateInterface $form_state) {
   $rid = $form_state->getValue('multiple_registration_rid');
   $uid = $form_state->getValue('uid');
-  $config = \Drupal::config('multiple_registration.create_registration_page_form_config');
+  $config = \Drupal::config('multiple_registration.create_registration_page_form_config')->getOriginal();
 
   if ($rid && $uid) {
     $connection = Database::getConnection();
@@ -246,7 +248,7 @@ function _multiple_registration_rid(array $form, FormStateInterface $form_state)
   }
 
   // Redirect users to custom path.
-  if ($redirectPath = $config->get('roles')[$rid]['redirect_path']) {
+  if ($redirectPath = $config[$rid]['redirect_path']) {
     $form_state->setRedirectUrl(Url::fromUserInput($redirectPath));
   }
 }
@@ -377,12 +379,12 @@ function multiple_registration_entity_form_display_alter(EntityFormDisplayInterf
     $is_user_edit_form = $route_name === 'entity.user.edit_form' && $context['form_mode'] === 'default';
 
     if ($context['entity_type'] === 'user' && ($is_user_register_form || $is_user_edit_form)) {
-      $config = \Drupal::config('multiple_registration.create_registration_page_form_config');
+      $config = \Drupal::config('multiple_registration.create_registration_page_form_config')->getOriginal();
 
       switch ($route_name) {
         case 'multiple_registration.role_registration_page':
           $rid = \Drupal::routeMatch()->getParameter('rid');
-          $custom_form_mode = $config->get('roles')[$rid]['form_mode_register'] ?? 'register';
+          $custom_form_mode = $config[$rid]['form_mode_register'] ?: 'register';
           break;
 
         case 'entity.user.edit_form':
@@ -394,7 +396,7 @@ function multiple_registration_entity_form_display_alter(EntityFormDisplayInterf
           $query->condition('mr.uid', $uid);
           $query->fields('mr', ['rid']);
           $rid = $query->execute()->fetchField();
-          $custom_form_mode = $rid ? $config->get('roles')[$rid]['form_mode_edit'] : 'default';
+          $custom_form_mode = $rid ? $config[$rid]['form_mode_edit'] : 'default';
           break;
       }
 
@@ -461,7 +463,7 @@ function multiple_registration_handle_user_entity($entity) {
   // Get all available roles.
   $users_roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple();
   if (!empty($required_roles)) {
-    $config_roles = $config->get('roles');
+    $config_roles = $config->getOriginal();
     foreach ($required_roles as $user_role) {
       if (!empty($config_roles[$user_role]['form_mode_edit'])) {
         multiple_registration_update_registration_table($entity_id, $user_role);

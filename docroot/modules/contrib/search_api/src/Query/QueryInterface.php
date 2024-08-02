@@ -291,8 +291,8 @@ interface QueryInterface extends ConditionSetInterface {
    * Retrieves the error message explaining why this query was aborted, if any.
    *
    * @return \Drupal\Component\Render\MarkupInterface|string|null
-   *   An error message, if set, or NULL if none was set. Please be aware that
-   *   a NULL message does not have to mean that the query was not aborted.
+   *   An error message, if set, or NULL if none was set. Be aware that a NULL
+   *   message does not have to mean that the query was not aborted.
    */
   public function getAbortMessage();
 

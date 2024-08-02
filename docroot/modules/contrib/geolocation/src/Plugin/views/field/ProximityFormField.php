@@ -2,14 +2,14 @@
 
 namespace Drupal\geolocation\Plugin\views\field;
 
-use Drupal\Core\Render\Element;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\geolocation\LocationManager;
+use Drupal\Core\Render\Element;
 use Drupal\geolocation\LocationInputManager;
+use Drupal\geolocation\LocationManager;
 use Drupal\geolocation\ProximityTrait;
-use Drupal\Component\Utility\NestedArray;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Field handler for geolocation field.

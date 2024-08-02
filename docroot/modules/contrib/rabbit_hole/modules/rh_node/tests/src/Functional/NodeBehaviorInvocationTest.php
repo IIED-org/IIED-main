@@ -19,7 +19,7 @@ class NodeBehaviorInvocationTest extends RabbitHoleBehaviorInvocationTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_node', 'node'];
+  protected static $modules = ['rh_node', 'node'];
 
   const TEST_BUNDLE = 'rh_node_test_content_type';
 

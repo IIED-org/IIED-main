@@ -155,18 +155,11 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
     // If file is fetched and use_imagecache_root is set, original is used.
     $paths = [$relative_path];
 
-    // Image style file conversion support.
-    $unconverted_path = static::getFilePathWithoutConvertedExtension($relative_path);
-    if ($unconverted_path !== $relative_path) {
-      if ($config->get('use_imagecache_root')) {
-        // Check the unconverted file path first in order to use the local
-        // original image.
-        array_unshift($paths, $unconverted_path);
-      }
-      else {
-        // Check the unconverted path after the image derivative.
-        $paths[] = $unconverted_path;
-      }
+    // Webp support.
+    $is_webp = FALSE;
+    if (strpos($relative_path, '.webp')) {
+      $paths[] = str_replace('.webp', '', $relative_path);
+      $is_webp = TRUE;
     }
 
     foreach ($paths as $relative_path) {
@@ -182,12 +175,12 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
       // Is this imagecache? Request the root file and let imagecache resize.
       // We check this first so locally added files have precedence.
       $original_path = $this->manager->styleOriginalPath($relative_path, TRUE);
-      if ($original_path) {
+      if ($original_path && !$is_webp) {
         if (file_exists($original_path)) {
           // Imagecache can generate it without our help.
           return;
         }
-        if ($config->get('use_imagecache_root') && $unconverted_path === $relative_path) {
+        if ($config->get('use_imagecache_root')) {
           // Config says: Fetch the original.
           $fetch_path = StreamWrapperManager::getTarget($original_path);
         }
@@ -235,6 +228,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
    *   Defaults to the $path when the $path does not have a double extension.
    *
    * @todo Use ImageStyleDownloadController method for a URI once https://www.drupal.org/project/drupal/issues/2786735 has been committed.
+   * @todo this is used by #3402972 but caused regressions.
    */
   public static function getFilePathWithoutConvertedExtension(string $path): string {
     $original_path = $path;

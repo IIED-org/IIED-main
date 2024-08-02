@@ -118,7 +118,6 @@ trait MoveBlockHelperTrait {
     $page = $this->getSession()->getPage();
     $assert_session = $this->assertSession();
 
-    $assert_session->assertWaitOnAjaxRequest();
     $this->waitForNoElement('#drupal-off-canvas');
 
     $region_selector = "[data-layout-delta=\"$section_delta\"] [data-region=\"$region\"]";

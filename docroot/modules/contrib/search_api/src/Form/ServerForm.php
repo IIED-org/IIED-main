@@ -172,7 +172,7 @@ class ServerForm extends EntityForm {
         '#ajax' => [
           'callback' => [get_class($this), 'buildAjaxBackendConfigForm'],
           'wrapper' => 'search-api-backend-config-form',
-          'method' => 'replace',
+          'method' => 'replaceWith',
           'effect' => 'fade',
         ],
       ];
@@ -181,7 +181,7 @@ class ServerForm extends EntityForm {
     else {
       $url = 'https://www.drupal.org/docs/8/modules/search-api/getting-started/server-backends-and-features';
       $args[':url'] = Url::fromUri($url)->toString();
-      $error = $this->t('There are no backend plugins available for the Search API. Please install a <a href=":url">module that provides a backend plugin</a> to proceed.', $args);
+      $error = $this->t('There are no backend plugins available for the Search API. Install a <a href=":url">module that provides a backend plugin</a> to proceed.', $args);
       $this->messenger->addError($error);
       $form = [];
     }
@@ -215,7 +215,7 @@ class ServerForm extends EntityForm {
       $form_state->set('backend', $backend->getPluginId());
       if ($backend instanceof PluginFormInterface) {
         if ($form_state->isRebuilding()) {
-          $this->messenger->addWarning($this->t('Please configure the selected backend.'));
+          $this->messenger->addWarning($this->t('Configure the selected backend.'));
         }
         // Attach the backend plugin configuration form.
         $backend_form_state = SubformState::createForSubform($form['backend_config'], $form, $form_state);

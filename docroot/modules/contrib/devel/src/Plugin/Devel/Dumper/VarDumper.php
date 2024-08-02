@@ -39,8 +39,8 @@ class VarDumper extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public static function checkRequirements() {
-    return class_exists('Symfony\Component\VarDumper\Cloner\VarCloner', TRUE);
+  public static function checkRequirements(): bool {
+    return class_exists(VarCloner::class, TRUE);
   }
 
 }

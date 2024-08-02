@@ -21,7 +21,7 @@ shs.form:
     - core/jquery
     - core/drupal
     - core/drupalSettings
-    - core/backbone
+    - core/internal.backbone
     - core/once
 
 shs.formatter:

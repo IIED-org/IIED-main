@@ -11,9 +11,9 @@
 // Tabs
 .tabs-wrapper,
 .horizontal-tabs ul.horizontal-tabs-list {
-  padding: 0 .5em;
-  margin-left: -.5em;
-  margin-right: -.5em;
+  margin-right: -0.5em;
+  margin-left: -0.5em;
+  padding: 0 0.5em;
 
   @include mq($breakpointSmall) {
     padding: 0;
@@ -24,13 +24,13 @@
 .tabs-wrapper:not(.is-horizontal) {
   .tabs {
     .gin--dark-mode & {
-      border-color: #8E929C;
+      border-color: #8e929c;
     }
 
     &__tab {
       .gin--dark-mode & {
+        border-color: #8e929c;
         background-color: var(--gin-bg-item-hover);
-        border-color: #8E929C;
       }
     }
   }
@@ -50,12 +50,11 @@
 
 .tabs__link,
 .claro-details__summary,
-.horizontal-tabs ul.horizontal-tabs-list li.horizontal-tab-button a
-{
-  color: var(--gin-color-text);
-  font-weight: 600;
+.horizontal-tabs ul.horizontal-tabs-list li.horizontal-tab-button a {
   padding-top: 1.25em;
   padding-bottom: 1.25em;
+  color: var(--gin-color-text);
+  font-weight: 600;
 
   strong {
     font-weight: inherit;
@@ -71,7 +70,7 @@
 }
 
 .tabs__link.is-active,
-.claro-details__summary[aria-expanded=true],
+.claro-details__summary[aria-expanded="true"],
 .horizontal-tabs ul.horizontal-tabs-list li.horizontal-tab-button.selected a {
   font-weight: 700;
 }
@@ -93,7 +92,7 @@
 }
 
 .claro-details__summary {
-  &:after {
+  &::after {
     left: 0;
   }
 
@@ -108,32 +107,21 @@
 .horizontal-tabs ul.horizontal-tabs-list {
   position: relative;
 
-  @include mq($breakpointSmall) {
-    width: 100%;
-    padding: .3125em .5em 1.5em;
-    margin-bottom: -24px;
-    overflow-x: auto;
-
-    .gin--edit-form & {
-      padding-top: .4em;
-    }
-  }
-
   &::after {
-    pointer-events: none;
-    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     display: block;
     width: 100%;
-    max-width: calc(100% + .5em);
-    border-bottom: 1px solid var(--gin-border-color);
+    max-width: calc(100% + 0.5em);
+    content: "";
     transition: $transition;
+    pointer-events: none;
+    border-bottom: 1px solid var(--gin-border-color);
 
     @include mq($breakpointSmall) {
-      left: .5em;
       bottom: 1.5em;
+      left: 0.5em;
       max-width: calc(100% - 1em);
     }
   }
@@ -144,15 +132,15 @@
 
     &:focus-within {
       &::after {
-        content: "";
-        width: calc(100% + 8px);
-        height: 4px;
-        background: var(--gin-bg-app);
-        display: block;
         position: absolute;
+        z-index: 3;
         bottom: -4px;
         left: -4px;
-        z-index: 3;
+        display: block;
+        width: calc(100% + 8px);
+        height: 4px;
+        content: "";
+        background: var(--gin-bg-app);
       }
     }
   }
@@ -164,6 +152,17 @@
       }
     }
   }
+
+  @include mq($breakpointSmall) {
+    overflow-x: auto;
+    width: 100%;
+    margin-bottom: -24px;
+    padding: 0.3125em 0.5em 1.5em;
+
+    .gin--edit-form & {
+      padding-top: 0.4em;
+    }
+  }
 }
 
 .horizontal-tabs ul.horizontal-tabs-list {
@@ -173,7 +172,7 @@
   }
 
   &::after {
-    left: .5em;
+    left: 0.5em;
     max-width: calc(100% - 1em);
   }
 }
@@ -181,8 +180,8 @@
 .is-horizontal .tabs--primary,
 .is-horizontal .tabs--secondary {
   @include mq($breakpointSmall) {
-    margin-left: 0;
     margin-right: 0;
+    margin-left: 0;
   }
 }
 
@@ -193,6 +192,15 @@
 }
 
 .is-horizontal .tabs--primary {
+  .tabs__link {
+    height: 100%;
+    min-height: 3em;
+    border-radius: $borderDefault $borderDefault 0 0;
+
+    @include mq($breakpointSmall) {
+      padding: 1.25em 1.5em 1.5em;
+    }
+  }
   @include mq($breakpointSmall) {
     &::after {
       border-bottom: 0 none;
@@ -202,32 +210,21 @@
       }
     }
   }
-
-  .tabs__link {
-    min-height: 3em;
-    height: 100%;
-    border-radius: $borderDefault $borderDefault 0 0;
-
-    @include mq($breakpointSmall) {
-      padding: 1.25em 1.5em 1.5em;
-    }
-  }
 }
 
 .is-horizontal .tabs--secondary {
+  .tabs__link {
+    min-height: 2.5em;
+    padding: 0.75em 1.5em 1em;
+    border-radius: $borderDefault $borderDefault 0 0;
+    font-size: 0.875em;
+  }
   @include mq($breakpointSmall) {
     margin-top: -1em;
 
     &::before {
       width: 100%;
     }
-  }
-
-  .tabs__link {
-    min-height: 2.5em;
-    padding: .75em 1.5em 1em;
-    font-size: .875em;
-    border-radius: $borderDefault $borderDefault 0 0;
   }
 }
 
@@ -237,26 +234,26 @@
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  border: 0 none;
   margin-top: -1em;
+  border: 0 none;
 
   ul.horizontal-tabs-list {
-    background: none;
+    overflow: hidden;
     border-right: 0 none;
     border-bottom: 0 none;
-    overflow: hidden;
+    background: none;
 
-    &:after {
+    &::after {
       @include mq($breakpointSmall) {
-        left: .5em;
+        left: 0.5em;
         max-width: calc(100% - 1em);
       }
     }
 
     li.horizontal-tab-button {
-      background: none;
       border-right: 0 none;
       border-bottom: 0 none;
+      background: none;
 
       a {
         padding-right: 1.5em;
@@ -264,9 +261,9 @@
         border-radius: $borderDefault $borderDefault 0 0;
 
         &::before {
-          content: '';
-          display: block;
           position: absolute;
+          display: block;
+          content: "";
         }
       }
 
@@ -275,15 +272,15 @@
 
         &::before {
           z-index: 1;
-          border-left: none;
-          border-right: none;
-          border-bottom: 3px solid var(--gin-color-primary);
           top: auto;
+          right: 0;
           bottom: 0;
           left: 0;
-          right: 0;
-          height: 3px;
           width: 100%;
+          height: 3px;
+          border-right: none;
+          border-bottom: 3px solid var(--gin-color-primary);
+          border-left: none;
         }
       }
     }
@@ -295,8 +292,8 @@
 
   .horizontal-tabs-pane {
     padding: 0 !important;
-    box-shadow: none !important;
     border-bottom: 0 !important;
+    box-shadow: none !important;
 
     > .details-wrapper {
       margin: 0 !important;
@@ -312,7 +309,7 @@
 .claro-details__summary::before,
 .claro-details[open] > .claro-details__summary::before {
   background: var(--gin-color-text);
-  mask-image: icon('handle');
+  mask-image: icon("handle");
   mask-repeat: no-repeat;
   mask-position: center center;
   mask-size: 100% 100%;
@@ -355,13 +352,13 @@
 
   .vertical-tabs {
     &__items {
-      background: none;
       border: 0 none;
+      background: none;
     }
 
     &__menu-item.is-selected a {
-      background: var(--gin-bg-app);
       border-color: var(--gin-border-color);
+      background: var(--gin-bg-app);
     }
 
     &__menu-link {
@@ -374,11 +371,10 @@
   }
 }
 
-
 @media screen and (min-width: 85em) {
   .js .vertical-tabs__item {
-    overflow: visible;
     float: left;
+    overflow: visible;
     width: 100%;
   }
 }

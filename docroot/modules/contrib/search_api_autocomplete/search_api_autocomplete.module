@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Utility\Error;
 use Drupal\search_api\Plugin\views\filter\SearchApiText;
 use Drupal\search_api\Plugin\views\query\SearchApiQuery;
 use Drupal\search_api_autocomplete\Search\SearchPluginDeriverBase;
@@ -90,7 +91,7 @@ function search_api_autocomplete_search_api_autocomplete_search_delete(EntityInt
           '%perm' => $permissionString,
           '%role' => $role->label(),
         ];
-        watchdog_exception('search_api_autocomplete', $e, '%type while trying to remove permission %perm from user role %role: @message in %function (line %line of %file).', $variables);
+        Error::logException(\Drupal::logger('search_api_autocomplete'), $e, '%type while trying to remove permission %perm from user role %role: @message in %function (line %line of %file).', $variables);
       }
     }
   }

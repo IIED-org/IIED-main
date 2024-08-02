@@ -63,6 +63,7 @@
       var widget = this;
       var elemId = widget.container.app.$el.prop('id') + '-shs-' + widget.container.model.get('delta') + '-' + widget.model.get('level');
       widget.$el.prop('id', elemId)
+              .prop('disabled', widget.container.app.$el.prop('disabled'))
               .attr('aria-labelledby', elemId + '-label')
               .addClass('shs-select')
               // Add core classes to apply default styles to the element.

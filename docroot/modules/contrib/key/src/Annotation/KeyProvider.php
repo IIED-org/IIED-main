@@ -42,8 +42,22 @@ class KeyProvider extends Plugin {
    * This is an enumeration of {file, config, database, remote}.
    *
    * @var string
+   *
+   * @deprecated in key:1.18.0 and is removed from key:2.0.0. Use the 'tags'
+   *   definition entry instead.
+   *
+   * @see https://www.drupal.org/node/3364701
    */
   public $storage_method;
+
+  /**
+   * The key provider tags, used for classification and filtering.
+   *
+   * It should be a list of tags as strings.
+   *
+   * @var array
+   */
+  public $tags = [];
 
   /**
    * The settings for inputting a key value.

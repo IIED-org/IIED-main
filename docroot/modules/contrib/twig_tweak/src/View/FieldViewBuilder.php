@@ -50,7 +50,7 @@ class FieldViewBuilder {
     string $field_name,
     $view_mode = 'full',
     string $langcode = NULL,
-    bool $check_access = TRUE
+    bool $check_access = TRUE,
   ): array {
 
     $build = [];

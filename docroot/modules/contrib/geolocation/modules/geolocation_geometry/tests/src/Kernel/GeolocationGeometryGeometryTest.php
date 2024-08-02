@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\geolocation_geometry\Kernel;
 
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Tests\field\Kernel\FieldKernelTestBase;
 
 /**

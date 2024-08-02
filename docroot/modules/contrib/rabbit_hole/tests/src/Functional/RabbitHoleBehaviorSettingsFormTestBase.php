@@ -22,7 +22,7 @@ abstract class RabbitHoleBehaviorSettingsFormTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rabbit_hole'];
+  protected static $modules = ['rabbit_hole'];
 
   /**
    * Admin user.
@@ -30,6 +30,13 @@ abstract class RabbitHoleBehaviorSettingsFormTestBase extends BrowserTestBase {
    * @var \Drupal\user\UserInterface
    */
   protected $adminUser;
+
+  /**
+   * The entity type.
+   *
+   * @var string
+   */
+  protected $entityType;
 
   /**
    * The name of bundle entity type.
@@ -378,6 +385,17 @@ abstract class RabbitHoleBehaviorSettingsFormTestBase extends BrowserTestBase {
   protected function getEntityFormSubmit() {
     return 'edit-submit';
   }
+
+  /**
+   * Returns URL of the "Edit" entity page.
+   *
+   * @param string $id
+   *   Entity type id.
+   *
+   * @return \Drupal\Core\Url
+   *   URL object.
+   */
+  abstract protected function getEditEntityUrl($id);
 
   /**
    * Returns URL of the "Edit" entity bundle page.

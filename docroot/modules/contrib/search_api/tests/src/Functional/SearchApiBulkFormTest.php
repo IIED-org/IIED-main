@@ -12,6 +12,7 @@ use Drupal\Tests\BrowserTestBase;
 /**
  * Tests the Search API bulk form Views field plugin.
  *
+ * @coversDefaultClass \Drupal\search_api\Plugin\views\field\SearchApiBulkForm
  * @group search_api
  */
 class SearchApiBulkFormTest extends BrowserTestBase {

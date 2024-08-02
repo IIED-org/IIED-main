@@ -2,10 +2,13 @@
 
 namespace Drupal\password_policy_length\Plugin\PasswordConstraint;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\password_policy\PasswordConstraintBase;
 use Drupal\password_policy\PasswordPolicyValidation;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Enforces a specific character length for passwords.
@@ -17,7 +20,48 @@ use Drupal\user\UserInterface;
  *   errorMessage = @Translation("The length of your password is too short.")
  * )
  */
-class PasswordLength extends PasswordConstraintBase {
+class PasswordLength extends PasswordConstraintBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Constructs object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   */
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    EntityTypeManagerInterface $entity_type_manager,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -27,13 +71,13 @@ class PasswordLength extends PasswordConstraintBase {
     $validation = new PasswordPolicyValidation();
     switch ($configuration['character_operation']) {
       case 'minimum':
-        if (strlen($password) < $configuration['character_length']) {
+        if (mb_strlen($password) < $configuration['character_length']) {
           $validation->setErrorMessage($this->formatPlural($configuration['character_length'], 'Password length must be at least 1 character.', 'Password length must be at least @count characters.'));
         }
         break;
 
       case 'maximum':
-        if (strlen($password) > $configuration['character_length']) {
+        if (mb_strlen($password) > $configuration['character_length']) {
           $validation->setErrorMessage($this->formatPlural($configuration['character_length'], 'Password length must not exceed 1 character.', 'Password length must not exceed @count characters.'));
         }
         break;
@@ -78,6 +122,47 @@ class PasswordLength extends PasswordConstraintBase {
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     if (!is_numeric($form_state->getValue('character_length')) or $form_state->getValue('character_length') <= 0) {
       $form_state->setErrorByName('character_length', $this->t('The character length must be a positive number.'));
+    }
+    // Check if the new constraint is already defined or invalid.
+    $id = $form_state->getBuildInfo()['args'][1];
+    $new_operation = $form_state->getValue('character_operation');
+    $new_length = $form_state->getValue('character_length');
+    if ($id <> 'password_length') {
+      $entity = $this->entityTypeManager->getStorage('password_policy')->load($id);
+      $constraints = $entity->get('policy_constraints');
+
+      // Limit validation check for this plugin only.
+      $constraints = array_filter($constraints, function ($constraint) {
+        return $constraint['id'] === "password_length";
+      });
+      foreach ($constraints as $constraint) {
+        $constraint_operation = $constraint["character_operation"];
+        $constraint_length = $constraint["character_length"];
+
+        if ($constraint_operation == $new_operation) {
+          $form_state->setErrorByName('character_length', $this->t('The selected operation (@operation) already exists.',
+            [
+              '@operation' => $constraint_operation,
+            ]
+          ));
+        }
+        if ($constraint_operation <> $new_operation && $new_operation == 'minimum' && $new_length > $constraint_length) {
+          $form_state->setErrorByName('character_length', $this->t('The selected length (@new) is higher than the maximum length defined (@length).',
+            [
+              '@new' => $new_length,
+              '@length' => $constraint_length,
+            ]
+          ));
+        }
+        if ($constraint_operation <> $new_operation && $new_operation == 'maximum' && $new_length < $constraint_length) {
+          $form_state->setErrorByName('character_length', $this->t('The selected length (@new) is lower than the minimum length defined (@length).',
+            [
+              '@new' => $new_length,
+              '@length' => $constraint_length,
+            ]
+          ));
+        }
+      }
     }
   }
 

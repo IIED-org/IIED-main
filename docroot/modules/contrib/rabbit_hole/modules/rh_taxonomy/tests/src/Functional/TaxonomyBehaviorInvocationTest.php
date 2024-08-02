@@ -22,7 +22,7 @@ class TaxonomyBehaviorInvocationTest extends RabbitHoleBehaviorInvocationTestBas
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_taxonomy', 'taxonomy'];
+  protected static $modules = ['rh_taxonomy', 'taxonomy'];
 
   /**
    * Taxonomy vocabulary.

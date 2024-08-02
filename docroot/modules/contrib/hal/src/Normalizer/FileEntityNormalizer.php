@@ -62,6 +62,15 @@ class FileEntityNormalizer extends ContentEntityNormalizer {
   /**
    * {@inheritdoc}
    */
+  public function getSupportedTypes(?string $format): array {
+    return [
+      FileInterface::class => TRUE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getEntityUri(EntityInterface $entity, array $context = []) {
     assert($entity instanceof FileInterface);
     // https://www.drupal.org/project/drupal/issues/2277705 introduced a hack

@@ -538,7 +538,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
         '#description' => $this->t('Ignore quotes in searches and just look for the individual words separately. For instance, <em>"blue house"</em> matches any item that contains the words “blue” and “house” somewhere in its indexed text, no matter where and in what order.'),
       ],
       'bigram' => [
-        '#description' => $this->t('Treat a quoted phrase in a search like it is generally expected, matching only items that contain those words in the exact same order, consecutively. For instance, <em>"blue house"</em> would match only items that contain the word “blue” immediately followed by the word “house”. Please make sure that the associated increase in database size (about 5x) and indexing time (about 2x) is acceptable for your site.'),
+        '#description' => $this->t('Treat a quoted phrase in a search like it is generally expected, matching only items that contain those words in the exact same order, consecutively. For instance, <em>"blue house"</em> would match only items that contain the word “blue” immediately followed by the word “house”. Make sure that the associated increase in database size (about 5x) and indexing time (about 2x) is acceptable for your site.'),
       ],
     ];
 
@@ -1458,7 +1458,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
           // Log an error, but only once per field. Since a superfluous field is
           // not too serious, we just index the rest of the item normally.
           $field_errors[$field_id] = TRUE;
-          $this->getLogger()->warning("Unknown field @field: please check (and re-save) the index's fields settings.", ['@field' => $field_id]);
+          $this->getLogger()->warning("Unknown field @field: check (and re-save) the index's fields settings.", ['@field' => $field_id]);
           continue;
         }
 
@@ -1632,7 +1632,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
           foreach (static::splitIntoWords($text) as $word) {
             if ($word) {
               if (mb_strlen($word) > static::TOKEN_LENGTH_MAX) {
-                $this->getLogger()->warning('An overlong word (more than @token_length_max characters) was encountered while indexing: %word.<br />Since database search servers currently cannot index words of more than @token_length_max characters, the word was truncated for indexing. If this should not be a single word, please make sure the "Tokenizer" processor is enabled and configured correctly for index %index.', [
+                $this->getLogger()->warning('An overlong word (more than @token_length_max characters) was encountered while indexing: %word.<br />Since database search servers currently cannot index words of more than @token_length_max characters, the word was truncated for indexing. If this should not be a single word, make sure the "Tokenizer" processor is enabled and configured correctly for index %index.', [
                   '@token_length_max' => static::TOKEN_LENGTH_MAX,
                   '%word' => $word,
                   '%index' => $index->label(),
@@ -1653,7 +1653,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
                 $new_tokens = [];
                 foreach (static::splitIntoWords($word) as $word) {
                   if (mb_strlen($word) > static::TOKEN_LENGTH_MAX) {
-                    $this->getLogger()->warning('An overlong word (more than @token_length_max characters) was encountered while indexing: %word.<br />Since database search servers currently cannot index words of more than @token_length_max characters, the word was truncated for indexing. If this should not be a single word, please make sure the "Tokenizer" processor is enabled and configured correctly for index %index.', [
+                    $this->getLogger()->warning('An overlong word (more than @token_length_max characters) was encountered while indexing: %word.<br />Since database search servers currently cannot index words of more than @token_length_max characters, the word was truncated for indexing. If this should not be a single word, make sure the "Tokenizer" processor is enabled and configured correctly for index %index.', [
                       '@token_length_max' => static::TOKEN_LENGTH_MAX,
                       '%word' => $word,
                       '%index' => $index->label(),
@@ -2002,7 +2002,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
     $this->getEventDispatcher()->dispatch($event, $event_base_name);
     $db_query = $event->getDbQuery();
 
-    $description = 'This hook is deprecated in search_api:8.x-1.16 and is removed from search_api:2.0.0. Please use the "search_api_db.query_pre_execute" event instead. See https://www.drupal.org/node/3103591';
+    $description = 'This hook is deprecated in search_api:8.x-1.16 and is removed from search_api:2.0.0. Use the "search_api_db.query_pre_execute" event instead. See https://www.drupal.org/node/3103591';
     $this->getModuleHandler()->alterDeprecated($description, 'search_api_db_query', $db_query, $query);
     $this->preQuery($db_query, $query);
 
@@ -2880,11 +2880,6 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
     $orderBy = &$db_query->getOrderBy();
     $orderBy = [];
 
-    // If there's a GROUP BY for item_id, we leave that, all others need to be
-    // discarded.
-    $group_by = &$db_query->getGroupBy();
-    $group_by = array_intersect_key($group_by, ['t.item_id' => TRUE]);
-
     // In case there are any expressions left (like a computed distance column),
     // we nest the query to get rid of them.
     if ($expressions) {
@@ -3142,7 +3137,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
    *
    * Prevents the database connection and logger from being serialized.
    */
-  public function __sleep() {
+  public function __sleep(): array {
     $properties = array_flip(parent::__sleep());
     unset($properties['database']);
     return array_keys($properties);
@@ -3153,7 +3148,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
    *
    * Reloads the database connection and logger.
    */
-  public function __wakeup() {
+  public function __wakeup(): void {
     parent::__wakeup();
 
     if (isset($this->configuration['database'])) {

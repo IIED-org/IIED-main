@@ -12,7 +12,7 @@ class DevelLayoutInfoTest extends DevelBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['devel', 'block', 'layout_discovery'];
+  protected static $modules = ['devel', 'block', 'layout_discovery'];
 
   /**
    * {@inheritdoc}
@@ -26,7 +26,7 @@ class DevelLayoutInfoTest extends DevelBrowserTestBase {
   /**
    * Tests layout info menu link.
    */
-  public function testLayoutsInfoMenuLink() {
+  public function testLayoutsInfoMenuLink(): void {
     $this->drupalPlaceBlock('system_menu_block:devel');
     // Ensures that the layout info link is present on the devel menu and that
     // it points to the correct page.
@@ -40,7 +40,7 @@ class DevelLayoutInfoTest extends DevelBrowserTestBase {
   /**
    * Tests layout info page.
    */
-  public function testLayoutList() {
+  public function testLayoutList(): void {
     $this->drupalGet('/devel/layouts');
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains('Layouts');
@@ -64,9 +64,7 @@ class DevelLayoutInfoTest extends DevelBrowserTestBase {
       'Regions',
       'Provider',
     ];
-    $actual_headers = array_map(function ($element) {
-      return $element->getText();
-    }, $headers);
+    $actual_headers = array_map(fn($element) => $element->getText(), $headers);
     $this->assertSame($expected_headers, $actual_headers);
 
     // Ensures that all the layouts are listed in the table.
@@ -116,7 +114,7 @@ class DevelLayoutInfoTest extends DevelBrowserTestBase {
   /**
    * Tests the dependency with layout_discovery module.
    */
-  public function testLayoutDiscoveryDependency() {
+  public function testLayoutDiscoveryDependency(): void {
     $this->container->get('module_installer')->uninstall(['layout_discovery']);
     $this->drupalPlaceBlock('system_menu_block:devel');
 

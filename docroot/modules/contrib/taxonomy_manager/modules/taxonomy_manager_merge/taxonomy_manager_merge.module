@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Taxonomy Manager Merge.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\taxonomy\VocabularyInterface;
+use Drupal\taxonomy_manager_merge\Form\MergeTermsForm;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function taxonomy_manager_merge_form_taxonomy_manager_vocabulary_terms_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  if (!isset($form['voc']['#value']) || !($form['voc']['#value'] instanceof VocabularyInterface)) {
+    return;
+  }
+
+  $taxonomy_vocabulary = $form['voc']['#value'];
+
+  $form['toolbar']['merge'] = [
+    '#type' => 'submit',
+    '#name' => 'merge',
+    '#value' => t('Merge terms'),
+    '#ajax' => [
+      'callback' => [MergeTermsForm::class, 'mergeTermsFormCallback'],
+    ],
+    '#attributes' => [
+      'disabled' => TRUE,
+    ],
+    '#access' => \Drupal::currentUser()->hasPermission('edit terms in ' . $taxonomy_vocabulary->id()),
+  ];
+
+  // Attach custom library.
+  $form['#attached']['library'][] = 'taxonomy_manager_merge/tree';
+}

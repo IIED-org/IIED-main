@@ -11,7 +11,7 @@ body.gin-login {
       display: inline-block;
       width: 32px;
       height: 32px;
-      background-color: var(--colorGinText, #000);
+      background-color: var(--gin-color-text, #000);
       mask-image: url(../../images/gin.svg);
       mask-repeat: no-repeat;
       mask-position: center center;
@@ -23,7 +23,7 @@ body.gin-login {
       }
 
       &:hover {
-        background-color: var(--colorGinPrimary, #003cc5);
+        background-color: var(--gin-color-primary, #003cc5);
       }
     }
   }
@@ -34,7 +34,7 @@ body.gin-login {
     min-height: 100vh;
     max-height: 100%;
     margin-bottom: -1px;
-    background: var(--colorGinLayerBackground, #fff);
+    background: var(--gin-bg-layer, #fff);
 
     @media (min-width: $breakpoint) {
       flex-wrap: nowrap;

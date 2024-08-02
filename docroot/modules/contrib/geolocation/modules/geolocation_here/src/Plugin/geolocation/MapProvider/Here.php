@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation_here\Plugin\geolocation\MapProvider;
 
-use Drupal\geolocation\MapProviderBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapProviderBase;
 
 /**
  * Provides HERE Maps API.

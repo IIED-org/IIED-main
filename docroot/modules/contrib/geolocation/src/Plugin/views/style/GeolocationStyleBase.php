@@ -2,14 +2,14 @@
 
 namespace Drupal\geolocation\Plugin\views\style;
 
-use Drupal\views\Plugin\views\style\StylePluginBase;
+use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\views\Plugin\views\style\StylePluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Utility\NestedArray;
-use Drupal\Component\Render\PlainTextOutput;
-use Drupal\Core\File\FileUrlGeneratorInterface;
 
 /**
  * Geolocation Style Base.

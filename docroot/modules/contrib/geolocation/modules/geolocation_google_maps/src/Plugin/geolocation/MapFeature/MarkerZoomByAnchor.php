@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation_google_maps\Plugin\geolocation\MapFeature;
 
-use Drupal\geolocation\MapFeatureFrontendBase;
 use Drupal\Core\Template\Attribute;
+use Drupal\geolocation\MapFeatureFrontendBase;
 
 /**
  * Provides Google Maps.

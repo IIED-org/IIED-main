@@ -390,22 +390,6 @@ function dfbt($label) {
   \Drupal::service('devel.dumper')->dump(FirePHP::TRACE, $label, 'firephp');
 }
 
-if (!function_exists('dd')) {
-
-  /**
-   * Wrapper for DevelDumperManager::debug().
-   *
-   * @deprecated in devel:8.x-2.0 and is removed from devel:5.0.0.
-   *   Symfony added dd() as a function, introduced with Drupal 8.6.
-   *   Use the Devel ddm() function instead.
-   * @see https://www.drupal.org/project/devel/issues/2999892
-   */
-  function dd($data, $label = NULL) {
-    return \Drupal::service('devel.dumper')->debug($data, $label, 'default');
-  }
-
-}
-
 if (!function_exists('ddm')) {
 
   /**

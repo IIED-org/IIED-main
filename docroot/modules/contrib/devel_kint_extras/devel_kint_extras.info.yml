@@ -6,7 +6,7 @@ package: Development
 dependencies:
   - devel:devel (>=4.x)
 
-# Information added by Drupal.org packaging script on 2022-09-21
-version: '1.1.0'
+# Information added by Drupal.org packaging script on 2024-02-26
+version: '1.1.1'
 project: 'devel_kint_extras'
-datestamp: 1663761000
+datestamp: 1708936997

@@ -57,3 +57,12 @@ function layout_paragraphs_update_9001(&$sandbox) {
   $sandbox['#finished'] = empty($sandbox['max']) || count($ids) == 0 ? 1 : $sandbox['progress'] / $sandbox['max'];
 
 }
+
+/**
+ * Remove old theme_display configuration.
+ */
+function layout_paragraphs_update_9002(&$sandbox) {
+  \Drupal::configFactory()->getEditable('layout_paragraphs.modal_settings')
+    ->clear('theme_display')
+    ->save();
+}

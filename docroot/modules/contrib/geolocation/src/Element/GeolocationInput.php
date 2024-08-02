@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation\Element;
 
-use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element\FormElement;
 
 /**
  * Provides a render element to display a geolocation map.

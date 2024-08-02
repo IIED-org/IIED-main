@@ -82,7 +82,7 @@ class MessagePurgePluginManager extends DefaultPluginManager {
     foreach ($definitions as $plugin_id => $definition) {
 
       /** @var \Drupal\message\MessagePurgeInterface $plugin */
-      $plugin = $this->createInstance($plugin_id, isset($purge_settings[$plugin_id]) ? $purge_settings[$plugin_id] : []);
+      $plugin = $this->createInstance($plugin_id, $purge_settings[$plugin_id] ?? []);
 
       // Create the table row.
       $form['settings']['purge_methods'][$plugin_id]['#attributes']['class'][] = 'draggable';

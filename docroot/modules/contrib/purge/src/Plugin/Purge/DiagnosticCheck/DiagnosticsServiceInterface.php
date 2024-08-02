@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Describes a service that interacts with diagnostic checks.
  */
-interface DiagnosticsServiceInterface extends ServiceInterface, ContainerAwareInterface, \Iterator, \Countable {
+interface DiagnosticsServiceInterface extends ServiceInterface, \Iterator, \Countable {
 
   /**
    * Get only SEVERITY_INFO level checks.

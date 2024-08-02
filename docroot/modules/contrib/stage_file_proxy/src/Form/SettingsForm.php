@@ -32,6 +32,7 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
+    // @phpstan-ignore-next-line
     return new static(
       $container->get('config.factory'),
       $container->getParameter('site.path')

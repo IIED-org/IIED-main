@@ -12,10 +12,10 @@ tfa.settings:
         type: string
         label: 'Role'
     send_plugins:
-     type: sequence
-     label: 'Enabled send plugins'
-     sequence:
-       type: tfa.send.config.[%key]
+      type: sequence
+      label: 'Enabled send plugins'
+      sequence:
+        type: tfa.send.config.[%key]
     login_plugins:
       type: sequence
       label: 'Enabled Login plugins'
@@ -43,6 +43,9 @@ tfa.settings:
     validation_skip:
       type: integer
       label: 'No. of times a user without tfa validation set-up can login.'
+    users_without_tfa_redirect:
+      type: boolean
+      label: 'Redirect user directly to the TFA account setup overview page on login.'
     reset_pass_skip_enabled:
       type: boolean
       label: 'Allow super administrator to skip TFA when resetting password.'

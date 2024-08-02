@@ -73,6 +73,10 @@ class TextFieldMapping extends FieldMappingBase {
    *   The max length or length of field, otherwise return 0.
    */
   protected function checkMaxFieldSizeExceeded(FieldDefinitionInterface $field_definition, $value = "") {
+    if (empty($value)) {
+      return 0;
+    }
+
     $field_settings = $field_definition->getSettings();
     if (empty($field_settings) || !array_key_exists('max_length', $field_settings)) {
       return 0;

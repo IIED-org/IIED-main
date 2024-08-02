@@ -27,9 +27,7 @@ class ThemeNegotiator implements ThemeNegotiatorInterface {
    * @param Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory interface.
    */
-  public function __construct(
-    ConfigFactoryInterface $configFactory
-  ) {
+  public function __construct(ConfigFactoryInterface $configFactory) {
     $this->configFactory = $configFactory;
   }
 
@@ -69,11 +67,9 @@ class ThemeNegotiator implements ThemeNegotiatorInterface {
    *   Returns Boolean or String.
    */
   private function negotiateRoute(RouteMatchInterface $route_match) {
-    if (
-        $route_match->getRouteName() == 'user.login' ||
-        $route_match->getRouteName() == 'user.pass' ||
-        $route_match->getRouteName() == 'user.register'
-      ) {
+    $route_definitions = \Drupal::service('gin_login.route')->getLoginRouteDefinitions();
+
+    if (array_key_exists($route_match->getRouteName(), $route_definitions)) {
       return $this->configFactory->get('system.theme')->get('admin');
     }
 

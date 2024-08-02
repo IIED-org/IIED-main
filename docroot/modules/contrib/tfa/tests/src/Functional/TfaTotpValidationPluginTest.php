@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\tfa\Functional;
 
+use Drupal\Core\Site\Settings;
 use ParagonIE\ConstantTime\Encoding;
 
 /**
@@ -131,6 +132,13 @@ class TfaTotpValidationPluginTest extends TfaTestBase {
     $assert->pageTextContains($this->userAccount->getDisplayName());
 
     // Check for replay attack.
+    $current_settings = file_get_contents("$this->siteDirectory/settings.php");
+    $current_settings .= "\n \$settings['hash_salt'] = '12345';\n";
+    $current_settings .= "\n \$settings['tfa.previous_hash_salts'] = ['" . Settings::getHashSalt() . "'];\n";
+    chmod("$this->siteDirectory/settings.php", 0644);
+    file_put_contents("$this->siteDirectory/settings.php", $current_settings);
+    chmod("$this->siteDirectory/settings.php", 0444);
+
     $this->drupalLogout();
     $edit = [
       'name' => $this->userAccount->getAccountName(),
@@ -144,6 +152,7 @@ class TfaTotpValidationPluginTest extends TfaTestBase {
     $edit = ['code' => $valid_code];
     $this->submitForm($edit, 'Verify');
     $assert->statusCodeEquals(200);
+    $assert->pageTextNotContains('Invalid application code.');
     $assert->pageTextContains('Invalid code, it was recently used for a login. Please try a new code.');
   }
 

@@ -18,7 +18,7 @@ class CacheableResponseSubscriber extends PurgeCacheableResponseSubscriber imple
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[KernelEvents::RESPONSE][] = ['onRespond', -1000];
     return $events;
   }

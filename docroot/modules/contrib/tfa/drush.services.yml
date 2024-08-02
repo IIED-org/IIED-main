@@ -1,6 +1,17 @@
 services:
+  tfa.drush.token_managment:
+    class: \Drupal\tfa\Commands\TfaTokenManagement
+    arguments:
+      - '@plugin.manager.mail'
+      - '@user.data'
+      - '@entity_type.manager'
+      - '@logger.channel.tfa'
+    tags:
+      - { name: drush.command }
   tfa.commands:
     class: \Drupal\tfa\Commands\TfaCommands
-    arguments: ['@database']
+    arguments:
+      - '@database'
+      - '@tfa.drush.token_managment'
     tags:
       - { name: drush.command }

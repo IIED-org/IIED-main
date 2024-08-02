@@ -24,6 +24,15 @@ class TimestampItemNormalizer extends FieldItemNormalizer {
   /**
    * {@inheritdoc}
    */
+  public function getSupportedTypes(?string $format): array {
+    return [
+      TimestampItem::class => TRUE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function normalizedFieldValues(FieldItemInterface $field_item, $format, array $context) {
     return parent::normalizedFieldValues($field_item, $format, $context) + [
       // 'format' is not a property on Timestamp objects. This is present to

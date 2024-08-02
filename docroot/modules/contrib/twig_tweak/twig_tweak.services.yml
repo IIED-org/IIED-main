@@ -15,7 +15,7 @@ services:
 
   twig_tweak.entity_view_builder:
     class: Drupal\twig_tweak\View\EntityViewBuilder
-    arguments: ['@entity_type.manager']
+    arguments: ['@entity_type.manager', '@entity.repository']
 
   twig_tweak.entity_form_view_builder:
     class: Drupal\twig_tweak\View\EntityFormViewBuilder
@@ -31,6 +31,7 @@ services:
 
   twig_tweak.image_view_builder:
     class: Drupal\twig_tweak\View\ImageViewBuilder
+    arguments: ['@image.factory']
 
   twig_tweak.url_extractor:
     class: Drupal\twig_tweak\UrlExtractor

@@ -2,12 +2,12 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\DataProvider;
 
-use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\views\Plugin\views\field\FieldPluginBase;
-use Drupal\geolocation\DataProviderInterface;
+use Drupal\Core\Field\FieldItemInterface;
 use Drupal\geolocation\DataProviderBase;
+use Drupal\geolocation\DataProviderInterface;
 use Drupal\geolocation\Plugin\Field\FieldType\GeolocationItem;
+use Drupal\views\Plugin\views\field\FieldPluginBase;
 
 /**
  * Provides default geolocation field.

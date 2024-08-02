@@ -20,7 +20,7 @@ class GroupBehaviorInvocationTest extends RabbitHoleBehaviorInvocationTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_group', 'group'];
+  protected static $modules = ['rh_group', 'group'];
 
   /**
    * Group type.
@@ -33,7 +33,7 @@ class GroupBehaviorInvocationTest extends RabbitHoleBehaviorInvocationTestBase {
    * {@inheritdoc}
    */
   protected function createEntityBundle($action = NULL) {
-    // TODO: Switch to trait when/if the patch is committed and released.
+    // @todo Switch to trait when/if the patch is committed and released.
     // See: https://www.drupal.org/project/group/issues/3177542
     $storage = \Drupal::entityTypeManager()->getStorage('group_type');
     $group_type = $storage->create([
@@ -62,7 +62,7 @@ class GroupBehaviorInvocationTest extends RabbitHoleBehaviorInvocationTestBase {
       $values['rh_action'] = $action;
     }
 
-    // TODO: Switch to trait when/if the patch is committed and released.
+    // @todo Switch to trait when/if the patch is committed and released.
     // See: https://www.drupal.org/project/group/issues/3177542
     $storage = \Drupal::entityTypeManager()->getStorage('group');
     $group = $storage->create($values + [
@@ -79,7 +79,7 @@ class GroupBehaviorInvocationTest extends RabbitHoleBehaviorInvocationTestBase {
    * {@inheritdoc}
    */
   protected function getViewPermissions() {
-    return ['bypass group access'];
+    return [];
   }
 
 }

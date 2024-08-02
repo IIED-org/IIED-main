@@ -1,12 +1,12 @@
 .button--primary {
-  background-color: var(--colorGinPrimary);
+  background-color: var(--gin-color-primary);
 
   &:hover {
-    background-color: var(--colorGinPrimaryHover);
+    background-color: var(--gin-color-primary-hover);
   }
 
   &:active {
-    background-color: var(--colorGinPrimaryHover);
+    background-color: var(--gin-color-primary-hover);
   }
 }
 
@@ -14,28 +14,28 @@ a,
 .link,
 button.link,
 .forgot-password-link {
-  color: var(--colorGinPrimary);
+  color: var(--gin-color-primary);
 
   &:hover {
-    color: var(--colorGinPrimaryHover);
+    color: var(--gin-color-primary-hover);
   }
 
   &:active {
-    color: var(--colorGinPrimaryActive);
+    color: var(--gin-color-primary-active);
   }
 }
 
 .form-boolean--type-checkbox:checked,
 [open] > .claro-details__summary--accordion:not(:focus):not(:active)::after,
 [open] > .claro-details__summary--accordion-item:not(:focus):not(:active)::after {
-  border-color: var(--colorGinPrimary);
+  border-color: var(--gin-color-primary);
 
   &:hover {
-    border-color: var(--colorGinPrimaryHover);
+    border-color: var(--gin-color-primary-hover);
   }
 
   &:active {
-    border-color: var(--colorGinPrimaryActive);
+    border-color: var(--gin-color-primary-active);
   }
 }
 
@@ -45,7 +45,7 @@ button.link,
 .action-link
 {
   &:hover {
-    color: var(--colorGinPrimaryHover);
+    color: var(--gin-color-primary-hover);
   }
 }
 
@@ -53,6 +53,6 @@ button.link,
 .claro-details[open] > .claro-details__summary
 {
   &:focus {
-    color: var(--colorGinPrimaryActive);
+    color: var(--gin-color-primary-active);
   }
 }

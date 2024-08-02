@@ -103,7 +103,7 @@ class MessageTemplateForm extends EntityForm {
       '#title' => $this->t('Clear empty tokens'),
       '#type' => 'checkbox',
       '#description' => $this->t('When this option is selected, empty tokens will be removed from display.'),
-      '#default_value' => isset($settings['token options']['clear']) ? $settings['token options']['clear'] : FALSE,
+      '#default_value' => $settings['token options']['clear'] ?? FALSE,
     ];
 
     $form['settings']['token options']['token replace'] = [
@@ -132,16 +132,9 @@ class MessageTemplateForm extends EntityForm {
    */
   protected function actions(array $form, FormStateInterface $form_state) {
     $actions = parent::actions($form, $form_state);
-    $actions['submit']['#value'] = t('Save message template');
-    $actions['delete']['#value'] = t('Delete message template');
+    $actions['submit']['#value'] = $this->t('Save message template');
+    $actions['delete']['#value'] = $this->t('Delete message template');
     return $actions;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validate(array $form, FormStateInterface $form_state) {
-    parent::validate($form, $form_state);
   }
 
   /**
@@ -183,13 +176,19 @@ class MessageTemplateForm extends EntityForm {
     }, $text);
     $this->entity->set('text', $text);
 
+    $new = $this->entity->isNew();
     parent::save($form, $form_state);
 
     $params = [
-      '@template' => $form_state->getValue('label'),
+      '%template' => $form_state->getValue('label'),
     ];
 
-    $this->messenger()->addMessage($this->t('The message template @template created successfully.', $params));
+    if ($new) {
+      $this->messenger()->addMessage($this->t('The message template %template created successfully.', $params));
+    }
+    else {
+      $this->messenger()->addMessage($this->t('The message template %template has been updated.', $params));
+    }
     $form_state->setRedirect('message.overview_templates');
     return $this->entity;
   }

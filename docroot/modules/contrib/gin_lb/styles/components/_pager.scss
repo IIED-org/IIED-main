@@ -5,8 +5,8 @@
     margin-bottom: 1em !important;
 
     ul {
-      list-style-image: none !important;
       padding-left: 0 !important;
+      list-style-image: none !important;
     }
   }
 
@@ -28,28 +28,32 @@
     vertical-align: top !important;
   }
 
-  .pager__link, .pager__item--current {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      box-sizing: border-box !important;
-      min-width: 2em !important;
-      height: 2em !important;
-      padding-right: 0.5em !important;
-      padding-left: 0.5em !important;
-      text-decoration: none !important;
-      border-radius: 1em !important;
-      line-height: 1 !important;
+  .pager__link,
+  .pager__item--current {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    min-width: 2em !important;
+    height: 2em !important;
+    padding-right: 0.5em !important;
+    padding-left: 0.5em !important;
+    text-decoration: none !important;
+    border-radius: 1em !important;
+    line-height: 1 !important;
   }
 
-  .pager__item--first .pager__link::before, .pager__item--previous .pager__link::before, .pager__item--next .pager__link::after, .pager__item--last .pager__link::after {
-      position: relative !important;
-      display: inline-block !important;
-      width: 1em !important;
-      height: 1em !important;
-      content: "" !important;
-      background-repeat: no-repeat !important;
-      background-position: center !important;
+  .pager__item--first .pager__link::before,
+  .pager__item--previous .pager__link::before,
+  .pager__item--next .pager__link::after,
+  .pager__item--last .pager__link::after {
+    position: relative !important;
+    display: inline-block !important;
+    width: 1em !important;
+    height: 1em !important;
+    content: "" !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
   }
 
   .pager__item--mini {
@@ -106,5 +110,4 @@
       background: var(--gin-bg-app) !important;
     }
   }
-
 }

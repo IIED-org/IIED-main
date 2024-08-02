@@ -121,7 +121,7 @@ trait TestItemsTrait {
       ->disableOriginalConstructor()
       ->getMock();
     $dataTypeManager->method('getInstances')
-      ->will($this->returnValue([]));
+      ->willReturn([]);
 
     $moduleHandler = $this->getMockBuilder('Drupal\Core\Extension\ModuleHandlerInterface')
       ->disableOriginalConstructor()
@@ -154,7 +154,7 @@ trait TestItemsTrait {
         return Query::create($index, $options);
       });
     $queryHelper->method('getResults')
-      ->will($this->returnValue([]));
+      ->willReturn([]);
 
     $this->container = new ContainerBuilder();
     $this->container->set('plugin.manager.search_api.data_type', $dataTypeManager);

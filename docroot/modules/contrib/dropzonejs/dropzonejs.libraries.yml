@@ -7,10 +7,10 @@ dropzonejs:
     url: https://github.com/enyo/dropzone/blob/master/LICENSE
     gpl-compatible: true
   js:
-    /libraries/dropzone/dist/min/dropzone.min.js: { minified: true }
+    /libraries/dropzone/dropzone-min.js: { minified: true }
   css:
     component:
-      /libraries/dropzone/dist/min/dropzone.min.css: { minified: true }
+      /libraries/dropzone/dropzone.css: { minified: true }
 widget:
   version: VERSION
   css:

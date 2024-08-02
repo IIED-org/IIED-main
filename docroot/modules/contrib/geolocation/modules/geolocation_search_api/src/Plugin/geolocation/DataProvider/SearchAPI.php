@@ -4,11 +4,11 @@ namespace Drupal\geolocation_search_api\Plugin\geolocation\DataProvider;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\geolocation\DataProviderBase;
+use Drupal\geolocation\DataProviderInterface;
+use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Plugin\views\field\SearchApiEntityField;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
-use Drupal\geolocation\DataProviderInterface;
-use Drupal\search_api\Entity\Index;
 
 /**
  * Provides Google Maps.

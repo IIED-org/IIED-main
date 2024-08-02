@@ -51,7 +51,6 @@ interface BehaviorSettingsManagerInterface {
    * @return \Drupal\Core\Config\ImmutableConfig|null
    *   The BehaviorSettings Config object or NULL if it does not exist.
    */
-  public function loadBehaviorSettingsAsEditableConfig($entity_type_label,
-    $entity_id);
+  public function loadBehaviorSettingsAsEditableConfig($entity_type_label, $entity_id);
 
 }

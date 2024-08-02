@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\color_field\Plugin\Field\FieldFormatter;
 
@@ -128,7 +128,7 @@ class ColorFieldFormatterText extends FormatterBase {
     $opacity = $this->getFieldSetting('opacity');
     $settings = $this->getSettings();
 
-    $color_hex = new ColorHex($item->color, $item->opacity);
+    $color_hex = new ColorHex($item->color, is_null($item->opacity) ? NULL : (float) $item->opacity);
 
     switch ($settings['format']) {
       case 'hex':

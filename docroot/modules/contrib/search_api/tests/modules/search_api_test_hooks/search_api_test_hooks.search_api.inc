@@ -77,6 +77,7 @@ function search_api_test_hooks_search_api_index_items_alter(IndexInterface $inde
  * Implements hook_search_api_items_indexed().
  */
 function search_api_test_hooks_search_api_items_indexed(IndexInterface $index, array $item_ids) {
+  // cspell:disable-next-line
   \Drupal::messenger()->addStatus('Please set me at ease');
 }
 

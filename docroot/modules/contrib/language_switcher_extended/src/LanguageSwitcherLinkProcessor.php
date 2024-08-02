@@ -169,7 +169,7 @@ class LanguageSwitcherLinkProcessor {
               break;
 
             case 'no_link':
-              unset($links[$langcode]['url']);
+              $links[$langcode]['url'] = new Url('<nolink>');
               $links[$langcode]['attributes']['class'][] = 'language-link--untranslated';
               break;
           }
@@ -211,7 +211,7 @@ class LanguageSwitcherLinkProcessor {
       ->getId();
 
     // Display the current language without link.
-    unset($links[$currentLanguage]['url']);
+    $links[$currentLanguage]['url'] = new Url('<nolink>');
     $links[$currentLanguage]['attributes']['class'][] = 'is-active';
   }
 

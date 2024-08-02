@@ -141,7 +141,7 @@ class BuilderTest extends BuilderTestBase {
     $this->drupalGet($this->contentEditUrl);
 
     $page = $this->getSession()->getPage();
-    $this->addTextComponent('Second text item.', '[data-id="2"] .lpb-btn--add.after');
+    $this->addTextComponent('Second text item.', '[data-type="text"] .lpb-btn--add.after');
     $this->assertOrderOfStrings(['Some arbitrary text', 'Second text item.'], 'Second item was not correctly added after the first.');
 
     // Click the new item's move up button.
@@ -178,7 +178,8 @@ class BuilderTest extends BuilderTestBase {
     $this->htmlOutput($this->getSession()->getPage()->getHtml());
 
     $this->assertSession()->elementExists('css', '.layout__region--first .js-lpb-component');
-    $this->assertSession()->assertWaitOnAjaxRequest();
+//    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->getSession()->wait(1000);
     $this->submitForm([
       'title[0][value]' => 'Node title',
     ], 'Save');

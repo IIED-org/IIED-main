@@ -27,6 +27,8 @@ interface WebformContentCreatorInterface extends ConfigEntityInterface {
 
   const TYPE = 'type';
 
+  const SYNC_UNIQUE = 'sync_unique';
+
   const SYNC_CONTENT = 'sync_content';
 
   const SYNC_CONTENT_DELETE = 'sync_content_delete';
@@ -36,6 +38,12 @@ interface WebformContentCreatorInterface extends ConfigEntityInterface {
   const USE_ENCRYPT = 'use_encrypt';
 
   const ENCRYPTION_PROFILE = 'encryption_profile';
+
+  const REDIRECT_TO_ENTITY = "redirect_to_entity";
+
+  const REDIRECT_TO_ENTITY_MESSAGE = "redirect_to_entity_message";
+
+  const REDIRECT_TO_ENTITY_MESSAGE_ON_UPDATE = "redirect_to_entity_message_on_update";
 
   /**
    * Returns the entity title.
@@ -122,6 +130,14 @@ interface WebformContentCreatorInterface extends ConfigEntityInterface {
   public function getAttributes();
 
   /**
+   * Check if synchronization based on unique field is used.
+   *
+   * @return bool
+   *   true, when the synchronization is used. Otherwise, returns false.
+   */
+  public function getSyncUniqueContentCheck();
+
+  /**
    * Check if synchronization between content entities and webform submissions is used.
    *
    * @return bool
@@ -160,6 +176,30 @@ interface WebformContentCreatorInterface extends ConfigEntityInterface {
    *   The encryption profile name.
    */
   public function getEncryptionProfile();
+
+  /**
+   * Redirect to entity.
+   *
+   * @return bool
+   *   True, when the redirection is on. Otherwise, returns false.
+   */
+  public function getRedirectToEntityCheck();
+
+  /**
+   * Get message to be shown when redirect to new entity.
+   *
+   * @return string
+   *   Message after redirect.
+   */
+  public function getRedirectToEntityMessage();
+
+  /**
+   * Display message on webform submission update.
+   *
+   * @return string
+   *   True, when the redirection on submission update is on. Otherwise, returns false.
+   */
+  public function getRedirectToEntityMessageOnUpdateCheck();
 
   /**
    * Check if the target entity type exists.

@@ -5,3 +5,7 @@ services:
       - '@config.factory'
     tags:
       - { name: theme_negotiator, priority: 1000 }
+  gin_login.route:
+    class: Drupal\gin_login\Services\GinLoginRouteService
+    arguments:
+      - '@module_handler'

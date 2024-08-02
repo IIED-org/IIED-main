@@ -181,6 +181,7 @@ class SearchCrudTest extends KernelTestBase {
     $role->save();
     $role = Role::load('test_role');
     $this->assertContains($permission, $role->getPermissions());
+    $this->assertContains('search_api_autocomplete.search.muh', $role->getDependencies()['config']);
 
     $loaded_search = Search::load($search->id());
     $this->assertInstanceOf(SearchInterface::class, $loaded_search);

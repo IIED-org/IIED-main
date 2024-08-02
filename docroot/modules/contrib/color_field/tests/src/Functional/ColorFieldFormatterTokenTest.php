@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\color_field\Functional;
 
@@ -52,7 +52,7 @@ class ColorFieldFormatterTokenTest extends ColorFieldFunctionalTestBase {
     ])->save();
 
     $this->drupalGet('node/add/article');
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->responseContains('.node-article { background-color: rgba(156,89,209,0.95); }');
 
     // Ensure 2 fields on the same entity are both rendered properly.
@@ -91,7 +91,7 @@ class ColorFieldFormatterTokenTest extends ColorFieldFunctionalTestBase {
       'field_text_color[0][opacity]' => 1,
     ];
     $this->drupalGet('node/add/article');
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->responseContains('.node-article { background-color: rgba(0,0,0,0.1); }');
     $this->assertSession()->responseContains('.node-article { color: rgba(0,0,0,1); }');
   }

@@ -1,0 +1,7 @@
+taxonomy_manager_merge.admin_vocabulary.merge_terms:
+  path: '/admin/structure/taxonomy_manager/voc/{taxonomy_vocabulary}/mergeterms'
+  defaults:
+    _form: '\Drupal\taxonomy_manager_merge\Form\MergeTermsForm'
+    _title: 'Merge terms'
+  requirements:
+    _entity_create_access: 'taxonomy_term:{taxonomy_vocabulary}'

@@ -2,11 +2,8 @@
 
 namespace Drupal\Tests\linkchecker\Kernel;
 
-use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\linkchecker\Entity\LinkCheckerLink;
-use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
 
@@ -54,7 +51,12 @@ class LinkcheckerCleanUpTest extends KernelTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-    $this->installSchema('system', 'sequences');
+    // Installing sequences table is deprecated since 10.2 release so call it
+    // conditionally.
+    // @see https://www.drupal.org/node/3349345
+    if (version_compare(\Drupal::VERSION, '10.2', '<')) {
+      $this->installSchema('system', 'sequences');
+    }
     $this->installEntitySchema('node');
     $this->installEntitySchema('user');
     $this->installEntitySchema('linkcheckerlink');
@@ -85,7 +87,7 @@ class LinkcheckerCleanUpTest extends KernelTestBase {
       'body' => [
         [
           'value' => '
-          <a href="http://httpstat.us/304">The nightmare continues</a>'
+          <a href="http://httpstat.us/304">The nightmare continues</a>',
         ],
       ],
     ]);

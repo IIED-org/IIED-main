@@ -94,13 +94,15 @@ class FromAcquiaCloud implements EventSubscriberInterface {
     if (count($metadata) !== count(self::ENVIRONMENT_VARIABLES)) {
       return;
     }
-    // Cloud IDE environments do not have network information injected.
-    if (preg_match('/^(ide|ode\d*)$/', getenv('AH_SITE_ENVIRONMENT') ?: '') !== 0) {
+
+    // If the default network identifier settings are missing, return.
+    global $config;
+    if ((!CoreSettings::get('ah_network_identifier') && !isset($config['ah_network_identifier'])) ||
+      (!CoreSettings::get('ah_network_key') && !isset($config['ah_network_key']))) {
       return;
     }
 
     // Store the default Cloud settings in the metadata storage.
-    global $config;
     $metadata['ah_network_identifier'] = CoreSettings::get('ah_network_identifier') ?? $config['ah_network_identifier'];
     $metadata['ah_network_key'] = CoreSettings::get('ah_network_key') ?? $config['ah_network_key'];
 

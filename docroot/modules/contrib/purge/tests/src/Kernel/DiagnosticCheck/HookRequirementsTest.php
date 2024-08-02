@@ -29,18 +29,18 @@ class HookRequirementsTest extends KernelTestBase {
     $module_handler->loadInclude('purge', 'install');
     $req = $module_handler->invoke('purge', 'requirements', ['runtime']);
     // Assert presence of all DiagnosticCheck plugins we know off.
-    $this->assertSame(TRUE, isset($req["capacity"]));
-    $this->assertSame(TRUE, isset($req["maxage"]));
-    $this->assertSame(TRUE, isset($req["memoryqueuewarning"]));
-    $this->assertSame(TRUE, isset($req["processorsavailable"]));
-    $this->assertSame(TRUE, isset($req["purgersavailable"]));
-    $this->assertSame(TRUE, isset($req["queuersavailable"]));
-    $this->assertSame(TRUE, isset($req["alwayserror"]));
-    $this->assertSame(TRUE, isset($req["alwayswarning"]));
-    $this->assertSame(FALSE, isset($req["alwaysinfo"]));
-    $this->assertSame(FALSE, isset($req["alwaysok"]));
-    $this->assertSame(FALSE, isset($req["purgerwarning"]));
-    $this->assertSame(FALSE, isset($req["queuewarning"]));
+    $this->assertTrue(isset($req["capacity"]));
+    $this->assertTrue(isset($req["maxage"]));
+    $this->assertTrue(isset($req["memoryqueuewarning"]));
+    $this->assertTrue(isset($req["processorsavailable"]));
+    $this->assertTrue(isset($req["purgersavailable"]));
+    $this->assertTrue(isset($req["queuersavailable"]));
+    $this->assertTrue(isset($req["alwayserror"]));
+    $this->assertTrue(isset($req["alwayswarning"]));
+    $this->assertFalse(isset($req["alwaysinfo"]));
+    $this->assertFalse(isset($req["alwaysok"]));
+    $this->assertFalse(isset($req["purgerwarning"]));
+    $this->assertFalse(isset($req["queuewarning"]));
     // Assert check titles.
     $this->assertSame('Purge: Always a warning', $req['alwayswarning']['title']);
     $this->assertSame('Purge: Always an error', $req['alwayserror']['title']);
@@ -54,7 +54,7 @@ class HookRequirementsTest extends KernelTestBase {
     $this->assertSame('warning', $req['alwayswarning']['severity_status']);
     $this->assertSame('error', $req['alwayserror']['severity_status']);
     // Assert that the values come through properly.
-    $this->assertSame(TRUE, is_string($req['capacity']['value']));
+    $this->assertTrue(is_string($req['capacity']['value']));
     $this->assertSame("0", $req['capacity']['value']);
   }
 

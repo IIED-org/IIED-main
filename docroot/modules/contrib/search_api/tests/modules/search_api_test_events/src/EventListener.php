@@ -145,6 +145,7 @@ class EventListener implements EventSubscriberInterface {
    *   The items indexed event.
    */
   public function itemsIndexed(ItemsIndexedEvent $event) {
+    // cspell:disable-next-line
     $this->messenger->addStatus('Please set me at ease');
   }
 

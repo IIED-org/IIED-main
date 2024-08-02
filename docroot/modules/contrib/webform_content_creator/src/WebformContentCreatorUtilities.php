@@ -13,6 +13,8 @@ class WebformContentCreatorUtilities {
 
   const WEBFORM_SUBMISSION = 'webform_submission';
 
+  const WEBFORM_CONTENT_CREATOR = 'webform_content_creator';
+
   const ENTITY_TYPE_MANAGER = 'entity_type.manager';
 
   const ENTITY_MANAGER = 'entity_field.manager';
@@ -47,12 +49,15 @@ class WebformContentCreatorUtilities {
   private static function buildTree(array $elements) {
     $elementsDefinitions = \Drupal::service('plugin.manager.webform.element')->getDefinitions();
     $layoutElements = [
-      'webform_wizard_page',
       'container',
       'details',
       'fieldset',
       'webform_flexbox',
-      'webform_card'
+      'webform_card',
+      'webform_section',
+      'webform_table',
+      'webform_table_row',
+      'webform_wizard_page',
     ];
 
     $result = [];
@@ -322,11 +327,13 @@ class WebformContentCreatorUtilities {
    *   Encryption profile.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   Webform submission.
+   * @param array $mapping
+   *   Webform content creator mapping.
    *
    * @return string
    *   Token value.
    */
-  public static function getDecryptedTokenValue($value, $encryption_profile, WebformSubmissionInterface $webform_submission) {
+  public static function getDecryptedTokenValue($value, $encryption_profile, WebformSubmissionInterface $webform_submission, $mapping = []) {
     if (empty($value) || empty($webform_submission)) {
       return '';
     }
@@ -339,7 +346,7 @@ class WebformContentCreatorUtilities {
     }
     foreach ($tokens as $types) {
       foreach ($types as $val) {
-        $token_value = \Drupal::token()->replace($val, [self::WEBFORM_SUBMISSION => $webform_submission], ['clear' => TRUE]);
+        $token_value = \Drupal::token()->replace($val, [self::WEBFORM_SUBMISSION => $webform_submission, self::WEBFORM_CONTENT_CREATOR => $mapping], ['clear' => TRUE]);
         if (!empty($encryption_profile)) {
           // Decrypt single token value.
           $dec_token_value = self::getDecryptedValue($token_value, $encryption_profile);

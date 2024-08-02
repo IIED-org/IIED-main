@@ -4,19 +4,29 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\acquia_connector\Kernel\EventSubscriber;
 
-use Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaTelemetry;
-use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Component\Serialization\Json;
+use Drupal\acquia_connector\Services\AcquiaTelemetryService;
 use Drupal\Component\Uuid\Php as PhpUuid;
 use Drupal\Tests\acquia_connector\Kernel\AcquiaConnectorTestBase;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
 
 /**
  * @coversDefaultClass \Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaTelemetry
  * @group acquia_connector
  */
 final class AcquiaTelemetryTest extends AcquiaConnectorTestBase {
+
+  /**
+   * The AcquiaTelemetry service object.
+   *
+   * @var \Drupal\acquia_connector\Services\AcquiaTelemetryService
+   */
+  protected $acquiaTelemetry;
+
+  /**
+   * The event name.
+   *
+   * @var string
+   */
+  protected $eventTypeMachine;
 
   /**
    * {@inheritdoc}
@@ -26,97 +36,132 @@ final class AcquiaTelemetryTest extends AcquiaConnectorTestBase {
     $this->config('system.site')
       ->set('uuid', (new PhpUuid())->generate())
       ->save();
+    $this->acquiaTelemetry = new AcquiaTelemetryService(
+      $this->container->get('extension.list.module'),
+      $this->container->get('config.factory'),
+      $this->container->get("state"),
+      $this->container->get("logger.factory"),
+    );
+    $this->eventTypeMachine = preg_replace('@[^a-z0-9-]+@', '_', strtolower('Drupal Module Statistics'));
   }
 
   /**
-   * Tests the telemetry events sent.
+   * Tests the telemetry data sent.
    */
   public function testTelemetry(): void {
-    $state = $this->container->get('state');
+    $get_telemetry_method = $this->getAcquiaTelemetryMethod("getTelemetryData");
+    $actual_telemetry_data = $get_telemetry_method->invokeArgs($this->acquiaTelemetry, ['Drupal Module Statistics', []]);
 
-    $request = Request::create('/');
-    $this->container->get('http_kernel')->terminate(
-      $request,
-      $this->doRequest($request)
-    );
+    $this->assertArrayHasKey('event_type', $actual_telemetry_data, "Telemetry data does not contain event_type key.");
+    $this->assertArrayHasKey('user_id', $actual_telemetry_data, "Telemetry data does not contain user_id key.");
+    $this->assertNotEmpty($actual_telemetry_data['user_id'], "Site UUID is empty.");
 
-    $events = $state->get('acquia_connector_test.telemetry_events', []);
-    self::assertIsArray($events);
-    self::assertCount(1, $events);
-    $payload = [];
-    parse_str($events[0], $payload);
-    self::assertIsString($payload['api_key']);
-    self::assertIsString('event', $payload['event']);
+    $this->assertArrayHasKey('event_properties', $actual_telemetry_data, "Telemetry data does not contain event_properties key.");
 
-    $data = Json::decode($payload['event']);
-    self::assertIsArray($data);
-    self::assertEquals(
-      ['event_type', 'user_id', 'event_properties'],
-      array_keys($data),
-    );
-    self::assertEquals(
-      ['extensions', 'php', 'drupal'],
-      array_keys($data['event_properties'])
-    );
-    self::assertContains('acquia_connector', array_keys($data['event_properties']['extensions']));
-    self::assertEquals(['version'], array_keys($data['event_properties']['php']));
-    self::assertEquals(PHP_VERSION, $data['event_properties']['php']['version']);
-    self::assertEquals(['version', 'core_enabled'], array_keys($data['event_properties']['drupal']));
-    self::assertContains('user', array_keys($data['event_properties']['drupal']['core_enabled']));
+    $this->assertArrayHasKey('extensions', $actual_telemetry_data['event_properties'], "Telemetry data event_properties does not contain extensions key.");
+    $this->assertArrayHasKey('php', $actual_telemetry_data['event_properties'], "Telemetry data event_properties does not contain php key.");
+    $this->assertArrayHasKey('drupal', $actual_telemetry_data['event_properties'], "Telemetry data event_properties does not contain drupal key.");
+
+    $this->assertContains('acquia_connector', array_keys($actual_telemetry_data['event_properties']['extensions']));
+    $this->assertEquals(['version'], array_keys($actual_telemetry_data['event_properties']['php']));
+    $this->assertEquals(PHP_VERSION, $actual_telemetry_data['event_properties']['php']['version']);
+    $this->assertEquals(['version', 'core_enabled'], array_keys($actual_telemetry_data['event_properties']['drupal']));
+    $this->assertContains('user', array_keys($actual_telemetry_data['event_properties']['drupal']['core_enabled']));
+
   }
 
   /**
-   * Tests the telemetry threshold period for sending events.
+   * Tests the shouldSendTelemetryData() method of AcquiaCmsTelemetry class.
+   *
+   * @throws \ReflectionException
+   *
+   * @dataProvider telemetryTestData
    */
-  public function testTelemetryThresholdPeriod(): void {
-    $state = $this->container->get('state');
-    $current_time = time();
-    $time = $this->createMock(TimeInterface::class);
-    $time->method('getCurrentTime')->willReturn(
-      // The first getCurrentTime() for checks.
-      $current_time,
-      // The call to getCurrentTime() for setting the timestamp.
-      $current_time,
-      // The second getCurrentTime() for checks.
-      $current_time + 21600,
-      // The third getCurrentTime() for checks.
-      $current_time + 86400,
-      // The fourth getCurrentTime() for checks.
-      $current_time + 86401,
-      // The call to getCurrentTime() for setting the timestamp.
-      $current_time + 86401
+  public function testIfTelemetryDataShouldSend(string|null $env, bool $should_send): void {
+    $get_telemetry_method = $this->getAcquiaTelemetryMethod("getTelemetryData");
+    $actual_telemetry_data = $get_telemetry_method->invokeArgs($this->acquiaTelemetry, [$this->eventTypeMachine, []]);
+    $should_send_method = $this->getAcquiaTelemetryMethod("shouldSendTelemetryData");
+    $env_check_method = $this->getAcquiaTelemetryMethod("isAcquiaProdEnv");
+    $state_service = $this->container->get("state");
+    $parameters = [
+      $this->eventTypeMachine,
+      [
+        'extensions' => $actual_telemetry_data['event_properties']['extensions'],
+        'php' => $actual_telemetry_data['event_properties']['php'],
+        'drupal' => $actual_telemetry_data['event_properties']['drupal'],
+      ],
+    ];
+
+    if ($env) {
+      putenv("AH_SITE_ENVIRONMENT=$env");
+    }
+    $should_send_data = $env_check_method->invoke($this->acquiaTelemetry);
+    $should_send_msg = !$should_send ? 'not' : '';
+    $this->assertEquals($should_send, $should_send_data, "Should $should_send_msg send telemetry data.");
+
+    $method_hash = $this->getAcquiaTelemetryMethod("getHash");
+    $state_service->set(
+      "acquia_connector.telemetry.$this->eventTypeMachine.hash",
+      $method_hash->invoke($this->acquiaTelemetry, [
+        'extensions' => $actual_telemetry_data['event_properties']['extensions'],
+        'php' => $actual_telemetry_data['event_properties']['php'],
+        'drupal' => $actual_telemetry_data['event_properties']['drupal'],
+      ]),
     );
 
-    $sut = new AcquiaTelemetry(
-      $this->container->get('extension.list.module'),
-      $this->container->get('http_client'),
-      $this->container->get('config.factory'),
-      $state,
-      $time
-    );
-    $do_terminate = function () use ($sut) {
-      $sut->onTerminateResponse(new KernelEvent(
-        $this->container->get('http_kernel'),
-        Request::create('/'),
-        1
-      ));
-    };
+    if ($should_send) {
+      $should_send_data = $should_send_method->invokeArgs($this->acquiaTelemetry, $parameters);
+      $this->assertFalse($should_send_data, "Should not send telemetry data, if current telemetry data is same as data already sent.");
 
-    $do_terminate();
-    self::assertEquals($current_time, $state->get('acquia_connector.telemetry.timestamp'));
-    self::assertCount(1, $state->get('acquia_connector_test.telemetry_events'));
+      $state_service->set("acquia_connector.telemetry.$this->eventTypeMachine.hash", 'O2X4mf9Csg8KLOIqNlUqc9dqXdsL_JE5hjKh4dRPemQ');
+      $should_send_data = $should_send_method->invokeArgs($this->acquiaTelemetry, $parameters);
+      $this->assertTrue($should_send_data, "Should send telemetry data, if current telemetry data has changed from data already sent.");
+    }
+  }
 
-    $do_terminate();
-    self::assertEquals($current_time, $state->get('acquia_connector.telemetry.timestamp'));
-    self::assertCount(1, $state->get('acquia_connector_test.telemetry_events'));
+  /**
+   * Data for testing embed codes.
+   *
+   * @return \Generator
+   *   The test data.
+   */
+  public function telemetryTestData(): \Generator {
+    yield 'Non Acquia Environment' => [
+      NULL,
+      FALSE,
+    ];
+    yield 'Dev Acquia Environment' => [
+      'dev',
+      FALSE,
+    ];
+    yield 'Stage Acquia Environment' => [
+      'stage',
+      FALSE,
+    ];
+    yield 'Prod Acquia Environment' => [
+      'prod',
+      TRUE,
+    ];
+    yield 'IDE Acquia Environment' => [
+      'IDE',
+      FALSE,
+    ];
+    yield 'ODE Acquia Environment' => [
+      'ODE',
+      FALSE,
+    ];
+  }
 
-    $do_terminate();
-    self::assertEquals($current_time, $state->get('acquia_connector.telemetry.timestamp'));
-    self::assertCount(1, $state->get('acquia_connector_test.telemetry_events'));
-
-    $do_terminate();
-    self::assertEquals($current_time + 86401, $state->get('acquia_connector.telemetry.timestamp'));
-    self::assertCount(2, $state->get('acquia_connector_test.telemetry_events'));
+  /**
+   * Returns the AcquiaTelemetry ReflectionMethod object.
+   *
+   * @throws \ReflectionException
+   */
+  protected function getAcquiaTelemetryMethod(string $method_name): \ReflectionMethod {
+    $class = new \ReflectionClass($this->acquiaTelemetry);
+    $method = $class->getMethod($method_name);
+    $method->setAccessible(TRUE);
+    return $method;
   }
 
 }

@@ -5,21 +5,18 @@
    * Attaches UI elements to $container.
    * @param {jQuery} $container
    *   The container.
-   * @param {string} id
-   *   The container id.
    * @param {Object} settings
    *   The settings object.
    */
   function attachUiElements($container, settings) {
-    const id = $container[0].id;
+    const id = $container.attr('data-lpb-ui-id');
     const lpbBuilderSettings = settings.lpBuilder || {};
     const uiElements = lpbBuilderSettings.uiElements || {};
     const containerUiElements = uiElements[id] || [];
-    Object.entries(containerUiElements).forEach(([key, uiElement]) => {
+    Object.values(containerUiElements).forEach((uiElement) => {
       const { element, method } = uiElement;
       $container[method]($(element).addClass('js-lpb-ui'));
     });
-    Drupal.attachBehaviors($container[0], drupalSettings);
   }
 
   /**
@@ -43,11 +40,23 @@
     }
     $dialogs.each((i, dialog) => {
       const bounding = dialog.getBoundingClientRect();
-      const viewPortHeight = window.innerHeight || document.documentElement.clientHeight;
+      const viewPortHeight =
+        window.innerHeight || document.documentElement.clientHeight;
       if (bounding.bottom > viewPortHeight) {
-        const $dialog =  $('.ui-dialog-content', dialog);
-        const pos = $dialog.dialog('option', 'position');
-        $dialog.dialog('option', 'position', pos);
+        const $dialog = $('.ui-dialog-content', dialog);
+        const height = viewPortHeight - 200;
+        $dialog.dialog('option', 'height', height);
+        $dialog.css('overscroll-behavior', 'contain');
+
+        if ($dialog.data('lpOriginalHeight') !== height) {
+          $dialog.data('lpOriginalHeight', height);
+          const bounding = dialog.getBoundingClientRect();
+          const viewPortHeight = window.innerHeight || document.documentElement.clientHeight;
+          if (bounding.bottom > viewPortHeight) {
+            const pos = $dialog.dialog('option', 'position');
+            $dialog.dialog('option', 'position', pos);
+          }
+        }
       }
     });
   }
@@ -79,11 +88,12 @@
       },
       error: () => {
         // Fail silently to prevent console errors.
-      }
-    })
-    .execute();
+      },
+    }).execute();
   }
+
   const reorderComponents = debounce(doReorderComponents);
+
   /**
    * Returns a list of errors for the attempted move, or an empty array if there are no errors.
    * @param {Element} settings The builder settings.
@@ -100,18 +110,31 @@
       )
       .filter((errors) => errors !== false && errors !== undefined);
   }
+
   /**
    * Updates move buttons to reflect current state.
    * @param {jQuery} $element The builder element.
    */
   function updateMoveButtons($element) {
-    $element.find('.lpb-up, .lpb-down').attr('tabindex', '0');
-    $element
-      .find(
-        '.js-lpb-component:first-of-type .lpb-up, .js-lpb-component:last-of-type .lpb-down',
-      )
-      .attr('tabindex', '-1');
+    const lpbBuilderElements = Array.from($element[0].querySelectorAll('.js-lpb-component-list, .js-lpb-region'));
+    const lpbBuilderComponent = lpbBuilderElements.filter(el => el.querySelector('.js-lpb-component'));
+
+    $element[0].querySelectorAll('.lpb-up, .lpb-down').forEach((el) => {
+      // Set the tabindex of the up and down arrows to 0.
+      el.setAttribute('tabindex', '0');
+    });
+
+    lpbBuilderComponent.forEach((el) => {
+      const components = Array.from(el.children).filter(n => n.classList.contains('js-lpb-component'));
+
+      // Set the tabindex of the first component's up arrow to -1.
+      components[0].querySelector('.lpb-up')?.setAttribute('tabindex', '-1');
+
+      // Set the tabindex of the last component's down arrow to -1.
+      components[components.length - 1].querySelector('.lpb-down')?.setAttribute('tabindex', '-1');
+    });
   }
+
   /**
    * Hides the add content button in regions that contain components.
    * @param {jQuery} $element The builder element.
@@ -126,6 +149,7 @@
       }
     });
   }
+
   /**
    * Updates the UI based on currently state.
    * @param {jQuery} $element The builder element.
@@ -135,6 +159,7 @@
     updateMoveButtons($element);
     hideEmptyRegionButtons($element);
   }
+
   /**
    * Moves a component up or down within a simple list of components.
    * @param {jQuery} $moveItem The item to move.
@@ -146,40 +171,56 @@
       direction === 1
         ? $moveItem.nextAll('.js-lpb-component').first()
         : $moveItem.prevAll('.js-lpb-component').first();
+
     const method = direction === 1 ? 'after' : 'before';
     const { scrollY } = window;
     const destScroll = scrollY + $sibling.outerHeight() * direction;
-    const distance = Math.abs(destScroll - scrollY);
 
     if ($sibling.length === 0) {
       return false;
     }
 
-    $({ translateY: 0 }).animate(
-      { translateY: 100 * direction },
-      {
-        duration: Math.max(100, Math.min(distance, 500)),
-        easing: 'swing',
-        step() {
-          const a = $sibling.outerHeight() * (this.translateY / 100);
-          const b = -$moveItem.outerHeight() * (this.translateY / 100);
-          $moveItem.css({ transform: `translateY(${a}px)` });
-          $sibling.css({ transform: `translateY(${b}px)` });
-        },
-        complete() {
-          $moveItem.css({ transform: 'none' });
-          $sibling.css({ transform: 'none' });
-          $sibling[method]($moveItem);
-          $moveItem
-            .closest(`[${idAttr}]`)
-            .trigger('lpb-component:move', [$moveItem.attr('data-uuid')]);
-        },
-      },
-    );
-    if (distance > 50) {
-      $('html, body').animate({ scrollTop: destScroll });
+    // Determine if the move should be animated horizontally or vertically.
+    const animateProp = $sibling[0].getBoundingClientRect().top == $moveItem[0].getBoundingClientRect().top
+      ? 'translateX'
+      : 'translateY';
+    // Determine the dimension property to use for the animation.
+    const dimmensionProp = animateProp === 'translateX' ? 'offsetWidth' : 'offsetHeight';
+    // Determine the distance to move the sibling and the item.
+    const siblingDest = $moveItem[0][dimmensionProp] * direction * -1;
+    const itemDest = $sibling[0][dimmensionProp] * direction;
+    const distance = Math.abs(Math.max(siblingDest, itemDest));
+    const duration  = distance * .25;
+    const siblingKeyframes = [
+      { transform: `${animateProp}(0)` },
+      { transform: `${animateProp}(${siblingDest}px)` },
+    ];
+    const itemKeyframes = [
+      { transform: `${animateProp}(0)` },
+      { transform: `${animateProp}(${itemDest}px)` },
+    ];
+    const timing = {
+      duration,
+      iterations: 1
+    }
+    const anim1 = $moveItem[0].animate(itemKeyframes, timing);
+    anim1.onfinish = () => {
+      $moveItem.css({ transform: 'none' });
+      $sibling.css({ transform: 'none' });
+      $sibling[method]($moveItem);
+      $moveItem
+        .closest(`[${idAttr}]`)
+        .trigger('lpb-component:move', [$moveItem.attr('data-uuid')]);
+    };
+    $sibling[0].animate(siblingKeyframes, timing);
+    if (animateProp === 'translateY') {
+      window.scrollTo({
+        top: destScroll,
+        behavior: 'smooth',
+      });
     }
   }
+
   /**
    * Moves the focused component up or down the DOM to the next valid position
    * when an arrow key is pressed. Unlike move(), nav()can fully navigate
@@ -203,7 +244,7 @@
         '<div class="lpb-shim"></div>',
       );
     }
-    // Build a list of possible targets, or move destinatons.
+    // Build a list of possible targets, or move destinations.
     const targets = $('.js-lpb-component, .lpb-shim', $element)
       .toArray()
       // Remove child components from possible targets.
@@ -238,6 +279,7 @@
       .closest(`[${idAttr}]`)
       .trigger('lpb-component:move', [$item.attr('data-uuid')]);
   }
+
   function startNav($item) {
     const $msg = $(
       `<div id="lpb-navigating-msg" class="lpb-tooltiptext lpb-tooltiptext--visible js-lpb-tooltiptext">${Drupal.t(
@@ -255,6 +297,7 @@
       .prepend($msg);
     $item.before('<div class="lpb-navigating-placeholder"></div>');
   }
+
   function stopNav($item) {
     $item
       .removeClass('is-navigating')
@@ -267,12 +310,14 @@
       .find('.lpb-navigating-placeholder')
       .remove();
   }
+
   function cancelNav($item) {
     const $builder = $item.closest(`[${idAttr}]`);
     $builder.find('.lpb-navigating-placeholder').replaceWith($item);
     updateUi($builder);
     stopNav($item);
   }
+
   /**
    * Prevents user from navigating away and accidentally loosing changes.
    * @param {jQuery} $element The jQuery layout paragraphs builder object.
@@ -300,6 +345,7 @@
         $element.removeClass('is_changed');
       });
   }
+
   /**
    * Attaches event listeners/handlers for builder ui.
    * @param {jQuery} $element The layout paragraphs builder object.
@@ -317,7 +363,6 @@
     });
     $element.on('click.lp-builder', '.js-lpb-component', (e) => {
       $(e.currentTarget).focus();
-      return false;
     });
     $element.on('click.lp-builder', '.lpb-drag', (e) => {
       const $btn = $(e.currentTarget);
@@ -349,12 +394,11 @@
       }
     });
   }
+
   function initDragAndDrop($element, settings) {
+    const containers = once('is-dragula-enabled', '.js-lpb-component-list, .js-lpb-region', $element[0]);
     const drake = dragula(
-      $element
-        .find('.js-lpb-component-list, .js-lpb-region')
-        .not('.is-dragula-enabled')
-        .get(),
+      containers,
       {
         accepts: (el, target, source, sibling) =>
           moveErrors(settings, el, target, source, sibling).length === 0,
@@ -400,11 +444,12 @@
     });
     return drake;
   }
+
   // An array of move error callback functions.
   Drupal._lpbMoveErrors = [];
   /**
    * Registers a move validation function.
-   * @param {Funciton} f The validator function.
+   * @param {Function} f The validator function.
    */
   Drupal.registerLpbMoveError = (f) => {
     Drupal._lpbMoveErrors.push(f);
@@ -440,49 +485,96 @@
     const $element = $(`[data-lpb-id="${layoutId}"]`);
     $element.trigger(`lpb-${eventName}`, [componentUuid]);
   };
+
+  /*
+   * Moves the main form action buttons into the jQuery modal button pane.
+   * @param {jQuery} context
+   *  The context to search for dialog buttons.
+   * @return {void}
+   */
+  function updateDialogButtons(context) {
+    // Determine if this context is from within dialog content.
+    const $lpDialog = $(context).closest('.ui-dialog-content');
+
+    if (!$lpDialog) {
+      return;
+    }
+
+    const buttons = [];
+    const $buttons = $lpDialog.find('.layout-paragraphs-component-form > .form-actions input[type=submit], .layout-paragraphs-component-form > .form-actions a.button');
+
+    if ($buttons.length === 0) {
+      return;
+    }
+
+    $buttons.each((_i, el) => {
+      const $originalButton = $(el).css({ display: 'none' });
+      buttons.push({
+        text: $originalButton.html() || $originalButton.attr('value'),
+        class: $originalButton.attr('class'),
+        click(e) {
+          // If the original button is an anchor tag, triggering the "click"
+          // event will not simulate a click. Use the click method instead.
+          if ($originalButton.is('a')) {
+            $originalButton[0].click();
+          } else {
+            $originalButton
+              .trigger('mousedown')
+              .trigger('mouseup')
+              .trigger('click');
+            e.preventDefault();
+          }
+        },
+      });
+    });
+
+    $lpDialog.dialog('option', 'buttons', buttons);
+  }
+
   Drupal.behaviors.layoutParagraphsBuilder = {
     attach: function attach(context, settings) {
       // Add UI elements to the builder, each component, and each region.
-      $(once('lpb-ui-elements', '[data-has-js-ui-element]'))
-        .each((i, el) => {
-          attachUiElements($(el), settings);
-        });
+      const jsUiElements = once('lpb-ui-elements', '[data-has-js-ui-element]');
+      jsUiElements.forEach((el) => {
+        attachUiElements($(el), settings);
+      });
+
       // Listen to relevant events and update UI.
-      const events = [
-        'lpb-builder:init.lpb',
-        'lpb-component:insert.lpb',
-        'lpb-component:update.lpb',
-        'lpb-component:move.lpb',
-        'lpb-component:drop.lpb',
-        'lpb-component:delete.lpb',
-      ].join(' ');
-      $(once('lpb-events', '[data-lpb-id]'))
-        .on(events, (e) => {
+      once('lpb-events', '[data-lpb-id]').forEach((el) => {
+        $(el).on('lpb-builder:init.lpb lpb-component:insert.lpb lpb-component:update.lpb lpb-component:move.lpb lpb-component:drop.lpb lpb-component:delete.lpb', (e) => {
           const $element = $(e.currentTarget);
           updateUi($element);
         });
+      });
+
       // Initialize the editor drag and drop ui.
-      $(`.has-components[${idAttr}]`).each((index, element) => {
-        const $element = $(once('lpb-enabled', element));
+      once('lpb-enabled', '[data-lpb-id].has-components').forEach((el) => {
+        const $element = $(el);
         const id = $element.attr(idAttr);
         const lpbSettings = settings.lpBuilder[id];
         // Attach event listeners and init dragula just once.
-        $element.each(() => {
-          $element.data('drake', initDragAndDrop($element, lpbSettings));
-          attachEventListeners($element, lpbSettings);
-          $element.trigger('lpb-builder:init');
-        });
-        // Add new containers to the dragula instance.
-        $('.js-lpb-region:not(.is-dragula-enabled)', element)
-          .addClass('is-dragula-enabled')
-          .get()
-          .forEach((c) => {
-            const drake = $(element).data('drake');
-            drake.containers.push(c);
-          });
+        $element.data('drake', initDragAndDrop($element, lpbSettings));
+        attachEventListeners($element, lpbSettings);
+        $element.trigger('lpb-builder:init');
       });
+
+      // Add new containers to the dragula instance.
+      once('is-dragula-enabled', '.js-lpb-region').forEach((c) => {
+        const builderElement = c.closest('[data-lpb-id]');
+        const drake = $(builderElement).data('drake');
+        drake.containers.push(c);
+      });
+
+      // If UI elements have been attached to the DOM, we need to attach behaviors.
+      if (jsUiElements.length) {
+        Drupal.attachBehaviors(context, settings);
+      }
+
+      // Moves dialog buttons into the jQuery modal button pane.
+      updateDialogButtons(context);
     },
   };
+
   // Move the main form action buttons into the jQuery modal button pane.
   // By default, dialog.ajax.js moves all form action buttons into the button
   // pane -- which can have unintended consequences. We suppress that option
@@ -490,49 +582,28 @@
   // main form action buttons into the jQuery button pane.
   // @see https://www.drupal.org/project/layout_paragraphs/issues/3191418
   // @see https://www.drupal.org/project/layout_paragraphs/issues/3216981
-  $(window).on('dialog:aftercreate', (event, dialog, $dialog) => {
-    if ($dialog.attr('id').indexOf('lpb-dialog-') === 0) {
-      // If buttons have already been added to the buttonpane, do not continue.
-      if ($dialog.dialog('option', 'buttons').length > 0) {
-        return;
-      }
-      const buttons = [];
-      const $buttons = $dialog.find(
-        '.layout-paragraphs-component-form > .form-actions input[type=submit], .layout-paragraphs-component-form > .form-actions a.button',
-      );
-      $buttons.each((_i, el) => {
-        const $originalButton = $(el).css({ display: 'none' });
-        buttons.push({
-          text: $originalButton.html() || $originalButton.attr('value'),
-          class: $originalButton.attr('class'),
-          click(e) {
-            // If the original button is an anchor tag, triggering the "click"
-            // event will not simulate a click. Use the click method instead.
-            if ($originalButton.is('a')) {
-              $originalButton[0].click();
-            } else {
-              $originalButton
-                .trigger('mousedown')
-                .trigger('mouseup')
-                .trigger('click');
-              e.preventDefault();
-            }
-          },
-        });
-      });
-      if (buttons.length) {
-        $dialog.dialog('option', 'buttons', buttons);
-      }
-    }
-  });
+
   // Repositions open dialogs.
   // @see https://www.drupal.org/project/layout_paragraphs/issues/3252978
   // @see https://stackoverflow.com/questions/5456298/refresh-jquery-ui-dialog-position
+
   let lpDialogInterval;
-  $(window).on('dialog:aftercreate', (event, dialog, $dialog) => {
-    if ($dialog[0].id.indexOf('lpb-dialog-') === 0) {
+
+  const handleAfterDialogCreate = (event, dialog, $dialog) => {
+    const $element = $dialog || jQuery(event.target);
+    if ($element.attr('id').startsWith('lpb-dialog-')) {
+      updateDialogButtons($element);
       clearInterval(lpDialogInterval);
-      lpDialogInterval = setInterval(repositionDialog.bind(null, lpDialogInterval), 500);
+      lpDialogInterval = setInterval(
+        repositionDialog.bind(null, lpDialogInterval),
+        500
+      );
     }
-  });
+  };
+  if (typeof DrupalDialogEvent === 'undefined') {
+    $(window).on('dialog:aftercreate', handleAfterDialogCreate);
+  } else {
+    window.addEventListener('dialog:aftercreate', handleAfterDialogCreate);
+  }
+
 })(jQuery, Drupal, Drupal.debounce, dragula, once);

@@ -139,14 +139,11 @@
           chart = new google.visualization.Table(document.getElementById(chartId));
       }
 
-      // Fix for https://www.drupal.org/project/charts/issues/2950654.
-      // Would be interested in a different approach that allowed the default
-      // colors to be applied first, rather than unsetting.
+      let color_regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
       if (options['colors'] && options['colors'].length > 10) {
-        for (const i in options) {
-          if (i === 'colors') {
-            delete options[i];
-            break;
+        for (const i in options['colors']) {
+          if (!color_regex.test(options['colors'][i])) {
+            options['colors'][i] = '#FFFFFF';
           }
         }
       }

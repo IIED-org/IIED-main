@@ -6,6 +6,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\TranslatableInterface;
@@ -96,10 +97,19 @@ class LinkExtractorService {
       if ($entity instanceof TranslatableInterface && $fieldDefinition->isTranslatable()) {
         foreach ($entity->getTranslationLanguages() as $language) {
           $translation = $entity->getTranslation($language->getId());
+          $skip_unpublished = $this->linkcheckerSetting->get('search_published_contents_only');
+          if ($skip_unpublished && $translation instanceof EntityPublishedInterface && !$translation->isPublished()) {
+            continue;
+          }
+
           $links += $this->extractFromField($translation->get($fieldDefinition->getName()));
         }
       }
       else {
+        $skip_unpublished = $this->linkcheckerSetting->get('search_published_contents_only');
+        if ($skip_unpublished && $entity instanceof EntityPublishedInterface && !$entity->isPublished()) {
+          continue;
+        }
         $links += $this->extractFromField($entity->get($fieldDefinition->getName()));
       }
     }
@@ -199,7 +209,7 @@ class LinkExtractorService {
       // Decode HTML links into plain text links.
       // DOMDocument->loadHTML does not provide the RAW url from code. All html
       // entities are already decoded.
-      // @todo: Try to find a way to get the raw value.
+      // @todo Try to find a way to get the raw value.
       $urlDecoded = $url;
 
       // Prefix protocol relative urls with a protocol to allow link checking.
@@ -416,7 +426,9 @@ class LinkExtractorService {
 
     // Is url in domain blacklist?
     $urls = $this->linkcheckerSetting->get('check.disable_link_check_for_urls');
-    if (!empty($urls) && preg_match('/' . implode('|', array_map(function ($links) {return preg_quote($links, '/');}, preg_split('/(\r\n?|\n)/', $urls))) . '/', $url)) {
+    if (!empty($urls) && preg_match('/' . implode('|', array_map(function ($links) {
+      return preg_quote($links, '/');
+    }, preg_split('/(\r\n?|\n)/', $urls))) . '/', $url)) {
       return TRUE;
     }
 
@@ -456,9 +468,9 @@ class LinkExtractorService {
 
     $scheme = isset($uri['scheme']) ? $uri['scheme'] . '://' : '';
     $user = isset($uri['user']) ? $uri['user'] . ($uri['pass'] ? ':' . $uri['pass'] : '') . '@' : '';
-    $port = isset($uri['port']) ? $uri['port'] : 80;
+    $port = $uri['port'] ?? 80;
     $host = $uri['host'] . ($port != 80 ? ':' . $port : '');
-    $path = isset($uri['path']) ? $uri['path'] : '/';
+    $path = $uri['path'] ?? '/';
 
     // Glue the URL variables.
     $absoluteUrl = $scheme . $user . $host . $path;

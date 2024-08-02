@@ -28,5 +28,5 @@ function devel_kint_extras_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_devel_dumper_info_alter().
  */
 function devel_kint_extras_devel_dumper_info_alter(&$info) {
-    $info['kint']['class'] = KintExtended::class;
+  $info['kint']['class'] = KintExtended::class;
 }

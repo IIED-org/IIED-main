@@ -17,21 +17,25 @@ abstract class ChartBase extends PluginBase implements ChartInterface {
   /**
    * {@inheritdoc}
    */
-  public function getChartName() {
+  public function getChartName(): string {
     return $this->pluginDefinition['name'];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSupportedChartTypes() {
-    return $this->pluginDefinition['types'];
+  public function getSupportedChartTypes(): array {
+    $types = $this->pluginDefinition['types'];
+    $chart_plugin_id = $this->getPluginId();
+    // @todo Add dependency injection for the next major version.
+    \Drupal::moduleHandler()->alter('charts_plugin_supported_chart_types', $types, $chart_plugin_id);
+    return $types;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function isSupportedChartType(string $chart_type_id) {
+  public function isSupportedChartType(string $chart_type_id): bool {
     $supported_chart_types = $this->getSupportedChartTypes();
     return !$supported_chart_types || in_array($chart_type_id, $supported_chart_types);
   }
@@ -39,14 +43,14 @@ abstract class ChartBase extends PluginBase implements ChartInterface {
   /**
    * {@inheritdoc}
    */
-  public function getConfiguration() {
+  public function getConfiguration(): array {
     return $this->configuration;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setConfiguration(array $configuration) {
+  public function setConfiguration(array $configuration): void {
     $this->configuration = NestedArray::mergeDeep($this->defaultConfiguration(), $configuration);
   }
 
@@ -82,8 +86,8 @@ abstract class ChartBase extends PluginBase implements ChartInterface {
    * @return array
    *   The defaults settings.
    */
-  public static function getDefaultSettings() {
-    $defaults = [
+  public static function getDefaultSettings(): array {
+    return [
       'type' => 'line',
       'library' => NULL,
       'grouping' => FALSE,
@@ -122,8 +126,6 @@ abstract class ChartBase extends PluginBase implements ChartInterface {
         'colors' => self::getDefaultColors(),
       ],
     ];
-
-    return $defaults;
   }
 
   /**
@@ -132,7 +134,7 @@ abstract class ChartBase extends PluginBase implements ChartInterface {
    * @return array
    *   The hex colors.
    */
-  public static function getDefaultColors() {
+  public static function getDefaultColors(): array {
     return [
       '#2f7ed8',
       '#0d233a',

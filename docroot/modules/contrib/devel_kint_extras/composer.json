@@ -21,6 +21,6 @@
   },
   "require": {
     "drupal/devel": "^4.0 || ^5.0",
-    "kint-php/kint": "^3.3 || ^4.0"
+    "kint-php/kint": "^3.3 || ^4.0 || ^5.0"
   }
 }

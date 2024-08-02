@@ -134,7 +134,7 @@ class LinkCheckerInterfaceTest extends BrowserTestBase {
     $edit = [];
     $edit['title[0][value]'] = $random->name(32);
     $edit['body[0][value]'] = $body;
-    //$edit["body[0][format]"] = 'full_html';
+    // $edit["body[0][format]"] = 'full_html';
     $edit['path[0][alias]'] = '/' . $folder1 . '/' . $folder2;
 
     // Extract only full qualified URLs.
@@ -148,7 +148,8 @@ class LinkCheckerInterfaceTest extends BrowserTestBase {
     // Save node.
     $this->drupalGet('/node/add/page');
     $this->submitForm($edit, 'Save');
-    $this->assertSession()->pageTextContains($this->t('@type @title has been created.', ['@type' => 'Basic page', '@title' => $edit["title[0][value]"]]));
+    $this->assertSession()->pageTextContains($this->t('@type @title has been created.',
+     ['@type' => 'Basic page', '@title' => $edit["title[0][value]"]]));
 
     $node = $this->drupalGetNodeByTitle($edit['title[0][value]']);
     $this->assertNotEmpty($node);
@@ -186,7 +187,8 @@ class LinkCheckerInterfaceTest extends BrowserTestBase {
     $this->submitForm($custom_block, 'Save');
     // Confirm that the custom block has been created, and then query the
     // created bid.
-    $this->assertSession()->pageTextContains($this->t('@type @title has been created.', ['@type' => 'Basic block', '@title' => $custom_block['info[0][value]']]));
+    $this->assertSession()->pageTextContains($this->t('@type @title has been created.',
+     ['@type' => 'Basic block', '@title' => $custom_block['info[0][value]']]));
     // Check that the block exists in the database.
     $blocks = \Drupal::entityQuery('block_content')->accessCheck()->condition('info', $custom_block['info[0][value]'])->execute();
     $block = BlockContent::load(reset($blocks));
@@ -201,7 +203,7 @@ class LinkCheckerInterfaceTest extends BrowserTestBase {
     else {
       $this->fail(new FormattableMarkup('URL %url not found.', ['%url' => $url1]));
     }
-   }
+  }
 
   /**
    * Get a link checker link entity by the given URl.

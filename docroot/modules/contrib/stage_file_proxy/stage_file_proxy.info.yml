@@ -5,7 +5,7 @@ package: Development
 configure: stage_file_proxy.admin_form
 core_version_requirement: ^9 || ^10
 
-# Information added by Drupal.org packaging script on 2023-12-13
-version: '2.1.3'
+# Information added by Drupal.org packaging script on 2024-06-27
+version: '2.1.5'
 project: 'stage_file_proxy'
-datestamp: 1702477026
+datestamp: 1719499512

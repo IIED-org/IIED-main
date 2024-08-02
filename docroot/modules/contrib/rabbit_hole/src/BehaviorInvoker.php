@@ -74,14 +74,7 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    */
-  public function __construct(
-    BehaviorSettingsManager $rabbit_hole_behavior_settings_manager,
-    RabbitHoleBehaviorPluginManager $plugin_manager_rabbit_hole_behavior_plugin,
-    RabbitHoleEntityPluginManager $plugin_manager_rabbit_hole_entity_plugin,
-    EntityExtender $entity_extender,
-    AccountProxyInterface $current_user,
-    ModuleHandlerInterface $module_handler = NULL
-  ) {
+  public function __construct(BehaviorSettingsManager $rabbit_hole_behavior_settings_manager, RabbitHoleBehaviorPluginManager $plugin_manager_rabbit_hole_behavior_plugin, RabbitHoleEntityPluginManager $plugin_manager_rabbit_hole_entity_plugin, EntityExtender $entity_extender, AccountProxyInterface $current_user, ModuleHandlerInterface $module_handler = NULL) {
     $this->rhBehaviorSettingsManager = $rabbit_hole_behavior_settings_manager;
     $this->rhBehaviorPluginManager = $plugin_manager_rabbit_hole_behavior_plugin;
     $this->rhEntityPluginManager = $plugin_manager_rabbit_hole_entity_plugin;
@@ -89,6 +82,7 @@ class BehaviorInvoker implements BehaviorInvokerInterface {
     $this->currentUser = $current_user;
     if (!$module_handler) {
       @trigger_error('This module handler workaround is deprecated in rabbit_hole:8.x-1.0 version and will be removed in rabbit_hole:2.x-2.0. The module_handler service must be passed to ' . __NAMESPACE__ . '\BehaviorInvoker::__construct(). See https://www.drupal.org/project/rabbit_hole/issues/3232505', E_USER_DEPRECATED);
+      // @phpstan-ignore-next-line
       $module_handler = \Drupal::moduleHandler();
     }
     $this->moduleHandler = $module_handler;

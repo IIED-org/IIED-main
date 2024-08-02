@@ -5,11 +5,11 @@ namespace Drupal\charts\Element;
 use Drupal\charts\ColorHelperTrait;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Entity\EntityPublishedInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Element\FormElementBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\views\Views;
 
@@ -36,7 +36,7 @@ use Drupal\views\Views;
  *
  * @FormElement("charts_settings")
  */
-class BaseSettings extends FormElement {
+class BaseSettings extends FormElementBase {
 
   use ColorHelperTrait;
   use ElementFormStateTrait;
@@ -693,7 +693,7 @@ class BaseSettings extends FormElement {
     // That allows executeElementSubmitHandlers() to be completely certain that
     // the form has passed validation before proceeding.
     $complete_form['#validate'][] = [
-      get_class(),
+      static::class,
       'executeLibraryElementSubmitHandlers',
     ];
     $complete_form['#charts_library_settings_element_submit_attached'] = TRUE;
@@ -1311,6 +1311,7 @@ class BaseSettings extends FormElement {
       $chart_build['#id'] = $id_prefix . '--preview-chart';
       // @todo check if this would work with various hooks.
       $chart_build['#chart_id'] = $chart_id;
+      $chart_build['#in_preview_mode'] = TRUE;
       $element['preview']['content'] = $chart_build;
     }
     else {
@@ -1528,7 +1529,7 @@ class BaseSettings extends FormElement {
     $query = $entity_storage->getQuery()->accessCheck(FALSE)
       ->condition($bundle_key, $bundle_ids, 'IN');
 
-    if ($entity_type instanceof EntityPublishedInterface) {
+    if ($entity_type instanceof EntityTypeInterface) {
       $published_key = $entity_type->getKey('published');
       $query->condition($published_key, TRUE);
     }

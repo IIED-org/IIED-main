@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 /**
  * Provides a message deletion confirmation form.
  */
-class DeleteMultiple extends ConfirmFormBase {
+final class DeleteMultiple extends ConfirmFormBase {
 
   /**
    * The array of messages to delete.
@@ -101,7 +101,7 @@ class DeleteMultiple extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
+    return new self(
       $container->get('tempstore.private'),
       $container->get('entity_type.manager'),
       $container->get('request_stack')->getCurrentRequest()->query->get('q'),

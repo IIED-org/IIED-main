@@ -2,11 +2,11 @@
 
 namespace Drupal\Tests\geolocation\FunctionalJavascript;
 
-use Drupal\views\Tests\ViewTestData;
-use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\field\Entity\FieldConfig;
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\views\Tests\ViewTestData;
 
 /**
  * Tests the JavaScript functionality.
@@ -150,12 +150,12 @@ class GeolocationJavascriptTest extends GeolocationJavascriptTestBase {
 
     // Enable the checkbox to use current language.
     $edit = ['use_current_language' => TRUE];
-    $this->submitForm($edit, t('Save configuration'));
+    $this->submitForm($edit, 'Save configuration');
 
     // Add and set French as the language. See from LanguageSwitchingTest.
     $edit = ['predefined_langcode' => 'fr'];
     $this->drupalGet('admin/config/regional/language/add');
-    $this->submitForm($edit, t('Add language'));
+    $this->submitForm($edit, 'Add language');
 
     \Drupal::service('language.config_factory_override')
       ->getOverride('fr', 'language.entity.fr')
@@ -165,7 +165,7 @@ class GeolocationJavascriptTest extends GeolocationJavascriptTestBase {
     // Enable URL language detection and selection.
     $edit = ['language_interface[enabled][language-url]' => '1'];
     $this->drupalGet('admin/config/regional/language/detection');
-    $this->submitForm($edit, t('Save settings'));
+    $this->submitForm($edit, 'Save settings');
 
     $this->drupalGet('fr/node/4');
     $this->assertSession()->elementExists('css', 'html[lang="fr"]');
@@ -239,7 +239,7 @@ class GeolocationJavascriptTest extends GeolocationJavascriptTestBase {
       'field_geolocation[0][google_map_settings][height]' => '273px',
     ];
 
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
 
     $this->drupalGet('node/4');
 

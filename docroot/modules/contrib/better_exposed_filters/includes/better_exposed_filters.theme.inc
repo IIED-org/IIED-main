@@ -26,6 +26,9 @@ function better_exposed_filters_theme($existing, $type, $theme, $path) {
     'bef_hidden' => [
       'render element' => 'element',
     ],
+    'bef_number' => [
+      'render element' => 'element',
+    ],
   ];
 }
 
@@ -35,7 +38,7 @@ function better_exposed_filters_theme($existing, $type, $theme, $path) {
 function better_exposed_filters_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
   // Target bef elements.
   if ($hook === 'form_element') {
-    $plugin_type = $variables['element']['#context']['plugin_type'] ?? FALSE;
+    $plugin_type = $variables['element']['#context']['#plugin_type'] ?? FALSE;
     if ($plugin_type && $plugin_type === 'bef') {
       $view_id = $variables['element']['#context']['#view_id'];
       $display_id = $variables['element']['#context']['#display_id'];
@@ -66,7 +69,7 @@ function better_exposed_filters_preprocess_views_exposed_form(array &$variables)
   }
   // Replaces tokens in description field of the exposed filter.
   foreach ($variables['form']['#info'] as $name => &$info) {
-    if (isset($info['description']) && isset($variables['form'][explode('filter-', $name)[1]]['#description'])) {
+    if (isset($info['description']) && str_starts_with($name, 'filter-') && isset($variables['form'][explode('filter-', $name)[1]]['#description'])) {
       $info['description'] = \Drupal::service('token')->replace($info['description']);
       $variables['form'][explode('filter-', $name)[1]]['#description'] = $info['description'];
     }
@@ -136,6 +139,28 @@ function template_preprocess_bef_radios(array &$variables) {
 }
 
 /**
+ * Prepares variables for bef-number template.
+ *
+ * Default template: bef-number.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the exposed form element.
+ */
+function template_preprocess_bef_number(array &$variables) {
+  $element = &$variables['element'];
+  $variables['children'] = Element::children($element);
+  $variables['display_inline'] = $element['#bef_display_inline'] ?? FALSE;
+
+  if (!isset($element['#name'])) {
+    $variables['attributes']['name'] = $element['#parent'][0];
+  }
+  else {
+    $variables['attributes']['name'] = $element['#name'];
+  }
+}
+
+/**
  * Prepares variables for bef-hidden template.
  *
  * Default template: bef-hidden.html.twig.
@@ -159,8 +184,8 @@ function template_preprocess_bef_hidden(array &$variables) {
     ];
   }
 
-  // @todo
-  // Check for optgroups.  Put subelements in the $element_set array and add a
+  // @todo Check for optgroups.
+  // Put subelements in the $element_set array and add a
   // group heading. Otherwise, just add the element to the set.
   // $element_set = array();
   // if (is_array($elem)) {
@@ -206,6 +231,7 @@ function template_preprocess_bef_links(array &$variables) {
   if (!is_array($selectedValues)) {
     $selectedValues = [$selectedValues => $selectedValues];
   }
+  $variables['selected'] = $selectedValues;
 
   // Set hidden elements array.
   $hiddens = [];

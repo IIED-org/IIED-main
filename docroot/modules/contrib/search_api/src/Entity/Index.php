@@ -975,7 +975,7 @@ class Index extends ConfigEntityBase implements IndexInterface {
 
     // Preprocess the indexed items.
     $this->alterIndexedItems($items);
-    $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Please use the "search_api.indexing_items" event instead. See https://www.drupal.org/node/3059866';
+    $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Use the "search_api.indexing_items" event instead. See https://www.drupal.org/node/3059866';
     \Drupal::moduleHandler()->alterDeprecated($description, 'search_api_index_items', $this, $items);
     $event = new IndexingItemsEvent($this, $items);
     \Drupal::getContainer()->get('event_dispatcher')
@@ -1018,7 +1018,7 @@ class Index extends ConfigEntityBase implements IndexInterface {
         // effect again. Therefore, we reset the flag.
         $this->setHasReindexed(FALSE);
 
-        $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Please use the "search_api.items_indexed" event instead. See https://www.drupal.org/node/3059866';
+        $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Use the "search_api.items_indexed" event instead. See https://www.drupal.org/node/3059866';
         \Drupal::moduleHandler()
           ->invokeAllDeprecated($description, 'search_api_items_indexed', [$this, $processed_ids]);
 
@@ -1123,8 +1123,15 @@ class Index extends ConfigEntityBase implements IndexInterface {
     if ($this->hasValidTracker()) {
       $this->getTrackerInstance()->trackItemsDeleted($item_ids);
     }
+    // Delete the items from the search server, and make sure they aren't
+    // indexed again in the same page request due to an already scheduled
+    // indexing operation.
     if (!$this->isReadOnly() && $this->hasValidServer()) {
       $this->getServerInstance()->deleteItems($this, $item_ids);
+      if ($this->getOption('index_directly') && !$this->isBatchTracking()) {
+        \Drupal::getContainer()->get('search_api.post_request_indexing')
+          ->removeFromIndexing($this->id(), $item_ids);
+      }
     }
   }
 
@@ -1135,7 +1142,7 @@ class Index extends ConfigEntityBase implements IndexInterface {
     if ($this->status() && !$this->isReindexing()) {
       $this->setHasReindexed();
       $this->getTrackerInstance()->trackAllItemsUpdated();
-      $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Please use the "search_api.reindex_scheduled" event instead. See https://www.drupal.org/node/3059866';
+      $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Use the "search_api.reindex_scheduled" event instead. See https://www.drupal.org/node/3059866';
       \Drupal::moduleHandler()->invokeAllDeprecated($description, 'search_api_index_reindex', [$this, FALSE]);
       /** @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher */
       $dispatcher = \Drupal::getContainer()->get('event_dispatcher');
@@ -1163,7 +1170,7 @@ class Index extends ConfigEntityBase implements IndexInterface {
       $this->getServerInstance()->deleteAllIndexItems($this);
     }
     if ($invoke_hook) {
-      $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Please use the "search_api.reindex_scheduled" event instead. See https://www.drupal.org/node/3059866';
+      $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Use the "search_api.reindex_scheduled" event instead. See https://www.drupal.org/node/3059866';
       \Drupal::moduleHandler()->invokeAllDeprecated($description, 'search_api_index_reindex', [$this, !$this->isReadOnly()]);
 
       /** @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher */
@@ -1185,7 +1192,7 @@ class Index extends ConfigEntityBase implements IndexInterface {
     $index_task_manager->stopTracking($this);
     $index_task_manager->startTracking($this);
     $this->setHasReindexed();
-    $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Please use the "search_api.reindex_scheduled" event instead. See https://www.drupal.org/node/3059866';
+    $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Use the "search_api.reindex_scheduled" event instead. See https://www.drupal.org/node/3059866';
     \Drupal::moduleHandler()
       ->invokeAllDeprecated($description, 'search_api_index_reindex', [$this, FALSE]);
     /** @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher */
@@ -1997,7 +2004,7 @@ class Index extends ConfigEntityBase implements IndexInterface {
    *
    * Prevents the instantiated plugins and fields from being serialized.
    */
-  public function __sleep() {
+  public function __sleep(): array {
     // First, write our changes to the persistent *_settings properties so they
     // won't be discarded. Make sure we have a container to do this. This is
     // important to correctly display test failures.

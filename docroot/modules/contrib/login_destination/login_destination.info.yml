@@ -11,7 +11,7 @@ dependencies:
 test_dependencies:
   - admin_toolbar:admin_toolbar_tools
 
-# Information added by Drupal.org packaging script on 2023-03-30
-version: '8.x-2.0-beta6'
+# Information added by Drupal.org packaging script on 2024-06-13
+version: '8.x-2.0-beta7'
 project: 'login_destination'
-datestamp: 1680182202
+datestamp: 1718298983

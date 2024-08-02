@@ -101,8 +101,9 @@ class PlatformInfo implements PlatformInfoInterface {
     // Generate the Drupal sitepath from service.
     $this->sitePath = $site_path;
 
-    // Take the IP addresses from Public LBs and Proxies via the 'reverse_proxies' setting.
-    // Note: This is different from 'reverse_proxy_addresses' which contains ALL reverse proxies.
+    // IP addresses from Public LBs / Proxies via the 'reverse_proxies' setting.
+    // Note: This is different from 'reverse_proxy_addresses' which contains ALL
+    // reverse proxies.
     if (is_array($reverse_proxies = $settings->get('reverse_proxies'))) {
       foreach ($reverse_proxies as $reverse_proxy) {
         if ($reverse_proxy && strpos($reverse_proxy, '.')) {

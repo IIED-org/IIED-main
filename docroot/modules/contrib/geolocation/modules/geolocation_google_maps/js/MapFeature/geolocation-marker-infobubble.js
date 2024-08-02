@@ -83,7 +83,7 @@
               .find(".location-content")
               .html();
 
-            if (content.length < 1) {
+            if (content !== undefined && content.length < 1) {
               return;
             }
 

@@ -55,6 +55,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     'bg' => 'bg',
     'ca' => 'ca',
     'cs' => 'cs',
+    'cy' => 'cy',
     'da' => 'da',
     'el' => 'el',
     'es' => 'es',
@@ -336,6 +337,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
           $language_ids['zh-hant'] = FALSE;
           if (version_compare($targeted_solr_major_version, '6', '<')) {
             $language_ids['ar'] = FALSE;
+            $language_ids['cy'] = FALSE;
             $language_ids['ja'] = FALSE;
             $language_ids['hu'] = FALSE;
             $language_ids['sk'] = FALSE;
@@ -741,6 +743,54 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     $query->addCondition('body', ['some', 'text'], '=');
     $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
     $this->assertEquals('tm_X3b_en_body:("some" "text")', $fq[0]['query']);
+    $this->assertArrayNotHasKey(1, $fq);
+
+    $query = $this->buildSearch();
+    $query->addCondition('changed', '2024-03-04', '=');
+    $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
+    $this->assertEquals('ds_changed:"2024-03-04T00:00:00Z"', $fq[0]['query']);
+    $this->assertArrayNotHasKey(1, $fq);
+
+    $query = $this->buildSearch();
+    $query->addCondition('changed', '*', '=');
+    $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
+    $this->assertEquals('ds_changed:*', $fq[0]['query']);
+    $this->assertArrayNotHasKey(1, $fq);
+
+    $query = $this->buildSearch();
+    $query->addCondition('changed', NULL, '=');
+    $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
+    $this->assertEquals('(*:* -ds_changed:[* TO *])', $fq[0]['query']);
+    $this->assertArrayNotHasKey(1, $fq);
+
+    $query = $this->buildSearch();
+    $query->addCondition('changed', ['2024-03-04', '2024-03-20'], 'BETWEEN');
+    $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
+    $this->assertEquals('ds_changed:["2024-03-04T00:00:00Z" TO "2024-03-20T00:00:00Z"]', $fq[0]['query']);
+    $this->assertArrayNotHasKey(1, $fq);
+
+    $query = $this->buildSearch();
+    $query->addCondition('changed', ['*', '2024-03-20'], 'BETWEEN');
+    $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
+    $this->assertEquals('ds_changed:[* TO "2024-03-20T00:00:00Z"]', $fq[0]['query']);
+    $this->assertArrayNotHasKey(1, $fq);
+
+    $query = $this->buildSearch();
+    $query->addCondition('changed', ['2024-03-04', '*'], 'BETWEEN');
+    $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
+    $this->assertEquals('ds_changed:["2024-03-04T00:00:00Z" TO *]', $fq[0]['query']);
+    $this->assertArrayNotHasKey(1, $fq);
+
+    $query = $this->buildSearch();
+    $query->addCondition('changed', [NULL, '2024-03-20'], 'BETWEEN');
+    $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
+    $this->assertEquals('ds_changed:[* TO "2024-03-20T00:00:00Z"]', $fq[0]['query']);
+    $this->assertArrayNotHasKey(1, $fq);
+
+    $query = $this->buildSearch();
+    $query->addCondition('changed', ['2024-03-04', NULL], 'BETWEEN');
+    $fq = $this->invokeMethod($backend, 'getFilterQueries', [$query, &$options]);
+    $this->assertEquals('ds_changed:["2024-03-04T00:00:00Z" TO *]', $fq[0]['query']);
     $this->assertArrayNotHasKey(1, $fq);
   }
 
@@ -1520,7 +1570,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
   /**
    * Data provider for testConfigGeneration method.
    */
-  public function configGenerationDataProvider() {
+  public static function configGenerationDataProvider() {
     // @codingStandardsIgnoreStart
     return [[[
       'schema_extra_types.xml' => [

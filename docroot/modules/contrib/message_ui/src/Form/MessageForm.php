@@ -4,7 +4,6 @@ namespace Drupal\message_ui\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Language\Language;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -70,9 +69,9 @@ class MessageForm extends ContentEntityForm {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
-    /** @var \Drupal\message\Entity\Message $message */
+    /** @var \Drupal\message\MessageInterface $message */
     $message = $this->entity;
-
+    /** @var \Drupal\message\MessageTemplateInterface $template */
     $template = $this->entityTypeManager->getStorage('message_template')->load($this->entity->bundle());
 
     if ($this->config('message_ui.settings')->get('show_preview')) {
@@ -162,14 +161,6 @@ class MessageForm extends ContentEntityForm {
       }
     }
 
-    $form['langcode'] = [
-      '#title' => $this->t('Language'),
-      '#type' => 'language_select',
-      '#default_value' => $message->getUntranslated()->language()->getId(),
-      '#languages' => Language::STATE_ALL,
-      '#access' => $this->languageManager->isMultilingual(),
-    ];
-
     // @todo add similar to node/from library, adding css for
     // 'message-form-owner' class.
     // $form['#attached']['library'][] = 'node/form';
@@ -181,6 +172,7 @@ class MessageForm extends ContentEntityForm {
    */
   protected function actions(array $form, FormStateInterface $form_state) {
     $element = parent::actions($form, $form_state);
+    /** @var \Drupal\message\MessageInterface $message */
     $message = $this->entity;
 
     // @todo check if we need access control here on form submit.
@@ -218,8 +210,8 @@ class MessageForm extends ContentEntityForm {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Build the node object from the submitted values.
     parent::submitForm($form, $form_state);
-
-    /** @var Message $message */
+    /** @var \Drupal\message\MessageInterface $this->entity */
+    /** @var \Drupal\message\MessageInterface $message */
     $message = $this->entity;
 
     // Set message owner.
@@ -262,7 +254,7 @@ class MessageForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    /** @var Message $message */
+    /** @var \Drupal\message\MessageInterface $message */
     $message = $this->entity;
     $insert = $message->isNew();
 

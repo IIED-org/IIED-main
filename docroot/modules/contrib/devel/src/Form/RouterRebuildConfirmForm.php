@@ -4,7 +4,9 @@ namespace Drupal\devel\Form;
 
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\RouteBuilderInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -15,34 +17,52 @@ class RouterRebuildConfirmForm extends ConfirmFormBase {
 
   /**
    * The route builder service.
-   *
-   * @var \Drupal\Core\Routing\RouteBuilderInterface
    */
-  protected $routeBuilder;
+  protected RouteBuilderInterface $routeBuilder;
+
+  /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
 
   /**
    * Constructs a new RouterRebuildConfirmForm object.
    *
    * @param \Drupal\Core\Routing\RouteBuilderInterface $route_builder
    *   The route builder service.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
    */
-  public function __construct(RouteBuilderInterface $route_builder) {
+  public function __construct(
+    RouteBuilderInterface $route_builder,
+    MessengerInterface $messenger,
+    TranslationInterface $string_translation
+  ) {
     $this->routeBuilder = $route_builder;
+    $this->messenger = $messenger;
+    $this->stringTranslation = $string_translation;
+
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): static {
     return new static(
-      $container->get('router.builder')
+      $container->get('router.builder'),
+      $container->get('messenger'),
+      $container->get('string_translation'),
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'devel_menu_rebuild';
   }
 
@@ -56,7 +76,7 @@ class RouterRebuildConfirmForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getCancelUrl() {
+  public function getCancelUrl(): Url {
     return new Url('<front>');
   }
 
@@ -77,9 +97,9 @@ class RouterRebuildConfirmForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->routeBuilder->rebuild();
-    $this->messenger()->addMessage($this->t('The router has been rebuilt.'));
+    $this->messenger->addMessage($this->t('The router has been rebuilt.'));
     $form_state->setRedirect('<front>');
   }
 

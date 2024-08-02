@@ -4,7 +4,7 @@ package: Testing
 description: Provides test integration for AcquiaConnectorEvents::GET_SUBSCRIPTION.
 hidden: true
 
-# Information added by Drupal.org packaging script on 2023-08-07
-version: '4.0.5'
+# Information added by Drupal.org packaging script on 2024-06-24
+version: '4.0.8'
 project: 'acquia_connector'
-datestamp: 1691430067
+datestamp: 1719245736

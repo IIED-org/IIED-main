@@ -21,7 +21,6 @@ use Drupal\Component\Datetime\Time;
 use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Crypt;
-use Drupal\Core\Cache\MemoryBackend;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -52,6 +51,7 @@ use Solarium\Core\Query\Helper;
 use Solarium\QueryType\MorelikeThis\Query as MoreLikeThisQuery;
 use Solarium\QueryType\Update\Query\Query as UpdateQuery;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -59,6 +59,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @coversDefaultClass \Drupal\acquia_search\Plugin\SolrConnector\SearchApiSolrAcquiaConnector
  */
 final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
+
+  /**
+   * The event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcher|void
+   */
+  private $eventDispatcher;
 
   public function testCoreLink(): void {
     $container = $this->createContainerMock();
@@ -179,10 +186,7 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
     return $backend->getSolrConnector();
   }
 
-  private function createContainerMock(
-    array $solr_responses = [],
-    array $subscription_data = []
-  ): ContainerInterface {
+  private function createContainerMock(array $solr_responses = [], array $subscription_data = []): ContainerInterface {
     $container = new ContainerBuilder();
 
     $state = $this->createMock(StateInterface::class);
@@ -191,40 +195,8 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
 
     $date_formatter = $this->createMock(DateFormatterInterface::class);
     $messenger = $this->createMock(MessengerInterface::class);
-    $cache_default = new MemoryBackend();
+    $cache_default = $this->getMockBuilder('Drupal\Core\Cache\MemoryBackend')->disableOriginalConstructor()->getMock();
     $datetime_time = new Time(new RequestStack());
-    $event_dispatcher = new ContainerAwareEventDispatcher($container, [
-      AcquiaSearchEvents::GET_POSSIBLE_CORES => [
-        0 => [
-          [
-            'callable' => function (AcquiaPossibleCoresEvent $event) {
-              $event->addPossibleCore('abc123.prod');
-            },
-          ],
-        ],
-      ],
-      Events::PRE_EXECUTE_REQUEST => [
-        0 => [
-          [
-            'service' => [
-              'acquia_search.search_subscriber',
-              'preExecuteRequest',
-            ],
-          ],
-        ],
-      ],
-      Events::POST_EXECUTE_REQUEST => [
-        0 => [
-          [
-            'service' => [
-              'acquia_search.search_subscriber',
-              'postExecuteRequest',
-            ],
-          ],
-        ],
-      ],
-    ]);
-
     $subscription = $this->createMock(Subscription::class);
     $settings = $this->createMock(Settings::class);
     $settings->method('getIdentifier')->willReturn('abc123');
@@ -337,20 +309,77 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
       $lock
     );
 
+    $flood = $this->createMock(Flood::class);
+    $flood->method('isAllowed')
+      ->willReturnMap([
+        ['admin/system', TRUE],
+      ]);
+    $search_subscriber = new SearchSubscriber($subscription, $api_client, $flood);
+
+    if (version_compare(\Drupal::VERSION, '10.0', '<')) {
+      $event_dispatcher = new ContainerAwareEventDispatcher($container, [
+        AcquiaSearchEvents::GET_POSSIBLE_CORES => [
+          0 => [
+            [
+              'callable' => function (AcquiaPossibleCoresEvent $event) {
+                $event->addPossibleCore('abc123.prod');
+              },
+            ],
+          ],
+        ],
+        Events::PRE_EXECUTE_REQUEST => [
+          0 => [
+            [
+              'service' => [
+                'acquia_search.search_subscriber',
+                'preExecuteRequest',
+              ],
+            ],
+          ],
+        ],
+        Events::POST_EXECUTE_REQUEST => [
+          0 => [
+            [
+              'service' => [
+                'acquia_search.search_subscriber',
+                'postExecuteRequest',
+              ],
+            ],
+          ],
+        ],
+      ]);
+    }
+    else {
+      $event_dispatcher = (new \ReflectionClass(EventDispatcher::class))->newInstanceWithoutConstructor();
+
+      $event_dispatcher->addListener(
+        AcquiaSearchEvents::GET_POSSIBLE_CORES,
+        function (AcquiaPossibleCoresEvent $event) {
+          $event->addPossibleCore('abc123.prod');
+        }
+      );
+      $event_dispatcher->addListener(
+        Events::PRE_EXECUTE_REQUEST,
+        [
+          $search_subscriber,
+          'preExecuteRequest',
+        ],
+      );
+      $event_dispatcher->addListener(
+        Events::POST_EXECUTE_REQUEST,
+        [
+          $search_subscriber,
+          'postExecuteRequest',
+        ],
+      );
+    }
+
     $preferred_core = new PreferredCoreServiceFactory(
       $event_dispatcher,
       $subscription,
       $api_client,
       $this->createMock(ModuleHandlerInterface::class)
     );
-
-    $flood = $this->createMock(Flood::class);
-    $flood->method('isAllowed')
-      ->willReturnMap([
-        ['admin/system', TRUE],
-      ]);
-
-    $search_subscriber = new SearchSubscriber($subscription, $api_client, $flood);
 
     $container->set('state', $state);
     $container->set('logger.factory', $logger_factory);

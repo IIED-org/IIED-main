@@ -1,0 +1,14 @@
+taxonomy_manager.vocabulary_list:
+  route_name: taxonomy_manager.admin
+  title: 'Taxonomy Manager'
+  base_route: taxonomy_manager.admin
+
+taxonomy_manager.vocabulary_add:
+  route_name: entity.taxonomy_vocabulary.add_form
+  title: 'Add new vocabulary'
+  base_route: taxonomy_manager.admin
+
+taxonomy_manager.vocabulary_settings:
+  route_name: entity.taxonomy_vocabulary.collection
+  title: 'Edit vocabulary settings'
+  base_route: taxonomy_manager.admin

@@ -3,8 +3,8 @@
 namespace Drupal\geolocation\Plugin\views\field;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\views\Plugin\views\field\EntityField;
 use Drupal\geolocation\Plugin\Field\FieldType\GeolocationItem;
+use Drupal\views\Plugin\views\field\EntityField;
 
 /**
  * Field handler for geolocaiton field.

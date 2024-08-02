@@ -1,3 +1,20 @@
+Search API Autocomplete 1.9 (2024-06-16):
+-----------------------------------------
+- #3442321 by drunken monkey: Fixed call to deprecated method renderPlain().
+- #3442323 by drunken monkey: Fixed CSS code style issues reported by CSpell.
+- #3442315 by drunken monkey: Fixed test failures against Drupal 10.3.
+- #3427555 by drunken monkey: Fixed GitLab CI pipelines (phpstan and cspell).
+- #3425236 by drunken monkey, samit.310@gmail.com: Fixed incompatibility with
+  Drupal 11.
+- #3408112 by drunken monkey, Prashant.c, thakurnishant_06: Added GitLab CI
+  configuration.
+- #3416842 by benjifisher, drunken monkey: Added proper dependency metadata to
+  this module's dynamic permissions.
+- #3408112 by Prashant.c, thakurnishant_06, drunken monkey: Added GitLab CI
+  configuration.
+- #3373000 by drunken monkey: Fixed error in autocomplete endpoint when "q"
+  parameter is missing.
+
 Search API Autocomplete 1.8 (2023-10-15):
 -----------------------------------------
 - #3382226 by bvoynick, drunken monkey, keshavv, claudiu.cristea: Fixed errors

@@ -121,11 +121,13 @@ final class StatusControllerTest extends AcquiaConnectorTestBase {
    */
   public function accessData() {
     $uuid = (new PhpUuid())->generate();
+    // phpcs:disable
     yield 'missing nonce' => [$uuid, '', '', AccessResult::forbidden('Missing nonce.')];
     yield 'missing uuid' => ['', 'f00Bar', '', AccessResult::forbidden('Missing application UUID.')];
     yield 'missing key' => [$uuid, 'f00Bar', '', AccessResult::forbidden('Could not validate key.')];
     yield 'invalid key' => [$uuid, 'f00Bar', 'ddsdfdsfdsdf', AccessResult::forbidden('Could not validate key.')];
     yield 'okay' => [$uuid, 'f00Bar', hash('sha1', "$uuid:f00Bar"), AccessResult::allowed()];
+    // phpcs:enable
   }
 
 }

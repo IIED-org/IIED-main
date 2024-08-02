@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\gin_lb\Form;
 
 use Drupal\Core\Cache\Cache;
@@ -80,7 +82,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     parent::submitForm($form, $form_state);
     $this->config('gin_lb.settings')
       ->set('toastify_loading', $form_state->getValue('toastify_loading'))

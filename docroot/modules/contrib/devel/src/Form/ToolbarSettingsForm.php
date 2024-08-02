@@ -7,6 +7,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,10 +17,8 @@ class ToolbarSettingsForm extends ConfigFormBase {
 
   /**
    * The menu link tree service.
-   *
-   * @var \Drupal\Core\Menu\MenuLinkTree
    */
-  protected $menuLinkTree;
+  protected MenuLinkTreeInterface $menuLinkTree;
 
   /**
    * ToolbarSettingsForm constructor.
@@ -28,33 +27,41 @@ class ToolbarSettingsForm extends ConfigFormBase {
    *   The config factory.
    * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree
    *   The menu link tree service.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_link_tree) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    MenuLinkTreeInterface $menu_link_tree,
+    TranslationInterface $string_translation
+  ) {
     parent::__construct($config_factory);
     $this->menuLinkTree = $menu_link_tree;
+    $this->stringTranslation = $string_translation;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('config.factory'),
-      $container->get('menu.link_tree')
+      $container->get('menu.link_tree'),
+      $container->get('string_translation'),
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'devel_toolbar_settings_form';
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getEditableConfigNames() {
+  protected function getEditableConfigNames(): array {
     return [
       'devel.toolbar.settings',
     ];
@@ -64,7 +71,7 @@ class ToolbarSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('devel.toolbar.settings');
+    $config = $this->configFactory->getEditable('devel.toolbar.settings');
 
     $form['toolbar_items'] = [
       '#type' => 'checkboxes',
@@ -81,11 +88,11 @@ class ToolbarSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $values = $form_state->getValues();
     $toolbar_items = array_keys(array_filter($values['toolbar_items']));
 
-    $this->config('devel.toolbar.settings')
+    $this->configFactory->getEditable('devel.toolbar.settings')
       ->set('toolbar_items', $toolbar_items)
       ->save();
 
@@ -98,7 +105,7 @@ class ToolbarSettingsForm extends ConfigFormBase {
    * @return array
    *   Associative array of devel menu item labels keyed by plugin ID.
    */
-  protected function getLinkLabels() {
+  protected function getLinkLabels(): array {
     $options = [];
 
     $parameters = new MenuTreeParameters();

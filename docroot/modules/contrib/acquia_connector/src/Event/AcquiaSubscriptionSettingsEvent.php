@@ -6,7 +6,7 @@ use Drupal\acquia_connector\Settings;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * The event dispatched to find settings for Acquia Connector.
+ * The event to find settings for Acquia Connector.
  */
 class AcquiaSubscriptionSettingsEvent extends EventBase {
 

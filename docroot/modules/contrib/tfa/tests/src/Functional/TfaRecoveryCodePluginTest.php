@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\tfa\Functional;
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Class TfaRecoveryCodeSetupPluginTest.
  *
@@ -168,7 +170,14 @@ class TfaRecoveryCodePluginTest extends TfaTestBase {
     $assert->pageTextContains($this->userAccount->getDisplayName());
     $this->assertTrue($this->userAccount->isAuthenticated(), 'User is logged in.');
 
-    // Try replay attack with a valid code that has already been used.
+    // Check for replay attack.
+    $current_settings = file_get_contents("$this->siteDirectory/settings.php");
+    $current_settings .= "\n \$settings['hash_salt'] = '12345';\n";
+    $current_settings .= "\n \$settings['tfa.previous_hash_salts'] = ['" . Settings::getHashSalt() . "'];\n";
+    chmod("$this->siteDirectory/settings.php", 0644);
+    file_put_contents("$this->siteDirectory/settings.php", $current_settings);
+    chmod("$this->siteDirectory/settings.php", 0444);
+
     $this->drupalLogout();
     $edit = [
       'name' => $this->userAccount->getAccountName(),
@@ -182,6 +191,7 @@ class TfaRecoveryCodePluginTest extends TfaTestBase {
     $edit = ['code' => $codes[0]];
     $this->submitForm($edit, 'Verify');
     $assert->statusCodeEquals(200);
+    $assert->pageTextNotContains('Invalid application code.');
     $assert->pageTextContains('Invalid recovery code.');
   }
 

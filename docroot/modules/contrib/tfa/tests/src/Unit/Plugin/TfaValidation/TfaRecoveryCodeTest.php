@@ -2,12 +2,11 @@
 
 namespace Drupal\Tests\tfa\Unit\Plugin\TfaValidation;
 
-use Drupal\Core\Lock\LockBackendInterface;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Form\FormState;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\encrypt\EncryptionProfileInterface;
 use Drupal\encrypt\EncryptionProfileManagerInterface;
@@ -15,6 +14,7 @@ use Drupal\encrypt\EncryptServiceInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\tfa\Plugin\TfaValidation\TfaRecoveryCode;
 use Drupal\user\UserDataInterface;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @coversDefaultClass \Drupal\tfa\Plugin\TfaValidation\TfaRecoveryCode

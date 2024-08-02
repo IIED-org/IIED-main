@@ -63,7 +63,7 @@ class TokenizerTest extends UnitTestCase {
    *   - The expected preprocessed value.
    *   - (optional) Configuration to override the processor's defaults.
    */
-  public function textDataProvider() {
+  public static function textDataProvider() {
     $word_token = Utility::createTextToken('word');
     return [
       // Test some simple cases.
@@ -397,9 +397,9 @@ class TokenizerTest extends UnitTestCase {
    *   - The expected return value.
    *   - The message to display for the assertion.
    */
-  public function searchSimplifyPunctuationProvider() {
+  public static function searchSimplifyPunctuationProvider() {
     // cspell:disable
-    $cases = [
+    return [
       [
         '20.03/94-28,876',
         '20039428876',
@@ -427,7 +427,6 @@ class TokenizerTest extends UnitTestCase {
       ],
     ];
     // cspell:enable
-    return $cases;
   }
 
   /**
@@ -464,8 +463,8 @@ class TokenizerTest extends UnitTestCase {
    *   - The original keys.
    *   - The expected keys after preprocessing.
    */
-  public function preprocessSearchQueryProvider() {
-    $cases = [
+  public static function preprocessSearchQueryProvider() {
+    return [
       'convert whitespace' => [
         "foo\tbar\n\nbaz ",
         'foo bar baz',
@@ -487,7 +486,6 @@ class TokenizerTest extends UnitTestCase {
         '',
       ],
     ];
-    return $cases;
   }
 
 }

@@ -29,7 +29,7 @@ class InvalidBehaviorSettingException extends \Exception {
    * Returns invalid setting name.
    */
   public function getSetting() {
-    return $this->setting();
+    return $this->setting;
   }
 
 }

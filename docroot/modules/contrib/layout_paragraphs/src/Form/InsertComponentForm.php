@@ -115,7 +115,9 @@ class InsertComponentForm extends ComponentFormBase {
     else {
       $this->domSelector = '[data-lpb-id="' . $this->layoutParagraphsLayout->id() . '"]';
     }
-    return $this->buildComponentForm($form, $form_state);
+
+    $form_display_mode = $this->layoutParagraphsLayout->getSetting('form_display_mode');
+    return $this->buildComponentForm($form, $form_state, $form_display_mode);
   }
 
   /**
@@ -228,6 +230,7 @@ class InsertComponentForm extends ComponentFormBase {
       ->create([
         $bundle_key => $paragraph_type->id(),
         $langcode_key => $langcode,
+        '_layoutParagraphsLayout' => $this->getLayoutParagraphsLayout(),
       ]);
     return $paragraph;
   }

@@ -50,7 +50,7 @@ class CustomScript extends SuggesterPluginBase implements PluginFormInterface {
     $form['path'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Custom script path'),
-      '#description' => $this->t('The internal path or external URL to use for autocompletion. A local path should start with a leading slash. For using an external URL, please take CSRF protection into account.'),
+      '#description' => $this->t('The internal path or external URL to use for autocompletion. A local path should start with a leading slash. For using an external URL, take CSRF protection into account.'),
       '#default_value' => $this->configuration['path'],
     ];
 

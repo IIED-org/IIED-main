@@ -2,20 +2,20 @@
 
 namespace Drupal\rabbit_hole;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfo;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
+use Drupal\rabbit_hole\Entity\BehaviorSettings;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPlugin\DisplayPage;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager;
 use Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager;
-use Drupal\rabbit_hole\Entity\BehaviorSettings;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Component\Utility\UrlHelper;
 
 /**
  * Provides necessary form alterations.
@@ -72,15 +72,7 @@ class FormManglerService {
   /**
    * Constructor.
    */
-  public function __construct(
-    EntityTypeManagerInterface $etm,
-    EntityTypeBundleInfo $etbi,
-    RabbitHoleBehaviorPluginManager $behavior_plugin_manager,
-    RabbitHoleEntityPluginManager $entity_plugin_manager,
-    BehaviorSettingsManager $behavior_settings_manager,
-    TranslationInterface $translation,
-    BehaviorInvokerInterface $behavior_invoker) {
-
+  public function __construct(EntityTypeManagerInterface $etm, EntityTypeBundleInfo $etbi, RabbitHoleBehaviorPluginManager $behavior_plugin_manager, RabbitHoleEntityPluginManager $entity_plugin_manager, BehaviorSettingsManager $behavior_settings_manager, TranslationInterface $translation, BehaviorInvokerInterface $behavior_invoker) {
     $this->entityTypeManager = $etm;
     $this->allBundleInfo = $etbi->getAllBundleInfo();
     $this->rhBehaviorPluginManager = $behavior_plugin_manager;
@@ -161,11 +153,8 @@ class FormManglerService {
     $entity_type_id,
     $entity,
     FormStateInterface $form_state,
-    $form_id
+    $form_id,
   ) {
-
-    $entity_type = $this->entityTypeManager->getStorage($entity_type_id)
-      ->getEntityType();
 
     if ($entity === NULL) {
       $is_bundle_or_entity_type = TRUE;
@@ -173,6 +162,37 @@ class FormManglerService {
     else {
       $is_bundle_or_entity_type = $this->isEntityBundle($entity);
     }
+
+    // Do not display "Rabbit Hole" settings if this is an entity translation
+    // form and all Rabbit Hole fields marked as not-translatable.
+    if (!$is_bundle_or_entity_type) {
+      $entity_langcode = $entity->getUntranslated()->language()->getId();
+      $is_translation = $entity->isNewTranslation() || ($entity->language()->getId() != $entity_langcode);
+      $hide_untranslatable_fields = $entity->isDefaultTranslationAffectedOnly() && !$entity->isDefaultTranslation();
+
+      if ($is_translation && $hide_untranslatable_fields) {
+        $has_translatable_field = FALSE;
+        $rh_fields = [
+          'rh_action',
+          'rh_redirect',
+          'rh_redirect_response',
+          'rh_redirect_fallback_action',
+        ];
+        foreach ($rh_fields as $rh_field) {
+          if ($entity->getFieldDefinition($rh_field)->isTranslatable()) {
+            $has_translatable_field = TRUE;
+            break;
+          }
+        }
+
+        if (!$has_translatable_field) {
+          return;
+        }
+      }
+    }
+
+    $entity_type = $this->entityTypeManager->getStorage($entity_type_id)
+      ->getEntityType();
 
     $bundle_settings = NULL;
     $bundle = isset($entity) ? $entity->bundle() : $entity_type_id;
@@ -214,17 +234,14 @@ class FormManglerService {
         return;
       }
 
-      $action = isset($entity->rh_action->value)
-        ? $entity->rh_action->value
-        : 'bundle_default';
+      $action = $entity->rh_action->value ?? 'bundle_default';
     }
 
     // Get information about the entity.
-    // TODO: Should be possible to get this as plural? Look into this.
+    // @todo Should be possible to get this as plural? Look into this.
     $entity_label = $entity_type->getLabel();
 
-    $bundle_info = isset($this->allBundleInfo[$entity_type->id()])
-      ? $this->allBundleInfo[$entity_type->id()] : NULL;
+    $bundle_info = $this->allBundleInfo[$entity_type->id()] ?? NULL;
 
     // Get the label for the bundle. This won't be set when the user is creating
     // a new bundle. In that case, fallback to "this bundle".
@@ -240,7 +257,7 @@ class FormManglerService {
       '#tree' => FALSE,
       '#weight' => 10,
 
-      // TODO: Should probably handle group in a plugin - not sure if, e.g.,
+      // @todo Should probably handle group in a plugin - not sure if, e.g.,
       // files will work in the same way and even if they do later entities
       // might not.
       '#group' => $is_bundle_or_entity_type ? 'additional_settings' : 'advanced',
@@ -248,7 +265,7 @@ class FormManglerService {
     ];
 
     // Add the invoking module to the internal values.
-    // TODO: This can probably be removed - check.
+    // @todo This can probably be removed - check.
     $form['rabbit_hole']['rh_is_bundle'] = [
       '#type' => 'hidden',
       '#value' => $is_bundle_or_entity_type,
@@ -302,14 +319,14 @@ class FormManglerService {
     // callback.
     $attach += $form;
 
-    // TODO: Optionally provide a form validation handler (can we do this via
+    // @todo Optionally provide a form validation handler (can we do this via
     // plugin?).
     //
     // If the implementing module provides a submit function for the bundle
     // form, we'll add it as a submit function for the attached form. We'll also
     // make sure that this won't be added for entity forms.
     //
-    // TODO: This should probably be moved out into plugins based on entity
+    // @todo This should probably be moved out into plugins based on entity
     // type.
     $is_global_form = isset($attach['#form_id'])
       && $attach['#form_id'] === $entity_plugin->getGlobalConfigFormId();
@@ -325,7 +342,7 @@ class FormManglerService {
     }
     $this->attachFormSubmit($attach, $submit_location, '_rabbit_hole_general_form_submit');
 
-    // TODO: Optionally provide additional form submission handler (can we do
+    // @todo Optionally provide additional form submission handler (can we do
     // this via plugin?).
     // Add ability to validate user input before saving the data.
     $attach['rabbit_hole']['rabbit_hole']['redirect']['rh_redirect']['#element_validate'][] = [
@@ -465,7 +482,7 @@ class FormManglerService {
     $form_id,
     EntityInterface $entity = NULL,
     $entity_is_bundle = FALSE,
-    ImmutableConfig $bundle_settings = NULL
+    ImmutableConfig $bundle_settings = NULL,
   ) {
 
     foreach ($this->rhBehaviorPluginManager->getDefinitions() as $id => $def) {
@@ -495,7 +512,13 @@ class FormManglerService {
   }
 
   /**
-   * TODO.
+   * Helper method to detect if entity is a bundle.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity to check bundle status.
+   *
+   * @return bool
+   *   If entity is a bundle or not.
    */
   protected function isEntityBundle($entity) {
     return is_subclass_of($entity,

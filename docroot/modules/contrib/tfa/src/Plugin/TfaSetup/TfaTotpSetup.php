@@ -2,19 +2,19 @@
 
 namespace Drupal\tfa\Plugin\TfaSetup;
 
+use chillerlan\QRCode\QRCode;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\tfa\Plugin\TfaValidation\TfaTotpValidation;
-use ParagonIE\ConstantTime\Encoding;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\encrypt\EncryptionProfileManagerInterface;
 use Drupal\encrypt\EncryptServiceInterface;
 use Drupal\tfa\Plugin\TfaSetupInterface;
+use Drupal\tfa\Plugin\TfaValidation\TfaTotpValidation;
 use Drupal\user\Entity\User;
 use Drupal\user\UserDataInterface;
-use chillerlan\QRCode\QRCode;
+use ParagonIE\ConstantTime\Encoding;
 
 /**
  * TOTP setup class to setup TOTP validation.
@@ -24,9 +24,10 @@ use chillerlan\QRCode\QRCode;
  *   label = @Translation("TFA TOTP Setup"),
  *   description = @Translation("TFA TOTP Setup Plugin"),
  *   helpLinks = {
- *    "Google Authenticator (Android/iOS)" = "https://googleauthenticator.net",
+ *    "Google Authenticator (Android)" = "https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2",
+ *    "Google Authenticator (iOS)" = "https://apps.apple.com/us/app/google-authenticator/id388497605",
  *    "Microsoft Authenticator (Android/iOS)" = "https://www.microsoft.com/en-us/security/mobile-authenticator-app",
- *    "Authy (Android/iOS/Desktop)" = "https://authy.com",
+ *    "Twilio Authy (Android/iOS/Desktop)" = "https://authy.com",
  *    "FreeOTP (Android/iOS)" = "https://freeotp.github.io",
  *    "GAuth Authenticator (Desktop)" = "https://github.com/gbraadnl/gauth"
  *   },

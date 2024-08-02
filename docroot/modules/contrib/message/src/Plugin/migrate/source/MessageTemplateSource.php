@@ -1,14 +1,10 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\message\Plugin\migrate\source.
- */
-
 namespace Drupal\message\Plugin\migrate\source;
 
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase;
-use Drupal\migrate\Row;
+
 /**
  * Drupal 7 message types source from database.
  *
@@ -29,7 +25,6 @@ class MessageTemplateSource extends DrupalSqlBase {
 
     $query->fields('mt', [
       'id',
-      'name',
       'category',
       'description',
       'argument_keys',
@@ -45,8 +40,9 @@ class MessageTemplateSource extends DrupalSqlBase {
       'delta',
     ]);
 
+    $expression = 'right(mt.name, ' . EntityTypeInterface::ID_MAX_LENGTH . ')';
+    $query->addExpression($expression, 'name');
     $query->addExpression("concat(mt.id, txt.delta)", 'concat_id');
-
     $query->orderBy('mt.id');
 
     return $query;

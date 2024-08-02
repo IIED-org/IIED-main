@@ -206,8 +206,18 @@ function _search_api_views_get_handlers(FieldInterface $field) {
       $definition = $field->getDataDefinition();
     }
 
+    // Since $definition->getClass() can throw an exception in specific setups,
+    // but $class is not always needed for determining the mappings, we catch
+    // and ignore the exception here.
+    try {
+      $class = $definition?->getClass();
+    }
+    catch (PluginNotFoundException) {
+      // Ignore.
+    }
+
     // Check whether this is an entity reference field.
-    if (is_a($definition?->getClass(), EntityReferenceItem::class, TRUE)) {
+    if (is_a($class ?? NULL, EntityReferenceItem::class, TRUE)) {
       $entity_type_id = $definition->getSetting('target_type');
       if ($entity_type_id) {
         $entity_type = \Drupal::entityTypeManager()
@@ -405,7 +415,7 @@ function _search_api_views_handler_mapping() {
     ];
 
     $alter_id = 'search_api_views_handler_mapping';
-    $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Please use the "search_api.mapping_views_handlers" event instead. See https://www.drupal.org/node/3059866';
+    $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Use the "search_api.mapping_views_handlers" event instead. See https://www.drupal.org/node/3059866';
     \Drupal::moduleHandler()
       ->alterDeprecated($description, $alter_id, $mapping);
 
@@ -1004,7 +1014,7 @@ function _search_api_views_get_field_handler_mapping() {
 
     // Let other modules change or expand this mapping.
     $alter_id = 'search_api_views_field_handler_mapping';
-    $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Please use the "search_api.mapping_views_field_handlers" event instead. See https://www.drupal.org/node/3059866';
+    $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Use the "search_api.mapping_views_field_handlers" event instead. See https://www.drupal.org/node/3059866';
     \Drupal::moduleHandler()
       ->alterDeprecated($description, $alter_id, $plain_mapping);
 

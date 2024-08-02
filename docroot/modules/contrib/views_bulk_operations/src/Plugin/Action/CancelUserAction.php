@@ -86,7 +86,7 @@ class CancelUserAction extends ViewsBulkOperationsActionBase implements Containe
    * {@inheritdoc}
    */
   public function execute($account = NULL) {
-    if ($account->id() === $this->currentUser->id() && (empty($this->context['list']) || \count($this->context['list'] > 1))) {
+    if ($account->id() === $this->currentUser->id() && (empty($this->context['list']) || \count($this->context['list']) > 1)) {
       $this->messenger()->addError($this->t('The current user account cannot be canceled in a batch operation. Select your account only or cancel it from your account page.'));
     }
     elseif (\intval($account->id()) === 1) {

@@ -4,6 +4,7 @@
 build:
   assessment:
     validate_codebase:
+      # eslint-disable-next-line yml/no-empty-mapping-value
       phplint:
       phpcs:
         # phpcs will use core's specified version of Coder.
@@ -15,23 +16,23 @@ build:
       # suppress-deprecations is false in order to be alerted to usages of
       # deprecated code.
       run_tests.phpunit:
-        types: 'PHPUnit-Unit'
-        testgroups: '--all'
+        types: "PHPUnit-Unit"
+        testgroups: "--all"
         suppress-deprecations: false
         halt-on-fail: false
       run_tests.kernel:
-        types: 'PHPUnit-Kernel'
-        testgroups: '--all'
+        types: "PHPUnit-Kernel"
+        testgroups: "--all"
         suppress-deprecations: false
         halt-on-fail: false
       run_tests.functional:
-        types: 'PHPUnit-Functional'
-        testgroups: '--all'
+        types: "PHPUnit-Functional"
+        testgroups: "--all"
         suppress-deprecations: false
         halt-on-fail: false
       run_tests.javascript:
         concurrency: 15
-        types: 'PHPUnit-FunctionalJavascript'
-        testgroups: '--all'
+        types: "PHPUnit-FunctionalJavascript"
+        testgroups: "--all"
         suppress-deprecations: false
         halt-on-fail: false

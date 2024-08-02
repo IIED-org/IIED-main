@@ -354,7 +354,7 @@ class ContentEntityDatasourceTest extends KernelTestBase {
    *
    * @see \Drupal\Tests\search_api\Kernel\Datasource\ContentEntityDatasourceTest::testGetLanguages()
    */
-  public function getLanguagesDataProvider(): array {
+  public static function getLanguagesDataProvider(): array {
     return [
       'all' => [
         'language_config' => [

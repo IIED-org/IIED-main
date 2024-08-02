@@ -3,10 +3,10 @@
 namespace Drupal\taxonomy_manager\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\taxonomy_manager\Element\TaxonomyManagerTree;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\taxonomy_manager\Element\TaxonomyManagerTree;
 
 /**
  * Exposes a list of terms to any JS library via JSON.

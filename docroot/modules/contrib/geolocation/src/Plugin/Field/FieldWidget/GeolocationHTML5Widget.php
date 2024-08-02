@@ -41,8 +41,8 @@ class GeolocationHTML5Widget extends WidgetBase {
     $lng = $items[$delta]->lng;
 
     // Get the default values for existing field.
-    $lat_default_value = isset($lat) ? $lat : NULL;
-    $lng_default_value = isset($lng) ? $lng : NULL;
+    $lat_default_value = $lat ?? NULL;
+    $lng_default_value = $lng ?? NULL;
 
     // The 'Get my location' button.
     $button_html = '<div class="geolocation-html5-button">';

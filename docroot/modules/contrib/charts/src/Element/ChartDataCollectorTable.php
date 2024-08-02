@@ -9,14 +9,14 @@ use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Element\FormElementBase;
 
 /**
  * Provides a chart data collector table form element.
  *
  * @FormElement("chart_data_collector_table")
  */
-class ChartDataCollectorTable extends FormElement {
+class ChartDataCollectorTable extends FormElementBase {
 
   use ColorHelperTrait;
   use ElementFormStateTrait;

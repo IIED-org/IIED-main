@@ -122,8 +122,8 @@ key type group, or storage method. Examples:
     This would only display MailChimp keys that use the File key provider.
   * `#key_filters = ['type_group' => 'encryption']` This would only display
     keys that are of a key type that belongs to the 'encryption' group.
-  * `#key_filters = ['storage_method' => 'file']` This would only display keys
-    that are defined to use file as the storage_method.
+  * `#key_filters = ['tags' => ['file', 'private']]` This would only display
+    keys whose definitions are tagged with `file` and `private` tags.
 * `#key_description` This is a boolean value that determines if information
   about keys is added to the element's description. It is TRUE by default
   and it prepends the description with the following text (with a link to

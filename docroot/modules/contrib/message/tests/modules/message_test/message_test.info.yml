@@ -6,7 +6,7 @@ dependencies:
   - drupal:views
   - message:message
 
-# Information added by Drupal.org packaging script on 2022-11-04
-version: '8.x-1.4'
+# Information added by Drupal.org packaging script on 2024-03-10
+version: '8.x-1.5'
 project: 'message'
-datestamp: 1667584510
+datestamp: 1710105162

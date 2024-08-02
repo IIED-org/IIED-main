@@ -184,7 +184,7 @@ class TaxonomyManagerHelper {
 
       $values = [
         'name' => $name,
-        // @todo: do we need to set a format?
+        // @todo do we need to set a format?
         'format' => $format->id(),
         'vid' => $vid,
         'langcode' => $langcode,
@@ -295,16 +295,16 @@ class TaxonomyManagerHelper {
     $max_weight = 0;
     if (!$parents) {
       // Sorted by weight, then name, we can pull the last's weight to get max.
-
       if (!empty($vocabulary)) {
         $max_weight = (end($vocabulary)->weight);
       }
-    } else {
+    }
+    else {
       $parent_vocabularies = [];
       $parent_max_weights = [];
       foreach ($parents as $index => $parent) {
         $parent_vocabularies[$index] = $taxonomy_entity_storage->loadTree($vid, $parent, 1, FALSE);
-        $parent_max_weights[$index] = $parent_vocabularies[$index] ? (end($parent_vocabularies[$index])->weight) : 0 ;
+        $parent_max_weights[$index] = $parent_vocabularies[$index] ? (end($parent_vocabularies[$index])->weight) : 0;
       }
       $max_weight = max($parent_max_weights) ?? 0;
     }

@@ -9,7 +9,7 @@
         "php": ">=8"
     },
     "require-dev": {
-        "drush/drush": "^11",
+        "drush/drush": "^11 || ^12",
         "drupal/coder": "^8.3"
     },
     "extra": {

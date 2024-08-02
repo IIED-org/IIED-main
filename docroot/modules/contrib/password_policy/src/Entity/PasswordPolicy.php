@@ -2,8 +2,8 @@
 
 namespace Drupal\password_policy\Entity;
 
-use Drupal\Core\Plugin\DefaultLazyPluginCollection;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\Core\Plugin\DefaultLazyPluginCollection;
 use Drupal\password_policy\PasswordPolicyInterface;
 
 /**
@@ -76,9 +76,9 @@ class PasswordPolicy extends ConfigEntityBase implements PasswordPolicyInterface
   /**
    * Send email notification upon reset.
    *
-   * @var int
+   * @var bool
    */
-  protected $send_reset_email = 0;
+  protected $send_reset_email = FALSE;
 
   /**
    * Send pending email days before.
@@ -170,7 +170,7 @@ class PasswordPolicy extends ConfigEntityBase implements PasswordPolicyInterface
   /**
    * Return the password reset email value from the policy.
    *
-   * @return int
+   * @return bool
    *   Whether to send email upon password resets.
    */
   public function getPasswordResetEmailValue() {

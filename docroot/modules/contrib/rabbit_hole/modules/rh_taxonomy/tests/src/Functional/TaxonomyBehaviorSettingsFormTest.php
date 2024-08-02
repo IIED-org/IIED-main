@@ -36,7 +36,7 @@ class TaxonomyBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTes
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_taxonomy', 'taxonomy'];
+  protected static $modules = ['rh_taxonomy', 'taxonomy'];
 
   /**
    * {@inheritdoc}

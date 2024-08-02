@@ -61,6 +61,13 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
   protected $id;
 
   /**
+   * The layout's parent entity.
+   *
+   * @var \Drupal\Core\Entity\EntityInterface
+   */
+  protected $entity;
+
+  /**
    * Class constructor.
    *
    * @param \Drupal\Core\Field\EntityReferenceFieldItemListInterface $paragraphs_reference_field
@@ -164,6 +171,12 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
    * @return $this
    */
   public function setParagraphsReferenceField(EntityReferenceFieldItemListInterface $paragraphs_reference_field) {
+    foreach ($paragraphs_reference_field as $key => $field_item) {
+      if ($field_item->entity) {
+        $paragraphs_reference_field[$key]->entity->_referringItem = $field_item;
+        $paragraphs_reference_field[$key]->entity->_layoutParagraphsLayout = $this;
+      }
+    }
     $this->paragraphsReferenceField = $paragraphs_reference_field;
     return $this;
   }
@@ -399,9 +412,11 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
       $new_paragraph = $component->getEntity();
       $new_paragraph->setParentEntity($this->getEntity(), $this->getFieldName());
       // Splice the new paragraph into the field item list.
-      $list = $this->paragraphsReferenceField->getValue();
+      $item_list = $this->getParagraphsReferenceField();
+      $list = $item_list->getValue();
       $list[] = ['entity' => $new_paragraph];
-      $this->paragraphsReferenceField->setValue($list);
+      $item_list->setValue($list);
+      $this->setParagraphsReferenceField($item_list);
     }
     else {
       // @todo Throw exception.
@@ -470,11 +485,13 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
       $new_paragraph = $new_component->getEntity();
       $new_paragraph->setParentEntity($this->getEntity(), $this->getFieldName());
       // Splice the new paragraph into the field item list.
-      $list = $this->paragraphsReferenceField->getValue();
+      $item_list = $this->getParagraphsReferenceField();
+      $list = $item_list->getValue();
       $delta = $this->getComponentDeltaByUuid($sibling_uuid);
       $delta += $delta_offset;
       array_splice($list, $delta, 0, ['entity' => $new_paragraph]);
-      $this->paragraphsReferenceField->setValue($list);
+      $item_list->setValue($list);
+      $this->setParagraphsReferenceField($item_list);
     }
     else {
       // @todo Throw exception.

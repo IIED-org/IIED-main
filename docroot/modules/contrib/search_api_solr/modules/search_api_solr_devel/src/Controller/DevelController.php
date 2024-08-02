@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\Core\Url;
 use Drupal\devel\DevelDumperManagerInterface;
 use Drupal\search_api\Backend\BackendPluginManager;
@@ -175,12 +176,19 @@ class DevelController extends ControllerBase {
           foreach ($indexes as $index) {
             if ($index->status()) {
               foreach ($index->getDatasourceIds() as $datasource_id) {
-                [, $entity_type] = Utility::splitPropertyPath($datasource_id);
-                if ($entity->getEntityTypeId() === $entity_type) {
-
+                $datasource = $index->getDatasource($datasource_id);
+                if ($entity->getEntityTypeId() === $datasource->getEntityTypeId()) {
                   foreach (array_keys($entity->getTranslationLanguages()) as $langcode) {
+                    if (!$entity->hasTranslation($langcode)) {
+                      continue;
+                    }
+                    $item_id = $datasource->getItemId($entity->getTranslation($langcode)->getTypedData());
+                    if ($item_id === NULL) {
+                      // The entity is not provided by this datasource.
+                      continue;
+                    }
                     // @todo improve that ID generation?
-                    $item_id = $datasource_id . '/' . $entity->id() . ':' . $langcode;
+                    $item_id = $datasource_id . '/' . $item_id;
                     $items = [];
                     $base_summary_row = $this->getBaseRow($server, $index, $datasource_id, $entity, $langcode, $item_id);
 
@@ -201,7 +209,7 @@ class DevelController extends ControllerBase {
                       $summary_row = $base_summary_row;
                       $summary_row['num'] = $num + 1;
                       $fields = $document->getFields();
-                      $summary_row['object_size'] = format_size(strlen(json_encode($fields)));
+                      $summary_row['object_size'] = ByteSizeMarkup::create(strlen(json_encode($fields)));
                       ksort($fields);
                       $details_id = $fields['id'];
                       $output_details[$details_id] = [
@@ -260,7 +268,7 @@ class DevelController extends ControllerBase {
                         // Show Solr documents for this item.
                         $solr_documents = $results->getDocuments();
                         $fields = $solr_documents[0]->getFields();
-                        $summary_row['solr_size'] = format_size(strlen(json_encode($fields)));
+                        $summary_row['solr_size'] = ByteSizeMarkup::create(strlen(json_encode($fields)));
                         if (!empty($fields['timestamp'])) {
                           $summary_row['solr_changed'] = $this->showTimeAndTimeAgo(strtotime($fields['timestamp']));
                         }

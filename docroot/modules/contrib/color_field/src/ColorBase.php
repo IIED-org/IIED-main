@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\color_field;
 
@@ -32,6 +32,7 @@ abstract class ColorBase implements ColorInterface {
    * @var string[]
    */
   public static array $namedColors = [
+    // cspell:disable
     "aliceblue" => "f0f8ff",
     "antiquewhite" => "faebd7",
     "aqua" => "00ffff",
@@ -175,6 +176,7 @@ abstract class ColorBase implements ColorInterface {
     "whitesmoke" => "f5f5f5",
     "yellow" => "ffff00",
     "yellowgreen" => "9acd32",
+    // cspell:enable
   ];
 
   /**
@@ -182,12 +184,12 @@ abstract class ColorBase implements ColorInterface {
    *
    * @var float
    */
-  protected float $opacity;
+  protected float|null $opacity;
 
   /**
    * Get the opacity.
    *
-   * @return float
+   * @return float|null
    *   The opacity value between 0 and 1.
    */
   public function getOpacity(): float {
@@ -197,7 +199,7 @@ abstract class ColorBase implements ColorInterface {
   /**
    * Set the opacity.
    */
-  public function setOpacity(float $opacity): void {
+  public function setOpacity(?float $opacity): void {
     $this->opacity = $opacity;
   }
 

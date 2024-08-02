@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  weight = 4
  * )
  */
-class MessageUiContextualLinkNotifyMessage extends MessageUiViewsContextualLinksBase implements MessageUiViewsContextualLinksInterface, ContainerFactoryPluginInterface {
+final class MessageUiContextualLinkNotifyMessage extends MessageUiViewsContextualLinksBase implements MessageUiViewsContextualLinksInterface, ContainerFactoryPluginInterface {
   use StringTranslationTrait;
 
   /**
@@ -78,7 +78,7 @@ class MessageUiContextualLinkNotifyMessage extends MessageUiViewsContextualLinks
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
+    return new self(
       $configuration,
       $plugin_id,
       $plugin_definition,

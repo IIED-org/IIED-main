@@ -208,7 +208,7 @@ class IndexAddFieldsForm extends EntityForm {
           '#theme' => 'item_list',
           '#items' => $unmapped_fields,
           '#prefix' => $this->t('The following fields cannot be indexed since there is no type mapping for them:'),
-          '#suffix' => $this->t("If you think one of these fields should be available for indexing, please report this in the module's <a href=':url'>issue queue</a>. (Make sure to first search for an existing issue for this field.) Please note that entity-valued fields generally can be indexed by either indexing their parent reference field, or their child entity ID field.", [':url' => Url::fromUri('https://www.drupal.org/project/issues/search_api')->toString()]),
+          '#suffix' => $this->t("If you think one of these fields should be available for indexing, report this in the module's <a href=':url'>issue queue</a>. (Make sure to first search for an existing issue for this field.) Note that entity-valued fields generally can be indexed by either indexing their parent reference field, or their child entity ID field.", [':url' => Url::fromUri('https://www.drupal.org/project/issues/search_api')->toString()]),
         ],
       ];
     }

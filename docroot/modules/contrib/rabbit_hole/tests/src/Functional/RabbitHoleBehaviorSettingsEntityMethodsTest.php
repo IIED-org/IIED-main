@@ -11,8 +11,8 @@ use Drupal\Tests\BrowserTestBase;
  *
  * @group rabbit_hole
  *
- * TODO: Test that creating an entity with an invalid redirect code fails.
- * TODO: Test that creating an entity with redirect settings when the action
+ * @todo Test that creating an entity with an invalid redirect code fails.
+ * @todo Test that creating an entity with redirect settings when the action
  * type is not redirect fails.
  *
  * Note: Currently config entity constructors don't use setters - see
@@ -28,7 +28,7 @@ class RabbitHoleBehaviorSettingsEntityMethodsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rabbit_hole'];
+  protected static $modules = ['rabbit_hole'];
 
   /**
    * Drupal\Core\Config\ConfigFactory definition.

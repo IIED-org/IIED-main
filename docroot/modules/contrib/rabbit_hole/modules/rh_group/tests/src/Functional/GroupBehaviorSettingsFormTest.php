@@ -33,13 +33,13 @@ class GroupBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTestBa
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_group', 'group'];
+  protected static $modules = ['rh_group', 'group'];
 
   /**
    * {@inheritdoc}
    */
   protected function createEntityBundle() {
-    // TODO: Switch to trait when/if the patch is committed and released.
+    // @todo Switch to trait when/if the patch is committed and released.
     // See: https://www.drupal.org/project/group/issues/3177542
     $storage = \Drupal::entityTypeManager()->getStorage('group_type');
     $group_type = $storage->create([
@@ -83,7 +83,7 @@ class GroupBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTestBa
       $values['rh_action'] = $action;
     }
 
-    // TODO: Switch to trait when/if the patch is committed and released.
+    // @todo Switch to trait when/if the patch is committed and released.
     // See: https://www.drupal.org/project/group/issues/3177542
     $storage = \Drupal::entityTypeManager()->getStorage('group');
     $group = $storage->create($values + [
@@ -120,7 +120,7 @@ class GroupBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTestBa
    * {@inheritdoc}
    */
   protected function getAdminPermissions() {
-    return ['administer group', 'bypass group access', 'access group overview'];
+    return ['administer group', 'access group overview'];
   }
 
 }

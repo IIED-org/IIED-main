@@ -2,7 +2,7 @@
 
 namespace Drupal\search_api_solr\SolrConnector;
 
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -68,7 +68,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   /**
    * The event dispatcher.
    *
-   * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
   protected $eventDispatcher;
 
@@ -82,7 +82,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   /**
    * {@inheritdoc}
    */
-  public function setEventDispatcher(ContainerAwareEventDispatcher $eventDispatcher) : SolrConnectorInterface {
+  public function setEventDispatcher(EventDispatcherInterface $eventDispatcher) : SolrConnectorInterface {
     $this->eventDispatcher = $eventDispatcher;
     return $this;
   }
@@ -518,8 +518,11 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
         if (version_compare($version, '9.4.0', '<')) {
           return '9.4.2';
         }
-        // Solr 9.4.0 uses lucene 9.8.0.
-        return '9.8.0';
+        if (version_compare($version, '9.6.0', '<')) {
+          return '9.8.0';
+        }
+        // Solr 9.6.0 uses lucene 9.10.0.
+        return '9.10.0';
       }
     }
 
@@ -1360,7 +1363,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   /**
    * {@inheritdoc}
    */
-  public function __sleep() {
+  public function __sleep(): array {
     // It's safe to unset the solr client completely before serialization
     // because connect() will set it up again correctly after deserialization.
     unset($this->solr);

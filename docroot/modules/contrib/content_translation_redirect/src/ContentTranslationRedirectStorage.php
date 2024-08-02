@@ -25,6 +25,7 @@ class ContentTranslationRedirectStorage extends ConfigEntityStorage implements C
    * {@inheritdoc}
    */
   public function loadByEntity(EntityInterface $entity): ?ContentTranslationRedirectInterface {
+    /** @var \Drupal\content_translation_redirect\ContentTranslationRedirectInterface[] $redirects */
     $redirects = $this->loadMultiple($this->getPossibleIds($entity));
     return reset($redirects) ?: NULL;
   }

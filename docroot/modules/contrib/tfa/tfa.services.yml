@@ -1,4 +1,7 @@
 services:
+  logger.channel.tfa:
+    parent: logger.channel_base
+    arguments: ['tfa']
   plugin.manager.tfa.login:
     class: Drupal\tfa\TfaLoginPluginManager
     parent: default_plugin_manager

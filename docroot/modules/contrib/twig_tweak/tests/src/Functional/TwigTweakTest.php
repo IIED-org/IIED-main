@@ -5,13 +5,13 @@ namespace Drupal\Tests\twig_tweak\Functional;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
-use Drupal\file\FileInterface;
-use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\TestFileCreationTrait;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\media\Entity\Media;
 use Drupal\responsive_image\Entity\ResponsiveImageStyle;
+use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\TestFileCreationTrait;
 use Drupal\user\Entity\Role;
 
 /**
@@ -265,6 +265,11 @@ final class TwigTweakTest extends BrowserTestBase {
     $xpath = sprintf('//div[@class = "tt-url"]/div[@data-case="with-langcode" and text() = "%s"]', $url);
     $this->assertXpath($xpath);
 
+    // -- External URL.
+    $url = 'https://example.com/node?foo=bar&page=1#here';
+    $xpath = sprintf('//div[@class = "tt-url"]/div[@data-case="external" and text() = "%s"]', $url);
+    $this->assertXpath($xpath);
+
     // -- Link.
     $url = Url::fromUserInput('/node/1/edit', ['absolute' => TRUE]);
     $link = Link::fromTextAndUrl('Edit', $url)->toString();
@@ -337,7 +342,16 @@ final class TwigTweakTest extends BrowserTestBase {
     $xpath = '//div[@class = "tt-with-nested" and text() = "{alpha:{beta:{gamma:456}}}"]';
     $this->assertXpath($xpath);
 
+    // -- Data URI (SVG).
+    $xpath = '//div[@class = "tt-data-uri-svg"]/img[@src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNTAiIGZpbGw9ImxpbWUiLz48L3N2Zz4="]';
+    $this->assertXpath($xpath);
+
+    // -- Data URI (Iframe).
+    $xpath = '//div[@class = "tt-data-uri-iframe"]/iframe[@src = "data:text/html;charset=UTF-8;base64,PGgxPkhlbGxvIHdvcmxkITwvaDE+"]';
+    $this->assertXpath($xpath);
+
     // -- 'children'.
+    // cspell:disable-next-line
     $xpath = '//div[@class = "tt-children" and text() = "doremi"]';
     $this->assertXpath($xpath);
 

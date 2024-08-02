@@ -50,7 +50,7 @@ class RegionViewBuilder {
     EntityTypeManagerInterface $entity_type_manager,
     ConfigFactoryInterface $config_factory,
     RequestStack $request_stack,
-    TitleResolverInterface $title_resolver
+    TitleResolverInterface $title_resolver,
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\color_field;
 
@@ -39,10 +39,10 @@ class ColorCMY extends ColorBase {
    *   The magenta.
    * @param int $yellow
    *   The yellow.
-   * @param float $opacity
+   * @param float|null $opacity
    *   The opacity.
    */
-  public function __construct(int $cyan, int $magenta, int $yellow, float $opacity) {
+  public function __construct(int $cyan, int $magenta, int $yellow, ?float $opacity) {
     $this->cyan = $cyan;
     $this->magenta = $magenta;
     $this->yellow = $yellow;

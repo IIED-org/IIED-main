@@ -456,14 +456,14 @@ class BlockPlacementDenylistTest extends LayoutBuilderRestrictionsTestBase {
     $assert_session->checkboxNotChecked('Allow specific Inline blocks blocks:');
     $assert_session->checkboxChecked('Allow all existing & new System blocks.');
     $assert_session->checkboxNotChecked('Allow specific System blocks:');
-    $assert_session->checkboxChecked('Allow all existing & new core blocks.');
-    $assert_session->checkboxNotChecked('Allow specific core blocks:');
+    $assert_session->checkboxChecked('Allow all existing & new Forms blocks.');
+    $assert_session->checkboxNotChecked('Allow specific Forms blocks:');
 
     // Disallow Core blocks in the ThreeCol first region.
-    $element = $page->find('xpath', '//*[starts-with(@id, "edit-allowed-blocks-core-restriction-denylisted--")]');
+    $element = $page->find('xpath', '//*[starts-with(@id, "edit-allowed-blocks-forms-restriction-denylisted--")]');
     $element->click();
-    $core_blocks = $page->findAll('xpath', '//*[starts-with(@id, "edit-allowed-blocks-core-blocks-allowed-blocks-")]');
-    foreach ($core_blocks as $block) {
+    $form_blocks = $page->findAll('xpath', '//*[starts-with(@id, "edit-allowed-blocks-forms-blocks-allowed-blocks-")]');
+    foreach ($form_blocks as $block) {
       $block->click();
     }
     $element = $page->find('xpath', '//*[starts-with(@id,"edit-submit--")]');
@@ -475,17 +475,6 @@ class BlockPlacementDenylistTest extends LayoutBuilderRestrictionsTestBase {
     $page->pressButton('Save');
 
     $this->navigateToNodeLayout($node_id);
-    $element = $page->find('xpath', '//*[contains(@class, "layout__region--first")]//a');
-    $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
-    $assert_session->linkExists('Primary admin actions');
-    $page->pressButton('Close');
-
-    $element = $page->find('xpath', '//*[contains(@class, "layout__region--second")]//a');
-    $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
-    $assert_session->linkExists('Primary admin actions');
-    $page->pressButton('Close');
 
     // Add three-column layout below existing section.
     $element = $page->find('xpath', '//*[@data-layout-builder-highlight-id="section-1"]//a');
@@ -503,7 +492,7 @@ class BlockPlacementDenylistTest extends LayoutBuilderRestrictionsTestBase {
     // three-column layout.
     $element = $page->find('xpath', '//*[contains(@class, "layout--threecol-section")]/*[contains(@class, "layout__region--first")]//a');
     $element->click();
-    $assert_session->linkNotExists('Primary admin actions');
+    $assert_session->linkNotExists('Search form');
 
     // Finally, test all_regions functionality.
     $this->navigateToManageDisplay();

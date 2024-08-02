@@ -3,8 +3,8 @@
 namespace Drupal\Tests\message\Functional;
 
 use Drupal\language\Entity\ConfigurableLanguage;
-use Drupal\message\Entity\MessageTemplate;
 use Drupal\message\Entity\Message;
+use Drupal\message\Entity\MessageTemplate;
 
 /**
  * Testing the CRUD functionality for the Message template entity.
@@ -66,7 +66,7 @@ class MessageTemplateUiTest extends MessageTestBase {
       'text[0][format]' => 'filtered_html',
     ];
     $this->drupalGet('admin/structure/message/template/add');
-    $this->submitForm($edit, t('Save message template'));
+    $this->submitForm($edit, 'Save message template');
     $this->assertSession()->pageTextContains('The message template Dummy message created successfully.');
     $this->drupalGet('admin/structure/message/manage/dummy_message');
 
@@ -84,7 +84,8 @@ class MessageTemplateUiTest extends MessageTestBase {
       'text[0][value]' => '<p>This is a dummy message with some edited dummy text</p>',
     ];
     $this->drupalGet('admin/structure/message/manage/dummy_message');
-    $this->submitForm($edit, t('Save message template'));
+    $this->submitForm($edit, 'Save message template');
+    $this->assertSession()->pageTextContains('The message template Edited Dummy message has been updated.');
 
     $this->drupalGet('admin/structure/message/manage/dummy_message');
 
@@ -105,7 +106,7 @@ class MessageTemplateUiTest extends MessageTestBase {
       'translation[config_names][message.template.dummy_message][text][0][value]' => '<p>This is a dummy message with translated text to Hebrew</p>',
     ];
     $this->drupalGet('admin/structure/message/manage/dummy_message/translate/he/add');
-    $this->submitForm($edit, t('Save translation'));
+    $this->submitForm($edit, 'Save translation');
 
     // Go to the edit form and verify text.
     $this->drupalGet('admin/structure/message/manage/dummy_message/translate/he/edit');
@@ -119,23 +120,22 @@ class MessageTemplateUiTest extends MessageTestBase {
 
     // Load the message template via code in hebrew and english and verify the
     // text. Also verify that when no translation, nothing gets returned.
-    /* @var $template MessageTemplate */
+    /** @var \Drupal\message\Entity\MessageTemplate $template */
     $template = MessageTemplate::load('dummy_message');
-    $this->assertEquals(['<p>This is a dummy message with translated text to Hebrew</p>'], $template->getText('he'), 'The text in hebrew pulled correctly.');
-    $this->assertEquals(['<p>This is a dummy message with some edited dummy text</p>'], $template->getText(), 'The text in english pulled correctly.');
+    $this->assertEquals('<p>This is a dummy message with translated text to Hebrew</p>', (string) $template->getText('he')[0], 'The text in hebrew pulled correctly.');
+    $this->assertEquals('<p>This is a dummy message with some edited dummy text</p>', (string) $template->getText()[0], 'The text in english pulled correctly.');
     $this->assertEquals([], $template->getText('fi'), 'Nonexistent translation pulled empty.');
-
 
     // Create a message using that same template and test that multilingual text
     // still works.
-    /* @var $template Message */
+    /** @var \Drupal\message\Entity\Message $template */
     $message = Message::create([
       'template' => 'dummy_message',
     ]);
     /** @var \Drupal\message\MessageViewBuilder $builder */
     $builder = $this->entityTypeManager->getViewBuilder('message');
-    $this->assertEquals(['<p>This is a dummy message with translated text to Hebrew</p>'], $message->getText('he'), 'The text in hebrew pulled correctly.');
-    $this->assertEquals(['<p>This is a dummy message with some edited dummy text</p>'], $message->getText(), 'The text in english pulled correctly.');
+    $this->assertEquals('<p>This is a dummy message with translated text to Hebrew</p>', (string) $message->getText('he')[0], 'The text in hebrew pulled correctly.');
+    $this->assertEquals('<p>This is a dummy message with some edited dummy text</p>', (string) $message->getText()[0], 'The text in english pulled correctly.');
     $build = $builder->view($message);
     $this->assertEquals(['#markup' => '<p>This is a dummy message with some edited dummy text</p>'], $build['partial_0'], 'The text in english built correctly.');
 

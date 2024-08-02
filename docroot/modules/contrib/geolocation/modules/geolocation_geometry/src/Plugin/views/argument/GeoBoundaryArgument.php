@@ -3,8 +3,8 @@
 namespace Drupal\geolocation_geometry\Plugin\views\argument;
 
 use Drupal\geolocation\Plugin\views\argument\BoundaryArgument;
-use Drupal\views\Plugin\views\query\Sql;
 use Drupal\geolocation_geometry\GeometryBoundaryTrait;
+use Drupal\views\Plugin\views\query\Sql;
 
 /**
  * Argument handler for geolocation boundary.

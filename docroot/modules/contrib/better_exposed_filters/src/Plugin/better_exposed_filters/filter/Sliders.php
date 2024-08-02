@@ -6,20 +6,20 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * JQuery UI slider widget implementation.
+ * Sliders widget implementation.
  *
  * @BetterExposedFiltersFilterWidget(
  *   id = "bef_sliders",
- *   label = @Translation("jQuery UI Slider"),
+ *   label = @Translation("Sliders"),
  * )
  */
 class Sliders extends FilterWidgetBase {
 
   // Slider animation options.
-  const ANIMATE_NONE = 'none';
-  const ANIMATE_SLOW = 'slow';
-  const ANIMATE_NORMAL = 'normal';
-  const ANIMATE_FAST = 'fast';
+  const ANIMATE_NONE = 0;
+  const ANIMATE_SLOW = 600;
+  const ANIMATE_NORMAL = 400;
+  const ANIMATE_FAST = 200;
   const ANIMATE_CUSTOM = 'custom';
 
   // Slider orientation options.
@@ -72,14 +72,14 @@ class Sliders extends FilterWidgetBase {
       '#type' => 'number',
       '#title' => $this->t('Range minimum'),
       '#default_value' => $this->configuration['min'],
-      '#description' => $this->t('The minimum allowed value for the jQuery range slider. It can be positive, negative, or zero and have up to 11 decimal places.'),
+      '#description' => $this->t('The minimum allowed value for the range slider. It can be positive, negative, or zero and have up to 11 decimal places.'),
     ];
 
     $form['max'] = [
       '#type' => 'number',
       '#title' => $this->t('Range maximum'),
       '#default_value' => $this->configuration['max'],
-      '#description' => $this->t('The maximum allowed value for the jQuery range slider. It can be positive, negative, or zero and have up to 11 decimal places.'),
+      '#description' => $this->t('The maximum allowed value for the range slider. It can be positive, negative, or zero and have up to 11 decimal places.'),
     ];
 
     $form['step'] = [
@@ -95,9 +95,9 @@ class Sliders extends FilterWidgetBase {
       '#title' => $this->t('Animation speed'),
       '#options' => [
         self::ANIMATE_NONE => $this->t('None'),
-        self::ANIMATE_SLOW => $this->t('Slow'),
-        self::ANIMATE_NORMAL => $this->t('Normal'),
-        self::ANIMATE_FAST => $this->t('Fast'),
+        self::ANIMATE_SLOW => $this->t('Slow (600 ms)'),
+        self::ANIMATE_NORMAL => $this->t('Normal (400 ms)'),
+        self::ANIMATE_FAST => $this->t('Fast (200 ms)'),
         self::ANIMATE_CUSTOM => $this->t('Custom'),
       ],
       '#default_value' => $this->configuration['animate'],
@@ -124,7 +124,7 @@ class Sliders extends FilterWidgetBase {
         self::ORIENTATION_VERTICAL => $this->t('Vertical'),
       ],
       '#default_value' => $this->configuration['orientation'],
-      '#description' => $this->t('The orientation of the jQuery range slider.'),
+      '#description' => $this->t('The orientation of the range slider.'),
     ];
 
     return $form;

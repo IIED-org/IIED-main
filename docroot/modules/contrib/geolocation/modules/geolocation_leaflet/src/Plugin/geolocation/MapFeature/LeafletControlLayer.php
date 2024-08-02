@@ -64,12 +64,12 @@ class LeafletControlLayer extends ControlCustomElementBase {
         $form['tile_layer_providers'][$provider][$key]['checkbox'] = [
           '#type' => 'checkbox',
           '#title' => $variant,
-          '#default_value' => isset($settings['tile_layer_providers'][$provider][$key]['checkbox']) ? $settings['tile_layer_providers'][$provider][$key]['checkbox'] : 0,
+          '#default_value' => $settings['tile_layer_providers'][$provider][$key]['checkbox'] ?? 0,
         ];
         $form['tile_layer_providers'][$provider][$key]['label'] = [
           '#type' => 'textfield',
           '#description' => $this->t('Label for the layer in the control.'),
-          '#default_value' => isset($settings['tile_layer_providers'][$provider][$key]['label']) ? $settings['tile_layer_providers'][$provider][$key]['label'] : '',
+          '#default_value' => $settings['tile_layer_providers'][$provider][$key]['label'] ?? '',
           '#states' => [
             'visible' => [
               ':input[name="' . $parents_string . '][tile_layer_providers][' . $provider . '][' . $key . '][checkbox]"]' => ['checked' => TRUE],

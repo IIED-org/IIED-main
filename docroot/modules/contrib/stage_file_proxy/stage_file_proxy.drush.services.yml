@@ -1,6 +1,6 @@
 services:
   stage_file_proxy.command:
-    class: Drupal\stage_file_proxy\Commands\StageFileProxyCommands
+    class: Drupal\stage_file_proxy\Drush\Commands\StageFileProxyCommands
     arguments:
       - '@config.factory'
       - '@database'

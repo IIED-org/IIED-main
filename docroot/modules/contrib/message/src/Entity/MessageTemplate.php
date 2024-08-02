@@ -2,7 +2,6 @@
 
 namespace Drupal\message\Entity;
 
-use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Language\Language;
@@ -286,8 +285,8 @@ class MessageTemplate extends ConfigEntityBundleBase implements MessageTemplateI
       // @see check_markup()
       $build = [
         '#type' => 'processed_text',
-        '#text' => isset($item['value']) ? $item['value'] : '',
-        '#format' => $item['format'],
+        '#text' => $item['value'] ?? '',
+        '#format' => $item['format'] ?? 'plain_text',
         '#langcode' => $langcode,
       ];
       $text[$key] = \Drupal::service('renderer')->renderPlain($build);
@@ -307,16 +306,6 @@ class MessageTemplate extends ConfigEntityBundleBase implements MessageTemplateI
    */
   public function isLocked() {
     return !$this->isNew();
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * @return \Drupal\message\MessageTemplateInterface
-   *   A message template object ready to be save.
-   */
-  public static function create(array $values = []) {
-    return parent::create($values);
   }
 
   /**

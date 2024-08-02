@@ -463,7 +463,7 @@ class DependencyRemovalTest extends KernelTestBase {
    * @return array
    *   An array of argument arrays for this class's test methods.
    */
-  public function dependencyTestDataProvider() {
+  public static function dependencyTestDataProvider() {
     return [
       'Remove dependency' => [TRUE],
       'Keep dependency' => [FALSE],
@@ -623,7 +623,7 @@ class DependencyRemovalTest extends KernelTestBase {
    *   An array of argument arrays for
    *   \Drupal\Tests\search_api\Kernel\DependencyRemovalTest::testDataTypeDependency().
    */
-  public function dataTypeDependencyTestDataProvider() {
+  public static function dataTypeDependencyTestDataProvider() {
     return [
       'Module dependency' => ['module'],
       'Config dependency' => ['config'],

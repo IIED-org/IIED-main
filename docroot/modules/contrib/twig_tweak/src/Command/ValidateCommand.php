@@ -6,13 +6,12 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * Implements twig-tweak:lint console command.
+ *
+ * @cspell:ignore friendsoftwig, twigcs
+ *
+ * @todo Remove this in 4.x.
  */
 final class ValidateCommand extends LintCommand {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $defaultName = 'twig-tweak:validate';
 
   /**
    * {@inheritdoc}
@@ -24,6 +23,7 @@ final class ValidateCommand extends LintCommand {
     }
 
     parent::configure();
+    $this->setName('twig-tweak:validate');
     $this->setAliases(['twig-validate']);
     $this->setHelp(
       $this->getHelp() . <<< 'TEXT'

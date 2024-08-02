@@ -44,6 +44,7 @@ abstract class RabbitHoleEntityPluginBase extends PluginBase implements RabbitHo
   public function getEntityTokenMap() {
     $map = [];
     $map[$this->pluginDefinition['entityType']] = $this->pluginDefinition['entityType'];
+    // @phpstan-ignore-next-line
     $bundle = \Drupal::entityTypeManager()
       ->getDefinition($this->pluginDefinition['entityType'])
       ->getBundleEntityType();

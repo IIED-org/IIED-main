@@ -14,26 +14,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class LayoutParagraphsModalSettingsForm extends ConfigFormBase {
 
   /**
-   * The typed config service.
-   *
-   * @var \Drupal\Core\Config\TypedConfigManagerInterface
-   */
-  protected $typedConfigManager;
-
-  /**
    * SettingsForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
    *   The typed config service.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    TypedConfigManagerInterface $typed_config_manager
+    TypedConfigManagerInterface $typedConfigManager,
   ) {
-    parent::__construct($config_factory);
-    $this->typedConfigManager = $typed_config_manager;
+    parent::__construct($config_factory, $typedConfigManager);
+    $this->typedConfigManager = $typedConfigManager;
   }
 
   /**
@@ -102,7 +95,6 @@ class LayoutParagraphsModalSettingsForm extends ConfigFormBase {
     $lp_config->set('width', $form_state->getValue('width'));
     $lp_config->set('height', $form_state->getValue('height'));
     $lp_config->set('autoresize', $form_state->getValue('autoresize'));
-    $lp_config->set('theme_display', $form_state->getValue('theme_display'));
     $lp_config->save();
     // Confirmation on form submission.
     $this->messenger()->addMessage($this->t('The Layout Paragraphs modal settings have been saved.'));

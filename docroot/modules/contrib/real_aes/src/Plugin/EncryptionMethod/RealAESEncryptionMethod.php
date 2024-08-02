@@ -5,18 +5,18 @@ namespace Drupal\real_aes\Plugin\EncryptionMethod;
 use Drupal\encrypt\EncryptionMethodInterface;
 use Drupal\encrypt\Exception\EncryptException;
 use Drupal\encrypt\Plugin\EncryptionMethod\EncryptionMethodBase;
-use \Defuse\Crypto\Crypto;
-use \Defuse\Crypto\Exception as Ex;
-use \Defuse\Crypto\Key;
-use \Defuse\Crypto\Encoding;
+use Defuse\Crypto\Crypto;
+use Defuse\Crypto\Key;
+use Defuse\Crypto\Encoding;
+use Defuse\Crypto\Exception\CryptoException;
 
 /**
- * Class RealAESEncryptionMethod.
+ * Provides an encryption method for using AES encryption.
  *
  * @EncryptionMethod(
  *   id = "real_aes",
  *   title = @Translation("Authenticated AES (Real AES)"),
- *   description = "Authenticated encryption based on AES-128 in CBC mode. Verifies ciphertext integrity via an Encrypt-then-MAC scheme using HMAC-SHA256.",
+ *   description = "Authenticated encryption based on AES-256 in CBC mode.",
  *   key_type_group = {"encryption"},
  *   can_decrypt = TRUE
  * )
@@ -46,8 +46,8 @@ class RealAESEncryptionMethod extends EncryptionMethodBase implements Encryption
       $key = Key::loadFromAsciiSafeString($key);
       return Crypto::encrypt((string) $text, $key);
     }
-    catch (Ex\CryptoException $ex) {
-      throw new EncryptException();
+    catch (CryptoException $ex) {
+      throw new EncryptException($ex->getMessage());
     }
   }
 
@@ -61,8 +61,8 @@ class RealAESEncryptionMethod extends EncryptionMethodBase implements Encryption
       $key = Key::loadFromAsciiSafeString($key);
       return Crypto::decrypt((string) $text, $key);
     }
-    catch (Ex\CryptoException $ex) {
-      throw new EncryptException();
+    catch (CryptoException $ex) {
+      throw new EncryptException($ex->getMessage());
     }
   }
 

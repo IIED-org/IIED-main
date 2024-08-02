@@ -4,6 +4,7 @@ dashboard:
       css/dashboard.css: {}
   dependencies:
     - core/drupal.ajax
+    - core/drupal.dialog.ajax
     - core/jquery
     - core/drupal
 diagnostics:

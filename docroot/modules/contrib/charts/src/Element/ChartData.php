@@ -2,19 +2,19 @@
 
 namespace Drupal\charts\Element;
 
-use Drupal\Core\Render\Element\RenderElement;
+use Drupal\Core\Render\Element\RenderElementBase;
 
 /**
  * Provides a chart data render element.
  *
  * @RenderElement("chart_data")
  */
-class ChartData extends RenderElement {
+class ChartData extends RenderElementBase {
 
   /**
    * {@inheritdoc}
    */
-  public function getInfo() {
+  public function getInfo(): array {
     return [
       '#title' => NULL,
       '#labels' => NULL,

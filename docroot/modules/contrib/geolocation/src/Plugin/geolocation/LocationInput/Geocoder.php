@@ -2,11 +2,11 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\LocationInput;
 
-use Drupal\geolocation\LocationInputInterface;
-use Drupal\geolocation\LocationInputBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\geolocation\GeocoderManager;
+use Drupal\geolocation\LocationInputBase;
+use Drupal\geolocation\LocationInputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Location based proximity center.

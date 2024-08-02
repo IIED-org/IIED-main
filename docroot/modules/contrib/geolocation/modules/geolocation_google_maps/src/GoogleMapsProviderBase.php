@@ -3,8 +3,8 @@
 namespace Drupal\geolocation_google_maps;
 
 use Drupal\Core\Url;
-use Drupal\geolocation\MapProviderBase;
 use Drupal\geolocation\KeyProvider;
+use Drupal\geolocation\MapProviderBase;
 
 /**
  * Class GoogleMapsProvider Base.

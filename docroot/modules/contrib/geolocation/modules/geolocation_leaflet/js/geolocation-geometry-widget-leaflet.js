@@ -21,7 +21,7 @@
     getDrawSettingsByTyp: function /** @param {String} geometryType */ (geometryType) {
       switch (geometryType) {
         case 'polygon':
-        case 'multi_polygon':
+        case 'multipolygon':
           return {
             polyline: false,
             marker: false,
@@ -29,7 +29,7 @@
           };
 
         case 'polyline':
-        case 'multi_polyline':
+        case 'multipolyline':
           return {
             polygon: false,
             rectangle: false,
@@ -39,7 +39,7 @@
           };
 
         case 'point':
-        case 'multi_point':
+        case 'multipoint':
           return {
             polyline: false,
             polygon: false,
@@ -71,9 +71,9 @@
 
           default:
             var types = {
-              multi_polygon: 'MultiPolygon',
-              multi_polyline: 'MultiPolyline',
-              multi_point: 'MultiPoint',
+              multipolygon: 'MultiPolygon',
+              multipolyline: 'MultiPolyline',
+              multipoint: 'MultiPoint',
               default: 'GeometryCollection'
             }
 

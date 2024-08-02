@@ -8,6 +8,7 @@ validation_plugin_settings: { }
 allowed_validation_plugins: { }
 help_text: 'Contact support to reset your access'
 validation_skip: 3
+users_without_tfa_redirect: false
 encryption: ''
 tfa_flood_uid_only: 1
 tfa_flood_window: 300

@@ -35,12 +35,12 @@ devel.theme_registry:
 devel.entity_info_page:
   title: 'Entity Info'
   route_name: devel.entity_info_page
-#  parent: 'system.admin_config_development'
+  #  parent: 'system.admin_config_development'
   menu_name: devel
 devel.field_info_page:
   title: 'Field Info'
   route_name: devel.field_info_page
-#  parent: 'system.admin_config_development'
+  #  parent: 'system.admin_config_development'
   menu_name: devel
 devel.phpinfo:
   title: 'PHPinfo()'

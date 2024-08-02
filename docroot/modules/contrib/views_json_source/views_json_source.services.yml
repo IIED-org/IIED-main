@@ -1,0 +1,4 @@
+services:
+  logger.channel.views_json_source:
+    parent: logger.channel_base
+    arguments: ['views_json_source']

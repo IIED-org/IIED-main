@@ -103,7 +103,7 @@ class SearchApiQuery extends QueryPluginBase {
    *
    * @var array
    */
-  public $orderby = [];
+  public $orderby = NULL;
 
   /**
    * The conjunction with which multiple filter groups are combined.

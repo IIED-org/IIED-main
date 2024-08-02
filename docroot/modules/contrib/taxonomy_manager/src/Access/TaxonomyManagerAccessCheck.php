@@ -1,11 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\taxonomy_manager\Access;
 
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -33,8 +33,11 @@ class TaxonomyManagerAccessCheck implements AccessInterface {
     if ($account->hasPermission('administer taxonomy')) {
       return AccessResult::allowed()->cachePerPermissions();
     }
-    $taxonomyVocabulary = $route_match->getParameter('taxonomy_vocabulary')
-      ->id();
+
+    // Get the taxonomy vocabulary from the route. If there is not a taxonomy
+    // vocabulary as a route param, get it from the taxonomy_term param.
+    $taxonomyVocabulary = $route_match->getParameter('taxonomy_vocabulary')?->id() ?? $route_match->getParameter('taxonomy_term')?->bundle();
+
     $routeName = $route_match->getRouteName();
     switch ($routeName) {
       case "taxonomy_manager.admin_vocabulary.delete":
@@ -44,6 +47,7 @@ class TaxonomyManagerAccessCheck implements AccessInterface {
         break;
 
       case "taxonomy_manager.admin_vocabulary.move":
+      case 'taxonomy_manager.taxonomy_term.edit':
         if ($account->hasPermission('edit terms in ' . $taxonomyVocabulary)) {
           return AccessResult::allowed()->cachePerPermissions();
         }

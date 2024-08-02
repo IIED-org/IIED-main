@@ -17,7 +17,7 @@ class EdisMax implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     // phpcs:ignore
     // @todo Remove when support for Solr 4.2.1 is no longer supported.
     if (class_exists('Drupal\search_api_solr\Event\SearchApiSolrEvents')) {

@@ -5,1087 +5,262 @@
  * Provides hooks for gin_lb module.
  */
 
-use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
+declare(strict_types=1);
+
 use Drupal\Core\Asset\AttachedAssetsInterface;
-use Drupal\views\ViewExecutable;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Url;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\gin_lb\HookHandler\CssAlter;
+use Drupal\gin_lb\HookHandler\FormAlter;
+use Drupal\gin_lb\HookHandler\FormMediaLibraryAddFormAlter;
+use Drupal\gin_lb\HookHandler\FormMediaLibraryAddFormOembedAlter;
+use Drupal\gin_lb\HookHandler\FormMediaLibraryAddFormUploadAlter;
+use Drupal\gin_lb\HookHandler\Help;
+use Drupal\gin_lb\HookHandler\ModuleImplementsAlter;
+use Drupal\gin_lb\HookHandler\PageAttachments;
+use Drupal\gin_lb\HookHandler\Preprocess;
+use Drupal\gin_lb\HookHandler\Theme;
+use Drupal\gin_lb\HookHandler\ThemeSuggestionsAlter;
+use Drupal\gin_lb\HookHandler\ThemeSuggestionsFormAlter;
+use Drupal\gin_lb\HookHandler\ViewsPreRender;
+use Drupal\views\ViewExecutable;
 
 /**
- * Implements hook_preprocess_form_element().
+ * Implements hook_css_alter().
  */
-function gin_lb_preprocess_form_element(array &$variables) {
-  if (!isset($variables['label'])) {
-    return;
-  }
-
-  if (isset($variables['element']['#gin_lb_form'])) {
-    $variables['label']['#gin_lb_form'] = TRUE;
-    if (isset($variables['element']['#type'])) {
-      $variables['attributes']['class'][] = 'form-type--' . $variables['element']['#type'];
-    }
-  }
-}
-
-/**
- * Returns true if the current theme is not gin.
- *
- * @return bool
- *   return true if gin === 'false'
- */
-function gin_lb_is_valid_theme() {
-  /** @var \Drupal\Core\Theme\ThemeManagerInterface $theme_manager */
-  $theme_manager = \Drupal::service('theme.manager');
-  $active_theme = $theme_manager->getActiveTheme();
-  if ($active_theme->getName() === 'gin' || array_key_exists('gin', $active_theme->getBaseThemeExtensions())) {
-    return FALSE;
-  }
-  return TRUE;
-}
-
-/**
- * Returns true if the given form id should rendered in gin style.
- *
- * @param string $form_id
- *   The form id.
- * @param array $form
- *   The form.
- *
- * @return bool
- *   True for gin form.
- */
-function gin_lb_is_layout_builder_form_id($form_id, array $form) {
-  if (gin_lb_is_valid_theme() === FALSE) {
-    return FALSE;
-  }
-  $form_ids = [
-    'form-autocomplete',
-    'layout_builder_add_block',
-    'layout_builder_block_move',
-    'layout_builder_configure_section',
-    'layout_builder_remove_block',
-    'layout_builder_update_block',
-    'media_image_edit_form',
-    'media_library_add_form_oembed',
-    'media_library_add_form_upload',
-    'section_library_add_section_to_library',
-    'section_library_add_template_to_library',
-    'form-autocomplete',
-    'editor_image_dialog',
-
-  ];
-  $form_id_contains = [
-    'layout_builder_translate_form',
-    'views_form_media_library_widget_',
-  ];
-
-  foreach ($form_id_contains as $form_id_contain) {
-    if (strpos($form_id, $form_id_contain) !== FALSE) {
-      return TRUE;
-    }
-  }
-
-  if (in_array($form_id, $form_ids)) {
-    return TRUE;
-  }
-
-  if ($form_id === 'views_exposed_form' && isset($form['#id']) && $form['#id'] === 'views-exposed-form-media-library-widget') {
-    return TRUE;
-  }
-  if (strpos($form_id, 'layout_builder_form') !== FALSE) {
-    return TRUE;
-  }
-  return FALSE;
-}
-
-/**
- * Implements hook_module_implements_alter().
- */
-function gin_lb_module_implements_alter(&$implementations, $hook) {
-  switch ($hook) {
-    case 'suggestions_alter':
-    case 'form_alter':
-    case 'preprocess':
-      $group = $implementations['gin_lb'];
-      unset($implementations['gin_lb']);
-      $implementations['gin_lb'] = $group;
-      break;
-  }
-}
-
-/**
- * Implements hook_views_pre_render().
- */
-function gin_lb_views_pre_render(ViewExecutable $view) {
-  if (gin_lb_is_valid_theme() === FALSE) {
-    return;
-  }
-  $add_classes = function (&$option, array $classes_to_add) {
-    $classes = preg_split('/\s+/', $option);
-    $classes = array_filter($classes);
-    $classes = array_merge($classes, $classes_to_add);
-    $option = implode(' ', array_unique($classes));
-  };
-
-  if ($view->id() === 'media_library') {
-    if ($view->display_handler->options['defaults']['css_class']) {
-      $add_classes($view->displayHandlers->get('default')->options['css_class'], ['media-library-view']);
-    }
-    else {
-      $add_classes($view->display_handler->options['css_class'], ['media-library-view']);
-    }
-
-    if ($view->current_display === 'page') {
-      if (array_key_exists('media_bulk_form', $view->field)) {
-        $add_classes($view->field['media_bulk_form']->options['element_class'], ['media-library-item__click-to-select-checkbox']);
-      }
-      if (array_key_exists('rendered_entity', $view->field)) {
-        $add_classes($view->field['rendered_entity']->options['element_class'], ['media-library-item__content']);
-      }
-      if (array_key_exists('edit_media', $view->field)) {
-        $add_classes($view->field['edit_media']->options['alter']['link_class'], ['media-library-item__edit']);
-        $add_classes($view->field['edit_media']->options['alter']['link_class'], ['icon-link']);
-      }
-      if (array_key_exists('delete_media', $view->field)) {
-        $add_classes($view->field['delete_media']->options['alter']['link_class'], ['media-library-item__remove']);
-        $add_classes($view->field['delete_media']->options['alter']['link_class'], ['icon-link']);
-      }
-    }
-    elseif (strpos($view->current_display, 'widget') === 0) {
-      if (array_key_exists('rendered_entity', $view->field)) {
-        $add_classes($view->field['rendered_entity']->options['element_class'], ['media-library-item__content']);
-      }
-      if (array_key_exists('media_library_select_form', $view->field)) {
-        $add_classes($view->field['media_library_select_form']->options['element_wrapper_class'], ['media-library-item__click-to-select-checkbox']);
-      }
-
-      if ($view->display_handler->options['defaults']['css_class']) {
-        $add_classes($view->displayHandlers->get('default')->options['css_class'], ['media-library-view--widget']);
-      }
-      else {
-        $add_classes($view->display_handler->options['css_class'], ['media-library-view--widget']);
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_theme_suggestions_alter().
- */
-function gin_lb_theme_suggestions_alter(
-  array &$suggestions,
-  array $variables,
-  $hook
-) {
-  if (gin_lb_is_valid_theme() === FALSE) {
-    return;
-  }
-  $add_suggestions = FALSE;
-  $route_name = \Drupal::routeMatch()->getRouteName();
-  if (
-  in_array(
-    $route_name,
-    [
-      'editor.image_dialog',
-      'editor.link_dialog',
-      'editor.media_dialog',
-      'layout_builder.add_block',
-      'layout_builder.choose_block',
-      'layout_builder.choose_inline_block',
-      'layout_builder.choose_section',
-      'layout_builder.remove_block',
-      'layout_builder.remove_section',
-      'media_library.ui',
-      'section_library.add_section_to_library',
-      'section_library.add_template_to_library',
-      'view.media_library.widget',
-      'view.media_library.widget_table',
-    ]
-  )
-  ) {
-    $add_suggestions = TRUE;
-  }
-
-  // For ajax the route is views.ajax
-  // So a look to the suggestions help.
-  if ($route_name === 'views.ajax') {
-    if (\Drupal::request()->query->get('media_library_opener_id')) {
-      $add_suggestions = TRUE;
-    }
-    $view = isset($variables['view']) && $variables['view'] instanceof ViewExecutable;
-    if ($view && $variables['view']->id() === 'media_library') {
-      $add_suggestions = TRUE;
-    }
-    if ($hook === 'media' && $variables['elements']['#view_mode'] === 'media_library') {
-      $add_suggestions = TRUE;
-    }
-  }
-  if (gin_lb_is_layout_builder_route() && in_array(
-      $hook,
-      [
-        'toolbar',
-      ]
-    )) {
-    $suggestions[] = $hook . '__gin_lb';
-  }
-  if (gin_lb_is_layout_builder_route() && in_array(
-      $hook,
-      [
-        'status_messages',
-        'media_library_wrapper',
-        'views_view',
-        'views_view_unformatted',
-        'media',
-        'views_mini_pager',
-        'pager',
-      ]
-    )) {
-    $add_suggestions = TRUE;
-  }
-  if (isset($variables['element']['#gin_lb_form']) || $add_suggestions === TRUE) {
-
-    // Fix form element suggestions when they are not implemented in the theme.
-    if (empty($suggestions) && !empty($variables['theme_hook_original'])) {
-      $suggestions = [$variables['theme_hook_original']];
-    }
-
-    if ($hook === 'input' && isset($variables['element']['#type']) && $variables['element']['#type'] === 'checkbox') {
-      $suggestions[] = 'input__checkbox__toggle';
-    }
-
-    $additional_suggestions = [];
-    foreach ($suggestions as $suggestion) {
-      $additional_suggestions[] = $suggestion . '__gin_lb';
-    }
-    $suggestions[] = $hook . '__gin_lb';
-    $suggestions = array_merge($suggestions, $additional_suggestions);
-    if (isset($variables['view']) && $hook === 'views_view_unformatted') {
-      $suggestions[] = $hook . '__' . $variables['view']->id() . '__gin_lb';
-    }
-  }
-}
-
-/**
- * Implements hook_theme_suggestions_HOOK_alter().
- */
-function gin_lb_theme_suggestions_form_alter(
-  array &$suggestions,
-  array $variables
-) {
-  if (gin_lb_is_valid_theme() === FALSE) {
-    return;
-  }
-  if (strpos(
-      $variables['element']['#form_id'],
-      'layout_builder_form'
-    ) !== FALSE) {
-    $route_name = \Drupal::routeMatch()->getRouteName();
-    $gin_lb_show_toolbar = TRUE;
-
-    \Drupal::moduleHandler()->alter('gin_lb_show_toolbar', $gin_lb_show_toolbar);
-    // Disable toolbar for layout library.
-    // Layout builder is part of the layout library form.
-    if (strpos($route_name, 'layout_builder.layout_library.') !== 0
-    && $gin_lb_show_toolbar === TRUE
-    ) {
-      $suggestions[] = 'form__layout_builder_form__gin_lb';
-    }
-  }
-}
-
-/**
- * Implements hook_preprocess_HOOK() for 'file_managed_file__gin_lb'.
- */
-function gin_lb_preprocess_file_managed_file__gin_lb(&$variables) {
-  if (gin_lb_is_valid_theme() === FALSE) {
-    return;
-  }
-  // Produce the same renderable element structure as image widget has.
-  $child_keys = Element::children($variables['element']);
-  foreach ($child_keys as $child_key) {
-    $variables['data'][$child_key] = $variables['element'][$child_key];
-  }
-
-  _gin_lb_preprocess_file_and_image_widget($variables);
-}
-
-/**
- * Implements hook_preprocess_HOOK() for 'image_widget__gin_lb'.
- */
-function gin_lb_preprocess_image_widget__gin_lb(&$variables) {
-  if (gin_lb_is_valid_theme() === FALSE) {
-    return;
-  }
-  // This prevents image widget templates from rendering preview container HTML
-  // to users that do not have permission to access these previews.
-  // @todo revisit in https://drupal.org/node/953034
-  // @todo revisit in https://drupal.org/node/3114318
-  if (isset($variables['data']['preview']['#access']) && $variables['data']['preview']['#access'] === FALSE) {
-    unset($variables['data']['preview']);
-  }
-
-  _gin_lb_preprocess_file_and_image_widget($variables);
-}
-
-/**
- * Helper pre-process callback for file_managed_file and image_widget.
- *
- * @param array $variables
- *   The renderable array of image and file widgets, with 'element' and 'data'
- *   keys.
- */
-function _gin_lb_preprocess_file_and_image_widget(array &$variables) {
-  $element = $variables['element'];
-  $main_item_keys = [
-    'upload',
-    'upload_button',
-    'remove_button',
-  ];
-
-  // Calculate helper values for the template.
-  $upload_is_accessible = !isset($element['upload']['#access']) || $element['upload']['#access'] !== FALSE;
-  $is_multiple = !empty($element['#cardinality']) && $element['#cardinality'] !== 1;
-  $has_value = isset($element['#value']['fids']) && !empty($element['#value']['fids']);
-
-  // File widget properties.
-  $display_can_be_displayed = !empty($element['#display_field']);
-  // Display is rendered in a separate table cell for multiple value widgets.
-  $display_is_visible = $display_can_be_displayed && !$is_multiple && isset($element['display']['#type']) && $element['display']['#type'] !== 'hidden';
-  $description_can_be_displayed = !empty($element['#description_field']);
-  $description_is_visible = $description_can_be_displayed && isset($element['description']);
-
-  // Image widget properties.
-  $alt_can_be_displayed = !empty($element['#alt_field']);
-  $alt_is_visible = $alt_can_be_displayed && (!isset($element['alt']['#access']) || $element['alt']['#access'] !== FALSE);
-  $title_can_be_displayed = !empty($element['#title_field']);
-  $title_is_visible = $title_can_be_displayed && (!isset($element['title']['#access']) || $element['title']['#access'] !== FALSE);
-
-  $variables['multiple'] = $is_multiple;
-  $variables['upload'] = $upload_is_accessible;
-  $variables['has_value'] = $has_value;
-  $variables['has_meta'] = $alt_is_visible || $title_is_visible || $display_is_visible || $description_is_visible;
-  $variables['display'] = $display_is_visible;
-
-  // Render file upload input and upload button (or file name and remove button,
-  // if the field is not empty) in an emphasized div.
-  foreach ($variables['data'] as $key => $item) {
-    $item_is_filename = isset($item['filename']['#file']) && $item['filename']['#file'] instanceof FileInterface;
-
-    // Move filename to main items.
-    if ($item_is_filename) {
-      $variables['main_items']['filename'] = $item;
-      unset($variables['data'][$key]);
-      continue;
-    }
-
-    // Move buttons, upload input and hidden items to main items.
-    if (in_array($key, $main_item_keys)) {
-      $variables['main_items'][$key] = $item;
-      unset($variables['data'][$key]);
-    }
-  }
-}
-
-/**
- * After build form process.
- *
- * Layout builder forms are attached later to setting form.
- * To add suggestion to the attached fields we have to attach lb_form
- * after build.
- *
- * @param array $form
- *   The form.
- *
- * @return array
- *   The form.
- */
-function gin_lb_after_build(array $form) {
-  gin_lb_attach_lb_form($form);
-  return $form;
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function gin_lb_preprocess_html(&$variables) {
-  if (gin_lb_is_layout_builder_route() && \Drupal::config('gin_lb.settings')->get('enable_preview_regions')) {
-    $variables['attributes']['class'][] = 'glb-preview-regions--enable';
-  }
-  if (gin_lb_is_layout_builder_route()) {
-    $variables['attributes']['class'][] = 'glb-body';
-  }
-
-}
-
-/**
- * Layout builder Form redirect handler.
- */
-function gin_lb_form_redirect_submit(&$form, FormStateInterface $form_state) {
-  $config = \Drupal::config('gin_lb.settings');
-  if ($config->get('save_behavior') === 'stay') {
-    $form_state->setRedirectUrl(
-      Url::fromRoute('<current>')
-    );
-  }
+function gin_lb_css_alter(array &$css, AttachedAssetsInterface $assets, LanguageInterface $language): void {
+  /** @var \Drupal\gin_lb\HookHandler\CssAlter $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(CssAlter::class);
+  $instance->alter($css, $assets, $language);
 }
 
 /**
  * Implements hook_form_alter().
  */
-function gin_lb_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (gin_lb_is_valid_theme() === FALSE) {
-    return;
-  }
-  if (gin_lb_is_layout_builder_form_id($form_id, $form)) {
-    $form['#after_build'][] = 'gin_lb_after_build';
-    $form['#gin_lb_form'] = TRUE;
-    $form['#attributes']['class'][] = 'glb-form';
-
-    if (\Drupal::config('gin_lb.settings')->get('hide_discard_button')) {
-      $form['actions']['discard_changes']['#access'] = FALSE;
-    }
-
-    if (\Drupal::config('gin_lb.settings')->get('hide_revert_button')) {
-      $form['actions']['revert']['#access'] = FALSE;
-    }
-  }
-
-  if (strpos($form_id, 'layout_builder_form') !== FALSE) {
-    $form['advanced']['#type'] = 'container';
-    if (isset($form['actions']['submit']['#submit'])) {
-      $form['actions']['submit']['#submit'][] = 'gin_lb_form_redirect_submit';
-    }
-
-    // Ensure JS may target only this button.
-    if (isset($form['actions']['submit'])) {
-      $form['actions']['submit'] = NestedArray::mergeDeepArray([
-        $form['actions']['submit'],
-        [
-          '#attributes' => [
-            'class' => [
-              'js-glb-button--primary',
-            ],
-          ],
-        ]
-      ]);
-    }
-  }
-  if (in_array($form_id, [
-    'layout_builder_add_block',
-    'layout_builder_configure_section',
-    'layout_builder_remove_section',
-    'layout_builder_remove_block',
-    'layout_builder_update_block',
-  ])) {
-    $form['#attributes']['class'][] = 'canvas-form';
-    if (isset($form['settings'])) {
-      $form['settings']['#type'] = 'container';
-      $form['settings']['#attributes']['class'][] = 'canvas-form__settings';
-    }
-
-    if (isset($form['layout_settings'])) {
-      $form['layout_settings']['#type'] = 'container';
-      $form['layout_settings']['#attributes']['class'][] = 'canvas-form__settings';
-    }
-
-    if (in_array($form_id, [
-      'layout_builder_remove_block',
-      'layout_builder_remove_section',
-    ])) {
-      $form['description']['#type'] = 'container';
-      $form['description']['#attributes']['class'][] = 'canvas-form__settings';
-    }
-
-    $form['actions']['#type'] = 'container';
-    $form['actions']['#attributes']['class'][] = 'canvas-form__actions';
-
-    // Layout Builder Lock.
-    if (isset($form['layout_builder_lock_wrapper'])) {
-      $form['layout_builder_lock_wrapper'] = NestedArray::mergeDeepArray([
-        $form['layout_builder_lock_wrapper'],
-        [
-          '#attributes' => [
-            'class' => [
-              'canvas-form__actions',
-            ],
-          ],
-        ]
-      ]);
-    }
-    if (isset($form['layout_builder_lock_info'])) {
-      $form['layout_builder_lock_info'] = [
-        '#type' => 'container',
-        '#attributes' => [
-          'class' => [
-            'canvas-form__actions',
-          ],
-        ],
-        'message' => $form['layout_builder_lock_info'],
-      ];
-    }
-
-    // UI Styles Layout Builder.
-    if (isset($form['ui_styles_wrapper'])) {
-      $form['ui_styles_wrapper'] = NestedArray::mergeDeepArray([
-        $form['ui_styles_wrapper'],
-        [
-          '#attributes' => [
-            'class' => [
-              'canvas-form__actions',
-            ],
-          ],
-        ]
-      ]);
-    }
-    if (isset($form['ui_styles_title'])) {
-      $form['ui_styles_title'] = NestedArray::mergeDeepArray([
-        $form['ui_styles_title'],
-        [
-          '#attributes' => [
-            'class' => [
-              'canvas-form__actions',
-            ],
-          ],
-        ]
-      ]);
-    }
-    if (isset($form['ui_styles'])) {
-      $form['ui_styles'] = NestedArray::mergeDeepArray([
-        $form['ui_styles'],
-        [
-          '#attributes' => [
-            'class' => [
-              'canvas-form__actions',
-            ],
-          ],
-        ]
-      ]);
-    }
-  }
+function gin_lb_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  /** @var \Drupal\gin_lb\HookHandler\FormAlter $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(FormAlter::class);
+  $instance->alter($form, $form_state, $form_id);
 }
 
 /**
- * Returns true if the current route is a layout builder route.
- *
- * @return bool
- *   Returns true for layout builder routes.
+ * Implements hook_form_BASE_FORM_ID_alter() for 'media_library_add_form'.
  */
-function gin_lb_is_layout_builder_route() {
-  $gin_lb_is_layout_builder_route = drupal_static(__FUNCTION__);
-  if ($gin_lb_is_layout_builder_route !== NULL) {
-    return $gin_lb_is_layout_builder_route;
-  }
-  $route_name = \Drupal::routeMatch()->getRouteName();
-  $gin_lb_is_layout_builder_route = FALSE;
-  if ($route_name !== NULL && preg_match('/^(layout_builder\.([^.]+\.)?)/', $route_name)) {
-    $gin_lb_is_layout_builder_route = TRUE;
-  }
-  \Drupal::moduleHandler()->alter('gin_lb_is_layout_builder_route', $gin_lb_is_layout_builder_route, $context);
-  return $gin_lb_is_layout_builder_route;
+function gin_lb_form_media_library_add_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  /** @var \Drupal\gin_lb\HookHandler\FormMediaLibraryAddFormAlter $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(FormMediaLibraryAddFormAlter::class);
+  $instance->alter($form, $form_state, $form_id);
 }
 
 /**
- * Attaches gin_lb_form to all layout builder form elements.
- *
- * @param array $form
- *   The form or form element which children should have form id attached.
+ * Implements hook_form_FORM_ID_alter() for 'media_library_add_form_oembed'.
  */
-function gin_lb_attach_lb_form(array &$form) {
-  foreach (Element::children($form) as $child) {
-    if (!isset($form[$child]['#gin_lb_form'])) {
-      $form[$child]['#gin_lb_form'] = TRUE;
-    }
-    gin_lb_attach_lb_form($form[$child]);
-  }
+function gin_lb_form_media_library_add_form_oembed_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  /** @var \Drupal\gin_lb\HookHandler\FormMediaLibraryAddFormOembedAlter $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(FormMediaLibraryAddFormOembedAlter::class);
+  $instance->alter($form, $form_state, $form_id);
 }
 
 /**
- * Implements hook_page_attachments().
+ * Implements hook_form_FORM_ID_alter() for 'media_library_add_form_upload'.
  */
-function gin_lb_page_attachments(array &$attachments) {
-  if (gin_lb_is_layout_builder_route()) {
-    $attachments['#attached']['library'][] = 'gin_lb/gin_lb_init';
-    $attachments['#attached']['library'][] = 'gin/gin_ckeditor';
-    $attachments['#attached']['library'][] = 'claro/claro.jquery.ui';
-    $attachments['#attached']['library'][] = 'gin_lb/gin_lb';
-    if (\Drupal::VERSION >= '10.0.0') {
-      $attachments['#attached']['library'][] = 'gin_lb/gin_lb_10';
-    }
-    $config = \Drupal::config('gin_lb.settings');
-    if ($config->get('toastify_loading') === 'cdn') {
-      $attachments['#attached']['library'][] = 'gin_lb/toastify_cdn';
-      $attachments['#attached']['library'][] = 'gin_lb/gin_lb_toastify';
-    }
-    if ($config->get('toastify_loading') === 'composer') {
-      $attachments['#attached']['library'][] = 'gin_lb/toastify_composer';
-      $attachments['#attached']['library'][] = 'gin_lb/gin_lb_toastify';
-    }
-  }
-}
-
-/**
- * Implements hook_preprocess_HOOK() for 'status_messages__gin_lb'.
- */
-function gin_lb_preprocess_status_messages__gin_lb(&$variables) {
-  $variables['toastify'] = FALSE;
-
-  $config = \Drupal::config('gin_lb.settings');
-  if (in_array($config->get('toastify_loading'), ['cdn', 'composer'])) {
-    $variables['toastify'] = TRUE;
-  }
-}
-
-/**
- * A list of all overwritten themes.
- *
- * @return array
- *   List of overwritten themes.
- */
-function gin_lb_overwritten_themes() {
-  return [
-    'form/form',
-    'form/input',
-    'form/form-element-label',
-    'form/form-element',
-    'form/container',
-    'form/input--checkbox',
-    'form/input--checkbox--toggle',
-    'form/checkboxes',
-    'form/details',
-    'form/radios',
-    'form/select',
-    'form/field-multiple-value-form',
-    'form/text-format-wrapper',
-    'form/fieldset',
-    'form/textarea',
-    'content-edit/file-managed-file',
-    'content-edit/file-widget-multiple',
-    'content-edit/image-widget',
-    'links',
-    'media-library/container--media-library-content',
-    'media-library/container--media-library-widget-selection',
-    'media-library/details--media-library-add-form-selected-media',
-    'media-library/item-list--media-library-add-form-media-list',
-    'media-library/links--media-library-menu',
-    'media-library/media--media-library',
-    'media-library/media-library-item',
-    'media-library/media-library-wrapper',
-    'media-library/views-view--media-library',
-    'media-library/views-view-table',
-    'media-library/media-library-element',
-    'media-library/views-view-unformatted--media-library',
-    'item-list',
-    'views/views-view-fields',
-    'table',
-    'status-messages',
-    'views-mini-pager',
-    'pager',
-    'toolbar',
-    'menu-local-tasks',
-    'menu-local-task',
-
-  ];
-}
-
-/**
- * Implements hook_preprocess_media_library_item__widget().
- *
- * This targets each media item selected in an entity reference field.
- */
-function gin_lb_preprocess_media_library_item(array &$variables) {
-  if (gin_lb_is_valid_theme() === FALSE) {
-    return;
-  }
-  $variables['content']['remove_button']['#attributes']['class'][] = 'media-library-item__remove';
-  $variables['content']['remove_button']['#attributes']['class'][] = 'icon-link';
-
-  if (isset($variables['content']['media_edit'])) {
-    $variables['content']['media_edit']['#attributes']['class'][] = 'glb-media-library-item__edit';
-  }
-}
-
-/**
- * Implements hook_preprocess_links__media_library_menu().
- *
- * This targets the menu of available media types in the media library's modal
- * dialog.
- *
- * @todo Do this in the relevant template once
- *   https://www.drupal.org/project/drupal/issues/3088856 is resolved.
- */
-function gin_lb_preprocess_links__media_library_menu(array &$variables) {
-  if (gin_lb_is_valid_theme() === FALSE) {
-    return;
-  }
-  foreach ($variables['links'] as &$link) {
-    // Add a class to the Media Library menu items.
-    $link['attributes']->addClass('glb-media-library-menu__item');
-
-    // This conditional exists because the media-library-menu__link class is
-    // currently added by Classy, but Claro will eventually not use Classy as a
-    // base theme.
-    // @todo remove conditional, keep class addition in
-    //   https://drupal.org/node/3110137
-    // @see classy_preprocess_links__media_library_menu()
-    if (!isset($link['link']['#options']['attributes']['class']) || !in_array('glb-media-library-menu__link', $link['link']['#options']['attributes']['class'])) {
-      $link['link']['#options']['attributes']['class'][] = 'glb-media-library-menu__link';
-    }
-  }
-}
-
-/**
- * Implements hook_form_BASE_FORM_ID_alter().
- */
-function gin_lb_form_media_library_add_form_alter(array &$form, FormStateInterface $form_state) {
-  $form['#attributes']['class'][] = 'media-library-add-form';
-
-  // If there are unsaved media items, apply styling classes to various parts
-  // of the form.
-  if (isset($form['media'])) {
-    $form['#attributes']['class'][] = 'media-library-add-form--with-input';
-
-    // Put a wrapper around the informational message above the unsaved media
-    // items.
-    $form['description']['#template'] = '<p class="glb-media-library-add-form__description">{{ text }}</p>';
-  }
-  else {
-    $form['#attributes']['class'][] = 'media-library-add-form--without-input';
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function gin_lb_form_media_library_add_form_upload_alter(array &$form, FormStateInterface $form_state) {
-  $form['#attributes']['class'][] = 'media-library-add-form--upload';
-  if (isset($form['container']['upload'])) {
-    // Set this flag so we can prevent the details element from being added
-    // in \Drupal\claro\ClaroPreRender::managedFile.
-    $form['container']['upload']['#do_not_wrap_in_details'] = TRUE;
-  }
-  if (isset($form['container'])) {
-    $form['container']['#attributes']['class'][] = 'media-library-add-form__input-wrapper';
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function gin_lb_form_media_library_add_form_oembed_alter(array &$form, FormStateInterface $form_state) {
-  $form['#attributes']['class'][] = 'media-library-add-form--oembed';
-
-  // If no media items have been added yet, add a couple of styling classes
-  // to the initial URL form.
-  if (isset($form['container'])) {
-    $form['container']['#attributes']['class'][] = 'media-library-add-form__input-wrapper';
-    $form['container']['url']['#attributes']['class'][] = 'media-library-add-form-oembed-url';
-    $form['container']['submit']['#attributes']['class'][] = 'media-library-add-form-oembed-submit';
-  }
-}
-
-/**
- * Implements hook_preprocess_item_list__media_library_add_form_media_list().
- *
- * This targets each new, unsaved media item added to the media library, before
- * they are saved.
- */
-function gin_lb_preprocess_item_list__media_library_add_form_media_list(array &$variables) {
-  foreach ($variables['items'] as &$item) {
-    $item['value']['preview']['#attributes']['class'][] = 'media-library-add-form__preview';
-    $item['value']['fields']['#attributes']['class'][] = 'media-library-add-form__fields';
-    $item['value']['remove_button']['#attributes']['class'][] = 'media-library-add-form__remove-button';
-
-    $item['value']['remove_button']['#attributes']['class'][] = 'button--extrasmall';
-    // #source_field_name is set by AddFormBase::buildEntityFormElement()
-    // to help themes and form_alter hooks identify the source field.
-    $fields = &$item['value']['fields'];
-    $source_field_name = $fields['#source_field_name'];
-
-    // Set this flag so we can remove the details element.
-    $fields[$source_field_name]['widget'][0]['#do_not_wrap_in_details'] = TRUE;
-
-    if (isset($fields[$source_field_name])) {
-      $fields[$source_field_name]['#attributes']['class'][] = 'media-library-add-form__source-field';
-    }
-  }
-}
-
-/**
- * Implements hook_preprocess_media_library_item__widget().
- *
- * This targets each media item selected in an entity reference field.
- */
-function gin_lb_preprocess_media_library_item__widget(array &$variables) {
-  $variables['content']['remove_button']['#attributes']['class'][] = 'media-library-item__remove';
-  $variables['content']['remove_button']['#attributes']['class'][] = 'icon-link';
-}
-
-/**
- * Implements hook_preprocess_toolbar().
- */
-function gin_lb_preprocess_toolbar__gin_lb(&$variables) {
-  $variables['secondary_toolbar_frontend'] = FALSE;
-
-  if (isset($variables['route_name']) && preg_match('#layout_builder\.overrides\.(?<entity_type_id>.+)\.view#', $variables['route_name'], $matches)) {
-    $entity = \Drupal::request()->attributes->get($matches['entity_type_id']);
-
-    if ($entity instanceof EntityInterface && $entity->hasLinkTemplate('edit-form')) {
-      $variables['entity_title'] = $entity->label();
-      $variables['entity_edit_url'] = $entity->toUrl('edit-form');
-    }
-    if ($entity instanceof EntityInterface && $entity->hasLinkTemplate('canonical')) {
-      $variables['entity_view_url'] = $entity->toUrl();
-    }
-  }
-  $variables['preview_region'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Preview Regions'),
-    '#gin_lb_form' => TRUE,
-    '#id' => 'glb-toolbar-preview-regions',
-    '#default_value' => \Drupal::config('gin_lb.settings')->get('enable_preview_regions'),
-  ];
-  $variables['preview_content'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Preview Content'),
-    '#value' => TRUE,
-    '#gin_lb_form' => TRUE,
-    '#id' => 'glb-toolbar-preview-content',
-  ];
-
-  $variables['#cache']['tags'] = \Drupal::config('gin_lb.settings')->getCacheTags();
-}
-
-/**
- * Implements template_preprocess_HOOK() for table.
- */
-function gin_lb_preprocess_table(&$variables) {
-  if (isset($variables['attributes']['class']) &&
-    is_array($variables['attributes']['class']) &&
-    in_array('glb-table', $variables['attributes']['class'], TRUE)) {
-    // Adding table sort indicator CSS class for inactive sort link.
-    // @todo Revisit after https://www.drupal.org/node/3025726 or
-    // https://www.drupal.org/node/1973418 is in.
-    if (!empty($variables['header'])) {
-      foreach ($variables['header'] as &$header_cell) {
-        if ($header_cell['content'] instanceof Link) {
-          $query = $header_cell['content']->getUrl()->getOption('query') ?: [];
-
-          if (isset($query['order']) && isset($query['sort'])) {
-            $header_cell['attributes']->addClass('sortable-heading');
-          }
-        }
-      }
-    }
-
-    // Mark the whole table and the first cells if rows are draggable.
-    $draggable_row_found = FALSE;
-    if (!empty($variables['rows'])) {
-      foreach ($variables['rows'] as &$row) {
-        /** @var \Drupal\Core\Template\Attribute $row ['attributes'] */
-        if (!empty($row['attributes']) && $row['attributes']->hasClass('draggable')) {
-          if (!$draggable_row_found) {
-            $variables['attributes']['class'][] = 'draggable-table';
-            $draggable_row_found = TRUE;
-          }
-
-          reset($row['cells']);
-          $first_cell_key = key($row['cells']);
-          // The 'attributes' key is always here and it is an
-          // \Drupal\Core\Template\Attribute.
-          // @see template_preprocess_table();
-          $row['cells'][$first_cell_key]['attributes']->addClass('tabledrag-cell');
-
-          // Check that the first cell is empty or not.
-          if (empty($row['cells'][$first_cell_key]) || empty($row['cells'][$first_cell_key]['content'])) {
-            $row['cells'][$first_cell_key]['attributes']->addClass('tabledrag-cell--only-drag');
-          }
-        }
-      }
-    }
-
-    if ($draggable_row_found) {
-      $variables['#attached']['library'][] = 'gin/gin_tabledrag';
-    }
-  }
-}
-
-/**
- * Implements template_preprocess_HOOK() for field_ui_table.
- */
-function gin_lb_preprocess_field_ui_table(&$variables) {
-  gin_lb_preprocess_table($variables);
-}
-
-/**
- * Implements hook_preprocess_HOOK() for field_multiple_value_form.
- */
-function gin_lb_preprocess_field_multiple_value_form(&$variables) {
-  // Add gin_lb_form attribute to tables.
-  if ($variables['element']['#gin_lb_form'] ?? NULL) {
-    $variables['table']['#attributes']['class'][] = 'glb-table';
-
-    // Make disabled available for the template.
-    $variables['disabled'] = !empty($variables['element']['#disabled']);
-
-    if ($variables['multiple']) {
-      // Add an additional CSS class for the field label table cell.
-      // This repeats the logic of .ate_preprocess_field_multiple_value_form()
-      // without using '#prefix' and '#suffix' for the wrapper element.
-      //
-      // If the field is multiple, we don't have to check the existence of the
-      // table header cell.
-      //
-      // @see template_preprocess_field_multiple_value_form().
-      $header_attributes = [
-        'class' => [
-          'form-item__label',
-          'form-item__label--multiple-value-form',
-        ],
-      ];
-      if (!empty($variables['element']['#required'])) {
-        $header_attributes['class'][] = 'js-form-required';
-        $header_attributes['class'][] = 'form-required';
-      }
-      // Using array_key_first() for addressing the first header cell would be
-      // more elegant here, but we can rely on the related theme.inc preprocess.
-      $variables['table']['#header'][0]['data'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'h4',
-        '#value' => $variables['element']['#title'],
-        '#attributes' => $header_attributes,
-      ];
-
-      if ($variables['disabled']) {
-        $variables['table']['#attributes']['class'][] = 'tabledrag-disabled';
-        $variables['table']['#attributes']['class'][] = 'js-tabledrag-disabled';
-
-        // We will add the 'is-disabled' CSS class to the disabled table header
-        // cells.
-        $header_attributes['class'][] = 'is-disabled';
-        foreach ($variables['table']['#header'] as &$cell) {
-          if (is_array($cell) && isset($cell['data'])) {
-            $cell = $cell + ['class' => []];
-            $cell['class'][] = 'is-disabled';
-          }
-          else {
-            // We have to modify the structure of this header cell.
-            $cell = [
-              'data' => $cell,
-              'class' => ['is-disabled'],
-            ];
-          }
-        }
-      }
-
-      // Make add-more button smaller.
-      if (!empty($variables['button'])) {
-        $variables['button']['#attributes']['class'][] = 'button--small';
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_theme().
- */
-function gin_lb_theme($existing, $type, $theme, $path) {
-  $overwritten_themes = gin_lb_overwritten_themes();
-  $themes = [];
-  foreach ($overwritten_themes as $overwritten_theme) {
-    $overwritten_hook_ary = explode(
-      '/',
-      str_replace('-', '_', $overwritten_theme)
-    );
-    $overwritten_hook = $overwritten_hook_ary[count($overwritten_hook_ary) - 1];
-    $overwritten_base_hook = explode('--', $overwritten_hook)[0];
-
-    $themes[$overwritten_hook . '__gin_lb'] = [
-      'template' => $overwritten_theme . '--gin-lb',
-      'base hook' => $overwritten_base_hook,
-    ];
-  }
-  $themes['form__layout_builder_form__gin_lb'] = [
-    'template' => 'form/form--layout-builder-form--gin-lb',
-    'base hook' => 'form',
-  ];
-  return $themes;
-}
-
-/**
- * Implements hook_css_alter().
- */
-function gin_lb_css_alter(&$css, AttachedAssetsInterface $assets) {
-
-  $theme_handler = \Drupal::service('theme_handler');
-
-  // Only target layout builder specific pages by checking if the layout builder
-  // library is attached.
-  if (in_array('layout_builder/drupal.layout_builder', $assets->getLibraries())) {
-    $stable_themes = ['stable', 'stable9'];
-    foreach ($stable_themes as $stable_theme) {
-      if ($theme_handler->themeExists($stable_theme)) {
-        $stable_theme_css = \Drupal::service('extension.list.theme')->getPath($stable_theme) . '/css';
-        // Remove very specific CSS files that this module is overriding.
-        unset($css[$stable_theme_css . '/layout_builder/layout-builder.css']);
-        unset($css[$stable_theme_css . '/core/dialog/off-canvas.theme.css']);
-        unset($css[$stable_theme_css . '/core/dialog/off-canvas.details.css']);
-        unset($css[$stable_theme_css . '/core/dialog/off-canvas.reset.css']);
-        unset($css[$stable_theme_css . '/core/dialog/off-canvas.base.css']);
-        unset($css[$stable_theme_css . '/core/dialog/off-canvas.table.css']);
-        unset($css[$stable_theme_css . '/core/dialog/off-canvas.tabledrag.css']);
-        unset($css[$stable_theme_css . '/core/dialog/off-canvas.form.css']);
-        unset($css[$stable_theme_css . '/core/dialog/off-canvas.button.css']);
-        // unset($css[$stable_theme_css . '/core/vertical-tabs.css']);.
-      }
-    }
-    unset($css['core/modules/layout_builder/css/layout-builder.css']);
-    unset($css['core/modules/system/css/components/tabledrag.module.css']);
-    unset($css['core/assets/vendor/jquery.ui/themes/base/dialog.css']);
-    unset($css['core/misc/dialog/off-canvas.theme.css']);
-    unset($css['core/misc/dialog/off-canvas.base.css']);
-    unset($css['core/misc/dialog/off-canvas.reset.css']);
-    unset($css['core/misc/dialog/off-canvas.table.css']);
-    unset($css['core/misc/dialog/off-canvas.tabledrag.css']);
-    unset($css['core/misc/dialog/off-canvas.details.css']);
-    unset($css['core/misc/dialog/off-canvas.form.css']);
-    unset($css['core/misc/dialog/off-canvas.button.css']);
-    unset($css['core/assets/vendor/jquery.ui/themes/base/theme.css']);
-
-    // Drupal 10.
-    unset($css['core/misc/dialog/off-canvas/css/reset.css']);
-    unset($css['core/misc/dialog/off-canvas/css/wrapper.css']);
-    unset($css['core/misc/dialog/off-canvas/css/titlebar.css']);
-    unset($css['core/misc/dialog/off-canvas/css/dropbutton.css']);
-    unset($css['core/misc/dialog/off-canvas/css/messages.css']);
-    unset($css['core/misc/dialog/off-canvas/css/details.css']);
-    unset($css['core/misc/dialog/off-canvas/css/form.css']);
-    unset($css['core/misc/dialog/off-canvas/css/button.css']);
-    unset($css['core/misc/dialog/off-canvas/css/base.css']);
-    unset($css['core/misc/dialog/off-canvas/css/table.css']);
-  }
+function gin_lb_form_media_library_add_form_upload_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  /** @var \Drupal\gin_lb\HookHandler\FormMediaLibraryAddFormUploadAlter $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(FormMediaLibraryAddFormUploadAlter::class);
+  $instance->alter($form, $form_state, $form_id);
 }
 
 /**
  * Implements hook_help().
  */
-function gin_lb_help($route_name, RouteMatchInterface $route_match) {
-  switch ($route_name) {
-    case 'help.page.gin_lb':
-      $text = file_get_contents(dirname(__FILE__) . '/README.md');
-      if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
-        return '<pre>' . $text . '</pre>';
-      }
-      else {
-        // Use the Markdown filter to render the README.
-        $filter_manager = \Drupal::service('plugin.manager.filter');
-        $settings = \Drupal::configFactory()->get('markdown.settings')->getRawData();
-        $config = ['settings' => $settings];
-        $filter = $filter_manager->createInstance('markdown', $config);
-        return $filter->process($text, 'en');
-      }
+function gin_lb_help(string $route_name, RouteMatchInterface $route_match): array|string {
+  /** @var \Drupal\gin_lb\HookHandler\Help $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Help::class);
+  return $instance->help($route_name, $route_match);
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function gin_lb_module_implements_alter(array &$implementations, string $hook): void {
+  /** @var \Drupal\gin_lb\HookHandler\ModuleImplementsAlter $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(ModuleImplementsAlter::class);
+  $instance->alter($implementations, $hook);
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function gin_lb_page_attachments(array &$attachments): void {
+  /** @var \Drupal\gin_lb\HookHandler\PageAttachments $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(PageAttachments::class);
+  $instance->attachments($attachments);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'field_multiple_value_form'.
+ */
+function gin_lb_preprocess_field_multiple_value_form(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessFieldMultipleValueForm($variables);
+}
+
+/**
+ * Implements template_preprocess_HOOK() for 'field_ui_table'.
+ */
+function gin_lb_preprocess_field_ui_table(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessTable($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'file_managed_file__gin_lb'.
+ */
+function gin_lb_preprocess_file_managed_file__gin_lb(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessFileManagedFileGinLb($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'form_element'.
+ */
+function gin_lb_preprocess_form_element(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessFormElement($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'html'.
+ */
+function gin_lb_preprocess_html(array &$variables): void {
+  // Ease update in case of error on update.php.
+  // @todo to remove on next major version.
+  // @phpstan-ignore-next-line
+  if (!\Drupal::getContainer()->has('gin_lb.context_validator')) {
+    return;
   }
-  return NULL;
+
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessHtml($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'image_widget__gin_lb'.
+ */
+function gin_lb_preprocess_image_widget__gin_lb(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessImageWidgetGinLb($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'item_list__media_library_add_form_media_list'.
+ */
+function gin_lb_preprocess_item_list__media_library_add_form_media_list(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessItemListMediaLibraryAddFormMediaList($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'links__media_library_menu'.
+ */
+function gin_lb_preprocess_links__media_library_menu(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessLinksMediaLibraryMenu($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'media_library_item'.
+ */
+function gin_lb_preprocess_media_library_item(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessMediaLibraryItem($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'media_library_item__widget'.
+ */
+function gin_lb_preprocess_media_library_item__widget(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessMediaLibraryItemWidget($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'status_messages__gin_lb'.
+ */
+function gin_lb_preprocess_status_messages__gin_lb(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessStatusMessagesGinLb($variables);
+}
+
+/**
+ * Implements template_preprocess_HOOK() for 'table'.
+ */
+function gin_lb_preprocess_table(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessTable($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for 'toolbar__gin_lb'.
+ */
+function gin_lb_preprocess_toolbar__gin_lb(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessToolbarGinLb($variables);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function gin_lb_theme(): array {
+  /** @var \Drupal\gin_lb\HookHandler\Theme $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Theme::class);
+  return $instance->themes();
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function gin_lb_theme_suggestions_alter(array &$suggestions, array $variables, string $hook): void {
+  // Ease update in case of error on update.php.
+  // @todo to remove on next major version.
+  // @phpstan-ignore-next-line
+  if (!\Drupal::getContainer()->has('gin_lb.context_validator')) {
+    return;
+  }
+
+  /** @var \Drupal\gin_lb\HookHandler\ThemeSuggestionsAlter $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(ThemeSuggestionsAlter::class);
+  $instance->alter($suggestions, $variables, $hook);
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for 'form'.
+ */
+function gin_lb_theme_suggestions_form_alter(array &$suggestions, array $variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\ThemeSuggestionsFormAlter $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(ThemeSuggestionsFormAlter::class);
+  $instance->alter($suggestions, $variables);
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function gin_lb_views_pre_render(ViewExecutable $view): void {
+  /** @var \Drupal\gin_lb\HookHandler\ViewsPreRender $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(ViewsPreRender::class);
+  $instance->preRender($view);
 }

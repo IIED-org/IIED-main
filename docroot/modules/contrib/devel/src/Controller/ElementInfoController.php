@@ -5,6 +5,7 @@ namespace Drupal\devel\Controller;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\ElementInfoManagerInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Drupal\devel\DevelDumperManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -17,17 +18,13 @@ class ElementInfoController extends ControllerBase {
 
   /**
    * Element info manager service.
-   *
-   * @var \Drupal\Core\Render\ElementInfoManagerInterface
    */
-  protected $elementInfo;
+  protected ElementInfoManagerInterface $elementInfo;
 
   /**
    * The dumper service.
-   *
-   * @var \Drupal\devel\DevelDumperManagerInterface
    */
-  protected $dumper;
+  protected DevelDumperManagerInterface $dumper;
 
   /**
    * EventInfoController constructor.
@@ -36,19 +33,27 @@ class ElementInfoController extends ControllerBase {
    *   Element info manager service.
    * @param \Drupal\devel\DevelDumperManagerInterface $dumper
    *   The dumper service.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
    */
-  public function __construct(ElementInfoManagerInterface $element_info, DevelDumperManagerInterface $dumper) {
+  public function __construct(
+    ElementInfoManagerInterface $element_info,
+    DevelDumperManagerInterface $dumper,
+    TranslationInterface $string_translation
+  ) {
     $this->elementInfo = $element_info;
     $this->dumper = $dumper;
+    $this->stringTranslation = $string_translation;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('element_info'),
-      $container->get('devel.dumper')
+      $container->get('devel.dumper'),
+      $container->get('string_translation'),
     );
   }
 
@@ -58,7 +63,7 @@ class ElementInfoController extends ControllerBase {
    * @return array
    *   A render array as expected by the renderer.
    */
-  public function elementList() {
+  public function elementList(): array {
     $headers = [
       $this->t('Name'),
       $this->t('Provider'),
@@ -133,7 +138,7 @@ class ElementInfoController extends ControllerBase {
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    *   If the requested element is not defined.
    */
-  public function elementDetail($element_name) {
+  public function elementDetail($element_name): array {
     if (!$element = $this->elementInfo->getDefinition($element_name, FALSE)) {
       throw new NotFoundHttpException();
     }

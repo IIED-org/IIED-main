@@ -42,7 +42,7 @@ class MoveTermsForm extends FormBase {
   /**
    * {@inheritdoc}
    *
-   * @todo: Add autocomplete to select/add parent term.
+   * @todo Add autocomplete to select/add parent term.
    */
   public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL, $selected_terms = []) {
     if (empty($selected_terms)) {

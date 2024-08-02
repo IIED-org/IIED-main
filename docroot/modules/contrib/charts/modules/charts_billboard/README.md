@@ -114,4 +114,4 @@ the code below.
 7. Run the following command; you should find that new directories have been
 created under "/libraries".
 
-        composer require --prefer-dist billboardjs/billboard:3.10.3 d3/d3:6.7.0
+        composer require --prefer-dist billboardjs/billboard:3.10.3 d3/d3:7.8.5

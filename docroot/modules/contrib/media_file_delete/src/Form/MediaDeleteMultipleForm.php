@@ -70,7 +70,7 @@ class MediaDeleteMultipleForm extends DeleteMultipleForm {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $file_deleted_count = 0;
-    $file_inacessible_count = 0;
+    $file_inaccessible_count = 0;
     $file_in_use_count = 0;
     $storage = $this->entityTypeManager->getStorage($this->entityTypeId);
     $entities = $storage->loadMultiple(array_keys($this->selection));
@@ -83,7 +83,7 @@ class MediaDeleteMultipleForm extends DeleteMultipleForm {
           $file = $this->getFile($entity);
           if ($file) {
             if (!$file->access('delete', $this->currentUser)) {
-              $file_inacessible_count++;
+              $file_inaccessible_count++;
               continue;
             }
 
@@ -105,8 +105,8 @@ class MediaDeleteMultipleForm extends DeleteMultipleForm {
       if ($file_deleted_count) {
         $this->messenger->addStatus($this->formatPlural($file_deleted_count, 'Deleted @count associated file.', 'Deleted @count associated files.'));
       }
-      if ($file_inacessible_count) {
-        $this->messenger->addWarning($this->formatPlural($file_inacessible_count, 'Could not delete @count associated file because of insufficient privilege.', 'Could not delete @count associated files because of insufficient privilege.'));
+      if ($file_inaccessible_count) {
+        $this->messenger->addWarning($this->formatPlural($file_inaccessible_count, 'Could not delete @count associated file because of insufficient privilege.', 'Could not delete @count associated files because of insufficient privilege.'));
       }
       if ($file_in_use_count) {
         $this->messenger->addWarning($this->formatPlural($file_in_use_count, 'Could not delete @count associated file because it is used in other places.', 'Could not delete @count associated files because they are used in other places.'));

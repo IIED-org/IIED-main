@@ -1,11 +1,11 @@
 name: Twig Tweak
 type: module
 description: Provides some extra Twig functions and filters.
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^10 || ^11
 dependencies:
-  - drupal:system (>=9.0)
+  - drupal:system (>=10.3)
 
-# Information added by Drupal.org packaging script on 2023-02-26
-version: '3.2.1'
+# Information added by Drupal.org packaging script on 2024-07-21
+version: '3.4.0'
 project: 'twig_tweak'
-datestamp: 1677404309
+datestamp: 1721562309

@@ -1,6 +1,6 @@
 /**
  * @file
- * Expands the behaviour of the default autocompletion.
+ * Expands the behavior of the default autocompletion.
  */
 
 (($, Drupal, drupalSettings, once) => {

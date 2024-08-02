@@ -58,6 +58,14 @@ class KeyPluginManager extends DefaultPluginManager {
     parent::processDefinition($definition, $plugin_id);
     // Add plugin_type to the definition.
     $definition['plugin_type'] = $this->pluginType;
+
+    if ($this->pluginType === 'key_provider' && !empty($definition['storage_method'])) {
+      @trigger_error("The key provider 'storage_method' definition entry is deprecated in key:1.18.0 and is removed from key:2.0.0. Use the 'tags' definition entry instead. See https://www.drupal.org/node/3364701", E_USER_DEPRECATED);
+      $definition['tags'] = $definition['tags'] ?? [];
+      if (!in_array($definition['storage_method'], $definition['tags'])) {
+        $definition['tags'][] = $definition['storage_method'];
+      }
+    }
   }
 
 }

@@ -36,7 +36,9 @@ class MessageThemeTest extends KernelTestBase {
 
     $this->installEntitySchema('message');
     $this->installEntitySchema('user');
-    $this->installSchema('system', ['sequences']);
+    if (version_compare(\Drupal::VERSION, '10.2.0', '<')) {
+      $this->installSchema('system', ['sequences']);
+    }
     $this->installConfig(['filter']);
 
     $this->account = $this->createUser();

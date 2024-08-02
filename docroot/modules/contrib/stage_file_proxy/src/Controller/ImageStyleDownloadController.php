@@ -77,22 +77,17 @@ final class ImageStyleDownloadController implements ContainerInjectionInterface 
    *   The file scheme, defaults to 'private'.
    * @param \Drupal\image\ImageStyleInterface $image_style
    *   The image style to deliver.
+   * @param string|null $required_derivative_scheme
+   *   The required scheme for the derivative image.
    *
-   * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\Response
+   * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|Response
    *   The transferred file as response or some error response.
-   *
-   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-   *   Thrown when the file request is invalid.
-   * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
-   *   Thrown when the user does not have access to the file.
-   * @throws \Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException
-   *   Thrown when the file is still being generated.
    */
-  public function deliver(Request $request, string $scheme, ImageStyleInterface $image_style) {
+  public function deliver(Request $request, string $scheme, ImageStyleInterface $image_style, ?string $required_derivative_scheme = 'public') {
     $tries = 5;
     do {
       try {
-        return $this->decorated->deliver($request, $scheme, $image_style);
+        return $this->decorated->deliver($request, $scheme, $image_style, $required_derivative_scheme);
       }
       catch (ServiceUnavailableHttpException $e) {
         $tries--;

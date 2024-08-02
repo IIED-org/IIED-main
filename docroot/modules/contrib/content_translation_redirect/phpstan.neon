@@ -1,0 +1,12 @@
+parameters:
+    level: 5
+    paths:
+        - .
+    ignoreErrors:
+        # new static() is a best practice in Drupal, so we cannot fix that.
+        - "#^Unsafe usage of new static#"
+    drupal:
+        entityMapping:
+            content_translation_redirect:
+                class: Drupal\content_translation_redirect\Entity\ContentTranslationRedirect
+                storage: Drupal\content_translation_redirect\ContentTranslationRedirectStorage

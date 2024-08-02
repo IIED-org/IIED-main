@@ -85,16 +85,16 @@ abstract class PluginTestBase extends KernelPluginManagerTestBase {
    */
   public function testQueueCountBehavior(): void {
     $this->assertNull($this->queue->deleteQueue());
-    $this->assertSame(TRUE, is_int($this->queue->numberOfItems()));
+    $this->assertTrue(is_int($this->queue->numberOfItems()));
     $this->assertEquals(0, $this->queue->numberOfItems());
     for ($i = 1; $i <= 5; $i++) {
       $id = $this->queue->createItem($i);
-      $this->assertSame(TRUE, is_scalar($id));
-      $this->assertSame(TRUE, $id !== FALSE);
+      $this->assertTrue(is_scalar($id));
+      $this->assertTrue($id !== FALSE);
       $this->assertEquals($i, $this->queue->numberOfItems());
     }
-    $this->assertSame(TRUE, is_object($this->queue->claimItem(1)));
-    $this->assertSame(TRUE, is_int($this->queue->numberOfItems()));
+    $this->assertTrue(is_object($this->queue->claimItem(1)));
+    $this->assertTrue(is_int($this->queue->numberOfItems()));
     $this->assertEquals(5, $this->queue->numberOfItems());
     $this->assertNull($this->queue->deleteQueue());
     $this->assertEquals(0, $this->queue->numberOfItems());
@@ -132,9 +132,9 @@ abstract class PluginTestBase extends KernelPluginManagerTestBase {
     $claim = $this->queue->claimItem(3600);
     // Change the claim data to verify that releasing changed data, persists.
     $claim->data = [4, 5, 6];
-    $this->assertSame(FALSE, $this->queue->claimItem(3600));
-    $this->assertSame(TRUE, $this->queue->releaseItem($claim));
-    $this->assertSame(TRUE, is_object($claim = $this->queue->claimItem(3600)));
+    $this->assertFalse($this->queue->claimItem(3600));
+    $this->assertTrue($this->queue->releaseItem($claim));
+    $this->assertTrue(is_object($claim = $this->queue->claimItem(3600)));
     $this->assertSame($claim->data, [4, 5, 6]);
     $this->queue->releaseItem($claim);
     $this->assertSame(
@@ -161,27 +161,27 @@ abstract class PluginTestBase extends KernelPluginManagerTestBase {
    * Test the behavior of lease time when claiming queue items.
    */
   public function testLeaseTime(): void {
-    $this->assertSame(FALSE, $this->queue->claimItem());
+    $this->assertFalse($this->queue->claimItem());
     $this->queue->createItem($this->randomString());
     $this->assertEquals(1, $this->queue->numberOfItems());
-    $this->assertSame(TRUE, is_object($this->queue->claimItem(5)));
-    $this->assertSame(FALSE, $this->queue->claimItem());
+    $this->assertTrue(is_object($this->queue->claimItem(5)));
+    $this->assertFalse($this->queue->claimItem());
     sleep(6);
-    $this->assertSame(TRUE, is_object($this->queue->claimItem(2)));
-    $this->assertSame(FALSE, $this->queue->claimItem(1));
+    $this->assertTrue(is_object($this->queue->claimItem(2)));
+    $this->assertFalse($this->queue->claimItem(1));
     sleep(3);
-    $this->assertSame(TRUE, is_object($this->queue->claimItem(2)));
+    $this->assertTrue(is_object($this->queue->claimItem(2)));
     $this->queue->deleteQueue();
 
     // Test claimItemMultiple which should work in the same way.
-    $this->assertSame(TRUE, empty($this->queue->claimItemMultiple(2)));
+    $this->assertEmpty($this->queue->claimItemMultiple(2));
     for ($i = 1; $i <= 5; $i++) {
       $this->queue->createItem($this->randomString());
     }
-    $this->assertSame(count($this->queue->claimItemMultiple(5, 5)), 5);
-    $this->assertSame(TRUE, empty($this->queue->claimItemMultiple(2)));
+    $this->assertCount(5, $this->queue->claimItemMultiple(5, 5));
+    $this->assertEmpty($this->queue->claimItemMultiple(2));
     sleep(6);
-    $this->assertSame(count($this->queue->claimItemMultiple(5, 5)), 5);
+    $this->assertCount(5, $this->queue->claimItemMultiple(5, 5));
 
     $this->queue->deleteQueue();
   }

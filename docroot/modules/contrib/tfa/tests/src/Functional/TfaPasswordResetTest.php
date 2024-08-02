@@ -48,7 +48,12 @@ class TfaPasswordResetTest extends TfaTestBase {
     $config->save();
 
     $this->webUser = $this->drupalCreateUser(['setup own tfa']);
-    $this->adminUser = $this->drupalCreateUser(['admin tfa settings']);
+    $this->adminUser = $this->drupalCreateUser(
+      [
+        'admin tfa settings',
+        'setup own tfa',
+      ]
+    );
     $this->superAdmin = User::load(1);
     $this->canEnableValidationPlugin('tfa_totp');
   }

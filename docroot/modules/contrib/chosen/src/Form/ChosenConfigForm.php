@@ -34,21 +34,11 @@ class ChosenConfigForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ThemeHandler $themeHandler, MessengerInterface $messenger) {
-    parent::__construct($config_factory);
-    $this->themeHandler = $themeHandler;
-    $this->messenger = $messenger;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('theme_handler'),
-      $container->get('messenger')
-    );
+    $instance = parent::create($container);
+    $instance->themeHandler = $container->get('theme_handler');
+    $instance->messenger = $container->get('messenger');
+    return $instance;
   }
 
   /**

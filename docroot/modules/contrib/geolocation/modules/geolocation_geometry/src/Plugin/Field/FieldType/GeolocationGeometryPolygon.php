@@ -11,7 +11,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
  * @FieldType(
  *   id = "geolocation_geometry_polygon",
  *   label = @Translation("Geolocation Geometry - Polygon"),
- *   category = @Translation("Spatial fields"),
+ *   category = "Spatial fields",
  *   description = @Translation("This field stores spatial geometry data."),
  *   default_widget = "geolocation_geometry_wkt",
  *   default_formatter = "geolocation_geometry_wkt"
@@ -44,7 +44,7 @@ class GeolocationGeometryPolygon extends GeolocationGeometryBase {
     usort(
       $coordinates,
       function ($a, $b) use ($center_point) {
-        return self::sortCoordinatesByAngle($a, $b, $center_point);
+        return self::sortCoordinatesByAngle($a, $b, $center_point) ? 1 : -1;
       }
     );
     // POLYGONS need to be closed.

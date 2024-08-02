@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\color_field;
 
@@ -21,13 +21,13 @@ class ColorHex extends ColorBase {
    *
    * @param string $color
    *   The string hex value (i.e. "FFFFFF").
-   * @param string $opacity
+   * @param float|null $opacity
    *   The opacity value.
    *
    * @throws \Exception
    *   If the color doesn't appear to be a valid hex value.
    */
-  public function __construct(string $color, ?string $opacity) {
+  public function __construct(string $color, ?float $opacity) {
     $color = trim(strtolower($color));
 
     if (str_starts_with($color, '#')) {
@@ -43,10 +43,8 @@ class ColorHex extends ColorBase {
     }
 
     $this->color = hexdec($color);
-    $opacity = $opacity ?? '1';
+    $opacity = $opacity ?? 1.0;
     $this->setOpacity((float) $opacity);
-
-    return $this;
   }
 
   /**

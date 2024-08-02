@@ -3,12 +3,15 @@
 namespace Drupal\linkchecker;
 
 use Drupal\Core\Batch\BatchBuilder;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Messenger\MessengerTrait;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Messenger\MessengerTrait;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Helper service to handle extraction index.
@@ -41,12 +44,20 @@ class LinkExtractorBatch {
   protected $database;
 
   /**
+   * The Linkchecker settings.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $linkcheckerSetting;
+
+  /**
    * LinkExtractorBatch constructor.
    */
-  public function __construct(LinkExtractorService $extractor, EntityTypeManagerInterface $entityTypeManager, Connection $dbConnection) {
+  public function __construct(LinkExtractorService $extractor, EntityTypeManagerInterface $entityTypeManager, Connection $dbConnection, ConfigFactoryInterface $configFactory) {
     $this->extractor = $extractor;
     $this->entityTypeManager = $entityTypeManager;
     $this->database = $dbConnection;
+    $this->linkcheckerSetting = $configFactory->get('linkchecker.settings');
   }
 
   /**
@@ -56,9 +67,10 @@ class LinkExtractorBatch {
    *   List of entity types with bundles.
    */
   public function getEntityTypesToProcess() {
-    $fieldConfigs = $this->entityTypeManager
+    $fieldConfigs = $this
+      ->entityTypeManager
       ->getStorage('field_config')
-      ->loadMultiple(NULL);
+      ->loadMultiple();
     $entityTypes = [];
 
     /** @var \Drupal\Core\Field\FieldConfigInterface $config */
@@ -90,30 +102,40 @@ class LinkExtractorBatch {
    * @return int
    *   Number of items that were processed.
    */
-  public function processEntities($numberOfItems = 20) {
-    $entityTypes = $this->getEntityTypesToProcess();
+  public function processEntities($numberOfItems = NULL) {
     $numberOfProcessedItems = 0;
+    // This function is used in batch to extract all links on demand and it's
+    // also called on every cron run (see linkchecker_cron()). Because it uses
+    // SQL LEFT JOIN, it's quite expensive. So, first check if there is anything
+    // to process. If yes, then use query with LEFT JOIN to retrieve entities to
+    // be processed.
+    if ($this->getTotalEntitiesToProcess() <= $this->getNumberOfProcessedEntities()) {
+      return $numberOfProcessedItems;
+    }
+
+    if (!$numberOfItems) {
+      $numberOfItems = Settings::get('entity_update_batch_size', 50);
+    }
+    $entityTypes = $this->getEntityTypesToProcess();
 
     foreach ($entityTypes as $entityTypeData) {
       /** @var \Drupal\Core\Entity\EntityTypeInterface $entityType */
       $entityType = $entityTypeData['entity_type'];
       $bundle = $entityTypeData['bundle'];
 
-      $query = $this->database->select($entityType->getBaseTable(), 'base');
-      $query->fields('base', [$entityType->getKey('id')]);
+      $query = $this->getQuery($entityType, $bundle);
       $query->leftJoin('linkchecker_index', 'i', 'i.entity_id = base.' . $entityType->getKey('id') . ' AND i.entity_type = :entity_type', [
         ':entity_type' => $entityType->id(),
       ]);
       $query->isNull('i.entity_id');
-      if (!empty($bundle)) {
-        $query->condition('base.' . $entityType->getKey('bundle'), $bundle);
-      }
       $query->range(0, $numberOfItems - $numberOfProcessedItems);
 
       $ids = $query->execute()->fetchCol();
-      $storage = $this->entityTypeManager->getStorage($entityType->id());
-      foreach ($ids as $id) {
-        $entity = $storage->load($id);
+      $entities = $this
+        ->entityTypeManager
+        ->getStorage($entityType->id())
+        ->loadMultiple($ids);
+      foreach ($entities as $entity) {
         if ($entity instanceof FieldableEntityInterface) {
           // Process the entity links.
           $links = $this->extractor->extractFromEntity($entity);
@@ -146,15 +168,7 @@ class LinkExtractorBatch {
       /** @var \Drupal\Core\Entity\EntityTypeInterface $entityType */
       $entityType = $entityTypeData['entity_type'];
       $bundle = $entityTypeData['bundle'];
-
-      // We don`t use $this->getQuery() cause we do not need left join
-      // on linkchecker_index table.
-      $query = $this->database->select($entityType->getBaseTable(), 'base');
-      $query->fields('base', [$entityType->getKey('id')]);
-      if (!empty($bundle)) {
-        $query->condition('base.' . $entityType->getKey('bundle'), $bundle);
-      }
-
+      $query = $this->getQuery($entityType, $bundle);
       $query = $query->countQuery();
       $total += $query->execute()->fetchField();
     }
@@ -186,7 +200,7 @@ class LinkExtractorBatch {
 
     $batch = new BatchBuilder();
     $batch->setTitle('Extract entities')
-      ->addOperation([$this, 'batchProcessEntities'], [20])
+      ->addOperation([$this, 'batchProcessEntities'], [Settings::get('entity_update_batch_size', 50)])
       ->setProgressive()
       ->setFinishCallback([$this, 'batchFinished']);
 
@@ -229,6 +243,46 @@ class LinkExtractorBatch {
       $this->messenger()
         ->addError($this->t('Links were not extracted.'));
     }
+  }
+
+  /**
+   * Get link extraction query.
+   *
+   * If unpublished content should be skipped, data table is used, base table
+   * otherwise.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entityType
+   *   The entity type.
+   * @param string $bundle
+   *   The bundle.
+   *
+   * @return \Drupal\Core\Database\Query\SelectInterface
+   *   The select query.
+   */
+  protected function getQuery(EntityTypeInterface $entityType, $bundle) {
+    // Use data table only if exists and unpublished content should be skipped.
+    if ($entityType->hasKey('status')
+      && $entityType->getDataTable()
+      && $this->linkcheckerSetting->get('search_published_contents_only')
+    ) {
+      $query = $this
+        ->database
+        ->select($entityType->getDataTable(), 'base')
+        ->condition('base.' . $entityType->getKey('status'), 1)
+        ->distinct();
+    }
+    // Otherwise, use base table, it has all necessary information.
+    else {
+      $query = $this->database->select($entityType->getBaseTable(), 'base');
+    }
+
+    $query->fields('base', [$entityType->getKey('id')]);
+    if (!empty($bundle)) {
+      $query->condition('base.' . $entityType->getKey('bundle'), $bundle);
+    }
+
+    $query->orderBy('base.' . $entityType->getKey('id'));
+    return $query;
   }
 
 }

@@ -2,6 +2,8 @@
 
 namespace Drupal\better_exposed_filters;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+
 /**
  * Defines a helper class for better exposed filters.
  */
@@ -19,11 +21,13 @@ class BetterExposedFiltersHelper {
    *   String representing the entry in the settings form.
    * @param bool $reorder
    *   Reorder $options based on the rewrite settings.
+   * @param bool $rewrite_based_on_key
+   *   Flag determining whether options labels should be rewritten based on key.
    *
    * @return array
    *   Rewritten $options.
    */
-  public static function rewriteOptions(array $options, $rewrite_settings, $reorder = FALSE) {
+  public static function rewriteOptions(array $options, $rewrite_settings, $reorder = FALSE, $rewrite_based_on_key = FALSE) {
     // Break out early if we don't have anything to rewrite.
     if (empty($rewrite_settings) || !is_string($rewrite_settings)) {
       return $options;
@@ -43,7 +47,7 @@ class BetterExposedFiltersHelper {
 
     $lines = explode("\n", trim($rewrite_settings));
     foreach ($lines as $line) {
-      list($search, $replace) = array_map('trim', explode('|', $line));
+      [$search, $replace] = array_map('trim', explode('|', $line));
       if (!empty($search)) {
         $rewrites[$search] = $replace;
 
@@ -75,29 +79,37 @@ class BetterExposedFiltersHelper {
 
     // Rewrite the option value.
     foreach ($return as $index => &$choice) {
-      if (is_object($choice) && isset($choice->option)) {
-        $key = key($choice->option);
-        $value = &$choice->option[$key];
-      }
-      elseif (is_array($choice) && array_key_exists('name', $choice)) {
-        $value = &$choice['name'];
+      if ($rewrite_based_on_key) {
+        if (isset($rewrites[$index])) {
+          // phpcs:ignore
+          $return[$index] = new TranslatableMarkup($rewrites[$index]);
+        }
       }
       else {
-        $choice = (string) $choice;
-        $value = &$choice;
-      }
-
-      if (!is_scalar($value)) {
-        // We give up...
-        continue;
-      }
-
-      if (isset($rewrites[$value])) {
-        if ('' === $rewrites[$value]) {
-          unset($return[$index]);
+        if (is_object($choice) && isset($choice->option)) {
+          $key = key($choice->option);
+          $value = &$choice->option[$key];
+        }
+        elseif (is_array($choice) && array_key_exists('name', $choice)) {
+          $value = &$choice['name'];
         }
         else {
-          $value = $rewrites[$value];
+          $choice = (string) $choice;
+          $value = &$choice;
+        }
+
+        if (!is_scalar($value)) {
+          // We give up...
+          continue;
+        }
+
+        if (isset($rewrites[$value])) {
+          if ('' === $rewrites[$value]) {
+            unset($return[$index]);
+          }
+          else {
+            $value = $rewrites[$value];
+          }
         }
       }
     }
@@ -149,7 +161,11 @@ class BetterExposedFiltersHelper {
     $flat_options = self::flattenOptions($options, TRUE);
 
     // Alphabetically sort our list of concatenated values.
-    asort($flat_options);
+    uasort($flat_options, function ($a, $b) {
+      $transliteration = \Drupal::transliteration();
+      return strnatcasecmp($transliteration->transliterate($a), $transliteration->transliterate($b));
+    });
+
     // Now use its keys to sort the original array.
     return array_replace(array_flip(array_keys($flat_options)), $options);
   }
@@ -198,7 +214,11 @@ class BetterExposedFiltersHelper {
     }
 
     // Alphabetically sort our list of concatenated values.
-    asort($flat_options);
+    uasort($flat_options, function ($a, $b) {
+      $transliteration = \Drupal::transliteration();
+      return strnatcasecmp($transliteration->transliterate($a), $transliteration->transliterate($b));
+    });
+
     // Now use its keys to sort the original array.
     return array_replace(array_flip(array_keys($flat_options)), $options);
   }

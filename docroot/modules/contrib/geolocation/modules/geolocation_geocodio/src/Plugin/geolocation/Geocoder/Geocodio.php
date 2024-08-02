@@ -2,11 +2,11 @@
 
 namespace Drupal\geolocation_geocodio\Plugin\geolocation\Geocoder;
 
-use GuzzleHttp\Exception\RequestException;
 use Drupal\geolocation\GeocoderBase;
 use Drupal\geolocation\GeocoderInterface;
-use Geocodio\Geocodio as GeocodioApi;
 use Drupal\geolocation\KeyProvider;
+use Geocodio\Geocodio as GeocodioApi;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Provides a Geocodio integration.
