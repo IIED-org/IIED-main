@@ -23,7 +23,7 @@
               afterToggle: function(trigger, element, expanded) {
                 if(!expanded) { // The "Close" link was clicked
                   // Would be good to make this optional, commenting out for now.
-                  // window.scrollTo({ top: element.offsetTop, behavior: 'smooth' });
+                   window.scrollTo({ top: element.offsetTop, behavior: 'smooth' });
                 }
               }
             });
