@@ -71,6 +71,10 @@
     top: calc(var(--gin-toolbar-y-offset) + var(--gin-sticky-offset)) !important;
   }
 
+  &[data-fullscreen="fullscreeneditor"] .ck-sticky-panel__content.ck-sticky-panel__content_sticky {
+    top: 0 !important;
+  }
+
   .ck-toolbar__separator {
     opacity: .3;
   }
@@ -118,5 +122,10 @@
   .ck-content .drupal-media > figcaption {
     color: var(--ck-color-image-caption-text);
     background: var(--ck-color-image-caption-background);
+  }
+
+  .ck.ck.ck-balloon-panel.ck-powered-by-balloon {
+    z-index: 2;
+    transform: translateY(-13px);
   }
 }

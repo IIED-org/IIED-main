@@ -68,24 +68,23 @@
 
 <div class="region-sticky-watcher"></div>
 
-<header class="region region-sticky">
+<header class="region region-sticky {{ gin_form_actions_class }}">
   <div class="layout-container region-sticky__items">
     <div class="region-sticky__items__inner">
       {{ page.header[page_title_block] }}
       {{ page.content[local_actions_block] }}
+      {{ gin_form_actions }}
     </div>
   </div>
 </header>
 
 <div class="sticky-shadow"></div>
 
-{% if page.header|without(page_title_block)|render|striptags|trim is not empty %}
 <div class="content-header clearfix">
   <div class="layout-container">
     {{ page.header|without(page_title_block) }}
   </div>
 </div>
-{% endif %}
 
 <div class="layout-container">
   {{ page.pre_content }}

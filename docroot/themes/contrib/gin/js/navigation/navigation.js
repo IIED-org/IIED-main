@@ -4,6 +4,10 @@
    */
   let sidebar;
 
+  // Gin Custom start ---------------------
+  const breakpointLarge = 1280;
+  // Gin Custom end ------------------------
+
   /**
    * Collapsed toolbar keydown handling vars.
    */
@@ -63,7 +67,7 @@
     // Check all links on the sidebar (that are not in the shortcutsNav
     // <div>) to see if they are the current page. If so, set a `current`
     // and `is-active` CSS class on the parent <li>.
-    const sidebarLinks = sidebar.querySelectorAll('a.toolbar-link:not(.menu--shortcuts *)');
+    const sidebarLinks = sidebar.querySelectorAll('a.toolbar-link:not(.menu--shortcuts *):not(.toolbar-link--create)');
     sidebarLinks.forEach(link => {
       if (link.href === document.URL) {
         link.parentElement.classList.add('current', 'is-active');
@@ -75,7 +79,7 @@
     const sidebarTitles = sidebar.querySelectorAll('.toolbar-menu__item--level-1[data-url]');
     sidebarTitles.forEach(title => {
       if (title.getAttribute('data-url') === window.location.pathname) {
-        title.querySelector('button.toolbar-link')?.classList.add('current', 'is-active');
+        title.querySelector('a.toolbar-link')?.classList.add('current', 'is-active');
       }
     });
     // Gin Custom end ------------------------
@@ -103,6 +107,12 @@
     else {
       flyoutTooltipInit();
     }
+
+    // Gin Custom start ---------------------
+    if (toState === true && window.innerWidth < breakpointLarge) {
+      Drupal.ginSidebar?.collapseSidebar();
+    }
+    // Gin Custom end ------------------------
   }
 
   /**
@@ -179,7 +189,7 @@
    */
   function positionTooltip(hoveredEl) {
     const anchorEl = hoveredEl.querySelector('.toolbar-link'); // This is the <a> element within the navigation link.
-    const tooltipEl = document.querySelector('.tooltip'); // This is the tooltip span.
+    const tooltipEl = document.querySelector('.gin-tooltip-navigation'); // This is the tooltip span.
     computePosition(anchorEl, tooltipEl, {
       placement: 'right',
       middleware: [
@@ -242,14 +252,14 @@
     // Add click event listeners to all buttons and then contains the callback
     // to expand / collapse the button's menus.
     clonedFlyout.querySelectorAll('.toolbar-menu__item--has-dropdown > button').forEach(el => el.addEventListener('click', (e) => {
-      openCloseSubmenu(e.currentTarget.parentElement);
-    }));
-
-    // Add click event listeners to title buttons when navigation is collapsed.
-    clonedFlyout.querySelectorAll('.toolbar-menu__item--to-title > button').forEach(el => el.addEventListener('click', (e) => {
+      // Gin Custom start ---------------------
       const dataUrl = el.getAttribute('data-url');
-      if (!isNavExpanded() && dataUrl) {
-        window.location.assign(dataUrl);
+      if ((e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) && dataUrl) {
+        window.open(dataUrl, '_blank');
+      }
+      // Gin Custom end ------------------------
+      else {
+        openCloseSubmenu(e.currentTarget.parentElement);
       }
     }));
 
@@ -295,7 +305,7 @@
     // Add a class to easily remove flyout in closeTooltip().
     // Append the cloned tooltip to the body to fix overflow issues with
     // vertical scrolling on the collapsed sidebar.
-    clonedTooltip.classList.add('tooltip');
+    clonedTooltip.classList.add('gin-tooltip-navigation');
     document.querySelector('body').append(clonedTooltip);
     if (!hoveredEl.classList.contains('toolbar-menu__item--expanded')) {
       positionTooltip(hoveredEl);
@@ -331,7 +341,7 @@
    */
   function closeTooltip() {
     if (!isNavExpanded()) {
-      const clonedTooltip = document.querySelector('.tooltip');
+      const clonedTooltip = document.querySelector('.gin-tooltip-navigation');
       clonedTooltip?.remove();
     }
   }
@@ -623,16 +633,6 @@
     }));
 
     // Gin Custom start ---------------------
-    // Make overview buttons clickable when collapsed
-    sidebar.querySelectorAll('.toolbar-menu__item--level-1 > button.toolbar-link').forEach(el => el.addEventListener('click', () => {
-      const dataUrl = el.parentElement.getAttribute('data-url');
-      if (!isNavExpanded() && dataUrl) {
-        window.location.assign(dataUrl);
-      }
-    }));
-    // Gin Custom end ------------------------
-
-    // Gin Custom start ---------------------
     // Show toolbar navigation with shortcut:
     // OPTION + T (Mac) / ALT + T (Windows)
     document.addEventListener('keydown', e => {
@@ -643,9 +643,14 @@
     // Gin Custom end ------------------------
   }
 
-  Drupal.behaviors.navigation = {
+  Drupal.behaviors.ginNavigation = {
     attach(context) {
       once('navigation', '.admin-toolbar', context).forEach(init);
     },
+    // Gin Custom start ---------------------
+    collapseSidebar() {
+      expandCollapseSidebar(false);
+    },
+    // Gin Custom end ------------------------
   };
 })(Drupal, once, FloatingUIDOM);

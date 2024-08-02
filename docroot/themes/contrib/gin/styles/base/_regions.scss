@@ -16,7 +16,7 @@
     padding-top: var(--gin-spacing-m);
 
     @include mq(large) {
-      top: calc(var(--gin-toolbar-y-offset) - var(--gin-spacing-xxxl));
+      top: var(--gin-toolbar-y-offset);
       padding-top: var(--gin-spacing-s);
     }
   }
@@ -41,10 +41,6 @@
       background: var(--gin-bg-app);
       backdrop-filter: none;
     }
-  }
-
-  .gin--classic-toolbar:not(.gin--edit-form) & {
-    position: static;
   }
 
   @include mq(large) {
@@ -103,12 +99,18 @@
       }
     }
 
-    .gin-sticky {
+    .gin-sticky-form-actions {
       display: flex;
+      width: auto;
+      margin-top: 0;
 
       @include mq(large) {
         padding-left: var(--gin-spacing-l);
       }
+    }
+
+    [id*="block-gin-local-actions"] + .gin-sticky-form-actions {
+      padding-left: var(--gin-spacing-xs);
     }
   }
 }
@@ -118,6 +120,13 @@
   margin-bottom: 0;
   background-color: transparent;
   overflow: initial;
+
+  // Normalize whitespace if empty.
+  @include mq(small) {
+    &:not(:has(.layout-container *)) {
+      margin-top: calc(var(--gin-spacing-m) * -1);
+    }
+  }
 }
 
 .sticky-shadow {
@@ -138,11 +147,6 @@
     position: sticky;
     top: calc(var(--gin-toolbar-y-offset) + (var(--gin-height-sticky) - 40px));
     width: calc(100% - min(10vw, 96px) + var(--gin-spacing-l));
-
-    // Classic, legacy toolbar
-    .gin--classic-toolbar:not(.gin--edit-form) & {
-      display: none;
-    }
 
     .gin--edit-form & {
       max-width: 1300px;
@@ -177,12 +181,7 @@ body:not(.toolbar-tray-open) .layout-container {
   }
 }
 
-// Hide action bar
-.layout-node-form__actions {
-  display: none;
-}
-
-.gin-sticky {
+.gin-sticky-form-actions {
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 0;
@@ -200,19 +199,19 @@ body:not(.toolbar-tray-open) .layout-container {
     flex-grow: 1;
     align-items: center;
     justify-content: flex-end;
-
-    :last-child {
-      margin-right: 0;
-    }
   }
 
   .field--name-status {
     display: flex;
     align-items: center;
-    margin-right: var(--gin-spacing-xxs);
+    margin-right: var(--gin-spacing-s);
 
-    @include mq(medium) {
-      margin-right: var(--gin-spacing-l);
+    .form-item__label {
+      font-size: 0.8125rem;
+
+      @include mq($to: tiny) {
+        display: none;
+      }
     }
 
     .form-type--checkbox {
