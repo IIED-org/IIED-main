@@ -28,12 +28,12 @@
   float: right;
 }
 
-.toolbar .toolbar-bar .toolbar-icon-devel:before {
+.toolbar .toolbar-bar .toolbar-icon-devel::before {
   background-image: url(../icons/bebebe/cog.svg);
 }
 
-.toolbar-bar .toolbar-icon-devel:active:before,
-.toolbar-bar .toolbar-icon-devel.is-active:before {
+.toolbar-bar .toolbar-icon-devel:active::before,
+.toolbar-bar .toolbar-icon-devel.is-active::before {
   background-image: url(../icons/ffffff/cog.svg);
 }
 

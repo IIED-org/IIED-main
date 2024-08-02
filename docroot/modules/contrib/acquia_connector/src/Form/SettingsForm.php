@@ -7,6 +7,7 @@ use Drupal\acquia_connector\Event\AcquiaProductSettingsEvent;
 use Drupal\acquia_connector\SiteProfile\SiteProfile;
 use Drupal\acquia_connector\Subscription;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -97,9 +98,11 @@ class SettingsForm extends ConfigFormBase {
    *   Connector Site Profile Service.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   Event Dispatcher Service.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_configmanager
+   *   The typed config manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, PrivateKey $private_key, Subscription $subscription, StateInterface $state, SiteProfile $site_profile, EventDispatcherInterface $dispatcher) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, PrivateKey $private_key, Subscription $subscription, StateInterface $state, SiteProfile $site_profile, EventDispatcherInterface $dispatcher, TypedConfigManagerInterface $typed_configmanager) {
+    parent::__construct($config_factory, $typed_configmanager);
 
     $this->moduleHandler = $module_handler;
     $this->privateKey = $private_key;
@@ -120,7 +123,8 @@ class SettingsForm extends ConfigFormBase {
       $container->get('acquia_connector.subscription'),
       $container->get('state'),
       $container->get('acquia_connector.site_profile'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('config.typed')
     );
   }
 
@@ -151,6 +155,7 @@ class SettingsForm extends ConfigFormBase {
 
     // Redirect to confirmation form when resetting network ID.
     if ($this->resetData) {
+      // phpcs:ignore
       return \Drupal::formBuilder()->getForm('Drupal\acquia_connector\Form\ResetConfirmationForm');
     }
 

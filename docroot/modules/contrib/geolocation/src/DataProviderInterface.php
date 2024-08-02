@@ -3,10 +3,10 @@
 namespace Drupal\geolocation;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
-use Drupal\Core\Field\FieldItemInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 
 /**
  * Defines an interface for geolocation DataProvider plugins.

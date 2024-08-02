@@ -42,7 +42,7 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    // Enable AJAX on the our test view.
+    // Enable AJAX on the test view.
     \Drupal::configFactory()->getEditable('views.view.bef_test')
       ->set('display.default.display_options.use_ajax', TRUE)
       ->save();
@@ -114,6 +114,7 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Verify nothing has changed.
+    $html = $page->getHtml();
     $this->assertStringContainsString('Page One', $html);
     $this->assertStringNotContainsString('Page Two', $html);
 
@@ -170,7 +171,8 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     $field_bef_email->setValue('qwerty@test.com');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
-    // Verify nothing has changed.
+    // Veri fy nothing has changed.
+    $html = $page->getHtml();
     $this->assertStringContainsString('Page One', $html);
     $this->assertStringNotContainsString('Page Two', $html);
 
@@ -189,7 +191,6 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
    */
   public function testSecondaryOptions() {
     $view = Views::getView('bef_test');
-    $display = &$view->storage->getDisplay('default');
 
     // Enable auto-submit, but disable for text fields.
     $this->setBetterExposedOptions($view, [
@@ -239,6 +240,44 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     // Verify our field-set is open and our fields visible.
     $secondary_options = $page->find('css', '.bef--secondary');
     $this->assertTrue($secondary_options->hasAttribute('open'));
+  }
+
+  /**
+   * Tests when filter is marked to be collapsed.
+   */
+  public function testFilterCollapsible() {
+    $view = Views::getView('bef_test');
+    $session = $this->getSession();
+    $page = $session->getPage();
+
+    $this->setBetterExposedOptions($view, [
+      'filter' => [
+        'field_bef_email_value' => [
+          'plugin_id' => 'default',
+          'advanced' => [
+            'collapsible' => TRUE,
+            'collapsible_disable_automatic_open' => TRUE,
+          ],
+        ],
+      ],
+    ]);
+
+    // Visit the bef-test page.
+    $this->drupalGet('bef-test');
+
+    // Assert the field is closed by default.
+    $details_summary = $page->find('css', '#edit-field-bef-email-value-collapsible summary');
+    $this->assertTrue($details_summary->hasAttribute('aria-expanded'));
+    $this->assertEquals('false', $details_summary->getAttribute('aria-expanded'));
+
+    // Verify field_bef_email is 2nd in the filter.
+    $email_details = $page->find('css', '.views-exposed-form .form-item:nth-child(2)');
+    $this->assertEquals('edit-field-bef-email-value-collapsible', $email_details->getAttribute('id'));
+
+    // Assert the field is closed by default.
+    $details_summary = $page->find('css', '#edit-field-bef-email-value-collapsible summary');
+    $this->assertTrue($details_summary->hasAttribute('aria-expanded'));
+    $this->assertEquals('false', $details_summary->getAttribute('aria-expanded'));
   }
 
 }

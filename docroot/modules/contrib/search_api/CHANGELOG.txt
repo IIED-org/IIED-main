@@ -1,3 +1,40 @@
+Search API 1.35 (2024-06-16):
+-----------------------------
+- #3454923 by drunken monkey: Disabled the "views_test_data" module in most
+  tests.
+- #3450983 by drunken monkey: Fixed doc comment of the TestTracker class.
+- #3448241 by drunken monkey: Fixed PluginHelper::createIndexPlugin() to pass on
+  message from PluginException.
+- #3425235 by drunken monkey, jcnventura, sarwan_verma: Fixed incompatibility
+  with Drupal 11.
+- #3449783 by drunken monkey: Fixed Views bulk form not working in Drupal 10.3+.
+- #3449298 by immaculatexavier, drunken monkey: Fixed minor issue with sorting
+  of search views.
+- #3447797 by NexusNovaz, drunken monkey: Fixed documentation of
+  ContentEntity::getPartialItemIds().
+- #3437275 by dineshkumarbollu, drunken monkey, jonathan1055: Removed uses of
+  "please" from this module.
+- #3442296 by drunken monkey, jonathan1055: Fixed Javascript code style issues
+  reported by ESLint.
+- #3438899 by mparker17, drunken monkey: Added isEmpty() function to
+  ConditionGroupInterface.
+- #3325206 by drunken monkey: Fixed bug when an item is first updated then
+  ignored during a single page request.
+- #3438314 by mparker17, drunken monkey: Declared that TextTokenInterface and
+  TextValueInterface implement \Stringable.
+- #3436123 by drunken monkey, Yazzbe: Fixed incomplete GROUP BY when using
+  partial matching and facets.
+
+Search API 1.34 (2024-04-06):
+-----------------------------
+- #3438940 by mkalkbrenner, drunken monkey: Fixed PluginNotFoundException while
+  adding Views handlers.
+
+Search API 1.33 (2024-04-04):
+-----------------------------
+- #3437379 by yauheni, ELC, Taran2L, drunken monkey: Fixed bug in update
+  function that sets caching of all search views to "None".
+
 Search API 1.32 (2024-03-31):
 -----------------------------
 - #3427068 by jonathan1055, drunken monkey: Fixed cspell errors.

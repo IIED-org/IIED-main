@@ -90,7 +90,7 @@ function message_ui_entity_type_alter(array &$entity_types) {
     return;
   }
 
-  /** @var \Drupal\Core\Config\Entity\ConfigEntityType $message_config */
+  /** @var \Drupal\Core\Config\Entity\ConfigEntityType[] $entity_types */
   $entity_types['message']
     ->setAccessClass('Drupal\message_ui\MessageAccessControlHandler')
     ->setHandlerClass('view_builder', 'Drupal\message\MessageViewBuilder')

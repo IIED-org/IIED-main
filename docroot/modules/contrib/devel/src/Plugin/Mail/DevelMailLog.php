@@ -55,10 +55,8 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
 
   /**
    * The file system service.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
    */
-  protected $fileSystem;
+  protected FileSystemInterface $fileSystem;
 
   /**
    * Constructs a new DevelMailLog object.
@@ -74,7 +72,13 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, FileSystemInterface $file_system) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    ConfigFactoryInterface $config_factory,
+    FileSystemInterface $file_system,
+  ) {
     $this->config = $config_factory->get('devel.settings');
     $this->fileSystem = $file_system;
   }
@@ -82,7 +86,7 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     return new static(
       $configuration,
       $plugin_id,
@@ -95,7 +99,7 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
   /**
    * {@inheritdoc}
    */
-  public function mail(array $message) {
+  public function mail(array $message): bool {
     $directory = $this->config->get('debug_mail_directory');
 
     if (!$this->prepareDirectory($directory)) {
@@ -112,7 +116,7 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
   /**
    * {@inheritdoc}
    */
-  public function format(array $message) {
+  public function format(array $message): array {
     // Join the body array into one string.
     $message['body'] = implode("\n\n", $message['body']);
 
@@ -133,7 +137,7 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
    * @return string
    *   The output message.
    */
-  protected function composeMessage(array $message) {
+  protected function composeMessage(array $message): string {
     $mimeheaders = [];
     $message['headers']['To'] = $message['to'];
     foreach ($message['headers'] as $name => $value) {
@@ -146,8 +150,7 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
     $output .= 'Subject: ' . $message['subject'] . $line_endings;
     // Blank line to separate headers from body.
     $output .= $line_endings;
-    $output .= preg_replace('@\r?\n@', $line_endings, $message['body']);
-    return $output;
+    return $output . preg_replace('@\r?\n@', $line_endings, $message['body']);
   }
 
   /**
@@ -165,14 +168,14 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
    * @return string
    *   The formatted string.
    */
-  protected function replacePlaceholders($filename, array $message) {
+  protected function replacePlaceholders(string $filename, array $message): string {
     $tokens = [
       '%to' => $message['to'],
       '%subject' => $message['subject'],
       '%datetime' => date('y-m-d_his'),
     ];
     $filename = str_replace(array_keys($tokens), array_values($tokens), $filename);
-    return preg_replace('/[^a-zA-Z0-9_\-\.@]/', '_', $filename);
+    return preg_replace('/[^a-zA-Z0-9_\-\.@]/', '_', $filename) ?? '';
   }
 
   /**
@@ -188,11 +191,11 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
    *   TRUE if the directory exists (or was created), is writable and is
    *   protected (if it is public). FALSE otherwise.
    */
-  protected function prepareDirectory($directory) {
+  protected function prepareDirectory(string $directory): bool {
     if (!$this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
       return FALSE;
     }
-    if (0 === strpos($directory, 'public://')) {
+    if (str_starts_with($directory, 'public://')) {
       return FileSecurity::writeHtaccess($directory);
     }
 

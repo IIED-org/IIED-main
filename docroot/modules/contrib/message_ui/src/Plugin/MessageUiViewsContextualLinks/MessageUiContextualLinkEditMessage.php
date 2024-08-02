@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  weight = 1
  * )
  */
-class MessageUiContextualLinkEditMessage extends MessageUiViewsContextualLinksBase implements MessageUiViewsContextualLinksInterface, ContainerFactoryPluginInterface {
+final class MessageUiContextualLinkEditMessage extends MessageUiViewsContextualLinksBase implements MessageUiViewsContextualLinksInterface, ContainerFactoryPluginInterface {
   use StringTranslationTrait;
 
   /**
@@ -67,7 +67,7 @@ class MessageUiContextualLinkEditMessage extends MessageUiViewsContextualLinksBa
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
+    return new self(
       $configuration,
       $plugin_id,
       $plugin_definition,
@@ -80,7 +80,7 @@ class MessageUiContextualLinkEditMessage extends MessageUiViewsContextualLinksBa
    * {@inheritdoc}
    */
   public function access() {
-    return $this->message->access('edit');
+    return $this->message->access('update');
   }
 
   /**

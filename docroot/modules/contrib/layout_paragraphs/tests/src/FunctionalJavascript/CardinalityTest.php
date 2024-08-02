@@ -14,17 +14,10 @@ class CardinalityTest extends BuilderTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->loginWithPermissions([
-      'administer site configuration',
-      'administer node fields',
-      'administer node display',
-      'administer paragraphs types',
-    ]);
-    $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_content/storage');
-    $this->submitForm([
-      'cardinality' => 'number',
-      'cardinality_number' => 2,
-    ], 'Save field settings');
+    // Update definitions and schema.
+    $storage_definition = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('node')['field_content'];
+    $storage_definition->setCardinality(2);
+    $storage_definition->save();
   }
 
   /**

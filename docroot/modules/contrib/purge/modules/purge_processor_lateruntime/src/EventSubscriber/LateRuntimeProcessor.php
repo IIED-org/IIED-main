@@ -2,11 +2,10 @@
 
 namespace Drupal\purge_processor_lateruntime\EventSubscriber;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\purge\Plugin\Purge\Purger\Exception\CapacityException;
 use Drupal\purge\Plugin\Purge\Purger\Exception\DiagnosticsException;
 use Drupal\purge\Plugin\Purge\Purger\Exception\LockException;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -14,8 +13,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Processes queue items at the end of every request.
  */
-class LateRuntimeProcessor implements EventSubscriberInterface, ContainerAwareInterface {
-  use ContainerAwareTrait;
+class LateRuntimeProcessor implements EventSubscriberInterface {
 
   /**
    * The processor plugin or FALSE when disabled.
@@ -37,6 +35,23 @@ class LateRuntimeProcessor implements EventSubscriberInterface, ContainerAwareIn
    * @var \Drupal\purge\Plugin\Purge\Queue\QueueServiceInterface
    */
   protected $purgeQueue;
+
+  /**
+   * The container service.
+   *
+   * @var \Symfony\Component\DependencyInjection\ContainerInterface
+   */
+  protected $container;
+
+  /**
+   * Construct the Late Runtime Processor.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   The container service.
+   */
+  public function __construct(ContainerInterface $container) {
+    $this->container = $container;
+  }
 
   /**
    * {@inheritdoc}

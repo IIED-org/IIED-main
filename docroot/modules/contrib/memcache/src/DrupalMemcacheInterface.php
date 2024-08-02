@@ -3,7 +3,7 @@
 namespace Drupal\memcache;
 
 /**
- * Class DrupalMemcacheInterface.
+ * Define the interface for drupal memcache.
  */
 interface DrupalMemcacheInterface {
 

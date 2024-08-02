@@ -3,8 +3,8 @@
 namespace Drupal\Tests\message\Functional;
 
 use Drupal\message\Entity\MessageTemplate;
-use Drupal\Tests\message\Kernel\MessageTemplateCreateTrait;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\message\Kernel\MessageTemplateCreateTrait;
 
 /**
  * Holds set of tools for the message testing.

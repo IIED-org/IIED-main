@@ -6,3 +6,5 @@ taxonomy_manager.settings:
       type: integer
     taxonomy_manager_pager_tree_page_size:
       type: integer
+    taxonomy_manager_translations:
+      type: boolean

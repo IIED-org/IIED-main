@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
-use Drupal\geolocation\MapFeatureBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapFeatureBase;
 use Drupal\geolocation_leaflet\LeafletTileLayerProviders;
 
 /**

@@ -28,9 +28,12 @@ function better_exposed_filters_help($route_name, RouteMatchInterface $route_mat
       $output .= '<dd>' . t('Better Exposed Filters is used on <a href=":views">Views</a> that use an exposed filter.  Views filters are used to reduce the result set of a View to a manageable amount of data. BEF only operates on fields that have a limited number of options such as <a href=":node">Node</a>:Type or <a href=":taxonomy">Taxonomy</a>:TermID.',
           [
             ':views' => Url::fromRoute('help.page',
-              ['name' => 'views'])->toString(), ':node' => Url::fromRoute('help.page',
-            ['name' => 'node'])->toString(), ':taxonomy' => (\Drupal::moduleHandler()->moduleExists('taxonomy')) ? Url::fromRoute('help.page',
-            ['name' => 'taxonomy'])->toString() : '#',
+              ['name' => 'views'])->toString(),
+            ':node' => Url::fromRoute('help.page',
+              ['name' => 'node'])->toString(),
+            ':taxonomy' => (\Drupal::moduleHandler()
+              ->moduleExists('taxonomy')) ? Url::fromRoute('help.page',
+              ['name' => 'taxonomy'])->toString() : '#',
           ]) . '</dd>';
       $output .= '<dt>' . t('Styling Better Exposed Filters') . '</dt>';
       $output .= '<dd>' . t('BEF provides some additional HTML structure to help you style your exposed filters. For some common examples see the <a href=":doco">online documentation</a>.', [':doco' => 'https://www.drupal.org/node/766974']) . '</dd>';
@@ -70,4 +73,21 @@ function better_exposed_filters_form_views_ui_config_item_form_alter(&$form, For
     '#theme' => 'token_tree_link',
     '#token_types' => [],
   ];
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function better_exposed_filters_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'better_exposed_filters' && isset($libraries['sliders'])) {
+    $libraries_directory_file_finder = \Drupal::service('library.libraries_directory_file_finder');
+    $lib_slider_internal = $libraries_directory_file_finder->find('nouislider');
+
+    if ($lib_slider_internal) {
+      $libraries['sliders']['dependencies'][] = 'better_exposed_filters/nouislider_internal';
+    }
+    else {
+      $libraries['sliders']['dependencies'][] = 'better_exposed_filters/nouislider_external';
+    }
+  }
 }

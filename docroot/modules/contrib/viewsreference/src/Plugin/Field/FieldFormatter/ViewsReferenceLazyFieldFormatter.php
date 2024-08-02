@@ -138,6 +138,11 @@ class ViewsReferenceLazyFieldFormatter extends FormatterBase implements TrustedC
    *   The parent field name.
    */
   public static function lazyBuilder(string $view_name, string $display_id, string $data, string $enabled_settings, bool $plugin_types, ?string $parent_entity_type, ?string $parent_entity_id, ?string $parent_field_name): array {
+    // Since no JS creating a node is a multi-step, it is possible that
+    // no display ID has yet been selected.
+    if (!$display_id) {
+      return [];
+    }
     $unserialized_data = !empty($data) ? unserialize($data, ['allowed_classes' => FALSE]) : [];
     $unserialized_enabled_settings = !empty($enabled_settings) ? unserialize($enabled_settings, ['allowed_classes' => FALSE]) : [];
     $view = Views::getView($view_name);

@@ -7,6 +7,8 @@ use Drupal\Core\Url;
 use Drupal\search_api_autocomplete\Suggestion\SuggestionFactory;
 use Drupal\Tests\UnitTestCase;
 
+// cspell:ignore fooo foooo ödön
+
 /**
  * Tests the functionality of the suggestion factory class.
  *

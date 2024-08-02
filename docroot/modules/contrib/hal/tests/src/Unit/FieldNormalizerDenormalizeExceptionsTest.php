@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\hal\Unit;
 
+use Drupal\Core\Field\FieldItemBase;
+use Drupal\Core\Field\Plugin\DataType\FieldItem;
 use Drupal\hal\Normalizer\FieldItemNormalizer;
 use Drupal\hal\Normalizer\FieldNormalizer;
 use Drupal\Tests\UnitTestCase;
@@ -21,11 +23,21 @@ class FieldNormalizerDenormalizeExceptionsTest extends UnitTestCase {
    *
    * @dataProvider providerNormalizerDenormalizeExceptions
    */
-  public function testFieldNormalizerDenormalizeExceptions($context) {
+  public function testFieldNormalizerDenormalizeExceptions(bool $with_context) {
     $field_item_normalizer = new FieldNormalizer();
     $data = [];
     $class = [];
     $this->expectException(InvalidArgumentException::class);
+
+    $context = [];
+    if ($with_context) {
+      $mock = $this->createMock(FieldItemBase::class);
+      $mock->expects($this->any())
+        ->method('getParent')
+        ->willReturn(NULL);
+      $context['target_instance'] = $mock;
+    }
+
     $field_item_normalizer->denormalize($data, $class, NULL, $context);
   }
 
@@ -36,11 +48,21 @@ class FieldNormalizerDenormalizeExceptionsTest extends UnitTestCase {
    *
    * @dataProvider providerNormalizerDenormalizeExceptions
    */
-  public function testFieldItemNormalizerDenormalizeExceptions($context) {
+  public function testFieldItemNormalizerDenormalizeExceptions(bool $with_context) {
     $field_item_normalizer = new FieldItemNormalizer();
     $data = [];
     $class = [];
     $this->expectException(InvalidArgumentException::class);
+
+    $context = [];
+    if ($with_context) {
+      $mock = $this->createMock(FieldItemBase::class);
+      $mock->expects($this->any())
+        ->method('getParent')
+        ->willReturn(NULL);
+      $context['target_instance'] = $mock;
+    }
+
     $field_item_normalizer->denormalize($data, $class, NULL, $context);
   }
 
@@ -50,16 +72,10 @@ class FieldNormalizerDenormalizeExceptionsTest extends UnitTestCase {
    * @return array
    *   The context of the normalizer.
    */
-  public function providerNormalizerDenormalizeExceptions() {
-    $mock = $this->getMockBuilder('\Drupal\Core\Field\Plugin\DataType\FieldItem')
-      ->addMethods(['getParent'])
-      ->getMock();
-    $mock->expects($this->any())
-      ->method('getParent')
-      ->will($this->returnValue(NULL));
+  public static function providerNormalizerDenormalizeExceptions(): array {
     return [
-      [[]],
-      [['target_instance' => $mock]],
+      [TRUE],
+      [FALSE],
     ];
   }
 

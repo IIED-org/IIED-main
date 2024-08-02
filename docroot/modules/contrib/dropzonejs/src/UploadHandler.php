@@ -4,8 +4,10 @@ namespace Drupal\dropzonejs;
 
 use Drupal\Component\Transliteration\TransliterationInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\File\Event\FileUploadSanitizeNameEvent;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -51,6 +53,13 @@ class UploadHandler implements UploadHandlerInterface {
   protected $dropzoneSettings;
 
   /**
+   * Event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * Constructs dropzone upload controller route controller.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
@@ -62,11 +71,12 @@ class UploadHandler implements UploadHandlerInterface {
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   LanguageManager service.
    */
-  public function __construct(RequestStack $request_stack, ConfigFactoryInterface $config_factory, TransliterationInterface $transliteration, LanguageManagerInterface $language_manager) {
+  public function __construct(RequestStack $request_stack, ConfigFactoryInterface $config_factory, TransliterationInterface $transliteration, LanguageManagerInterface $language_manager, EventDispatcherInterface $event_dispatcher) {
     $this->request = $request_stack->getCurrentRequest();
     $this->transliteration = $transliteration;
     $this->languageManager = $language_manager;
     $this->dropzoneSettings = $config_factory->get('dropzonejs.settings');
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -81,25 +91,33 @@ class UploadHandler implements UploadHandlerInterface {
       throw new UploadException(UploadException::FILENAME_ERROR);
     }
 
-    if (!$this->dropzoneSettings->get('filename_transliteration')) {
-      return $original_name . '.txt';
+    // If the transliteration option is still there, we cannot use core
+    // file event, because we don't know if we want to always transliterate
+    // or just in dropzone.
+    // @todo This can be removed, when we drop legacy support.
+    $dropzone_transliteration = $this->dropzoneSettings->get('filename_transliteration');
+    if ($dropzone_transliteration == TRUE) {
+      // Transliterate.
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      $filename = $this->transliteration->transliterate($original_name, $langcode, '');
+
+      // Replace whitespace.
+      $filename = str_replace(' ', '_', $filename);
+      // Remove remaining unsafe characters.
+      $filename = preg_replace('![^0-9A-Za-z_.-]!', '', $filename);
+      // Remove multiple consecutive non-alphabetical characters.
+      $filename = preg_replace('/(_)_+|(\.)\.+|(-)-+/', '\\1\\2\\3', $filename);
+      // Force lowercase to prevent issues on case-insensitive file systems.
+      $filename = strtolower($filename);
+
+      return $filename . '.txt';
     }
 
-    // @todo The following filename sanitization steps replicate the behaviour
-    //   of the 2492171-28 patch for https://www.drupal.org/node/2492171.
-    //   Try to reuse that code instead, once that issue is committed.
-    // Transliterate.
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $filename = $this->transliteration->transliterate($original_name, $langcode, '');
-
-    // Replace whitespace.
-    $filename = str_replace(' ', '_', $filename);
-    // Remove remaining unsafe characters.
-    $filename = preg_replace('![^0-9A-Za-z_.-]!', '', $filename);
-    // Remove multiple consecutive non-alphabetical characters.
-    $filename = preg_replace('/(_)_+|(\.)\.+|(-)-+/', '\\1\\2\\3', $filename);
-    // Force lowercase to prevent issues on case-insensitive file systems.
-    $filename = strtolower($filename);
+    // Dispatch the event so core can sanitize and transliterate (depending on
+    // configuration) the filename.
+    $event = new FileUploadSanitizeNameEvent($original_name, '');
+    $this->eventDispatcher->dispatch($event);
+    $filename = $event->getFilename();
 
     // For security reasons append the txt extension. It will be removed in
     // Drupal\dropzonejs\Element::valueCallback when we will know the valid

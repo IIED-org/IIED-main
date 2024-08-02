@@ -1,7 +1,7 @@
 .vertical-tabs {
   .glb-claro-details {
-    margin-left: 0 !important;
     margin-right: 0 !important;
+    margin-left: 0 !important;
     border-bottom: 0 !important;
     background-color: transparent !important;
   }
@@ -23,7 +23,6 @@
   }
 
   &__menu-item.is-selected a::before {
-
     z-index: 1;
     border-left: 4px solid var(--gin-color-primary);
     border-radius: 2px 0 0 2px;
@@ -40,5 +39,4 @@
     pointer-events: none;
     background-clip: padding-box;
   }
-
 }

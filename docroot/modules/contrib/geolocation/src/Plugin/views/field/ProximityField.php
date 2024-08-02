@@ -2,13 +2,13 @@
 
 namespace Drupal\geolocation\Plugin\views\field;
 
-use Drupal\views\ResultRow;
-use Drupal\views\Plugin\views\field\NumericField;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\geolocation\LocationManager;
 use Drupal\geolocation\ProximityTrait;
+use Drupal\views\Plugin\views\field\NumericField;
+use Drupal\views\ResultRow;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Field handler for geolocation field.

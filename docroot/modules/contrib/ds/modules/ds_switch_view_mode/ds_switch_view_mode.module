@@ -28,6 +28,7 @@ function ds_switch_view_mode_entity_base_field_info(EntityTypeInterface $entity_
       ->setTranslatable(TRUE)
       ->setDescription(t('Holds the DS view mode of the node.'))
       ->setSetting('default_value', '')
+      ->setTranslatable(TRUE)
       ->setPropertyConstraints('value', ['Length' => ['max' => 60]]);
 
     return $fields;
@@ -127,7 +128,9 @@ function ds_switch_view_mode_form_node_form_alter(&$form, FormStateInterface $fo
       $layout_settings = $chosen_layout->getThirdPartySettings('ds');
 
       $ds_layouts = Ds::getLayouts();
-      $fallback_image = \Drupal::service('extension.list.module')->getPath('ds') . '/images/preview.png';
+      $fallback_image = [
+       '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . \Drupal::service('extension.list.module')->getPath('ds') . '/images/preview.png' . '"/></div>',
+      ];
 
       if (isset($layout_settings['layout'])) {
         /** @var \Drupal\Core\Layout\LayoutDefinition $chosen_layout */
@@ -139,10 +142,7 @@ function ds_switch_view_mode_form_node_form_alter(&$form, FormStateInterface $fo
         $form['ds_switch_view_mode']['preview']['image'] = $image;
       }
       else {
-        $image = $fallback_image;
-        $form['ds_switch_view_mode']['preview']['image'] = [
-          '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . $image . '"/></div>',
-        ];
+        $form['ds_switch_view_mode']['preview']['image'] = $fallback_image;
       }
     }
   }

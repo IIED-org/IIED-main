@@ -92,7 +92,7 @@ interface MessageTemplateInterface extends ConfigEntityInterface {
    * @return array
    *   The message text.
    */
-  public function getRaWText();
+  public function getRawText();
 
   /**
    * Retrieves the configured message text in a certain language.

@@ -14,7 +14,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "key_test_state",
  *   label = @Translation("State ☠️"),
  *   description = @Translation("Stores keys in state."),
- *   storage_method = "state",
+ *   tags = {
+ *     "state",
+ *   },
  *   key_value = {
  *     "accepted" = TRUE,
  *     "required" = FALSE

@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapProvider;
 
-use Drupal\geolocation\MapProviderBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapProviderBase;
 
 /**
  * Provides Leaflet maps.

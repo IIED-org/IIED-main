@@ -125,7 +125,7 @@ capable of generating authentication codes.  As of the date of this ReadMe,
 some of the more popular options include:
   * Google Authenticator (Android, iOS)
   * Microsoft Authenticator (Android, iOS)
-  * Authy (Android, iOS, Windows, macOS, Linux)
+  * Twilio Authy (Android, iOS, Windows, macOS, Linux)
   * FreeOTP (Android, iOS)
   * WinAuth (Windows)
   * GAuth Authenticator (Chrome browser extension and Chrome OS)

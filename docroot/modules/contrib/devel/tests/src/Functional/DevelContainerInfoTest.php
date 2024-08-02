@@ -3,6 +3,7 @@
 namespace Drupal\Tests\devel\Functional;
 
 use Drupal\Core\Url;
+use Drupal\devel\Routing\RouteSubscriber;
 
 /**
  * Tests container info pages and links.
@@ -26,7 +27,7 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
   /**
    * Tests container info menu link.
    */
-  public function testContainerInfoMenuLink() {
+  public function testContainerInfoMenuLink(): void {
     $this->drupalPlaceBlock('system_menu_block:devel');
     // Ensures that the events info link is present on the devel menu and that
     // it points to the correct page.
@@ -40,7 +41,7 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
   /**
    * Tests service list page.
    */
-  public function testServiceList() {
+  public function testServiceList(): void {
     $this->drupalGet('/devel/container/service');
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains('Container services');
@@ -58,9 +59,7 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
     $this->assertEquals(4, count($headers));
 
     $expected_headers = ['ID', 'Class', 'Alias', 'Operations'];
-    $actual_headers = array_map(function ($element) {
-      return $element->getText();
-    }, $headers);
+    $actual_headers = array_map(fn($element) => $element->getText(), $headers);
     $this->assertSame($expected_headers, $actual_headers);
 
     // Ensures that all the services are listed in the table.
@@ -77,7 +76,7 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
 //        'alias' => '',
 //      ],
       'devel.route_subscriber' => [
-        'class' => 'Drupal\devel\Routing\RouteSubscriber',
+        'class' => RouteSubscriber::class,
         'alias' => '',
       ],
 //      'plugin.manager.element_info' => [
@@ -122,7 +121,7 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
   /**
    * Tests service detail page.
    */
-  public function testServiceDetail() {
+  public function testServiceDetail(): void {
     $service_id = 'devel.dumper';
 
     // Ensures that the page works as expected.
@@ -145,7 +144,7 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
   /**
    * Tests parameter list page.
    */
-  public function testParameterList() {
+  public function testParameterList(): void {
     // Ensures that the page works as expected.
     $this->drupalGet('/devel/container/parameter');
     $this->assertSession()->statusCodeEquals(200);
@@ -164,9 +163,7 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
     $this->assertEquals(2, count($headers));
 
     $expected_headers = ['Name', 'Operations'];
-    $actual_headers = array_map(function ($element) {
-      return $element->getText();
-    }, $headers);
+    $actual_headers = array_map(fn($element) => $element->getText(), $headers);
     $this->assertSame($expected_headers, $actual_headers);
 
     // Ensures that all the parameters are listed in the table.
@@ -211,7 +208,7 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
   /**
    * Tests parameter detail page.
    */
-  public function testParameterDetail() {
+  public function testParameterDetail(): void {
     $parameter_name = 'cache_bins';
 
     // Ensures that the page works as expected.

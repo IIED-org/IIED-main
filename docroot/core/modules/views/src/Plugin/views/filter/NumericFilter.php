@@ -3,15 +3,15 @@
 namespace Drupal\views\Plugin\views\filter;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Attribute\ViewsFilter;
 
 /**
  * Simple filter to handle greater than/less than filters.
  *
  * @ingroup views_filter_handlers
- *
- * @ViewsFilter("numeric")
  */
-class NumericFilter extends FilterPluginBase {
+#[ViewsFilter("numeric")]
+class NumericFilter extends FilterPluginBase implements FilterOperatorsInterface {
 
   protected $alwaysMultiple = TRUE;
 
@@ -89,6 +89,9 @@ class NumericFilter extends FilterPluginBase {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function operators() {
     $operators = [
       '<' => [

@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\twig_tweak\Kernel;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 
@@ -116,8 +117,14 @@ final class MenuViewBuilderTest extends KernelTestBase {
    */
   private function assertMarkup(string $expected_markup, array $build): void {
     $expected_markup = preg_replace('#\s{2,}#', '', $expected_markup);
+    /** @var \Drupal\Core\Render\RendererInterface $renderer */
     $renderer = $this->container->get('renderer');
-    $actual_markup = preg_replace('#\s{2,}#', '', $renderer->renderPlain($build));
+    $actual_html = DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION, '10.3.0',
+      fn () => $renderer->renderInIsolation($build),
+      fn () => $renderer->renderPlain($build),
+    );
+    $actual_markup = preg_replace('#\s{2,}#', '', $actual_html);
     self::assertSame($expected_markup, $actual_markup);
   }
 

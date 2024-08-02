@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 id: banner
 label: Banner
-revision: 0
+revision: false
 description: 'Standard large banner with image and link '

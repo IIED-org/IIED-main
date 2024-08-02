@@ -8,6 +8,7 @@
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Url;
 use Drupal\gin\GinSettings;
+use Drupal\gin_login\Services\GinLoginRouteService;
 
 /**
  * Page_attachments_alter()
@@ -164,18 +165,14 @@ function gin_login_form_alter(&$form, $form_state, $form_id) {
  */
 function gin_login_theme() {
   // Page.
-  $theme['page__user__login'] = [
-    'template' => 'page--user--login',
-    'preprocess functions' => ['gin_login_preprocess_ginlogin'],
-  ];
-  $theme['page__user__password'] = [
-    'template' => 'page--user--password',
-    'preprocess functions' => ['gin_login_preprocess_ginlogin'],
-  ];
-  $theme['page__user__register'] = [
-    'template' => 'page--user--register',
-    'preprocess functions' => ['gin_login_preprocess_ginlogin'],
-  ];
+  $route_definitions = \Drupal::classResolver(GinLoginRouteService::class)->getLoginRouteDefinitions();
+
+  foreach ($route_definitions as $route_definition) {
+    $theme[$route_definition['page']] = [
+      'template' => $route_definition['template'],
+      'preprocess functions' => $route_definition['preprocess functions'],
+    ];
+  }
 
   return $theme;
 }
@@ -189,7 +186,6 @@ function gin_login_preprocess_ginlogin(&$variables) {
   $variables['site_name'] = \Drupal::config('system.site')->get('name');
   $themeIconPath = theme_get_setting('icon_path', $theme);
   $themeUseDefaultIcon = theme_get_setting('icon_default', $theme);
-  $darkmode = theme_get_setting('enable_darkmode', $theme);
   $fileUrlGenerator = \Drupal::service('file_url_generator');
 
   // #3258015: Make sure we're compatible with the new variant.
@@ -252,17 +248,31 @@ function gin_login_theme_suggestions_page_alter(array &$suggestions, array $vari
 function _gin_login__check_path() {
   // Get path from Route.
   $route = \Drupal::routeMatch()->getRouteName();
+  $route_definitions = \Drupal::classResolver(GinLoginRouteService::class)->getLoginRouteDefinitions();
 
-  if (
-    $route == 'user.login' ||
-    $route == 'user.pass' ||
-    $route == 'user.register'
-  ) {
+  if (array_key_exists($route, $route_definitions)) {
     return TRUE;
   }
-  else {
-    return FALSE;
-  }
+  return FALSE;
+}
+
+/**
+ * Ignore gin sticky actions.
+ */
+function gin_login_gin_ignore_sticky_form_actions() {
+  // Get path from Route.
+  $route = \Drupal::routeMatch()->getRouteName();
+  $route_definitions = \Drupal::classResolver(GinLoginRouteService::class)->getLoginRouteDefinitions();
+
+  // Fallback routes.
+  $fallback_routes = [
+    'user_login_form',
+    'user_pass',
+    'user_register_form',
+  ];
+
+  // Merge route definitions with fallback routes and return them.
+  return array_unique(array_merge(array_keys($route_definitions), $fallback_routes));
 }
 
 /**

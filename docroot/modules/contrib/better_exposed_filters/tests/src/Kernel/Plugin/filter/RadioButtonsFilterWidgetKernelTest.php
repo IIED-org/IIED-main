@@ -103,7 +103,7 @@ class RadioButtonsFilterWidgetKernelTest extends BetterExposedFiltersKernelTestB
     $actual = $this->xpath("//form//div[contains(concat(' ',normalize-space(@class),' '),' bef-nested ')]");
     $this->assertCount(1, $actual, 'Exposed filter "TERM_NODE_TID_DEPTH" has bef-nested class');
 
-    // The difference with checkboxes is that radio buttons render an additoinal
+    // The difference with checkboxes is that radio buttons render an additional
     // top level option (i.e. any).
     $actual = $this->xpath('//form//div[@id="edit-term-node-tid-depth--2"]/div/ul/li/div/input[@type="radio" and starts-with(@name, "term_node_tid_depth")]');
     $this->assertCount(4, $actual, 'Exposed filter "TERM_NODE_TID_DEPTH" has correct number of exposed top-level radio buttons.');

@@ -20,6 +20,7 @@ class Node extends RabbitHoleEntityPluginBase {
    * {@inheritdoc}
    */
   public function getBundleFormSubmitHandlerAttachLocations(array $form, FormStateInterface $form_state) {
+    // @phpstan-ignore-next-line
     if (\Drupal::moduleHandler()->moduleExists('field_ui') && $form_state->getFormObject()->getEntity()->isNew()) {
       return [['actions', 'save_continue', '#submit']];
     }

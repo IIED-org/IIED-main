@@ -20,10 +20,8 @@ class Debug extends AbstractExtension {
 
   /**
    * The devel dumper service.
-   *
-   * @var \Drupal\devel\DevelDumperManagerInterface
    */
-  protected $dumper;
+  protected DevelDumperManagerInterface $dumper;
 
   /**
    * Constructs a Debug object.
@@ -38,7 +36,7 @@ class Debug extends AbstractExtension {
   /**
    * {@inheritdoc}
    */
-  public function getName() {
+  public function getName(): string {
     return 'devel_debug';
   }
 
@@ -106,7 +104,7 @@ class Debug extends AbstractExtension {
    *   String representation of the input variables, or null if twig_debug mode
    *   is tunred off.
    */
-  private function doDump(Environment $env, array $context, array $args = [], $plugin_id = NULL) {
+  private function doDump(Environment $env, array $context, array $args = [], $plugin_id = NULL): false|string|null {
     if (!$env->isDebug()) {
       return NULL;
     }
@@ -165,7 +163,7 @@ class Debug extends AbstractExtension {
    *
    * @see \Drupal\devel\DevelDumperManager::message()
    */
-  public function message(Environment $env, array $context, array $args = []) {
+  public function message(Environment $env, array $context, array $args = []): void {
     if (!$env->isDebug()) {
       return;
     }
@@ -210,7 +208,7 @@ class Debug extends AbstractExtension {
    * @param array $args
    *   An array of parameters passed the function.
    */
-  public function breakpoint(Environment $env, array $context, array $args = []) {
+  public function breakpoint(Environment $env, array $context, array $args = []): void {
     if (!$env->isDebug()) {
       return;
     }
@@ -229,7 +227,7 @@ class Debug extends AbstractExtension {
    * @return array
    *   An array Twig context variables.
    */
-  protected function getContextVariables(array $context) {
+  protected function getContextVariables(array $context): array {
     $context_variables = [];
     foreach ($context as $key => $value) {
       if (!$value instanceof Template) {
@@ -245,14 +243,14 @@ class Debug extends AbstractExtension {
    * @return array
    *   The detected twig function parameters.
    */
-  protected function guessTwigFunctionParameters() {
+  protected function guessTwigFunctionParameters(): array {
     $callee = NULL;
     $template = NULL;
 
     $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS | DEBUG_BACKTRACE_PROVIDE_OBJECT);
 
     foreach ($backtrace as $index => $trace) {
-      if (isset($trace['object']) && $trace['object'] instanceof Template && 'Twig_Template' !== get_class($trace['object'])) {
+      if (isset($trace['object']) && $trace['object'] instanceof Template && 'Twig_Template' !== $trace['object']::class) {
         $template = $trace['object'];
         $callee = $backtrace[$index - 1];
         break;

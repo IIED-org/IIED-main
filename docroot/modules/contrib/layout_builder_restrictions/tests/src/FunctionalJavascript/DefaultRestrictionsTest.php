@@ -26,13 +26,13 @@ class DefaultRestrictionsTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $page->pressButton('Save');
 
-    // Enable the 'Help' module, which provides a plugin block.
-    $this->container->get('module_installer')->install(['help']);
+    // Enable the 'Announcements feed' module, which provides a plugin block.
+    $this->container->get('module_installer')->install(['announcements_feed']);
 
     $this->navigateToNodeSettingsTray($node_id);
-    // The 'Help' block is not allowed, even though there isn't a specific
+    // The 'Announcements Feed' block is not allowed, even though there isn't a specific
     // restriction.
-    $assert_session->linkNotExists('Help');
+    $assert_session->linkNotExists('Announcements Feed');
     // Other blocks are allowed because they are listed in the allowed_blocks
     // schema.
     $this->clickLink('Create content block');
@@ -65,12 +65,12 @@ class DefaultRestrictionsTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $page->pressButton('Save');
 
-    // Enable the 'Help' module, which provides a plugin block.
-    $this->container->get('module_installer')->install(['help']);
+    // Enable the 'Announcements feed' module, which provides a plugin block.
+    $this->container->get('module_installer')->install(['announcements_feed']);
 
     $this->navigateToNodeSettingsTray($node_id);
-    // The new 'Help' block is allowed.
-    $assert_session->linkExists('Help');
+    // The new 'Announcements Feed' block is allowed.
+    $assert_session->linkExists('Announcements Feed');
     // Other blocks are allowed because they are listed in the allowed_blocks
     // schema.
     $this->clickLink('Create content block');

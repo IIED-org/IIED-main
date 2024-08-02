@@ -60,7 +60,7 @@ function search_api_post_update_views_query_type() {
 
   if ($changed_cache) {
     $vars = ['@ids' => implode(', ', array_unique($changed_cache))];
-    return t('The following views have had caching switched off. The selected caching mechanism does not work with views on Search API indexes. Please either use one of the Search API-specific caching options or "None": @ids.', $vars);
+    return t('The following views have had caching switched off. The selected caching mechanism does not work with views on Search API indexes. Either use one of the Search API-specific caching options or "None": @ids.', $vars);
   }
 
   return NULL;
@@ -83,7 +83,7 @@ function search_api_post_update_views_cache_none(): ?TranslatableMarkup {
 
     $update = FALSE;
     foreach ($displays as $id => $display) {
-      if ($display['display_options']['cache']['type'] ?? '' === 'none') {
+      if (($display['display_options']['cache']['type'] ?? '') === 'none') {
         $displays[$id]['display_options']['cache']['type'] = 'search_api_none';
         $update = TRUE;
       }

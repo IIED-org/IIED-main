@@ -3,6 +3,7 @@
 namespace Drupal\Tests\linkchecker\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\linkchecker\Entity\LinkCheckerLink;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
 
@@ -56,7 +57,12 @@ class QueueLinksTest extends KernelTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-    $this->installSchema('system', 'sequences');
+    // Installing sequences table is deprecated since 10.2 release so call it
+    // conditionally.
+    // @see https://www.drupal.org/node/3349345
+    if (version_compare(\Drupal::VERSION, '10.2', '<')) {
+      $this->installSchema('system', 'sequences');
+    }
     $this->installSchema('node', 'node_access');
     $this->installSchema('linkchecker', 'linkchecker_index');
     $this->installEntitySchema('user');
@@ -65,6 +71,26 @@ class QueueLinksTest extends KernelTestBase {
     $this->installConfig(['field', 'user', 'node', 'filter', 'linkchecker']);
 
     $this->checkerService = $this->container->get('linkchecker.checker');
+  }
+
+  /**
+   * Test link checker unpublished link handling.
+   */
+  public function testUnpublishedLink() {
+    $link = LinkCheckerLink::create([
+      'url' => 'https://do-not-test.com',
+      'entity_id' => [
+        'target_id' => 1,
+        'target_type' => 'dummy_type',
+      ],
+      'entity_field' => 'dummy_field',
+      'entity_langcode' => 'en',
+    ]);
+    $link->setDisableLinkCheck();
+    $link->save();
+
+    $number = $this->checkerService->queueLinks(TRUE);
+    self::assertEquals(0, $number);
   }
 
   /**

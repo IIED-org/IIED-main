@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\LocationInput;
 
-use Drupal\geolocation\LocationInputInterface;
 use Drupal\geolocation\LocationInputBase;
+use Drupal\geolocation\LocationInputInterface;
 
 /**
  * Location based proximity center.

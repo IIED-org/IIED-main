@@ -18,7 +18,7 @@ class NotAvailableTestDumper extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public function dump($input, $name = NULL) {
+  public function dump($input, $name = NULL): void {
     $input = '<pre>' . $input . '</pre>';
     echo $input;
   }
@@ -34,7 +34,7 @@ class NotAvailableTestDumper extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public static function checkRequirements() {
+  public static function checkRequirements(): bool {
     return FALSE;
   }
 

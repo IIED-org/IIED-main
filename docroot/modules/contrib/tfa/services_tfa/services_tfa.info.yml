@@ -7,8 +7,11 @@ package: Services
 dependencies:
   - services:services
   - tfa:tfa
+lifecycle: deprecated
+lifecycle_link: https://www.drupal.org/node/3395756
 
-# Information added by Drupal.org packaging script on 2024-04-03
-version: '8.x-1.6'
+
+# Information added by Drupal.org packaging script on 2024-04-18
+version: '8.x-1.7'
 project: 'tfa'
-datestamp: 1712169201
+datestamp: 1713484492

@@ -4,8 +4,8 @@ namespace Drupal\draggableviews\Plugin\migrate\destination;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Plugin\migrate\destination\DestinationBase;
+use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Row;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -33,7 +33,7 @@ class DraggableViews extends DestinationBase implements ContainerFactoryPluginIn
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    MigrationInterface $migration = NULL
+    MigrationInterface $migration = NULL,
   ) {
     return new static(
       $configuration,
@@ -54,6 +54,7 @@ class DraggableViews extends DestinationBase implements ContainerFactoryPluginIn
 
   /**
    * {@inheritdoc}
+   *
    * @throws \Exception
    */
   public function import(Row $row, array $old_destination_id_values = []) {
@@ -102,7 +103,7 @@ class DraggableViews extends DestinationBase implements ContainerFactoryPluginIn
    */
   public function fields(MigrationInterface $migration = NULL) {
     return [
-      'dvid' => $this->t('The primarty identifier'),
+      'dvid' => $this->t('The primary identifier'),
       'view_name' => $this->t('The view name.'),
       'view_display' => $this->t('The view display.'),
       'args' => $this->t('The arguments.'),

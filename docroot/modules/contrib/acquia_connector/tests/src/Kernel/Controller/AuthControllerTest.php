@@ -163,7 +163,13 @@ final class AuthControllerTest extends AcquiaConnectorTestBase implements Logger
     }
   }
 
-  public function authorizationReturnData() {
+  /**
+   * Return data for the authorization responses.
+   *
+   * @return \Generator
+   *   The test data.
+   */
+  public function authorizationReturnData(): \Generator {
     yield 'success' => ['AUTHORIZATION_SUCCESSFUL'];
     yield 'error' => [
       'AUTHORIZATION_ERROR',

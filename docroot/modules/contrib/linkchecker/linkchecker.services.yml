@@ -24,6 +24,7 @@ services:
       - '@linkchecker.extractor'
       - '@entity_type.manager'
       - '@database'
+      - '@config.factory'
 
   linkchecker.checker:
     class: Drupal\linkchecker\LinkCheckerService

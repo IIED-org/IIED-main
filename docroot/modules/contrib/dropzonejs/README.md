@@ -7,52 +7,52 @@ This is the Drupal integration for [DropzoneJS](http://www.dropzonejs.com/).
 #### The non-composer way
 
 1. Download this module
-2. [Download DropzoneJS](https://github.com/enyo/dropzone) and place it in the
-   libraries folder
+2. [Download DropzoneJS](https://github.com/dropzone/dropzone), use the latest
+   dist.zip for either Dropzone 5 or 6 and put it in a libraries/dropzone folder
+   so that you have libraries/dropzone/dropzone-min.js
 3. Install dropzonejs the [usual way](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules)
-4. Remove "test" folder from libraries folder as it could constitute a
-   security risk to your site. See http://drupal.org/node/1189632 for more info.
 
 You will now have a dropzonejs element at your disposal.
 
-#### The composer way 1
+#### The composer way
 
-Run `composer require wikimedia/composer-merge-plugin`
-
-Update the root `composer.json` file. For example:
-
-```
-    "extra": {
-        "merge-plugin": {
-            "include": [
-                "web/modules/contrib/dropzonejs/composer.libraries.json"
-            ]
-        }
-    }
-```
-
-Run `composer require drupal/dropzonejs enyo/dropzone`, the DropzoneJS library will be
-installed to the `libraries` folder automatically.
-
-#### The composer way 2
+This assumes that the type:drupal-library is set up to be installed in
+web/libraries.
 
 Add a custom package to the root `composer.json` file. Its `repositories` key
-looks like the following.
+looks like the following. Adjust version numbers according to current release.
 
+Dropzone 5:
 ```
     "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        },
+        ...
         {
             "type": "package",
             "package": {
                 "name": "enyo/dropzone",
-                "version": "5.7.1",
+                "version": "5.9.3",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/enyo/dropzone/archive/v5.7.1.zip",
+                    "url": "https://github.com/dropzone/dropzone/releases/download/v5.9.3/dist.zip",
+                    "type": "zip"
+                }
+            }
+        }
+    ]
+```
+
+Dropzone 6:
+```
+    "repositories": [
+        ...
+        {
+            "type": "package",
+            "package": {
+                "name": "enyo/dropzone",
+                "version": "6.0.0-beta.2",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/dropzone/dropzone/releases/download/v6.0.0-beta.2/dist.zip",
                     "type": "zip"
                 }
             }
@@ -62,6 +62,25 @@ looks like the following.
 
 Run `composer require drupal/dropzonejs enyo/dropzone`, the DropzoneJS library
 will be installed to the `libraries` folder automatically as well.
+
+To also install exif-js for optional client-resize, define another repository.
+
+```
+    {
+        "type": "package",
+        "package": {
+            "name": "exif-js/exif-js",
+            "version": "v2.3.0",
+            "type": "drupal-library",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/exif-js/exif-js/archive/refs/tags/v2.3.0.zip",
+            }
+        }
+    },
+```
+
+And require it with `composer require exif-js/exif-js`
 
 ### Future plans:
 - A dropzonejs field widget.

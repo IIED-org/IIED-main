@@ -137,8 +137,8 @@ class RetainLayoutRestrictionsTest extends WebDriverTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-layouts-layouts-layout-onecol"]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
     $page->pressButton('Save');
+    $this->assertTrue($assert_session->waitForText('Your settings have been saved.'));
   }
 
 }

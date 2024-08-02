@@ -3,68 +3,65 @@ langcode: en
 status: true
 dependencies:
   module:
-    - context
     - node
+    - system
+    - user
 id: iied_publications_container
 label: 'IIED main container'
 weight: 0
-container_id: GTM-5QNCJ5
-hostname: www.googletagmanager.com
-data_layer: dataLayer
-include_classes: false
-whitelist_classes: |-
-  google
-  nonGooglePixels
-  nonGoogleScripts
-  nonGoogleIframes
-blacklist_classes: |-
-  customScripts
-  customPixels
-include_environment: false
-environment_id: ''
-environment_token: ''
-path_toggle: 'exclude listed'
-path_list: |-
-  /admin*
-  /batch*
-  /node/add*
-  /node/*/edit
-  /node/*/delete
-  /user/*/edit*
-  /user/*/cancel*
-  /taxonomy/term/*/layout
-role_toggle: 'include listed'
-role_list:
-  anonymous: anonymous
-  authenticated: authenticated
-status_toggle: 'exclude listed'
-status_list: |-
-  403
-  404
+tag_container_ids:
+  - GTM-5QNCJ5
+advanced_settings:
+  consent_mode: false
+  gtm:
+    GTM-5QNCJ5:
+      data_layer: dataLayer
+      include_classes: false
+      allowlist_classes: |-
+        google
+        nonGooglePixels
+        nonGoogleScripts
+        nonGoogleIframes
+      blocklist_classes: |-
+        customScripts
+        customPixels
+      include_environment: false
+      environment_id: ''
+      environment_token: ''
+dimensions_metrics: {  }
 conditions:
-  'entity_bundle:node':
-    id: 'entity_bundle:node'
-    negate: false
-    context_mapping:
-      node: '@node.node_route_context:node'
-    bundles:
-      article: article
-      blog: blog
-      event: event
-      hidden_page: hidden_page
-      long_read: long_read
-      news: news
-      page: page
-      project: project
-      publication: publication
-  user_status:
-    id: user_status
+  request_path:
+    id: request_path
+    negate: true
+    pages: "/admin*\r\n/batch*\r\n/node/add*\r\n/node/*/edit\r\n/node/*/delete\r\n/user/*/edit*\r\n/user/*/cancel*\r\n/taxonomy/term/*/layout"
+  response_code:
+    id: response_code
+    negate: true
+    response_codes: |-
+      403
+      404
+  user_role:
+    id: user_role
     negate: false
     context_mapping:
       user: '@user.current_user_context:current_user'
-    user_status:
-      viewing_profile: '0'
-      logged_viewing_profile: '0'
-      own_page_true: '0'
-      field_value: '0'
-    user_fields: uid
+    roles:
+      anonymous: anonymous
+      authenticated: authenticated
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: true
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles: {  }
+events:
+  generate_lead:
+    value: ''
+    currency: ''
+  search: {  }
+  webform_purchase: {  }
+  custom: {  }
+  login:
+    method: CMS
+  sign_up:
+    method: CMS

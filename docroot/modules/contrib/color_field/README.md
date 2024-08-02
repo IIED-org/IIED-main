@@ -1,6 +1,31 @@
-# Color Field - Drupal 8
+# Color Field
 
-## ABOUT & FEATURES
+This module provides an intuitive way to specify and display HTML color values.
+
+For a full description of the module, visit the
+[color field](https://www.drupal.org/project/color_field) project page.
+
+Submit bug reports and feature suggestions, or track changes in the
+[issue queue](https://www.drupal.org/project/issues/color_field).
+
+
+## Table of contents
+
+- Requirements
+- About & Features
+- Road Map
+- Installation
+- Configuration
+- More info
+- Maintainers
+
+
+## Requirements
+
+This module requires no modules outside of Drupal core.
+
+
+## About & Features
 
 ### Formatters
 
@@ -29,31 +54,25 @@ native manner. If enabled, opacity is a number field.
 provide a user friendly color palette to choose the correct color. This has an
 integrated slider for opacity (if opacity is enabled).
 
-## ROAD MAP
+## Road Map
 
 1) Make this module a base that could be used by any color picker.
 2) include http://www.eyecon.ro/colorpicker/
 3) include http://www.dematte.at/colorPicker/
 4) include http://acko.net/blog/farbtastic-jquery-color-picker-plug-in/
 
-## INSTALLATION
 
-Install as you would normally install a contributed Drupal module. See also
-[Core Docs](https://www.drupal.org/docs/8/extending-drupal-8/installing-modules)
+## Installation
 
-### DEPENDENCIES
-There are JavaScript libraries required for a couple of the field widgets. If
-you are not actively using those field widgets, you can skip their installation
-if desired.
+Install as you would normally install a contributed Drupal module. For further information, see [Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
 
-#### COMPOSER
 If you installed color field via [Composer](https://getcomposer.org), the
 packages will have been suggested but not automatically installed. If you have
 Asset Packagist already configured - as most Commerce users will - skip to just
 requiring the desired package(s).
 ```bash
 composer require bower-asset/jquery-simple-color bower-asset/spectrum
-``` 
+```
 
 Otherwise, to install them you will need to add
 [Asset Packagist](https://asset-packagist.org) to your composer.json and
@@ -94,38 +113,14 @@ composer require oomphinc/composer-installers-extender
 composer require bower-asset/jquery-simple-color bower-asset/spectrum
 ```
 
-#### MANUAL
-If you are not using Composer, you will need to manually install them.
+## Configuration
 
-- [jQuery Simple Color](https://github.com/recurser/jquery-simple-color)
-copy to `/libraries/jquery-simple-color` so that `jquery.simple-color.min.js`
-is in that folder. Required for the Color Grid widget.
-- [Spectrum](https://github.com/bgrins/spectrum) copy to `/libraries/spectrum`
-so that `spectrum.js` exists in that folder. Required for the Spectrum widget.
+1. Enable the module at Administration > Extend.
+1. Add a field of the "Color" type to any content type, vocabulary, or other
+   bundle that could leverage the functionality of this module.
+1. Configure the form display and display options that best suit your needs.
+1. Profit!
 
-## USAGE
-
-Field
-1. Add the field to an node/entity
-2. Select the 'Color Field' field type
-3. Select the 'Color' widget you want
-
-## DEVELOPMENT
-
-To ease matching Drupal code standards, development dependencies are configured
-to use a pre-commit hook. Install composer dev dependencies and PHPCS will be
-automatically run if php is in your path.
-
-## CREDIT
-
-Original Creator: [targoo](https://www.drupal.org/u/targoo).
-
-Maintainers:
-  - [targoo](https://www.drupal.org/u/targoo)
-  - [Nick Wilde](https://www.drupal.org/u/nickwilde)
-
-Original development sponsored by Marique Calcus and written by Calcus David.
-For professional support and development services contact targoo@gmail.com.
 
 ## More info
 
@@ -134,3 +129,12 @@ https://github.com/mikeemoo/ColorJizz-PHP
 http://www.colorhexa.com/ff0000
 https://github.com/PrimalPHP/Color/blob/master/lib/Primal/Color/Parser.php
 https://github.com/matthewbaggett/php-color/blob/master/Color.php
+
+
+## Maintainers (optional)
+[//]: # cSpell:disable
+[//]: # Do not add maintainers to cspell-project-words file
+
+- david calcus - [targoo](https://www.drupal.org/u/targoo)
+- Nick Dickinson-Wilde - [NickDickinsonWilde](https://www.drupal.org/u/NickDickinsonWilde)
+- Martin Anderson-Clutz - [mandclu](https://www.drupal.org/u/mandclu)

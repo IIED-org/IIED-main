@@ -85,6 +85,11 @@ class EntityTranslationNormalizeTest extends NormalizerTestBase {
 
     $original_values['revision_default'] = [];
     $original_translation_values['revision_default'] = [];
+    // Drupal 10.2 no longer exports a revision log?
+    if (version_compare(\Drupal::VERSION, '10.2.0', '>=')) {
+      $original_values['revision_log'] = [0 => ['value' => '']];
+      $original_translation_values['revision_log'] = [0 => ['value' => '']];
+    }
     $this->assertEquals($original_values, $denormalized_node->toArray(), 'Node values are restored after normalizing and denormalizing.');
     $this->assertEquals($original_translation_values, $denormalized_node->getTranslation('en')->toArray(), 'Node values are restored after normalizing and denormalizing.');
   }

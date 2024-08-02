@@ -2,13 +2,13 @@
 
 namespace Drupal\rabbit_hole\Plugin;
 
-use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Plugin\DefaultPluginManager;
 
 /**
- * Provides the Rabbit hole entity plugin plugin manager.
+ * Provides the Rabbit hole entity plugin manager.
  */
 class RabbitHoleEntityPluginManager extends DefaultPluginManager {
 
@@ -32,12 +32,7 @@ class RabbitHoleEntityPluginManager extends DefaultPluginManager {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
-  public function __construct(
-    \Traversable $namespaces,
-    CacheBackendInterface $cache_backend,
-    ModuleHandlerInterface $module_handler,
-    EntityTypeManagerInterface $entity_type_manager
-  ) {
+  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct('Plugin/RabbitHoleEntityPlugin', $namespaces, $module_handler, 'Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginInterface', 'Drupal\rabbit_hole\Annotation\RabbitHoleEntityPlugin');
 
     $this->alterInfo('rabbit_hole_rabbit_hole_entity_plugin_info');

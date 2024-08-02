@@ -2,11 +2,11 @@
 
 namespace Drupal\geolocation_google_maps;
 
-use Drupal\geolocation\GeocoderInterface;
-use Drupal\geolocation\GeocoderBase;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\geolocation\MapProviderManager;
+use Drupal\geolocation\GeocoderBase;
 use Drupal\geolocation\GeocoderCountryFormattingManager;
+use Drupal\geolocation\GeocoderInterface;
+use Drupal\geolocation\MapProviderManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

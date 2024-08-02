@@ -130,7 +130,7 @@ abstract class PluginTestBase extends KernelTestBase {
     $i->setStateContext('purger_a');
     $i->setProperty('myprop', 1234);
     $i->deleteProperty('myprop');
-    $this->assertSame(NULL, $i->getProperty('myprop'));
+    $this->assertNull($i->getProperty('myprop'));
   }
 
   /**
@@ -143,12 +143,12 @@ abstract class PluginTestBase extends KernelTestBase {
     $i->setStateContext('purger_b');
     $i->setProperty('my_book', 'Nineteen Eighty-Four');
     $this->assertSame('Nineteen Eighty-Four', $i->getProperty('my_book'));
-    $this->assertSame(NULL, $i->getProperty('my_film'));
+    $this->assertNull($i->getProperty('my_film'));
 
     // Test again within a different context.
     $i->setState(InvalidationInterface::FAILED);
     $i->setStateContext('purger_b2');
-    $this->assertSame(NULL, $i->getProperty('my_book'));
+    $this->assertNull($i->getProperty('my_book'));
   }
 
   /**
@@ -159,7 +159,7 @@ abstract class PluginTestBase extends KernelTestBase {
   public function testSetProperty(): void {
     $i = $this->getInstance();
     $i->setStateContext('purger_d');
-    $this->assertSame(NULL, $i->setProperty('my_film', 'Pulp Fiction'));
+    $this->assertNull($i->setProperty('my_film', 'Pulp Fiction'));
     $this->assertSame('Pulp Fiction', $i->getProperty('my_film'));
   }
 
@@ -176,12 +176,12 @@ abstract class PluginTestBase extends KernelTestBase {
 
     // Verify retrieving and setting properties.
     $i->setStateContext('purger1');
-    $this->assertSame(NULL, $i->getProperty('doesntexist'));
-    $this->assertSame(NULL, $i->setProperty('key1', 'foobar'));
+    $this->assertNull($i->getProperty('doesntexist'));
+    $this->assertNull($i->setProperty('key1', 'foobar'));
     $this->assertSame('foobar', $i->getProperty('key1'));
-    $this->assertSame(NULL, $i->deleteProperty('key1'));
-    $this->assertSame(NULL, $i->getProperty('key1'));
-    $this->assertSame(NULL, $i->setProperty('key1', 'foobar2'));
+    $this->assertNull($i->deleteProperty('key1'));
+    $this->assertNull($i->getProperty('key1'));
+    $this->assertNull($i->setProperty('key1', 'foobar2'));
     $this->assertSame('foobar2', $i->getProperty('key1'));
 
     // Switch state to add some more properties.
@@ -193,10 +193,10 @@ abstract class PluginTestBase extends KernelTestBase {
 
     // Verify that every property is stored by context.
     $p = $i->getProperties();
-    $this->assertSame(2, count($p));
-    $this->assertSame(TRUE, isset($p['purger1']['key1']));
+    $this->assertCount(2, $p);
+    $this->assertTrue(isset($p['purger1']['key1']));
     $this->assertSame('foobar2', $p['purger1']['key1']);
-    $this->assertSame(TRUE, isset($p['purger2']['key2']));
+    $this->assertTrue(isset($p['purger2']['key2']));
     $this->assertSame('baz', $p['purger2']['key2']);
   }
 

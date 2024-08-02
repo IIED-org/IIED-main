@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\color_field;
 
@@ -39,12 +39,12 @@ class ColorHSL extends ColorBase {
    *   The sat (0-100)
    * @param int $lum
    *   The lum (0-100)
-   * @param float $opacity
+   * @param float|null $opacity
    *   The opacity.
    *
    * @throws \Exception
    */
-  public function __construct(int $hue, int $sat, int $lum, float $opacity) {
+  public function __construct(int $hue, int $sat, int $lum, ?float $opacity) {
     if ($hue < 0 || $hue > 360) {
       throw new \Exception("Invalid hue: $hue");
     }

@@ -2,9 +2,9 @@
 
 namespace Drupal\geolocation_google_static_maps\Plugin\geolocation\MapProvider;
 
-use Drupal\geolocation_google_maps\GoogleMapsProviderBase;
-use Drupal\geolocation\Element\GeolocationMap;
 use Drupal\Core\Url;
+use Drupal\geolocation\Element\GeolocationMap;
+use Drupal\geolocation_google_maps\GoogleMapsProviderBase;
 
 /**
  * Provides Google Maps.

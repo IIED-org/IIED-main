@@ -11,7 +11,7 @@ use Drupal\file\Plugin\Field\FieldType\FileItem;
  *   id = "geolocation_gpx_file",
  *   label = @Translation("Geolocation GPX File"),
  *   description = @Translation("This field stores the ID of an geolocation gpx file as an integer value."),
- *   category = @Translation("Geolocation"),
+ *   category = "Geolocation",
  *   default_widget = "geolocation_gpx_file",
  *   default_formatter = "geolocation_gpx_file",
  * )

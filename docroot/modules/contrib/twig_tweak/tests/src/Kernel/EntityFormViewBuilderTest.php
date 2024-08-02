@@ -2,10 +2,11 @@
 
 namespace Drupal\Tests\twig_tweak\Kernel;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Cache\Cache;
-use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 
 /**
  * A test for EntityFormViewBuilder.
@@ -75,6 +76,7 @@ final class EntityFormViewBuilderTest extends AbstractTestCase {
         'user.roles:authenticated',
       ],
       'tags' => [
+        'CACHE_MISS_IF_UNCACHEABLE_HTTP_METHOD:form',
         'config:core.entity_form_display.node.article.default',
         'node:1',
         'tag_from_twig_tweak_test_node_access',
@@ -111,6 +113,7 @@ final class EntityFormViewBuilderTest extends AbstractTestCase {
         'user.roles:authenticated',
       ],
       'tags' => [
+        'CACHE_MISS_IF_UNCACHEABLE_HTTP_METHOD:form',
         'config:core.entity_form_display.node.article.default',
         'node:2',
       ],
@@ -124,7 +127,13 @@ final class EntityFormViewBuilderTest extends AbstractTestCase {
    * Renders a render array.
    */
   private function renderPlain(array $build): string {
-    return $this->container->get('renderer')->renderPlain($build);
+    /** @var \Drupal\Core\Render\RendererInterface $renderer */
+    $renderer = $this->container->get('renderer');
+    return DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION, '10.3.0',
+      fn () => $renderer->renderInIsolation($build),
+      fn () => $renderer->renderPlain($build),
+    );
   }
 
 }

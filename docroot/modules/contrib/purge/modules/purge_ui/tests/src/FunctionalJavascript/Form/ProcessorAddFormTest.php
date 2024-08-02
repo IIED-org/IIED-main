@@ -73,11 +73,11 @@ class ProcessorAddFormTest extends AjaxFormTestBase {
     $this->assertSession()->responseNotContains('Processor B');
     $this->assertSession()->responseContains('Processor C');
     $this->assertSession()->responseContains('Processor with form');
-    $this->assertSame(TRUE, count($this->purgeProcessors->getPluginsEnabled()) === 2);
-    $this->assertSame(TRUE, in_array('a', $this->purgeProcessors->getPluginsEnabled()));
-    $this->assertSame(TRUE, in_array('b', $this->purgeProcessors->getPluginsEnabled()));
-    $this->assertSame(FALSE, in_array('c', $this->purgeProcessors->getPluginsEnabled()));
-    $this->assertSame(FALSE, in_array('withform', $this->purgeProcessors->getPluginsEnabled()));
+    $this->assertCount(2, $this->purgeProcessors->getPluginsEnabled());
+    $this->assertTrue(in_array('a', $this->purgeProcessors->getPluginsEnabled()));
+    $this->assertTrue(in_array('b', $this->purgeProcessors->getPluginsEnabled()));
+    $this->assertFalse(in_array('c', $this->purgeProcessors->getPluginsEnabled()));
+    $this->assertFalse(in_array('withform', $this->purgeProcessors->getPluginsEnabled()));
   }
 
   /**
@@ -89,18 +89,18 @@ class ProcessorAddFormTest extends AjaxFormTestBase {
   public function testAddSubmit(): void {
     $this->drupalLogin($this->adminUser);
     $this->initializeProcessorsService(['a', 'b']);
+    $web_assert = $this->assertSession();
+    $page = $this->getSession()->getPage();
     $this->visitDashboard();
-    $this->assertSession()->linkNotExists('Processor C');
-    $this->getSession()->getPage()->clickLink('Add processor');
-    $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->getSession()->getPage()->selectFieldOption('id', 'c');
+    $web_assert->linkNotExists('Processor C');
+    $page->clickLink('Add processor');
+    $web_assert->assertWaitOnAjaxRequest();
+    $page->selectFieldOption('id', 'c');
     $this->pressDialogButton('Add');
-    $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->assertSession()->elementNotExists('css', '#drupal-modal');
-    $this->assertSession()->pageTextContains('The configuration options have been saved.');
-    $this->assertSession()->linkExists('Processor C');
+    $web_assert->pageTextContains('The configuration options have been saved.');
+    $web_assert->linkExists('Processor C');
     $this->purgeProcessors->reload();
-    $this->assertSame(TRUE, in_array('c', $this->purgeProcessors->getPluginsEnabled()));
+    $this->assertTrue(in_array('c', $this->purgeProcessors->getPluginsEnabled()));
   }
 
   /**
@@ -130,7 +130,6 @@ class ProcessorAddFormTest extends AjaxFormTestBase {
     $this->getSession()->getPage()->clickLink('Add processor');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->pressDialogButton('Cancel');
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->elementNotExists('css', '#drupal-modal');
   }
 

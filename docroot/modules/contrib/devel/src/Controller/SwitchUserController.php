@@ -3,10 +3,10 @@
 namespace Drupal\devel\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Session\SessionManagerInterface;
+use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -18,38 +18,37 @@ class SwitchUserController extends ControllerBase {
 
   /**
    * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
    */
-  protected $account;
+  protected AccountProxyInterface $account;
 
   /**
    * The user storage.
-   *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
-  protected $userStorage;
+  protected UserStorageInterface $userStorage;
+
+  /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * The session manager service.
-   *
-   * @var \Drupal\Core\Session\SessionManagerInterface
    */
-  protected $sessionManager;
+  protected SessionManagerInterface $sessionManager;
 
   /**
    * The session.
-   *
-   * @var \Symfony\Component\HttpFoundation\Session\Session
    */
-  protected $session;
+  protected Session $session;
 
   /**
    * Constructs a new SwitchUserController object.
    *
    * @param \Drupal\Core\Session\AccountProxyInterface $account
    *   The current user.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $user_storage
+   * @param \Drupal\user\UserStorageInterface $user_storage
    *   The user storage.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The user storage.
@@ -58,7 +57,7 @@ class SwitchUserController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Session\Session $session
    *   The session.
    */
-  public function __construct(AccountProxyInterface $account, EntityStorageInterface $user_storage, ModuleHandlerInterface $module_handler, SessionManagerInterface $session_manager, Session $session) {
+  public function __construct(AccountProxyInterface $account, UserStorageInterface $user_storage, ModuleHandlerInterface $module_handler, SessionManagerInterface $session_manager, Session $session) {
     $this->account = $account;
     $this->userStorage = $user_storage;
     $this->moduleHandler = $module_handler;
@@ -69,7 +68,7 @@ class SwitchUserController extends ControllerBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('current_user'),
       $container->get('entity_type.manager')->getStorage('user'),

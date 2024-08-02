@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\media_file_delete\Functional;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\entity_usage\EntityUsageInterface;
 use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
@@ -40,6 +41,23 @@ class MediaFileEntityUsageDeleteTest extends BrowserTestBase {
   ];
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    // Configure Entity Usage to not automatically track usages, for example the
+    // "entity_reference" plugin
+    // (\Drupal\entity_usage\Plugin\EntityUsage\Track\EntityReference)
+    // interferes with our testing.
+    \Drupal::service(ConfigFactoryInterface::class)
+      ->getEditable('entity_usage.settings')
+      // Explicitly set to nothing. Default is NULL=everything.
+      ->set('track_enabled_plugins', [])
+      ->save(TRUE);
+  }
+
+  /**
    * Tests media deletion.
    */
   public function testMediaFileDeleteWithEntityUsage() {
@@ -48,6 +66,8 @@ class MediaFileEntityUsageDeleteTest extends BrowserTestBase {
     assert($image1 instanceof \stdClass);
     assert(property_exists($image1, 'uri'));
     $editor1 = $this->createUser([
+      // Since https://www.drupal.org/project/drupal/issues/2949017 (Core 10.1)
+      'delete any file',
       sprintf('delete any %s media', $image_type->id()),
     ]);
 

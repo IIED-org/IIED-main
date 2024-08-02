@@ -101,7 +101,7 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     // HMAC Cookie injection has to fire before NoWaitForResponseRequest (pri 5)
     // and after PostBigRequest (priority 10). Set priority to 9.
     return [

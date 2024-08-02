@@ -67,13 +67,6 @@ class TfaTotpValidation extends TfaBasePlugin implements TfaValidationInterface,
   protected $issuer;
 
   /**
-   * Whether the code has already been used or not.
-   *
-   * @var bool
-   */
-  protected $alreadyAccepted;
-
-  /**
    * The Datetime service.
    *
    * @var \Drupal\Component\Datetime\TimeInterface
@@ -284,6 +277,7 @@ class TfaTotpValidation extends TfaBasePlugin implements TfaValidationInterface,
    *   True if validation was successful otherwise false.
    */
   public function validateRequest($code) {
+    $code = str_pad((string) $code, $this->codeLength, '0', STR_PAD_LEFT);
     $totp_validation_lock_id = 'tfa_validation_totp_' . $this->uid;
     while (!$this->lock->acquire($totp_validation_lock_id)) {
       $this->lock->wait($totp_validation_lock_id);
@@ -318,7 +312,7 @@ class TfaTotpValidation extends TfaBasePlugin implements TfaValidationInterface,
       // We use checkHotResync() because it provides a method to obtain the
       // validated counter which corresponds to the accepted time window.
       $validated_window = FALSE;
-      $current_window_base = floor((time() / 30)) - $this->timeSkew;
+      $current_window_base = floor(($this->time->getRequestTime() / 30)) - $this->timeSkew;
       $token_valid = ($seed && ($validated_window = $this->auth->otp->checkHotpResync(Encoding::base32DecodeUpper($seed), $current_window_base, $code, $this->timeSkew * 2)));
       if ($token_valid && $validated_window > $last_accepted_window) {
         $this->setUserData('tfa', ['tfa_totp_time_window' => $validated_window], $this->uid, $this->userData);

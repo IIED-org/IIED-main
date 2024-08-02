@@ -13,8 +13,9 @@ use Drupal\search_api\Backend\BackendInterface;
  * In addition, the backend has to include "search_api_autocomplete" in the
  * return value of its getSupportedFeatures() implementation.
  *
- * Please note that this interface is purely documentational. You shouldn't, and
- * can't, implement it explicitly (unless your module is depending on this one).
+ * Note that this interface is purely for the purpose of documentation. You
+ * should not, and cannot, implement it explicitly (unless your module is
+ * depending on this one).
  *
  * @deprecated in search_api_autocomplete:8.x-1.6 and is removed from
  *   search_api_autocomplete:2.0.0. Use

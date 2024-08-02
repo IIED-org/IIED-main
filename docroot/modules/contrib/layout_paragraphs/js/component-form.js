@@ -4,6 +4,7 @@
 * https://www.drupal.org/node/2815083
 * @preserve
 **/
+"use strict";
 
 (function ($, Drupal) {
   Drupal.behaviors.layoutParagraphsComponentForm = {

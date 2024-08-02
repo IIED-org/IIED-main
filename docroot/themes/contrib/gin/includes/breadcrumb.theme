@@ -14,12 +14,12 @@ use Drupal\node\NodeInterface;
  */
 function gin_preprocess_breadcrumb(&$variables) {
   // Alter node breadcrumb.
-  if ($variables['breadcrumb']) {
-    foreach ($variables['breadcrumb'] as $key => $item) {
-      $entity = _gin_get_route_entity();
-      $entity_id = $entity ? $entity->getEntityTypeId() : NULL;
-      $url = $entity ? $entity->toUrl() : NULL;
+  if (isset($variables['breadcrumb'])) {
+    $entity = _gin_get_route_entity();
+    $entity_id = $entity ? $entity->getEntityTypeId() : NULL;
+    $url = $entity ? $entity->toUrl() : NULL;
 
+    foreach ($variables['breadcrumb'] as $key => $item) {
       // Back to site item.
       if ($key === 0) {
         $variables['breadcrumb'][$key]['text'] = t('Back to site');
@@ -44,7 +44,7 @@ function gin_preprocess_breadcrumb(&$variables) {
           $variables['breadcrumb'][$key]['attributes']['data'] = 'data-gin-toolbar-escape-admin';
         }
       }
-      elseif ($item['url'] === $url) {
+      elseif (isset($item['url']) && $item['url'] === $url) {
         // Remove as we already have the back to site link set.
         unset($variables['breadcrumb'][$key]);
       }

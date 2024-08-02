@@ -4,9 +4,12 @@ namespace Drupal\search_api_solr\Utility;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\search_api\ConsoleException;
+use Drupal\search_api\SearchApiException;
 use Drupal\search_api\ServerInterface;
 use Drupal\search_api\Utility\CommandHelper;
 use Drupal\search_api_solr\Controller\SolrConfigSetController;
+use Drupal\search_api_solr\Plugin\search_api\tracker\IndexParallel;
 use Drupal\search_api_solr\SearchApiSolrException;
 use Drupal\search_api_solr\SolrBackendInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -23,6 +26,8 @@ class SolrCommandHelper extends CommandHelper {
    * @var \Drupal\search_api_solr\Controller\SolrConfigSetController
    */
   protected $configsetController;
+
+  protected $processes = [];
 
   /**
    * Constructs a CommandHelper object.
@@ -178,6 +183,131 @@ class SolrCommandHelper extends CommandHelper {
     foreach ($server->getIndexes() as $index) {
       if ($index->status() && !$index->isReadOnly()) {
         $index->reindex();
+      }
+    }
+  }
+
+  /**
+   * Indexes items on one or more indexes.
+   *
+   * @param string[]|null $indexIds
+   *   (optional) An array of index IDs, or NULL if we should index items for
+   *   all enabled indexes.
+   * @param int $threads
+   *   (optional) The number of parallel threads.
+   * @param int|null $batchSize
+   *   (optional) The maximum number of items to process per batch, an empty
+   *   value to use the default cron limit configured for the index, or a
+   *   negative value to index all items in a single batch.
+   *
+   * @return int[]
+   *   The batch IDs.
+   *
+   * @throws \Drupal\search_api\ConsoleException
+   *   Thrown if an indexing batch process could not be created.
+   * @throws \Drupal\search_api\SearchApiException
+   *   Thrown if one of the affected indexes had an invalid tracker set.
+   */
+  public function indexParallelCommand(array $indexIds = NULL, $threads = 2, $batchSize = NULL): array {
+    $indexes = $this->loadIndexes($indexIds);
+    if (!$indexes) {
+      return [];
+    }
+
+    $ids = [];
+
+    /** @var \Drupal\search_api_solr\Entity\Index $index */
+    foreach ($indexes as $index) {
+      if (!$index->status() || $index->isReadOnly()) {
+        continue;
+      }
+      $tracker = $index->getTrackerInstance();
+      $indexed = (int) $tracker->getIndexedItemsCount();
+      $remaining = $tracker->getTotalItemsCount() - $indexed;
+
+      if (!$remaining) {
+        $this->logSuccess($this->t("The index @index is up to date.", ['@index' => $index->label()]));
+        continue;
+      }
+      else {
+        $arguments = [
+          '@remaining' => $remaining,
+          '@index' => $index->label(),
+        ];
+        $this->logSuccess($this->t("Found @remaining items to index for @index.", $arguments));
+      }
+
+      $currentThreads = $threads;
+      // Get the batch size to use for this index (in case none was specified in
+      // the command).
+      $currentBatchSize = $batchSize;
+      if (!$currentBatchSize) {
+        $cron_limit = $index->getOption('cron_limit');
+        $currentBatchSize = $cron_limit ?: \Drupal::configFactory()
+          ->get('search_api.settings')
+          ->get('default_cron_limit');
+      }
+
+      if ($tracker->getPluginId() === 'index_parallel') {
+        while ($currentBatchSize * IndexParallel::SAFETY_DISTANCE_FACTOR * $currentThreads >= $remaining) {
+          if ($currentThreads === 1) {
+            break;
+          }
+          $currentThreads--;
+        }
+      }
+      else {
+        $currentThreads = 1;
+      }
+
+      $index->setIndexingEmptyIndex($indexed === 0);
+
+      $arguments = [
+        '@index' => $index->label(),
+        '@threads' => $currentThreads,
+        '@batch_size' => $currentBatchSize,
+        '@empty' => $index->isIndexingEmptyIndex() ? $this->t('empty') : $this->t('not empty'),
+      ];
+      $this->logSuccess($this->t("Indexing parallel with @threads threads (@batch_size items per batch run) for the index '@index'. The index is @empty", $arguments));
+
+      // Create the batch.
+      try {
+        $ids[$index->id()] = IndexParallelBatchHelper::create($index, $currentBatchSize, $currentThreads);
+      } catch (SearchApiException $e) {
+        throw new ConsoleException($this->t("Couldn't create all batches, check the batch size and other parameters."), 0, $e);
+      }
+    }
+
+    // In case that multiple indexes get indexed, it makes sense to distribute
+    // the threads across the indexes instead of running multiple threads for
+    // the same index. That will distribute the load if one index requires a lot
+    // of processing in PHP while another one performs a lot of database or API
+    // queries.
+    $shuffled_ids = [];
+    $max_ids = 0;
+    foreach ($ids as $index_ids) {
+      $count = count($index_ids);
+      if ($count > $max_ids) {
+        $max_ids = $count;
+      }
+    }
+
+    for ($i = 0; $i < $max_ids; ++$i) {
+      foreach ($ids as $index_ids) {
+        if (isset($index_ids[$i])) {
+          $shuffled_ids[] = $index_ids[$i];
+        }
+      }
+    }
+
+    return $shuffled_ids;
+  }
+
+  public function resetEmptyIndexState(array $indexIds): void {
+    if ($indexes = $this->loadIndexes($indexIds)) {
+      /** @var \Drupal\search_api_solr\Entity\Index $index */
+      foreach ($indexes as $index) {
+        $index->setIndexingEmptyIndex(FALSE);
       }
     }
   }

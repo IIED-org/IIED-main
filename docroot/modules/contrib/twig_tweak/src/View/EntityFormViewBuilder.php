@@ -29,6 +29,8 @@ class EntityFormViewBuilder {
   /**
    * Gets the built and processed entity form for the given entity type.
    *
+   * @todo Add langcode parameter.
+   *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity.
    * @param string $form_mode
@@ -40,7 +42,6 @@ class EntityFormViewBuilder {
    *   The processed form for the given entity type and form mode.
    */
   public function build(EntityInterface $entity, string $form_mode = 'default', bool $check_access = TRUE): array {
-
     $build = [];
 
     $operation = $entity->isNew() ? 'create' : 'update';

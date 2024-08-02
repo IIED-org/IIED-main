@@ -27,6 +27,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  *   category = @Translation("Security"),
  *   path = "auth/tfa"
  * )
+ *
+ * @deprecated in tfa:8.x-1.4 and is removed from tfa:2.0.0-alpha3. No replacement is provided.
+ * @see https://www.drupal.org/node/3395756
  */
 class GenericValidation extends ServiceDefinitionBase implements ContainerFactoryPluginInterface {
   use DependencySerializationTrait;

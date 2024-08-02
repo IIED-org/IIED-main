@@ -103,8 +103,15 @@ class RestRegisterUserTest extends ResourceTestBase {
     $config->save();
     $name = 'Jason.Taverner';
     $user = $this->registerUser($name, FALSE);
-    $this->assertEmpty($user->getPassword());
-    $this->assertTrue($user->isBlocked());
+    // See https://www.drupal.org/node/3055807
+    if (version_compare(\Drupal::VERSION, '10.2.99', '>=')) {
+      $this->assertNotEmpty($user->getPassword());
+      $this->assertFalse($user->isBlocked());
+    }
+    else {
+      $this->assertEmpty($user->getPassword());
+      $this->assertTrue($user->isBlocked());
+    }
     $this->resetAll();
 
     $this->assertMailString('body', 'You may now log in by clicking this link', 1);
@@ -128,7 +135,13 @@ class RestRegisterUserTest extends ResourceTestBase {
     $name = 'Bob.Arctor';
     $user = $this->registerUser($name, FALSE);
     $this->resetAll();
-    $this->assertEmpty($user->getPassword());
+    // See https://www.drupal.org/node/3055807
+    if (version_compare(\Drupal::VERSION, '10.2.99', '>=')) {
+      $this->assertNotEmpty($user->getPassword());
+    }
+    else {
+      $this->assertEmpty($user->getPassword());
+    }
     $this->assertTrue($user->isBlocked());
 
     $this->assertMailString('body', 'Your application for an account is', 2);

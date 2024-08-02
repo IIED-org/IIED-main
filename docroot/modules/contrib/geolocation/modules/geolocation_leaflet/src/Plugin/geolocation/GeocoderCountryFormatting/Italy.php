@@ -22,7 +22,8 @@ class Italy extends NominatimRoadFirstFormattingBase {
     $address_elements = parent::format($atomics);
 
     if (!empty($atomics['countyCode'])) {
-      $address_elements['administrativeArea'] = array_pop(explode("-", $atomics['countyCode']));
+      $countyCode = explode("-", $atomics['countyCode']);
+      $address_elements['administrativeArea'] = array_pop($countyCode);
     }
 
     if (!empty($atomics['village'])) {

@@ -7,7 +7,7 @@ configure: geolocation_baidu.settings
 dependencies:
   - geolocation:geolocation
 
-# Information added by Drupal.org packaging script on 2023-01-09
-version: '8.x-3.12'
+# Information added by Drupal.org packaging script on 2024-04-29
+version: '8.x-3.13'
 project: 'geolocation'
-datestamp: 1673282365
+datestamp: 1714403542

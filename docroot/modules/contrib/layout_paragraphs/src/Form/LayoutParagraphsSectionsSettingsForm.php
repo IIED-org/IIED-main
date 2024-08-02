@@ -17,13 +17,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 class LayoutParagraphsSectionsSettingsForm extends ConfigFormBase {
 
   /**
-   * The typed config service.
-   *
-   * @var \Drupal\Core\Config\TypedConfigManagerInterface
-   */
-  protected $typedConfigManager;
-
-  /**
    * The entity type bundle info service.
    *
    * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
@@ -65,7 +58,7 @@ class LayoutParagraphsSectionsSettingsForm extends ConfigFormBase {
     EntityTypeManagerInterface $entity_type_manager,
     LayoutPluginManagerInterface $layout_plugin_manager
   ) {
-    parent::__construct($config_factory);
+    parent::__construct($config_factory, $typedConfigManager);
     $this->typedConfigManager = $typedConfigManager;
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
     $this->entityTypeManager = $entity_type_manager;

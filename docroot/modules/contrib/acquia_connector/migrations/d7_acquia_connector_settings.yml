@@ -1,10 +1,10 @@
 id: d7_acquia_connector_settings
-label: 'Acquia Connector Configurations'
+label: 'Acquia Connector Settings'
 migration_tags:
   - Drupal 7
   - Configuration
 source:
-  plugin: variable
+  plugin: acquia_connector_settings_v3
   variables:
     - acquia_agent_debug
     - acquia_spi_cron_interval

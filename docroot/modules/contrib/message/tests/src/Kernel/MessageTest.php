@@ -45,10 +45,15 @@ class MessageTest extends KernelTestBase {
    */
   public function setUp():void {
     parent::setUp();
+
     $this->installConfig(['filter']);
     $this->installEntitySchema('message');
     $this->installEntitySchema('user');
-    $this->installSchema('system', ['sequences']);
+
+    if (version_compare(\Drupal::VERSION, '10.2.0', '<')) {
+      $this->installSchema('system', ['sequences']);
+    }
+
     $this->entityTypeManager = $this->container->get('entity_type.manager');
     $this->messageTemplate = $this->createMessageTemplate(mb_strtolower($this->randomMachineName()), $this->randomString(), $this->randomString(), []);
   }
@@ -111,7 +116,7 @@ class MessageTest extends KernelTestBase {
     ]);
     $text = $message->getText();
     $this->assertEquals(1, count($text));
-    $this->assertEquals('<p>foo [fake:token] and [message:author:name]</p>' . "\n", $text[0]);
+    $this->assertEquals('<p>foo [fake:token] and [message:author:name]</p>' . "\n", (string) $text[0]);
 
     // Verify token clearing enabled.
     $this->messageTemplate->setSettings([
@@ -127,7 +132,7 @@ class MessageTest extends KernelTestBase {
     ]);
     $text = $message->getText();
     $this->assertEquals(1, count($text));
-    $this->assertEquals('<p>foo  and </p>' . "\n", $text[0]);
+    $this->assertEquals('<p>foo  and </p>' . "\n", (string) $text[0]);
 
     // Verify token replacement.
     $account = $this->createUser();
@@ -135,7 +140,7 @@ class MessageTest extends KernelTestBase {
     $message->save();
     $text = $message->getText();
     $this->assertEquals(1, count($text));
-    $this->assertEquals('<p>foo  and ' . $account->getAccountName() . "</p>\n", $text[0]);
+    $this->assertEquals('<p>foo  and ' . $account->getAccountName() . "</p>\n", (string) $text[0]);
 
     // Disable token processing.
     $this->messageTemplate->setSettings([
@@ -147,7 +152,7 @@ class MessageTest extends KernelTestBase {
     $this->messageTemplate->save();
     $text = $message->getText();
     $this->assertEquals(1, count($text));
-    $this->assertEquals('<p>foo [fake:token] and [message:author:name]</p>' . "\n", $text[0]);
+    $this->assertEquals('<p>foo [fake:token] and [message:author:name]</p>' . "\n", (string) $text[0]);
   }
 
   /**
@@ -209,8 +214,8 @@ class MessageTest extends KernelTestBase {
     $message->save();
     $text = $message->getText();
     $this->assertEquals(2, count($text));
-    $this->assertEquals('<p>bar bar_replacement_' . $message->id() . ' and @no_replace</p>' . "\n", $text[0]);
-    $this->assertEquals('<p>some bar other bar_replacement_' . $message->id() . "</p>\n", $text[1]);
+    $this->assertEquals('<p>bar bar_replacement_' . $message->id() . ' and @no_replace</p>' . "\n", (string) $text[0]);
+    $this->assertEquals('<p>some bar other bar_replacement_' . $message->id() . "</p>\n", (string) $text[1]);
 
     // Do not pass the message.
     /** @var \Drupal\message\Entity\Message $message */
@@ -233,8 +238,8 @@ class MessageTest extends KernelTestBase {
     $message->save();
     $text = $message->getText();
     $this->assertEquals(2, count($text));
-    $this->assertEquals('<p>bar bar_replacement and @no_replace</p>' . "\n", $text[0]);
-    $this->assertEquals('<p>some bar other bar_replacement' . "</p>\n", $text[1]);
+    $this->assertEquals('<p>bar bar_replacement and @no_replace</p>' . "\n", (string) $text[0]);
+    $this->assertEquals('<p>some bar other bar_replacement' . "</p>\n", (string) $text[1]);
   }
 
   /**

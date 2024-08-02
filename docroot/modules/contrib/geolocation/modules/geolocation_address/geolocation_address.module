@@ -5,11 +5,11 @@
  * Provide address integration where due.
  */
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Field\WidgetInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidgetBase;
+use Drupal\Core\Field\WidgetInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationMapWidgetBase;
 use Drupal\geolocation_address\Plugin\migrate\field\Location;
 
 /**

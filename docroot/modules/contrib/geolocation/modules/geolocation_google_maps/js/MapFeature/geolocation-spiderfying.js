@@ -129,7 +129,11 @@
                     }
 
                     var icon = null;
-                    var iconSize = new google.maps.Size(23, 32);
+                    if (featureSettings.spiralIconWidth && featureSettings.spiralIconHeight) {
+                      var iconSize = new google.maps.Size(featureSettings.spiralIconWidth, featureSettings.spiralIconHeight);
+                    } else {
+                      var iconSize = new google.maps.Size(26, 37);
+                    }
                     switch (status) {
                       case OverlappingMarkerSpiderfier.markerStatus
                         .SPIDERFIABLE:

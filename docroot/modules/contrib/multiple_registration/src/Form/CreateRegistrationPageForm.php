@@ -2,14 +2,14 @@
 
 namespace Drupal\multiple_registration\Form;
 
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\ProxyClass\Routing\RouteBuilder;
 use Drupal\multiple_registration\Controller\MultipleRegistrationController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\ProxyClass\Routing\RouteBuilder;
-use Drupal\Core\Entity\EntityDisplayRepository;
 
 /**
  * Provides a form for creating user registrations in Multiple Registration.
@@ -109,7 +109,7 @@ class CreateRegistrationPageForm extends ConfigFormBase {
       return FALSE;
     }
     $form['rid'] = ['#type' => 'value', '#value' => $rid];
-    $config = $this->config('multiple_registration.create_registration_page_form_config')->get('roles');
+    $config = $this->config('multiple_registration.create_registration_page_form_config')->getOriginal();
     // Predefine array with default settings if rid is not exist.
     $role_config = $config && isset($config[$rid]) ? $config[$rid] : [
       'path' => '',
@@ -198,7 +198,7 @@ class CreateRegistrationPageForm extends ConfigFormBase {
       ],
     ];
     $config
-      ->set('roles', array_merge($config->get('roles') ?? [], $data))
+      ->set($rid, array_merge($config->getOriginal() ?? [], $data[$rid]))
       ->save();
     $this->multipleRegistrationController->addRegisterPageAlias($source, $alias);
     $this->routeBuilder->rebuild();

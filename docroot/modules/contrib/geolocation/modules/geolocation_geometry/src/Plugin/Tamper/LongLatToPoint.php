@@ -2,10 +2,10 @@
 
 namespace Drupal\geolocation_geometry\Plugin\Tamper;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\tamper\Exception\TamperException;
 use Drupal\tamper\TamperableItemInterface;
 use Drupal\tamper\TamperBase;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Plugin implementation for filtering data.

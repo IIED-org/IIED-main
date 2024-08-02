@@ -8,7 +8,7 @@ use Drupal\memcache\Driver\MemcacheDriverFactory;
 use Drupal\memcache\Invalidator\TimestampInvalidatorInterface;
 
 /**
- * Class MemcacheBackendFactory.
+ * Defines the memcache backend factory.
  */
 class MemcacheBackendFactory implements CacheFactoryInterface {
 
@@ -63,7 +63,7 @@ class MemcacheBackendFactory implements CacheFactoryInterface {
       $bin,
       $this->memcacheFactory->get($bin),
       $this->checksumProvider,
-      $this->timestampInvalidator
+      $this->timestampInvalidator,
     );
   }
 

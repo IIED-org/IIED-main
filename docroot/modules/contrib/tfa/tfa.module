@@ -5,12 +5,12 @@
  * Contains tfa.module.
  */
 
-use Drupal\Component\Render\PlainTextOutput;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\block\Entity\Block;
-use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 
@@ -51,7 +51,7 @@ function tfa_entity_operation(EntityInterface $entity) {
 
   if ($entity instanceof UserInterface) {
     $url = Url::fromRoute('tfa.overview', ['user' => $entity->id()]);
-    if ($url->access($entity) === TRUE) {
+    if ($url->access() === TRUE) {
       $operations['tfa'] = [
         'title' => t('TFA'),
         'url' => $url,

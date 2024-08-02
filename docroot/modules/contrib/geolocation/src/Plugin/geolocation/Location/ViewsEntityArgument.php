@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\Location;
 
-use Drupal\geolocation\LocationInterface;
 use Drupal\geolocation\LocationBase;
+use Drupal\geolocation\LocationInterface;
 use Drupal\geolocation\ViewsContextTrait;
 
 /**

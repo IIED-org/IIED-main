@@ -179,7 +179,7 @@ class StemmerTest extends UnitTestCase {
    * @return array[]
    *   Arrays of arguments for testPreprocessSearchQuery().
    */
-  public function preprocessSearchQueryDataProvider(): array {
+  public static function preprocessSearchQueryDataProvider(): array {
     return [
       'language-less query' => [NULL, TRUE],
       'English query' => [['en'], TRUE],
@@ -214,7 +214,7 @@ class StemmerTest extends UnitTestCase {
    * @return array[]
    *   Arrays of arguments for testProcess().
    */
-  public function processDataProvider(): array {
+  public static function processDataProvider(): array {
     // cspell:disable
     return [
       ['Yo', 'yo'],

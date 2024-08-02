@@ -2,10 +2,10 @@
 
 namespace Drupal\taxonomy_manager\Element;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Query\QueryException;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
-use Drupal\Component\Utility\Html;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -103,7 +103,7 @@ class TaxonomyManagerTree extends FormElement {
       // This site is still using the pre-Drupal 8.5 database schema, where
       // https://www.drupal.org/project/drupal/issues/2543726 was not yet
       // committed to Drupal core.
-      // @todo: Remove both the try/catch wrapper and the code below the catch-
+      // @todo Remove both the try/catch wrapper and the code below the catch-
       // statement once the taxonomy_manager module only supports Drupal 8.5 or
       // newer.
     }

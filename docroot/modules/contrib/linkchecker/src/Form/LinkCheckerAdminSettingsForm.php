@@ -4,9 +4,11 @@ namespace Drupal\linkchecker\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\filter\FilterPluginCollection;
 use Drupal\filter\FilterPluginManager;
@@ -73,9 +75,16 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
   protected $linkCheckerResponseCodes;
 
   /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
    * LinkCheckerAdminSettingsForm constructor.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, DateFormatterInterface $date_formatter, FilterPluginManager $plugin_manager_filter, LinkCheckerService $linkchecker_checker, LinkExtractorBatch $extractorBatch, LinkCleanUp $linkCleanUp, UserStorageInterface $user_storage, LinkCheckerResponseCodesInterface $linkCheckerResponseCodes) {
+  public function __construct(ConfigFactoryInterface $config_factory, DateFormatterInterface $date_formatter, FilterPluginManager $plugin_manager_filter, LinkCheckerService $linkchecker_checker, LinkExtractorBatch $extractorBatch, LinkCleanUp $linkCleanUp, UserStorageInterface $user_storage, LinkCheckerResponseCodesInterface $linkCheckerResponseCodes, ModuleHandlerInterface $module_handler, AccountInterface $current_user) {
     parent::__construct($config_factory);
     $this->dateFormatter = $date_formatter;
     $this->extractorBatch = $extractorBatch;
@@ -84,6 +93,8 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
     $this->filterPluginManager = $plugin_manager_filter;
     $this->userStorage = $user_storage;
     $this->linkCheckerResponseCodes = $linkCheckerResponseCodes;
+    $this->moduleHandler = $module_handler;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -98,7 +109,9 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
       $container->get('linkchecker.extractor_batch'),
       $container->get('linkchecker.clean_up'),
       $container->get('entity_type.manager')->getStorage('user'),
-      $container->get('linkchecker.response_codes')
+      $container->get('linkchecker.response_codes'),
+      $container->get('module_handler'),
+      $container->get('current_user')
     );
   }
 
@@ -173,8 +186,8 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Default URL scheme'),
       '#description' => $this->t('Default URL scheme for scheme relative paths'),
       '#options' => [
-        'http://' => 'HTTP',
-        'https://' => 'HTTPS',
+        'http://' => $this->t('HTTP'),
+        'https://' => $this->t('HTTPS'),
       ],
     ];
     $form['general']['base_path'] = [
@@ -184,6 +197,12 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Should not start with URL scheme'),
     ];
 
+    $form['general']['search_published_contents_only'] = [
+      '#default_value' => $config->get('search_published_contents_only'),
+      '#type' => 'checkbox',
+      '#title' => $this->t('Search published contents only'),
+      '#description' => $this->t('If selected, links in unpublished content will be ignored.'),
+    ];
     $form['tag'] = [
       '#type' => 'details',
       '#title' => $this->t('Link extraction'),
@@ -291,11 +310,11 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Defines the user agent that will be used for checking links on remote sites. If someone blocks the standard Drupal user agent you can try with a more common browser.'),
       '#default_value' => $config->get('check.useragent'),
       '#options' => [
-        'Drupal (+https://drupal.org/)' => 'Drupal (+https://drupal.org/)',
-        'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko' => 'Windows 8.1 (x64), Internet Explorer 11.0',
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586' => 'Windows 10 (x64), Edge',
-        'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0' => 'Windows 8.1 (x64), Mozilla Firefox 47.0',
-        'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0' => 'Windows 10 (x64), Mozilla Firefox 47.0',
+        'Drupal (+https://drupal.org/)' => $this->t('Drupal (+https://drupal.org/)'),
+        'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko' => $this->t('Windows 8.1 (x64), Internet Explorer 11.0'),
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586' => $this->t('Windows 10 (x64), Edge'),
+        'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0' => $this->t('Windows 8.1 (x64), Mozilla Firefox 47.0'),
+        'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0' => $this->t('Windows 10 (x64), Mozilla Firefox 47.0'),
       ],
     ];
     $intervals = [
@@ -368,8 +387,17 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
         10 => $this->t('After ten failed checks'),
       ],
     ];
-    if (\Drupal::moduleHandler()->moduleExists('dblog') && \Drupal::currentUser()->hasPermission('access site reports')) {
-      $form['error']['#description'] = $this->t('If enabled, outdated links in content providing a status <em>Moved Permanently</em> (status code 301) are automatically updated to the most recent URL. If used, it is recommended to use a value of <em>three</em> to make sure this is not only a temporarily change. This feature trust sites to provide a valid permanent redirect. A new content revision is automatically created on link updates if <em>create new revision</em> is enabled in the <a href=":content_types">content types</a> publishing options. It is recommended to create new revisions for all link checker enabled content types. Link updates are nevertheless always logged in <a href=":dblog">recent log entries</a>.', [':dblog' => Url::fromRoute('entity.node_type.collection')->toString(), ':content_types' => Url::fromRoute('entity.node_type.collection')->toString()]);
+    if ($this->moduleHandler->moduleExists('dblog') && $this->currentUser->hasPermission('access site reports')) {
+      $form['error']['#description'] = $this->t('If enabled, outdated links in content providing a status 
+          <em>Moved Permanently</em> (status code 301) are automatically updated to the most recent URL. If used,
+          it is recommended to use a value of <em>three</em> to make sure this is not only a temporarily change.
+          This feature trust sites to provide a valid permanent redirect.
+          A new content revision is automatically created on link updates if <em>create new revision</em> is enabled in the <a href=":content_types">content types</a> publishing options.
+          It is recommended to create new revisions for all link checker enabled content types. Link updates are nevertheless always logged in <a href=":dblog">recent log entries</a>.',
+          [
+            ':dblog' => Url::fromRoute('entity.node_type.collection')->toString(),
+            ':content_types' => Url::fromRoute('entity.node_type.collection')->toString(),
+          ]);
     }
     else {
       $form['error']['#description'] = $this->t('If enabled, outdated links in content providing a status <em>Moved Permanently</em> (status code 301) are automatically updated to the most recent URL. If used, it is recommended to use a value of <em>three</em> to make sure this is not only a temporarily change. This feature trust sites to provide a valid permanent redirect. A new content revision is automatically created on link updates if <em>create new revision</em> is enabled in the <a href=":content_types">content types</a> publishing options. It is recommended to create new revisions for all link checker enabled content types. Link updates are nevertheless always logged.', [':content_types' => Url::fromRoute('entity.node_type.collection')->toString()]);
@@ -442,7 +470,7 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
 
     // Validate impersonation user name.
     $linkchecker_impersonate_account = user_load_by_name($form_state->getValue('linkchecker_impersonate_account'));
-    // @TODO: Cleanup
+    // @todo Cleanup
     // if (empty($linkchecker_impersonate_account->id())) {
     if ($linkchecker_impersonate_account && empty($linkchecker_impersonate_account->id())) {
       $form_state->setErrorByName('linkchecker_impersonate_account', $this->t('User account %name cannot found.', ['%name' => $form_state->getValue('linkchecker_impersonate_account')]));
@@ -455,7 +483,7 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('linkchecker.settings');
 
-    // @todo: Move it to setting save hook.
+    // @todo Move it to setting save hook.
     if ((int) $config->get('check.connections_max') != (int) $form_state->getValue('linkchecker_check_connections_max')) {
       $this->linkCheckerService->queueLinks(TRUE);
     }
@@ -478,6 +506,7 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
       ->set('check.library', $form_state->getValue('linkchecker_check_library'))
       ->set('check.interval', $form_state->getValue('linkchecker_check_interval'))
       ->set('check.useragent', $form_state->getValue('linkchecker_check_useragent'))
+      ->set('search_published_contents_only', $form_state->getValue('search_published_contents_only'))
       ->set('error.action_status_code_301', $form_state->getValue('linkchecker_action_status_code_301'))
       ->set('error.action_status_code_404', $form_state->getValue('linkchecker_action_status_code_404'))
       ->set('error.ignore_response_codes', $form_state->getValue('linkchecker_ignore_response_codes'))

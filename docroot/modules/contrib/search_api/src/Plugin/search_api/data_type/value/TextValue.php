@@ -138,9 +138,9 @@ class TextValue implements TextValueInterface {
   }
 
   /**
-   * Implements the magic __toString() method.
+   * {@inheritdoc}
    */
-  public function __toString() {
+  public function __toString(): string {
     return $this->toText();
   }
 

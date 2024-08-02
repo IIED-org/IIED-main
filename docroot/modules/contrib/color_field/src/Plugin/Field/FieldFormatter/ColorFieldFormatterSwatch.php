@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\color_field\Plugin\Field\FieldFormatter;
 
@@ -132,7 +132,7 @@ class ColorFieldFormatterSwatch extends FormatterBase {
         continue;
       }
 
-      $color = new ColorHex($item->color, $item->opacity);
+      $color = new ColorHex($item->color, is_null($item->opacity) ? NULL : (float) $item->opacity);
       $elements[$delta]['#attributes']['data-color'] = $color->toString(FALSE);
     }
 
@@ -188,7 +188,7 @@ class ColorFieldFormatterSwatch extends FormatterBase {
     $opacity = $this->getFieldSetting('opacity');
     $settings = $this->getSettings();
 
-    $color_hex = new ColorHex($item->color, $item->opacity);
+    $color_hex = new ColorHex($item->color, is_null($item->opacity) ? NULL : (float) $item->opacity);
 
     return $opacity && $settings['opacity']
         ? $color_hex->toRgb()->toString(TRUE)

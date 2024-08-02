@@ -14,3 +14,6 @@ parameters:
   ignoreErrors:
     - "#^Unsafe usage of new static#"
     - "#Drupal calls should be avoided in classes, use dependency injection instead#"
+    -
+      message: "#Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\.* does not exist#"
+      reportUnmatched: false

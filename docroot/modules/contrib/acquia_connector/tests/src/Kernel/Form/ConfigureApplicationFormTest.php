@@ -17,6 +17,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
 
+  /**
+   * Test the behavior when there is authentication is missing.
+   *
+   * This method tests the behavior of a specific scenario where
+   * no authentication is provided.
+   */
   public function testWithNoAuth(): void {
     $this->createUserWithSession();
 
@@ -35,6 +41,9 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
     );
   }
 
+  /**
+   * Test when there is an error fetching the application keys.
+   */
   public function testWithErrorGettingApplicationKeys(): void {
     $this->createUserWithSession();
 
@@ -55,6 +64,9 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
     );
   }
 
+  /**
+   * Test when the subscription returns no applications.
+   */
   public function testWithNoApplications(): void {
     $this->createUserWithSession();
 
@@ -75,6 +87,9 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
     );
   }
 
+  /**
+   * Tests when the current application uuid doesn't match the subscription.
+   */
   public function testApplicationCloudMismatch(): void {
     $this->setAccessToken('ACCESS_TOKEN_ONE_APPLICATION');
 
@@ -107,6 +122,9 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
     );
   }
 
+  /**
+   * Test when a subscription only has one application.
+   */
   public function testWithOneApplication(): void {
     $this->createUserWithSession();
 
@@ -154,6 +172,9 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
     );
   }
 
+  /**
+   * Test when a subscription contains multiple applications.
+   */
   public function testWithMultipleApplications(): void {
     $this->createUserWithSession();
 

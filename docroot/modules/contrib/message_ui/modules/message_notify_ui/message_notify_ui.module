@@ -15,7 +15,7 @@ function message_notify_ui_entity_type_alter(array &$entity_types) {
     return;
   }
 
-  /** @var \Drupal\Core\Config\Entity\ConfigEntityType $message_config */
+  /** @var \Drupal\Core\Config\Entity\ConfigEntityType[] $entity_types */
   $entity_types['message']
     ->setFormClass('notify', 'Drupal\message_notify_ui\Form\MessageNotifyForm')
     ->setLinkTemplate('notify-form', '/message/{message}/notify');

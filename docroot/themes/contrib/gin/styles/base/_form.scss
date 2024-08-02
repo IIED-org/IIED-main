@@ -133,109 +133,67 @@
 }
 
 // Single Checkbox: show as toggle
-:not(.form-checkboxes):not(td):not(.tabledrag-cell-content__item):not(.media-library-item__click-to-select-checkbox):not(.field-content) > .form-type--checkbox {
+:not(.form-checkboxes):not(td):not(.tabledrag-cell-content__item):not(.media-library-item__click-to-select-checkbox):not(.field-content):not(.tablesaw-cell-content) > .form-type--checkbox {
   position: relative;
   margin-left: 0;
 
-  .checkbox-toggle {
-    z-index: 0;
+  input {
+    all: unset;
+    appearance: none;
+    cursor: pointer;
     display: inline-block;
     vertical-align: top;
     width: 2.5rem;
     height: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    clip-path: circle(var(--gin-spacing-l) at 50% 50%); // Fix Safari bug
+    background-color: var(--gin-color-disabled);
+    border: 3px solid transparent;
     border-radius: var(--gin-border-l);
     box-sizing: border-box;
 
-    &__inner {
-      position: relative;
-      display: block;
+    .gin--dark-mode & {
+      background-color: var(--gin-bg-input);
+    }
+
+    @media (forced-colors: active) {
+      border-width: 2px;
+    }
+
+    &::before {
+      position: absolute;
+      content: "";
       width: 100%;
       height: 100%;
-      overflow: hidden;
-      clip-path: circle(var(--gin-spacing-l) at 50% 50%); // Fix Safari bug
-      background-color: var(--gin-color-disabled);
-      border: 3px solid transparent;
-      border-radius: var(--gin-border-l);
-      box-sizing: border-box;
+      background-color: #fff;
+      border-radius: 21px;
+      transform: translateX(-16px);
+      transition: transform .3s;
 
       .gin--dark-mode & {
-        background-color: var(--gin-bg-input);
+        background-color: var(--gin-border-color-form-element);
       }
 
-      &:before {
+      @media (forced-colors: active) {
+        background-color: CanvasText;
+      }
+    }
+
+    @media (forced-colors: active) {
+      &::after {
         position: absolute;
-        content: "";
+        content: '';
         width: 100%;
         height: 100%;
-        background-color: #fff;
-        border-radius: 21px;
+        background-color: Canvas;
+        mask-image: icon('toggle-unchecked');
+        mask-size: 16px 16px;
+        mask-position: 17px 2px;
+        mask-repeat: no-repeat;
         transform: translateX(-16px);
         transition: transform .3s;
-
-        .gin--dark-mode & {
-          background-color: var(--gin-border-color-form-element);
-        }
       }
-    }
-  }
-
-  input {
-    @include visually-hidden;
-    width: 40px;
-    height: 24px;
-    clip: auto;
-    margin-left: 0;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 1;
-
-    &:hover,
-    &:focus,
-    &:active,
-    &:hover:focus,
-    &:active:focus {
-      outline: none;
-      box-shadow: none;
-      border: none;
-    }
-
-    &:hover ~ .checkbox-toggle {
-      opacity: .9;
-      box-shadow: 0 0 2px rgba(0, 0, 0, .2);
-    }
-
-    &:checked ~ .checkbox-toggle {
-      border-color: var(--gin-color-primary-light-active);
-
-      .gin--high-contrast-mode & {
-        border-color: var(--gin-border-color);
-      }
-
-      .checkbox-toggle__inner {
-        background-color: var(--gin-switch);
-
-        .gin--dark-mode & {
-          background-color: var(--gin-color-primary-light-active);
-        }
-
-        &:before {
-          transform: translateX(16px);
-          background-color: #fff;
-
-          .gin--dark-mode & {
-            background-color: var(--gin-color-primary-hover);
-          }
-
-          .gin--high-contrast-mode & {
-            background-color: var(--gin-border-color);
-          }
-        }
-      }
-    }
-
-    &:active ~ .checkbox-toggle .checkbox-toggle__inner,
-    &:focus ~ .checkbox-toggle .checkbox-toggle__inner {
-      box-shadow: 0 0 0 1px var(--gin-color-focus-border), 0 0 0 4px var(--gin-color-focus);
     }
 
     // Disabled state: set cursor to not-allowed
@@ -243,16 +201,62 @@
       cursor: not-allowed;
     }
 
-    // Disabled styles
-    &:disabled ~ .checkbox-toggle,
-    &:disabled ~ .checkbox-toggle:hover,
-    &:disabled:checked ~ .checkbox-toggle .checkbox-toggle__inner,
-    &:disabled:checked ~ .checkbox-toggle:hover .checkbox-toggle__inner {
+    // Hover state
+    &:hover {
+      opacity: .9;
+      box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+    }
+
+    // Hover/Focus state
+    &:active,
+    &:focus {
+      box-shadow: 0 0 0 1px var(--gin-color-focus-border), 0 0 0 4px var(--gin-color-focus);
+    }
+
+    // Active state
+    &:checked {
+      background-color: var(--gin-switch);
+
+      .gin--dark-mode & {
+        background-color: var(--gin-color-primary-light-active);
+      }
+
+      &::before {
+        transform: translateX(16px);
+        background-color: #fff;
+
+        .gin--dark-mode & {
+          background-color: var(--gin-color-primary-hover);
+        }
+
+        .gin--high-contrast-mode & {
+          background-color: var(--gin-border-color);
+        }
+
+        @media (forced-colors: active) {
+          padding-left: 8px;
+          background-color: LinkText !important;
+        }
+      }
+
+      @media (forced-colors: active) {
+        &::after {
+          transform: translateX(16px);
+          mask-image: icon('checked');
+          mask-position: 2px 2px;
+        }
+      }
+    }
+
+    // Disabled state
+    &:disabled {
+      opacity: 0.75;
       background-color: var(--gin-color-disabled);
+      box-shadow: none;
 
       &::before {
         background-color: #fff;
-        opacity: .4;
+        opacity: .6;
       }
     }
   }

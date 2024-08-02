@@ -8,18 +8,6 @@
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 
-// Version of SPI data format.
-define('ACQUIA_CONNECTOR_ACQUIA_SPI_DATA_VERSION', 3.1);
-
-/**
- * Identifiers for the method of sending SPI data.
- */
-define('ACQUIA_CONNECTOR_ACQUIA_SPI_METHOD_CALLBACK', 'menu');
-define('ACQUIA_CONNECTOR_ACQUIA_SPI_METHOD_CRON', 'cron');
-define('ACQUIA_CONNECTOR_ACQUIA_SPI_METHOD_DRUSH', 'drush');
-define('ACQUIA_CONNECTOR_ACQUIA_SPI_METHOD_CREDS', 'creds');
-define('ACQUIA_CONNECTOR_ACQUIA_SPI_METHOD_INSIGHT', 'insight');
-
 /**
  * Implements hook_help().
  */
@@ -106,8 +94,8 @@ function acquia_connector_toolbar() {
  * Implements hook_modules_installed().
  */
 function acquia_connector_modules_installed(array $modules) {
-  /** @var \Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaTelemetry $telemetry_service */
-  $telemetry_service = \Drupal::service('acquia_connector.telemetry');
+  /** @var \Drupal\acquia_connector\Services\AcquiaTelemetryService $telemetry_service */
+  $telemetry_service = \Drupal::service('acquia_connector.telemetry_service');
   $installed_acquia_extensions = array_intersect($modules, $telemetry_service->getAcquiaExtensionNames());
   if ($installed_acquia_extensions) {
     $event_properties = ['installed_extensions' => array_values($installed_acquia_extensions)];
@@ -126,8 +114,8 @@ function acquia_connector_modules_installed(array $modules) {
  * Implements hook_modules_uninstalled().
  */
 function acquia_connector_modules_uninstalled(array $modules) {
-  /** @var \Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaTelemetry $telemetry_service */
-  $telemetry_service = \Drupal::service('acquia_connector.telemetry');
+  /** @var \Drupal\acquia_connector\Services\AcquiaTelemetryService $telemetry_service */
+  $telemetry_service = \Drupal::service('acquia_connector.telemetry_service');
   $uninstalled_acquia_extensions = array_intersect($modules, $telemetry_service->getAcquiaExtensionNames());
   if ($uninstalled_acquia_extensions) {
     $event_properties = ['uninstalled_extensions' => array_values($uninstalled_acquia_extensions)];

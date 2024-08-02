@@ -44,7 +44,7 @@ class SettingsFormTest extends BrowserTestBase {
     $this->assertSession()->statusCodeEquals(200);
 
     // Verify that by default the log level is ERROR.
-    $this->assertSession()->fieldValueEquals('missing_file_log_level', RfcLogLevel::ERROR);
+    $this->assertSession()->fieldValueEquals('missing_file_log_level', (string) RfcLogLevel::ERROR);
     $this->assertEquals(RfcLogLevel::ERROR, $this->config('file_mdm.settings')->get('missing_file_log_level'));
 
     // Try loading metadata for a non-existing file. We should get an entry in

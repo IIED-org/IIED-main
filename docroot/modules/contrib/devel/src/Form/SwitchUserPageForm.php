@@ -3,9 +3,9 @@
 namespace Drupal\devel\Form;
 
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\devel\SwitchUserListHelper;
-use Drupal\Core\Form\FormBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -15,17 +15,13 @@ class SwitchUserPageForm extends FormBase {
 
   /**
    * The FormBuilder object.
-   *
-   * @var \Drupal\Core\Form\FormBuilderInterface
    */
-  protected $formBuilder;
+  protected FormBuilderInterface $formBuilder;
 
   /**
    * A helper for creating the user list form.
-   *
-   * @var Drupal\devel\SwitchUserListHelper
    */
-  protected $switchUserListHelper;
+  protected SwitchUserListHelper $switchUserListHelper;
 
   /**
    * Constructs a new SwitchUserPageForm object.
@@ -43,7 +39,7 @@ class SwitchUserPageForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('devel.switch_user_list_helper'),
       $container->get('form_builder'),
@@ -53,17 +49,17 @@ class SwitchUserPageForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'devel_switchuser_page_form';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     if ($accounts = $this->switchUserListHelper->getUsers()) {
       $form['devel_links'] = $this->switchUserListHelper->buildUserList($accounts);
-      $form['devel_form'] = $this->formBuilder->getForm('\Drupal\devel\Form\SwitchUserForm');
+      $form['devel_form'] = $this->formBuilder->getForm(SwitchUserForm::class);
     }
     else {
       $this->messenger->addStatus('There are no user accounts present!');
@@ -75,14 +71,14 @@ class SwitchUserPageForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
     // Nothing to do here. This is delegated to devel.switch via http call.
   }
 
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     // Nothing to do here. This is delegated to devel.switch via http call.
   }
 

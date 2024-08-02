@@ -2,10 +2,10 @@
 
 namespace Drupal\Tests\geolocation\Kernel;
 
-use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\field\Entity\FieldConfig;
-use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldItemInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Tests\field\Kernel\FieldKernelTestBase;
 
 /**
@@ -80,8 +80,8 @@ class GeolocationItemTest extends FieldKernelTestBase {
     $this->assertEquals($entity->get('field_test')->data, $data, "Data {$entity->get('field_test')->data} is equal to data {$data}.");
 
     // Verify changing the field value.
-    $new_lat = rand(-90, 90) - rand(0, 999999) / 1000000;
-    $new_lng = rand(-180, 180) - rand(0, 999999) / 1000000;
+    $new_lat = (float) rand(-90, 90) - rand(0, 999999) / 1000000.0;
+    $new_lng = (float) rand(-180, 180) - rand(0, 999999) / 1000000.0;
     $new_data = ['an_array'];
     $entity->get('field_test')->lat = $new_lat;
     $entity->get('field_test')->lng = $new_lng;

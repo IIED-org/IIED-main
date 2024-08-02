@@ -133,3 +133,37 @@ function hook_chart_definition_alter(array &$definition, array $element, $chart_
  */
 function hook_chart_definition_CHART_ID_alter(array &$definition, array $element, $chart_id) {
 }
+
+/**
+ * Alter the list of supported chart types for a chart plugin.
+ *
+ * To use this hook, first define the chart types you want to add in a file
+ * named <module>.charts_types.yml to your module's root directory. For example,
+ * if your module is named "charts_foo", the file should be named
+ * "charts_foo.charts_types.yml".
+ *
+ * The contents of this file will look something like:
+ *
+ * @code
+ * candlestick:
+ *   label: 'Candlestick'
+ *   axis: 'xy'
+ *   axis_inverted: false
+ *   stacking: false
+ * @endcode
+ *
+ * @see charts.charts_types.yml
+ *
+ * With that file in place, you can now implement this hook. See below for an
+ * example adding the 'candlestick' chart type to the 'highcharts' chart plugin.
+ *
+ * @param array $types
+ *   An array of supported chart types.
+ * @param string $chart_plugin_id
+ *   The chart plugin ID.
+ */
+function hook_charts_plugin_supported_chart_types_alter(array &$types, string $chart_plugin_id) {
+  if ($chart_plugin_id === 'highcharts') {
+    $types[] = 'candlestick';
+  }
+}

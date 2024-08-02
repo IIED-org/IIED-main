@@ -4,15 +4,16 @@
 }
 
 .glb-grid-item {
-  width: calc(33% - 2px);
-  background: var(--gin-bg-layer) !important;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 6px;
+  width: calc(33% - 2px);
   margin: 1px !important;
   padding: 6px;
-  svg, img {
+  border-radius: 6px;
+  background: var(--gin-bg-layer) !important;
+  svg,
+  img {
     width: 60px;
   }
   &:hover {
@@ -26,10 +27,11 @@
 
 .glb-layout-builder-browser .glb-claro-details__wrapper {
   @extend .glb-grid;
+
+  margin-right: -24px;
+  margin-left: -20px;
   padding-top: 4px;
   padding-bottom: 4px;
-  margin-left: -20px;
-  margin-right: -24px;
 }
 
 .layout-builder-browser-block-item {

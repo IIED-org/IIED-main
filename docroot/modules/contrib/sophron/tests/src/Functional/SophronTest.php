@@ -7,12 +7,14 @@ namespace Drupal\Tests\sophron\Functional;
 use Drupal\sophron\MimeMapManagerInterface;
 use Drupal\Tests\BrowserTestBase;
 use FileEye\MimeMap\MappingException;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests Sophron functionality.
  *
  * @group sophron
  */
+#[Group('sophron')]
 class SophronTest extends BrowserTestBase {
 
   /**
@@ -46,7 +48,7 @@ class SophronTest extends BrowserTestBase {
     // Load the form, and change the default map class.
     $this->drupalGet('admin/config/system/sophron');
     $edit = [
-      'map_option' => MimeMapManagerInterface::DEFAULT_MAP,
+      'map_option' => (string) MimeMapManagerInterface::DEFAULT_MAP,
     ];
     $this->submitForm($edit, 'Save configuration');
 
@@ -57,18 +59,18 @@ class SophronTest extends BrowserTestBase {
 
     // Set an invalid custom mapping class.
     $edit = [
-      'map_option' => MimeMapManagerInterface::CUSTOM_MAP,
+      'map_option' => (string) MimeMapManagerInterface::CUSTOM_MAP,
       'map_class' => BrowserTestBase::class,
     ];
     $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->responseContains('The map class is invalid.');
     $edit = [
-      'map_option' => MimeMapManagerInterface::DEFAULT_MAP,
+      'map_option' => (string) MimeMapManagerInterface::DEFAULT_MAP,
     ];
     $this->submitForm($edit, 'Save configuration');
 
     try {
-      $this->assertEquals('application/octet-stream', \Drupal::service('sophron.mime_map.manager')->getExtension('quxqux')->getDefaultType());
+      $this->assertEquals('application/octet-stream', \Drupal::service(MimeMapManagerInterface::class)->getExtension('quxqux')->getDefaultType());
       $this->fail('MappingException was expected.');
     }
     catch (MappingException $e) {

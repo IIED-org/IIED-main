@@ -2,10 +2,11 @@
 
 namespace Drupal\views_json_source\Plugin\views\field;
 
-use Drupal\views\Plugin\views\field\FieldPluginBase;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\views\ResultRow;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
+use Drupal\views\Plugin\views\field\FieldPluginBase;
+use Drupal\views\ResultRow;
 
 /**
  * Base field handler for views_json_source.
@@ -13,6 +14,13 @@ use Drupal\Component\Utility\Html;
  * @ViewsField("views_json_source_field")
  */
 class ViewsJsonField extends FieldPluginBase {
+
+  /**
+   * The table alias.
+   *
+   * @var string
+   */
+  public $tableAlias = '';
 
   /**
    * Render.
@@ -34,7 +42,9 @@ class ViewsJsonField extends FieldPluginBase {
    */
   public function renderField($value) {
     if ($this->options['trusted_html'] == 1) {
-      return ['#markup' => $value];
+      return [
+        '#markup' => Markup::create($value),
+      ];
     }
     else {
       return Html::escape($value);
@@ -76,10 +86,10 @@ class ViewsJsonField extends FieldPluginBase {
    */
   public function query() {
     // Add the field.
-    $this->table_alias = 'json';
+    $this->tableAlias = 'json';
 
     $this->field_alias = $this->query->addField(
-      $this->table_alias,
+      $this->tableAlias,
       $this->options['key'],
       '',
       $this->options

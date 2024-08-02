@@ -32,9 +32,12 @@ function ginInitDarkmode() {
 
 ginInitDarkmode();
 
-// GinDarkMode is not set yet.
+// GinDarkMode is not set yet or config changes detected.
 window.addEventListener('DOMContentLoaded', () => {
-  if (!localStorage.getItem('Drupal.gin.darkmode')) {
+  if (
+    !localStorage.getItem('Drupal.gin.darkmode') ||
+    (drupalSettings.gin.darkmode != localStorage.getItem('Drupal.gin.darkmode') && !drupalSettings.gin.show_user_theme_settings)
+  ) {
     localStorage.setItem('Drupal.gin.darkmode', drupalSettings.gin.darkmode);
     ginInitDarkmode();
   }
@@ -74,7 +77,12 @@ if (localStorage.getItem('Drupal.gin.toolbarExpanded')) {
   }
 }
 
-// Sidebar check.
+// Sidebar checks.
+if (localStorage.getItem('Drupal.gin.sidebarWidth')) {
+  const sidebarWidth = localStorage.getItem('Drupal.gin.sidebarWidth');
+  document.documentElement.style.setProperty('--gin-sidebar-width', sidebarWidth);
+}
+
 if (localStorage.getItem('Drupal.gin.sidebarExpanded.desktop')) {
   const style = document.createElement('style');
   const className = 'gin-sidebar-inline-styles';

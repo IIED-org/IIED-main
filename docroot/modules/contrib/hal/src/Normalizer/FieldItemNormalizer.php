@@ -24,6 +24,15 @@ class FieldItemNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
+  public function getSupportedTypes(?string $format): array {
+    return [
+      FieldItemInterface::class => TRUE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function normalize($field_item, $format = NULL, array $context = []): array|string|int|float|bool|\ArrayObject|NULL {
     // The values are wrapped in an array, and then wrapped in another array
     // keyed by field name so that field items can be merged by the

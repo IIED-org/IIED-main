@@ -273,8 +273,7 @@ class Repair301 extends LinkStatusHandlerBase {
           // Finds param tags with links in the object tag.
           $params = $object->getElementsByTagName('param');
           foreach ($params as $param) {
-            // @todo
-            // - Try to replace links in unknown "flashvars" values
+            // @todo Try to extract links in unkown "flashvars" values
             //   (e.g., file=http://, data=http://).
             $names = ['archive', 'filename', 'href', 'movie', 'src', 'url'];
             if ($param->hasAttribute('name') && in_array($param->getAttribute('name'), $names)) {

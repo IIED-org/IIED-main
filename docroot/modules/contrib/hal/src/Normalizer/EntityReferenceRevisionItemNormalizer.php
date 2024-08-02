@@ -19,6 +19,15 @@ class EntityReferenceRevisionItemNormalizer extends EntityReferenceItemNormalize
   /**
    * {@inheritdoc}
    */
+  public function getSupportedTypes(?string $format): array {
+    return [
+      EntityReferenceRevisionsItem::class => TRUE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function constructValue($data, $context) {
     $value = parent::constructValue($data, $context);
     if ($value) {

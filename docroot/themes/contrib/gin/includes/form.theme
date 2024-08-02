@@ -45,6 +45,16 @@ function gin_form_alter(&$form, $form_state, $form_id) {
 }
 
 /**
+ * Helper function to remember the form actions after form has been built.
+ */
+function gin_form_after_build(array $form, FormStateInterface $form_state): array {
+  _gin_form_actions($form['actions'] ?? NULL);
+  unset($form['actions']);
+  unset($form['gin_actions']);
+  return $form;
+}
+
+/**
  * Implements form_user_form_alter().
  */
 function gin_form_user_form_alter(&$form, FormStateInterface $form_state) {
@@ -98,26 +108,6 @@ function gin_form_user_form_alter(&$form, FormStateInterface $form_state) {
 function gin_preprocess_select(&$variables) {
   if (in_array('block-weight', $variables['attributes']['class'], TRUE)) {
     $variables['attributes']['class'][] = 'form-element--extrasmall';
-  }
-}
-
-/**
- * Implements form_alter() for forms.
- */
-function gin_theme_suggestions_form_alter(array &$suggestions, array $variables) {
-  $suggestions[] = 'form__' . str_replace('-', '_', $variables['element']['#id']);
-}
-
-/**
- * Implements form_alter() for input.
- */
-function gin_theme_suggestions_input_alter(array &$suggestions, array $variables) {
-  if ($variables['element']['#type'] === 'checkbox') {
-    // Way to identify if checkbox is in a checkboxes group
-    // as Drupal doesn't provide one yet (see #2643012)
-    if (!isset($variables['element']['#error_no_message'])) {
-      $suggestions[] = 'input__checkbox__toggle';
-    }
   }
 }
 
@@ -178,4 +168,22 @@ function gin_preprocess_text_format_wrapper(&$variables) {
  */
 function gin_preprocess_inline_entity_form_entity_table(array &$variables) {
   $variables['table']['#attached']['library'][] = 'gin/inline_entity_form';
+}
+
+/**
+ * Set and get the form actions of the current request.
+ *
+ * @param array|null $actions
+ *   If not NULL, the given actions will be remembered for the current request
+ *   so that they can be retrieved later when processing the page.
+ *
+ * @return array|null
+ *   If set, the previously stored actions, NULL otherwise.
+ */
+function _gin_form_actions(?array $actions = NULL): ?array {
+  if ($actions !== NULL) {
+    // Set the form actions for this request.
+    drupal_static(__FUNCTION__, $actions);
+  }
+  return drupal_static(__FUNCTION__);
 }

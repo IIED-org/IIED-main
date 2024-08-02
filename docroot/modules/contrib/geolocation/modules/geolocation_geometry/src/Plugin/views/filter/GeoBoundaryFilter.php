@@ -3,8 +3,8 @@
 namespace Drupal\geolocation_geometry\Plugin\views\filter;
 
 use Drupal\geolocation\Plugin\views\filter\BoundaryFilter;
-use Drupal\views\Plugin\views\query\Sql;
 use Drupal\geolocation_geometry\GeometryBoundaryTrait;
+use Drupal\views\Plugin\views\query\Sql;
 
 /**
  * Filter handler for search keywords.

@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - filter.format.webform_default
+    - search_api_autocomplete.search.acquia_search
+    - search_api_autocomplete.search.search
   module:
     - comment
     - contact

@@ -77,9 +77,7 @@ class CacheTagsQueuerTest extends UnitTestCase {
     $this->container->set('purge.invalidation.factory', $this->purgeInvalidationFactory);
 
     // Initialize the CacheTagsQueuer object and set the container.
-    $this->cacheTagsQueuer = new CacheTagsQueuer();
-    $this->cacheTagsQueuer->setContainer($this->container);
-    $this->assertInstanceOf(ContainerAwareInterface::class, $this->cacheTagsQueuer);
+    $this->cacheTagsQueuer = new CacheTagsQueuer($this->container);
     $this->assertInstanceOf(CacheTagsInvalidatorInterface::class, $this->cacheTagsQueuer);
   }
 

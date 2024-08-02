@@ -34,14 +34,14 @@ class UserHalLoginHttpTest extends UserLoginHttpTest {
   /**
    * {@inheritdoc}
    */
-  public function testLogin() {
+  public function testLogin(): void {
     $this->doTestLogin('hal_json');
   }
 
   /**
    * {@inheritdoc}
    */
-  public function testPasswordReset() {
+  public function testPasswordReset(): void {
     // Create a user account.
     $account = $this->drupalCreateUser();
 

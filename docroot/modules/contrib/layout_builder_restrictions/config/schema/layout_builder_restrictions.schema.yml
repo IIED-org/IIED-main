@@ -2,7 +2,7 @@ core.entity_view_display.*.*.*.third_party.layout_builder_restrictions:
   type: sequence
   label: 'Layout Builder Restrictions plugin configuration'
   sequence:
-    - type: layout_builder_restrictions.[%key]
+    type: layout_builder_restrictions.[%key]
 
 layout_builder_restrictions.entity_view_mode_restriction:
   type: mapping

@@ -51,6 +51,7 @@ services:
     arguments: ['@flood', '@config.factory', '@acquia_search.logger_channel']
   acquia_search.memory_cache:
     class: Drupal\Core\Cache\MemoryCache\MemoryCache
+    arguments: ['@datetime.time']
   cache.acquia_search.indexes:
     class: Drupal\Core\Cache\BackendChain
     calls:

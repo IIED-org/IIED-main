@@ -6,3 +6,4 @@ name: People
 vid: person
 description: 'Author, editor, contributor, staff etc. (can be a group)'
 weight: 0
+new_revision: false

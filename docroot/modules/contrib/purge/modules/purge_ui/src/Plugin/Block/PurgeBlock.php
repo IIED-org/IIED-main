@@ -6,7 +6,6 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\purge_ui\Form\PurgeBlockForm;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -18,7 +17,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class PurgeBlock extends BlockBase implements ContainerFactoryPluginInterface {
-  use ContainerAwareTrait;
+
+  /**
+   * The container service.
+   *
+   * @var \Symfony\Component\DependencyInjection\ContainerInterface
+   */
+  protected $container;
 
   /**
    * Construct a new PurgeBlock instance.
@@ -34,7 +39,7 @@ class PurgeBlock extends BlockBase implements ContainerFactoryPluginInterface {
    */
   final public function __construct(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->setContainer($container);
+    $this->container = $container;
   }
 
   /**

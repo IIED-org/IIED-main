@@ -31,7 +31,7 @@ class RabbitHoleBehaviorSettingsTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['rabbit_hole', self::DEFAULT_TEST_ENTITY];
+  protected static $modules = ['rabbit_hole', self::DEFAULT_TEST_ENTITY];
 
   /**
    * Behavior settings manager.

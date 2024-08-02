@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation_google_maps;
 
-use Drupal\geolocation\GeocoderCountryFormattingInterface;
 use Drupal\geolocation\GeocoderCountryFormattingBase;
+use Drupal\geolocation\GeocoderCountryFormattingInterface;
 
 /**
  * Defines an interface for geolocation google geocoder country  plugins.

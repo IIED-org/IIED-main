@@ -2,12 +2,12 @@
 
 namespace Drupal\geolocation_google_places_api\Plugin\geolocation\Geocoder;
 
-use GuzzleHttp\Exception\RequestException;
 use Drupal\Component\Serialization\Json;
-use Drupal\geolocation_google_maps\GoogleGeocoderBase;
-use Drupal\geolocation\KeyProvider;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\KeyProvider;
+use Drupal\geolocation_google_maps\GoogleGeocoderBase;
 use Drupal\geolocation_google_maps\Plugin\geolocation\MapProvider\GoogleMaps;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Provides the Google Places API.

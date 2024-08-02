@@ -2,8 +2,8 @@
 
 namespace Drupal\views_json_source\Event;
 
-use Symfony\Contracts\EventDispatcher\Event;
 use Drupal\views\ViewExecutable;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Event used to modify the json content before setting into cache.

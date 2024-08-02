@@ -45,6 +45,11 @@ abstract class KeyProviderBase extends KeyPluginBase implements KeyProviderInter
    *   The obscured key value.
    */
   protected static function obscureValue($key_value, array $options = []) {
+    // Check if key_value is a string.
+    if (!is_string($key_value)) {
+      return '';
+    }
+
     // Add default options.
     $options += [
       'replacement_character' => '*',

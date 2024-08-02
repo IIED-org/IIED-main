@@ -39,8 +39,8 @@
   'use strict';
 
   Drupal.behaviors.geolocationAddressMapWidgetPendingActions = {
-    attach: function (context, drupalSettings) {
-      $(once('geolocation-address-handler', 'html')).ajaxComplete(function (event, xhr, settings) {
+    attach: function () {
+      $(document).ajaxComplete(function (event, xhr, settings) {
         if (
           typeof settings.extraData === 'undefined'
           || typeof settings.extraData._drupal_ajax === 'undefined'
@@ -111,7 +111,7 @@
           return;
         }
 
-        var geolocationWidgetWrapper = $(once('geolocation-address-integration-enabled', '.field--name-' + sourceFieldName.replace(/_/g, '-'), context));
+        var geolocationWidgetWrapper = $('.field--name-' + sourceFieldName.replace(/_/g, '-'), context);
         if (geolocationWidgetWrapper.length === 0) {
           return;
         }

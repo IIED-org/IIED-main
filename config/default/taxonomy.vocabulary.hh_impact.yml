@@ -6,3 +6,4 @@ name: 'HH impact'
 vid: hh_impact
 description: 'Hidden handbrake content impact areas'
 weight: 0
+new_revision: false

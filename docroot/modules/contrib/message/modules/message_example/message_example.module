@@ -5,11 +5,11 @@
  * Holds hook implementation for the Message example module.
  */
 
-use Drupal\Core\Entity\ContentEntityBase;
-use Drupal\node\Entity\Node;
 use Drupal\comment\Entity\Comment;
-use Drupal\user\Entity\User;
+use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\message\Entity\Message;
+use Drupal\node\Entity\Node;
+use Drupal\user\Entity\User;
 
 /**
  * Implements hook_node_insert().
@@ -76,7 +76,7 @@ function message_example_update_message_status(ContentEntityBase $entity) {
   $field = 'field_' . $entity->getEntityType()->id() . '_reference';
   $query->condition($field . '.target_id', $entity->id());
 
-  $results = $query->execute();
+  $results = $query->accessCheck(FALSE)->execute();
 
   if (empty($results)) {
     return;

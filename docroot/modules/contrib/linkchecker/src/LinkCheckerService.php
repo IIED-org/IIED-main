@@ -14,12 +14,12 @@ use Drupal\linkchecker\Event\BuildHeader;
 use Drupal\linkchecker\Event\LinkcheckerEvents;
 use Drupal\linkchecker\Plugin\LinkStatusHandlerManager;
 use GuzzleHttp\Client;
-use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class LinkCheckerService.
+ * Created a Class for creating Services.
  */
 class LinkCheckerService {
 
@@ -95,13 +95,13 @@ class LinkCheckerService {
   }
 
   /**
-   * Queue all links for checking.
+   * Queue all published links for checking.
    *
    * @param bool $rebuild
-   *   Defines whether rebuild queue or not.
+   *   Defines whether to rebuild queue or not.
    *
    * @return int
-   *   Nubmer of queued items.
+   *   Number of queued items.
    */
   public function queueLinks($rebuild = FALSE) {
     if ($rebuild) {
@@ -113,7 +113,10 @@ class LinkCheckerService {
     }
 
     $checkInterval = $this->linkcheckerSetting->get('check.interval');
-    $query = $this->entityTypeManager->getStorage('linkcheckerlink')->getAggregateQuery()->accessCheck();
+    $query = $this->entityTypeManager->getStorage('linkcheckerlink')
+      ->getAggregateQuery()
+      ->accessCheck()
+      ->condition('status', 1);
     $orGroup = $query->orConditionGroup()
       ->condition('last_check', $this->time->getRequestTime() - $checkInterval, '<=')
       ->condition('last_check', NULL, 'IS NULL');
@@ -127,8 +130,8 @@ class LinkCheckerService {
     if (!empty($linkIds)) {
       $linkIds = array_column($linkIds, 'lid_min');
       $maxConnections = $this->linkcheckerSetting->get('check.connections_max');
-      // Split ids by max connection amount to make possible send concurrent
-      // requests.
+      // Split ids by max connection amount to make it possible to send
+      // concurrent requests.
       $linkIds = array_chunk($linkIds, $maxConnections);
     }
     else {

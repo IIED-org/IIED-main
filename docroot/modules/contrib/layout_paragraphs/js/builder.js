@@ -4,28 +4,20 @@
 * https://www.drupal.org/node/2815083
 * @preserve
 **/
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0) { ; } } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+"use strict";
+
 (function ($, Drupal, debounce, dragula, once) {
   var idAttr = 'data-lpb-id';
   function attachUiElements($container, settings) {
-    var id = $container[0].id;
+    var id = $container.attr('data-lpb-ui-id');
     var lpbBuilderSettings = settings.lpBuilder || {};
     var uiElements = lpbBuilderSettings.uiElements || {};
     var containerUiElements = uiElements[id] || [];
-    Object.entries(containerUiElements).forEach(function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 2),
-        key = _ref2[0],
-        uiElement = _ref2[1];
+    Object.values(containerUiElements).forEach(function (uiElement) {
       var element = uiElement.element,
         method = uiElement.method;
       $container[method]($(element).addClass('js-lpb-ui'));
     });
-    Drupal.attachBehaviors($container[0], drupalSettings);
   }
   function repositionDialog(intervalId) {
     var $dialogs = $('.lpb-dialog');
@@ -38,8 +30,18 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       var viewPortHeight = window.innerHeight || document.documentElement.clientHeight;
       if (bounding.bottom > viewPortHeight) {
         var $dialog = $('.ui-dialog-content', dialog);
-        var pos = $dialog.dialog('option', 'position');
-        $dialog.dialog('option', 'position', pos);
+        var height = viewPortHeight - 200;
+        $dialog.dialog('option', 'height', height);
+        $dialog.css('overscroll-behavior', 'contain');
+        if ($dialog.data('lpOriginalHeight') !== height) {
+          $dialog.data('lpOriginalHeight', height);
+          var _bounding = dialog.getBoundingClientRect();
+          var _viewPortHeight = window.innerHeight || document.documentElement.clientHeight;
+          if (_bounding.bottom > _viewPortHeight) {
+            var pos = $dialog.dialog('option', 'position');
+            $dialog.dialog('option', 'position', pos);
+          }
+        }
       }
     });
   }
@@ -70,8 +72,21 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     });
   }
   function updateMoveButtons($element) {
-    $element.find('.lpb-up, .lpb-down').attr('tabindex', '0');
-    $element.find('.js-lpb-component:first-of-type .lpb-up, .js-lpb-component:last-of-type .lpb-down').attr('tabindex', '-1');
+    var lpbBuilderElements = Array.from($element[0].querySelectorAll('.js-lpb-component-list, .js-lpb-region'));
+    var lpbBuilderComponent = lpbBuilderElements.filter(function (el) {
+      return el.querySelector('.js-lpb-component');
+    });
+    $element[0].querySelectorAll('.lpb-up, .lpb-down').forEach(function (el) {
+      el.setAttribute('tabindex', '0');
+    });
+    lpbBuilderComponent.forEach(function (el) {
+      var _components$0$querySe, _components$querySele;
+      var components = Array.from(el.children).filter(function (n) {
+        return n.classList.contains('js-lpb-component');
+      });
+      (_components$0$querySe = components[0].querySelector('.lpb-up')) === null || _components$0$querySe === void 0 || _components$0$querySe.setAttribute('tabindex', '-1');
+      (_components$querySele = components[components.length - 1].querySelector('.lpb-down')) === null || _components$querySele === void 0 || _components$querySele.setAttribute('tabindex', '-1');
+    });
   }
   function hideEmptyRegionButtons($element) {
     $element.find('.js-lpb-region').each(function (i, e) {
@@ -94,41 +109,45 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     var _window = window,
       scrollY = _window.scrollY;
     var destScroll = scrollY + $sibling.outerHeight() * direction;
-    var distance = Math.abs(destScroll - scrollY);
     if ($sibling.length === 0) {
       return false;
     }
-    $({
-      translateY: 0
-    }).animate({
-      translateY: 100 * direction
+    var animateProp = $sibling[0].getBoundingClientRect().top == $moveItem[0].getBoundingClientRect().top ? 'translateX' : 'translateY';
+    var dimmensionProp = animateProp === 'translateX' ? 'offsetWidth' : 'offsetHeight';
+    var siblingDest = $moveItem[0][dimmensionProp] * direction * -1;
+    var itemDest = $sibling[0][dimmensionProp] * direction;
+    var distance = Math.abs(Math.max(siblingDest, itemDest));
+    var duration = distance * .25;
+    var siblingKeyframes = [{
+      transform: "".concat(animateProp, "(0)")
     }, {
-      duration: Math.max(100, Math.min(distance, 500)),
-      easing: 'swing',
-      step: function step() {
-        var a = $sibling.outerHeight() * (this.translateY / 100);
-        var b = -$moveItem.outerHeight() * (this.translateY / 100);
-        $moveItem.css({
-          transform: "translateY(".concat(a, "px)")
-        });
-        $sibling.css({
-          transform: "translateY(".concat(b, "px)")
-        });
-      },
-      complete: function complete() {
-        $moveItem.css({
-          transform: 'none'
-        });
-        $sibling.css({
-          transform: 'none'
-        });
-        $sibling[method]($moveItem);
-        $moveItem.closest("[".concat(idAttr, "]")).trigger('lpb-component:move', [$moveItem.attr('data-uuid')]);
-      }
-    });
-    if (distance > 50) {
-      $('html, body').animate({
-        scrollTop: destScroll
+      transform: "".concat(animateProp, "(").concat(siblingDest, "px)")
+    }];
+    var itemKeyframes = [{
+      transform: "".concat(animateProp, "(0)")
+    }, {
+      transform: "".concat(animateProp, "(").concat(itemDest, "px)")
+    }];
+    var timing = {
+      duration: duration,
+      iterations: 1
+    };
+    var anim1 = $moveItem[0].animate(itemKeyframes, timing);
+    anim1.onfinish = function () {
+      $moveItem.css({
+        transform: 'none'
+      });
+      $sibling.css({
+        transform: 'none'
+      });
+      $sibling[method]($moveItem);
+      $moveItem.closest("[".concat(idAttr, "]")).trigger('lpb-component:move', [$moveItem.attr('data-uuid')]);
+    };
+    $sibling[0].animate(siblingKeyframes, timing);
+    if (animateProp === 'translateY') {
+      window.scrollTo({
+        top: destScroll,
+        behavior: 'smooth'
       });
     }
   }
@@ -201,7 +220,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     });
     $element.on('click.lp-builder', '.js-lpb-component', function (e) {
       $(e.currentTarget).focus();
-      return false;
     });
     $element.on('click.lp-builder', '.lpb-drag', function (e) {
       var $btn = $(e.currentTarget);
@@ -234,7 +252,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     });
   }
   function initDragAndDrop($element, settings) {
-    var drake = dragula($element.find('.js-lpb-component-list, .js-lpb-region').not('.is-dragula-enabled').get(), {
+    var containers = once('is-dragula-enabled', '.js-lpb-component-list, .js-lpb-region', $element[0]);
+    var drake = dragula(containers, {
       accepts: function accepts(el, target, source, sibling) {
         return moveErrors(settings, el, target, source, sibling).length === 0;
       },
@@ -301,66 +320,78 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     var $element = $("[data-lpb-id=\"".concat(layoutId, "\"]"));
     $element.trigger("lpb-".concat(eventName), [componentUuid]);
   };
+  function updateDialogButtons(context) {
+    var $lpDialog = $(context).closest('.ui-dialog-content');
+    if (!$lpDialog) {
+      return;
+    }
+    var buttons = [];
+    var $buttons = $lpDialog.find('.layout-paragraphs-component-form > .form-actions input[type=submit], .layout-paragraphs-component-form > .form-actions a.button');
+    if ($buttons.length === 0) {
+      return;
+    }
+    $buttons.each(function (_i, el) {
+      var $originalButton = $(el).css({
+        display: 'none'
+      });
+      buttons.push({
+        text: $originalButton.html() || $originalButton.attr('value'),
+        class: $originalButton.attr('class'),
+        click: function click(e) {
+          if ($originalButton.is('a')) {
+            $originalButton[0].click();
+          } else {
+            $originalButton.trigger('mousedown').trigger('mouseup').trigger('click');
+            e.preventDefault();
+          }
+        }
+      });
+    });
+    $lpDialog.dialog('option', 'buttons', buttons);
+  }
   Drupal.behaviors.layoutParagraphsBuilder = {
     attach: function attach(context, settings) {
-      $(once('lpb-ui-elements', '[data-has-js-ui-element]')).each(function (i, el) {
+      var jsUiElements = once('lpb-ui-elements', '[data-has-js-ui-element]');
+      jsUiElements.forEach(function (el) {
         attachUiElements($(el), settings);
       });
-      var events = ['lpb-builder:init.lpb', 'lpb-component:insert.lpb', 'lpb-component:update.lpb', 'lpb-component:move.lpb', 'lpb-component:drop.lpb', 'lpb-component:delete.lpb'].join(' ');
-      $(once('lpb-events', '[data-lpb-id]')).on(events, function (e) {
-        var $element = $(e.currentTarget);
-        updateUi($element);
+      once('lpb-events', '[data-lpb-id]').forEach(function (el) {
+        $(el).on('lpb-builder:init.lpb lpb-component:insert.lpb lpb-component:update.lpb lpb-component:move.lpb lpb-component:drop.lpb lpb-component:delete.lpb', function (e) {
+          var $element = $(e.currentTarget);
+          updateUi($element);
+        });
       });
-      $(".has-components[".concat(idAttr, "]")).each(function (index, element) {
-        var $element = $(once('lpb-enabled', element));
+      once('lpb-enabled', '[data-lpb-id].has-components').forEach(function (el) {
+        var $element = $(el);
         var id = $element.attr(idAttr);
         var lpbSettings = settings.lpBuilder[id];
-        $element.each(function () {
-          $element.data('drake', initDragAndDrop($element, lpbSettings));
-          attachEventListeners($element, lpbSettings);
-          $element.trigger('lpb-builder:init');
-        });
-        $('.js-lpb-region:not(.is-dragula-enabled)', element).addClass('is-dragula-enabled').get().forEach(function (c) {
-          var drake = $(element).data('drake');
-          drake.containers.push(c);
-        });
+        $element.data('drake', initDragAndDrop($element, lpbSettings));
+        attachEventListeners($element, lpbSettings);
+        $element.trigger('lpb-builder:init');
       });
+      once('is-dragula-enabled', '.js-lpb-region').forEach(function (c) {
+        var builderElement = c.closest('[data-lpb-id]');
+        var drake = $(builderElement).data('drake');
+        drake.containers.push(c);
+      });
+      if (jsUiElements.length) {
+        Drupal.attachBehaviors(context, settings);
+      }
+      updateDialogButtons(context);
     }
   };
-  $(window).on('dialog:aftercreate', function (event, dialog, $dialog) {
-    if ($dialog.attr('id').indexOf('lpb-dialog-') === 0) {
-      if ($dialog.dialog('option', 'buttons').length > 0) {
-        return;
-      }
-      var buttons = [];
-      var $buttons = $dialog.find('.layout-paragraphs-component-form > .form-actions input[type=submit], .layout-paragraphs-component-form > .form-actions a.button');
-      $buttons.each(function (_i, el) {
-        var $originalButton = $(el).css({
-          display: 'none'
-        });
-        buttons.push({
-          text: $originalButton.html() || $originalButton.attr('value'),
-          class: $originalButton.attr('class'),
-          click: function click(e) {
-            if ($originalButton.is('a')) {
-              $originalButton[0].click();
-            } else {
-              $originalButton.trigger('mousedown').trigger('mouseup').trigger('click');
-              e.preventDefault();
-            }
-          }
-        });
-      });
-      if (buttons.length) {
-        $dialog.dialog('option', 'buttons', buttons);
-      }
-    }
-  });
   var lpDialogInterval;
-  $(window).on('dialog:aftercreate', function (event, dialog, $dialog) {
-    if ($dialog[0].id.indexOf('lpb-dialog-') === 0) {
+  var handleAfterDialogCreate = function handleAfterDialogCreate(event, dialog, $dialog) {
+    var $element = $dialog || jQuery(event.target);
+    if ($element.attr('id').startsWith('lpb-dialog-')) {
+      updateDialogButtons($element);
       clearInterval(lpDialogInterval);
       lpDialogInterval = setInterval(repositionDialog.bind(null, lpDialogInterval), 500);
     }
-  });
+  };
+  if (typeof DrupalDialogEvent === 'undefined') {
+    $(window).on('dialog:aftercreate', handleAfterDialogCreate);
+  } else {
+    window.addEventListener('dialog:aftercreate', handleAfterDialogCreate);
+  }
 })(jQuery, Drupal, Drupal.debounce, dragula, once);

@@ -1,62 +1,62 @@
 :root {
-  --colorGinPrimary: #003cc5;
-  --colorGinPrimaryHover: #0036b1;
-  --colorGinPrimaryActive: #00339a;
+  --gin-color-primary: #003cc5;
+  --gin-color-primary-hover: #0036b1;
+  --gin-color-primary-active: #00339a;
 }
 
 .button--primary {
-  background-color: var(--colorGinPrimary);
+  background-color: var(--gin-color-primary);
 }
 .button--primary:hover {
-  background-color: var(--colorGinPrimaryHover);
+  background-color: var(--gin-color-primary-hover);
 }
 .button--primary:active {
-  background-color: var(--colorGinPrimaryHover);
+  background-color: var(--gin-color-primary-hover);
 }
 
 a,
 .link,
 button.link,
 .forgot-password-link {
-  color: var(--colorGinPrimary);
+  color: var(--gin-color-primary);
 }
 a:hover,
 .link:hover,
 button.link:hover,
 .forgot-password-link:hover {
-  color: var(--colorGinPrimaryHover);
+  color: var(--gin-color-primary-hover);
 }
 a:active,
 .link:active,
 button.link:active,
 .forgot-password-link:active {
-  color: var(--colorGinPrimaryActive);
+  color: var(--gin-color-primary-active);
 }
 
 .form-boolean--type-checkbox:checked,
 [open] > .claro-details__summary--accordion:not(:focus):not(:active)::after,
 [open] > .claro-details__summary--accordion-item:not(:focus):not(:active)::after {
-  border-color: var(--colorGinPrimary);
+  border-color: var(--gin-color-primary);
 }
 .form-boolean--type-checkbox:checked:hover,
 [open] > .claro-details__summary--accordion:not(:focus):not(:active)::after:hover,
 [open] > .claro-details__summary--accordion-item:not(:focus):not(:active)::after:hover {
-  border-color: var(--colorGinPrimaryHover);
+  border-color: var(--gin-color-primary-hover);
 }
 .form-boolean--type-checkbox:checked:active,
 [open] > .claro-details__summary--accordion:not(:focus):not(:active)::after:active,
 [open] > .claro-details__summary--accordion-item:not(:focus):not(:active)::after:active {
-  border-color: var(--colorGinPrimaryActive);
+  border-color: var(--gin-color-primary-active);
 }
 
 .is-horizontal .tabs__link:hover,
 .claro-details__summary:hover,
 .action-link:hover {
-  color: var(--colorGinPrimaryHover);
+  color: var(--gin-color-primary-hover);
 }
 
 .claro-details[open] > .claro-details__summary:focus {
-  color: var(--colorGinPrimaryActive);
+  color: var(--gin-color-primary-active);
 }
 
 body.gin-login .toolbar-icon-default {
@@ -68,7 +68,7 @@ body.gin-login .toolbar-icon-default::before {
   display: inline-block;
   width: 32px;
   height: 32px;
-  background-color: var(--colorGinText, #000);
+  background-color: var(--gin-color-text, #000);
   -webkit-mask-image: url(../../images/gin.svg);
           mask-image: url(../../images/gin.svg);
   -webkit-mask-repeat: no-repeat;
@@ -85,7 +85,7 @@ body.gin-login .toolbar-icon-default::before {
   }
 }
 body.gin-login .toolbar-icon-default::before:hover {
-  background-color: var(--colorGinPrimary, #003cc5);
+  background-color: var(--gin-color-primary, #003cc5);
 }
 body.gin-login .user-form-page {
   display: flex;
@@ -93,7 +93,7 @@ body.gin-login .user-form-page {
   min-height: 100vh;
   max-height: 100%;
   margin-bottom: -1px;
-  background: var(--colorGinLayerBackground, #fff);
+  background: var(--gin-bg-layer, #fff);
 }
 @media (min-width: 800px) {
   body.gin-login .user-form-page {

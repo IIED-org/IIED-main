@@ -365,12 +365,26 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $entity_type_id = $this->getFieldSetting('target_type');
     $element = parent::settingsForm($form, $form_state);
+    $element['view_mode'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('View mode'),
+      '#default_value' => $this->getSetting('view_mode'),
+      '#options' => $this->entityDisplayRepository->getViewModeOptions($entity_type_id),
+      '#required' => TRUE,
+    );
     $element['preview_view_mode'] = [
       '#type' => 'select',
       '#title' => $this->t('Preview view mode'),
       '#default_value' => $this->getSetting('preview_view_mode'),
       '#options' => $this->entityDisplayRepository->getViewModeOptions($entity_type_id),
-      '#description' => $this->t('View mode for the referenced entity preview on the edit form. Automatically falls back to "default", if it is not enabled in the referenced entity type displays.'),
+      '#description' => $this->t('View mode for the referenced entity preview on the edit form. Automatically falls back to "default" if it is not enabled in the referenced entity type displays.'),
+    ];
+    $element['form_display_mode'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Form display mode'),
+      '#default_value' => $this->getSetting('form_display_mode'),
+      '#options' => $this->entityDisplayRepository->getFormModeOptions($entity_type_id),
+      '#description' => $this->t('The form display mode to use when rendering the paragraph form. Automatically falls back to "default", if it is not enabled in the referenced entity type displays.'),
     ];
     $element['nesting_depth'] = [
       '#type' => 'select',
@@ -397,7 +411,13 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
    */
   public function settingsSummary() {
     $summary = parent::settingsSummary();
-    $summary[] = $this->t('Preview view mode: @preview_view_mode', ['@preview_view_mode' => $this->getSetting('preview_view_mode')]);
+    $view_modes = $this->entityDisplayRepository->getViewModeOptions($this->getFieldSetting('target_type'));
+    $view_mode = $this->getSetting('view_mode');
+    $preview_view_mode = $this->getSetting('preview_view_mode');
+
+    $summary[] = $this->t('Rendered as @mode', ['@mode' => $view_modes[$view_mode] ?? $view_mode]);
+    $summary[] = $this->t('Preview view mode: @preview_mode', ['@preview_mode' => $view_modes[$preview_view_mode] ?? $preview_view_mode]);
+    $summary[] = $this->t('Form display mode: @form_display_mode', ['@form_display_mode' => $this->getSetting('form_display_mode')]);
     $summary[] = $this->t('Maximum nesting depth: @max_depth', ['@max_depth' => $this->getSetting('nesting_depth')]);
     if ($this->getSetting('require_layouts')) {
       $summary[] = $this->t('Paragraphs <b>must be</b> added within layouts.');
@@ -418,11 +438,25 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
     $defaults = parent::defaultSettings();
     $defaults += [
       'empty_message' => '',
+      'view_mode' => 'default',
       'preview_view_mode' => 'default',
+      'form_display_mode' => 'default',
       'nesting_depth' => 0,
       'require_layouts' => 0,
     ];
     return $defaults;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function form(FieldItemListInterface $items, array &$form, FormStateInterface $form_state, $get_delta = NULL) {
+    $elements = parent::form($items, $form, $form_state, $get_delta);
+    // Signal to content_translation that this field should be treated as
+    // multilingual and not be hidden, see
+    // \Drupal\content_translation\ContentTranslationHandler::entityFormSharedElements().
+    $elements['#multilingual'] = TRUE;
+    return $elements;
   }
 
 }

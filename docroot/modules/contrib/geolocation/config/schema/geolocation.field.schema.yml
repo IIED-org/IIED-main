@@ -64,6 +64,13 @@ field.formatter.settings.geolocation_token:
     tokenized_text:
       type: text_format
       label: 'Tokenized text'
+    token_help:
+      type: mapping
+      label: 'Token help'
+      mapping:
+        token_items:
+          type: string
+          label: 'Token items'
 
 geolocation.field.widget.map.base:
   type: mapping

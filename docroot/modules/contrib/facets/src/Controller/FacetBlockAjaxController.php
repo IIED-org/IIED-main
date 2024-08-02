@@ -117,6 +117,11 @@ class FacetBlockAjaxController extends ControllerBase {
 
     // Rebuild the request and the current path, needed for facets.
     $path = $request->request->get('facet_link');
+
+    // Remove base path if drupal is installed in a sub-directory.
+    $host = $request->getSchemeAndHttpHost();
+    $base_url = $host . base_path();
+    $path = preg_replace('/^' . str_replace('/', '\/', $base_url) . '/', '/', $path);
     $facets_blocks = $request->request->all()['facets_blocks'] ?? [];
 
     if (empty($path) || empty($facets_blocks)) {

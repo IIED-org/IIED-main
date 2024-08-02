@@ -1,51 +1,62 @@
 .gin-table-scroll-wrapper {
-  overflow: auto;
+  clear: both;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 240px;
   margin-top: calc(var(--gin-spacing-xs) * -1);
-  margin-bottom: -240px;
+}
+
+table.gin--sticky-table-header {
+  visibility: hidden;
+  z-index: 97;
+  position: sticky;
+  top: calc(var(--gin-toolbar-y-offset) + var(--gin-height-sticky) - 1px);
+  width: auto !important;
+  margin-top: -8px;
+  overflow: hidden;
+
+  tr {
+    display: block;
+    width: max-content;
+  }
+}
+
+.gin-horizontal-scroll-shadow {
+  background-image:
+    linear-gradient(to right, var(--gin-bg-layer), var(--gin-bg-layer)),
+    linear-gradient(to right, var(--gin-bg-layer), var(--gin-bg-layer)),
+    linear-gradient(to right, rgba(0, 0, 0, .125), rgba(255, 255, 255, 0)),
+    linear-gradient(to left, rgba(0, 0, 0, .125), rgba(255, 255, 255, 0));
+  background-position: left center, right center, left center, right center;
+  background-repeat: no-repeat;
+  background-color: var(--gin-bg-layer);
+  background-size: 24px 100%, 24px 100%, 12px 100%, 12px 100%;
+  background-attachment: local, local, scroll, scroll;
 }
 
 table.sticky-header {
-  visibility: hidden;
-  z-index: 98;
-  position: fixed;
   left: auto !important;
-  top: calc(var(--gin-toolbar-y-offset) + var(--gin-sticky-offset)) !important;
+  min-width: 100%;
+  max-width: fit-content;
   background: transparent;
+}
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 1.5rem;
-    height: 100%;
+table.position-sticky,
+table.sticky-header {
+  thead {
+    position: static;
   }
 
-  &::before {
-    left: calc(var(--gin-spacing-l) * -1);
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0), var(--gin-bg-layer));
-  }
+  &.--is-processed thead {
+    pointer-events: none;
 
-  &::after {
-    right: calc(var(--gin-spacing-l) * -1);
-    background: linear-gradient(90deg, var(--gin-bg-layer), rgba(255, 255, 255, 0));
-  }
+    tr {
+      border-color: transparent;
 
-  .--is-sticky & {
-    box-shadow: 0 10px 20px -16px rgba(0, 0, 0, .4);
-
-    @include mq(medium) {
-      visibility: visible !important;
-    }
-
-    thead tr {
-      border-bottom: none;
-    }
-
-    th {
-      background: var(--gin-bg-layer);
+      .sortable-heading.is-active > a::before {
+        display: none;
+      }
     }
   }
 }
@@ -91,13 +102,14 @@ table {
   }
 
   tr,
+  tr:focus-within,
   .draggable-table.tabledrag-disabled tr {
     color: var(--gin-color-text);
     background-color: transparent;
 
     &:hover {
       color: var(--gin-color-text);
-      background: var(--gin-bg-item-hover);
+      background: var(--gin-bg-item);
     }
 
     &.selected:hover {
@@ -111,7 +123,7 @@ table {
     }
 
     td {
-      background-color: var(--gin-color-primary-light);
+      background-color: var(--gin-bg-item-hover);
     }
   }
 
@@ -135,7 +147,7 @@ table {
   padding: var(--gin-spacing-xs) var(--gin-spacing-m);
 
   > a::before {
-    bottom: -1px;
+    bottom: -2px;
   }
 
   > a::after {
@@ -149,12 +161,25 @@ table {
     }
   }
 
+  &.is-active > a::before,
+  > a:hover::before {
+    width: 100%;
+    left: 0;
+  }
+
+  > a:hover::before {
+    border-bottom-width: 3px;
+  }
+
   &.is-active > a {
     &, &:hover, &:active {
       color: var(--gin-color-primary-active);
     }
 
     &::before {
+      background-color: var(--gin-bg-item);
+      border-top-left-radius: var(--gin-border-s);
+      border-top-right-radius: var(--gin-border-s);
       border-bottom: .1875rem solid var(--gin-color-primary-active);
     }
   }
@@ -216,20 +241,19 @@ td.webform-has-field-suffix > .form-item > .form-element {
   }
 
   thead {
-    position: relative;
-    z-index: 0;
-
-    &::after {
-      content: "";
-      z-index: -1;
-      display: block;
-      width: 100%;
-      height: 100%;
+    th {
       background: var(--gin-bg-header);
-      position: absolute;
-      top: 0;
-      left: 0;
-      border-radius: var(--gin-border-m);
+
+      &:first-of-type {
+        border-top-left-radius: var(--gin-border-m);
+        border-bottom-left-radius: var(--gin-border-m);
+      }
+    }
+
+    &:not(:has(th:last-of-type:not([style*="display: none"]))) th:nth-last-of-type(2),
+    th:last-of-type:not([style*="display: none"]) {
+      border-top-right-radius: var(--gin-border-m);
+      border-bottom-right-radius: var(--gin-border-m);
     }
 
     tr {
@@ -251,6 +275,11 @@ td.webform-has-field-suffix > .form-item > .form-element {
 
   tr .form-item:not(:last-of-type) {
     margin-bottom: var(--gin-spacing-m);
+  }
+
+  // Fixes paragraphs extending beyond layout
+  .ck.ck-toolbar.ck-toolbar_grouping>.ck-toolbar__items {
+    flex-wrap: wrap;
   }
 }
 

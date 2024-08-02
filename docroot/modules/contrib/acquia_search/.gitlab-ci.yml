@@ -13,10 +13,14 @@ variables:
   # Projects with complex tests are welcome to increase this.
   # Keeping this low helps jobs find an available runner without waiting.
   KUBERNETES_CPU_REQUEST: 2
+  # Google env variables.
+  # ORCA_GOOGLE_API_CLIENT_ID: ${{ secrets.ORCA_GOOGLE_API_CLIENT_ID }}
+  # ORCA_GOOGLE_API_CLIENT_SECRET: ${{ secrets.ORCA_GOOGLE_API_CLIENT_SECRET }}
+  # ORCA_GOOGLE_API_REFRESH_TOKEN: ${{ secrets.ORCA_GOOGLE_API_REFRESH_TOKEN }}
 
 .with-chrome: &with-chrome
   name: drupalci/chromedriver:production
-  alias: chrome-orca
+  alias: chrome
   entrypoint:
     - chromedriver
     - "--no-sandbox"
@@ -30,9 +34,59 @@ variables:
     - <<: *with-chrome
   script:
     - apt update && apt upgrade -y
-    # Installing missing packages.
     - apt-get update && apt-get install -y apt-utils libsodium-dev patch unzip
-    # Installing sodiun extension required by ACMS.
+    - apt-get update && apt-get install -y apt-utils libsodium-dev patch unzip wget
+    - |
+      # php_version="$(php -r 'echo PHP_VERSION;' | cut -d '.' -f 1,2)"
+      # echo "php_version:${php_version}"
+      php_version="$(php -r 'echo PHP_VERSION;' | cut -d '.' -f 1,2)"
+      echo "php_version:${php_version}"
+      # if [ ${php_version} = 8.0 ]; then
+      #   apt install -y libzip-dev unzip;
+      # fi
+      # if [ ${php_version} = 8.1 ]; then
+      #   # docker-php-ext-install sodium
+      # fi
+      # if [ ${php_version} = 8.3 ]; then
+      #
+      #   # Below code needs to be uncommented when using image "drupalci/php-8.3-apache:production" in PHP 8.3 test.
+      #   # Currently we are using "drupalci/php-8.3-apache:production-old" image for PHP 8.3 testing as commands like 'docker-php-ext-install' are not working
+      #   # in the latest image "drupalci/php-8.3-apache:production". This ensures we have feature parity "drupalci/php-8.1-apache:production" image.
+      #   #
+      #   # apt-get update && apt-get install -y --no-install-recommends --allow-downgrades
+      #   # && autoconf ca-certificates curl file  g++ gcc gdb gnupg2 libc-dev libedit2
+      #   # && libsqlite3-0 	libxml2  make pkg-config 	re2c 	rsync unzip xz-utils
+      #   # && rm -rf /var/lib/apt/lists/*;
+      #   #
+      #   # export PHP_URL="https://secure.php.net/get/php-8.3.3.tar.xz/from/this/mirror";
+      #   # export PHP_ASC_URL="https://secure.php.net/get/php-8.3.3.tar.xz.asc/from/this/mirror";
+      #   #
+      #   # set -xe; 		fetchDeps='wget'; apt-get update; apt-get install -y --no-install-recommends --allow-downgrades $fetchDeps;
+      #   # rm -rf /var/lib/apt/lists/*;
+      #   # mkdir -p /usr/src; 	cd /usr/src;
+      #   # wget -O php.tar.xz "$PHP_URL";
+      #   # if [ -n "$PHP_ASC_URL" ]; then
+      #   #   wget -O php.tar.xz.asc "$PHP_ASC_URL";
+      #   # fi;
+      #   # apt-get purge -y --auto-remove $fetchDeps
+      #
+      # fi
+    - |
+      if [ ${php_version} = 8.1 ]; then
+        apt-get update && apt-get install -y --no-install-recommends --allow-downgrades \
+          autoconf ca-certificates curl file  g++ gcc gdb gnupg2 libc-dev libedit2 \
+          libsqlite3-0 	libxml2  make pkg-config 	re2c 	rsync unzip xz-utils \
+          && rm -rf /var/lib/apt/lists/*;
+
+        export PHP_URL="https://secure.php.net/get/php-8.1.28.tar.xz/from/this/mirror";
+
+        set -xe; 		fetchDeps='wget'; apt-get update; apt-get install -y --no-install-recommends --allow-downgrades $fetchDeps;
+        rm -rf /var/lib/apt/lists/*;
+        mkdir -p /usr/src; 	cd /usr/src;
+        wget -O php.tar.xz "$PHP_URL";
+        apt-get purge -y --auto-remove $fetchDeps
+      fi
+    - cd $CI_PROJECT_DIR
     - docker-php-ext-install sodium
     - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca $ORCA_VERSION
     - |
@@ -45,12 +99,15 @@ variables:
         pecl install xdebug
         docker-php-ext-enable xdebug
         echo xdebug.mode=coverage > /usr/local/etc/php/conf.d/xdebug.ini
+        echo zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20210902/xdebug.so >> /usr/local/etc/php/conf.d/xdebug.ini
       fi
     - cd $CI_PROJECT_DIR
     - ../orca/bin/ci/before_install.sh
     - ../orca/bin/ci/install.sh
+    - unset ORCA_ENABLE_NIGHTWATCH
     - ../orca/bin/ci/script.sh
   after_script:
+    - unset ORCA_COVERAGE_ENABLE
     - ../orca/bin/ci/after_success.sh
     - ../orca/bin/ci/after_failure.sh
     - ../orca/bin/ci/after_script.sh
@@ -71,6 +128,15 @@ INTEGRATED_TEST_ON_LATEST_EOL_MAJOR_PHP8:
     ORCA_JOB: "INTEGRATED_TEST_ON_LATEST_EOL_MAJOR"
     ORCA_VERSION: ^3
 
+# # PHP 8.0 tests.
+# INTEGRATED_TEST_ON_LATEST_EOL_MAJOR_PHP8:
+#   image: drupalci/php-8.0-apache:production
+#   extends:
+#     - .orca_run_tests
+#   variables:
+#     ORCA_JOB: "INTEGRATED_TEST_ON_LATEST_EOL_MAJOR"
+#     ORCA_VERSION: ^3
+#
 # PHP 8.1 tests.
 STATIC_CODE_ANALYSIS:
   extends:
@@ -114,21 +180,38 @@ ISOLATED_TEST_ON_CURRENT_DEV:
   variables:
     ORCA_JOB: "ISOLATED_TEST_ON_CURRENT_DEV"
 
-ISOLATED_TEST_ON_CURRENT_COVERAGE:
+# Coverage doesn't work on gitlab, so commented out.
+#ISOLATED_TEST_ON_CURRENT_COVERAGE:
+#  extends:
+#    - .orca_run_tests
+#  variables:
+#    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT"
+#    ORCA_COVERAGE_COBERTURA_ENABLE: "TRUE"
+#    ORCA_COVERAGE_COBERTURA: "$CI_PROJECT_DIR/var/logs/cobertura.xml"
+#  allow_failure: true
+#  artifacts:
+#    paths:
+#      - $CI_PROJECT_DIR/var/logs/cobertura.xml
+#      - $CI_PROJECT_DIR/var/logs/junit.xml
+#    reports:
+#      coverage_report:
+#        coverage_format: cobertura
+#        path: $CI_PROJECT_DIR/var/logs/cobertura.xml
+
+ISOLATED_TEST_ON_CURRENT_NIGHTWATCH:
   extends:
     - .orca_run_tests
   variables:
     ORCA_JOB: "ISOLATED_TEST_ON_CURRENT"
-    ORCA_COVERAGE_COBERTURA_ENABLE: "TRUE"
-    ORCA_COVERAGE_COBERTURA: "$CI_PROJECT_DIR/var/logs/cobertura.xml"
+    ORCA_ENABLE_NIGHTWATCH: "TRUE"
+    DRUPAL_NIGHTWATCH_OUTPUT: $CI_PROJECT_DIR/reports/nightwatch
   artifacts:
-    paths:
-      - $CI_PROJECT_DIR/var/logs/cobertura.xml
-      - $CI_PROJECT_DIR/var/logs/junit.xml
+    expire_in: 6 mos
+    when: always
     reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: $CI_PROJECT_DIR/var/logs/cobertura.xml
+      junit: $CI_PROJECT_DIR/reports/nightwatch/*/*.xml
+    paths:
+      - $CI_PROJECT_DIR/reports/nightwatch
 
 INTEGRATED_TEST_ON_CURRENT:
   extends:
@@ -178,6 +261,14 @@ LOOSE_DEPRECATED_CODE_SCAN:
   variables:
     ORCA_JOB: "LOOSE_DEPRECATED_CODE_SCAN"
 
+LIVE_TEST:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: ""
+    ORCA_LIVE_TEST: "TRUE"
+    ORCA_PACKAGES_CONFIG: ""
+    ORCA_PACKAGES_CONFIG_ALTER: ""
 
 # PHP 8.3 tests.
 STATIC_CODE_ANALYSIS_PHP83:
@@ -256,3 +347,13 @@ LOOSE_DEPRECATED_CODE_SCAN_PHP83:
     - .orca_run_tests
   variables:
     ORCA_JOB: "LOOSE_DEPRECATED_CODE_SCAN"
+
+LIVE_TEST_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: ""
+    ORCA_LIVE_TEST: "TRUE"
+    ORCA_PACKAGES_CONFIG: ""
+    ORCA_PACKAGES_CONFIG_ALTER: ""

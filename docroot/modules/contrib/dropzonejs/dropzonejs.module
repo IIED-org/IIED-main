@@ -5,6 +5,7 @@
  * Contains dropzonejs.module.
  */
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\dropzonejs\Form\DropzoneJsUploadForm;
 
@@ -71,20 +72,9 @@ function template_preprocess_dropzonejs(array &$variables) {
 function dropzonejs_library_info_build() {
   $libraries = [];
 
-  // @todo Remove this conditional structure in favor of using the libraries
-  // directory file finder service when Drupal 8.9 is the minimum supported
-  // version of core.
-  if (\Drupal::hasService('library.libraries_directory_file_finder')) {
-    /** @var \Drupal\Core\Asset\LibrariesDirectoryFileFinder $library_file_finder */
-    $library_file_finder = \Drupal::service('library.libraries_directory_file_finder');
-    $exif_path = $library_file_finder->find('exif-js/exif.js');
-  }
-  elseif (\Drupal::moduleHandler()->moduleExists('libraries')) {
-    $exif_path = libraries_get_path('exif-js') . '/exif.js';
-  }
-  else {
-    $exif_path = DRUPAL_ROOT . '/libraries/exif-js/exif.js';
-  }
+  /** @var \Drupal\Core\Asset\LibrariesDirectoryFileFinder $library_file_finder */
+  $library_file_finder = \Drupal::service('library.libraries_directory_file_finder');
+  $exif_path = $library_file_finder->find('exif-js/exif.js');
 
   if ($exif_path && file_exists($exif_path)) {
     $libraries['exif-js'] = [
@@ -110,12 +100,33 @@ function dropzonejs_library_info_build() {
  * Implements hook_library_info_alter().
  */
 function dropzonejs_library_info_alter(&$libraries, $extension) {
-  if ($extension == 'dropzonejs' && \Drupal::moduleHandler()->moduleExists('libraries')) {
-    $libraries['dropzonejs']['js'] = ['/' . libraries_get_path('dropzone') . '/dist/min/dropzone.min.js' => []];
-    $libraries['dropzonejs']['css']['component'] = ['/' . libraries_get_path('dropzone') . '/dist/min/dropzone.min.css' => []];
+  if ($extension !== 'dropzonejs') {
+    return;
+  }
 
-    if ($exif_path = libraries_get_path('exif-js')) {
-      $libraries['exif-js']['js'] = ['/' . $exif_path . '/exif.js' => []];
+  /** @var \Drupal\Core\Asset\LibrariesDirectoryFileFinder $library_file_finder */
+  $library_file_finder = \Drupal::service('library.libraries_directory_file_finder');
+
+  $js_candidates = [
+    'dropzone/dropzone-min.js',
+    'dropzone/dropzone.min.js',
+    'dropzone/min/dropzone.min.js',
+    'dropzone/dist/min/dropzone.min.js',
+  ];
+  foreach ($js_candidates as $js_candidate) {
+    if ($js_min_path = $library_file_finder->find($js_candidate)) {
+      $libraries['dropzonejs']['js'] = ['/' . $js_min_path => []];
+    }
+  }
+
+  $css_candidates = [
+    'dropzone/dropzone.css',
+    'dropzone/min/dropzone.min.css',
+    'dropzone/dist/min/dropzone.min.css',
+  ];
+  foreach ($css_candidates as $css_candidate) {
+    if ($css_path = $library_file_finder->find($css_candidate)) {
+      $libraries['dropzonejs']['css']['component'] = ['/' . $css_path => []];
     }
   }
 }
@@ -139,4 +150,30 @@ function dropzonejs_media_source_info_alter(array &$sources) {
   if (isset($sources['file'])) {
     $sources['file']['forms']['media_library_add'] = DropzoneJsUploadForm::class;
   }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dropzonejs_form_system_file_system_settings_alter(array &$form, FormStateInterface $form_state) {
+  $dropzone_config = \Drupal::config('dropzonejs.settings');
+
+  $form['dropzonejs_filename_sanitization'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Enable custom filename sanitization and transliteration for DropzoneJS (deprecated)'),
+    '#description' => t('When enabled, files uploaded through DropzoneJS go through a hardcoded and not customizable sanitization/transliteration process. Starting with Drupal 10.2, site-wide transliteration options are available that also always apply to files uploaded through DropzoneJS. It is recommend to configure those settings and disable this. This feature will be removed in a future version.'),
+    '#weight' => 99,
+    '#default_value' => $dropzone_config->get('filename_transliteration'),
+  ];
+  $form['#submit'][] = 'dropzonejs_form_system_file_system_settings_submit';
+}
+
+/**
+ * Form submission handler for file system settings form.
+ */
+function dropzonejs_form_system_file_system_settings_submit(array &$form, FormStateInterface $form_state) {
+  $config = \Drupal::configFactory()
+    ->getEditable('dropzonejs.settings')
+    ->set('filename_transliteration', $form_state->getValue('dropzonejs_filename_transliteration'));
+  $config->save();
 }

@@ -300,18 +300,28 @@ class KeyCommands extends DrushCommands {
    * Display a list of available key providers.
    *
    * @command key:provider-list
-   * @option storage-method An optional key provider storage method on which to filter.
+   * @option tags Optional key provider tags, separated by comma, on which to filter.
+   * @option storage-method [DEPRECATED] An optional key provider storage method on which to filter.
    * @aliases key-provider-list
    * @format table
    */
-  public function providerList($options = ['storage-method' => NULL]) {
+  public function providerList($options = [
+    'tags' => NULL,
+    'storage-method' => NULL,
+  ]) {
     $result = [];
 
-    $storage_method = $options['storage-method'];
+    $tags = StringUtils::csvToArray($options['tags']);
+    if ($options['storage-method']) {
+      @trigger_error("The Drush --storage-method option is deprecated in key:1.18.0 and is removed from key:2.0.0. Use the --tags option instead. See https://www.drupal.org/node/3364701", E_USER_DEPRECATED);
+      \Drupal::logger('key')->log('warning', (dt("The Drush --storage-method option is deprecated in key:1.18.0 and is removed from key:2.0.0. Use the --tags option instead. See https://www.drupal.org/node/3364701", E_USER_DEPRECATED)));
+      $tags[] = $options['storage-method'];
+      $tags = array_unique($tags);
+    }
 
     $plugins = $this->keyProviderPluginManager->getDefinitions();
     foreach ($plugins as $id => $plugin) {
-      if (!isset($storage_method) || $plugin['storage_method'] == $storage_method) {
+      if (!$tags || array_intersect($plugin['tags'], $tags)) {
         $row = [];
         $row['id'] = $id;
         $row['description'] = $plugin['description'];

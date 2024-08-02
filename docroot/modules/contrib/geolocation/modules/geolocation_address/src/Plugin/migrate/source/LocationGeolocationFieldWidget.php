@@ -2,10 +2,10 @@
 
 namespace Drupal\geolocation_address\Plugin\migrate\source;
 
-use Drupal\field\Plugin\migrate\source\d7\FieldInstancePerFormDisplay;
-use Drupal\geolocation_address\Plugin\migrate\field\Location;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\field\Plugin\migrate\source\d7\FieldInstancePerFormDisplay;
+use Drupal\geolocation_address\Plugin\migrate\field\Location;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Row;
 

@@ -21,7 +21,7 @@ class DevelEventInfoTest extends DevelBrowserTestBase {
   /**
    * Tests event info menu link.
    */
-  public function testEventsInfoMenuLink() {
+  public function testEventsInfoMenuLink(): void {
     $this->drupalPlaceBlock('system_menu_block:devel');
     // Ensures that the events info link is present on the devel menu and that
     // it points to the correct page.
@@ -35,7 +35,7 @@ class DevelEventInfoTest extends DevelBrowserTestBase {
   /**
    * Tests event info page.
    */
-  public function testEventList() {
+  public function testEventList(): void {
     /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher */
     $event_dispatcher = \Drupal::service('event_dispatcher');
 
@@ -55,9 +55,7 @@ class DevelEventInfoTest extends DevelBrowserTestBase {
     $this->assertEquals(3, count($headers));
 
     $expected_headers = ['Event Name', 'Callable', 'Priority'];
-    $actual_headers = array_map(function ($element) {
-      return $element->getText();
-    }, $headers);
+    $actual_headers = array_map(fn($element) => $element->getText(), $headers);
     $this->assertSame($expected_headers, $actual_headers);
 
     // Ensures that all the events are listed in the table.

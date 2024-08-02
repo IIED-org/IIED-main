@@ -24,7 +24,7 @@ class LocalTasksTest extends KernelTestBase {
    *
    * @dataProvider getPageRoutesServer
    */
-  public function testLocalTasksServer($route) {
+  public function testLocalTasksServer(string $route): void {
     $tasks = [
       0 => [
         'entity.search_api_server.canonical',
@@ -41,7 +41,7 @@ class LocalTasksTest extends KernelTestBase {
    *   An array containing arrays with the arguments for a
    *   testLocalTasksServer() call.
    */
-  public function getPageRoutesServer() {
+  public static function getPageRoutesServer(): array {
     return [
       ['entity.search_api_server.canonical'],
       ['entity.search_api_server.edit_form'],
@@ -56,7 +56,7 @@ class LocalTasksTest extends KernelTestBase {
    *
    * @dataProvider getPageRoutesIndex
    */
-  public function testLocalTasksIndex($route) {
+  public function testLocalTasksIndex(string $route): void {
     $tasks = [
       0 => [
         'entity.search_api_index.canonical',
@@ -75,7 +75,7 @@ class LocalTasksTest extends KernelTestBase {
    *   An array containing arrays with the arguments for a
    *   testLocalTasksIndex() call.
    */
-  public function getPageRoutesIndex() {
+  public static function getPageRoutesIndex(): array {
     return [
       ['entity.search_api_index.canonical'],
       ['entity.search_api_index.edit_form'],

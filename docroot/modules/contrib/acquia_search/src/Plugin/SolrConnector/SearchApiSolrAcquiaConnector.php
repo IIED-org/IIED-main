@@ -7,8 +7,6 @@ use Drupal\acquia_search\AcquiaSearchApiClient;
 use Drupal\acquia_search\Client\Solarium\AcquiaGuzzle;
 use Drupal\acquia_search\Client\Solarium\Endpoint as AcquiaEndpoint;
 use Drupal\acquia_search\Helper\Messages;
-use Drupal\acquia_search\Solarium\EventDispatcher\Psr14Bridge;
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -88,17 +86,7 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements So
   /**
    * {@inheritdoc}
    */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    array $plugin_definition,
-    LoggerChannelFactoryInterface $logger_factory,
-    AcquiaGuzzle $acquia_guzzle,
-    MessengerInterface $messenger,
-    CacheBackendInterface $cache,
-    Subscription $subscription,
-    AcquiaSearchApiClient $acquia_search_api_client
-  ) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, LoggerChannelFactoryInterface $logger_factory, AcquiaGuzzle $acquia_guzzle, MessengerInterface $messenger, CacheBackendInterface $cache, Subscription $subscription, AcquiaSearchApiClient $acquia_search_api_client) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->acquiaGuzzle = $acquia_guzzle;
     $this->acquiaSearchApiClient = $acquia_search_api_client;
@@ -128,21 +116,6 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements So
     );
     $instance->setEventDispatcher($container->get('event_dispatcher'));
     return $instance;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setEventDispatcher(
-    ContainerAwareEventDispatcher $eventDispatcher
-  ): SolrConnectorInterface {
-    $drupal_major_parts = explode('.', \Drupal::VERSION);
-    $drupal_major = reset($drupal_major_parts);
-    if ($drupal_major < 9) {
-      // For Drupal 8 use the PSR14 Bridge.
-      $eventDispatcher = new Psr14Bridge($eventDispatcher);
-    }
-    return parent::setEventDispatcher($eventDispatcher);
   }
 
   /**
@@ -306,11 +279,7 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements So
   /**
    * {@inheritdoc}
    */
-  public function useTimeout(
-    string $timeout = self::QUERY_TIMEOUT,
-    ?Endpoint $endpoint = NULL
-  ) {
-  }
+  public function useTimeout(string $timeout = self::QUERY_TIMEOUT, ?Endpoint $endpoint = NULL) {}
 
   /**
    * {@inheritdoc}
@@ -334,17 +303,13 @@ class SearchApiSolrAcquiaConnector extends SolrConnectorPluginBase implements So
    */
   protected function createClient(array &$configuration) {
     return new Client(
-      new Psr18Adapter(
-        $this->acquiaGuzzle,
-        new RequestFactory(),
-        new StreamFactory()
-      ),
+      new Psr18Adapter($this->acquiaGuzzle, new RequestFactory(), new StreamFactory()),
       $this->eventDispatcher,
       [
         'endpoint' => [
           'search_api_solr' => new AcquiaEndpoint($configuration),
         ],
-      ]
+      ],
     );
   }
 

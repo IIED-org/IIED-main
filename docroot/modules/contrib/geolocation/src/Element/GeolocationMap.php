@@ -2,11 +2,11 @@
 
 namespace Drupal\geolocation\Element;
 
+use Drupal\Component\Utility\SortArray;
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\RenderElement;
-use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Template\Attribute;
-use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Provides a render element to display a geolocation map.

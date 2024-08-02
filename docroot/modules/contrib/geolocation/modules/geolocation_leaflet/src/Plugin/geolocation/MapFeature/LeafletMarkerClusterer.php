@@ -3,8 +3,8 @@
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\geolocation\MapFeatureBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapFeatureBase;
 
 /**
  * Provides marker clusterer.

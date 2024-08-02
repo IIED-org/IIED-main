@@ -453,3 +453,9 @@ plugin.plugin_configuration.geolocation.map_feature.spiderfying:
         legWeight:
           type: float
           label: 'Setting'
+        spiralIconWidth:
+          type: integer
+          label: 'Setting'
+        spiralIconHeight:
+          type: integer
+          label: 'Setting'

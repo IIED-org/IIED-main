@@ -4,14 +4,14 @@ namespace Drupal\Tests\rabbit_hole\Functional;
 
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
-use Drupal\Tests\BrowserTestBase;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPlugin\AccessDenied;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPlugin\DisplayPage;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPlugin\PageNotFound;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPlugin\PageRedirect;
+use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginManager;
+use Drupal\Tests\BrowserTestBase;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Test the functionality of the RabbitHoleBehavior plugin.
@@ -32,7 +32,7 @@ class RabbitHoleBehaviorPluginTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['rabbit_hole', 'node'];
+  protected static $modules = ['rabbit_hole', 'node'];
 
   /**
    * The plugin manager.
@@ -133,7 +133,7 @@ class RabbitHoleBehaviorPluginTest extends BrowserTestBase {
     $this->assertInstanceOf(PageRedirect::class, $plugin, 'The page redirect plugin is the correct type.');
 
     // Check that the plugin performs the expected action.
-    // TODO: Check that $plugin->performAction() does what it's supposed to,
+    // @todo Check that $plugin->performAction() does what it's supposed to,
     // whatever that is.
   }
 

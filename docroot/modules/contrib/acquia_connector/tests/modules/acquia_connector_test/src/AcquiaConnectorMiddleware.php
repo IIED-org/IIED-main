@@ -265,15 +265,6 @@ class AcquiaConnectorMiddleware {
           }
         }
 
-        if ($uri->getHost() === 'api.amplitude.com') {
-          $events = $this->state->get('acquia_connector_test.telemetry_events', []);
-          $content = (string) $request->getBody();
-          $events[] = $content;
-          $this->state->set('acquia_connector_test.telemetry_events', $events);
-
-          return new FulfilledPromise(new Response(200, [], ''));
-        }
-
         // Otherwise, no intervention. We defer to the handler stack.
         return $handler($request, $options);
       };

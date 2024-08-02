@@ -64,6 +64,9 @@ field.formatter.settings.layout_paragraphs_builder:
     preview_view_mode:
       type: string
       label: 'Preview view mode'
+    form_display_mode:
+      type: string
+      label: 'Form display mode'
     nesting_depth:
       type: integer
       label: 'Maximum nesting depth'
@@ -78,9 +81,15 @@ field.widget.settings.layout_paragraphs:
   type: mapping
   label: 'Layout Paragraphs display format settings'
   mapping:
+    view_mode:
+      type: string
+      label: 'View mode'
     preview_view_mode:
       type: string
       label: 'Preview view mode'
+    form_display_mode:
+      type: string
+      label: 'Form display mode'
     nesting_depth:
       type: integer
       label: 'Maximum nesting depth'

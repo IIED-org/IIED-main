@@ -3,6 +3,7 @@
 namespace Drupal\Tests\tfa\Functional;
 
 use Drupal\tfa\TfaUserDataTrait;
+use Drupal\user\RoleInterface;
 
 /**
  * Tests for the tfa login process.
@@ -82,10 +83,16 @@ class TfaLoginTest extends TfaTestBase {
     // gets prompted with tfa.
     // Disable TFA for all roles.
     $this->drupalLogin($this->adminUser);
-    $roles = user_role_names(TRUE);
-    $edit = [];
-    foreach ($roles as $role_id => $role_name) {
-      $edit['tfa_required_roles[' . $role_id . ']'] = FALSE;
+    /** @var \Drupal\user\RoleStorageInterface $role_storage */
+    $role_storage = \Drupal::service('entity_type.manager')->getStorage('user_role');
+    /** @var \Drupal\user\RoleInterface[]|null $roles */
+    $roles = $role_storage->loadMultiple();
+    $this->assertNotEmpty($roles);
+    foreach ($roles as $role) {
+      if ($role->id() == RoleInterface::ANONYMOUS_ID) {
+        continue;
+      }
+      $edit['tfa_required_roles[' . $role->id() . ']'] = FALSE;
     }
     $edit['tfa_required_roles[authenticated]'] = FALSE;
     $this->drupalGet('admin/config/people/tfa');
@@ -131,6 +138,8 @@ class TfaLoginTest extends TfaTestBase {
     $this->drupalGet('user/' . $another_user->id() . '/security/tfa');
     $assert_session->statusCodeEquals(200);
     $this->clickLink('Set up test application');
+    $assert_session->statusCodeEquals(200);
+    $assert_session->pageTextContains('Enter your current password to alter TFA settings for account ' . $another_user->getAccountName());
     $edit = [
       'current_pass' => $this->superAdmin->passRaw,
     ];

@@ -49,7 +49,7 @@ class StopwordsTest extends UnitTestCase {
    *
    * Processor checks for exact case, and tokenized content.
    */
-  public function processDataProvider() {
+  public static function processDataProvider() {
     // cspell:disable
     return [
       [
@@ -98,7 +98,7 @@ class StopwordsTest extends UnitTestCase {
     $index = $this->createMock(IndexInterface::class);
     $index->expects($this->any())
       ->method('status')
-      ->will($this->returnValue(TRUE));
+      ->willReturn(TRUE);
     /** @var \Drupal\search_api\IndexInterface $index */
 
     $this->processor->setIndex($index);

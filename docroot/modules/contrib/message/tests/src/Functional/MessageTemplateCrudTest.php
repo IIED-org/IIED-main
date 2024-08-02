@@ -29,7 +29,10 @@ class MessageTemplateCrudTest extends MessageTestBase {
       'text' => 'Text',
     ];
     foreach ($values as $key => $label) {
-      $this->assertEquals(call_user_func([$template, 'get' . $key]), call_user_func([$created_message_template, 'get' . $key]), 'The ' . $label . ' between the message we created and loaded were not the same');
+      $this->assertEquals(
+        call_user_func([$template, 'get' . $key]),
+        call_user_func([$created_message_template, 'get' . $key]),
+        'The ' . $label . ' between the message we created and loaded were not the same');
     }
 
     // Verifying updating action.

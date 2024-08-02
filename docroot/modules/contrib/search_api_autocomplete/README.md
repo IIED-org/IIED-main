@@ -31,7 +31,7 @@ work, the server’s backend plugin has to support the `search_api_autocomplete`
 feature. Having autocompletion for indexes on servers for which the backend
 doesn’t support this feature is only possible if you use a different suggester
 (like “Display live results”, or one provided by a separate module). Most
-backends do support this feature, but please see the [list in the Search API
+backends do support this feature, but see the [list in the Search API
 documentation] for more up-to-date information on available backends and whether
 they support this feature.
 

@@ -26,7 +26,7 @@ function memcache_requirements($phase) {
 
   if ($phase == 'runtime') {
     if ($memcache) {
-      // @todo: consider adding minimum version requirement for extensions.
+      // @todo consider adding minimum version requirement for extensions.
       $requirements['memcache_extension_version']['title'] = t('Memcache version');
       $requirements['memcache_extension_version']['severity'] = REQUIREMENT_OK;
       $requirements['memcache_extension_version']['value'] = phpversion('memcache');

@@ -2,13 +2,13 @@
 
 namespace Drupal\geolocation_yandex\Plugin\geolocation\Geocoder;
 
-use GuzzleHttp\Exception\RequestException;
-use Drupal\Core\Url;
-use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Url;
 use Drupal\geolocation\GeocoderBase;
 use Drupal\geolocation\GeocoderInterface;
 use Drupal\geolocation_yandex\Plugin\geolocation\MapProvider\Yandex as YandexMapProvider;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Provides the Yandex.
@@ -79,8 +79,8 @@ class Yandex extends GeocoderBase implements GeocoderInterface {
     else {
       $coordinates = explode(' ', $result['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos']);
       $location['location'] = [
-        'lat' => $coordinates[0],
-        'lng' => $coordinates[1],
+        'lng' => $coordinates[0],
+        'lat' => $coordinates[1],
       ];
     }
 

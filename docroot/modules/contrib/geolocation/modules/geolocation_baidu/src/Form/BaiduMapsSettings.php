@@ -22,7 +22,9 @@ class BaiduMapsSettings extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Baidu Maps App ID'),
       '#default_value' => $config->get('key'),
-      '#description' => $this->t('Baidu Maps requires users to sign up at <a href="https://http://lbsyun.baidu.com">http://lbsyun.baidu.com</a>.'),
+      '#description' => $this->t('Baidu Maps requires users to sign up at <a href="@link_baidu_api" target="_blank">Baidu Map API Key</a>.', [
+         '@link_baidu_api' => 'https://lbsyun.baidu.com/apiconsole/key'
+      ]),
     ];
 
     return parent::buildForm($form, $form_state);

@@ -4,6 +4,7 @@ namespace Drupal\twig_tweak;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Component\Uuid\Uuid;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
@@ -14,6 +15,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
@@ -105,10 +107,11 @@ class TwigTweakExtension extends AbstractExtension {
       new TwigFilter('image_style', [self::class, 'imageStyleFilter']),
       new TwigFilter('transliterate', [self::class, 'transliterateFilter']),
       new TwigFilter('check_markup', 'check_markup'),
-      new TwigFilter('format_size', 'format_size'),
+      new TwigFilter('format_size', [ByteSizeMarkup::class, 'create']),
       new TwigFilter('truncate', [Unicode::class, 'truncate']),
       new TwigFilter('view', [self::class, 'viewFilter']),
       new TwigFilter('with', [self::class, 'withFilter']),
+      new TwigFilter('data_uri', [self::class, 'dataUriFilter']),
       new TwigFilter('children', [self::class, 'childrenFilter']),
       new TwigFilter('file_uri', [self::class, 'fileUriFilter']),
       new TwigFilter('file_url', [self::class, 'fileUrlFilter']),
@@ -332,7 +335,7 @@ class TwigTweakExtension extends AbstractExtension {
   }
 
   /**
-   * Generates a URL from an internal path.
+   * Generates a URL from an internal or external path.
    *
    * @param string $user_input
    *   User input for a link or path.
@@ -352,6 +355,9 @@ class TwigTweakExtension extends AbstractExtension {
       if ($language = $language_manager->getLanguage($options['langcode'])) {
         $options['language'] = $language;
       }
+    }
+    if (UrlHelper::isExternal($user_input)) {
+      return Url::fromUri($user_input, $options);
     }
     if (!in_array($user_input[0], ['/', '#', '?'])) {
       $user_input = '/' . $user_input;
@@ -567,6 +573,19 @@ class TwigTweakExtension extends AbstractExtension {
   }
 
   /**
+   * Creates a data URI (RFC 2397).
+   */
+  public static function dataUriFilter(string $data, string $mime, array $parameters = []): string {
+    $uri = 'data:' . $mime;
+    foreach ($parameters as $key => $value) {
+      $uri .= ';' . $key . '=' . rawurlencode($value);
+    }
+    $uri .= \str_starts_with($data, 'text/') ?
+       ',' . rawurlencode($data) : ';base64,' . base64_encode($data);
+    return $uri;
+  }
+
+  /**
    * Adds new element to the array.
    *
    * @param array $build
@@ -699,6 +718,7 @@ class TwigTweakExtension extends AbstractExtension {
    */
   public static function phpFilter(array $context, string $code) {
     // Make Twig variables available in PHP code.
+    // @cspell:disable-next-line
     extract($context, EXTR_SKIP);
     ob_start();
     // phpcs:ignore Drupal.Functions.DiscouragedFunctions.Discouraged

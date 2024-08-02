@@ -22,6 +22,8 @@ abstract class MessageUiViewsContextualLinksBase extends PluginBase implements M
    */
   public function setMessage(Message $message) {
     $this->message = $message;
+
+    return $this;
   }
 
   /**

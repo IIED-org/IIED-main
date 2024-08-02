@@ -36,3 +36,27 @@ function taxonomy_manager_help($path, $arg) {
       return $output;
   }
 }
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function taxonomy_manager_entity_type_alter(array &$entity_types) {
+  // Provide a custom form class for editing terms via taxonomy manager.
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
+  foreach ($entity_types as $type => $entity_type) {
+    if ($type == 'taxonomy_term' && !$entity_type->getFormClass('taxonomy_manager')) {
+      $entity_type->setFormClass('taxonomy_manager', '\Drupal\taxonomy_manager\Form\TaxonomyManagerTermForm');
+    }
+  }
+}
+
+/**
+ * Checks whether the given vocabulary supports translations.
+ */
+function taxonomy_manager_vocabulary_translatable($vid): bool {
+  if (\Drupal::hasService('content_translation.manager')) {
+    $translatable = \Drupal::config('taxonomy_manager.settings')->get('taxonomy_manager_translations') &&
+      \Drupal::service('content_translation.manager')->isEnabled('taxonomy_term', $vid);
+  }
+  return $translatable ?? FALSE;
+}

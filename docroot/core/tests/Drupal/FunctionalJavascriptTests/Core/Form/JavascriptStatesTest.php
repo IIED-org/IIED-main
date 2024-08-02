@@ -63,7 +63,7 @@ class JavascriptStatesTest extends WebDriverTestBase {
    * this is a single public test method that invokes a series of protected
    * methods to do assertions on specific kinds of triggering elements.
    */
-  public function testJavascriptStates() {
+  public function testJavascriptStates(): void {
     $this->doCheckboxTriggerTests();
     $this->doCheckboxesTriggerTests();
     $this->doTextfieldTriggerTests();
@@ -443,6 +443,15 @@ class JavascriptStatesTest extends WebDriverTestBase {
     $this->assertFalse($item_visible_value2->isVisible());
     $this->assertTrue($textfield_visible_value3->isVisible());
     $this->assertTrue($textfield_visible_value2_or_value3->isVisible());
+
+    $this->container->get('module_installer')->install(['big_pipe']);
+    $this->drupalGet('form-test/javascript-states-form');
+    $select_visible_2 = $this->assertSession()->elementExists('css', 'select[name="select_visible_2"]');
+    $select_visible_3 = $this->assertSession()->elementExists('css', 'select[name="select_visible_3"]');
+    $this->assertFalse($select_visible_3->isVisible());
+
+    $select_visible_2->setValue('1');
+    $this->assertTrue($select_visible_3->isVisible());
   }
 
   /**

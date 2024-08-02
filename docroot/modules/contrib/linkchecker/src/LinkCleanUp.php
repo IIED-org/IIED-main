@@ -4,13 +4,15 @@ namespace Drupal\linkchecker;
 
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
-use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Messenger\MessengerTrait;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+
 /**
- * Class LinkCleanUp.
+ * Form to clean the links.
  */
 class LinkCleanUp {
 
@@ -95,7 +97,7 @@ class LinkCleanUp {
 
     $ids = $storage->getQuery()
       ->accessCheck()
-      ->range(0, 10)
+      ->range(0, Settings::get('entity_update_batch_size', 50))
       ->execute();
 
     $this->processDelete($ids);

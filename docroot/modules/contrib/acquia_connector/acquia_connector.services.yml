@@ -6,24 +6,44 @@ services:
       - {name: event_subscriber}
   acquia_connector.telemetry:
     class: Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaTelemetry
-    arguments: ['@extension.list.module', '@http_client', '@config.factory', '@state', '@datetime.time']
+    arguments: ['@acquia_connector.telemetry_service']
     tags:
       - { name: event_subscriber }
+  acquia_connector.telemetry_service:
+    class: Drupal\acquia_connector\Services\AcquiaTelemetryService
+    arguments:
+      - '@extension.list.module'
+      - '@config.factory'
+      - '@state'
+      - '@logger.factory'
   acquia_connector.client.factory:
     class: Drupal\acquia_connector\Client\ClientFactory
-    arguments: ['@logger.factory', '@extension.list.module', '@http_client_factory', '@datetime.time', '@acquia_connector.auth_service', '@http_handler_stack']
+    arguments:
+      - '@logger.factory'
+      - '@extension.list.module'
+      - '@http_client_factory'
+      - '@datetime.time'
+      - '@acquia_connector.auth_service'
+      - '@http_handler_stack'
   acquia_connector.site_profile:
     class: Drupal\acquia_connector\SiteProfile\SiteProfile
     arguments: ['@request_stack']
   acquia_connector.subscription:
     class: Drupal\acquia_connector\Subscription
-    arguments: ['@event_dispatcher', '@acquia_connector.client.factory', '@state', '@config.factory']
+    arguments:
+      - '@event_dispatcher'
+      - '@acquia_connector.client.factory'
+      - '@state'
+      - '@config.factory'
   acquia_connector.logger_channel:
     parent: logger.channel_base
     arguments: ['acquia_connector']
   acquia_connector.settings.acquiacloud:
     class: Drupal\acquia_connector\EventSubscriber\GetSettings\FromAcquiaCloud
-    arguments: ['@acquia_connector.logger_channel', '@messenger', '@state']
+    arguments:
+      - '@acquia_connector.logger_channel'
+      - '@messenger'
+      - '@state'
     tags:
       - { name: event_subscriber }
   acquia_connector.settings.core:
@@ -38,7 +58,13 @@ services:
 
   acquia_connector.auth_service:
     class: Drupal\acquia_connector\AuthService
-    arguments: ['@csrf_token', '@http_client_factory', '@session', '@keyvalue.expirable', '@state', '@datetime.time']
+    arguments:
+      - '@csrf_token'
+      - '@http_client_factory'
+      - '@session'
+      - '@keyvalue.expirable'
+      - '@state'
+      - '@datetime.time'
 
   acquia_connector.connector_settings_subscriber:
     class: Drupal\acquia_connector\EventSubscriber\ConfigSubscriber

@@ -8,7 +8,7 @@
 /**
  * Implements hook_mail().
  */
-function devel_test_mail($key, &$message, $params) {
+function devel_test_mail($key, array &$message, array $params): void {
   switch ($key) {
     case 'devel_mail_log':
       $message['subject'] = $params['subject'];

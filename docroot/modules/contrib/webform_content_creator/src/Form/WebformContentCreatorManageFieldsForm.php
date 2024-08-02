@@ -66,7 +66,7 @@ class WebformContentCreatorManageFieldsForm extends EntityForm {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form['intro_text'] = [
-      '#markup' => '<p>' . $this->t('You can create nodes based on webform submission values. In this page, you can do mappings between content type fields and webform submission values. You may also use tokens in custom text.') . '</p>',
+      '#markup' => '<p>' . $this->t('You can create entities based on webform submission values. In this page, you can do mappings between content type fields and webform submission values. You may also use tokens in custom text.') . '</p>',
     ];
     if (\Drupal::service('module_handler')->moduleExists('token')) {
       $form['tokens'] = [
@@ -224,9 +224,9 @@ class WebformContentCreatorManageFieldsForm extends EntityForm {
       }
 
       $attributes[$k] = [
-        'type' => explode(',', $v[self::WEBFORM_FIELD])[0] === '1',
+        'type' => $args[0] === '1',
         self::FIELD_MAPPING => isset($v[self::FIELD_MAPPING]) ? $v[self::FIELD_MAPPING] : '',
-        self::WEBFORM_FIELD => !$v[self::CUSTOM_CHECK] ? explode(',', $v[self::WEBFORM_FIELD])[1] : '',
+        self::WEBFORM_FIELD => !$v[self::CUSTOM_CHECK] && count($args) > 1 ? $args[1] : '',
         self::CUSTOM_CHECK => $v[self::CUSTOM_CHECK],
         self::CUSTOM_VALUE => $v[self::CUSTOM_CHECK] ? $v[self::CUSTOM_VALUE] : '',
       ];

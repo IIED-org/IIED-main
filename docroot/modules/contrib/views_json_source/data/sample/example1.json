@@ -20,7 +20,7 @@
       {
         "nid": 3,
         "title": "Sample Node Three",
-        "tag": "one",
+        "tag": "two",
         "misc": {
           "description": "Sample Two : Lorem ipsum dolor sit amet, consectetur adipiscing elit."
         }
@@ -28,7 +28,7 @@
       {
         "nid": 4,
         "title": "Sample Node Four",
-        "tag": "one",
+        "tag": "two",
         "misc": {
           "description": "Sample Two : Lorem ipsum dolor sit amet, consectetur adipiscing elit."
         }

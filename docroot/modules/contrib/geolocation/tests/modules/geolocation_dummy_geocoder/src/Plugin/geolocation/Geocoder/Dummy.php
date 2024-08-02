@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation_dummy_geocoder\Plugin\geolocation\Geocoder;
 
-use Drupal\geolocation\GeocoderBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\GeocoderBase;
 
 /**
  * Provides the Google Geocoding API.

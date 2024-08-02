@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\memcache\Unit;
 
-use Drupal\memcache\MemcacheSettings;
 use Drupal\Core\Site\Settings;
+use Drupal\memcache\MemcacheSettings;
 use Drupal\Tests\UnitTestCase;
 
 /**
@@ -30,6 +30,7 @@ class MemcacheSettingsTest extends UnitTestCase {
    * @covers ::__construct
    */
   protected function setUp(): void {
+    parent::setUp();
     $this->config = [
       'memcache' => [
         'servers' => ['127.0.0.2:12345' => 'default'],

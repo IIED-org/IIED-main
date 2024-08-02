@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 id: key_figure
 label: 'Key figure'
-revision: 0
+revision: false
 description: 'An important statistic'

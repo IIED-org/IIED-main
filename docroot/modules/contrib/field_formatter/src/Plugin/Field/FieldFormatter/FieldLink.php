@@ -4,6 +4,7 @@ namespace Drupal\field_formatter\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\Field\FormatterPluginManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\Element;
@@ -47,11 +48,13 @@ class FieldLink extends FieldWrapperBase {
    *   Any third party settings.
    * @param \Drupal\Core\Field\FormatterPluginManager $formatter_plugin_manager
    *   The formatter plugin manager.
+   * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $field_type_plugin_manager
+   *   The field_type plugin manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager object for retrieving the correct language code.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, FormatterPluginManager $formatter_plugin_manager, LanguageManagerInterface $language_manager) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $formatter_plugin_manager);
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, FormatterPluginManager $formatter_plugin_manager, FieldTypePluginManagerInterface $field_type_plugin_manager, LanguageManagerInterface $language_manager) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $formatter_plugin_manager, $field_type_plugin_manager);
     $this->languageManager = $language_manager;
   }
 
@@ -68,6 +71,7 @@ class FieldLink extends FieldWrapperBase {
       $configuration['view_mode'],
       $configuration['third_party_settings'],
       $container->get('plugin.manager.field.formatter'),
+      $container->get('plugin.manager.field.field_type'),
       $container->get('language_manager')
     );
   }

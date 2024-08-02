@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
@@ -196,5 +197,14 @@ function login_destination_perform_redirect($trigger, AccountInterface $account)
       $response->send();
     }
     $service->prepareDestination($destination);
+  }
+}
+
+/**
+ * Implements hook_block_build_alter().
+ */
+function login_destination_block_build_alter(array &$build, BlockPluginInterface $block) {
+  if ($block->getPluginId() == 'system_menu_block:account') {
+    $build['#cache']['contexts'][] = 'url.path';
   }
 }

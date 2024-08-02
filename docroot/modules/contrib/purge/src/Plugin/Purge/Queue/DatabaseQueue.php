@@ -273,7 +273,7 @@ class DatabaseQueue extends CoreDatabaseQueue implements QueueInterface {
    * {@inheritdoc}
    */
   public function deleteQueue() {
-    $this->connection->delete(static::TABLE_NAME)
+    $this->connection->truncate(static::TABLE_NAME)
       ->execute();
   }
 
@@ -319,7 +319,8 @@ class DatabaseQueue extends CoreDatabaseQueue implements QueueInterface {
     $resultset = $this->connection
       ->select(static::TABLE_NAME, 'q')
       ->fields('q', ['item_id', 'expire', 'data'])
-      ->orderBy('q.created', 'DESC')
+      ->orderBy('q.created')
+      ->orderBy('q.item_id')
       ->range((($page - 1) * $limit), $limit)
       ->execute();
     foreach ($resultset as $item) {

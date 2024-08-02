@@ -2,65 +2,106 @@
 
 namespace Drupal\memcache_admin\Controller;
 
-use Drupal\Component\Datetime\Time;
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Messenger\MessengerTrait;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\memcache\Driver\MemcacheDriverFactory;
+use Drupal\memcache\MemcacheSettings;
 use Drupal\memcache_admin\Event\MemcacheStatsEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Memcache Statistics.
+ * Defines Memcache Statistics.
  */
 class MemcacheStatisticsController extends ControllerBase {
 
-  use MessengerTrait;
-  use StringTranslationTrait;
+  use MessengerTrait, StringTranslationTrait;
 
   /**
    * Memcache Driver Factory.
-   * 
+   *
    * @var \Drupal\memcache\Driver\MemcacheDriverFactory
    */
   protected $memcacheDriverFactory;
 
   /**
    * Event Dispatcher Service.
-   * 
+   *
    * @var \Symfony\Component\EventDispatcher\EventDispatcher
    */
   protected $dispatcher;
 
   /**
    * Core Date Formatter Service.
-   * 
+   *
    * @var \Drupal\Core\Datetime\DateFormatterInterface
    */
   protected $dateFormatter;
 
   /**
    * Core DateTime Service.
-   * 
-   * @var \Drupal\Component\Datetime\Time
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
    */
   protected $time;
 
   /**
-   * ModalFormContactController constructor.
+   * Memcache Settings Service.
    *
-   * @param \Drupal\Core\Form\FormBuilder $form_builder
-   *   The form builder.
+   * @var \Drupal\memcache\MemcacheSettings
    */
-  public function __construct(MemcacheDriverFactory $memcacheDriverFactory, ContainerAwareEventDispatcher $dispatcher, DateFormatterInterface $dateFormatter, Time $time) {
+  protected $settings;
+
+  /**
+   * The route match service.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
+   * The current user service.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
+   * Memcache Statistics Page.
+   *
+   * Displays a page of memcache statistics for an administrator to debug.
+   *
+   * @param \Drupal\memcache\Driver\MemcacheDriverFactory $memcacheDriverFactory
+   *   The Memcache Driver.
+   * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $dispatcher
+   *   Event Dispatcher service.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
+   *   Date Formatter service.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   DateTime Service.
+   * @param \Drupal\memcache\MemcacheSettings $settings
+   *   Memcache Settings service.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   Route match interface.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   Account interface.
+   */
+  public function __construct(MemcacheDriverFactory $memcacheDriverFactory, EventDispatcherInterface $dispatcher, DateFormatterInterface $dateFormatter, TimeInterface $time, MemcacheSettings $settings, RouteMatchInterface $route_match, AccountInterface $current_user) {
     $this->memcacheDriverFactory = $memcacheDriverFactory;
     $this->dispatcher = $dispatcher;
     $this->dateFormatter = $dateFormatter;
     $this->time = $time;
+    $this->settings = $settings;
+    $this->routeMatch = $route_match;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -77,21 +118,24 @@ class MemcacheStatisticsController extends ControllerBase {
       $container->get('event_dispatcher'),
       $container->get('date.formatter'),
       $container->get('datetime.time'),
+      $container->get('memcache.settings'),
+      $container->get('current_route_match'),
+      $container->get('current_user'),
     );
   }
 
   /**
    * Callback for the Memcache Stats page.
    *
-   * @param string $bin
-   *   The bin name.
+   * @param string $cluster
+   *   The cluster name.
    *
    * @return array
    *   The page output.
    */
-  public function statsTable($bin = 'default') {
-    $bin = $this->getBinMapping($bin);
-    /** @var $memcache \Drupal\memcache\DrupalMemcacheInterface */
+  public function statsTable($cluster = 'default') {
+    $bin = $this->getBinMapping($cluster);
+    /** @var \Drupal\memcache\DrupalMemcacheInterface $memcache */
     $memcache = $this->memcacheDriverFactory->get($bin, TRUE);
 
     // Instantiate our event.
@@ -100,6 +144,7 @@ class MemcacheStatisticsController extends ControllerBase {
     // Get the event_dispatcher service and dispatch the event.
     $this->dispatcher->dispatch($event, MemcacheStatsEvent::BUILD_MEMCACHE_STATS);
 
+    $raw_stats = [];
     // Report the PHP Memcache(d) driver version.
     if ($memcache->getMemcache() instanceof \Memcached) {
       $raw_stats['driver_version'] = $this->t('PECL Driver in Use: Memcached v@version', ['@version' => phpversion('Memcached')]);
@@ -111,7 +156,39 @@ class MemcacheStatisticsController extends ControllerBase {
     // Get the event_dispatcher service and dispatch the event.
     $this->dispatcher->dispatch($event, MemcacheStatsEvent::REPORT_MEMCACHE_STATS);
 
-    $output = ['#markup' => '<p>' . $raw_stats['driver_version']];
+    $output = ['#markup' => '<p>' . $raw_stats['driver_version'] . '</p>'];
+
+    // Get endpoints.
+    $servers_settings = $this->settings->get('servers', []);
+    $bins_settings = $this->settings->get('bins', []);
+    if (isset($servers_settings) && count($servers_settings) > 1) {
+      $bins = [];
+      if (isset($bins_settings)) {
+        foreach ($bins_settings as $bin_name => $cluster_name) {
+          if (!isset($bins[$cluster_name])) {
+            $bins[$cluster_name] = [];
+          }
+          $bins[$cluster_name][] = $bin_name;
+        }
+      }
+      $links = [];
+      asort($servers_settings);
+      foreach ($servers_settings as $end_point => $cluster_name) {
+        sort($bins[$cluster_name]);
+        $links[] = Link::createFromRoute(
+          $end_point . ' (' . implode(',', $bins[$cluster_name]) . ')',
+          'memcache_admin.reports_cluster', ['cluster' => $cluster_name]
+        )->toRenderable();
+      }
+      $output[] = [
+        '#theme' => 'item_list',
+        '#list_type' => 'ul',
+        '#title' => $this->t('Configured services'),
+        '#items' => $links,
+        '#attributes' => ['class' => 'memcache_services'],
+        '#wrapper_attributes' => ['class' => 'memcache_container'],
+      ];
+    }
     $output[] = $this->statsTablesOutput($bin, $event->getServers(), $event->getReport());
 
     return $output;
@@ -134,7 +211,7 @@ class MemcacheStatisticsController extends ControllerBase {
     $cluster = $this->binMapping($cluster);
     $server = str_replace('!', '/', $server);
 
-    $slab = \Drupal::routeMatch()->getParameter('slab');
+    $slab = $this->routeMatch->getParameter('slab');
     $memcache = $this->memcacheDriverFactory->get($cluster, TRUE);
     if ($type == 'slabs' && !empty($slab)) {
       $stats = $memcache->stats($cluster, $slab, FALSE);
@@ -176,7 +253,7 @@ class MemcacheStatisticsController extends ControllerBase {
    * Helper function, reverse map the memcache_bins variable.
    */
   private function binMapping($bin = 'cache') {
-    $memcache      = $this->memcacheDriverFactory->get(NULL, TRUE);
+    $memcache = $this->memcacheDriverFactory->get(NULL, TRUE);
     $memcache_bins = $memcache->getBins();
 
     $bins = array_flip($memcache_bins);
@@ -189,47 +266,10 @@ class MemcacheStatisticsController extends ControllerBase {
   }
 
   /**
-   * Statistics report: format total and open connections.
-   */
-  private function statsConnections($stats) {
-    return $this->t(
-      '@current open of @total total',
-      [
-        '@current' => number_format($stats['curr_connections']),
-        '@total'   => number_format($stats['total_connections']),
-      ]
-    );
-  }
-
-  /**
-   * Statistics report: calculate # of increments and decrements.
-   */
-  private function statsCounters($stats) {
-    if (!is_array($stats)) {
-      $stats = [];
-    }
-
-    $stats += [
-      'incr_hits'   => 0,
-      'incr_misses' => 0,
-      'decr_hits'   => 0,
-      'decr_misses' => 0,
-    ];
-
-    return $this->t(
-      '@incr increments, @decr decrements',
-      [
-        '@incr' => number_format($stats['incr_hits'] + $stats['incr_misses']),
-        '@decr' => number_format($stats['decr_hits'] + $stats['decr_misses']),
-      ]
-    );
-  }
-
-  /**
    * Generates render array for output.
    */
   private function statsTablesOutput($bin, $servers, $stats) {
-    $memcache      = $this->memcacheDriverFactory->get(NULL, TRUE);
+    $memcache = $this->memcacheDriverFactory->get(NULL, TRUE);
     $memcache_bins = $memcache->getBins();
 
     $links = [];
@@ -265,9 +305,9 @@ class MemcacheStatisticsController extends ControllerBase {
         $rows[] = $row;
       }
       $output[$table] = [
-        '#theme'  => 'table',
+        '#theme' => 'table',
         '#header' => $headers,
-        '#rows'   => $rows,
+        '#rows' => $rows,
 
       ];
     }
@@ -279,12 +319,11 @@ class MemcacheStatisticsController extends ControllerBase {
    * Generates render array for output.
    */
   private function statsTablesRawOutput($cluster, $server, $stats, $type) {
-    $user          = \Drupal::currentUser();
-    $current_type  = isset($type) ? $type : 'default';
-    $memcache      = $this->memcacheDriverFactory->get(NULL, TRUE);
+    $current_type  = $type ?? 'default';
+    $memcache = $this->memcacheDriverFactory->get(NULL, TRUE);
     $memcache_bins = $memcache->getBins();
-    $bin           = isset($memcache_bins[$cluster]) ? $memcache_bins[$cluster] : 'default';
-    $slab = \Drupal::routeMatch()->getParameter('slab');
+    $bin = $memcache_bins[$cluster] ?? 'default';
+    $slab = $this->routeMatch->getParameter('slab');
 
     // Provide navigation for the various memcache stats types.
     $links = [];
@@ -307,7 +346,7 @@ class MemcacheStatisticsController extends ControllerBase {
     ];
 
     $build['table'] = [
-      '#type'  => 'table',
+      '#type' => 'table',
       '#header' => [
         $this->t('Property'),
         $this->t('Value'),
@@ -321,9 +360,8 @@ class MemcacheStatisticsController extends ControllerBase {
     if ($current_type == 'items' && isset($stats['items'])) {
       $stats = $stats['items'];
     }
-
+    $user = $this->currentUser;
     foreach ($stats as $key => $value) {
-
       // Add navigation for getting a cachedump of individual slabs.
       if (($current_type == 'slabs' || $current_type == 'items') && is_int($key) && $user->hasPermission('access slab cachedump')) {
         $build['table'][$row]['key'] = [
@@ -344,12 +382,13 @@ class MemcacheStatisticsController extends ControllerBase {
           // Format timestamp when viewing cachedump of individual slabs.
           if ($current_type == 'slabs' && $user->hasPermission('access slab cachedump') && !empty($slab) && $k == 0) {
             $k = $this->t('Size');
-            $v = format_size($v);
+            // @phpstan-ignore-next-line
+            $v = class_exists(ByteSizeMarkup::class) ? ByteSizeMarkup::create($v) : format_size($v);
           }
           elseif ($current_type == 'slabs' && $user->hasPermission('access slab cachedump') && !empty($slab) && $k == 1) {
-            $k          = $this->t('Expire');
+            $k = $this->t('Expire');
             $full_stats = $memcache->stats($cluster);
-            $infinite   = $full_stats[$cluster][$server]['time'] - $full_stats[$cluster][$server]['uptime'];
+            $infinite = $full_stats[$cluster][$server]['time'] - $full_stats[$cluster][$server]['uptime'];
             if ($v == $infinite) {
               $v = $this->t('infinite');
             }

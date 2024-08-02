@@ -12,7 +12,7 @@ use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
  */
 abstract class DropzoneJsWebDriverTestBase extends WebDriverTestBase {
 
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'starterkit_theme';
 
   /**
    * Simple grey rectangle image data.
@@ -76,14 +76,19 @@ RCKRSCQSiUTyPlnSFQER9VCp/AAAAABJRU5ErkJggg==";
   /**
    * Drop a predefined file to dropzone.
    *
+   * @param string $filename
+   *   (optional) File name.
+   * @param string $extension
+   *   (optional) File extension.
+   *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function dropFile() {
+  protected function dropFile($filename = 'notalama', $extension = 'jpg') {
     // Sometimes we are not yet switched to the iframe. Stop the horses a bit
     // here.
     sleep(1);
-    $file = $this->getFile('notalama');
+    $file = $this->getFile($filename, $extension);
 
     $input = <<<JS
       jQuery('.form-type-dropzonejs').append('<input type=\'file\' name=\'fakefile\'>');

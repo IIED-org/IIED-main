@@ -20,6 +20,7 @@
   <exclude-pattern>_ignore</exclude-pattern>
   <exclude-pattern>\.patch</exclude-pattern>
   <exclude-pattern>interdif</exclude-pattern>
+  <exclude-pattern>\.ddev</exclude-pattern>
 
   <!-- Examples for how you disable rules you do not like. -->
   <!-- Exclude a sniff from running on specific files. -->
@@ -49,10 +50,16 @@
   <rule ref="MySource.Debug.DebugCode.Found"><severity>0</severity></rule>
   <!-- Commented out code triggers this. Long lived, commented out code is useful. https://gitlab.com/drupalspoons/devel/-/jobs/3439809881 -->
   <rule ref="Drupal.WhiteSpace.ScopeIndent.Incorrect"><severity>0</severity></rule>
+  <!-- Some classes have self-explanatory names -->
+  <rule ref="Drupal.Commenting.ClassComment.Missing"><severity>0</severity></rule>
+  <!-- Some functions have self-explanatory names -->
+  <rule ref="Drupal.Commenting.FunctionComment.Missing"><severity>0</severity></rule>
   <!-- Commented out code triggers this. Long lived, commented out code is useful. https://gitlab.com/drupalspoons/devel/-/jobs/3439809881 -->
   <rule ref="Drupal.Commenting.InlineComment.SpacingBefore"><severity>0</severity></rule>
   <!-- Commented out code triggers this. Long lived, commented out code is useful. https://gitlab.com/drupalspoons/devel/-/jobs/3439809881 -->
   <rule ref="Drupal.Commenting.InlineComment.InvalidEndChar"><severity>0</severity></rule>
+  <!-- Use a real code editor -->
+  <rule ref="Drupal.Files.LineLength.TooLong"><severity>0</severity></rule>
 
   <!-- While work is ongoing to fix coding standards faults, and to determine
        which rules and sniffs we want to ignore, the following is a list of all
@@ -62,6 +69,5 @@
        sniff below, it should be removed from this list.
   -->
   <rule ref="DrupalPractice.FunctionCalls.InsecureUnserialize.InsecureUnserialize"><severity>0</severity></rule>
-  <rule ref="DrupalPractice.Objects.GlobalClass.GlobalClass"><severity>0</severity></rule>
 
 </ruleset>

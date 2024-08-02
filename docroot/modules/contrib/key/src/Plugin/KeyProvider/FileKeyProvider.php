@@ -14,7 +14,9 @@ use Drupal\key\KeyInterface;
  *   id = "file",
  *   label = @Translation("File"),
  *   description = @Translation("The File key provider allows a key to be stored in a file, preferably outside of the web root."),
- *   storage_method = "file",
+ *   tags = {
+ *     "file",
+ *   },
  *   key_value = {
  *     "accepted" = FALSE,
  *     "required" = FALSE

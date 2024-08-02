@@ -120,4 +120,13 @@ class PostRequestIndexing implements PostRequestIndexingInterface, DestructableI
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function removeFromIndexing($index_id, array $item_ids): void {
+    foreach ($item_ids as $item_id) {
+      unset($this->operations[$index_id][$item_id]);
+    }
+  }
+
 }

@@ -18,7 +18,7 @@ class LoginDestinationDeleteRuleForm extends EntityConfirmFormBase {
     /** @var \Drupal\login_destination\Entity\LoginDestination $login_destination */
     $login_destination = $this->entity;
     return $this->t('Are you sure you want to delete the login destination "@destination"?', [
-      '@destination' => $login_destination->getLabel(),
+      '@destination' => $login_destination->label(),
     ]);
   }
 
@@ -44,7 +44,7 @@ class LoginDestinationDeleteRuleForm extends EntityConfirmFormBase {
     $login_destination = $this->entity;
     $login_destination->delete();
     $this->messenger()->addMessage($this->t('The login destination %destination has been deleted.', [
-      '%destination' => $login_destination->getLabel(),
+      '%destination' => $login_destination->label(),
     ]));
     $form_state->setRedirectUrl($this->getCancelUrl());
   }

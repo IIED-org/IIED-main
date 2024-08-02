@@ -109,7 +109,7 @@ final class ConfigureApplicationForm extends FormBase {
       $response = $this->clientFactory->getCloudApiClient()->get('/api/applications');
       $data = Json::decode((string) $response->getBody());
       $applications = [];
-      foreach ($data['_embedded']['items'] as $key => $item) {
+      foreach ($data['_embedded']['items'] as $item) {
         if (trim($item['subscription']['name']) !== trim($item['name'])) {
           // Format for ACSF Sites.
           if (preg_match('/.+?(?= - ACSF)/', trim($item['name']), $sub_name)) {

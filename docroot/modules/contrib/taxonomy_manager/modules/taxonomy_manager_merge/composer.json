@@ -1,0 +1,17 @@
+{
+  "name": "drupal/taxonomy_manager_merge",
+  "type": "drupal-module",
+  "description": "This module provides an addition to taxonomy_manager to allow merging terms.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/taxonomy_manager",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/taxonomy_manager",
+    "source": "https://git.drupalcode.org/project/taxonomy_manager"
+  },
+  "require": {
+    "drupal/term_merge":"^2.0",
+    "drupal/term_reference_change":"^2.0"
+  }
+}

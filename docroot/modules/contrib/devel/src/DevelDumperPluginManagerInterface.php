@@ -19,6 +19,6 @@ interface DevelDumperPluginManagerInterface extends PluginManagerInterface, Fall
    * @return bool
    *   TRUE if the plugin is supported, FALSE otherwise.
    */
-  public function isPluginSupported($plugin_id);
+  public function isPluginSupported($plugin_id): bool;
 
 }

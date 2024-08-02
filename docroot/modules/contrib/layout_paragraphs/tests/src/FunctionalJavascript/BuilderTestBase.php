@@ -182,22 +182,27 @@ abstract class BuilderTestBase extends WebDriverTestBase {
     $page = $this->getSession()->getPage();
     // Click the Add Component button.
     $page->find('css', $css_selector)->click();
-    $this->assertSession()->assertWaitOnAjaxRequest(1000, 'Unable to click add a component.');
+//    $this->assertSession()->assertWaitOnAjaxRequest(1000, 'Unable to click add a component.');
+    $this->assertNotEmpty($this->assertSession()->waitForText('Choose a component'));
+
 
     // Add a section.
     $page->clickLink('section');
-    $this->assertSession()->assertWaitOnAjaxRequest(1000, 'Unable to select section component.');
+//    $this->assertSession()->assertWaitOnAjaxRequest(1000, 'Unable to select section component.');
+    $this->assertNotEmpty($this->assertSession()->waitForText('Create new section'));
 
     // Choose a three-column layout.
     $elements = $page->findAll('css', '.layout-select__item label.option');
     $elements[$columns_choice]->click();
-    $this->assertSession()->assertWaitOnAjaxRequest(1000, 'Unable to select layout.');
+//    $this->assertSession()->assertWaitOnAjaxRequest(1000, 'Unable to select layout.');
+    $this->assertNotEmpty($this->assertSession()->waitForText('Choose a layout:'));
+    $this->getSession()->wait(1000);
 
     // Save the layout.
     $button = $page->find('css', 'button.lpb-btn--save');
     $button->click();
-    $this->assertSession()->assertWaitOnAjaxRequest(1000, 'Could not save section.');
-
+//    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->getSession()->wait(1000);
   }
 
   /**

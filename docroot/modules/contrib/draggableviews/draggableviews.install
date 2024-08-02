@@ -5,14 +5,12 @@
  * Install, update and uninstall functions for the draggableviews module.
  */
 
-use Drupal\views\Views;
-
 /**
  * Implements hook_schema().
  */
 function draggableviews_schema() {
   $schema['draggableviews_structure'] = [
-    'description' => 'Saves the order settings of a draggableview view.',
+    'description' => 'Saves the order settings of a draggableviews view.',
     'fields' => [
       'dvid' => [
         'type' => 'serial',
@@ -77,8 +75,8 @@ function draggableviews_schema() {
  * Implements hook_update().
  */
 function draggableviews_update_8104(&$sandbox) {
-  // the update hook here accidentally cropped in into 1.1 but it shouldn't be
-  // there, I belivee that removing it should be harmless.
+  // The update hook here accidentally cropped in into 1.1 but it shouldn't be
+  // there, I believe that removing it should be harmless.
 }
 
 /**

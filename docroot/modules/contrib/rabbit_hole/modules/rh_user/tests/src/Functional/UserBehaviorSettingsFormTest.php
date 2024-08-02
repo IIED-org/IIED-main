@@ -25,7 +25,7 @@ class UserBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTestBas
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_user', 'user'];
+  protected static $modules = ['rh_user', 'user'];
 
   /**
    * Admin user.

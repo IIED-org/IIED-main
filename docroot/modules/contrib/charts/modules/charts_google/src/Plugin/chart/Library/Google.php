@@ -426,9 +426,10 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
             }
             elseif ($chart_type['id'] === 'bubble') {
               $chart_definition['data'][] = [
-                0 => $data_value[0],
-                $series_number + 1 => $data_value[1],
-                $series_number + 2 => $data_value[2],
+                0 => $element[$key]['#title'],
+                1 => $data_value[0],
+                $series_number + 2 => $data_value[1],
+                $series_number + 3 => $data_value[2],
               ];
             }
             else {
@@ -485,7 +486,7 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
 
         // Convert to a ComboChart if mixing types.
         // See https://developers.google.com/chart/interactive/docs/gallery/combochart?hl=en.
-        if ($element[$key]['#chart_type']) {
+        if ($element[$key]['#chart_type'] && !in_array($element[$key]['#chart_type'], ['bubble', 'scatter'])) {
           // Oddly Google calls a "column" chart a "bars" series.
           // Using actual bar.
           // charts is not supported in combo charts with Google.
@@ -547,25 +548,36 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
     // Once complete, normalize the chart data to ensure a full 2D structure.
     $data = $chart_definition['data'];
 
-    // Stub out corner value.
-    $data[0][0] = $data[0][0] ?? 'x';
-    if ($element['#chart_type'] === 'bubble') {
-      $data[0][2] = 'bubble';
+    if (in_array($element['#chart_type'], ['pie', 'donut', 'scatter'])) {
+      // Populate the 0th row with the same number of values as the 1st row.
+      $data[0] = array_fill(0, count($data[1]), $element[$key]['#title'] ?? '');
     }
-
+    elseif ($element['#chart_type'] === 'bubble') {
+      $data[0] = [
+        $element[$key]['#title'] ?? '',
+        $chart_definition['options']['hAxis']['title'] ?? '',
+        $chart_definition['options']['vAxes'][0]['title'] ?? '',
+        $chart_definition['options']['zAxis']['title'] ?? '',
+      ];
+    }
+    else {
+      array_unshift($data[0], '');
+    }
     // Ensure consistent column count.
     $column_count = count($data[0]);
-
+    $new_data = [];
     foreach ($data as $row => $values) {
-
       for ($n = 0; $n < $column_count; $n++) {
-        $data[$row][$n] = $data[$row][$n] ?? NULL;
+        if (!empty(array_values($values))) {
+          $temp = array_values($values);
+          $new_data[$row][$n] = $temp[$n] ?? NULL;
+        }
       }
-      ksort($data[$row]);
+      ksort($new_data[$row]);
     }
-    ksort($data);
+    ksort($new_data);
 
-    $chart_definition['data'] = $data;
+    $chart_definition['data'] = $new_data;
 
     return $chart_definition;
   }

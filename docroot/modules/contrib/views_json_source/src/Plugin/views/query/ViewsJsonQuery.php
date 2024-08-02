@@ -2,16 +2,21 @@
 
 namespace Drupal\views_json_source\Plugin\views\query;
 
-use Drupal\views\ResultRow;
-use Drupal\views\ViewExecutable;
-use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Utility\Token;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\views\ResultRow;
+use Drupal\views\ViewExecutable;
 use Drupal\views_json_source\Event\PreCacheEvent;
+use GuzzleHttp\ClientInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 
 /**
  * Base query handler for views_json_source.
@@ -34,7 +39,7 @@ class ViewsJsonQuery extends QueryPluginBase {
   /**
    * The config.
    *
-   * @var Drupal\Core\Config\ConfigFactoryInterface
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $config;
 
@@ -60,6 +65,27 @@ class ViewsJsonQuery extends QueryPluginBase {
   protected $eventDispatcher;
 
   /**
+   * The HTTP client.
+   *
+   * @var \GuzzleHttp\Client
+   */
+  protected $httpClient;
+
+  /**
+   * Token service.
+   *
+   * @var \Drupal\Core\Utility\Token
+   */
+  protected $token;
+
+  /**
+   * The logger instance.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * To store the url filter info.
    *
    * @var array
@@ -67,15 +93,49 @@ class ViewsJsonQuery extends QueryPluginBase {
   protected $urlParams;
 
   /**
+   * An array of fields.
+   *
+   * @var array
+   */
+  public $fields = [];
+
+  /**
+   * A simple array of order by clauses.
+   *
+   * @var array
+   */
+  public $orderby = [];
+
+  /**
+   * Not actually used.
+   *
+   * Copied over from \Drupal\views\Plugin\views\query\Sql::$where since
+   * QueryPluginBase depends on it.
+   *
+   * @var array
+   */
+  public $where = [];
+
+  /**
+   * A simple array of filter clauses.
+   *
+   * @var array
+   */
+  public $filter = [];
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config, CacheBackendInterface $cache, TimeInterface $time, ContainerAwareEventDispatcher $event_dispatcher) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config, CacheBackendInterface $cache, TimeInterface $time, ContainerAwareEventDispatcher $event_dispatcher, ClientInterface $http_client, Token $token, LoggerInterface $logger) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->config = $config;
     $this->cache = $cache;
     $this->time = $time;
     $this->eventDispatcher = $event_dispatcher;
+    $this->httpClient = $http_client;
+    $this->token = $token;
+    $this->logger = $logger;
   }
 
   /**
@@ -89,7 +149,10 @@ class ViewsJsonQuery extends QueryPluginBase {
       $container->get('config.factory'),
       $container->get('cache.default'),
       $container->get('datetime.time'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('http_client'),
+      $container->get('token'),
+      $container->get('logger.channel.views_json_source')
     );
   }
 
@@ -145,10 +208,10 @@ class ViewsJsonQuery extends QueryPluginBase {
     else {
       // Add the request headers if available.
       $headers = $this->options['headers']
-        ? json_decode($this->options['headers'], TRUE) ?? []
+        ? Json::decode($this->options['headers']) ?? []
         : [];
 
-      $result = \Drupal::httpClient()->get($uri, ['headers' => $headers]);
+      $result = $this->getRequestResponse($uri, $headers);
       if (isset($result->error)) {
         $args = ['%error' => $result->error, '%uri' => $uri];
         $message = $this->t('HTTP response: %error. URI: %uri', $args);
@@ -159,7 +222,7 @@ class ViewsJsonQuery extends QueryPluginBase {
       $config = $this->config->get('views_json_source.settings');
       $cache_duration = $config->get('cache_ttl');
       $json_content = (string) $result->getBody();
-      $cache_ttl = \Drupal::time()->getRequestTime() + $cache_duration;
+      $cache_ttl = $this->time->getRequestTime() + $cache_duration;
 
       // Dispatch event before caching json_content.
       $event = new PreCacheEvent($this->view, $json_content);
@@ -195,7 +258,7 @@ class ViewsJsonQuery extends QueryPluginBase {
       $url = $this->options['json_file'];
 
       // Replace any Drupal tokens in the url EG: [site:url].
-      $url = \Drupal::token()->replace($url);
+      $url = $this->token->replace($url);
 
       while ($param = $this->getUrlParam()) {
         $url = preg_replace('/' . preg_quote('%', '/') . '/', $param, $url, 1);
@@ -203,14 +266,14 @@ class ViewsJsonQuery extends QueryPluginBase {
       $data->contents = $this->fetchFile($url);
     }
     catch (\Exception $e) {
-      \Drupal::messenger()->addMessage($e->getMessage(), 'error');
+      $this->logger->error($e->getMessage());
       return;
     }
 
     // When content is empty, parsing it is pointless.
     if (!$data->contents) {
       if ($this->options['show_errors']) {
-        \Drupal::messenger()->addMessage($this->t('Views JSON Backend: File is empty.'), 'warning');
+        $this->logger->warning($this->t('Views JSON Backend: File is empty.'));
       }
       return;
     }
@@ -220,30 +283,16 @@ class ViewsJsonQuery extends QueryPluginBase {
     $view->execute_time = microtime(TRUE) - $start;
 
     if (!$ret && $this->options['show_errors']) {
-      if (version_compare(phpversion(), '5.3.0', '>=')) {
-        $tmp = [
-          JSON_ERROR_NONE =>
-          $this->t('No error has occurred'),
-          JSON_ERROR_DEPTH =>
-          $this->t('The maximum stack depth has been exceeded'),
-          JSON_ERROR_STATE_MISMATCH =>
-          $this->t('Invalid or malformed JSON'),
-          JSON_ERROR_CTRL_CHAR =>
-          $this->t('Control character error, possibly incorrectly encoded'),
-          JSON_ERROR_SYNTAX =>
-          $this->t('Syntax error'),
-          JSON_ERROR_UTF8 =>
-          $this->t('Malformed UTF-8 characters, possibly incorrectly encoded'),
-        ];
-        $msg = $tmp[json_last_error()] . ' - ' . $this->options['json_file'];
-        \Drupal::messenger()->addMessage($msg, 'error');
-      }
-      else {
-        \Drupal::messenger()->addMessage($this->t(
-          'Views JSON Backend: Parse error') .
-          ' - ' . $this->options['json_file'], 'error'
-        );
-      }
+      $tmp = [
+        JSON_ERROR_NONE => $this->t('No error has occurred'),
+        JSON_ERROR_DEPTH => $this->t('The maximum stack depth has been exceeded'),
+        JSON_ERROR_STATE_MISMATCH => $this->t('Invalid or malformed JSON'),
+        JSON_ERROR_CTRL_CHAR => $this->t('Control character error, possibly incorrectly encoded'),
+        JSON_ERROR_SYNTAX => $this->t('Syntax error'),
+        JSON_ERROR_UTF8 => $this->t('Malformed UTF-8 characters, possibly incorrectly encoded'),
+      ];
+      $msg = $tmp[json_last_error()] . ' - ' . $this->options['json_file'];
+      $this->logger->error($msg);
     }
   }
 
@@ -306,27 +355,44 @@ class ViewsJsonQuery extends QueryPluginBase {
         return $l != $r;
       },
       'contains' => function ($l, $r) {
-        return strpos($l, $r) !== FALSE;
+        return $l !== NULL && $r !== NULL ? stripos($l, $r) !== FALSE : FALSE;
       },
-      '!contains' => function ($l, $r) {
-        return strpos($l, $r) === FALSE;
+      'starts' => function ($l, $r) {
+        return $l !== NULL && $r !== NULL ? strpos($l, $r) === 0 : FALSE;
+      },
+      'not_starts' => function ($l, $r) {
+        return $l !== NULL && $r !== NULL ? strpos($l, $r) !== 0 : FALSE;
+      },
+      'ends' => function ($l, $r) {
+        $len = $l !== NULL && $r !== NULL ? strlen($r) : 0;
+        return $len > 0 ? substr($l, -$len) === $r : TRUE;
+      },
+      'not_ends' => function ($l, $r) {
+        $len = $l !== NULL && $r !== NULL ? strlen($r) : 0;
+        return $len > 0 ? substr($l, -$len) !== $r : TRUE;
+      },
+      'not' => function ($l, $r) {
+        return $l !== NULL && $r !== NULL ? stripos($l, $r) === FALSE : FALSE;
       },
       'shorterthan' => function ($l, $r) {
-        return strlen($l) < $r;
+        return $l !== NULL ? strlen($l) < $r : FALSE;
       },
       'longerthan' => function ($l, $r) {
-        return strlen($l) > $r;
+        return $l !== NULL ? strlen($l) > $r : FALSE;
+      },
+      'regular_expression' => function ($l, $r) {
+        return $l !== NULL && $r !== NULL ? preg_match($r, $l) === 1 : FALSE;
       },
     ];
 
-    return call_user_func_array($table[$op], [$l, $r]);
+    return array_key_exists($op, $table) ? call_user_func($table[$op], $l, $r) : FALSE;
   }
 
   /**
    * Parse.
    */
   public function parse(ViewExecutable &$view, $data) {
-    $ret = json_decode($data->contents, TRUE);
+    $ret = Json::decode($data->contents);
     if (!$ret) {
       return FALSE;
     }
@@ -344,7 +410,8 @@ class ViewsJsonQuery extends QueryPluginBase {
       foreach ($view->build_info['query'] as $filter) {
         // Filter only when value is present.
         if (!empty($filter[0])) {
-          $l = $row[$filter[0]];
+          $filter_keys = explode('/', trim($filter[0], '//'));
+          $l = NestedArray::getValue($row, $filter_keys);
           $check = $this->ops($filter[1], $l, $filter[2]);
           if ($group_conditional_operator === "AND") {
             // With AND condition.
@@ -364,6 +431,9 @@ class ViewsJsonQuery extends QueryPluginBase {
         unset($ret[$k]);
       }
     }
+
+    // Save the total number of results in the view.
+    $total_number_results = count($ret);
 
     try {
       if ($view->pager->useCountQuery() || !empty($view->get_total_rows)) {
@@ -409,7 +479,8 @@ class ViewsJsonQuery extends QueryPluginBase {
         $row->index = $index++;
       }
 
-      $view->total_rows = count($result);
+      // Pass the total number of the results.
+      $view->total_rows = $total_number_results;
 
       $view->pager->postExecute($view->result);
 
@@ -418,11 +489,10 @@ class ViewsJsonQuery extends QueryPluginBase {
     catch (\Exception $e) {
       $view->result = [];
       if (!empty($view->live_preview)) {
-        \Drupal::messenger()->addMessage(time());
-        \Drupal::messenger()->addMessage($e->getMessage(), 'error');
+        $this->logger->error($e->getMessage());
       }
       else {
-        \Drupal::messenger()->addMessage($e->getMessage());
+        $this->logger->notice($e->getMessage());
       }
     }
   }
@@ -470,6 +540,8 @@ class ViewsJsonQuery extends QueryPluginBase {
     $options['json_file'] = ['default' => ''];
     $options['row_apath'] = ['default' => ''];
     $options['headers'] = ['default' => ''];
+    $options['request_method'] = ['default' => 'get'];
+    $options['request_body'] = ['default' => ''];
     $options['single_payload'] = ['default' => ''];
     $options['show_errors'] = ['default' => TRUE];
 
@@ -500,6 +572,29 @@ class ViewsJsonQuery extends QueryPluginBase {
       '#default_value' => $this->options['headers'],
       '#description' => $this->t("Headers to be passed for the REST call.<br />Pass the headers as JSON string. Ex:<br /><pre>{&quot;Authorization&quot;:&quot;Basic xxxxx&quot;,&quot;Content-Type&quot;:&quot;application/json&quot;}</pre><br />.Here we are passing 2 headers for making the REST API call."),
       '#required' => FALSE,
+    ];
+    $form['request_method'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Request method'),
+      '#default_value' => $this->options['request_method'],
+      '#options' => [
+        'get' => $this->t('GET'),
+        'post' => $this->t('POST'),
+      ],
+      '#description' => $this->t('The request method to the REST call.'),
+    ];
+    $form['request_body'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Request body'),
+      '#default_value' => $this->options['request_body'],
+      '#states' => [
+        'visible' => [
+          'select[name="query[options][request_method]"]' => [
+            'value' => 'post',
+          ],
+        ],
+      ],
+      '#description' => $this->t('The POST request body to the REST call.<br/>Pass the form values as JSON string. Ex: <br/><pre>[{&quot;name&quot;:&quot;item_key&quot;,&quot;contents&quot;:&quot;item value&quot;,&quot;headers&quot;:{&quot;Content-type&quot;:&quot;application/json&quot;}}]</pre> See <a href="https://docs.guzzlephp.org/en/stable/request-options.html#multipart" target="_blank">the documentation for GuzzleHttp multipart request options</a>.'),
     ];
     $form['single_payload'] = [
       '#type' => 'checkbox',
@@ -566,8 +661,13 @@ class ViewsJsonQuery extends QueryPluginBase {
    */
   public function sortAsc($key) {
     return function ($a, $b) use ($key) {
-      $a_value = $a[$key] ?? '';
-      $b_value = $b[$key] ?? '';
+      $keyArray = explode('/', $key);
+      foreach ($keyArray as $indexKey) {
+        $a = $a[$indexKey];
+        $b = $b[$indexKey];
+      }
+      $a_value = $a ?? '';
+      $b_value = $b ?? '';
       return strnatcasecmp($a_value, $b_value);
     };
   }
@@ -577,8 +677,13 @@ class ViewsJsonQuery extends QueryPluginBase {
    */
   public function sortDesc($key) {
     return function ($a, $b) use ($key) {
-      $a_value = $a[$key] ?? '';
-      $b_value = $b[$key] ?? '';
+      $keyArray = explode("/", $key);
+      foreach ($keyArray as $indexKey) {
+        $a = $a[$indexKey];
+        $b = $b[$indexKey];
+      }
+      $a_value = $a ?? '';
+      $b_value = $b ?? '';
       return -strnatcasecmp($a_value, $b_value);
     };
   }
@@ -621,6 +726,37 @@ class ViewsJsonQuery extends QueryPluginBase {
     $filter = current($this->urlParams);
     next($this->urlParams);
     return $filter;
+  }
+
+  /**
+   * Get request result.
+   *
+   * @param string $uri
+   *   The request uri.
+   * @param array $headers
+   *   The request headers.
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   *   The request response.
+   */
+  private function getRequestResponse(string $uri, array $headers = []) {
+    $this->options['request_method'] = $this->options['request_method'] ?? 'get';
+    switch ($this->options['request_method']) {
+      case 'post':
+        $options = [];
+        $options['headers'] = $headers;
+        if (!empty($this->options['request_body'])) {
+          $options['multipart'] = Json::decode($this->options['request_body']);
+        }
+        $result = $this->httpClient->post($uri, $options);
+        break;
+
+      default:
+        $result = $this->httpClient->get($uri, ['headers' => $headers]);
+        break;
+    }
+
+    return $result;
   }
 
 }

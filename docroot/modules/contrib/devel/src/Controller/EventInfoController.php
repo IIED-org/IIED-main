@@ -3,6 +3,7 @@
 namespace Drupal\devel\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -13,27 +14,32 @@ class EventInfoController extends ControllerBase {
 
   /**
    * Event dispatcher service.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
-  protected $eventDispatcher;
+  protected EventDispatcherInterface $eventDispatcher;
 
   /**
    * EventInfoController constructor.
    *
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   Event dispatcher service.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
    */
-  public function __construct(EventDispatcherInterface $event_dispatcher) {
+  public function __construct(
+    EventDispatcherInterface $event_dispatcher,
+    TranslationInterface $string_translation
+  ) {
     $this->eventDispatcher = $event_dispatcher;
+    $this->stringTranslation = $string_translation;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): static {
     return new static(
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('string_translation'),
     );
   }
 
@@ -43,7 +49,7 @@ class EventInfoController extends ControllerBase {
    * @return array
    *   A render array as expected by the renderer.
    */
-  public function eventList() {
+  public function eventList(): array {
     $headers = [
       'name' => [
         'data' => $this->t('Event Name'),
@@ -111,7 +117,7 @@ class EventInfoController extends ControllerBase {
    * @return string
    *   The resolved callable name or an empty string.
    */
-  protected function resolveCallableName($callable) {
+  protected function resolveCallableName(mixed $callable) {
     if (is_callable($callable, TRUE, $callable_name)) {
       return $callable_name;
     }

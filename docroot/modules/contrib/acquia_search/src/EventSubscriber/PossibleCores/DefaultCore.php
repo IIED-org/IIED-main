@@ -54,7 +54,7 @@ class DefaultCore implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     // phpcs:ignore
     $events[AcquiaSearchEvents::GET_POSSIBLE_CORES][] = ['onGetPossibleCores', -1000];
     return $events;

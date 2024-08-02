@@ -60,7 +60,7 @@ class CorrectRegionTest extends BuilderTestBase {
     $this->keyPress('ArrowUp');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->keyPress('Enter');
-    $this->assertSession()->assertWaitOnAjaxRequest();
+//    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Add a fourth item above the third item, which has been moved to the first
     // region. Ensure the fourth item is correctly added to the first region,

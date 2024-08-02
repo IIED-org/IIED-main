@@ -214,7 +214,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
       if ($this->hasValidBackend()) {
         $this->features = $this->getBackend()->getSupportedFeatures();
       }
-      $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Please use the "search_api.determining_server_features" event instead. See https://www.drupal.org/node/3059866';
+      $description = 'This hook is deprecated in search_api:8.x-1.14 and is removed from search_api:2.0.0. Use the "search_api.determining_server_features" event instead. See https://www.drupal.org/node/3059866';
       \Drupal::moduleHandler()
         ->alterDeprecated($description, 'search_api_server_features', $this->features, $this);
       /** @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher */

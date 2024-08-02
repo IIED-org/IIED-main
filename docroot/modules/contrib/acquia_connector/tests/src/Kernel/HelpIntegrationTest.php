@@ -9,6 +9,8 @@ use Drupal\help\Plugin\Block\HelpBlock;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * Test the help messages from connector.
+ *
  * @group acquia_connector
  */
 final class HelpIntegrationTest extends AcquiaConnectorTestBase {

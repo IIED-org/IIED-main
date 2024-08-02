@@ -14,7 +14,9 @@ use Drupal\key\KeyInterface;
  *   id = "env",
  *   label = @Translation("Environment"),
  *   description = @Translation("The Environment key provider allows a key to be retrieved from an environment variable."),
- *   storage_method = "env",
+ *   tags = {
+ *     "env",
+ *   },
  *   key_value = {
  *     "accepted" = FALSE,
  *     "required" = FALSE
@@ -53,16 +55,13 @@ class EnvKeyProvider extends KeyProviderBase implements KeyPluginFormInterface {
       '#default_value' => $this->getConfiguration()['strip_line_breaks'],
     ];
 
-    // If this key type is for an encryption key.
-    if ($form_state->getFormObject()->getEntity()->getKeyType()->getPluginDefinition()['group'] == 'encryption') {
-      // Add an option to indicate that the value is stored Base64-encoded.
-      $form['base64_encoded'] = [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Base64-encoded'),
-        '#description' => $this->t('Check this if the key in the variable is Base64-encoded.'),
-        '#default_value' => $this->getConfiguration()['base64_encoded'],
-      ];
-    }
+    // Add an option to indicate that the value is stored Base64-encoded.
+    $form['base64_encoded'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Base64-encoded'),
+      '#description' => $this->t('Check this if the key in the variable is Base64-encoded. <em>Note: Naturally Base64-encoded values, such as RSA keys, do not need to be marked as Base64-encoded unless they have been additionally encoded for another reason.</em>'),
+      '#default_value' => $this->getConfiguration()['base64_encoded'],
+    ];
 
     return $form;
   }

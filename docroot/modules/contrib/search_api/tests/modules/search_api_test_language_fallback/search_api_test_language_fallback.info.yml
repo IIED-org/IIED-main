@@ -4,7 +4,7 @@ description: 'Provides a language fallback fr => es.'
 package: Testing
 hidden: true
 
-# Information added by Drupal.org packaging script on 2024-03-31
-version: '8.x-1.32'
+# Information added by Drupal.org packaging script on 2024-06-16
+version: '8.x-1.35'
 project: 'search_api'
-datestamp: 1711906244
+datestamp: 1718551029

@@ -4,13 +4,12 @@
     "license": "GPL-2.0-or-later",
     "type": "drupal-module",
     "require": {
-        "php": "^7.4 || ^8",
         "ext-curl": "*",
         "ext-json": "*",
         "ext-zip": "*",
         "acquia/http-hmac-php": ">=5.0",
         "drupal/acquia_connector": "^4.0",
-        "drupal/search_api_solr": "^4.2",
+        "drupal/search_api_solr": "^4.3.1",
         "guzzlehttp/guzzle": "^6.5.2 || ^7.0",
         "http-interop/http-factory-guzzle": "^1.0",
         "psr/event-dispatcher": "^1.0"

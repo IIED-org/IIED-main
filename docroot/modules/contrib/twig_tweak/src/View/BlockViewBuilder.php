@@ -7,9 +7,9 @@ use Drupal\Core\Block\TitleBlockPluginInterface;
 use Drupal\Core\Cache\CacheableDependencyInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\TitleResolverInterface;
-use Drupal\Core\Plugin\ContextAwarePluginInterface;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
 use Drupal\Core\Plugin\Context\ContextRepositoryInterface;
+use Drupal\Core\Plugin\ContextAwarePluginInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -79,7 +79,7 @@ class BlockViewBuilder {
     AccountInterface $account,
     RequestStack $request_stack,
     RouteMatchInterface $route_match,
-    TitleResolverInterface $title_resolver
+    TitleResolverInterface $title_resolver,
   ) {
     $this->pluginManagerBlock = $plugin_manager_block;
     $this->contextRepository = $context_repository;

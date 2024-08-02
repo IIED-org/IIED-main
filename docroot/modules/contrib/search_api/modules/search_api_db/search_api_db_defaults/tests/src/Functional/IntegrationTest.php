@@ -122,7 +122,7 @@ class IntegrationTest extends BrowserTestBase {
 
     $this->drupalLogout();
     $this->drupalGet('search/content');
-    $this->assertSession()->pageTextContains('Please enter some keywords to search.');
+    $this->assertSession()->pageTextContains('Enter some keywords to search.');
     $this->assertSession()->pageTextNotContains($title);
     $this->assertSession()->responseNotContains('Error message');
     // @todo This suddenly stopped working due to #2568889. Figure out the new
@@ -134,7 +134,7 @@ class IntegrationTest extends BrowserTestBase {
     $this->submitForm(['keys' => 'test'], 'Search');
     $this->assertSession()->pageTextContains($title);
     $this->assertSession()->responseNotContains('Error message');
-    $this->assertSession()->pageTextNotContains('Please enter some keywords.');
+    $this->assertSession()->pageTextNotContains('Enter some keywords.');
     $this->assertSession()->pageTextNotContains('Your search yielded no results.');
 
     // Uninstall the module.

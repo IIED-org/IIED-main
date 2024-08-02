@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @package Drupal\message_ui\Form
  */
-class MessageMultipleDeleteForm extends FormBase {
+final class MessageMultipleDeleteForm extends FormBase {
 
   /**
    * Drupal\Core\Entity\EntityTypeManagerInterface definition.
@@ -46,7 +46,7 @@ class MessageMultipleDeleteForm extends FormBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
+    return new self(
       $container->get('entity_type.manager'),
       $container->get('module_handler')
     );

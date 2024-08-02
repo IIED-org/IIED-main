@@ -43,4 +43,5 @@ CONFIGURATION
 MAINTAINERS
 -----------
 
- * Current Maintainer: Martin Anderson-Clutz (mandclu) - https://www.drupal.org/u/mandclu
+ * Current Maintainer:
+   Martin Anderson-Clutz (mandclu)- https://www.drupal.org/u/mandclu

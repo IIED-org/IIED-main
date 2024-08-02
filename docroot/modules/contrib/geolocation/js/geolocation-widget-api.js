@@ -176,7 +176,7 @@
         this.getNextEmptyInputDelta(),
         this.getNextPendingDelta()
       );
-      if (delta > this.cardinality && this.cardinality > 0) {
+      if (delta >= this.cardinality && this.cardinality > 0) {
         console.error("Cannot add further geolocation input.");
         return false;
       }

@@ -2,24 +2,23 @@
 
 namespace Drupal\layout_paragraphs\Element;
 
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Access\AccessResultAllowed;
+use Drupal\Core\Access\AccessResultForbidden;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Render\Element\RenderElement;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Render\Markup;
-use Drupal\Component\Utility\Html;
-use Drupal\Component\Serialization\Json;
-use Drupal\paragraphs\ParagraphInterface;
-use Drupal\Core\Access\AccessResultAllowed;
-use Drupal\layout_paragraphs\Utility\Dialog;
-use Drupal\Core\Access\AccessResultForbidden;
-use Drupal\Core\Render\Element\RenderElement;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\layout_paragraphs\LayoutParagraphsSection;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\layout_paragraphs\LayoutParagraphsComponent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\layout_paragraphs\LayoutParagraphsLayoutTempstoreRepository;
+use Drupal\layout_paragraphs\LayoutParagraphsSection;
+use Drupal\layout_paragraphs\Utility\Dialog;
+use Drupal\paragraphs\ParagraphInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines a render element for building the Layout Builder UI.
@@ -177,7 +176,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
       }
     }
 
-    // If a element #uuid is provided, render the matching element.
+    // If an element #uuid is provided, render the matching element.
     // This is used in cases where a single component needs
     // to be rendered - for example, as part of an AJAX response.
     if ($element_uuid) {
@@ -193,7 +192,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
         'lp-builder',
         'lp-builder-' . $this->layoutParagraphsLayout->id(),
       ],
-      'id' => Html::getUniqueId($this->layoutParagraphsLayout->id()),
+      'data-lpb-ui-id' => $this->layoutParagraphsLayout->id(),
       'data-lpb-id' => $this->layoutParagraphsLayout->id(),
     ] + ($element['#attributes'] ?? []);
     $element['#attached']['library'] = ['layout_paragraphs/builder'];
@@ -241,6 +240,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
    */
   protected function buildComponent(LayoutParagraphsComponent $component, $preview_view_mode = 'default') {
     $entity = $component->getEntity();
+    $entity->_layoutParagraphsBuilder = TRUE;
     $view_builder = $this->entityTypeManager->getViewBuilder($entity->getEntityTypeId());
     $build = $view_builder->view($entity, $preview_view_mode, $entity->language()->getId());
     $build['#post_render'] = [
@@ -248,9 +248,8 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
     ];
     $build['#attributes']['data-uuid'] = $entity->uuid();
     $build['#attributes']['data-type'] = $entity->bundle();
-    $build['#attributes']['data-id'] = $entity->id();
+    $build['#attributes']['data-lpb-ui-id'] = $entity->uuid() ?? 'new-' . $entity->bundle();
     $build['#attributes']['class'][] = 'js-lpb-component';
-    $build['#attributes']['id'] = Html::getUniqueId($entity->id() ?? 'new-' . $entity->bundle());
     $build['#layout_paragraphs_component'] = TRUE;
     if ($entity->isNew()) {
       $build['#attributes']['class'][] = 'is_new';
@@ -279,7 +278,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
       '#uuid' => $entity->uuid(),
       '#layout_paragraphs_layout' => $this->layoutParagraphsLayout,
       '#edit_access' => $this->editAccess($entity),
-      '#duplicate_access' => $this->createAccess() && $this->checkCardinality(),
+      '#duplicate_access' => $this->duplicateAccess($entity) && $this->checkCardinality(),
       '#delete_access' => $this->deleteAccess($entity),
     ];
     $build['#attached']['drupalSettings']['lpBuilder']['uiElements'][$entity->uuid()] = [];
@@ -340,7 +339,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
             ],
             'data-region' => $region_name,
             'data-region-uuid' => $entity->uuid() . '-' . $region_name,
-            'id' => Html::getUniqueId($entity->uuid() . '-' . $region_name),
+            'data-lpb-ui-id' => $entity->uuid() . '-' . $region_name,
           ],
         ];
         if ($this->createAccess() && $this->checkCardinality()) {
@@ -397,7 +396,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
    * @param array[] $route_params
    *   The route parameters for the link.
    * @param array[] $query_params
-   *   The query paramaters for the link.
+   *   The query parameters for the link.
    * @param int $weight
    *   The weight of the button element.
    * @param array[] $classes
@@ -529,8 +528,8 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
   /**
    * Returns an AccessResult object.
    *
-   * @return \Drupal\Core\Access\AccessResultInterface
-   *   True if user can edit.
+   * @return bool
+   *   True if user can create.
    */
   protected function createAccess() {
     $access = new AccessResultAllowed();
@@ -538,6 +537,23 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
       $access = new AccessResultForbidden('Cannot add paragraphs while in translation mode.');
     }
     return $access->isAllowed();
+  }
+
+  /**
+   * Returns an AccessResult object.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $paragraph
+   *   The paragraph entity.
+   *
+   * @return bool
+   *   True if user can duplicate.
+   */
+  protected function duplicateAccess(ParagraphInterface $paragraph) {
+    if ($this->isTranslating() && !($this->supportsAsymmetricTranslations())) {
+      $access = new AccessResultForbidden('Cannot duplicate paragraphs while in translation mode.');
+      return $access->isAllowed();
+    }
+    return $paragraph->access('create');
   }
 
   /**
@@ -558,7 +574,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
    * @see https://www.drupal.org/project/paragraphs_asymmetric_translation_widgets
    *
    * @return bool
-   *   True if asymmetric tranlation is supported.
+   *   True if asymmetric translation is supported.
    */
   protected function supportsAsymmetricTranslations() {
     return $this->layoutParagraphsLayout->getParagraphsReferenceField()->getFieldDefinition()->isTranslatable();
@@ -582,7 +598,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
    *   The javascript method to use to attach $element to its container.
    */
   public function addJsUiElement(array &$build, Markup $element, string $key, string $method = 'append') {
-    $id = $build['#attributes']['id'];
+    $id = $build['#attributes']['data-lpb-ui-id'];
     $build['#attributes']['data-has-js-ui-element'] = TRUE;
     $build['#attached']['drupalSettings']['lpBuilder']['uiElements'][$id][$key] = [
       'element' => $element,
@@ -607,7 +623,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
    * Checks if adding a component would exceed the field's cardinality limit.
    *
    * @return bool
-   *   True if a compoment can be added without exceeding cardinality.
+   *   True if a component can be added without exceeding cardinality.
    */
   protected function checkCardinality() {
     $cardinality = $this->getCardinality();

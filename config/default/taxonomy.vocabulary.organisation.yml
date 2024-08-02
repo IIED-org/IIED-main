@@ -6,3 +6,4 @@ name: Organisation
 vid: organisation
 description: 'Organisation such as publisher or partner. Can be a project or programme name'
 weight: 0
+new_revision: false

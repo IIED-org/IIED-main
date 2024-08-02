@@ -18,10 +18,10 @@ services:
   # Cache tag checksum backend. Used by memcache and most other cache backends
   # to deal with cache tag invalidations.
   cache_tags.invalidator.checksum:
-   class: Drupal\memcache\Cache\TimestampCacheTagsChecksum
-   arguments: ['@memcache.timestamp.invalidator.tag']
-   tags:
-     - { name: cache_tags_invalidator }
+    class: Drupal\memcache\Cache\TimestampCacheTagsChecksum
+    arguments: ['@memcache.timestamp.invalidator.tag']
+    tags:
+      - { name: cache_tags_invalidator }
 
   # Replaces the default lock backend with a memcache implementation.
   lock:

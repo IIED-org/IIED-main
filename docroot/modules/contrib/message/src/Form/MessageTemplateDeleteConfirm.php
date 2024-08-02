@@ -15,14 +15,16 @@ class MessageTemplateDeleteConfirm extends EntityConfirmFormBase {
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return t('Are you sure you want to delete the message template %template?', ['%template' => $this->entity->label()]);
+    return $this->t('Are you sure you want to delete the message template %template?', [
+      '%template' => $this->entity->label(),
+    ]);
   }
 
   /**
    * {@inheritdoc}
    */
   public function getConfirmText() {
-    return t('Delete');
+    return $this->t('Delete');
   }
 
   /**

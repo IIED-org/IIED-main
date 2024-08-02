@@ -7,6 +7,7 @@ use FileEye\MimeMap\MappingException;
 use FileEye\MimeMap\Type;
 use FileEye\MimeMap\TypeParameter;
 use FileEye\MimeMap\UndefinedException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TypeTest extends MimeMapTestBase
 {
@@ -432,6 +433,7 @@ class TypeTest extends MimeMapTestBase
      * @param bool $expectedHasParameters
      * @param string[] $expectedParameters
      */
+    #[DataProvider('parseProvider')]
     public function testParse(string $type, array $expectedToString, array $expectedMedia, array $expectedSubType, bool $expectedHasParameters, array $expectedParameters): void
     {
         $mt = new Type($type);
@@ -490,6 +492,7 @@ class TypeTest extends MimeMapTestBase
     /**
      * @dataProvider parseMalformedProvider
      */
+    #[DataProvider('parseMalformedProvider')]
     public function testParseMalformed(string $type): void
     {
         $this->expectException(MalformedTypeException::class);
@@ -536,6 +539,7 @@ class TypeTest extends MimeMapTestBase
     /**
      * @dataProvider missingDescriptionProvider
      */
+    #[DataProvider('missingDescriptionProvider')]
     public function testMissingDescription(string $type): void
     {
         $t = new Type($type);
@@ -688,6 +692,9 @@ class TypeTest extends MimeMapTestBase
         $this->assertEquals(['pgp', 'gpg', 'asc', 'skr', 'pkr', 'key', 'sig'], (new Type('application/pgp*'))->getExtensions());
         $this->assertEquals(['asc', 'sig', 'pgp', 'gpg'], (new Type('application/pgp-s*'))->getExtensions());
 
+        $this->assertEquals(['123', 'wk1', 'wk3', 'wk4', 'wks'], (new Type('application/vnd.lotus-1-2-3'))->getExtensions());
+        $this->assertEquals(['602'], (new Type('application/x-t602'))->getExtensions());
+
         $this->assertSame(['smi', 'smil', 'sml', 'kino'], (new Type('application/smil+xml'))->getExtensions());
         $this->assertSame(['smi', 'smil', 'sml', 'kino'], (new Type('application/smil'))->getExtensions());
     }
@@ -726,6 +733,7 @@ class TypeTest extends MimeMapTestBase
     /**
      * @dataProvider getDefaultExtensionFailProvider
      */
+    #[DataProvider('getDefaultExtensionFailProvider')]
     public function testGetDefaultExtensionFail(string $type): void
     {
         $this->expectException(MappingException::class);

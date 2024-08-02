@@ -50,7 +50,7 @@ class LinkCheckerLinkAccessControlHandler extends EntityAccessControlHandler {
       }
     }
 
-    // User not allowed to view URL field if he does not have access to parent
+    // User not allowed to view URL field if it does not have access to parent
     // entity.
     if ($operation == 'view'
       && isset($items)

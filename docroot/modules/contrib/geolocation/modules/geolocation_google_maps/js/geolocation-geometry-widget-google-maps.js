@@ -39,17 +39,17 @@
             var availableControls = [];
             switch (geometryType) {
               case "polygon":
-              case "multi_polygon":
+              case "multipolygon":
                 availableControls = ["Polygon"];
                 break;
 
               case "polyline":
-              case "multi_polyline":
+              case "multipolyline":
                 availableControls = ["LineString"];
                 break;
 
               case "point":
-              case "multi_point":
+              case "multipoint":
                 availableControls = ["Point"];
                 break;
 
@@ -114,9 +114,9 @@
 
                   default:
                     var types = {
-                      multi_polygon: "MultiPolygon",
-                      multi_polyline: "MultiPolyline",
-                      multi_point: "MultiPoint",
+                      multipolygon: "MultiPolygon",
+                      multipolyline: "MultiPolyline",
+                      multipoint: "MultiPoint",
                       default: "GeometryCollection",
                     };
 

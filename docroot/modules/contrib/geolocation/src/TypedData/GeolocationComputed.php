@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation\TypedData;
 
-use Drupal\Core\TypedData\TypedData;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
+use Drupal\Core\TypedData\TypedData;
 
 /**
  * Class GeolocationComputed typed data.

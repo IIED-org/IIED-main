@@ -442,7 +442,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     }
 
     // Remove machine names from series. Highcharts series must be an array.
-    $series = array_values($chart_definition['series']);
+    $series = !empty($chart_definition['series']) ? array_values($chart_definition['series']) : [];
     unset($chart_definition['series']);
 
     // Trim out empty options (excluding "series" for efficiency).
@@ -465,7 +465,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
     $element['#attributes']['class'][] = 'charts-highchart';
     $element['#chart_definition'] = $chart_definition;
     // Show a form on the front-end so users can change chart colors.
-    if (!empty($element['#color_changer'])) {
+    if (!empty($element['#color_changer']) && empty($element['#in_preview_mode'])) {
       $form_state = new FormState();
       $form_state->set('chart_series', $series);
       $form_state->set('chart_id', $element['#id']);

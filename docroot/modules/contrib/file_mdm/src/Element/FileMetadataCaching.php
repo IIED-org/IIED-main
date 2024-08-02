@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Drupal\file_mdm\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Attribute\RenderElement;
+use Drupal\Core\Render\Element\FormElementBase;
 
 /**
  * Implements a form element to enable capturing cache information for file_mdm.
- *
- * @FormElement("file_mdm_caching")
  */
-class FileMetadataCaching extends FormElement {
+#[RenderElement('file_mdm_caching')]
+class FileMetadataCaching extends FormElementBase {
 
   public function getInfo() {
     $class = get_class($this);

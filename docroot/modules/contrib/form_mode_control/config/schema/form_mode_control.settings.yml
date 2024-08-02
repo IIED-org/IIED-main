@@ -1,6 +1,7 @@
 form_mode_control.settings:
-  type: sequence
+  type: config_object
   label: 'Form Mode Control settings'
-  sequence:
-    type: string
-    label: 'Config value'
+  mapping:
+    config_value:
+      type: string
+      label: 'Config value'

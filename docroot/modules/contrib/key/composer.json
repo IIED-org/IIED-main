@@ -10,6 +10,12 @@
     "issues": "http://drupal.org/project/key",
     "source": "https://git.drupalcode.org/project/key"
   },
+  "require-dev": {
+    "drush/drush": ">=9"
+  },
+  "suggest": {
+    "drush/drush": ">=11"
+  },
   "extra": {
     "drush": {
       "services": {

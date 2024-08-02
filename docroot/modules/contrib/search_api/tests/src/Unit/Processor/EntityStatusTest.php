@@ -64,7 +64,7 @@ class EntityStatusTest extends UnitTestCase {
       $datasource = $this->createMock(DatasourceInterface::class);
       $datasource->expects($this->any())
         ->method('getEntityTypeId')
-        ->will($this->returnValue($entity_type));
+        ->willReturn($entity_type);
       $this->datasources["entity:$entity_type"] = $datasource;
     }
   }
@@ -86,7 +86,7 @@ class EntityStatusTest extends UnitTestCase {
       $this->datasources = array_intersect_key($this->datasources, $datasource_ids);
     }
     $this->index->method('getDatasources')
-      ->will($this->returnValue($this->datasources));
+      ->willReturn($this->datasources);
 
     // In supportsIndex(), the entity status processor will use the entity type
     // manager to get the definition of each datasource's entity type and then
@@ -115,7 +115,7 @@ class EntityStatusTest extends UnitTestCase {
    * @return array[]
    *   Array of parameter arrays for testSupportsIndex().
    */
-  public function supportsIndexDataProvider(): array {
+  public static function supportsIndexDataProvider(): array {
     return [
       'all datasources' => [NULL, TRUE],
       'node datasource' => [['entity:node'], TRUE],
@@ -148,12 +148,12 @@ class EntityStatusTest extends UnitTestCase {
         if ($entity instanceof EntityPublishedInterface) {
           /** @var \Drupal\Core\Entity\EntityPublishedInterface&\PHPUnit\Framework\MockObject\MockObject $entity */
           $entity->method('isPublished')
-            ->will($this->returnValue($status));
+            ->willReturn($status);
         }
         elseif ($entity instanceof User) {
           /** @var \Drupal\user\Entity\User&\PHPUnit\Framework\MockObject\MockObject $entity */
           $entity->method('isActive')
-            ->will($this->returnValue($status));
+            ->willReturn($status);
         }
         /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
         $item->setOriginalObject(EntityAdapter::createFromEntity($entity));

@@ -53,6 +53,7 @@ class MediaFileDeleteMultipleTest extends BrowserTestBase {
     assert(property_exists($image3, 'uri'));
     $editor1 = $this->createUser([
       sprintf('delete any %s media', $image_type->id()),
+      'delete own files',
       'access media overview',
       'view media',
     ]);

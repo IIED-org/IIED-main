@@ -84,6 +84,13 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
   protected $entityRepository;
 
   /**
+   * The form mode to use for rendering the form.
+   *
+   * @var string
+   */
+  protected $formMode = 'default';
+
+  /**
    * {@inheritDoc}
    */
   public function __construct(
@@ -154,10 +161,11 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
    */
   protected function buildComponentForm(
     array $form,
-    FormStateInterface $form_state) {
+    FormStateInterface $form_state,
+    string $form_display_mode = 'default') {
 
     $this->initFormLangcodes($form_state);
-    $display = EntityFormDisplay::collectRenderDisplay($this->paragraph, 'default');
+    $display = EntityFormDisplay::collectRenderDisplay($this->paragraph, $form_display_mode);
     $display->buildForm($this->paragraph, $form, $form_state);
     $this->paragraphType = $this->paragraph->getParagraphType();
     $lp_config = $this->config('layout_paragraphs.settings');
@@ -365,7 +373,7 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
    *   The form element.
    */
   public function afterBuild(array $element, FormStateInterface $form_state) {
-    $parents = array_merge($element['#parents'], [$this->getFormId()]);
+    $parents = array_merge($element['#parents'], [$this->getFormId(), $element['#paragraph']->bundle()]);
     $unprocessed_id = 'edit-' . implode('-', $parents);
     $element['#attributes']['data-drupal-selector'] = Html::getId($unprocessed_id);
     $element['#dialog_id'] = $unprocessed_id . '-dialog';
@@ -605,6 +613,20 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
       );
     }
     return [];
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getFormMode() {
+    return $this->formMode;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function setFormMode($view_mode) {
+    $this->formMode = $view_mode;
   }
 
 }

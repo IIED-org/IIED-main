@@ -4,9 +4,9 @@ namespace Drupal\tfa;
 
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Psr\Log\LoggerInterface;
-use Drupal\Core\Url;
 
 /**
  * Provide context for the current login attempt.
@@ -268,16 +268,27 @@ trait TfaLoginContextTrait {
     // prior attempts.
     $remaining = $this->remainingSkips();
     if ($remaining) {
-      $tfa_setup_link = Url::fromRoute('tfa.overview', [
-        'user' => $user->id(),
-      ])->toString();
-      $message = $this->formatPlural(
+      if ($user->hasPermission('setup own tfa')) {
+        $tfa_setup_link = Url::fromRoute('tfa.overview', [
+          'user' => $user->id(),
+        ])->toString();
+        $message = $this->formatPlural(
           $remaining - 1,
           'You are required to <a href="@link">setup two-factor authentication</a>. You have @remaining attempt left. After this you will be unable to login.',
           'You are required to <a href="@link">setup two-factor authentication</a>. You have @remaining attempts left. After this you will be unable to login.',
           ['@remaining' => $remaining - 1, '@link' => $tfa_setup_link]
-          );
-      $this->messenger()->addError($message);
+        );
+        $this->messenger()->addError($message);
+      }
+      else {
+        $message = $this->formatPlural(
+          $remaining - 1,
+          'You are required to setup two-factor authentication however your account does not have the necessary permissions. Please contact an administrator. You have @remaining attempt left. After this you will be unable to login.',
+          'You are required to setup two-factor authentication however your account does not have the necessary permissions. Please contact an administrator. You have @remaining attempts left. After this you will be unable to login.',
+          ['@remaining' => $remaining - 1]
+        );
+        $this->messenger()->addError($message);
+      }
       $this->hasSkipped();
       // User can login without TFA.
       return TRUE;

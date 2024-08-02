@@ -7,7 +7,6 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\user\UserDataInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -27,7 +26,7 @@ class GinSettings implements ContainerInjectionInterface {
   /**
    * The user data service.
    *
-   * @var \Drupal\user\UserDataInterface
+   * @var \Drupal\user\UserDataInterface|null
    */
   protected $userData;
 
@@ -41,15 +40,15 @@ class GinSettings implements ContainerInjectionInterface {
   /**
    * Settings constructor.
    *
-   * @param \Drupal\user\UserDataInterface $userData
-   *   The user data service.
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory.
    */
-  public function __construct(UserDataInterface $userData, AccountInterface $currentUser, ConfigFactoryInterface $configFactory) {
-    $this->userData = $userData;
+  public function __construct(AccountInterface $currentUser, ConfigFactoryInterface $configFactory) {
+    if (\Drupal::hasService('user.data')) {
+      $this->userData = \Drupal::service('user.data');
+    }
     $this->currentUser = $currentUser;
     $this->configFactory = $configFactory;
   }
@@ -59,7 +58,6 @@ class GinSettings implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('user.data'),
       $container->get('current_user'),
       $container->get('config.factory')
     );
@@ -121,7 +119,7 @@ class GinSettings implements ContainerInjectionInterface {
    *   The account object. Current user if NULL.
    */
   public function setAll(array $settings, AccountInterface $account = NULL) {
-    if (!$account) {
+    if (!$account || !$this->userData) {
       $account = $this->currentUser;
     }
     // All settings are deleted to remove legacy settings.
@@ -137,7 +135,7 @@ class GinSettings implements ContainerInjectionInterface {
    *   The account object. Current user if NULL.
    */
   public function clear(AccountInterface $account = NULL) {
-    if (!$account) {
+    if (!$account || !$this->userData) {
       $account = $this->currentUser;
     }
     $this->userData->delete('gin', $account->id());
@@ -164,7 +162,7 @@ class GinSettings implements ContainerInjectionInterface {
    *   TRUE or FALSE.
    */
   public function userOverrideEnabled(AccountInterface $account = NULL) {
-    if (!$account) {
+    if (!$account || !$this->userData) {
       $account = $this->currentUser;
     }
     return $this->allowUserOverrides() && (bool) $this->userData->get('gin', $account->id(), 'enable_user_settings');
@@ -416,7 +414,10 @@ class GinSettings implements ContainerInjectionInterface {
     ];
 
     // Toolbar setting.
+    $is_navigation_active = _gin_module_is_active('navigation');
+
     $form['classic_toolbar'] = [
+      '#disabled' => $is_navigation_active,
       '#type' => 'radios',
       '#title' => $this->t('Navigation (Drupal Toolbar)'),
       '#default_value' => $account ? $this->get('classic_toolbar', $account) : $this->getDefault('classic_toolbar'),
@@ -426,9 +427,19 @@ class GinSettings implements ContainerInjectionInterface {
         'classic' => $this->t('Legacy, Classic Drupal Toolbar'),
         'new' => $this->t('New Drupal Navigation, Test integration') . $new_label . $experimental_label,
       ],
+      '#attributes' => $is_navigation_active ? ['class' => ['gin-core-navigation--is-active']] : [],
+      '#description' => $is_navigation_active ? $this->t('This setting is currently deactivated as it is overwritten by the navigation module.') : '',
       '#after_build' => [
         '_gin_toolbar_radios',
       ],
+    ];
+
+    // Sticky action toggle.
+    $form['sticky_action_buttons'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable sticky action buttons') . $beta_label . $new_label,
+      '#description' => $this->t('Displays all actions of the form in the sticky header.'),
+      '#default_value' => $account ? $this->get('sticky_action_buttons', $account) : $this->getDefault('sticky_action_buttons'),
     ];
 
     // Show secondary toolbar in Frontend.
@@ -444,7 +455,7 @@ class GinSettings implements ContainerInjectionInterface {
     // Layout density setting.
     $form['layout_density'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Layout density') . $beta_label,
+      '#title' => $this->t('Layout density'),
       '#description' => $this->t('Changes the layout density for tables in the admin interface.'),
       '#default_value' => (string) ($account ? $this->get('layout_density', $account) : $this->getDefault('layout_density')),
       '#options' => [

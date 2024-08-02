@@ -43,7 +43,7 @@ class MemcacheSettings {
    *   The value of the setting, the provided default if not set.
    */
   public function get($name, $default = NULL) {
-    return isset($this->settings[$name]) ? $this->settings[$name] : $default;
+    return $this->settings[$name] ?? $default;
   }
 
   /**

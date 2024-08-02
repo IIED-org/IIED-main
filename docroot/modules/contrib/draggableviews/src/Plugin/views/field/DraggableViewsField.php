@@ -2,8 +2,8 @@
 
 namespace Drupal\draggableviews\Plugin\views\field;
 
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\draggableviews\DraggableViews;
 use Drupal\views\Plugin\views\field\BulkForm;
@@ -69,10 +69,27 @@ class DraggableViewsField extends BulkForm {
   /**
    * {@inheritdoc}
    */
+  protected function defineOptions() {
+    $options = parent::defineOptions();
+    $options['draggable_views_hierarchy'] = ['default' => 0];
+    return $options;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    $form['draggableview_help'] = [
+    $form['draggable_views_help'] = [
       '#markup' => $this->t("A draggable element will be added to the first table column. You do not have to set this field as the first column in your View."),
     ];
+
+    $form['draggable_views_hierarchy'] = [
+      '#title' => $this->t('Enable hierarchy'),
+      '#type' => 'checkbox',
+      '#default_value' => $this->options['draggable_views_hierarchy'],
+      '#weight' => -1,
+    ];
+
     parent::buildOptionsForm($form, $form_state);
     // Remove all the fields that would break this or are completely ignored
     // when rendering the drag interface.
@@ -97,7 +114,7 @@ class DraggableViewsField extends BulkForm {
   // @codingStandardsIgnoreStart
   public function render_item($count, $item) {
     // @codingStandardsIgnoreEnd
-    // Using internal method. @todo Reckeck after drupal stable release.
+    // Using internal method. @todo Recheck after drupal stable release.
     return Markup::create('<!--form-item-' . $this->options['id'] . '--' . $this->view->row_index . '-->');
   }
 
@@ -112,6 +129,10 @@ class DraggableViewsField extends BulkForm {
     $draggableviews = new DraggableViews($this->view);
 
     foreach ($this->view->result as $row_index => $row) {
+      if (empty($this->getEntity($row))) {
+        continue;
+      }
+
       $form[$this->options['id']][$row_index] = [
         '#tree' => TRUE,
       ];
@@ -141,15 +162,19 @@ class DraggableViewsField extends BulkForm {
     }
 
     if ($this->currentUser->hasPermission('access draggableviews')) {
-      $options = [
-        'table_id' => $draggableviews->getHtmlId(),
-        'action' => 'match',
-        'relationship' => 'group',
-        'group' => 'draggableviews-parent',
-        'subgroup' => 'draggableviews-parent',
-        'source' => 'draggableviews-id',
-      ];
-      drupal_attach_tabledrag($form, $options);
+      // Get an array of field group titles.
+      $fieldGrouping = $draggableviews->fieldGrouping();
+      foreach ($fieldGrouping as $key => $row) {
+        $options = [
+          'table_id' => $draggableviews->getHtmlId($key),
+          'action' => 'match',
+          'relationship' => $this->options['draggable_views_hierarchy'] === 1 ? 'parent' : 'sibling',
+          'group' => 'draggableviews-parent',
+          'subgroup' => 'draggableviews-parent',
+          'source' => 'draggableviews-id',
+        ];
+        drupal_attach_tabledrag($form, $options);
+      }
     }
   }
 

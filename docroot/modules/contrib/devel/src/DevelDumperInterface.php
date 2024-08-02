@@ -20,7 +20,7 @@ interface DevelDumperInterface {
    * @param string $name
    *   (optional) The label to output before variable, defaults to NULL.
    */
-  public function dump($input, $name = NULL);
+  public function dump(mixed $input, $name = NULL);
 
   /**
    * Returns a string representation of a variable.
@@ -33,7 +33,7 @@ interface DevelDumperInterface {
    * @return string
    *   String representation of a variable.
    */
-  public function export($input, $name = NULL);
+  public function export(mixed $input, $name = NULL);
 
   /**
    * Returns a string representation of a variable wrapped in a render array.
@@ -46,7 +46,7 @@ interface DevelDumperInterface {
    * @return array
    *   String representation of a variable wrapped in a render array.
    */
-  public function exportAsRenderable($input, $name = NULL);
+  public function exportAsRenderable(mixed $input, $name = NULL): array;
 
   /**
    * Checks if requirements for this plugin are satisfied.
@@ -54,6 +54,6 @@ interface DevelDumperInterface {
    * @return bool
    *   TRUE is requirements are satisfied, FALSE otherwise.
    */
-  public static function checkRequirements();
+  public static function checkRequirements(): bool;
 
 }

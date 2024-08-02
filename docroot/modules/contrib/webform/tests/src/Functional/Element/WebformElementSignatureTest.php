@@ -90,7 +90,7 @@ class WebformElementSignatureTest extends WebformElementBrowserTestBase {
 
     // Check public and private file access is denied.
     $this->drupalGet($private_file_url);
-    $assert_session->responseContains('Please login to access the uploaded file.');
+    $assert_session->responseContains('Please log in to access the uploaded file.');
     $assert_session->addressEquals('/user/login');
 
     /* ********************************************************************** */
@@ -106,6 +106,12 @@ class WebformElementSignatureTest extends WebformElementBrowserTestBase {
     // Check invalid when PNG has color.
     $image = file_get_contents(__DIR__ . '/../../../files/sample.png');
     $this->assertSignature('data:image/png;base64,' . base64_encode($image), FALSE);
+
+    // Check that the temp signature files are deleted.
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $file_system = \Drupal::service('file_system');
+    $files = $file_system->scanDirectory($file_system->getTempDirectory(), '/^webform_signature_.*/');
+    $this->assertEmpty($files);
 
     /* ********************************************************************** */
     // Delete.

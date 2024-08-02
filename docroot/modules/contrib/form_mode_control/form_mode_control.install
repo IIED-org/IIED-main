@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * Implements hook_update_N().
+ * Update the schema of form_mode_control.settings configuration.
+ */
+function form_mode_control_update_9001() {
+  $config_factory = \Drupal::configFactory();
+  $config_name = 'form_mode_control.settings';
+
+  // Load the old configuration.
+  $config = $config_factory->getEditable($config_name);
+
+  // Get the current sequence values.
+  $old_values = $config->get('sequence');
+
+  // Transform old sequence values to new mapping structure.
+  if (is_array($old_values)) {
+    $new_values = [];
+    foreach ($old_values as $value) {
+      $new_values[] = ['config_value' => $value];
+    }
+
+    // Clear the old sequence and set the new mapping structure.
+    $config->clear('sequence');
+    $config->set('config_value', $new_values);
+    $config->save();
+  }
+}

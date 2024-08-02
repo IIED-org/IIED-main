@@ -3,7 +3,7 @@ label: 'Delete selected messages'
 status: true
 langcode: en
 type: message
-plugin: message_delete_action
+plugin: entity:delete_action:message
 dependencies:
   module:
     - message

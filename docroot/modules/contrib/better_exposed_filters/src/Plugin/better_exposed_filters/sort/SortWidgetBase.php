@@ -66,7 +66,7 @@ abstract class SortWidgetBase extends BetterExposedFiltersWidgetBase implements 
       '#type' => 'checkbox',
       '#title' => $this->t('Combine sort order with sort by'),
       '#default_value' => !empty($this->configuration['advanced']['combine']),
-      '#description' => $this->t('Combines the sort by options and order (ascending or decending) into a single list.  Use this to display "Option1 (ascending)", "Option1 (descending)", "Option2 (ascending)", "Option2 (descending)" in a single form element. Sort order should first be exposed by selecting <em>Allow people to choose the sort order</em>.'),
+      '#description' => $this->t('Combines the sort by options and order (ascending or descending) into a single list.  Use this to display "Option1 (ascending)", "Option1 (descending)", "Option2 (ascending)", "Option2 (descending)" in a single form element. Sort order should first be exposed by selecting <em>Allow people to choose the sort order</em>.'),
       '#states' => [
         'enabled' => [
           ':input[name="exposed_form_options[expose_sort_order]"]' => ['checked' => TRUE],

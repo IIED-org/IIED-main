@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 id: collection_card
 label: 'Collection card'
-revision: 0
+revision: false
 description: 'Collection card (standard width) for placement in layout builder.'

@@ -32,7 +32,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['devel', 'user', 'system'];
+  protected static $modules = ['devel', 'user', 'system'];
 
   /**
    * {@inheritdoc}
@@ -60,7 +60,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function register(ContainerBuilder $container) {
+  public function register(ContainerBuilder $container): void {
     parent::register($container);
 
     $parameters = $container->getParameter('twig.config');
@@ -71,16 +71,16 @@ class DevelTwigExtensionTest extends KernelTestBase {
   /**
    * Tests that Twig extension loads appropriately.
    */
-  public function testTwigExtensionLoaded() {
+  public function testTwigExtensionLoaded(): void {
     $twig_service = \Drupal::service('twig');
     $extension = $twig_service->getExtension(Debug::class);
-    $this->assertEquals(get_class($extension), Debug::class, 'Debug Extension loaded successfully.');
+    $this->assertEquals($extension::class, Debug::class, 'Debug Extension loaded successfully.');
   }
 
   /**
    * Tests that the Twig dump functions are registered properly.
    */
-  public function testDumpFunctionsRegistered() {
+  public function testDumpFunctionsRegistered(): void {
     /** @var \Twig\TwigFunction[] $functions */
     $functions = \Drupal::service('twig')->getFunctions();
 
@@ -109,7 +109,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
   /**
    * Tests that the Twig function for XDebug integration is registered properly.
    */
-  public function testXdebugIntegrationFunctionsRegistered() {
+  public function testXdebugIntegrationFunctionsRegistered(): void {
     /** @var \Twig\TwigFunction $function */
     $function = \Drupal::service('twig')->getFunction('devel_breakpoint');
     $this->assertTrue($function instanceof TwigFunction);
@@ -124,7 +124,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
   /**
    * Tests that the Twig extension's dump functions produce the expected output.
    */
-  public function testDumpFunctions() {
+  public function testDumpFunctions(): void {
     $template = 'test-with-context {{ twig_string }} {{ twig_array.first }} {{ twig_array.second }}{{ devel_dump() }}';
     $expected_template_output = 'test-with-context context! first value second value';
 
@@ -172,9 +172,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
     // Clear messages.
     $this->messenger()->deleteAll();
 
-    $retrieve_message = function ($messages, $index) {
-      return isset($messages['status'][$index]) ? (string) $messages['status'][$index] : NULL;
-    };
+    $retrieve_message = fn($messages, $index): ?string => isset($messages['status'][$index]) ? (string) $messages['status'][$index] : NULL;
 
     // Ensures that if no argument is passed to the function the twig context is
     // dumped.

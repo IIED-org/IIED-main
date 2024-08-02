@@ -106,7 +106,7 @@ class KeyEntityTest extends KeyTestBase {
     $definition = [
       'id' => 'config',
       'label' => 'Configuration',
-      'storage_method' => 'config',
+      'tags' => ['config'],
     ];
     $this->key_provider_settings = ['key_value' => $this->createToken(), 'base64_encoded' => FALSE];
     $plugin = new ConfigKeyProvider($this->key_provider_settings, 'config', $definition);
@@ -117,11 +117,11 @@ class KeyEntityTest extends KeyTestBase {
     $this->keyProviderManager->expects($this->any())
       ->method('getDefinitions')
       ->willReturn([
-        ['id' => 'file', 'label' => 'File', 'storage_method' => 'file'],
+        ['id' => 'file', 'label' => 'File', 'tags' => ['file']],
         [
           'id' => 'config',
           'label' => 'Configuration',
-          'storage_method' => 'config',
+          'tags' => ['config'],
         ],
       ]);
     $this->keyProviderManager->expects($this->any())

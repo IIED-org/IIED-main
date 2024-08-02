@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\acquia_connector\Kernel;
 
 /**
+ * Test integration of connector with the Drupal Toolbar.
+ *
  * @group acquia_connector
  */
 final class ToolbarIntegrationTest extends AcquiaConnectorTestBase {

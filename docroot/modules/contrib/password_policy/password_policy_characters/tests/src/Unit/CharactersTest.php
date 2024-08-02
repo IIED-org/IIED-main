@@ -31,7 +31,7 @@ class CharactersTest extends UnitTestCase {
   /**
    * Provides data for the testCharacters method.
    */
-  public function charactersDataProvider() {
+  public static function charactersDataProvider(): array {
     return [
       // Passing conditions.
       [
@@ -98,7 +98,7 @@ class CharactersTest extends UnitTestCase {
       [
         4,
         'letter',
-        'pass',
+        'pas',
         FALSE,
       ],
     ];

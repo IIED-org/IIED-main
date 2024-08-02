@@ -2,12 +2,12 @@
 
 namespace Drupal\geolocation\Plugin\Field\FieldWidget;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\WidgetBase;
-use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -160,7 +160,7 @@ abstract class GeolocationGeometryWidgetBase extends WidgetBase implements Conta
     $element['geojson'] = [
       '#type' => 'textarea',
       '#title' => $this->t('GeoJSON'),
-      '#default_value' => isset($items[$delta]->geojson) ? $items[$delta]->geojson : NULL,
+      '#default_value' => $items[$delta]->geojson ?? NULL,
       '#empty_value' => '',
       '#required' => $element['#required'],
       '#attributes' => [

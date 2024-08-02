@@ -5,7 +5,7 @@
  * A color field with a custom color picker using the Field Types API.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\color_field\ColorHex;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -153,7 +153,7 @@ function color_field_tokens(string $type, array $tokens, array $data, array $opt
   if ($type === 'color_field' && !empty($data['color_field'])) {
     /** @var \Drupal\color_field\Plugin\Field\FieldType\ColorFieldType $color_field */
     $color_field = $data['color_field'];
-    $color_hex = new ColorHex($color_field->color, $color_field->opacity);
+    $color_hex = new ColorHex($color_field->color, is_null($color_field->opacity) ? NULL : (float) $color_field->opacity);
 
     foreach ($tokens as $name => $original) {
       switch ($name) {

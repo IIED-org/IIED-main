@@ -3,6 +3,7 @@
 namespace Drupal\Tests\linkchecker\Functional;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Utility\Random;
 use Drupal\linkchecker\Entity\LinkCheckerLink;
 use Drupal\linkchecker\LinkCheckerLinkInterface;
 
@@ -37,6 +38,9 @@ class LinkCheckerLinkExtractionTest extends LinkCheckerBaseTest {
     $this->drupalLogin($this->adminUser);
   }
 
+  /**
+   * Implemented function to check node link.
+   */
   public function testLinkCheckerCreateNodeWithLinks() {
     $body = <<<EOT
 <!-- UNSUPPORTED for link checking: -->
@@ -177,7 +181,7 @@ class LinkCheckerLinkExtractionTest extends LinkCheckerBaseTest {
 EOT;
 
     // Save folder names in variables for reuse.
-    $random = new \Drupal\Component\Utility\Random();
+    $random = new Random();
     $folder1 = $random->name(10);
     $folder2 = $random->name(5);
 
@@ -185,7 +189,7 @@ EOT;
     $edit = [];
     $edit["title[0][value]"] = $random->name(32);
     $edit["body[0][value]"] = $body;
-    //$edit["body[0][format]"] = 'full_html';
+    // $edit["body[0][format]"] = 'full_html';
     $edit['path[0][alias]'] = '/' . $folder1 . '/' . $folder2;
 
     // Extract only full qualified URLs.
@@ -198,7 +202,8 @@ EOT;
 
     // Save node.
     $this->submitForm($edit, 'Save');
-    $this->assertSession()->pageTextContains($this->t('@type @title has been created.', ['@type' => 'Basic page', '@title' => $edit["title[0][value]"]]));
+    $this->assertSession()->pageTextContains($this->t('@type @title has been created.',
+     ['@type' => 'Basic page', '@title' => $edit["title[0][value]"]]));
 
     $key = \Drupal::state()->get('system.cron_key');
     $this->drupalGet('cron/' . $key);
@@ -252,7 +257,8 @@ EOT;
       $link = $this->getLinkCheckerLinkByUrl($check_url);
 
       if ($link) {
-        $this->assertSame($link->get('url')->value, $check_url, new FormattableMarkup('Absolute URL %org_url matches expected result %check_url.', ['%org_url' => $org_url, '%check_url' => $check_url]));
+        $this->assertSame($link->get('url')->value, $check_url, new FormattableMarkup('Absolute URL %org_url matches expected result %check_url.',
+         ['%org_url' => $org_url, '%check_url' => $check_url]));
       }
       else {
         $this->fail(new FormattableMarkup('URL %check_url not found.', ['%check_url' => $check_url]));
@@ -264,18 +270,23 @@ EOT;
     // - Verifies that the linkchecker filter blacklist works well.
     $urls_in_database = \Drupal::entityQuery('linkcheckerlink')->accessCheck()->count()->execute();
     $urls_expected_count = count($urls_fqdn);
-    $this->assertEquals($urls_in_database, $urls_expected_count, new FormattableMarkup('Found @urls_in_database URLs in database matches expected result of @urls_expected_count.', ['@urls_in_database' => $urls_in_database, '@urls_expected_count' => $urls_expected_count]));
+    $this->assertEquals($urls_in_database,
+     $urls_expected_count, new FormattableMarkup('Found @urls_in_database URLs in database matches expected result of @urls_expected_count.', [
+       '@urls_in_database' => $urls_in_database,
+       '@urls_expected_count' => $urls_expected_count,
+     ]));
 
     // Extract all URLs including relative path.
     // @FIXME
-    //variable_set('clean_url', 1);
+    // variable_set('clean_url', 1);
     $this->config('linkchecker.settings')->set('check_links_types', LinkCheckerLinkInterface::TYPE_ALL)->save();
 
     $node = $this->drupalGetNodeByTitle($edit["title[0][value]"]);
     $this->assertNotEmpty($node);
     $this->drupalGet('node/' . $node->id() . '/edit');
     $this->submitForm($edit, 'Save');
-    $this->assertSession()->pageTextContains($this->t('@type @title has been updated.', ['@type' => 'Basic page', '@title' => $edit['title[0][value]']]));
+    $this->assertSession()->pageTextContains($this->t('@type @title has been updated.',
+     ['@type' => 'Basic page', '@title' => $edit['title[0][value]']]));
 
     // @todo Path alias seems not saved!???
     // Verify if the content links are extracted properly.
@@ -303,17 +314,26 @@ EOT;
       $link = $this->getLinkCheckerLinkByUrl($check_url);
 
       if ($link) {
-        //$this->assertIdentical($link->get('url')->value, $check_url, new FormattableMarkup('Relative URL %org_url matches expected result %check_url.', ['%org_url' => $org_url, '%check_url' => $check_url]));
+        // $this->assertIdentical($link->get('url')->value,
+        // $check_url, new FormattableMarkup
+        // ('Relative URL %org_url matches expected result %check_url.',
+        // ['%org_url' => $org_url, '%check_url' => $check_url]));
       }
       else {
-        //$this->fail(new FormattableMarkup('URL %check_url not found.', ['%check_url' => $check_url]));
+        // $this->fail(new FormattableMarkup('URL %check_url not found.',
+        // ['%check_url' => $check_url]));
       }
     }
 
     // Check if the number of links is correct.
     $urls_in_database = \Drupal::entityQuery('linkcheckerlink')->accessCheck()->count()->execute();
     $urls_expected_count = count($urls_fqdn + $urls_relative);
-    $this->assertEquals($urls_in_database, $urls_expected_count, new FormattableMarkup('Found @urls_in_database URLs in database matches expected result of @urls_expected_count.', ['@urls_in_database' => $urls_in_database, '@urls_expected_count' => $urls_expected_count]));
+    $this->assertEquals($urls_in_database, $urls_expected_count,
+     new FormattableMarkup('Found @urls_in_database URLs in database matches expected result of @urls_expected_count.',
+      [
+        '@urls_in_database' => $urls_in_database,
+        '@urls_expected_count' => $urls_expected_count,
+      ]));
 
     // Verify if link check has been enabled for normal URLs.
     $urls = [
@@ -347,7 +367,8 @@ EOT;
       $link = $this->getLinkCheckerLinkByUrl($url);
 
       // @FIXME
-      //$this->assertTrue($link->status, format_string('Link check for %url is enabled.', ['%url' => $url]));
+      // $this->assertTrue($link->status,
+      // format_string('Link check for %url is enabled.', ['%url' => $url]));
     }
 
     // Verify if link check has been disabled for example.com/net/org URLs.
@@ -375,7 +396,9 @@ EOT;
       $link = $this->getLinkCheckerLinkByUrl($documentation_url);
 
       // @FIXME
-      //$this->assertFalse($link->status, format_string('Link check for %url is disabled.', ['%url' => $documentation_url]));
+      // $this->assertFalse($link->status,
+      // format_string('Link check for %url is disabled.',
+      // ['%url' => $documentation_url]));
     }
   }
 

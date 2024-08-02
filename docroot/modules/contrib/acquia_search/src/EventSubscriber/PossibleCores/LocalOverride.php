@@ -44,7 +44,7 @@ class LocalOverride implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     // Overridden fires first and supersedes all other possible cores.
     // phpcs:ignore
     $events[AcquiaSearchEvents::GET_POSSIBLE_CORES][] = ['onGetPossibleCores', 9999];

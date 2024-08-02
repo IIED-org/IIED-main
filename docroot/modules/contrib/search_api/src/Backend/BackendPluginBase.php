@@ -334,7 +334,7 @@ abstract class BackendPluginBase extends ConfigurablePluginBase implements Backe
    *
    * Prevents the server entity from being serialized.
    */
-  public function __sleep() {
+  public function __sleep(): array {
     if ($this->server) {
       $this->serverId = $this->server->id();
     }
@@ -349,7 +349,7 @@ abstract class BackendPluginBase extends ConfigurablePluginBase implements Backe
    *
    * Reloads the server entity.
    */
-  public function __wakeup() {
+  public function __wakeup(): void {
     parent::__wakeup();
 
     if ($this->serverId) {

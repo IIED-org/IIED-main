@@ -1,24 +1,24 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\message\Plugin\migrate\source.
- */
-
 namespace Drupal\message\Plugin\migrate\source;
 
-use Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase;
 use Drupal\migrate\Row;
-use Drupal\message\Entity\Message;
+use Drupal\migrate_drupal\Plugin\migrate\source\d7\FieldableEntity;
+
 /**
  * Drupal 7 message source from database.
+ *
+ * Available configuration keys:
+ * - bundle: (optional) The message types to filter messages retrieved from the
+ *   source - can be a string or an array. If omitted, all messages are
+ *   retrieved.
  *
  * @MigrateSource(
  *   id = "d7_message_source",
  *   source_module = "message"
  * )
  */
-class MessageSource extends DrupalSqlBase {
+class MessageSource extends FieldableEntity {
 
   /**
    * {@inheritdoc}
@@ -34,6 +34,10 @@ class MessageSource extends DrupalSqlBase {
       'timestamp',
       'language',
     ]);
+
+    if (isset($this->configuration['bundle'])) {
+      $query->condition('m.type', (array) $this->configuration['bundle'], 'IN');
+    }
 
     $query->orderBy('timestamp');
 
@@ -61,6 +65,18 @@ class MessageSource extends DrupalSqlBase {
     $ids['mid']['type'] = 'integer';
 
     return $ids;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function prepareRow(Row $row) {
+    // Get Field API field values.
+    $mid = $row->getSourceProperty('mid');
+    foreach (array_keys($this->getFields('message', $row->getSourceProperty('type'))) as $field) {
+      $row->setSourceProperty($field, $this->getFieldValues('message', $field, $mid));
+    }
+    return parent::prepareRow($row);
   }
 
 }

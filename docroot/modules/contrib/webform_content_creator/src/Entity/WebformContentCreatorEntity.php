@@ -5,6 +5,7 @@ namespace Drupal\webform_content_creator\Entity;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\webform_content_creator\WebformContentCreatorInterface;
@@ -13,6 +14,7 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\Component\Utility\Html;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Defines the Webform Content Creator entity.
@@ -51,6 +53,10 @@ use Drupal\Component\Utility\Html;
  *     "field_title",
  *     "use_encrypt",
  *     "encryption_profile",
+ *     "redirect_to_entity",
+ *     "redirect_to_entity_message",
+ *     "redirect_to_entity_message_on_update",
+ *     "sync_unique",
  *     "sync_content",
  *     "sync_content_delete",
  *     "sync_content_node_field",
@@ -128,6 +134,27 @@ class WebformContentCreatorEntity extends ConfigEntityBase implements WebformCon
    * @var string
    */
   protected $encryption_profile;
+
+  /**
+   * Redirect to entity.
+   *
+   * @var bool
+   */
+  protected $redirect_to_entity;
+
+  /**
+   * Message on entity redirect.
+   *
+   * @var string
+   */
+  protected $redirect_to_entity_message;
+
+  /**
+   * Display message on webform submission update.
+   *
+   * @var bool
+   */
+  protected $redirect_to_entity_message_on_update;
 
   /**
    * Returns the entity title.
@@ -244,6 +271,16 @@ class WebformContentCreatorEntity extends ConfigEntityBase implements WebformCon
   }
 
   /**
+   * Check if synchronization based on unique field is used.
+   *
+   * @return bool
+   *   true, when the synchronization is used. Otherwise, returns false.
+   */
+  public function getSyncUniqueContentCheck() {
+    return $this->get(WebformContentCreatorInterface::SYNC_UNIQUE);
+  }
+
+  /**
    * Check if synchronization between content entities and webform submissions is used.
    *
    * @return bool
@@ -310,6 +347,36 @@ class WebformContentCreatorEntity extends ConfigEntityBase implements WebformCon
   }
 
   /**
+   * Redirect to entity.
+   *
+   * @return bool
+   *   True, when the redirection is on. Otherwise, returns false.
+   */
+  public function getRedirectToEntityCheck() {
+    return $this->get(WebformContentCreatorInterface::REDIRECT_TO_ENTITY);
+  }
+
+  /**
+   * Message on entity redirect.
+   *
+   * @return string
+   *   Message after redirect.
+   */
+  public function getRedirectToEntityMessage() {
+    return $this->get(WebformContentCreatorInterface::REDIRECT_TO_ENTITY_MESSAGE);
+  }
+
+  /**
+   * Display message on webform submission update.
+   *
+   * @return string
+   *   True, when the redirection on submission update is on. Otherwise, returns false.
+   */
+  public function getRedirectToEntityMessageOnUpdateCheck() {
+    return $this->get(WebformContentCreatorInterface::REDIRECT_TO_ENTITY_MESSAGE_ON_UPDATE);
+  }
+
+  /**
    * Get webform submission value.
    *
    * @param string $value
@@ -368,7 +435,7 @@ class WebformContentCreatorEntity extends ConfigEntityBase implements WebformCon
     // If the custom check functionality is active then we do need to evaluate
     // webform fields.
     if ($attributes[$field_id][WebformContentCreatorInterface::CUSTOM_CHECK]) {
-      $field_value = WebformContentCreatorUtilities::getDecryptedTokenValue($mapping[WebformContentCreatorInterface::CUSTOM_VALUE], $encryption_profile, $webform_submission);
+      $field_value = WebformContentCreatorUtilities::getDecryptedTokenValue($mapping[WebformContentCreatorInterface::CUSTOM_VALUE], $encryption_profile, $webform_submission, $this->get(WebformContentCreatorInterface::ELEMENTS));
     }
     else {
       if (!$attributes[$field_id][WebformContentCreatorInterface::TYPE]) {
@@ -388,10 +455,16 @@ class WebformContentCreatorEntity extends ConfigEntityBase implements WebformCon
 
       }
     }
+
+    // Decode HTML entities, returning them to their original UTF-8 characters.
+    if (is_string($field_value)) {
+      $field_value = Html::decodeEntities($field_value);
+    }
+
     $values[$field_id] = $field_value;
 
     // Map the field type using the selected field mapping.
-    $field_value = $field_mapping->mapEntityField($content, $webform_element, $fields[$field_id], $values, $mapping);
+    $field_mapping->mapEntityField($content, $webform_element, $fields[$field_id], $values, $mapping);
 
     return $content;
   }
@@ -437,6 +510,22 @@ class WebformContentCreatorEntity extends ConfigEntityBase implements WebformCon
       $content = $this->mapContentField($content, $webform_submission, $fields, $data, $encryptionProfile, $k2, $v2, $attributes);
     }
 
+    // Check if we have the synchronization process by unique field active.
+    if ($this->getSyncUniqueContentCheck()) {
+      $content_entities = \Drupal::entityTypeManager()->getStorage($entity_type_id)->getQuery()
+        ->condition($this->getSyncContentField(), $content->get($this->getSyncContentField())->value)
+        ->accessCheck(TRUE)
+        ->execute();
+
+      // Update the first existing content entity with the same unique value.
+      if (!empty($content_entities)) {
+        $content = \Drupal::entityTypeManager()->getStorage($entity_type_id)->load(reset($content_entities));
+        foreach ($attributes as $k2 => $v2) {
+          $content = $this->mapContentField($content, $webform_submission, $fields, $data, $encryptionProfile, $k2, $v2, $attributes);
+        }
+      }
+    }
+
     $result = FALSE;
 
     // Save content.
@@ -447,6 +536,11 @@ class WebformContentCreatorEntity extends ConfigEntityBase implements WebformCon
       \Drupal::logger(WebformContentCreatorInterface::WEBFORM_CONTENT_CREATOR)->error($this->t('A problem occurred when creating a new content.'));
       \Drupal::logger(WebformContentCreatorInterface::WEBFORM_CONTENT_CREATOR)->error($e->getMessage());
     }
+
+    if ($this->getRedirectToEntityCheck()) {
+      $this->redirectToEntity($content->getEntityTypeId(), $content->id(), 'create');
+    }
+
     return $result;
   }
 
@@ -521,6 +615,10 @@ class WebformContentCreatorEntity extends ConfigEntityBase implements WebformCon
     catch (\Exception $e) {
       \Drupal::logger(WebformContentCreatorInterface::WEBFORM_CONTENT_CREATOR)->error($this->t('A problem occurred while updating content.'));
       \Drupal::logger(WebformContentCreatorInterface::WEBFORM_CONTENT_CREATOR)->error($e->getMessage());
+    }
+
+    if ($this->getRedirectToEntityCheck()) {
+      $this->redirectToEntity($content->getEntityTypeId(), $content->id(), 'update');
     }
 
     return $result;
@@ -680,6 +778,33 @@ class WebformContentCreatorEntity extends ConfigEntityBase implements WebformCon
     }
 
     return $result;
+  }
+
+  /**
+   * Redirect user to the canonical page of entity created.
+   *
+   * @param $entity_type
+   *   Content entity type.
+   * @param $id
+   *   ID of the entity which was created / updated.
+   * @param $op
+   *   Operation which resulted in redirect. Can be 'create' and 'update'.
+   *
+   * @return void
+   */
+  private function redirectToEntity($entity_type, $id, $op) {
+    /* @var \Drupal\Core\Routing\RouteProviderInterface $route_provider */
+    $route_provider = \Drupal::service('router.route_provider');
+    $entity_route_exists = count($route_provider->getRoutesByNames(["entity.{$entity_type}.canonical"])) === 1;
+    if ($entity_route_exists) {
+      if (($op === 'create' || $this->getRedirectToEntityMessageOnUpdateCheck()) && !empty($this->getRedirectToEntityMessage()) ) {
+        $this->messenger()->addMessage($this->getRedirectToEntityMessage());
+      }
+      $options = ['absolute' => FALSE];
+      $url = Url::fromRoute("entity.{$entity_type}.canonical", ["{$entity_type}" => $id], $options);
+      $response = new RedirectResponse($url->toString());
+      $response->send();
+    }
   }
 
 }

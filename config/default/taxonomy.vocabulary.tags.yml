@@ -8,3 +8,4 @@ name: Tag
 vid: tags
 description: 'Use tags to group articles on similar topics into categories.'
 weight: -8
+new_revision: false

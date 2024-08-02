@@ -11,7 +11,7 @@ third_party_settings:
 name: 'Impact story'
 type: impact_story
 description: "Content type for short or long form articles concerning IIED's impact."
-help: ''
+help: null
 new_revision: true
 preview_mode: 1
 display_submitted: false

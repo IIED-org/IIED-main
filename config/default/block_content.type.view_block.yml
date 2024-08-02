@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 id: view_block
 label: 'View block'
-revision: 0
+revision: false
 description: 'Add a view'

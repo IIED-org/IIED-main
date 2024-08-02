@@ -72,11 +72,11 @@ class QueuerAddFormTest extends AjaxFormTestBase {
     $this->assertSession()->responseNotContains('Queuer B');
     $this->assertSession()->responseContains('Queuer C');
     $this->assertSession()->responseContains('Queuer with form');
-    $this->assertSame(TRUE, count($this->purgeQueuers->getPluginsEnabled()) === 2);
-    $this->assertSame(TRUE, in_array('a', $this->purgeQueuers->getPluginsEnabled()));
-    $this->assertSame(TRUE, in_array('b', $this->purgeQueuers->getPluginsEnabled()));
-    $this->assertSame(FALSE, in_array('c', $this->purgeQueuers->getPluginsEnabled()));
-    $this->assertSame(FALSE, in_array('withform', $this->purgeQueuers->getPluginsEnabled()));
+    $this->assertCount(2, $this->purgeQueuers->getPluginsEnabled());
+    $this->assertTrue(in_array('a', $this->purgeQueuers->getPluginsEnabled()));
+    $this->assertTrue(in_array('b', $this->purgeQueuers->getPluginsEnabled()));
+    $this->assertFalse(in_array('c', $this->purgeQueuers->getPluginsEnabled()));
+    $this->assertFalse(in_array('withform', $this->purgeQueuers->getPluginsEnabled()));
   }
 
   /**
@@ -135,12 +135,10 @@ class QueuerAddFormTest extends AjaxFormTestBase {
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->getSession()->getPage()->selectFieldOption('id', 'c');
     $this->pressDialogButton('Add');
-    $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->assertSession()->elementNotExists('css', '#drupal-modal');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
     $this->assertSession()->linkExists('Queuer C');
     $this->purgeQueuers->reload();
-    $this->assertSame(TRUE, in_array('c', $this->purgeQueuers->getPluginsEnabled()));
+    $this->assertTrue(in_array('c', $this->purgeQueuers->getPluginsEnabled()));
   }
 
 }

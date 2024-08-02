@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation_google_maps\Plugin\geolocation\MapProvider;
 
-use Drupal\geolocation_google_maps\GoogleMapsProviderBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation_google_maps\GoogleMapsProviderBase;
 
 /**
  * Provides Google Maps.

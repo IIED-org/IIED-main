@@ -55,6 +55,18 @@
   }
 
   .page-wrapper__node-edit-form {
+    .region-sticky {
+      @include mq($to: large) {
+        #edit-actions {
+          width: 100%;
+        }
+
+        #edit-gin-actions {
+          flex-grow: 1;
+        }
+      }
+    }
+
     .block-page-title-block {
       @include mq(1730px) {
         width: 100%;
@@ -86,6 +98,8 @@
     .layout-region-node-secondary {
       z-index: 103;
       width: var(--gin-sidebar-width);
+      min-width: var(--gin-sidebar-min-width);
+      max-width: var(--gin-sidebar-max-width);
       height: calc(100% - var(--gin-toolbar-y-offset));
       position: fixed;
       top: var(--gin-toolbar-y-offset);
@@ -115,7 +129,7 @@
 
       .field--name-revision-log,
       .field--name-revision-log-message {
-        margin-top: var(--gin-spacing-l);
+        margin-top: var(--gin-spacing-s);
       }
 
       .accordion {
@@ -129,8 +143,7 @@
 
         &__header {
           color: var(--gin-color-text);
-          padding-left: $sidebarSpacer;
-          padding-right: $sidebarSpacer;
+          padding: var(--gin-spacing-m) #{$sidebarSpacer};
           background-color: var(--gin-bg-layer);
           border: 0 none;
 
@@ -138,14 +151,35 @@
             padding-top: calc(var(--gin-spacing-l) - var(--gin-spacing-xxs));
             padding-right: var(--gin-spacing-l);
           }
+
+          .form-type--item,
+          .form-item__label {
+            font-size: var(--gin-font-size-s);
+          }
+
+          .form-item {
+            margin-block: var(--gin-spacing-xxs);
+          }
         }
 
         &__title {
           color: var(--gin-color-title);
           font-weight: var(--gin-font-weight-semibold);
-          margin-top: var(--gin-spacing-xxs);
-          margin-bottom: var(--gin-spacing-m);
           text-shadow: none;
+        }
+
+        &__revision {
+          margin-block-start: var(--gin-spacing-m);
+        }
+
+        &__last-saved,
+        &__author {
+          margin-block: var(--gin-spacing-xxs);
+
+          &,
+          .form-item__label {
+            font-size: var(--gin-font-size-s);
+          }
         }
 
         > .accordion__item {
@@ -159,6 +193,7 @@
           }
 
           > .claro-details__summary {
+            font-size: var(--gin-font-size-s);
             display: block;
             padding-left: #{$sidebarSpacer + 1.5rem};
 
@@ -252,7 +287,7 @@
 
   .field--name-title .form-element {
     font-size: var(--gin-font-size-h3);
-    font-weight: var(--gin-font-weight-semibold);
+    font-weight: 475;
     line-height: normal;
     letter-spacing: -0.025em;
     width: 100%;

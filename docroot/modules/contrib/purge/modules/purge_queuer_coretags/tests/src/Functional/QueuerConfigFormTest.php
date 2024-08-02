@@ -80,7 +80,7 @@ class QueuerConfigFormTest extends QueuerConfigFormTestBase {
     $form_state->addBuildInfo('args', $this->formArgs);
     $form_state->setValue('blacklist', ['testvalue', '', '', '']);
     $this->formBuilder()->submitForm($form, $form_state);
-    $this->assertSame(0, count($form_state->getErrors()));
+    $this->assertCount(0, $form_state->getErrors());
     $this->drupalGet($this->getPath());
     $this->assertSession()->responseContains('testvalue');
     $this->assertSession()->fieldExists('edit-blacklist-0');

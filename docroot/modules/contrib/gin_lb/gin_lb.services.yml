@@ -1,11 +1,5 @@
 services:
   gin_lb.twig:
-    arguments:
-      - '@renderer'
-      - '@url_generator'
-      - '@theme.manager'
-      - '@date.formatter'
-      - '@file_url_generator'
     class: Drupal\gin_lb\TwigExtension\GinLbExtension
     tags:
       - { name: twig.extension }
@@ -14,3 +8,9 @@ services:
     arguments: []
     tags:
       - { name: event_subscriber }
+  gin_lb.context_validator:
+    class: Drupal\gin_lb\Service\ContextValidator
+    arguments:
+      - '@theme.manager'
+      - '@current_route_match'
+      - '@module_handler'

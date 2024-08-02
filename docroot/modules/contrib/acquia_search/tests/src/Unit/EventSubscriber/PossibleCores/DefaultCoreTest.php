@@ -114,7 +114,7 @@ final class DefaultCoreTest extends AcquiaSearchTestCase {
     self::assertEquals($expected, $event->getPossibleCores());
   }
 
-  public function searchIndexesData() {
+  public static function searchIndexesData() {
     yield [
       [],
       [],

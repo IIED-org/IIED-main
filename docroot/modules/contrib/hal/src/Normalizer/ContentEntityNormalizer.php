@@ -66,6 +66,15 @@ class ContentEntityNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
+  public function getSupportedTypes(?string $format): array {
+    return [
+      ContentEntityInterface::class => TRUE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function normalize($entity, $format = NULL, array $context = []): array|string|int|float|bool|\ArrayObject|NULL {
     $context += [
       'account' => NULL,

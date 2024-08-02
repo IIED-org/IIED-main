@@ -6,3 +6,4 @@ name: 'World continents'
 vid: un_geoscheme_regional_groupings
 description: "7 continental regions - used in 'Hidden handbrake' webform and content type"
 weight: 0
+new_revision: false

@@ -81,9 +81,9 @@ class KeyRepository implements KeyRepositoryInterface {
   /**
    * {@inheritdoc}
    */
-  public function getKeysByStorageMethod($storage_method) {
-    $key_providers = array_filter($this->keyProviderManager->getDefinitions(), function ($definition) use ($storage_method) {
-      return $definition['storage_method'] == $storage_method;
+  public function getKeysByTags(array $tags): array {
+    $key_providers = array_filter($this->keyProviderManager->getDefinitions(), function (array $definition) use ($tags): bool {
+      return (bool) array_intersect($definition['tags'], $tags);
     });
 
     $keys = [];
@@ -91,6 +91,14 @@ class KeyRepository implements KeyRepositoryInterface {
       $keys = array_merge($keys, $this->getKeysByProvider($key_provider['id']));
     }
     return $keys;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getKeysByStorageMethod($storage_method) {
+    @trigger_error(__METHOD__ . '() is deprecated in key:1.18.0 and is removed from key:2.0.0. Use self::getKeysByTags() instead. See https://www.drupal.org/node/3364701', E_USER_DEPRECATED);
+    return $this->getKeysByTags([$storage_method]);
   }
 
   /**
@@ -136,8 +144,13 @@ class KeyRepository implements KeyRepositoryInterface {
           $keys = array_intersect_key($this->getKeysByTypeGroup($filter), $keys);
           break;
 
+        case 'tags':
+          array_intersect_key($this->getKeysByTags($filter), $keys);
+          break;
+
         case 'storage_method':
-          $keys = array_intersect_key($this->getKeysByStorageMethod($filter), $keys);
+          @trigger_error("Passing 'storage_method' as filter to Drupal\key\KeyRepository::getKeyNamesAsOptions() is deprecated in key:1.18.0 and is removed from key:2.0.0. Use the 'tags' filter instead. See https://www.drupal.org/node/3364701", E_USER_DEPRECATED);
+          $keys = array_intersect_key($this->getKeysByTags([$filter]), $keys);
           break;
       }
     }

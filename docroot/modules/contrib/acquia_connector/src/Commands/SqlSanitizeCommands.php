@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\acquia_connector\Commands;
 
+// The Drush 13 has removed the drush.services.yml for sanitize command.
+if (interface_exists('\Drush\Commands\sql\sanitize\SanitizePluginInterface')) {
+  class_alias('\Drush\Commands\sql\sanitize\SanitizePluginInterface', '\Drush\Drupal\Commands\sql\SanitizePluginInterface');
+}
+
 use Consolidation\AnnotatedCommand\CommandData;
 use Drupal\Core\State\StateInterface;
 use Drush\Commands\DrushCommands;

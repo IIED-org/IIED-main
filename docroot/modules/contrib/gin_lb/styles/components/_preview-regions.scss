@@ -1,36 +1,33 @@
-#toolbar-item-display-options:before {
-  mask-image: icon('eye') !important;
-
+#toolbar-item-display-options::before {
+  mask-image: icon("eye") !important;
 }
 
 .glb-preview-regions--enable {
-
   .layout-builder__region {
     position: relative;
-    &:after {
+    &::after {
       position: absolute;
-      border: 1px dashed var(--gin-border-color-form-element);
-      content: '';
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      left: 0;
-      top: 0;
+      content: "";
       pointer-events: none;
+      border: 1px dashed var(--gin-border-color-form-element);
     }
 
     .layout-builder__region-label {
-      padding: 0em 4px 0 4px !important;
-      font-size: 12px !important;
-      line-height: 20px !important;
       position: absolute;
-      color: #ffffff;
-      display: block;
+      z-index: 1;
       top: -19px;
       right: 0;
-      z-index: 1;
-      background: var(--gin-border-color-form-element);
+      display: block;
       height: 20px;
+      padding: 0 4px 0 4px !important;
+      color: #fff;
+      background: var(--gin-border-color-form-element);
+      font-size: 12px !important;
+      line-height: 20px !important;
     }
   }
-
 }

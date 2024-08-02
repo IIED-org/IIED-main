@@ -76,7 +76,7 @@ class DropzoneJsUploadControllerTest extends KernelTestBase {
     $language = ConfigurableLanguage::createFromLangcode('ru');
     $language->save();
     $this->config('system.site')->set('default_langcode', $language->getId())->save();
-
+    $this->config('dropzonejs.settings')->set('filename_transliteration', TRUE)->save();
     $unicode_emoticon = json_decode('"\uD83D\uDE0E"');
 
     $uploaded_file = new UploadedFile($this->tmpFile, "{$this->testfilePrefix}controller-Капля   a,A;1{$unicode_emoticon}.jpg");
@@ -108,10 +108,9 @@ class DropzoneJsUploadControllerTest extends KernelTestBase {
     $language->save();
     $this->config('system.site')->set('default_langcode', $language->getId())->save();
     $this->config('dropzonejs.settings')->set('filename_transliteration', FALSE)->save();
-
     // The filename should be expected as it is.
     $chinese_with_emoji_fileanme_without_extension = '中文😁';
-    $uploaded_file = new UploadedFile($this->tmpFile, "{$this->testfilePrefix}${chinese_with_emoji_fileanme_without_extension}.jpg");
+    $uploaded_file = new UploadedFile($this->tmpFile, "{$this->testfilePrefix}{$chinese_with_emoji_fileanme_without_extension}.jpg");
     $file_bag = new FileBag();
     $file_bag->set('file', $uploaded_file);
 

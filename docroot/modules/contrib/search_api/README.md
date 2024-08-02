@@ -174,9 +174,9 @@ For more information, see the
 
 [Developers handbook]: https://www.drupal.org/docs/8/modules/search-api/developer-documentation
 
-To know which parts of the module can be relied upon as its public API, please
-read the [Drupal 8 backwards compatibility and internal API policy][Core BC]
-and the module’s issue regarding [potential module-specific changes to that
+To know which parts of the module can be relied upon as its public API, read the
+[Drupal 8 backwards compatibility and internal API policy][Core BC] and the
+module’s issue regarding [potential module-specific changes to that
 policy][Module BC].
 
 [Core BC]: https://www.drupal.org/core/d8-bc-policy

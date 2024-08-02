@@ -4,8 +4,8 @@ namespace Drupal\geolocation_geometry_data;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Shapefile\Shapefile;
-use Shapefile\ShapefileReader;
 use Shapefile\ShapefileException;
+use Shapefile\ShapefileReader;
 
 /**
  * Class Geolocation GeometryData Base.

@@ -1,14 +1,13 @@
 .glb-claro-details {
-  margin-left: -$offcanvasPadding !important;
+  margin-top: 0 !important;
   margin-right: -$offcanvasPadding !important;
-  margin-bottom: 0!important;
-  margin-top: 0!important;
+  margin-bottom: 0 !important;
+  margin-left: -$offcanvasPadding !important;
   border: 0 none !important;
   border-top: 1px solid var(--gin-border-color) !important;
   border-bottom: 1px solid var(--gin-border-color) !important;
   border-radius: 0 !important;
   background-color: transparent !important;
-
 
   & + .glb-claro-details {
     border-top: 0 !important;
@@ -30,20 +29,20 @@
   }
 
   &__wrapper {
-    padding-left: 1.5em !important;
     padding-right: 1.5em !important;
+    padding-left: 1.5em !important;
   }
 
   &__summary {
     position: relative !important;
-    color: var(--gin-color-text) !important;
-    font-weight: 600 !important;
     padding: 1.25em 1.5em 1.25em 2.5em !important;
-    background: #fff !important;
-    line-height: 1.5em !important;
     list-style: none !important;
     cursor: pointer !important;
+    color: var(--gin-color-text) !important;
+    background: #fff !important;
     font-size: 1em !important;
+    font-weight: 600 !important;
+    line-height: 1.5em !important;
 
     &::-webkit-details-marker {
       display: none !important;
@@ -85,10 +84,7 @@
       box-shadow: inset 0 0 0 3px #26a769 !important;
     }
   }
-
-
 }
-
 
 .gin--dark-mode {
   .glb-claro-details__summary {

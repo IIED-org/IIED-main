@@ -36,13 +36,13 @@ class MediaBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTestBa
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_media', 'media', 'media_test_source'];
+  protected static $modules = ['rh_media', 'media', 'media_test_source'];
 
   /**
    * {@inheritdoc}
    */
   protected function createEntityBundle() {
-    // TODO: Remove 2nd parameter once https://www.drupal.org/node/3174874 is
+    // @todo Remove 2nd parameter once https://www.drupal.org/node/3174874 is
     // resolved.
     $this->bundle = $this->createMediaType('test', [
       'id' => mb_strtolower($this->randomMachineName()),

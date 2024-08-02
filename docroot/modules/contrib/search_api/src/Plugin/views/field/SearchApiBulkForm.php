@@ -293,4 +293,28 @@ class SearchApiBulkForm extends BulkForm {
     return $entity;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function isWorkspaceSafeForm(array $form, FormStateInterface $form_state): bool {
+    // Only return TRUE if all the index's datasources return workspace-safe
+    // entity types.
+    foreach ($this->getIndex()->getDatasources() as $datasource) {
+      $entity_type_id = $datasource->getEntityTypeId();
+      if ($entity_type_id === NULL) {
+        return FALSE;
+      }
+      try {
+        $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
+      }
+      catch (PluginNotFoundException) {
+        return FALSE;
+      }
+      if (!$this->isWorkspaceSafeEntityType($entity_type)) {
+        return FALSE;
+      }
+    }
+    return TRUE;
+  }
+
 }

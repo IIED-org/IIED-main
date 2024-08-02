@@ -2,18 +2,18 @@
 
 namespace Drupal\geolocation\Plugin\Field\FieldWidget;
 
-use Drupal\geolocation\MapCenterManager;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapCenterManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Map widget base.

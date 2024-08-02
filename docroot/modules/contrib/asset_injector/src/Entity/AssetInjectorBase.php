@@ -77,7 +77,7 @@ abstract class AssetInjectorBase extends ConfigEntityBase implements AssetInject
    */
   public function libraryNameSuffix() {
     $extension = $this->extension();
-    return "$extension/$this->id";
+    return "$extension.$this->id";
   }
 
   /**

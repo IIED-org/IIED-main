@@ -17,6 +17,6 @@
     "issues": "https://www.drupal.org/project/issues/datalayer"
   },
   "require": {
-    "drupal/core": "^9.4 || ^10"
+    "drupal/core": "^10.2 || ^11"
   }
 }

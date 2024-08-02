@@ -67,13 +67,6 @@ class TfaHotpValidation extends TfaBasePlugin implements TfaValidationInterface,
   protected $issuer;
 
   /**
-   * Whether the code has already been used or not.
-   *
-   * @var bool
-   */
-  protected $alreadyAccepted;
-
-  /**
    * The Datetime service.
    *
    * @var \Drupal\Component\Datetime\TimeInterface
@@ -280,6 +273,7 @@ class TfaHotpValidation extends TfaBasePlugin implements TfaValidationInterface,
    *   True if validation was successful otherwise false.
    */
   public function validateRequest($code) {
+    $code = str_pad((string) $code, $this->codeLength, '0', STR_PAD_LEFT);
     $hotp_validation_lock_id = 'tfa_validation_hotp_' . $this->uid;
     while (!$this->lock->acquire($hotp_validation_lock_id)) {
       $this->lock->wait($hotp_validation_lock_id);

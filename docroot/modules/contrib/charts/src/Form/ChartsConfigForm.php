@@ -5,12 +5,12 @@ namespace Drupal\charts\Form;
 use Drupal\charts\ChartManager;
 use Drupal\charts\DependenciesCalculatorTrait;
 use Drupal\charts\TypeManager;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Serialization\Yaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

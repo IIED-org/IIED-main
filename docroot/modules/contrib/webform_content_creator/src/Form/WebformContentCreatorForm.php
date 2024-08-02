@@ -122,6 +122,13 @@ class WebformContentCreatorForm extends EntityForm {
       '#validated' => TRUE
     ];
 
+    $form['sync_unique'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Synchronize the creation/edition of content based on unique content field'),
+      '#description' => $this->t('After submitting the webform, it is checked if a content already exists with the same value in the unique field (synchronization field). If a content already exists, the content is updated. Otherwise, a new content is created.'),
+      '#default_value' => $this->entity->getSyncUniqueContentCheck(),
+    ];
+
     $form['sync_content'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Synchronize Webform submission with the created content in edition'),
@@ -141,10 +148,14 @@ class WebformContentCreatorForm extends EntityForm {
       '#title' => $this->t('Synchronization field machine name'),
       '#maxlength' => 255,
       '#default_value' => $this->entity->getSyncContentField(),
-      '#help' => $this->t('When a webform submission is edited, the content which stores the webform submission id in this field is also updated. You have to create this field in the content type and then you have to map this field with Submission id. Example: field_submission_id'),
+      '#help' => $this->t('When a webform submission is created/edited, the content which stores the same value / webform submission id in this field is also updated. Make sure that you have this field in the content type and then you have to map this field with the unique field when choosing the first option: "Synchronize the creation/edition of content based on unique content field" OR with Submission id, when choosing the second option: "Synchronize Webform submission with the created content in edition". Example: field_submission_id'),
       '#states' => [
         'visible' =>
           [
+            [
+              ':input[name="sync_unique"]' => ['checked' => TRUE],
+            ],
+            'or',
             [
               ':input[name="sync_content"]' => ['checked' => TRUE],
             ],
@@ -155,8 +166,58 @@ class WebformContentCreatorForm extends EntityForm {
           ],
         'required' =>
           [
-            ':input[name="sync_content"]' => ['checked' => TRUE],
+            [
+              ':input[name="sync_unique"]' => ['checked' => TRUE],
+            ],
+            'or',
+            [
+              ':input[name="sync_content"]' => ['checked' => TRUE],
+            ],
+            'or',
+            [
+              ':input[name="sync_content_delete"]' => ['checked' => TRUE],
+            ],
           ],
+      ],
+    ];
+
+    $form['redirect_to_entity'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Redirect to entity'),
+      '#description' => $this->t('After submiting the webform redirect user to the new or updated entity.'),
+      '#default_value' => $this->entity->getRedirectToEntityCheck(),
+    ];
+
+    $form['redirect_to_entity_message'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Status message when redirecting to new entity'),
+      '#maxlength' => 255,
+      '#default_value' => $this->entity->getRedirectToEntityMessage(),
+      '#help' => $this->t('After redirecting to newly created entity this status message is shown to the user.'),
+      '#states' => [
+        'visible' =>
+          [
+            [
+              ':input[name="redirect_to_entity"]' => ['checked' => TRUE],
+            ],
+          ],
+      ],
+    ];
+
+    $form['redirect_to_entity_message_on_update'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display redirection message on submission update'),
+      '#description' => $this->t('Display redirection message also when the webform submission is updated.'),
+      '#default_value' => $this->entity->getRedirectToEntityMessageOnUpdateCheck(),
+      '#states' => [
+        'visible' =>
+          [
+            [
+              ':input[name="redirect_to_entity_message"]' => ['filled' => TRUE],
+              'and',
+              ':input[name="sync_content"]' => ['checked' => TRUE]
+            ],
+          ]
       ],
     ];
 

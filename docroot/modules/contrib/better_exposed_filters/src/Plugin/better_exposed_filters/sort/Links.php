@@ -18,6 +18,7 @@ class Links extends SortWidgetBase {
    * {@inheritdoc}
    */
   public function exposedFormAlter(array &$form, FormStateInterface $form_state) {
+    $view = $form_state->get('view');
     parent::exposedFormAlter($form, $form_state);
 
     foreach ($this->sortElements as $element) {
@@ -29,6 +30,10 @@ class Links extends SortWidgetBase {
         // select_as_links options as they will use the wrong path. We
         // provide a hint for theme functions to correct this.
         $form[$element]['#bef_path'] = $this->getExposedFormActionUrl($form_state);
+        if ($view->ajaxEnabled() || $view->display_handler->ajaxEnabled()) {
+          $form[$element]['#attributes']['class'][] = 'bef-links-use-ajax';
+          $form['#attached']['library'][] = 'better_exposed_filters/links_use_ajax';
+        }
       }
     }
   }
