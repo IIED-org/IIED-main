@@ -22,6 +22,9 @@ Disallow: /
 User-agent: ClaudeBot
 Disallow: /
 
+User-agent: GPTBot
+Disallow: /
+
 User-agent: *
 # CSS, JS, Images
 Allow: /core/*.css$
@@ -71,6 +74,7 @@ Disallow: /comment/reply/
 Disallow: /filter/tips
 Disallow: /node/add/
 Disallow: /search/
+Disallow: */search/
 Disallow: /user/register
 Disallow: /user/password
 Disallow: /user/login
