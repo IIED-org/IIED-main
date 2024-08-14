@@ -3,12 +3,10 @@ langcode: en
 status: true
 dependencies:
   module:
-    - context
     - system
 id: mapping_project_search_list_node_73466
 label: 'Mapping project search list node/73466'
-code: |-
-  <script>
+code: |2-
         function slFunction() {
           var input, filter, ul, li, a, i, txtValue;
           input = document.getElementById("slInput");
@@ -25,21 +23,12 @@ code: |-
             }
           }
         }
-  </script>
 noscript: ''
 noscriptRegion: {  }
 jquery: false
 header: false
 preprocess: true
 conditions:
-  context_all:
-    id: context_all
-    negate: null
-    values: ''
-  context:
-    id: context
-    negate: null
-    values: ''
   request_path:
     id: request_path
     negate: false
