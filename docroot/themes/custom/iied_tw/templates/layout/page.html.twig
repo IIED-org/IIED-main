@@ -47,6 +47,7 @@
 #}
 
 {{ attach_library('iied_tw/alpine') }}
+{{ attach_library('iied_tw/alpine-collapse') }}
 {{ attach_library('iied_tw/scroll-nav') }}
 
   <header role="banner" x-data="{ showSearch: false }" x-cloak>
@@ -55,8 +56,6 @@
     @keydown.escape.window="isOpen = false"
     role="navigation"
     aria-label="Main navigation">
-
-      {{ page.header }}
 
       <div>
       {{ page.navbar_branding }}
