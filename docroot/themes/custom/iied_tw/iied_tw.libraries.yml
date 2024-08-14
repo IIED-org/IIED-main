@@ -4,11 +4,10 @@ global-styling:
       dist/tailwind.css: {}
 alpine:
   js:
-    # https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js: { type: external, minified: true }
     https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js: { type: external, minified: true }
 alpine-collapse:
   js:
-    https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js: { type: external, minified: true }
+    https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js: { type: external, minified: true }
 priority-nav:
   header: true
   css:
