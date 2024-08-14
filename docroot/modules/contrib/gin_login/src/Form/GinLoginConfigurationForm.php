@@ -2,15 +2,67 @@
 
 namespace Drupal\gin_login\Form;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\Exception\FileException;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteBuilderInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class SettingsForm.
  */
 class GinLoginConfigurationForm extends ConfigFormBase {
+
+  /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * The File System service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
+   * The route builder.
+   *
+   * @var \Drupal\Core\Routing\RouteBuilderInterface
+   */
+  protected $routeBuilder;
+
+  /**
+   * ConfirmDeleteForm constructor.
+   *
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   The file system service.
+   * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
+   *   The route builder.
+   */
+  public function __construct(ModuleHandlerInterface $module_handler, FileSystemInterface $fileSystem, RouteBuilderInterface $router_builder) {
+    $this->moduleHandler = $module_handler;
+    $this->fileSystem = $fileSystem;
+    $this->routeBuilder = $router_builder;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('module_handler'),
+      $container->get('file_system'),
+      $container->get('router.builder')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -63,7 +115,7 @@ class GinLoginConfigurationForm extends ConfigFormBase {
     $form['logo']['settings']['logo_upload'] = [
       '#type' => 'file',
       '#title' => $this->t('Upload image'),
-      '#description' => t("If you don't have direct file access to the server, use this field to upload your logo."),
+      '#description' => $this->t("If you don't have direct file access to the server, use this field to upload your logo."),
       '#upload_validators' => [
         'file_validate_extensions' => [
           'png gif jpg jpeg apng webp avif svg',
@@ -99,7 +151,7 @@ class GinLoginConfigurationForm extends ConfigFormBase {
     $form['brand_image']['settings']['brand_image_upload'] = [
       '#type' => 'file',
       '#title' => $this->t('Upload image'),
-      '#description' => t("If you don't have direct file access to the server, use this field to upload your brand image."),
+      '#description' => $this->t("If you don't have direct file access to the server, use this field to upload your brand image."),
       '#upload_validators' => [
         'file_validate_is_image' => [],
         'file_validate_extensions' => [
@@ -115,7 +167,7 @@ class GinLoginConfigurationForm extends ConfigFormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
-    $moduleHandler = \Drupal::service('module_handler');
+    $moduleHandler = $this->moduleHandler;
 
     if ($moduleHandler->moduleExists('file')) {
       // Check for a new uploaded logo.
@@ -169,7 +221,7 @@ class GinLoginConfigurationForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
     $values = $form_state->getValues();
-    $file_system = \Drupal::service('file_system');
+    $file_system = $this->fileSystem;
     $default_scheme = $this->config('system.file')->get('default_scheme');
     $config = $this->config('gin_login.settings');
     try {
@@ -225,7 +277,7 @@ class GinLoginConfigurationForm extends ConfigFormBase {
 
     $config->save();
     // Rebuild the router.
-    \Drupal::service('router.builder')->rebuild();
+    $this->routeBuilder->rebuild();
   }
 
   /**
@@ -244,7 +296,7 @@ class GinLoginConfigurationForm extends ConfigFormBase {
    *   the path could not be validated.
    */
   protected function validatePath($path) {
-    $file_system = \Drupal::service('file_system');
+    $file_system = $this->fileSystem;
     // Absolute local file paths are invalid.
     if ($file_system->realpath($path) == $path) {
       return FALSE;

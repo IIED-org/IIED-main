@@ -3,8 +3,8 @@
 namespace Drupal\geolocation\Plugin\views\display;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\views\ViewExecutable;
 use Drupal\views\Plugin\views\display\Attachment;
+use Drupal\views\ViewExecutable;
 
 /**
  * The plugin that handles an attachment display.

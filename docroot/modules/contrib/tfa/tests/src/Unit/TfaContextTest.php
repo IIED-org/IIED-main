@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\tfa\Unit;
 
-use Drupal\user\UserStorageInterface;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Tests\UnitTestCase;
@@ -13,6 +11,8 @@ use Drupal\tfa\TfaLoginPluginManager;
 use Drupal\tfa\TfaValidationPluginManager;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
+use Drupal\user\UserStorageInterface;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @coversDefaultClass \Drupal\tfa\TfaLoginContextTrait

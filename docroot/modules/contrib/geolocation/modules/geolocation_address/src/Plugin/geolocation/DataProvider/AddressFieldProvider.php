@@ -2,19 +2,19 @@
 
 namespace Drupal\geolocation_address\Plugin\geolocation\DataProvider;
 
+use CommerceGuys\Addressing\AddressFormat\AddressFormatRepositoryInterface;
+use CommerceGuys\Addressing\Country\CountryRepositoryInterface;
 use Drupal\address\Plugin\Field\FieldType\AddressItem;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemInterface;
+use Drupal\geolocation\DataProviderBase;
+use Drupal\geolocation\DataProviderInterface;
 use Drupal\geolocation\GeocoderManager;
 use Drupal\views\Plugin\views\field\EntityField;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
-use Drupal\geolocation\DataProviderInterface;
-use Drupal\geolocation\DataProviderBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use CommerceGuys\Addressing\Country\CountryRepositoryInterface;
-use CommerceGuys\Addressing\AddressFormat\AddressFormatRepositoryInterface;
 
 /**
  * Provides default address field.

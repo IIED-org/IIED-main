@@ -1,5 +1,6 @@
 _core:
   default_config_hash: e8mvR0COZjJgU8fqPmljK3sV33vefyvSCMdEBX2gpVg
+langcode: en
 charts_default_settings:
   library: highcharts
   type: column

@@ -2,9 +2,9 @@
 
 namespace Drupal\geolocation\Plugin\views\style;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Utility\NestedArray;
 
 /**
  * Allow to display several field items on a common map.

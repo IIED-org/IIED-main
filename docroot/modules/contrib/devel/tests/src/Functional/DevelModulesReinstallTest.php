@@ -27,7 +27,7 @@ class DevelModulesReinstallTest extends DevelBrowserTestBase {
   /**
    * Reinstall modules.
    */
-  public function testDevelReinstallModules() {
+  public function testDevelReinstallModules(): void {
     // Minimal profile enables only dblog, block and node.
     $modules = ['dblog', 'block'];
 

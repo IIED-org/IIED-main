@@ -72,6 +72,7 @@ function hook_message_view_alter(array &$build) {
  *
  * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
  * @see hook_default_message_template_alter()
  */
 function hook_default_message_template() {
@@ -117,6 +118,7 @@ function hook_form_message_template_form_alter(array &$form, array &$form_state)
  *
  * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
  * @see hook_default_message_category_alter()
  */
 function hook_default_message_category() {

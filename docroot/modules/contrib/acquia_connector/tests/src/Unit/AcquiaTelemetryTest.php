@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\acquia_connector\Unit;
 
-use Drupal\acquia_connector\EventSubscriber\KernelTerminate\AcquiaTelemetry;
-use Drupal\Component\Datetime\TimeInterface;
+use Drupal\acquia_connector\Services\AcquiaTelemetryService;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Tests\UnitTestCase;
-use GuzzleHttp\ClientInterface;
 
 /**
+ * Unit tests for Acquia Telemetry Classes.
+ *
  * @group acquia_connector
  */
 final class AcquiaTelemetryTest extends UnitTestCase {
@@ -34,12 +35,11 @@ final class AcquiaTelemetryTest extends UnitTestCase {
     $module_list = $this->createMock(ModuleExtensionList::class);
     $module_list->method('getAllAvailableInfo')->willReturn(array_combine($modules, $modules));
 
-    $sut = new AcquiaTelemetry(
+    $sut = new AcquiaTelemetryService(
       $module_list,
-      $this->createMock(ClientInterface::class),
       $this->createMock(ConfigFactoryInterface::class),
       $this->createMock(StateInterface::class),
-      $this->createMock(TimeInterface::class)
+      $this->createMock(LoggerChannelFactoryInterface::class)
     );
     self::assertEquals(
       [

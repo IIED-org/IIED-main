@@ -14,13 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class LayoutParagraphsSettingsForm extends ConfigFormBase {
 
   /**
-   * The typed config service.
-   *
-   * @var \Drupal\Core\Config\TypedConfigManagerInterface
-   */
-  protected $typedConfigManager;
-
-  /**
    * SettingsForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -32,7 +25,7 @@ class LayoutParagraphsSettingsForm extends ConfigFormBase {
     ConfigFactoryInterface $config_factory,
     TypedConfigManagerInterface $typedConfigManager
   ) {
-    parent::__construct($config_factory);
+    parent::__construct($config_factory, $typedConfigManager);
     $this->typedConfigManager = $typedConfigManager;
   }
 

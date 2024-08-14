@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation\Plugin\views\sort;
 
-use Drupal\views\Plugin\views\sort\SortPluginBase;
 use Drupal\views\Plugin\views\query\Sql;
+use Drupal\views\Plugin\views\sort\SortPluginBase;
 
 /**
  * Sort handler for geolocation field.

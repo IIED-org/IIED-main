@@ -5,12 +5,13 @@ namespace Drupal\acquia_connector;
 use Drupal\acquia_connector\Client\ClientFactory;
 use Drupal\acquia_connector\Event\AcquiaSubscriptionDataEvent;
 use Drupal\acquia_connector\Event\AcquiaSubscriptionSettingsEvent;
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Acquia Subscription service.
@@ -26,6 +27,8 @@ use GuzzleHttp\Exception\RequestException;
  * @package Drupal\acquia_connector.
  */
 class Subscription {
+
+  use StringTranslationTrait;
 
   /**
    * Errors defined by Acquia.
@@ -50,7 +53,7 @@ class Subscription {
   /**
    * Event Dispatcher Service.
    *
-   * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
   protected $dispatcher;
 
@@ -99,7 +102,7 @@ class Subscription {
   /**
    * Acquia Subscription Constructor.
    *
-   * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $dispatcher
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   The event dispatcher.
    * @param \Drupal\acquia_connector\Client\ClientFactory $client_factory
    *   The acquia connector client factory.
@@ -108,12 +111,11 @@ class Subscription {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
    */
-  public function __construct(ContainerAwareEventDispatcher $dispatcher, ClientFactory $client_factory, StateInterface $state, ConfigFactoryInterface $config_factory) {
+  public function __construct(EventDispatcherInterface $dispatcher, ClientFactory $client_factory, StateInterface $state, ConfigFactoryInterface $config_factory) {
     $this->dispatcher = $dispatcher;
     $this->state = $state;
     $this->clientFactory = $client_factory;
     $this->configFactory = $config_factory;
-    $this->populateSettings();
   }
 
   /**
@@ -136,13 +138,16 @@ class Subscription {
   }
 
   /**
-   * Retreives the stored subscription.
+   * Retrieves the stored subscription.
    *
-   * @return \Drupal\acquia_connector\Settings|false
+   * @return \Drupal\acquia_connector\Settings
    *   The Connector Settings Object.
    */
   public function getSettings() {
-    return $this->settings ?? FALSE;
+    if (!$this->settings || !$this->settings->getIdentifier()) {
+      $this->populateSettings();
+    }
+    return $this->settings;
   }
 
   /**
@@ -152,6 +157,9 @@ class Subscription {
    *   The name of settings' provider.
    */
   public function getProvider() {
+    if (!$this->settings || !$this->settings->getIdentifier()) {
+      $this->populateSettings();
+    }
     return $this->settingsProvider;
   }
 
@@ -180,14 +188,14 @@ class Subscription {
     }
     if ($subscriptionData !== [] && $refresh !== TRUE) {
       // Ensure the legacy location of UUID is up-to-date.
-      $subscriptionData['uuid'] = $this->settings->getApplicationUuid();
+      $subscriptionData['uuid'] = $this->getSettings()->getApplicationUuid();
       return $subscriptionData;
     }
     // If there is no local subscription data, retrieve it.
     $subscriptionData += $this->getDefaultSubscriptionData();
     try {
       $client = $this->clientFactory->getCloudApiClient();
-      $application_response = $client->get('/api/applications/' . $this->settings->getApplicationUuid());
+      $application_response = $client->get('/api/applications/' . $this->getSettings()->getApplicationUuid());
       $application_data = Json::decode((string) $application_response->getBody());
       $subscription_uuid = $application_data['subscription']['uuid'];
       $subscription_response = $client->get('/api/subscriptions/' . $subscription_uuid);
@@ -246,7 +254,7 @@ class Subscription {
       'active' => TRUE,
       'gratis' => FALSE,
       'href' => "",
-      'uuid' => $this->settings->getApplicationUuid(),
+      'uuid' => $this->getSettings()->getApplicationUuid(),
       'subscription_name' => "",
       "expiration_date" => "",
       "search_service_enabled" => 1,
@@ -266,7 +274,8 @@ class Subscription {
    * Helper function to check if an identifier and key exist.
    */
   public function hasCredentials() {
-    return $this->settings->getIdentifier() && $this->settings->getSecretKey() && $this->settings->getApplicationUuid();
+    $settings = $this->getSettings();
+    return $settings->getIdentifier() && $settings->getSecretKey() && $settings->getApplicationUuid();
   }
 
   /**
@@ -319,22 +328,22 @@ class Subscription {
     if ($errno) {
       switch ($errno) {
         case self::NOT_FOUND:
-          return t('The identifier you have provided does not exist at Acquia or is expired. Please make sure you have used the correct value and try again.');
+          return $this->t('The identifier you have provided does not exist at Acquia or is expired. Please make sure you have used the correct value and try again.');
 
         case self::EXPIRED:
-          return t('Your Acquia Subscription subscription has expired. Please renew your subscription so that you can resume using Acquia services.');
+          return $this->t('Your Acquia Subscription subscription has expired. Please renew your subscription so that you can resume using Acquia services.');
 
         case self::MESSAGE_FUTURE:
-          return t('Your server is unable to communicate with Acquia due to a problem with your clock settings. For security reasons, we reject messages that are more than @time ahead of the actual time recorded by our servers. Please fix the clock on your server and try again.', ['@time' => \Drupal::service('date.formatter')->formatInterval(Subscription::MESSAGE_LIFETIME)]);
+          return $this->t('Your server is unable to communicate with Acquia due to a problem with your clock settings. For security reasons, we reject messages that are more than @time ahead of the actual time recorded by our servers. Please fix the clock on your server and try again.', ['@time' => \Drupal::service('date.formatter')->formatInterval(Subscription::MESSAGE_LIFETIME)]);
 
         case self::MESSAGE_EXPIRED:
-          return t('Your server is unable to communicate with Acquia due to a problem with your clock settings. For security reasons, we reject messages that are more than @time older than the actual time recorded by our servers. Please fix the clock on your server and try again.', ['@time' => \Drupal::service('date.formatter')->formatInterval(Subscription::MESSAGE_LIFETIME)]);
+          return $this->t('Your server is unable to communicate with Acquia due to a problem with your clock settings. For security reasons, we reject messages that are more than @time older than the actual time recorded by our servers. Please fix the clock on your server and try again.', ['@time' => \Drupal::service('date.formatter')->formatInterval(Subscription::MESSAGE_LIFETIME)]);
 
         case self::VALIDATION_ERROR:
-          return t('The identifier and key you have provided for the Acquia Subscription do not match. Please make sure you have used the correct values and try again.');
+          return $this->t('The identifier and key you have provided for the Acquia Subscription do not match. Please make sure you have used the correct values and try again.');
 
         default:
-          return t('There is an error communicating with the Acquia Subscription at this time. Please check your identifier and key and try again.');
+          return $this->t('There is an error communicating with the Acquia Subscription at this time. Please check your identifier and key and try again.');
       }
     }
     return FALSE;

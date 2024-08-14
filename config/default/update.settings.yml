@@ -10,5 +10,6 @@ fetch:
 notification:
   emails:
     - webmaster@iied.org
-    - admin@cbrody.com
+    - chris.brody@iied.org
+    - david.sankar@iied.org
   threshold: security

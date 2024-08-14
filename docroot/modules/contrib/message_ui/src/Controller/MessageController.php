@@ -33,7 +33,7 @@ class MessageController extends ControllerBase implements ContainerInjectionInte
   /**
    * Constructs a MessageUiController object.
    */
-  public function __construct(EntityAccessControlHandlerInterface $access_handler, FormBuilderInterface $form_builder) {
+  final public function __construct(EntityAccessControlHandlerInterface $access_handler, FormBuilderInterface $form_builder) {
     $this->accessHandler = $access_handler;
     $this->formBuilder = $form_builder;
   }
@@ -42,7 +42,7 @@ class MessageController extends ControllerBase implements ContainerInjectionInte
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
+    return new self(
       $container->get('entity_type.manager')->getAccessControlHandler('message'),
       $container->get('form_builder')
     );

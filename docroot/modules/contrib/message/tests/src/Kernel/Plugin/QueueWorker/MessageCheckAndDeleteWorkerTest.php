@@ -7,8 +7,8 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\message\Entity\Message;
 use Drupal\node\Entity\Node;
-use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
 use Drupal\Tests\message\Kernel\MessageTemplateCreateTrait;
+use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
 
 /**
  * Tests the multi-valued field check and delete after entity deletion.
@@ -44,8 +44,10 @@ class MessageCheckAndDeleteWorkerTest extends KernelTestBase {
     $this->installEntitySchema('node');
     $this->installEntitySchema('message');
 
-    $this->installSchema('system', ['sequences']);
     $this->installSchema('node', ['node_access']);
+    if (version_compare(\Drupal::VERSION, '10.2.0', '<')) {
+      $this->installSchema('system', ['sequences']);
+    }
 
     $this->installConfig(['filter', 'node']);
   }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\color_field\Functional;
 
@@ -40,7 +40,7 @@ class ColorFieldWidgetTest extends ColorFieldFunctionalTestBase {
       'field_color[0][opacity]' => 1,
     ];
 
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $session->responseContains('#E70000 1</div>');
   }
 

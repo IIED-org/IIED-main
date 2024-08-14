@@ -3,8 +3,8 @@
 namespace Drupal\rabbit_hole\EventSubscriber;
 
 use Drupal\Component\Plugin\Exception\PluginException;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\rabbit_hole\BehaviorInvoker;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 
@@ -32,7 +32,7 @@ class RabbitHoleSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events['kernel.request'] = ['onRequest', 28];
     $events['kernel.response'] = ['onResponse'];
     return $events;

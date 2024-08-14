@@ -3,13 +3,14 @@
 namespace Drupal\login_destination;
 
 use Drupal\Core\Path\CurrentPathStack;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\user\ToolbarLinkBuilder;
 
 /**
  * ToolbarLinkBuilder fills out the placeholders generated in user_toolbar().
  */
-class LoginDestinationToolbarLinkBuilder extends ToolbarLinkBuilder {
+class LoginDestinationToolbarLinkBuilder implements TrustedCallbackInterface {
 
   /**
    * The decorated service.
@@ -26,6 +27,13 @@ class LoginDestinationToolbarLinkBuilder extends ToolbarLinkBuilder {
   protected $currentPath;
 
   /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $account;
+
+  /**
    * ToolbarHandler constructor.
    *
    * @param \Drupal\user\ToolbarLinkBuilder $inner_service
@@ -38,7 +46,7 @@ class LoginDestinationToolbarLinkBuilder extends ToolbarLinkBuilder {
   public function __construct(ToolbarLinkBuilder $inner_service, CurrentPathStack $current_path, AccountProxyInterface $account) {
     $this->innerService = $inner_service;
     $this->currentPath = $current_path;
-    parent::__construct($account);
+    $this->account = $account;
   }
 
   /**
@@ -62,7 +70,7 @@ class LoginDestinationToolbarLinkBuilder extends ToolbarLinkBuilder {
    * @return array
    *   A renderable array as expected by the renderer service.
    */
-  public function renderToolbarLinks() {
+  public function renderToolbarLinks(): array {
     $build = $this->innerService->renderToolbarLinks();
 
     if ($this->account->getAccount()->isAuthenticated()) {
@@ -75,6 +83,13 @@ class LoginDestinationToolbarLinkBuilder extends ToolbarLinkBuilder {
     }
 
     return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return ['renderToolbarLinks', 'renderDisplayName'];
   }
 
 }

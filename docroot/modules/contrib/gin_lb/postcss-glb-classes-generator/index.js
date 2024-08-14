@@ -7,7 +7,7 @@ module.exports = (opts = { }) => {
     postcssPlugin: 'gin_lb_class_names',
     generate (root, postcss) {
       const ginLbClasses = {}
-      const nodeItterator = function(sels) {
+      const nodeIterator = function(sels) {
         sels.map(function(sel) {
           sel.nodes.forEach((innerNode)=> {
 
@@ -31,7 +31,7 @@ module.exports = (opts = { }) => {
       root.walk((node)=>{
         if (node.selectors != null) {
           return node.selectors.map(function(selector){
-            return parser(nodeItterator).process(selector).result
+            return parser(nodeIterator).process(selector).result
           });
         }
       });

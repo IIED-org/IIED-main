@@ -67,7 +67,7 @@ class PurgerAddFormTest extends AjaxFormTestBase {
     $this->drupalLogin($this->adminUser);
     $this->drupalGet($this->getPath());
     $this->assertSession()->responseContains('Add');
-    $this->assertSame(TRUE, count($this->purgePurgers->getPluginsEnabled()) === 3);
+    $this->assertCount(3, $this->purgePurgers->getPluginsEnabled());
   }
 
   /**
@@ -85,12 +85,10 @@ class PurgerAddFormTest extends AjaxFormTestBase {
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->getSession()->getPage()->find("xpath", "//input[@value = 'c']")->selectOption("c");
     $this->pressDialogButton('Add');
-    $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->assertSession()->elementNotExists('css', '#drupal-modal');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
     $this->assertSession()->linkExists('Purger C');
     $this->purgePurgers->reload();
-    $this->assertSame(TRUE, in_array('c', $this->purgePurgers->getPluginsEnabled()));
+    $this->assertTrue(in_array('c', $this->purgePurgers->getPluginsEnabled()));
   }
 
   /**
@@ -119,7 +117,6 @@ class PurgerAddFormTest extends AjaxFormTestBase {
     $this->getSession()->getPage()->clickLink('Add purger');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->pressDialogButton('Cancel');
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->elementNotExists('css', '#drupal-modal');
   }
 

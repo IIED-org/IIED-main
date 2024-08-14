@@ -3,7 +3,7 @@
 namespace Drupal\memcache\Driver;
 
 /**
- * Class MemcacheDriver.
+ * Defines the memcache driver.
  */
 class MemcacheDriver extends DriverBase {
 

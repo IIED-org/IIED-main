@@ -214,23 +214,111 @@ function better_exposed_filters_update_8003() {
   $moduleHandler = \Drupal::service('module_handler');
   // Push jquery_ui module for installation if it isn't enabled already.
   if (!($moduleHandler->moduleExists('jquery_ui'))) {
-    array_push($modules, 'jquery_ui');
+    $modules[] = 'jquery_ui';
   }
-  // Push jquery_ui_slider module for installation if it isn't enabled already.
+  // Push jquery_ui_slider module for installation
+  // if it isn't enabled already.
   if (!($moduleHandler->moduleExists('jquery_ui_slider'))) {
-    array_push($modules, 'jquery_ui_slider');
+    $modules[] = 'jquery_ui_slider';
   }
-  // Push jquery_ui_touch_punch module for installation if it isn't enabled already.
+  // Push jquery_ui_touch_punch module for installation
+  // if it isn't enabled already.
   if (!($moduleHandler->moduleExists('jquery_ui_touch_punch'))) {
-    array_push($modules, 'jquery_ui_touch_punch');
+    $modules[] = 'jquery_ui_touch_punch';
   }
-  // Push jquery_ui_datepicker module for installation if it isn't enabled already.
+  // Push jquery_ui_datepicker module for installation
+  // if it isn't enabled already.
   if (!($moduleHandler->moduleExists('jquery_ui_datepicker'))) {
-    array_push($modules, 'jquery_ui_datepicker');
+    $modules[] = 'jquery_ui_datepicker';
   }
 
   // Install the modules.
   if (!empty($modules)) {
     \Drupal::service('module_installer')->install($modules);
+  }
+}
+
+/**
+ * Set default value of filter_rewrite_values_key.
+ */
+function better_exposed_filters_update_8005() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('views.view.') as $config_name) {
+    $config = $config_factory->getEditable($config_name);
+    $needs_update = FALSE;
+    // Go through each display on each view.
+    $displays = $config->get('display');
+    foreach ($displays as $display_name => $display) {
+      if (!empty($display['display_options']['exposed_form'])) {
+        $exposed_form = $display['display_options']['exposed_form'];
+        // Find BEF exposed forms.
+        if (isset($exposed_form['type']) && $exposed_form['type'] === 'bef') {
+          $bef_settings = $exposed_form['options']['bef'];
+          foreach ($exposed_form['options']['bef'] as $type => $options) {
+            // General settings.
+            if ($type === 'filter') {
+              foreach ($options as $field_name => $option) {
+                if (isset($bef_settings['filter'][$field_name]['advanced']['rewrite'])) {
+                  // Update filter_rewrite_values_key setting.
+                  $bef_settings['filter'][$field_name]['advanced']['rewrite']['filter_rewrite_values_key'] = FALSE;
+                  $needs_update = TRUE;
+                }
+              }
+            }
+          }
+          // Update BEF settings.
+          $config->set("display.$display_name.display_options.exposed_form.options.bef", $bef_settings);
+        }
+      }
+    }
+
+    if ($needs_update) {
+      $config->save(TRUE);
+    }
+  }
+}
+
+/**
+ * Set default opt-out of collapsible_disable_automatic_open.
+ */
+function better_exposed_filters_update_8006() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('views.view.') as $config_name) {
+    $config = $config_factory->getEditable($config_name);
+
+    // Go through each display on each view.
+    $displays = $config->get('display');
+    foreach ($displays as $display_name => $display) {
+      if (!empty($display['display_options']['exposed_form'])) {
+        $exposed_form = $display['display_options']['exposed_form'];
+        // Find BEF exposed forms.
+        if (isset($exposed_form['type']) && $exposed_form['type'] === 'bef') {
+          $bef_settings = $exposed_form['options']['bef'];
+          foreach ($bef_settings as $type => &$option) {
+
+            // Collapsible disable automatic opening option is available for
+            // the filter type only.
+            if ($type === 'filter') {
+              foreach ($option as &$field_settings) {
+
+                // Final check to ensure that we are where we are expecting to
+                // be in the configuration, otherwise leave untouched.
+                if (!isset($field_settings['advanced']) || !isset($field_settings['advanced']['collapsible'])) {
+                  continue;
+                }
+
+                // Update advanced settings.
+                $field_settings['advanced']['collapsible_disable_automatic_open'] = FALSE;
+              }
+            }
+          }
+
+          // Update BEF settings.
+          $config->set("display.$display_name.display_options.exposed_form.options.bef", $bef_settings);
+        }
+      }
+    }
+
+    $config->save(TRUE);
   }
 }

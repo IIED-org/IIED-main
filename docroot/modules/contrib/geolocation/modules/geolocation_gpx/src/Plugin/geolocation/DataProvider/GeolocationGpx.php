@@ -3,13 +3,13 @@
 namespace Drupal\geolocation_gpx\Plugin\geolocation\DataProvider;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemInterface;
 use Drupal\file\Entity\File;
 use Drupal\geolocation\DataProviderBase;
-use Drupal\geolocation_gpx\Plugin\Field\FieldType\GeolocationGpxFile;
-use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\geolocation\DataProviderInterface;
-use Drupal\Core\Field\FieldItemInterface;
+use Drupal\geolocation_gpx\Plugin\Field\FieldType\GeolocationGpxFile;
 use Drupal\views\Plugin\views\field\EntityField;
+use Drupal\views\Plugin\views\field\FieldPluginBase;
 use phpGPX\phpGPX;
 
 /**

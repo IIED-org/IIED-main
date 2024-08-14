@@ -5,12 +5,17 @@ namespace Drupal\Tests\draggableviews\Functional;
 use Drupal\Tests\BrowserTestBase;
 
 /**
- * Tests sortability of Draggableviewws.
+ * Tests sortability of Draggableviews.
  *
  * @group draggableviews
  */
 class DraggableviewsTest extends BrowserTestBase {
 
+  /**
+   * The name of the default theme to use.
+   *
+   * @var string
+   */
   protected $defaultTheme = 'stark';
 
   /**
@@ -103,7 +108,7 @@ class DraggableviewsTest extends BrowserTestBase {
 
     $this->drupalGet('draggableviews-demo');
     $this->assertSession()->statusCodeEquals(200);
-    // Verify that anonymous useres cannot access the order page.
+    // Verify that anonymous users cannot access the order page.
     $this->drupalGet('draggableviews-demo/order');
     $this->assertSession()->statusCodeEquals(403);
 

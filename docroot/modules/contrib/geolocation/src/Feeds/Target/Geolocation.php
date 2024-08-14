@@ -3,9 +3,9 @@
 namespace Drupal\geolocation\Feeds\Target;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\feeds\FieldTargetDefinition;
 use Drupal\feeds\Exception\EmptyFeedException;
 use Drupal\feeds\Exception\TargetValidationException;
+use Drupal\feeds\FieldTargetDefinition;
 use Drupal\feeds\Plugin\Type\Target\FieldTargetBase;
 
 /**

@@ -64,7 +64,7 @@ class HtmlFilterTest extends UnitTestCase {
    * @return array
    *   An array of argument arrays for testTitleConfiguration().
    */
-  public function titleConfigurationDataProvider() {
+  public static function titleConfigurationDataProvider() {
     return [
       ['word', 'word', FALSE],
       ['word', 'word', TRUE],
@@ -105,7 +105,7 @@ class HtmlFilterTest extends UnitTestCase {
    * @return array
    *   An array of argument arrays for testAltConfiguration().
    */
-  public function altConfigurationDataProvider() {
+  public static function altConfigurationDataProvider() {
     return [
       ['word', [Utility::createTextToken('word')], FALSE],
       ['word', [Utility::createTextToken('word')], TRUE],
@@ -181,7 +181,7 @@ class HtmlFilterTest extends UnitTestCase {
    * @return array
    *   An array of argument arrays for testTagConfiguration().
    */
-  public function tagConfigurationDataProvider() {
+  public static function tagConfigurationDataProvider() {
     $tags_config = ['h2' => '2'];
     return [
       ['h2word', 'h2word', []],
@@ -274,7 +274,7 @@ class HtmlFilterTest extends UnitTestCase {
    *   An array of argument arrays for testStringProcessing(), where each array
    *   contains a HTML filter configuration as the only value.
    */
-  public function stringProcessingDataProvider() {
+  public static function stringProcessingDataProvider() {
     $configs = [];
     $configs[] = [[]];
     $config['tags'] = [

@@ -67,14 +67,6 @@ jobs:
         command: |
           composer install --prefer-dist --no-progress
           composer require --dev "phpstan/phpstan-deprecation-rules:^1.0"
-    - when:
-        name: Fetch drupal 10 dependencies, dev dependencies, and module test dependencies
-        condition:
-          or:
-          - equal: [ "10.0.x", << parameters.drupal-version >> ]
-          - equal: [ "10.1.x", << parameters.drupal-version >> ]
-        steps:
-          - run: composer require 'drupal/hal-hal:^1.0'
 
     - run:
         name: Show all installed composer packages.

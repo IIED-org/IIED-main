@@ -8,6 +8,7 @@ use Drupal\acquia_connector\SiteProfile\SiteProfile;
 use Drupal\acquia_connector\Subscription;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\PrivateKey;
 use Drupal\Core\State\StateInterface;
@@ -66,7 +67,8 @@ class SettingsOverriddenTest extends UnitTestCase {
       $subscription->reveal(),
       $this->prophesize(StateInterface::class)->reveal(),
       $this->prophesize(SiteProfile::class)->reveal(),
-      $this->prophesize(EventDispatcherInterface::class)->reveal()
+      $this->prophesize(EventDispatcherInterface::class)->reveal(),
+      $this->prophesize(TypedConfigManagerInterface::class)->reveal()
     );
     $method_reflection = new \ReflectionMethod($settings_form, 'isCloudOverridden');
     $method_reflection->setAccessible(TRUE);

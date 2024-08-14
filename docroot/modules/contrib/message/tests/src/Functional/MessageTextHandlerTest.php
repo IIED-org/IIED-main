@@ -43,7 +43,7 @@ class MessageTextHandlerTest extends MessageTestBase {
     Message::create(['template' => 'dummy_message'])->save();
 
     $this->drupalLogin($this->account);
-    $this->drupalGet('admin/content/messages');
+    $this->drupalGet('admin/content/message');
     $this->assertSession()->pageTextContains('Dummy text message');
 
     $this->drupalGet('message-test');

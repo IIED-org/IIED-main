@@ -11,7 +11,7 @@ third_party_settings:
 name: News
 type: news
 description: 'News stories, press releases and instant reactions. '
-help: ''
+help: null
 new_revision: true
 preview_mode: 1
 display_submitted: false

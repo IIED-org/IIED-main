@@ -16,7 +16,6 @@ use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ResultSet;
 use Drupal\search_api\Utility\Utility;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Error\Warning;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -97,7 +96,7 @@ class HighlightTest extends UnitTestCase {
 
     $results->expects($this->once())
       ->method('getResultCount')
-      ->will($this->returnValue(0));
+      ->willReturn(0);
     $results->expects($this->once())
       ->method('getQuery')
       ->willReturn(NULL);
@@ -127,7 +126,7 @@ class HighlightTest extends UnitTestCase {
       ->willReturn(1);
     $results->expects($this->once())
       ->method('getQuery')
-      ->will($this->returnValue($query));
+      ->willReturn($query);
     $results->expects($this->never())
       ->method('getResultItems');
     /** @var \Drupal\search_api\Query\ResultSet $results */
@@ -151,14 +150,14 @@ class HighlightTest extends UnitTestCase {
 
     $query->expects($this->once())
       ->method('getOriginalKeys')
-      ->will($this->returnValue([]));
+      ->willReturn([]);
 
     $results->expects($this->once())
       ->method('getResultCount')
-      ->will($this->returnValue(1));
+      ->willReturn(1);
     $results->expects($this->once())
       ->method('getQuery')
-      ->will($this->returnValue($query));
+      ->willReturn($query);
     $results->expects($this->never())
       ->method('getResultItems');
     /** @var \Drupal\search_api\Query\ResultSet $results */
@@ -176,14 +175,14 @@ class HighlightTest extends UnitTestCase {
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue('foo'));
+      ->willReturn('foo');
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -219,14 +218,14 @@ class HighlightTest extends UnitTestCase {
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(''));
+      ->willReturn('');
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -266,14 +265,14 @@ class HighlightTest extends UnitTestCase {
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', 'foo']));
+      ->willReturn(['#conjunction' => 'AND', 'foo']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -309,14 +308,14 @@ class HighlightTest extends UnitTestCase {
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', 'foo']));
+      ->willReturn(['#conjunction' => 'AND', 'foo']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -361,14 +360,14 @@ class HighlightTest extends UnitTestCase {
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', $keywords]));
+      ->willReturn(['#conjunction' => 'AND', $keywords]);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -402,7 +401,7 @@ class HighlightTest extends UnitTestCase {
    *
    * @see \Drupal\Tests\search_api\Unit\Processor\HighlightTest::testPostprocessSearchResultsHighlightPartial()
    */
-  public function postprocessSearchResultsHighlightPartialDataProvider() {
+  public static function postprocessSearchResultsHighlightPartialDataProvider() {
     // cspell:disable
     return [
       'normal' => [
@@ -429,14 +428,14 @@ class HighlightTest extends UnitTestCase {
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', 'foo']));
+      ->willReturn(['#conjunction' => 'AND', 'foo']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -475,14 +474,14 @@ class HighlightTest extends UnitTestCase {
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', 'congue']));
+      ->willReturn(['#conjunction' => 'AND', 'congue']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -518,14 +517,14 @@ class HighlightTest extends UnitTestCase {
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', 'foo']));
+      ->willReturn(['#conjunction' => 'AND', 'foo']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -570,7 +569,8 @@ END;
   public function testPostprocessSearchResultsInvalidHtml() {
     $logger = $this->createMock(LoggerInterface::class);
     $logger->method('warning')->willReturnCallback(function (string $message, array $context = []) {
-      throw new Warning(strtr($message, $context), 0, __FILE__, __LINE__);
+      $context_json = json_encode($context, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+      trigger_error("$message\n$context_json", E_USER_WARNING);
     });
     $this->processor->setLogger($logger);
 
@@ -580,14 +580,14 @@ END;
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', 'foo']));
+      ->willReturn(['#conjunction' => 'AND', 'foo']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -630,14 +630,14 @@ END;
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', 'diam']));
+      ->willReturn(['#conjunction' => 'AND', 'diam']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -675,14 +675,14 @@ END;
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue('congue'));
+      ->willReturn('congue');
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -720,14 +720,14 @@ END;
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', 'congue']));
+      ->willReturn(['#conjunction' => 'AND', 'congue']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -763,14 +763,14 @@ END;
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
       // cspell:disable-next-line
-      ->will($this->returnValue(['#conjunction' => 'AND', 'congues']));
+      ->willReturn(['#conjunction' => 'AND', 'congues']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 
@@ -824,14 +824,14 @@ END;
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue($keys));
+      ->willReturn($keys);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $body_field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $body_field]));
+      ->willReturn(['body' => $body_field]);
 
     $this->processor->setIndex($this->index);
 
@@ -869,7 +869,7 @@ END;
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', 'foo']));
+      ->willReturn(['#conjunction' => 'AND', 'foo']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $body_field = $this->createTestField('body', 'entity:node/body');
@@ -877,10 +877,10 @@ END;
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue([
+      ->willReturn([
         'body' => $body_field,
         'title' => $title_field,
-      ]));
+      ]);
 
     $this->processor->setIndex($this->index);
 
@@ -927,14 +927,14 @@ END;
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'OR', 'foo']));
+      ->willReturn(['#conjunction' => 'OR', 'foo']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $body_field = $this->createTestField('body', 'entity:node/body');
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $body_field]));
+      ->willReturn(['body' => $body_field]);
 
     $this->processor->setIndex($this->index);
 
@@ -980,7 +980,7 @@ END;
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue(['#conjunction' => 'AND', 'foo']));
+      ->willReturn(['#conjunction' => 'AND', 'foo']);
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $body_field = $this->createTestField('body', 'entity:node/body');
@@ -988,10 +988,10 @@ END;
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue([
+      ->willReturn([
         'body' => $body_field,
         'title' => $title_field,
-      ]));
+      ]);
 
     $this->processor->setIndex($this->index);
 
@@ -1190,7 +1190,7 @@ END;
    * @return array
    *   An array of argument arrays for testRegressionBug3022724().
    */
-  public function regressionBug3022724DataProvider() {
+  public static function regressionBug3022724DataProvider() {
     // cspell:disable
     return [
       'multiple snippets' => [
@@ -1232,7 +1232,7 @@ END;
       ->willReturn(QueryInterface::PROCESSING_FULL);
     $query->expects($this->atLeastOnce())
       ->method('getOriginalKeys')
-      ->will($this->returnValue('foo'));
+      ->willReturn('foo');
     /** @var \Drupal\search_api\Query\QueryInterface $query */
 
     $body = $this->createTestField('body', 'entity:node/body');
@@ -1240,7 +1240,7 @@ END;
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $body, 'title' => $title]));
+      ->willReturn(['body' => $body, 'title' => $title]);
 
     $this->processor->setIndex($this->index);
 
@@ -1302,7 +1302,7 @@ END;
 
     $this->index->expects($this->atLeastOnce())
       ->method('getFields')
-      ->will($this->returnValue(['body' => $field]));
+      ->willReturn(['body' => $field]);
 
     $this->processor->setIndex($this->index);
 

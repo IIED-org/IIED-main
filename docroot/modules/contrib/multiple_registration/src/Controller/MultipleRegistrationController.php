@@ -2,21 +2,21 @@
 
 namespace Drupal\multiple_registration\Controller;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\path_alias\AliasManager;
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\Core\Url;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
-use Drupal\user\Access\RegisterAccessCheck;
+use Drupal\Core\Url;
 use Drupal\multiple_registration\AvailableUserRolesService;
-use Drupal\Core\Messenger\Messenger;
+use Drupal\path_alias\AliasManager;
+use Drupal\user\Access\RegisterAccessCheck;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a controller for the Multiple Registration module.
@@ -427,7 +427,7 @@ class MultipleRegistrationController extends ControllerBase {
    *   of given roles.
    */
   protected static function useRegistrationPage(array $roles) {
-    $pages_config = \Drupal::configFactory()->get('multiple_registration.create_registration_page_form_config')->get('roles');
+    $pages_config = \Drupal::configFactory()->get('multiple_registration.create_registration_page_form_config')->getOriginal();
 
     foreach ($roles as $rid) {
       if (isset($pages_config[$rid]) && $pages_config[$rid]['url']) {

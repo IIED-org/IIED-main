@@ -2,10 +2,10 @@
 
 namespace Drupal\geolocation\Plugin\views\argument;
 
-use Drupal\views\Plugin\views\argument\ArgumentPluginBase;
-use Drupal\views\Plugin\views\query\Sql;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\geolocation\BoundaryTrait;
+use Drupal\views\Plugin\views\argument\ArgumentPluginBase;
+use Drupal\views\Plugin\views\query\Sql;
 
 /**
  * Argument handler for geolocation boundary.

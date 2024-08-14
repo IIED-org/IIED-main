@@ -21,7 +21,7 @@ function ds_extras_layout_alter(&$definitions) {
   if (\Drupal::config('ds_extras.settings')->get('hidden_region')) {
     /** @var \Drupal\Core\Layout\LayoutDefinition $layout */
     foreach ($definitions as $layout) {
-      if ($layout->getProvider() == 'ds') {
+      if ($layout->getClass() == 'Drupal\ds\Plugin\DsLayout') {
         $regions = $layout->getRegions();
         $regions['ds_hidden'] = ['label' => t('Hidden')];
         $layout->setRegions($regions);
@@ -118,14 +118,6 @@ function ds_extras_form_entity_view_display_edit_form_alter(&$form, FormStateInt
 
     $form['actions']['submit']['#submit'][] = 'ds_extras_block_submit';
   }
-}
-
-/**
- * Submit callback after Field UI submission of a views display.
- */
-function ds_extras_vd_field_ui_submit($form, FormStateInterface $form_state) {
-  // Add the 'type' key to the extra title key so we can ditch the notice.
-  $form_state->setValue('fields', ['title' => ['type' => 'hidden']]);
 }
 
 /**

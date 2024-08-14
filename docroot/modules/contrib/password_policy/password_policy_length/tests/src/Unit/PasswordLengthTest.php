@@ -34,7 +34,7 @@ class PasswordLengthTest extends UnitTestCase {
   /**
    * Provides data for the testLength method.
    */
-  public function lengthDataProvider() {
+  public static function lengthDataProvider(): array {
     return [
       // Passing conditions.
       [
@@ -84,6 +84,12 @@ class PasswordLengthTest extends UnitTestCase {
         10,
         'maximum',
         'PasswordPassword',
+        FALSE,
+      ],
+      [
+        2,
+        'minimum',
+        '£',
         FALSE,
       ],
     ];

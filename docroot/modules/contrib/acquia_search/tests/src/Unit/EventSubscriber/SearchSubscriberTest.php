@@ -9,7 +9,6 @@ use Drupal\acquia_search\Client\Solarium\Endpoint;
 use Drupal\acquia_search\EventSubscriber\SearchSubscriber;
 use Drupal\acquia_search\Helper\Flood;
 use Drupal\Component\Datetime\Time;
-use Drupal\Core\Cache\MemoryBackend;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Http\ClientFactory;
 use Drupal\Core\Lock\LockBackendInterface;
@@ -71,7 +70,7 @@ class SearchSubscriberTest extends UnitTestCase {
 
     $client_factory = $this->createMock(ClientFactory::class);
     $client_factory->method('fromOptions')->willReturn($this->createMock(Client::class));
-    $cache_default = new MemoryBackend();
+    $cache_default = $this->getMockBuilder('Drupal\Core\Cache\MemoryBackend')->disableOriginalConstructor()->getMock();
     $datetime_time = new Time(new RequestStack());
     $lock = $this->createMock(LockBackendInterface::class);
 

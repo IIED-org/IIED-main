@@ -1,5 +1,7 @@
 _core:
   default_config_hash: GXgpFNb8H7n-27gImTB9s1A2lE-lmH43d6qf2KMYp_A
+langcode: en
+dompurify_hide_warning: false
 custom:
   style: plain
   activate: 0
@@ -31,4 +33,3 @@ advanced:
   caption_trim: 0
   caption_trim_length: 75
   compression_type: minified
-dompurify_hide_warning: 0

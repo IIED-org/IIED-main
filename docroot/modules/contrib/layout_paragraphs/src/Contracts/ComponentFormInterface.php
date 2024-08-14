@@ -97,4 +97,17 @@ interface ComponentFormInterface extends FormInterface {
    */
   public function successfulAjaxSubmit(array $form, FormStateInterface $form_state);
 
+  /**
+   * Get the form mode.
+   */
+  public function getFormMode();
+
+  /**
+   * Set the form view mode.
+   *
+   * @param string $view_mode
+   *   The view mode.
+   */
+  public function setFormMode($view_mode);
+
 }

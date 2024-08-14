@@ -12,7 +12,7 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
   /**
    * Tests devel error handler.
    */
-  public function testErrorHandler() {
+  public function testErrorHandler(): void {
     $messages_selector = '[data-drupal-messages]';
 
     $expected_notice = 'This is an example notice';

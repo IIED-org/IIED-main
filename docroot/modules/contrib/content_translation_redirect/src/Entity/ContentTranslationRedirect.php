@@ -210,6 +210,11 @@ class ContentTranslationRedirect extends ConfigEntityBase implements ContentTran
 
   /**
    * {@inheritdoc}
+   *
+   * @param \Drupal\Core\Entity\EntityStorageInterface $storage
+   *   The entity storage object.
+   * @param \Drupal\content_translation_redirect\ContentTranslationRedirectInterface[] $entities
+   *   An array of entities.
    */
   public static function postDelete(EntityStorageInterface $storage, array $entities): void {
     parent::postDelete($storage, $entities);

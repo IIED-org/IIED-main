@@ -243,6 +243,7 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -1182,6 +1183,7 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+          pagination_heading_level: h4
       filters:
         status:
           id: status
@@ -1600,6 +1602,7 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+          pagination_heading_level: h4
       exposed_form:
         type: bef
         options:
@@ -1628,6 +1631,7 @@ display:
                 advanced:
                   collapsible: false
                   is_secondary: false
+                  collapsible_disable_automatic_open: false
       sorts:
         name:
           id: name
@@ -2018,6 +2022,7 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+          pagination_heading_level: h4
       exposed_form:
         type: bef
         options:
@@ -2046,6 +2051,7 @@ display:
                 advanced:
                   collapsible: false
                   is_secondary: false
+                  collapsible_disable_automatic_open: false
       sorts:
         name:
           id: name

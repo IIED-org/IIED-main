@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 id: icon_block
 label: 'Icon block'
-revision: 0
+revision: false
 description: 'Icon with link to related content'

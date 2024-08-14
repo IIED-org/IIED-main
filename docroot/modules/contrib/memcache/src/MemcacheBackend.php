@@ -91,28 +91,28 @@ class MemcacheBackend implements CacheBackendInterface {
     $this->memcache = $memcache;
     $this->checksumProvider = $checksum_provider;
     $this->timestampInvalidator = $timestamp_invalidator;
-
     $this->ensureBinDeletionTimeIsSet();
   }
 
   /**
    * Check to see if debug is on. Wrap it in safety for early bootstraps.
-   * 
-   * @returns bool 
+   *
+   * @returns bool
    */
-  private function debug() :bool {
+  private function debug(): bool {
     try {
+      // @phpstan-ignore-next-line
       $debug = \Drupal::service('memcache.settings')->get('debug');
       if ($debug) {
         return $debug;
       }
-      return false;
+      return FALSE;
     }
     catch (ServiceNotFoundException $e) {
-      return false;
+      return FALSE;
     }
     catch (ContainerNotInitializedException $e) {
-      return false;
+      return FALSE;
     }
   }
 
@@ -145,7 +145,7 @@ class MemcacheBackend implements CacheBackendInterface {
     $fetched = [];
 
     foreach ($cache as $result) {
-      if (is_string($result)){
+      if (is_string($result)) {
         continue;
       }
 
@@ -250,7 +250,7 @@ class MemcacheBackend implements CacheBackendInterface {
     return $this->memcache->set($cid, $cache);
   }
 
- /**
+  /**
    * Given a single cache item, split it into multiple child items.
    *
    * @param \stdClass $item
@@ -277,7 +277,7 @@ class MemcacheBackend implements CacheBackendInterface {
       // Child items do not need tags or expire, since that data is carried by
       // the parent.
       $chunkItem = new \stdClass();
-      // @TODO: mention why we added split and picked this order...
+      // @todo mention why we added split and picked this order...
       $chunkItem->cid = sprintf('split.%d.%s.%s', $i, $item->cid, $seed);
       $chunkItem->data = $chunk;
       $chunkItem->created = $item->created;
@@ -287,7 +287,7 @@ class MemcacheBackend implements CacheBackendInterface {
     if ($this->debug()) {
       $this->getLogger('memcache')->debug(
         'Split item @cid into @num pieces',
-        ['@cid' => $item->cid, '@num' => ($i+1)]
+        ['@cid' => $item->cid, '@num' => ($i + 1)]
       );
     }
 
@@ -304,10 +304,7 @@ class MemcacheBackend implements CacheBackendInterface {
    *   The combined an unserialized value that was originally stored.
    */
   private function combineItems(array $items) {
-    $data = array_reduce($items, function($collected, $item) {
-      return $collected . $item->data;
-    }, '');
-    return unserialize($data);
+    return unserialize(implode(array_column($items, 'data')), ['allowed_classes' => FALSE]);
   }
 
   /**

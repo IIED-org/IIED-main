@@ -13,7 +13,7 @@ class LayoutParagraphsRefreshLayoutSubscriber implements EventSubscriberInterfac
   /**
    * {@inheritDoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       LayoutParagraphsUpdateLayoutEvent::EVENT_NAME => 'layoutUpdated',
     ];

@@ -2,10 +2,12 @@
 
 namespace Drupal\draggableviews\Plugin\views\sort;
 
-use Drupal\views\Plugin\views\sort\SortPluginBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\views\Views;
 use Drupal\views\Entity\View;
+use Drupal\views\Plugin\views\sort\SortPluginBase;
+use Drupal\views\Views;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Basic sort handler for Draggableviews Weight.
@@ -20,6 +22,37 @@ class DraggableViewsSort extends SortPluginBase {
    * @var string
    */
   public $alias;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Constructs a SortPluginBase object, along with a ModuleHandler object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The EntityTypeManager utility class.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static($configuration, $plugin_id, $plugin_definition, $container->get('entity_type.manager'));
+  }
 
   /**
    * {@inheritdoc}
@@ -75,12 +108,12 @@ class DraggableViewsSort extends SortPluginBase {
    */
   public function query() {
 
-    // We should variablise these somehow??
+    // We should make these into variables somehow??
     $base = 'draggableviews_structure';
     $base_field = "entity_id";
 
     // Grab our view/plugin reference.
-    list($view_id, $view_display_id) = $this->splitViewSortDataOptions($this->options['draggable_views_reference']);
+    [$view_id, $view_display_id] = $this->splitViewSortDataOptions($this->options['draggable_views_reference']);
 
     $def = $this->definition;
     $def['table'] = $base;
@@ -116,7 +149,7 @@ class DraggableViewsSort extends SortPluginBase {
     $this->alias = $this->query->addRelationship($alias, $join, $this->query->view->storage->get('base_table'), $this->relationship);
 
     // We cannot use ISNULL() for compatibility with postgres, so use coalesce
-    // function instead. We use the mix or max php integer as default value based
+    // function instead. We use the min or max constant as default value based
     // on if we want those with null before or after.
     $coalesce_null_value = $this->options['draggable_views_null_order'] == "before" ? PHP_INT_MIN : PHP_INT_MAX;
     $formula = "COALESCE($this->alias.$this->realField, $coalesce_null_value)";
@@ -131,8 +164,10 @@ class DraggableViewsSort extends SortPluginBase {
    */
   protected function getViewSortDataOptions() {
     $view_data = [];
-    $query = \Drupal::entityQuery('view');
-    $entity_ids = $query->execute();
+    $views_storage = $this->entityTypeManager->getStorage('view');
+    $entity_ids = $views_storage->getQuery()
+      ->accessCheck(FALSE)
+      ->execute();
 
     foreach ($entity_ids as $view_id) {
       $v = View::load($view_id);

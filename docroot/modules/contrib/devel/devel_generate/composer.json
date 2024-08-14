@@ -41,12 +41,5 @@
   "require": {},
   "suggest": {
     "drupal/realistic_dummy_content": "Generate realistic demo content with Devel's devel_generate module."
-  },
-  "extra": {
-    "drush": {
-      "services": {
-        "drush.services.yml": "^9 || ^10"
-      }
-    }
   }
 }

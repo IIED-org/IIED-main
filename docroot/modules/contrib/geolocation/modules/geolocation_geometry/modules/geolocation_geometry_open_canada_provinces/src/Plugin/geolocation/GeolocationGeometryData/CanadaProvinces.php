@@ -3,8 +3,8 @@
 namespace Drupal\geolocation_geometry_open_canada_provinces\Plugin\geolocation\GeolocationGeometryData;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Shapefile\ShapefileException;
 use Drupal\geolocation_geometry_data\GeolocationGeometryDataBase;
+use Shapefile\ShapefileException;
 
 /**
  * Import Provinces of Canada.

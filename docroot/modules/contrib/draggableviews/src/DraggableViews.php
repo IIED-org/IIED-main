@@ -2,12 +2,12 @@
 
 namespace Drupal\draggableviews;
 
+use Drupal\Component\Utility\Html;
 use Drupal\media\Entity\Media;
 use Drupal\views\ViewExecutable;
-use Drupal\Component\Utility\Html;
 
 /**
- * Class DraggableViews.
+ * Helper class to provide common functionality for indexes of results.
  */
 class DraggableViews {
 
@@ -75,7 +75,7 @@ class DraggableViews {
    * Get parent by index.
    */
   public function getParent($index) {
-    return isset($this->view->result[$index]->draggableviews_structure_parent) ? $this->view->result[$index]->draggableviews_structure_parent : 0;
+    return $this->view->result[$index]->draggableviews_structure_parent ?? 0;
   }
 
   /**
@@ -94,10 +94,52 @@ class DraggableViews {
   }
 
   /**
+   * Return array of field groups titles.
+   */
+  public function fieldGrouping() {
+    $fieldGrouping = [];
+    $sets = $this->view->style_plugin->renderGrouping($this->view->result, $this->view->style_plugin->options['grouping'], FALSE);
+    $flatten_sets = $this->flattenGroups($sets);
+    foreach ($flatten_sets as $title => $rows) {
+      $fieldGrouping[] = $title;
+    }
+
+    return $fieldGrouping;
+  }
+
+  /**
    * Get HTML id for draggableviews table.
    */
-  public function getHtmlId() {
-    return Html::getId('draggableviews-table-' . $this->view->id() . '-' . $this->view->current_display);
+  public function getHtmlId($index) {
+    return Html::getId('draggableviews-table-' . $this->view->id() . '-' . $this->view->current_display . '-' . $index);
+  }
+
+  /**
+   * Recursively flatten groups.
+   *
+   * @param array $sets
+   *   Result set.
+   *
+   * @return array
+   *   List of groups keyed by original key.
+   */
+  protected static function flattenGroups(array $sets) {
+    $flatten = [];
+
+    foreach ($sets as $key => $set) {
+      $set_rows = $set['rows'];
+      if (!is_numeric(key($set_rows))) {
+        $subsets = self::flattenGroups($set_rows);
+        if ($subsets) {
+          $flatten = array_merge($flatten, $subsets);
+        }
+      }
+      else {
+        $flatten[$key] = $set_rows;
+      }
+    }
+
+    return $flatten;
   }
 
 }

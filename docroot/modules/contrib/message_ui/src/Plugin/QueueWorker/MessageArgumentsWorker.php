@@ -2,10 +2,14 @@
 
 namespace Drupal\message_ui\Plugin\QueueWorker;
 
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Render\Markup;
 use Drupal\message\Entity\Message;
 use Drupal\message\Entity\MessageTemplate;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Queue worker plugin instance to update the message arguments.
@@ -16,15 +20,61 @@ use Drupal\message\Entity\MessageTemplate;
  *   cron = {"time" = 60}
  * )
  */
-class MessageArgumentsWorker extends QueueWorkerBase {
+class MessageArgumentsWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The entity query factory.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $storage;
+
+  /**
+   * The queue factory.
+   *
+   * @var \Drupal\Core\Queue\QueueFactory
+   */
+  protected $queueFactory;
+
+  /**
+   * The entity query factory.
+   *
+   * @param array $configuration
+   *   The plugin configuration.
+   * @param string $plugin_id
+   *   The plugin ID.
+   * @param mixed $plugin_definition
+   *   The plugin definition.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $storage
+   *   The message storage.
+   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
+   *   The queue factory.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $storage, QueueFactory $queue_factory) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->storage = $storage;
+    $this->queueFactory = $queue_factory;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new self(
+        $configuration,
+        $plugin_id,
+        $plugin_definition,
+        $container->get('entity_type.manager')->getStorage('message'),
+        $container->get('queue')
+      );
+  }
 
   /**
    * {@inheritdoc}
    */
   public function processItem($data) {
 
-    // Load all of the messages.
-    $query = \Drupal::entityQuery('message');
+    $query = $this->storage->getQuery();
     $result = $query
       ->condition('template', $data['template'])
       ->sort('mid', 'DESC')
@@ -37,8 +87,8 @@ class MessageArgumentsWorker extends QueueWorkerBase {
       return FALSE;
     }
 
-    // Update the messages.
-    $messages = Message::loadMultiple(array_keys($result));
+    /** @var \Drupal\message\Entity\Message[] $messages */
+    $messages = $this->storage->loadMultiple(array_keys($result));
 
     foreach ($messages as $message) {
       /** @var \Drupal\message\Entity\Message $message */
@@ -47,7 +97,8 @@ class MessageArgumentsWorker extends QueueWorkerBase {
     }
 
     // Create the next queue worker.
-    $queue = \Drupal::queue('message_ui_arguments');
+    $queue = $this->queueFactory->get('message_ui_arguments');
+
     return $queue->createItem($data);
   }
 
@@ -65,7 +116,8 @@ class MessageArgumentsWorker extends QueueWorkerBase {
   public static function getArguments($template, $count = FALSE) {
 
     /** @var \Drupal\message\Entity\MessageTemplate $message_template */
-    if (!$message_template = MessageTemplate::load($template)) {
+    $message_template = MessageTemplate::load($template);
+    if (!$message_template) {
       return [];
     }
 

@@ -30,7 +30,7 @@ class DevelStateEditorTest extends DevelBrowserTestBase {
   /**
    * Tests state editor menu link.
    */
-  public function testStateEditMenuLink() {
+  public function testStateEditMenuLink(): void {
     $this->drupalPlaceBlock('system_menu_block:devel');
     $this->drupalLogin($this->develUser);
     // Ensures that the state editor link is present on the devel menu and that
@@ -45,7 +45,7 @@ class DevelStateEditorTest extends DevelBrowserTestBase {
   /**
    * Tests state listing.
    */
-  public function testStateListing() {
+  public function testStateListing(): void {
     $table_selector = 'table.devel-state-list';
 
     // Ensure that state listing page is accessible only by users with the
@@ -98,7 +98,7 @@ class DevelStateEditorTest extends DevelBrowserTestBase {
   /**
    * Tests state edit.
    */
-  public function testStateEdit() {
+  public function testStateEdit(): void {
     // Create some state variables for the test.
     $this->state->set('devel.simple', 0);
     $this->state->set('devel.array', ['devel' => 'value']);
@@ -175,9 +175,7 @@ class DevelStateEditorTest extends DevelBrowserTestBase {
    *   The expected text for the passed in elements.
    */
   protected function assertElementsTextEquals(array $elements, array $expected_elements_text) {
-    $actual_text = array_map(function (NodeElement $element) {
-      return $element->getText();
-    }, $elements);
+    $actual_text = array_map(fn(NodeElement $element) => $element->getText(), $elements);
     $this->assertSame($expected_elements_text, $actual_text);
   }
 

@@ -25,7 +25,7 @@
         labels: []
       };
 
-      $(context).find('.shs-enabled:not([disabled])').not('.shs-processed').addClass('shs-processed').each(function () {
+      $(context).find('.shs-enabled').not('.shs-processed').addClass('shs-processed').each(function () {
         var field = this;
         var field_name = $(field).attr('data-shs-selector');
         if (!drupalSettings.hasOwnProperty('shs') || !drupalSettings.shs.hasOwnProperty(field_name)) {

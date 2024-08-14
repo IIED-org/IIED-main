@@ -10,7 +10,7 @@ dependencies:
     - taxonomy.vocabulary.person
   module:
     - address
-    - image
+    - svg_image
     - taxonomy
     - user
 id: organisation_locations
@@ -180,6 +180,7 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -683,6 +684,7 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+          pagination_heading_level: h4
       filters:
         status:
           id: status

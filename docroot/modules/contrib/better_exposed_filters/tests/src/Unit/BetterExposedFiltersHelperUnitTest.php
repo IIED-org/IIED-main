@@ -3,7 +3,10 @@
 namespace Drupal\Tests\better_exposed_filters\Unit;
 
 use Drupal\better_exposed_filters\BetterExposedFiltersHelper;
+use Drupal\Component\Transliteration\TransliterationInterface;
+use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\UnitTestCase;
 
 /**
@@ -24,8 +27,8 @@ class BetterExposedFiltersHelperUnitTest extends UnitTestCase {
    *
    * @covers ::rewriteOptions
    */
-  public function testRewriteOptions($options, $settings, $expected) {
-    $actual = BetterExposedFiltersHelper::rewriteOptions($options, $settings);
+  public function testRewriteOptions($options, $settings, $expected, $rewrite_based_on_key = FALSE) {
+    $actual = BetterExposedFiltersHelper::rewriteOptions($options, $settings, FALSE, $rewrite_based_on_key);
     $this->assertEquals(array_values($expected), array_values($actual));
   }
 
@@ -75,6 +78,38 @@ class BetterExposedFiltersHelperUnitTest extends UnitTestCase {
       ['foo' => '1', 'bar' => '2', 'baz' => '3'],
       "1|One\n2|Two\n3|Three",
       ['foo' => 'One', 'bar' => 'Two', 'baz' => 'Three'],
+    ];
+
+    // Key based option replacement - no options are replaced.
+    $data[] = [
+      ['foo' => '1', 'bar' => '2', 'baz' => '3'],
+      "4|Two",
+      ['foo' => '1', 'bar' => '2', 'baz' => '3'],
+      TRUE,
+    ];
+
+    // Key based option replacement - some options are replaced.
+    $data[] = [
+      ['foo' => '1', 'bar' => '2', 'baz' => '3'],
+      "foo|One\n2|Two\nbaz|Three",
+      [
+        'foo' => new TranslatableMarkup('One'),
+        'bar' => '2',
+        'baz' => new TranslatableMarkup('Three'),
+      ],
+      TRUE,
+    ];
+
+    // Key based option replacement - all options are replaced.
+    $data[] = [
+      ['foo' => '1', 'bar' => '2', 'baz' => '3'],
+      "foo|One\nbar|Two\nbaz|Three",
+      [
+        'foo' => new TranslatableMarkup('One'),
+        'bar' => new TranslatableMarkup('Two'),
+        'baz' => new TranslatableMarkup('Three'),
+      ],
+      TRUE,
     ];
 
     return $data;
@@ -209,6 +244,22 @@ class BetterExposedFiltersHelperUnitTest extends UnitTestCase {
    * @covers ::sortOptions
    */
   public function testSortOptions($unsorted, $expected) {
+    $transliterator = $this->createMock(TransliterationInterface::class);
+    $transliterator->expects($this->any())
+      ->method('transliterate')
+      ->will($this->returnCallback(
+        fn($string, $langcode = 'en', $unknown_character = '?', $max_length = NULL) => str_replace([
+          'á',
+          'ã',
+          'è',
+          'ë',
+          'ő',
+        ], ['a', 'a', 'e', 'e', 'o'], $string)
+      ));
+    $container = new ContainerBuilder();
+    $container->set('transliteration', $transliterator);
+    \Drupal::setContainer($container);
+
     $sorted = BetterExposedFiltersHelper::sortOptions($unsorted);
     $this->assertEquals(array_values($sorted), array_values($expected));
   }
@@ -257,18 +308,52 @@ class BetterExposedFiltersHelperUnitTest extends UnitTestCase {
       ],
     ];
 
+    // List of strings that need transliteration.
+    $data[] = [
+      [
+        'ë',
+        'á',
+        'b',
+        'd',
+        'c',
+      ], [
+        'á',
+        'b',
+        'c',
+        'd',
+        'ë',
+      ],
+    ];
+
+    // List of mixed values that need transliteration.
+    $data[] = [
+      [
+        '1',
+        'ã',
+        '2',
+        'b',
+        '3',
+      ], [
+        '1',
+        '2',
+        '3',
+        'ã',
+        'b',
+      ],
+    ];
+
     // List of taxonomy terms.
     $data[] = [
       [
         (object) ['option' => [555 => 'term5']],
         (object) ['option' => [222 => 'term2']],
         (object) ['option' => [444 => 'term4']],
-        (object) ['option' => [333 => 'term3']],
+        (object) ['option' => [333 => 'tèrm3']],
         (object) ['option' => [111 => 'term1']],
       ], [
         (object) ['option' => [111 => 'term1']],
         (object) ['option' => [222 => 'term2']],
-        (object) ['option' => [333 => 'term3']],
+        (object) ['option' => [333 => 'tèrm3']],
         (object) ['option' => [444 => 'term4']],
         (object) ['option' => [555 => 'term5']],
       ],
@@ -285,6 +370,20 @@ class BetterExposedFiltersHelperUnitTest extends UnitTestCase {
    * @covers ::sortNestedOptions
    */
   public function testSortNestedOptions($unsorted, $expected) {
+    $transliterator = $this->createMock(TransliterationInterface::class);
+    $transliterator->expects($this->any())
+      ->method('transliterate')
+      ->will($this->returnCallback(
+        fn($string, $langcode = 'en', $unknown_character = '?', $max_length = NULL) => str_replace([
+          'á',
+          'é',
+          'è',
+        ], ['a', 'e', 'e'], $string)
+      ));
+    $container = new ContainerBuilder();
+    $container->set('transliteration', $transliterator);
+    \Drupal::setContainer($container);
+
     $sorted = BetterExposedFiltersHelper::sortNestedOptions($unsorted);
     $this->assertEquals(array_values($sorted), array_values($expected));
   }
@@ -324,6 +423,15 @@ class BetterExposedFiltersHelperUnitTest extends UnitTestCase {
         (object) ['option' => [2321 => '--Calgary']],
         (object) ['option' => [2323 => '--Lake Louise']],
         (object) ['option' => [2322 => '--Edmonton']],
+        (object) ['option' => [2315 => 'Spain']],
+        (object) ['option' => [2311 => '-Cancun']],
+        (object) ['option' => [2312 => '--Olot']],
+        (object) ['option' => [2313 => '--Olèrdola']],
+        (object) ['option' => [2314 => '--Barcelona']],
+        (object) ['option' => [2304 => '-Alpha']],
+        (object) ['option' => [2307 => '--Valdiciego']],
+        (object) ['option' => [2307 => '--Valdés']],
+        (object) ['option' => [2307 => '--Uviéu']],
       ], [
         (object) ['option' => [2315 => 'Canada']],
         (object) ['option' => [2320 => '-Alberta']],
@@ -335,6 +443,15 @@ class BetterExposedFiltersHelperUnitTest extends UnitTestCase {
         (object) ['option' => [2318 => '--Victoria']],
         (object) ['option' => [2319 => '--Whistler']],
         (object) ['option' => [2324 => 'Mexico']],
+        (object) ['option' => [2315 => 'Spain']],
+        (object) ['option' => [2304 => '-Alpha']],
+        (object) ['option' => [2307 => '--Uviéu']],
+        (object) ['option' => [2307 => '--Valdés']],
+        (object) ['option' => [2307 => '--Valdiciego']],
+        (object) ['option' => [2311 => '-Cancun']],
+        (object) ['option' => [2314 => '--Barcelona']],
+        (object) ['option' => [2313 => '--Olèrdola']],
+        (object) ['option' => [2312 => '--Olot']],
         (object) ['option' => [2303 => 'United States']],
         (object) ['option' => [2304 => '-California']],
         (object) ['option' => [2306 => '--San Diego']],

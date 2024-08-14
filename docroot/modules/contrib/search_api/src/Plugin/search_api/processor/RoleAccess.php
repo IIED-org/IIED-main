@@ -223,7 +223,7 @@ class RoleAccess extends ProcessorPluginBase {
     }
     else {
       $query->abort();
-      $this->getLogger()->warning('Role-based access checks could not be added to a search query on index %index since the required field is not available. Please re-save the index.', [
+      $this->getLogger()->warning('Role-based access checks could not be added to a search query on index %index since the required field is not available. You should re-save the index.', [
         '%index' => $query->getIndex()->label(),
       ]);
     }

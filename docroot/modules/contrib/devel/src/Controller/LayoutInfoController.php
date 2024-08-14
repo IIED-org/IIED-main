@@ -4,6 +4,7 @@ namespace Drupal\devel\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -13,27 +14,32 @@ class LayoutInfoController extends ControllerBase {
 
   /**
    * The Layout Plugin Manager.
-   *
-   * @var Drupal\Core\Layout\LayoutPluginManagerInterface
    */
-  protected $layoutPluginManager;
+  protected LayoutPluginManagerInterface $layoutPluginManager;
 
   /**
    * LayoutInfoController constructor.
    *
    * @param \Drupal\Core\Layout\LayoutPluginManagerInterface $pluginManagerLayout
    *   The layout manager.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
    */
-  public function __construct(LayoutPluginManagerInterface $pluginManagerLayout) {
+  public function __construct(
+    LayoutPluginManagerInterface $pluginManagerLayout,
+    TranslationInterface $string_translation
+  ) {
     $this->layoutPluginManager = $pluginManagerLayout;
+    $this->stringTranslation = $string_translation;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): static {
     return new static(
-      $container->get('plugin.manager.core.layout')
+      $container->get('plugin.manager.core.layout'),
+      $container->get('string_translation'),
     );
   }
 
@@ -43,7 +49,7 @@ class LayoutInfoController extends ControllerBase {
    * @return array
    *   Array of page elements to render.
    */
-  public function layoutInfoPage() {
+  public function layoutInfoPage(): array {
     $headers = [
       $this->t('Icon'),
       $this->t('Label'),

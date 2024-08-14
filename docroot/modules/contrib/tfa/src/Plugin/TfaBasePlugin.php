@@ -3,6 +3,7 @@
 namespace Drupal\tfa\Plugin;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Component\Utility\Crypt;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
@@ -10,7 +11,6 @@ use Drupal\encrypt\EncryptionProfileManagerInterface;
 use Drupal\encrypt\EncryptServiceInterface;
 use Drupal\tfa\TfaUserDataTrait;
 use Drupal\user\UserDataInterface;
-use Drupal\Component\Utility\Crypt;
 
 /**
  * Base plugin class.
@@ -50,7 +50,7 @@ abstract class TfaBasePlugin extends PluginBase {
   /**
    * Whether the code has been used before.
    *
-   * @var string
+   * @var bool
    */
   protected $alreadyAccepted;
 

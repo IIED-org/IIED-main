@@ -312,7 +312,7 @@ class IndexOverviewForm extends FormBase {
           $url = Url::fromRoute('user.admin_permissions', [], $options);
           if ($url->access()) {
             $vars[':perm_url'] = $url->toString();
-            $messages = $this->t('The settings have been saved. Please remember to set the <a href=":perm_url">permissions</a> for the newly enabled searches.', $vars);
+            $messages = $this->t('The settings have been saved. Remember to set the <a href=":perm_url">permissions</a> for the newly enabled searches.', $vars);
           }
         }
         $search->setStatus($enabled);

@@ -2,11 +2,11 @@
 
 namespace Drupal\Tests\geolocation\FunctionalJavascript;
 
-use Drupal\views\Tests\ViewTestData;
-use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\field\Entity\FieldConfig;
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\views\Tests\ViewTestData;
 
 /**
  * Tests the common map style AJAX JavaScript functionality.

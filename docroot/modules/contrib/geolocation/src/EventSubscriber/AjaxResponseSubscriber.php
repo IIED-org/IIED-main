@@ -2,11 +2,11 @@
 
 namespace Drupal\geolocation\EventSubscriber;
 
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Drupal\geolocation\Plugin\views\style\CommonMap;
 use Drupal\views\Ajax\ViewAjaxResponse;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Drupal\geolocation\Plugin\views\style\CommonMap;
 
 /**
  * Response subscriber to handle AJAX responses.

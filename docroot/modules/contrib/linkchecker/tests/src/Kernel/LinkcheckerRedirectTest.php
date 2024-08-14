@@ -57,7 +57,12 @@ class LinkcheckerRedirectTest extends KernelTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-    $this->installSchema('system', 'sequences');
+    // Installing sequences table is deprecated since 10.2 release so call it
+    // conditionally.
+    // @see https://www.drupal.org/node/3349345
+    if (version_compare(\Drupal::VERSION, '10.2', '<')) {
+      $this->installSchema('system', 'sequences');
+    }
     $this->installSchema('linkchecker', 'linkchecker_index');
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');

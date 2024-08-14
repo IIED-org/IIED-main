@@ -4,6 +4,7 @@ namespace Drupal\devel_generate;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -15,26 +16,33 @@ class DevelGeneratePermissions implements ContainerInjectionInterface {
 
   /**
    * The plugin manager.
-   *
-   * @var \Drupal\devel_generate\DevelGeneratePluginManager
    */
-  protected $develGeneratePluginManager;
+  protected DevelGeneratePluginManager $develGeneratePluginManager;
 
   /**
    * Constructs a new DevelGeneratePermissions instance.
    *
    * @param \Drupal\devel_generate\DevelGeneratePluginManager $develGeneratePluginManager
    *   The plugin manager.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
    */
-  public function __construct(DevelGeneratePluginManager $develGeneratePluginManager) {
+  public function __construct(
+    DevelGeneratePluginManager $develGeneratePluginManager,
+    TranslationInterface $string_translation
+  ) {
     $this->develGeneratePluginManager = $develGeneratePluginManager;
+    $this->stringTranslation = $string_translation;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
-    return new static($container->get('plugin.manager.develgenerate'));
+  public static function create(ContainerInterface $container): static {
+    return new static(
+      $container->get('plugin.manager.develgenerate'),
+      $container->get('string_translation'),
+    );
   }
 
   /**
@@ -45,7 +53,8 @@ class DevelGeneratePermissions implements ContainerInjectionInterface {
    * @return array
    *   An array of permissions for all plugins.
    */
-  public function permissions() {
+  public function permissions(): array {
+    $permissions = [];
     $devel_generate_plugins = $this->develGeneratePluginManager->getDefinitions();
     foreach ($devel_generate_plugins as $plugin) {
 

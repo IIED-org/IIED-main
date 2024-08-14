@@ -4,7 +4,6 @@ namespace Drupal\draggableviews\Plugin\views\join;
 
 use Drupal\draggableviews\Plugin\views\sort\DraggableViewsSort;
 use Drupal\views\Plugin\views\join\JoinPluginBase;
-use Drupal\views\ViewExecutable;
 
 /**
  * Defines a join handler with arguments.
@@ -19,7 +18,7 @@ class WithArgs extends JoinPluginBase {
    * {@inheritdoc}
    */
   public function buildJoin($select_query, $table, $view_query) {
-    /** @var ViewExecutable $view */
+    /** @var Drupal\views\ViewExecutable $view */
     $view = $view_query->view;
     $view_args = !empty($view_query->view->args) ? $view_query->view->args : [];
     $context = [
@@ -34,14 +33,14 @@ class WithArgs extends JoinPluginBase {
       $this->extra = [];
     }
 
-    //exclude args if arguments aren't passed
-    $includeArgs = true;
+    // Exclude args if arguments aren't passed.
+    $includeArgs = TRUE;
     $sort = $view->sort ?? [];
-    foreach($sort as $sortClass) {
-      if($sortClass instanceof DraggableViewsSort) {
+    foreach ($sort as $sortClass) {
+      if ($sortClass instanceof DraggableViewsSort) {
         $pass = $sortClass->options['draggable_views_pass_arguments'] ?? 0;
-        if(empty($pass) || $pass ===  '0') {
-          $includeArgs = false;
+        if (empty($pass) || $pass === '0') {
+          $includeArgs = FALSE;
         }
       }
     }

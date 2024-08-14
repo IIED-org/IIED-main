@@ -32,14 +32,14 @@ Minor mod of pub card md where sm: has been replaced with lg:
               class="flex flex-col justify-between w-9/12 p-4 lg:w-full grow lg:border-t-2 border-iiedgreen-500"
             >
 
-              <h4 class="mb-4 text-xl leading-relaxed text-gray-900 lg:text-2xl">
+              <h4 class="mb-4 text-xl leading-relaxed text-gray-900">
                 {% if node.field_short_title.value %}
                 {{ node.field_short_title.value }}
                 {% else %}
                 {{ label }}
                 {% endif %}
               </h4>
-              <p class="text-gray-500">{{ node.field_date_published.value|date('d F Y') }}</p>
+              <p class="text-gray-500">{{ node.field_date_published.value|date('F Y') }}</p>
             </div>
           </div>
         </a>

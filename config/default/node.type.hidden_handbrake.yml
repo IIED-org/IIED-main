@@ -12,7 +12,7 @@ third_party_settings:
 name: 'Hidden handbrake'
 type: hidden_handbrake
 description: "User generated content. These pages are generated automatically from the 'Hidden handbrake webform', via the webform content creator module."
-help: ''
+help: null
 new_revision: true
 preview_mode: 1
 display_submitted: false

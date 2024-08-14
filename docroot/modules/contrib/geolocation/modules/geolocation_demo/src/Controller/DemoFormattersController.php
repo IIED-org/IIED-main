@@ -3,9 +3,9 @@
 namespace Drupal\geolocation_demo\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Field\FormatterPluginManager;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 

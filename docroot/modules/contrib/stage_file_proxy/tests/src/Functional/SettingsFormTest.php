@@ -61,7 +61,7 @@ class SettingsFormTest extends BrowserTestBase {
     $this->submitForm($edit, 'Save configuration');
 
     // Test if the form was saved without error.
-    $this->assertSession()->pageTextContains('Your settings have been saved.');
+    $this->assertSession()->pageTextContains('The configuration options have been saved.');
 
     // Test if the stored value has the trailing slash removed.
     $newOrigin = $this->config('stage_file_proxy.settings')->get('origin');

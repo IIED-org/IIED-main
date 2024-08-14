@@ -341,11 +341,12 @@ class OptionsShsWidget extends OptionsSelectWidget implements ContainerFactoryPl
     if (!is_array($value)) {
       $value = [$value];
     }
-    if ($element['#shs']['settings']['anyValue'] === reset($value)) {
+    $first_value = reset($value);
+    if ($element['#shs']['settings']['anyValue'] === $first_value || empty($first_value)) {
       if (!$element['#required']) {
         return;
       }
-      elseif (count($element['#options']) > 1) {
+      elseif (!isset($element['#options']) || count($element['#options']) > 1) {
         $form_state->setError($element, t('You need to select a term from the deepest level in field @name.', ['@name' => $element['#title']]));
         return;
       }

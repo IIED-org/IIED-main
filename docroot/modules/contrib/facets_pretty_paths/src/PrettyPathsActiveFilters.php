@@ -177,7 +177,15 @@ class PrettyPathsActiveFilters {
     // defined as GET parameter.
     if ($this->routeMatch->getRouteName() === 'views.ajax') {
       $q = $this->request->query->get('q');
-      if ($q === NULL && $this->request->isMethod('POST') && !empty($_REQUEST['view_path'])) {
+
+      if (version_compare(\Drupal::VERSION, '10.1', '>=')) {
+        $condition = $q === NULL && !empty($_REQUEST['view_path']);
+      }
+      else {
+        $condition = $q === NULL && $this->request->isMethod('POST') && !empty($_REQUEST['view_path']);
+      }
+
+      if ($condition) {
         $q = str_replace($this->request->getSchemeAndHttpHost(), '', $this->request->headers->get('referer'));
       }
       if ($q) {

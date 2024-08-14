@@ -12,6 +12,7 @@
 // @codingStandardsIgnoreFile
 // This code is a literal copy of Symfony's LintCommand.
 // @see https://github.com/symfony/symfony/blob/5.x/src/Symfony/Bridge/Twig/Command/LintCommand.php
+// @cspell:ignore Weistroff Tamarelle Fabien Potencier
 namespace Drupal\twig_tweak\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -35,7 +36,7 @@ use Twig\Source;
  * @author Marc Weistroff <marc.weistroff@sensiolabs.com>
  * @author Jérôme Tamarelle <jerome@tamarelle.net>
  */
-class LintCommand extends Command
+abstract class LintCommand extends Command
 {
     protected static $defaultName = 'lint:twig';
 
@@ -77,7 +78,7 @@ EOF
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $filenames = $input->getArgument('filename');

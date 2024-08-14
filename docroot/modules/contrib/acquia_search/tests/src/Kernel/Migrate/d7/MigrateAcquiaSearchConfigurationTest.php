@@ -48,15 +48,7 @@ class MigrateAcquiaSearchConfigurationTest extends MigrateDrupal7TestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    // phpcs:ignore
-    // @todo Remove when support for Drupal 9.2 dropped.
-    if (version_compare(\Drupal::VERSION, '9.3', '>=')) {
-      $path = \Drupal::service('extension.path.resolver')->getPath('module', 'acquia_search');
-    }
-    else {
-      // @phpstan-ignore-next-line
-      $path = drupal_get_path('module', 'acquia_search');
-    }
+    $path = \Drupal::service('extension.path.resolver')->getPath('module', 'acquia_search');
     $this->loadFixture(implode(DIRECTORY_SEPARATOR, [
       DRUPAL_ROOT,
       $path,

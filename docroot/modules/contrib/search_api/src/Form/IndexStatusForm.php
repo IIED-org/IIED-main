@@ -252,7 +252,7 @@ class IndexStatusForm extends FormBase {
           IndexBatchHelper::create($index, $values['batch_size'], $values['limit']);
         }
         catch (SearchApiException) {
-          $this->messenger->addWarning($this->t('Failed to create a batch, please check the batch size and limit.'));
+          $this->messenger->addWarning($this->t('Failed to create a batch, check the batch size and limit.'));
         }
         break;
 

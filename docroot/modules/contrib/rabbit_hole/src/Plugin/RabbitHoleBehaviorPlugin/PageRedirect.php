@@ -4,24 +4,24 @@ namespace Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPlugin;
 
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Link;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Config\ImmutableConfig;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Utility\Token;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Routing\TrustedRedirectResponse;
-use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginBase;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
+use Drupal\Core\Utility\Token;
 use Drupal\rabbit_hole\Exception\InvalidRedirectResponseException;
+use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginBase;
 use Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Redirects to another page.
@@ -89,14 +89,7 @@ class PageRedirect extends RabbitHoleBehaviorPluginBase implements ContainerFact
   /**
    * {@inheritdoc}
    */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    RabbitHoleEntityPluginManager $rhepm,
-    ModuleHandlerInterface $mhi,
-    Token $token) {
-
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RabbitHoleEntityPluginManager $rhepm, ModuleHandlerInterface $mhi, Token $token) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->rhEntityPluginManager = $rhepm;
     $this->moduleHandler = $mhi;
@@ -145,7 +138,7 @@ class PageRedirect extends RabbitHoleBehaviorPluginBase implements ContainerFact
           // If a response already exists we don't need to do anything with it.
           return $current_response;
         }
-        // TODO: I don't think this is the correct way to handle a 304 response.
+        // @todo I don't think this is the correct way to handle a 304 response.
       case self::REDIRECT_NOT_MODIFIED:
         if ($current_response === NULL) {
           $not_modified_response = new Response();
@@ -157,7 +150,7 @@ class PageRedirect extends RabbitHoleBehaviorPluginBase implements ContainerFact
           // If a response already exists we don't need to do anything with it.
           return $current_response;
         }
-        // TODO: I have no idea if this is actually the correct way to handle a
+        // @todo I have no idea if this is actually the correct way to handle a
         // 305 response in Symfony/D8. Documentation on it seems a bit sparse.
       case self::REDIRECT_USE_PROXY:
         if ($current_response === NULL) {
@@ -263,7 +256,7 @@ class PageRedirect extends RabbitHoleBehaviorPluginBase implements ContainerFact
     $form_id,
     EntityInterface $entity = NULL,
     $entity_is_bundle = FALSE,
-    ImmutableConfig $bundle_settings = NULL
+    ImmutableConfig $bundle_settings = NULL,
   ) {
 
     $redirect = NULL;
@@ -276,15 +269,9 @@ class PageRedirect extends RabbitHoleBehaviorPluginBase implements ContainerFact
       $redirect_fallback_action = $bundle_settings->get('redirect_fallback_action');
     }
     elseif (isset($entity)) {
-      $redirect = isset($entity->rh_redirect->value)
-        ? $entity->rh_redirect->value
-        : self::RABBIT_HOLE_PAGE_REDIRECT_DEFAULT;
-      $redirect_code = isset($entity->rh_redirect_response->value)
-        ? $entity->rh_redirect_response->value
-        : self::RABBIT_HOLE_PAGE_REDIRECT_RESPONSE_DEFAULT;
-      $redirect_fallback_action = isset($entity->rh_redirect_fallback_action->value)
-        ? $entity->rh_redirect_fallback_action->value
-        : 'bundle_default';
+      $redirect = $entity->rh_redirect->value ?? self::RABBIT_HOLE_PAGE_REDIRECT_DEFAULT;
+      $redirect_code = $entity->rh_redirect_response->value ?? self::RABBIT_HOLE_PAGE_REDIRECT_RESPONSE_DEFAULT;
+      $redirect_fallback_action = $entity->rh_redirect_fallback_action->value ?? 'bundle_default';
     }
     else {
       $redirect = NULL;
@@ -413,15 +400,18 @@ class PageRedirect extends RabbitHoleBehaviorPluginBase implements ContainerFact
     $fields['rh_redirect'] = BaseFieldDefinition::create('string')
       ->setName('rh_redirect')
       ->setLabel($this->t('Rabbit Hole redirect path.'))
-      ->setDescription($this->t('The path to where the user should get redirected to.'));
+      ->setDescription($this->t('The path to where the user should get redirected to.'))
+      ->setTranslatable(TRUE);
     $fields['rh_redirect_response'] = BaseFieldDefinition::create('integer')
       ->setName('rh_redirect_response')
       ->setLabel($this->t('Rabbit Hole redirect response code'))
-      ->setDescription($this->t('Specifies the HTTP response code that should be used when perform a redirect.'));
+      ->setDescription($this->t('Specifies the HTTP response code that should be used when perform a redirect.'))
+      ->setTranslatable(TRUE);
     $fields['rh_redirect_fallback_action'] = BaseFieldDefinition::create('string')
       ->setName('rh_redirect_fallback_action')
       ->setLabel($this->t('Rabbit Hole redirect fallback action'))
-      ->setDescription($this->t('Specifies the action that should be used when the redirect path is invalid or empty.'));
+      ->setDescription($this->t('Specifies the action that should be used when the redirect path is invalid or empty.'))
+      ->setTranslatable(TRUE);
   }
 
   /**

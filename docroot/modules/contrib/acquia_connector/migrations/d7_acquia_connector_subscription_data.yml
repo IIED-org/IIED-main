@@ -12,6 +12,3 @@ process:
   acquia_subscription_data: acquia_subscription_data
 destination:
   plugin: state
-migration_dependencies:
-  required:
-    - d7_acquia_connector_settings

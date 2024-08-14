@@ -7,8 +7,8 @@
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs_library\Entity\LibraryItem;
 
 /**
@@ -22,7 +22,7 @@ function layout_paragraphs_library_form_layout_paragraphs_component_form_alter(a
   $paragraph = $form_object->getParagraph();
   $paragraph_type = $paragraph->getParagraphType();
 
-  // Only applies to paragraph types that allow being promoted to library.
+  // Only applies to paragraph types that allow being promoted to a library.
   // Section paragraphs cannot be used as library items.
   $allow_library_conversion =
     $paragraph_type->getThirdPartySetting('paragraphs_library', 'allow_library_conversion', FALSE)
@@ -43,12 +43,39 @@ function layout_paragraphs_library_form_layout_paragraphs_component_form_alter(a
       ],
       '#weight' => 110,
     ];
-    // Fix inline_entity_form compabitility.
+    // Fix inline_entity_form compatibility.
     // @see https://www.drupal.org/project/inline_entity_form/issues/2830136
-    if ($form['actions']['submit']['#ief_submit_trigger']) {
+    if (isset($form['actions']['submit']['#ief_submit_trigger'])) {
       $form['actions']['promote_to_library']['#ief_submit_trigger'] = TRUE;
       $form['actions']['promote_to_library']['#ief_submit_trigger_all'] = TRUE;
       array_unshift($form['actions']['promote_to_library']['#submit'], $form['actions']['submit']['#submit'][0]);
+    }
+  }
+
+  // Check if it is from a library.
+  if ($paragraph_type->id() === 'from_library') {
+    $form['actions']['unlink_from_library'] = [
+      '#type' => 'submit',
+      '#value' => t('Unlink from library'),
+      '#submit' => ['layout_paragraphs_library_submit'],
+      '#name' => 'unlink-from-library',
+      '#ajax' => [
+        'callback' => 'layout_paragraphs_library_ajax',
+      ],
+      '#attributes' => [
+        'class' => [
+          'lpb-btn--unlink-from-library',
+        ],
+      ],
+      '#weight' => 110,
+    ];
+
+    // Fix inline_entity_form compatibility.
+    // @see https://www.drupal.org/project/inline_entity_form/issues/2830136
+    if (isset($form['actions']['submit']['#ief_submit_trigger'])) {
+      $form['actions']['unlink_from_library']['#ief_submit_trigger'] = TRUE;
+      $form['actions']['unlink_from_library']['#ief_submit_trigger_all'] = TRUE;
+      array_unshift($form['actions']['unlink_from_library']['#submit'], $form['actions']['submit']['#submit'][0]);
     }
   }
 }
@@ -95,16 +122,34 @@ function layout_paragraphs_library_submit(&$form, FormStateInterface $form_state
 
   $form_state->set('original_paragraph', $paragraph);
 
-  // Replacing element in the array.
-  $library_item = LibraryItem::createFromParagraph($paragraph);
-  $library_item->save();
+  $new_paragraph = NULL;
+  if ($form_state->getTriggeringElement()['#name'] === 'promote-to-library') {
+    // Replacing an element in the array.
+    $library_item = LibraryItem::createFromParagraph($paragraph);
+    $library_item->save();
 
-  // Replace this paragraph with a library reference one.
-  $library_paragraph = Paragraph::create([
-    'type' => 'from_library',
-    'field_reusable_paragraph' => $library_item,
-  ]);
-  $library_component = $layout_paragraphs_layout->getComponent($library_paragraph);
+    // Replace this paragraph with a library reference one.
+    $new_paragraph = Paragraph::create([
+      'type' => 'from_library',
+      'field_reusable_paragraph' => $library_item,
+    ]);
+
+  }
+  else {
+    // Assume triggered element is "unlink-from-library".
+    $original_paragraph = NULL;
+    if ($paragraph->hasField('field_reusable_paragraph')) {
+      /** @var \Drupal\paragraphs_library\Entity\LibraryItem $library_item */
+      $library_item = $paragraph->get('field_reusable_paragraph')->entity;
+      if ($library_item) {
+        $original_paragraph = $library_item->get('paragraphs')->entity;
+        $form_object->setParagraph($original_paragraph);
+        $new_paragraph = $original_paragraph;
+      }
+    }
+  }
+
+  $library_component = $layout_paragraphs_layout->getComponent($new_paragraph);
   $library_component->setSettings($component_settings);
   $form_object->setParagraph($library_component->getEntity());
 

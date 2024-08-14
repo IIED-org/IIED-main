@@ -3,11 +3,11 @@
 namespace Drupal\geolocation\Plugin\views\filter;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\geolocation\LocationInputManager;
-use Drupal\views\Plugin\views\filter\NumericFilter;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\geolocation\LocationInputManager;
 use Drupal\geolocation\ProximityTrait;
+use Drupal\views\Plugin\views\filter\NumericFilter;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Filter handler for search keywords.
@@ -110,7 +110,9 @@ class ProximityFilter extends NumericFilter implements ContainerFactoryPluginInt
 
     $center_form = $this->locationInputManager->getForm($this->options['location_input'], $this, empty($this->value['center']) ? NULL : $this->value['center']);
     if (!empty($center_form)) {
-      $form['center'] = $center_form;
+      $identifier = $this->options['expose']['identifier'];
+      $form[$identifier . '_center'] = $center_form;
+      $form[$identifier . '_center']['#tree'] = TRUE;
     }
   }
 
@@ -176,7 +178,8 @@ class ProximityFilter extends NumericFilter implements ContainerFactoryPluginInt
     }
 
     $display_id = ($this->view->display_handler->isDefaulted('filters')) ? 'default' : $this->view->current_display;
-    $session = $this->view->getRequest()->getSession() ?? NULL;
+    $request = $this->view->getRequest();
+    $session = $request->hasSession() ? $request->getSession() : NULL;
     $views_session = $session ? $session->get('views', []) : [];
     if (empty($views_session[$this->view->storage->id()][$display_id])) {
       return;

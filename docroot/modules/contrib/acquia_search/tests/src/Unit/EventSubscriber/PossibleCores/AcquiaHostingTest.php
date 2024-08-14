@@ -95,7 +95,7 @@ final class AcquiaHostingTest extends AcquiaSearchTestCase {
     self::assertEquals($expected_read_only, $event->isReadOnly());
   }
 
-  public function acquiaCloudInfo() {
+  public static function acquiaCloudInfo() {
     yield 'prod' => [
       'prod',
       'foobar_db',

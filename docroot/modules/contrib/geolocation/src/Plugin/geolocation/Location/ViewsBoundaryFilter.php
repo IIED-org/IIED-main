@@ -2,11 +2,11 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\Location;
 
-use Drupal\geolocation\LocationInterface;
 use Drupal\geolocation\LocationBase;
 use Drupal\geolocation\LocationInputManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\geolocation\LocationInterface;
 use Drupal\geolocation\ViewsContextTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Derive center from proximity filter.

@@ -46,6 +46,9 @@ entity_browser.browser.widget.dropzonejs_media_entity:
     media_type:
       type: string
       label: 'Media type'
+    inherit_settings:
+      type: boolean
+      label: 'Inherit file settings'
 
 
 entity_browser.browser.widget.dropzonejs_media_entity_inline_entity_form:

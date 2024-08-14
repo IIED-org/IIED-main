@@ -17,4 +17,14 @@ interface PostRequestIndexingInterface {
    */
   public function registerIndexingOperation($index_id, array $item_ids);
 
+  /**
+   * Removes items from the indexing queue for the end of the page request.
+   *
+   * @param string $index_id
+   *   The ID of the search index in question.
+   * @param array $item_ids
+   *   The IDs of the items that should not be indexed.
+   */
+  public function removeFromIndexing(string $index_id, array $item_ids): void;
+
 }

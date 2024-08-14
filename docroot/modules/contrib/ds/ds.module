@@ -941,13 +941,14 @@ function ds_field_template_settings_form(array &$form, FormStateInterface &$form
   // Check if this is the layout builder field block form
   $is_layout_builder = ($form_state->getBuildInfo()['base_form_id'] == 'layout_builder_configure_block');
 
-  // Plugin settings.
-  if ($is_layout_builder) {
-    $field_settings = $context['formatter']->getThirdPartySetting('ds', 'ft');
-  }
-  else {
+  // Field (plugin) setting. If it's an array, this is a DS field, otherwise,
+  // it's a core base or field api field.
+  if (is_array($context['instance'])) {
     $plugin_settings = $form_state->get('plugin_settings');
     $field_settings = $plugin_settings[$key]['ft'] ?? [];
+  }
+  else {
+    $field_settings = $context['formatter']->getThirdPartySetting('ds', 'ft');
   }
 
   // In case with an ajax refresh we fetch the function from a different place.

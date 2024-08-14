@@ -27,3 +27,29 @@ function message_update_8100() {
     }
   }
 }
+
+/**
+ * Update message_delete_action plugin.
+ */
+function message_update_8102() {
+  $ids = \Drupal::entityQuery('action')
+    ->accessCheck(FALSE)
+    ->condition('plugin', 'message_delete_action')
+    ->execute();
+
+  foreach ($ids as $id) {
+    \Drupal::configFactory()
+      ->getEditable('system.action.' . $id)
+      ->set('plugin', 'entity:delete_action:message')
+      ->save();
+  }
+}
+
+/**
+ * Updates the message view path.
+ */
+function message_update_8105() {
+  $view = \Drupal::service('config.factory')->getEditable('views.view.message');
+  $view->set('display.page_1.display_options.path', 'admin/content/message');
+  $view->save();
+}

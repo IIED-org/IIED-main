@@ -2,12 +2,15 @@
 
 namespace Drupal\search_api_autocomplete\Controller;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Utility\Error;
 use Drupal\search_api_autocomplete\SearchApiAutocompleteException;
 use Drupal\search_api_autocomplete\SearchInterface;
 use Drupal\search_api_autocomplete\Utility\AutocompleteHelperInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,50 +22,36 @@ use Drupal\Component\Transliteration\TransliterationInterface;
 class AutocompleteController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
-   * The autocomplete helper service.
-   *
-   * @var \Drupal\search_api_autocomplete\Utility\AutocompleteHelperInterface
-   */
-  protected $autocompleteHelper;
-
-  /**
-   * The renderer.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
-   * The transliterator.
-   *
-   * @var \Drupal\Component\Transliteration\TransliterationInterface
-   */
-  protected $transliterator;
-
-  /**
    * Creates a new AutocompleteController instance.
    *
-   * @param \Drupal\search_api_autocomplete\Utility\AutocompleteHelperInterface $autocomplete_helper
+   * @param \Drupal\search_api_autocomplete\Utility\AutocompleteHelperInterface $autocompleteHelper
    *   The autocomplete helper service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
    * @param \Drupal\Component\Transliteration\TransliterationInterface $transliterator
    *   The transliterator.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   The logger.
    */
-  public function __construct(AutocompleteHelperInterface $autocomplete_helper, RendererInterface $renderer, TransliterationInterface $transliterator) {
-    $this->autocompleteHelper = $autocomplete_helper;
-    $this->renderer = $renderer;
-    $this->transliterator = $transliterator;
+  public function __construct(
+    protected AutocompleteHelperInterface $autocompleteHelper,
+    protected RendererInterface $renderer,
+    protected TransliterationInterface $transliterator,
+    protected LoggerInterface $logger,
+  ) {
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
+    /** @var \Psr\Log\LoggerInterface $logger */
+    $logger = $container->get('logger.channel.search_api_autocomplete');
     return new static(
       $container->get('search_api_autocomplete.helper'),
       $container->get('renderer'),
-      $container->get('transliteration')
+      $container->get('transliteration'),
+      $logger,
     );
   }
 
@@ -87,8 +76,10 @@ class AutocompleteController extends ControllerBase implements ContainerInjectio
 
     try {
       $keys = $request->query->get('q');
-      $split_keys = $this->autocompleteHelper->splitKeys($keys);
-      list($complete, $incomplete) = $split_keys;
+      if ("$keys" === '') {
+        return new JsonResponse($matches);
+      }
+      [$complete, $incomplete] = $this->autocompleteHelper->splitKeys($keys);
       $data = $request->query->all();
       unset($data['q']);
       $query = $search->createQuery($complete, $data);
@@ -166,10 +157,15 @@ class AutocompleteController extends ControllerBase implements ContainerInjectio
         if ($build) {
           // Render the label.
           try {
-            $label = $this->renderer->renderPlain($build);
+            $label = DeprecationHelper::backwardsCompatibleCall(
+              \Drupal::VERSION,
+              '10.3.0',
+              fn () => $this->renderer->renderInIsolation($build),
+              fn () => $this->renderer->renderPlain($build),
+            );
           }
           catch (\Exception $e) {
-            watchdog_exception('search_api_autocomplete', $e, '%type while rendering an autocomplete suggestion: @message in %function (line %line of %file).');
+            Error::logException($this->logger, $e, '%type while rendering an autocomplete suggestion: @message in %function (line %line of %file).');
             continue;
           }
 
@@ -198,7 +194,7 @@ class AutocompleteController extends ControllerBase implements ContainerInjectio
       }
     }
     catch (SearchApiAutocompleteException $e) {
-      watchdog_exception('search_api_autocomplete', $e, '%type while retrieving autocomplete suggestions: @message in %function (line %line of %file).');
+      Error::logException($this->logger, $e, '%type while retrieving autocomplete suggestions: @message in %function (line %line of %file).');
     }
 
     return new JsonResponse($matches);

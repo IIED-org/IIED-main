@@ -96,7 +96,7 @@ abstract class FileMetadataPluginBase extends PluginBase implements FileMetadata
       $plugin_definition,
       $container->get('cache.file_mdm'),
       $container->get(ConfigFactoryInterface::class),
-      $container->get(StreamWrapperManagerInterface::class)
+      $container->get(StreamWrapperManagerInterface::class),
     );
   }
 
@@ -424,7 +424,7 @@ abstract class FileMetadataPluginBase extends PluginBase implements FileMetadata
     if (($cache_settings = $this->isUriFileMetadataCacheable()) === FALSE) {
       return FALSE;
     }
-    if ($this->isMetadataLoaded !== FileMetadataInterface::LOADED_FROM_CACHE || ($this->isMetadataLoaded === FileMetadataInterface::LOADED_FROM_CACHE && $this->hasMetadataChangedFromCacheVersion)) {
+    if ($this->isMetadataLoaded !== FileMetadataInterface::LOADED_FROM_CACHE || $this->hasMetadataChangedFromCacheVersion) {
       $tags = Cache::mergeTags($tags, $this->getConfigObject()->getCacheTags());
       $tags = Cache::mergeTags($tags, $this->configFactory->get('file_mdm.settings')->getCacheTags());
       $expire = $cache_settings['expiration'] === -1 ? Cache::PERMANENT : time() + $cache_settings['expiration'];

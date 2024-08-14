@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\twig_tweak\Kernel;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 
@@ -164,8 +165,14 @@ final class BlockViewBuilderTest extends KernelTestBase {
    * Renders a render array.
    */
   private function renderPlain(array $build): string {
+    /** @var \Drupal\Core\Render\RendererInterface $renderer */
     $renderer = $this->container->get('renderer');
-    return rtrim(preg_replace('#\s{2,}#', '', $renderer->renderPlain($build)));
+    $content = (string) DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION, '10.3.0',
+      fn () => $renderer->renderInIsolation($build),
+      fn () => $renderer->renderPlain($build),
+    );
+    return rtrim(preg_replace('#\s{2,}#', '', $content));
   }
 
 }

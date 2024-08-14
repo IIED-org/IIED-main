@@ -1,0 +1,8 @@
+{
+    "name": "drupal/media_file_delete",
+    "type": "drupal-module",
+    "description": "Provides content editors the ability to delete associated files when deleting media items",
+    "require-dev": {
+        "drupal/entity_usage": "^2@beta"
+    }
+}

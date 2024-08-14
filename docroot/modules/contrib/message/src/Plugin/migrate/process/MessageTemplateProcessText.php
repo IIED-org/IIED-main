@@ -7,6 +7,8 @@ use Drupal\migrate\ProcessPluginBase;
 use Drupal\migrate\Row;
 
 /**
+ * Message template text process plugin.
+ *
  * @MigrateProcessPlugin(
  *   id = "d7_message_template_text"
  * )

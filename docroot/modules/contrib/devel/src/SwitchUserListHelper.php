@@ -3,34 +3,43 @@
 namespace Drupal\devel;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Url;
-use Drupal\user\Entity\Role;
-use Drupal\Core\Routing\RedirectDestinationTrait;
-use Drupal\Core\Session\AnonymousUserSession;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Routing\RedirectDestinationInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Url;
+use Drupal\user\RoleInterface;
+use Drupal\user\RoleStorageInterface;
+use Drupal\user\UserStorageInterface;
 
 /**
  * Switch user helper service.
  */
 class SwitchUserListHelper {
-  use RedirectDestinationTrait;
+
   use StringTranslationTrait;
 
   /**
    * The Current User object.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $currentUser;
+  protected AccountInterface $currentUser;
 
   /**
    * The user storage.
-   *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
-  protected $userStorage;
+  protected UserStorageInterface $userStorage;
+
+  /**
+   * The redirect destination service.
+   */
+  protected RedirectDestinationInterface $redirectDestination;
+
+  /**
+   * The role storage.
+   */
+  protected RoleStorageInterface $roleStorage;
 
   /**
    * Constructs a new SwitchUserListHelper service.
@@ -39,10 +48,22 @@ class SwitchUserListHelper {
    *   Current user.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
+   *   The redirect destination service.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
    */
-  public function __construct(AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    AccountInterface $current_user,
+    EntityTypeManagerInterface $entity_type_manager,
+    RedirectDestinationInterface $redirect_destination,
+    TranslationInterface $string_translation
+  ) {
     $this->currentUser = $current_user;
     $this->userStorage = $entity_type_manager->getStorage('user');
+    $this->redirectDestination = $redirect_destination;
+    $this->stringTranslation = $string_translation;
+    $this->roleStorage = $entity_type_manager->getStorage('user_role');
   }
 
   /**
@@ -71,9 +92,11 @@ class SwitchUserListHelper {
       ->accessCheck(FALSE)
       ->range(0, $limit);
 
-    $roles = user_roles(TRUE, 'switch users');
-
-    if (!empty($roles) && !isset($roles[Role::AUTHENTICATED_ID])) {
+    /** @var array<string, RoleInterface> $roles */
+    $roles = $this->roleStorage->loadMultiple();
+    unset($roles[AccountInterface::ANONYMOUS_ROLE]);
+    $roles = array_filter($roles, fn($role): bool => $role->hasPermission('switch users'));
+    if (!empty($roles) && !isset($roles[RoleInterface::AUTHENTICATED_ID])) {
       $query->condition('roles', array_keys($roles), 'IN');
     }
 
@@ -106,7 +129,8 @@ class SwitchUserListHelper {
       $accounts[$anonymous->id()] = $anonymous;
     }
 
-    uasort($accounts, [$this, 'sortUserList']);
+    // Syntax comes from https://php.watch/versions/8.2/partially-supported-callable-deprecation.
+    uasort($accounts, self::class . '::sortUserList');
 
     return $accounts;
   }
@@ -120,14 +144,14 @@ class SwitchUserListHelper {
    * @return array
    *   A renderable array.
    */
-  public function buildUserList(array $accounts) {
+  public function buildUserList(array $accounts): array {
     $links = [];
 
     foreach ($accounts as $account) {
       $links[$account->id()] = [
         'title' => $account->getDisplayName(),
         'url' => Url::fromRoute('devel.switch', ['name' => $account->getAccountName()]),
-        'query' => $this->getDestinationArray(),
+        'query' => $this->redirectDestination->getAsArray(),
         'attributes' => [
           'title' => $account->hasPermission('switch users') ? $this->t('This user can switch back.') : $this->t('Caution: this user will be unable to switch back.'),
         ],
@@ -163,7 +187,7 @@ class SwitchUserListHelper {
    *   -  0 if last access times compare equal
    *   -  1 if $b was more recently accessed
    */
-  public static function sortUserList(AccountInterface $a, AccountInterface $b) {
+  public static function sortUserList(AccountInterface $a, AccountInterface $b): int {
     $a_access = (int) $a->getLastAccessedTime();
     $b_access = (int) $b->getLastAccessedTime();
 

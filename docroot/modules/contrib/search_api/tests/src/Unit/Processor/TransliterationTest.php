@@ -44,7 +44,7 @@ class TransliterationTest extends UnitTestCase {
     };
     $transliterator->expects($this->any())
       ->method('transliterate')
-      ->will($this->returnCallback($transliterate));
+      ->willReturnCallback($transliterate);
     /** @var \Drupal\Component\Transliteration\TransliterationInterface $transliterator */
     $this->processor->setTransliterator($transliterator);
   }

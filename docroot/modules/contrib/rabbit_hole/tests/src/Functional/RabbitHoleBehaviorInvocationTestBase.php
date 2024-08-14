@@ -17,7 +17,7 @@ abstract class RabbitHoleBehaviorInvocationTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rabbit_hole'];
+  protected static $modules = ['rabbit_hole'];
 
   /**
    * The behavior settings manager.
@@ -25,6 +25,13 @@ abstract class RabbitHoleBehaviorInvocationTestBase extends BrowserTestBase {
    * @var \Drupal\rabbit_hole\BehaviorSettingsManagerInterface
    */
   protected $behaviorSettingsManager;
+
+  /**
+   * The entity type.
+   *
+   * @var string
+   */
+  protected $entityType;
 
   /**
    * {@inheritdoc}

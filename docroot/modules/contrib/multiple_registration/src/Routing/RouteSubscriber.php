@@ -2,10 +2,10 @@
 
 namespace Drupal\multiple_registration\Routing;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouteCollection;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Listens to the dynamic route events.

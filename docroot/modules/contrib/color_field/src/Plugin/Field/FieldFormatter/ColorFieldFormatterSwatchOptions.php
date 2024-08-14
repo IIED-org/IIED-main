@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\color_field\Plugin\Field\FieldFormatter;
 
@@ -74,7 +74,7 @@ class ColorFieldFormatterSwatchOptions extends ColorFieldFormatterSwatch {
    *   The color hex value.
    */
   protected function viewRawValue(ColorFieldType $item): string {
-    return (new ColorHex($item->color, $item->opacity))->toString(FALSE);
+    return (new ColorHex($item->color, is_null($item->opacity) ? NULL : (float) $item->opacity))->toString(FALSE);
   }
 
 }

@@ -2,10 +2,10 @@
 
 namespace Drupal\geolocation\Plugin\views\argument;
 
-use Drupal\views\Plugin\views\argument\Formula;
-use Drupal\views\Plugin\views\query\Sql;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\geolocation\ProximityTrait;
+use Drupal\views\Plugin\views\argument\Formula;
+use Drupal\views\Plugin\views\query\Sql;
 
 /**
  * Argument handler for geolocation proximity.
@@ -141,7 +141,7 @@ class ProximityArgument extends Formula {
         'lng' => floatval($values[2]),
         'operator' => $values[3],
         'distance' => floatval($values[4]),
-        'unit' => isset($values[5]) ? $values[5] : 'km',
+        'unit' => $values[5] ?? 'km',
       ] : FALSE;
     }
     return $values;

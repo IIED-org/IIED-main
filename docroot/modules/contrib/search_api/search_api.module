@@ -449,7 +449,7 @@ function search_api_view_presave(ViewEntityInterface $view) {
     $view->set('display', $displays);
 
     if ($changed_cache) {
-      $warning = t('The selected caching mechanism does not work with views on Search API indexes. Please use one of the Search API-specific caching options. The selected caching mechanism was changed accordingly for the view %view.', ['%view' => $view->label()]);
+      $warning = t('The selected caching mechanism does not work with views on Search API indexes. Use one of the Search API-specific caching options. The selected caching mechanism was changed accordingly for the view %view.', ['%view' => $view->label()]);
       \Drupal::messenger()->addWarning($warning);
     }
   }

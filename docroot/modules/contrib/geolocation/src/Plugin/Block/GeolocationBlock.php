@@ -2,14 +2,14 @@
 
 namespace Drupal\geolocation\Plugin\Block;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Component\Utility\NestedArray;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\filter\Entity\FilterFormat;
 use Drupal\geolocation\MapCenterManager;
 use Drupal\geolocation\MapProviderManager;
-use Drupal\filter\Entity\FilterFormat;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Exposes a map rendered as a block.

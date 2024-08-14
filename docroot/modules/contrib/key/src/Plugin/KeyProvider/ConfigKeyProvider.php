@@ -16,7 +16,9 @@ use Drupal\key\KeyInterface;
  *   id = "config",
  *   label = @Translation("Configuration"),
  *   description = @Translation("The Configuration key provider stores the key in Drupal's configuration system."),
- *   storage_method = "config",
+ *   tags = {
+ *     "config",
+ *   },
  *   key_value = {
  *     "accepted" = TRUE,
  *     "required" = FALSE

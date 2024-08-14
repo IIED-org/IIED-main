@@ -7,6 +7,8 @@ Below are known BC breaks that may require updating your Twig templates.
 Twig Tweak 3.x requires Drupal 9, Twig 2 and PHP 7.3.
 
 ## Rendering entities
+
+### Entity ID is now required
 Entity ID parameter in `drupal_entity()` and `drupal_field()` functions is now
 mandatory. Previously it was possible to load entities from current route by
 omitting entity ID parameter. However, that was making Twig templates coupled
@@ -31,6 +33,19 @@ prepare it in a preprocess hook.
 function preprocess_page(array &$variables): void {
   $variables['entity'] = \Drupal::routeMatch()->getParameter('entity_type');
 }
+```
+
+### Default view mode has changed
+The view mode parameter in `drupal_field()` has changed from `default` to `full`. If you are using `drupal_field()` without specifying a view mode, you should update your templates to specify the `default` one.
+
+Before:
+```
+{{ drupal_field('field_name', 'node', node.id) }}
+```
+
+After:
+```
+{{ drupal_field('field_name', 'node', node.id, 'default') }}
 ```
 
 ## Rendering blocks

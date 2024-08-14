@@ -3,8 +3,8 @@
 namespace Drupal\taxonomy_manager\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
 
 /**
  * Controller routines for taxonomy_manager routes.
@@ -19,28 +19,6 @@ class MainController extends ControllerBase {
    */
   public function listVocabularies() {
     $build = [];
-
-    if ($this->currentUser()->hasPermission('administer taxonomy')) {
-      $build[] = [
-        '#type' => 'link',
-        '#title' => $this->t('Add new vocabulary'),
-        '#url' => Url::fromRoute('entity.taxonomy_vocabulary.add_form'),
-        '#attributes' => [
-          'class' => ['button', 'button--primary'],
-        ],
-      ];
-    }
-
-    if ($this->currentUser()->hasPermission('access taxonomy overview')) {
-      $build[] = [
-        '#type' => 'link',
-        '#title' => $this->t('Edit vocabulary settings'),
-        '#url' => Url::fromRoute('entity.taxonomy_vocabulary.collection'),
-        '#attributes' => [
-          'class' => ['button', 'button--secondary'],
-        ],
-      ];
-    }
 
     $voc_list = [];
     $vocabularies = $this->entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple();

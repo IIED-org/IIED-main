@@ -1,8 +1,8 @@
 $offcanvasTitleHeight: 4.5em;
 $offcanvasPadding: 1.25em;
 $borderDefault: 6px;
-$lbEdit: #1A8EF7;
-$lbRegion: #E5E5E5;
+$lbEdit: #1a8ef7;
+$lbRegion: #e5e5e5;
 
 $breakpointTiny: 420px;
 $breakpointXSmall: 588px;
@@ -24,17 +24,17 @@ $borderDefault: 6px;
 $borderMedium: 8px;
 $borderBig: 12px;
 
-$iconFill: '787878';
-$iconActiveFill: '003cc5';
+$iconFill: "787878";
+$iconActiveFill: "003cc5";
 
-$basic-easing: cubic-bezier(.455, .03, .515, .955);
-$fancy-easing: cubic-bezier(.19, 1, .22, 1);
-$transition: .15s $fancy-easing;
-$transition--fast: .3s $fancy-easing;
+$basic-easing: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+$fancy-easing: cubic-bezier(0.19, 1, 0.22, 1);
+$transition: 0.15s $fancy-easing;
+$transition--fast: 0.3s $fancy-easing;
 
 $colorAppBackground: #fbfbff; //#f5f7fb;
 $colorAppBackgroundShadow: #f5f5f9;
-$colorDarkAppBackground: #1B1B1D;
+$colorDarkAppBackground: #1b1b1d;
 $ginPrimary: #0550e6; //0136fd;
 $ginPrimaryDark: #080090;
 

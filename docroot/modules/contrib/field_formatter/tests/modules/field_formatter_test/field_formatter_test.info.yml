@@ -10,7 +10,7 @@ dependencies:
   - drupal:user
   - field_formatter:field_formatter
 
-# Information added by Drupal.org packaging script on 2022-12-16
-version: '3.0.0-rc2'
+# Information added by Drupal.org packaging script on 2024-06-17
+version: '3.0.0-rc4'
 project: 'field_formatter'
-datestamp: 1671205511
+datestamp: 1718611796

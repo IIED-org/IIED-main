@@ -1,0 +1,8 @@
+tree:
+  version: 1.x
+  js:
+    js/tree.js: {}
+  dependencies:
+    - taxonomy_manager/jquery.tree
+    - core/drupalSettings
+    - core/once

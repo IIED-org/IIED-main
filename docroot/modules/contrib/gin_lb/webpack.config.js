@@ -4,7 +4,7 @@ const glbClassesGenerator = require('./postcss-glb-classes-generator')({targetPa
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const globImporter = require('node-sass-glob-importer');
+const globImporter = require('sass-glob-importer');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const autoprefixer = require('autoprefixer');
 
@@ -12,8 +12,6 @@ module.exports = {
   entry: {
     gin_lb: ['./styles/gin_lb.scss'],
     gin_lb_10: ['./styles/gin_lb_10.scss'],
-    gin_lb_js: ['./js/gin_lb.js'],
-    gin_lb_toastify: ['./js/gin_lb_toastify.js'],
   },
   output: {
     devtoolLineToLine: true,
@@ -56,10 +54,6 @@ module.exports = {
             },
           },
         ],
-      },
-      {
-        test: /modernizrrc\.js$/,
-        loader: 'expose-loader?Modernizr!webpack-modernizr-loader',
       },
       {
         test: /\.js$/,

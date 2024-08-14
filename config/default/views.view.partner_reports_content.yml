@@ -339,7 +339,6 @@ dependencies:
     - 'taxonomy_term:organisation:9d7e588e-2c76-48ed-9b66-b3989bc084a6'
     - 'taxonomy_term:organisation:9d880095-61e3-4977-8a58-4317675faafb'
     - 'taxonomy_term:organisation:9dde47be-c8e8-4ac7-a6c4-aad42cbeeaed'
-    - 'taxonomy_term:organisation:9dfd1384-f894-4321-9f30-d8ffdbe51580'
     - 'taxonomy_term:organisation:9e03fb0c-db19-4eb0-864f-d1117b4486c8'
     - 'taxonomy_term:organisation:9e69edb2-e8bb-45cd-8774-f867d77065d8'
     - 'taxonomy_term:organisation:9eac8425-43aa-41fa-a440-3cd747f22166'
@@ -679,6 +678,7 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
+          pagination_heading_level: h4
       exposed_form:
         type: bef
         options:
@@ -708,14 +708,17 @@ display:
                 advanced:
                   rewrite:
                     filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
                   collapsible: false
                   is_secondary: false
+                  collapsible_disable_automatic_open: false
               delta:
                 plugin_id: default
                 advanced:
                   placeholder_text: ''
                   collapsible: false
                   is_secondary: false
+                  collapsible_disable_automatic_open: false
       access:
         type: role
         options:
@@ -1435,6 +1438,7 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+          pagination_heading_level: h4
       sorts:
         field_date_published_value:
           id: field_date_published_value
@@ -3203,6 +3207,7 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+          pagination_heading_level: h4
       sorts:
         field_date_published_value:
           id: field_date_published_value

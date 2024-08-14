@@ -3,9 +3,13 @@
 namespace Drupal\devel\Form;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RedirectDestinationInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form that displays all the config variables to edit them.
@@ -13,16 +17,61 @@ use Drupal\Core\Url;
 class ConfigsList extends FormBase {
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * The redirect destination service.
+   *
+   * @var \Drupal\Core\Routing\RedirectDestinationInterface
+   */
+  protected $redirectDestination;
+
+  /**
+   * Constructs a new ConfigsList object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
+   *   The redirect destination service.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
+   */
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    RedirectDestinationInterface $redirect_destination,
+    TranslationInterface $string_translation
+  ) {
+    $this->configFactory = $config_factory;
+    $this->redirectDestination = $redirect_destination;
+    $this->stringTranslation = $string_translation;
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('redirect.destination'),
+      $container->get('string_translation'),
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId(): string {
     return 'devel_config_system_form';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $filter = '') {
+  public function buildForm(array $form, FormStateInterface $form_state, $filter = ''): array {
     $form['filter'] = [
       '#type' => 'details',
       '#title' => $this->t('Filter variables'),
@@ -47,11 +96,10 @@ class ConfigsList extends FormBase {
     ];
 
     $rows = [];
-
-    $destination = $this->getDestinationArray();
+    $destination = $this->redirectDestination->getAsArray();
 
     // List all the variables filtered if any filter was provided.
-    $names = $this->configFactory()->listAll($filter);
+    $names = $this->configFactory->listAll($filter);
 
     foreach ($names as $config_name) {
       $operations['edit'] = [
@@ -78,7 +126,7 @@ class ConfigsList extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $filter = $form_state->getValue('name');
     $form_state->setRedirectUrl(Url::FromRoute('devel.configs_list', ['filter' => Html::escape($filter)]));
   }

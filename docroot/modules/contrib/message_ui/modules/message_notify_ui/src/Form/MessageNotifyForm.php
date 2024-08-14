@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ingroup message_notify_ui
  */
-class MessageNotifyForm extends EntityForm {
+final class MessageNotifyForm extends EntityForm {
 
   /**
    * The entity type manager.
@@ -122,7 +122,7 @@ class MessageNotifyForm extends EntityForm {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
+    return new self(
       $container->get('entity_type.manager'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time'),

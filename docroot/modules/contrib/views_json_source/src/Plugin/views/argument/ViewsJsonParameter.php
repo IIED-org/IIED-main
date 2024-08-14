@@ -2,8 +2,8 @@
 
 namespace Drupal\views_json_source\Plugin\views\argument;
 
-use Drupal\views\Plugin\views\argument\ArgumentPluginBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Plugin\views\argument\ArgumentPluginBase;
 
 /**
  * Base argument handler for views_json_source.

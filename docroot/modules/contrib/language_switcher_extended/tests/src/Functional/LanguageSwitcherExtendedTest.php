@@ -32,7 +32,7 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stable';
+  protected $defaultTheme = 'stark';
 
   /**
    * The node object used in the test.
@@ -325,9 +325,9 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
     $this->assertSession()
       ->elementAttributeContains('css', '#block-test-language-block li[hreflang="en"] a', 'data-drupal-link-system-path', 'node/1');
     $this->assertSession()
-      ->elementNotExists('css', '#block-test-language-block li.de a');
+      ->elementNotExists('css', '#block-test-language-block li[hreflang="de"] a');
     $this->assertSession()
-      ->elementTextContains('css', '#block-test-language-block li.de', 'German');
+      ->elementTextContains('css', '#block-test-language-block li[hreflang="de"]', 'German');
   }
 
   /**
@@ -374,9 +374,9 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
 
     // Verify that the current language is not linked.
     $this->assertSession()
-      ->elementExists('css', '#block-test-language-block li.en .is-active');
+      ->elementExists('css', '#block-test-language-block li[hreflang="en"] .is-active');
     $this->assertSession()
-      ->elementNotExists('css', '#block-test-language-block li.en a');
+      ->elementNotExists('css', '#block-test-language-block li[hreflang="en"] a');
     // Verify that other language links lead to the homepage.
     $this->assertSession()
       ->elementAttributeContains('css', '#block-test-language-block li[hreflang="de"] a', 'data-drupal-link-system-path', '<front>');
@@ -400,18 +400,18 @@ class LanguageSwitcherExtendedTest extends BrowserTestBase {
 
     // Verify, that the language switcher text is shown as lang code.
     $this->assertSession()
-      ->elementTextContains('css', '#block-test-language-block li.en', 'en');
+      ->elementTextContains('css', '#block-test-language-block li[hreflang="en"]', 'en');
     $this->assertSession()
-      ->elementTextNotContains('css', '#block-test-language-block li.en', 'English');
+      ->elementTextNotContains('css', '#block-test-language-block li[hreflang="en"]', 'English');
 
     // Logout user to verify user login page lang switcher is using lang code.
     $this->drupalLogout();
     $this->drupalGet('user');
 
     $this->assertSession()
-      ->elementTextContains('css', '#block-test-language-block li.en', 'en');
+      ->elementTextContains('css', '#block-test-language-block li[hreflang="en"]', 'en');
     $this->assertSession()
-      ->elementTextNotContains('css', '#block-test-language-block li.en', 'English');
+      ->elementTextNotContains('css', '#block-test-language-block li[hreflang="en"]', 'English');
   }
 
 }

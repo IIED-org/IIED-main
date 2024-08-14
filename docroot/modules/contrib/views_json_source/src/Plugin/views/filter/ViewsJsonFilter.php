@@ -2,8 +2,8 @@
 
 namespace Drupal\views_json_source\Plugin\views\filter;
 
-use Drupal\views\Plugin\views\filter\FilterPluginBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Plugin\views\filter\FilterPluginBase;
 
 /**
  * Base filter handler for views_json_source.
@@ -48,18 +48,6 @@ class ViewsJsonFilter extends FilterPluginBase {
         'title' => $this->t('Contains'),
         'short' => $this->t('contains'),
         'method' => 'opContains',
-        'values' => 1,
-      ],
-      'word' => [
-        'title' => $this->t('Contains any word'),
-        'short' => $this->t('has word'),
-        'method' => 'opContainsWord',
-        'values' => 1,
-      ],
-      'allwords' => [
-        'title' => $this->t('Contains all words'),
-        'short' => $this->t('has all'),
-        'method' => 'opContainsWord',
         'values' => 1,
       ],
       'starts' => [
@@ -153,6 +141,7 @@ class ViewsJsonFilter extends FilterPluginBase {
     // not rendered, we can't render dependencies; instead we only
     // render the form items we need.
     $which = 'all';
+    $source = '';
     if (!empty($form['operator'])) {
       $source = ':input[name="options[operator]"]';
     }
@@ -242,11 +231,19 @@ class ViewsJsonFilter extends FilterPluginBase {
    * Generate the filter criteria.
    */
   public function generate() {
-    $operator = $this->options['operator'];
-    $key = $this->options['key'];
-    $value = !empty($this->value) ? reset($this->value) : $this->options['value'];
+    $options = $this->options;
 
-    return [$key, $operator, $value];
+    $operator = $this->options['operator'];
+    if ($options['exposed'] && $options['expose']['use_operator']) {
+      $operator = $this->operator;
+    }
+
+    $value = $this->options['value'];
+    if ($options['exposed'] && !empty($this->value)) {
+      $value = $options['expose']['multiple'] ? $this->value : reset($this->value);
+    }
+
+    return !empty($value) ? [$this->options['key'], $operator, $value] : [];
   }
 
 }

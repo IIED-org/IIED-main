@@ -13,7 +13,7 @@ class LayoutParagraphsAllowedTypesSubscriber implements EventSubscriberInterface
   /**
    * {@inheritDoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       LayoutParagraphsAllowedTypesEvent::EVENT_NAME => 'typeRestrictions',
     ];

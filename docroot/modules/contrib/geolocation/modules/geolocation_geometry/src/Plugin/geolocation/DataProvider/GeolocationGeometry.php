@@ -3,11 +3,11 @@
 namespace Drupal\geolocation_geometry\Plugin\geolocation\DataProvider;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\geolocation\DataProviderBase;
-use Drupal\views\Plugin\views\field\FieldPluginBase;
-use Drupal\geolocation\DataProviderInterface;
 use Drupal\Core\Field\FieldItemInterface;
+use Drupal\geolocation\DataProviderBase;
+use Drupal\geolocation\DataProviderInterface;
 use Drupal\views\Plugin\views\field\EntityField;
+use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 
 /**

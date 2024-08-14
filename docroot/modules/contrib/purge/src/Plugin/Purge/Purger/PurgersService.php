@@ -14,6 +14,7 @@ use Drupal\purge\Plugin\Purge\Purger\Exception\CapacityException;
 use Drupal\purge\Plugin\Purge\Purger\Exception\DiagnosticsException;
 use Drupal\purge\Plugin\Purge\Purger\Exception\LockException;
 use Drupal\purge\ServiceBase;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Provides the service that distributes access to one or more purgers.
@@ -396,10 +397,19 @@ class PurgersService extends ServiceBase implements PurgersServiceInterface {
     // Iterate each purger plugin we should load and instantiate them.
     $this->purgers = [];
     foreach ($this->getPluginsEnabled() as $id => $plugin_id) {
-      $this->purgers[$id] = $this->pluginManager->createInstance($plugin_id, ['id' => $id]);
-      $this->purgers[$id]->setLogger($this->purgeLogger->get(sprintf(self::LOGGER_PURGERS_FORMAT, $plugin_id, $id)));
-      $this->logger->debug("loading purger @id (@plugin_id).",
-        ['@id' => $id, '@plugin_id' => $plugin_id]);
+      try {
+        $this->purgers[$id] = $this->pluginManager->createInstance($plugin_id, ['id' => $id]);
+        $this->purgers[$id]->setLogger($this->purgeLogger->get(sprintf(self::LOGGER_PURGERS_FORMAT, $plugin_id, $id)));
+        $this->logger->debug("loading purger @id (@plugin_id).",
+          ['@id' => $id, '@plugin_id' => $plugin_id]);
+      }
+      // When uninstalling modules providing purger plugins, instantiating
+      // purgers may result in the attempt to instantiate services that are no
+      // longer valid, in which case it is fine to just skip those.
+      catch (ServiceNotFoundException $e) {
+        $this->logger->error("Error loading purger @id (@plugin_id): @error",
+          ['@id' => $id, '@plugin_id' => $plugin_id, '@error' => $e]);
+      }
     }
 
     // Pass the purger instance onto depending objects.

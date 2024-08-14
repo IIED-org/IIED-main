@@ -5,14 +5,15 @@ namespace Drupal\devel;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\TranslatableInterface;
-use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
 
 /**
  * Manager class for DevelDumper.
@@ -20,35 +21,31 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 class DevelDumperManager implements DevelDumperManagerInterface {
 
   use StringTranslationTrait;
-  use MessengerTrait;
 
   /**
    * The devel config.
-   *
-   * @var \Drupal\Core\Config\ImmutableConfig
    */
-  protected $config;
+  protected ImmutableConfig $config;
 
   /**
    * The current account.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
    */
-  protected $account;
+  protected AccountProxyInterface $account;
 
   /**
    * The devel dumper plugin manager.
-   *
-   * @var \Drupal\devel\DevelDumperPluginManagerInterface
    */
-  protected $dumperManager;
+  protected DevelDumperPluginManagerInterface $dumperManager;
 
   /**
    * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * The messenger.
+   */
+  protected MessengerInterface $messenger;
 
   /**
    * Constructs a DevelDumperPluginManager object.
@@ -61,12 +58,25 @@ class DevelDumperManager implements DevelDumperManagerInterface {
    *   The devel dumper plugin manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The translation manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, AccountProxyInterface $account, DevelDumperPluginManagerInterface $dumper_manager, EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    AccountProxyInterface $account,
+    DevelDumperPluginManagerInterface $dumper_manager,
+    EntityTypeManagerInterface $entityTypeManager,
+    MessengerInterface $messenger,
+    TranslationInterface $string_translation
+  ) {
     $this->config = $config_factory->get('devel.settings');
     $this->account = $account;
     $this->dumperManager = $dumper_manager;
     $this->entityTypeManager = $entityTypeManager;
+    $this->messenger = $messenger;
+    $this->stringTranslation = $string_translation;
   }
 
   /**
@@ -88,7 +98,7 @@ class DevelDumperManager implements DevelDumperManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function dump($input, $name = NULL, $plugin_id = NULL) {
+  public function dump($input, $name = NULL, $plugin_id = NULL): void {
     if ($this->hasAccessToDevelInformation()) {
       $this->createInstance($plugin_id)->dump($input, $name);
     }
@@ -110,10 +120,10 @@ class DevelDumperManager implements DevelDumperManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function message($input, $name = NULL, $type = MessengerInterface::TYPE_STATUS, $plugin_id = NULL, $load_references = FALSE) {
+  public function message($input, $name = NULL, $type = MessengerInterface::TYPE_STATUS, $plugin_id = NULL, $load_references = FALSE): void {
     if ($this->hasAccessToDevelInformation()) {
       $output = $this->export($input, $name, $plugin_id, $load_references);
-      $this->messenger()->addMessage($output, $type, TRUE);
+      $this->messenger->addMessage($output, $type, TRUE);
     }
   }
 
@@ -128,7 +138,7 @@ class DevelDumperManager implements DevelDumperManagerInterface {
       $file = 'temporary://drupal_debug.txt';
     }
     if (file_put_contents($file, $output, FILE_APPEND) === FALSE && $this->hasAccessToDevelInformation()) {
-      $this->messenger()->addError($this->t('Devel was unable to write to %file.', ['%file' => $file]));
+      $this->messenger->addError($this->t('Devel was unable to write to %file.', ['%file' => $file]));
       return FALSE;
     }
   }
@@ -150,7 +160,7 @@ class DevelDumperManager implements DevelDumperManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function exportAsRenderable($input, $name = NULL, $plugin_id = NULL, $load_references = FALSE) {
+  public function exportAsRenderable($input, $name = NULL, $plugin_id = NULL, $load_references = FALSE): array {
     if ($this->hasAccessToDevelInformation()) {
       if ($load_references && $input instanceof EntityInterface) {
         $input = $this->entityToArrayWithReferences($input);
@@ -166,7 +176,7 @@ class DevelDumperManager implements DevelDumperManagerInterface {
    * @return bool
    *   TRUE if the user has the permission, FALSE otherwise.
    */
-  protected function hasAccessToDevelInformation() {
+  protected function hasAccessToDevelInformation(): bool {
     return $this->account && $this->account->hasPermission('access devel information');
   }
 
@@ -213,10 +223,7 @@ class DevelDumperManager implements DevelDumperManagerInterface {
         try {
           $storage = $this->entityTypeManager->getStorage($target_type);
         }
-        catch (InvalidPluginDefinitionException $e) {
-          continue;
-        }
-        catch (PluginNotFoundException $e) {
+        catch (InvalidPluginDefinitionException | PluginNotFoundException) {
           continue;
         }
 
@@ -227,6 +234,7 @@ class DevelDumperManager implements DevelDumperManagerInterface {
               $referenced_entity = $storage->load($item['target_id']);
             }
             elseif (isset($item['target_revision_id'])) {
+              /** @var \Drupal\Core\Entity\RevisionableStorageInterface $storage */
               $referenced_entity = $storage->loadRevision($item['target_revision_id']);
             }
 

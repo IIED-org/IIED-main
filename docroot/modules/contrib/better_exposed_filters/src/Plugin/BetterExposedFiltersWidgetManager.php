@@ -2,9 +2,9 @@
 
 namespace Drupal\better_exposed_filters\Plugin;
 
-use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Plugin\DefaultPluginManager;
 use Symfony\Component\DependencyInjection\Container;
 
 /**

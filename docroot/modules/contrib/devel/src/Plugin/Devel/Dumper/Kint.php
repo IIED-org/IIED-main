@@ -87,14 +87,14 @@ class Kint extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public function getInternalFunctions() {
+  public function getInternalFunctions(): array {
     return array_merge(parent::getInternalFunctions(), KintOriginal::$aliases);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function checkRequirements() {
+  public static function checkRequirements(): bool {
     return class_exists('Kint', TRUE);
   }
 

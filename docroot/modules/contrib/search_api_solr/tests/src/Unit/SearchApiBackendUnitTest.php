@@ -3,7 +3,9 @@
 namespace Drupal\Tests\search_api_solr\Unit;
 
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Drupal\search_api_solr\Plugin\SolrConnector\StandardSolrConnector;
+use Drupal\search_api_solr\SearchApiSolrException;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
@@ -81,16 +83,19 @@ class SearchApiBackendUnitTest extends Drupal10CompatibilityUnitTestCase {
     // This helper is actually used.
     $this->queryHelper = new Helper();
 
+    $connector_manager = $this->prophesize(SolrConnectorPluginManager::class);
+    $connector_manager->createInstance(NULL, [])->willThrow(new SearchApiSolrException('no connector'));
+
     $this->backend = new SearchApiSolrBackend([], NULL, [],
       $this->prophesize(ModuleHandlerInterface::class)->reveal(),
       $this->prophesize(Config::class)->reveal(),
       $this->prophesize(LanguageManagerInterface::class)->reveal(),
-      $this->prophesize(SolrConnectorPluginManager::class)->reveal(),
+      $connector_manager->reveal(),
       $this->prophesize(FieldsHelperInterface::class)->reveal(),
       $this->prophesize(DataTypeHelperInterface::class)->reveal(),
       $this->queryHelper,
       $this->entityTypeManager->reveal(),
-      $this->prophesize(ContainerAwareEventDispatcher::class)->reveal(),
+      $this->prophesize(EventDispatcher::class)->reveal(),
       $this->prophesize(TimeInterface::class)->reveal(),
       $this->prophesize(StateInterface::class)->reveal(),
       $this->prophesize(MessengerInterface::class)->reveal(),
@@ -208,7 +213,7 @@ class SearchApiBackendUnitTest extends Drupal10CompatibilityUnitTestCase {
   /**
    * Data provider for testIndexField method.
    */
-  public function addIndexFieldDataProvider() {
+  public static function addIndexFieldDataProvider() {
     return [
       // addIndexField() should be called.
       ['0', 'boolean', 'false'],
@@ -249,7 +254,7 @@ class SearchApiBackendUnitTest extends Drupal10CompatibilityUnitTestCase {
   /**
    * Data provider for testIndexEmptyField method.
    */
-  public function addIndexEmptyFieldDataProvider() {
+  public static function addIndexEmptyFieldDataProvider() {
     return [
       [
         new TextValue(''),

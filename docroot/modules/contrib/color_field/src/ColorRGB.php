@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\color_field;
 
@@ -39,10 +39,10 @@ class ColorRGB extends ColorBase {
    *   The green (0-255)
    * @param int $blue
    *   The blue (0-255)
-   * @param float $opacity
+   * @param float|null $opacity
    *   The opacity.
    */
-  public function __construct(int $red, int $green, int $blue, float $opacity) {
+  public function __construct(int $red, int $green, int $blue, ?float $opacity) {
     $this->red = max(0, min(255, $red));
     $this->green = max(0, min(255, $green));
     $this->blue = max(0, min(255, $blue));
@@ -102,7 +102,7 @@ class ColorRGB extends ColorBase {
   public function toHex(): ColorHex {
     return new ColorHex(
       $this->intToColorHex($this->getRed()) . $this->intToColorHex($this->getGreen()) . $this->intToColorHex($this->getBlue()),
-      $this->intToColorHex($this->getOpacity() * 255)
+      (float) $this->intToColorHex((int) $this->getOpacity() * 255)
     );
   }
 

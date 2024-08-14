@@ -93,6 +93,7 @@ abstract class FormTestBase extends BrowserTestBase {
     if (is_null($this->formId)) {
       $this->formId = $this->route;
     }
+    $this->installModulesFromClassProperty($this->container);
   }
 
   /**

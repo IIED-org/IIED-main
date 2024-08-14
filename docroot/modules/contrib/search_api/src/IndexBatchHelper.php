@@ -200,7 +200,7 @@ class IndexBatchHelper {
           // job) could lead to a false warning here, so we need to phrase this
           // carefully.
           $not_indexed_message = static::t(
-            'Number of indexed items is less than expected (by @count). Please check the logs if there are still unindexed items.',
+            'Number of indexed items is less than expected (by @count). Check the logs if there are still unindexed items.',
             ['@count' => $results['not indexed']],
           );
           // Notify user about not indexed items.

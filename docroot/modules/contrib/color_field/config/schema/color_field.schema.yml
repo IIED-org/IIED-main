@@ -92,6 +92,14 @@ field.widget.settings.color_field_widget_default:
       type: label
       label: 'Opacity placeholder'
 
+field.widget.settings.color_field_widget_html5:
+  type: mapping
+  label: 'Color HTML5 widget settings'
+  mapping:
+    show_extra:
+      type: boolean
+      label: 'Show extra'
+
 field.widget.settings.color_field_widget_box:
   type: mapping
   label: 'Color boxes format settings'

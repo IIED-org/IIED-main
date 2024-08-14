@@ -1,3 +1,4 @@
+langcode: en
 id: external_link
 label: 'External link'
 ui_limit: 'publication|*'

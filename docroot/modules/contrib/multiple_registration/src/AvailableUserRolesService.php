@@ -83,7 +83,7 @@ class AvailableUserRolesService {
   public function getRegistrationPages() {
     $roles = $this->getAvailableRoles();
     if (!empty($roles)) {
-      $pages_config = $this->configFactory->getEditable('multiple_registration.create_registration_page_form_config')->get('roles');
+      $pages_config = $this->configFactory->getEditable('multiple_registration.create_registration_page_form_config')->getOriginal();
       $reg_pages = [];
       foreach ($roles as $rid => $role_name) {
         $role_config = $pages_config && isset($pages_config[$rid]) ? $pages_config[$rid] : NULL;

@@ -5,7 +5,7 @@ template: example_create_node
 label: 'Example - Create node'
 description: 'Working upon creating of a node.'
 text:
-  - value: "<p><a href='[message:user-url]'>[message:user-name]</a> created <a href='[message:node-url]'>[message:node-title]</a></p>\r\n <p>[message:node-render]</p>\r\n"
+  - value: "<p><a href='[message:user-url]'>[message:user-name]</a> created <a href='[message:field_node_reference:entity:url]'>[message:field_node_reference:entity:title]</a></p>\r\n <p>[message:node-render]</p>\r\n"
   - format: 'basic_html'
 data:
   'token options':

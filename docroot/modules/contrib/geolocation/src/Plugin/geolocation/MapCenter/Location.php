@@ -4,8 +4,8 @@ namespace Drupal\geolocation\Plugin\geolocation\MapCenter;
 
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\geolocation\LocationManager;
-use Drupal\geolocation\MapCenterInterface;
 use Drupal\geolocation\MapCenterBase;
+use Drupal\geolocation\MapCenterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

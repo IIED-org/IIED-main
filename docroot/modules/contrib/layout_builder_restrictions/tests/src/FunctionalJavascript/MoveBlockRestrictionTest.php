@@ -350,7 +350,6 @@ class MoveBlockRestrictionTest extends LayoutBuilderRestrictionsTestBase {
     // Allowlist all "Alternate" block types.
     $page->checkField('layout_builder_restrictions[allowed_blocks][Custom block types][available_blocks][alternate]');
     $page->pressButton('Save');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Reorder Alternate block.
     $page->clickLink('Manage layout');
@@ -408,7 +407,6 @@ class MoveBlockRestrictionTest extends LayoutBuilderRestrictionsTestBase {
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-custom-blocks-restriction-all"]');
     $element->click();
     $page->pressButton('Save');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Reorder both Alternate & Basic block block.
     $page->clickLink('Manage layout');

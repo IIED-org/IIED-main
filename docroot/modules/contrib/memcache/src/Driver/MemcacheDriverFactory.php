@@ -4,8 +4,8 @@ namespace Drupal\memcache\Driver;
 
 use Drupal\memcache\Connection\MemcacheConnection;
 use Drupal\memcache\Connection\MemcachedConnection;
-use Drupal\memcache\MemcacheSettings;
 use Drupal\memcache\MemcacheException;
+use Drupal\memcache\MemcacheSettings;
 
 /**
  * Factory class for creation of Memcache objects.
@@ -181,8 +181,9 @@ class MemcacheDriverFactory {
       $this->driverClass = MemcacheDriver::class;
     }
 
-    // Values from settings.php.
-    $this->servers = $this->settings->get('servers', ['127.0.0.1:11211' => 'default']);
+    // Values from settings.php or env variable.
+    $host = getenv('MEMCACHED_HOST') ?: '127.0.0.1:11211';
+    $this->servers = $this->settings->get('servers', [$host => 'default']);
     $this->bins = $this->settings->get('bins', ['default' => 'default']);
 
     // Indicate whether to connect to memcache using a persistent connection.

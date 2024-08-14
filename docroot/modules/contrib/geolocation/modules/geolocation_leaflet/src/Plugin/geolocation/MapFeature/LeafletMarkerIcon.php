@@ -4,8 +4,8 @@ namespace Drupal\geolocation_leaflet\Plugin\geolocation\MapFeature;
 
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\geolocation\MapFeatureBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapFeatureBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

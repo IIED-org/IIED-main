@@ -66,6 +66,8 @@ information, see
 
 
 ## Maintainers
+[//]: # cSpell:disable
+[//]: # Do not add maintainers to cspell-project-words file
 
 - Tyler Struyk - [iStryker](https://www.drupal.org/u/istryker)
 - Severin Unger - [sevi](https://www.drupal.org/u/sevi)

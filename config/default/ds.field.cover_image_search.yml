@@ -1,3 +1,4 @@
+langcode: en
 id: cover_image_search
 label: 'Cover image search'
 ui_limit: ''

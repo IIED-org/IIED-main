@@ -109,7 +109,7 @@ class PagesIntegrationTest extends IntegrationTestBase {
     $assert_session->pageTextContains('The settings have been saved.');
     // Our admin user for this test doesn't have the "administer permissions"
     // permission, so the permission reminder should not be included.
-    $assert_session->pageTextNotContains('Please remember to set the permissions for the newly enabled searches.');
+    $assert_session->pageTextNotContains('Remember to set the permissions for the newly enabled searches.');
 
     // Edit the search.
     $this->click('.dropbutton-action a[href$="/edit"]');

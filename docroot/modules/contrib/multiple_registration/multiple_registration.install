@@ -7,8 +7,8 @@
  * Contains module installation instructions.
  */
 
-use Drupal\multiple_registration\AvailableUserRolesService;
 use Drupal\Core\Database\Database;
+use Drupal\multiple_registration\AvailableUserRolesService;
 
 /**
  * Implements hook_schema().
@@ -156,6 +156,27 @@ function multiple_registration_update_8205() {
       }
     }
 
+    $config->save();
+  }
+}
+
+/**
+ * Updates the configuration in accordance with the new structure.
+ */
+function multiple_registration_update_8206() {
+  $configFactory = \Drupal::configFactory();
+  $config = $configFactory->getEditable('multiple_registration.create_registration_page_form_config');
+  $available_roles = \Drupal::service('multiple_registration.service')->getAvailableRoles();
+
+  if (!$config->isNew() && !empty($config->getRawData())) {
+    $roles = [];
+    foreach ($available_roles as $rid => $role_name) {
+      if (isset($config->get('roles')[$rid])) {
+        $roles[$rid] = $config->get('roles')[$rid];
+      }
+    }
+    $config->clear('roles');
+    $config->setData($roles);
     $config->save();
   }
 }

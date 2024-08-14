@@ -2,12 +2,12 @@
 
 namespace Drupal\rabbit_hole;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Generates permission for each supported entity type.
@@ -33,11 +33,7 @@ class RabbitHolePermissionGenerator implements ContainerInjectionInterface {
   /**
    * Constructor.
    */
-  public function __construct(
-    EntityTypeManagerInterface $etm,
-    RabbitHoleEntityPluginManager $entity_plugin_manager,
-    TranslationInterface $translation) {
-
+  public function __construct(EntityTypeManagerInterface $etm, RabbitHoleEntityPluginManager $entity_plugin_manager, TranslationInterface $translation) {
     $this->entityTypeManager = $etm;
     $this->rhEntityPluginManager = $entity_plugin_manager;
     $this->stringTranslation = $translation;

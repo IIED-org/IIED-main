@@ -9,7 +9,7 @@ use Drush\Drupal\Commands\sql\SanitizePluginInterface;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * A Drush command file.
+ * A Drush command file to reset or sanitize TFA for users.
  */
 class TfaCommands extends DrushCommands implements SanitizePluginInterface {
 
@@ -21,14 +21,24 @@ class TfaCommands extends DrushCommands implements SanitizePluginInterface {
   protected $database;
 
   /**
+   * TokenManagment service.
+   *
+   * @var \Drupal\tfa\Commands\TfaTokenManagement
+   */
+  protected $tokenManagement;
+
+  /**
    * TfaCommands constructor.
    *
    * @param \Drupal\Core\Database\Connection $database
    *   The database service.
+   * @param \Drupal\tfa\Commands\TfaTokenManagement $token_management
+   *   TFA token management helper service.
    */
-  public function __construct(Connection $database) {
+  public function __construct(Connection $database, TfaTokenManagement $token_management) {
     parent::__construct();
     $this->database = $database;
+    $this->tokenManagement = $token_management;
   }
 
   /**
@@ -54,6 +64,24 @@ class TfaCommands extends DrushCommands implements SanitizePluginInterface {
    */
   public function messages(&$messages, InputInterface $input) {
     $messages[] = dt('Remove recovery codes and other user-specific TFA data.');
+  }
+
+  /**
+   * Resets single user's TFA Data.
+   *
+   * @param array $options
+   *   Options to process.
+   *
+   * @command tfa:reset-user
+   *
+   * @option name A user name to reset.
+   * @option uid A uid to reset.
+   * @option mail A user mail address to reset.
+   *
+   * @aliases tfa-reset-user
+   */
+  public function resetUserTfaData(array $options = ['name' => NULL, 'uid' => NULL, 'mail' => NULL]): void {
+    $this->tokenManagement->resetUserTfaData($options, $this->io());
   }
 
 }

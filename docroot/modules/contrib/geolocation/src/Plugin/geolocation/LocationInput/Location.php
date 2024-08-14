@@ -2,9 +2,9 @@
 
 namespace Drupal\geolocation\Plugin\geolocation\LocationInput;
 
-use Drupal\geolocation\LocationManager;
-use Drupal\geolocation\LocationInputInterface;
 use Drupal\geolocation\LocationInputBase;
+use Drupal\geolocation\LocationInputInterface;
+use Drupal\geolocation\LocationManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

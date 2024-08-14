@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\color_field;
 
@@ -27,10 +27,10 @@ class ColorCMYK extends ColorCMY {
    *   The yellow.
    * @param int $key
    *   The key (black).
-   * @param float $opacity
+   * @param float|null $opacity
    *   The opacity.
    */
-  public function __construct(int $cyan, int $magenta, int $yellow, int $key, float $opacity) {
+  public function __construct(int $cyan, int $magenta, int $yellow, int $key, ?float $opacity) {
     parent::__construct($cyan, $magenta, $yellow, $opacity);
     $this->key = $key;
   }

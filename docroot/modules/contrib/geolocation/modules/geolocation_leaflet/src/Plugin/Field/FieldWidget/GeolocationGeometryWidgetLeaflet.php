@@ -14,13 +14,13 @@ use Drupal\geolocation\Plugin\Field\FieldWidget\GeolocationGeometryWidgetBase;
  *   label = @Translation("Geolocation Geometry Leaflet - GeoJSON"),
  *   field_types = {
  *     "geolocation_geometry_point",
- *     "geolocation_geometry_multi_point",
+ *     "geolocation_geometry_multipoint",
  *     "geolocation_geometry_linestring",
- *     "geolocation_geometry_multi_linestring",
+ *     "geolocation_geometry_multilinestring",
  *     "geolocation_geometry_polygon",
- *     "geolocation_geometry_multi_polygon",
+ *     "geolocation_geometry_multipolygon",
  *     "geolocation_geometry_geometry",
- *     "geolocation_geometry_multi_geometry"
+ *     "geolocation_geometry_geometrycollection"
  *   }
  * )
  */

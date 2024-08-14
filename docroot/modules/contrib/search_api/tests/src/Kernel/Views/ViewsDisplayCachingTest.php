@@ -335,7 +335,7 @@ class ViewsDisplayCachingTest extends KernelTestBase {
    *
    * @see ::testDisplayCacheability
    */
-  public function displayCacheabilityProvider() {
+  public static function displayCacheabilityProvider() {
     return [
       // First test case, using the 'none' caching plugin that is included with
       // Views. This is expected to disable caching.

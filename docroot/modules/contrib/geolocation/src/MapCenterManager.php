@@ -3,10 +3,10 @@
 namespace Drupal\geolocation;
 
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Component\Utility\SortArray;
+use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -99,7 +99,7 @@ class MapCenterManager extends DefaultPluginManager {
       $map_center = $this->createInstance($map_center_id);
       foreach ($map_center->getAvailableMapCenterOptions($context) as $option_id => $label) {
         $option_enable_id = HTML::getUniqueId($option_id . '_enabled');
-        $weight = isset($settings[$option_id]['weight']) ? $settings[$option_id]['weight'] : 0;
+        $weight = $settings[$option_id]['weight'] ?? 0;
 
         $form[$option_id] = [
           '#weight' => $weight,
@@ -113,7 +113,7 @@ class MapCenterManager extends DefaultPluginManager {
               'id' => $option_enable_id,
             ],
             '#type' => 'checkbox',
-            '#default_value' => isset($settings[$option_id]['enable']) ? $settings[$option_id]['enable'] : FALSE,
+            '#default_value' => $settings[$option_id]['enable'] ?? FALSE,
           ],
           'map_center_id' => [
             '#type' => 'value',

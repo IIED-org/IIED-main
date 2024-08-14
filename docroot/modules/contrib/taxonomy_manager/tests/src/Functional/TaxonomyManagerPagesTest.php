@@ -76,7 +76,6 @@ class TaxonomyManagerPagesTest extends BrowserTestBase {
     $this->drupalGet("admin/structure/taxonomy_manager/voc");
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains("Taxonomy manager");
-    $this->assertSession()->pageTextContains("Add new vocabulary");
     $this->drupalLogout();
   }
 

@@ -23,49 +23,15 @@ use Psr\Log\LoggerInterface;
 final class DownloadManager implements DownloadManagerInterface {
 
   /**
-   * The HTTP client.
-   *
-   * @var \GuzzleHttp\Client
+   * Construct the DownloadManager.
    */
-  private Client $client;
-
-  /**
-   * The file system.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
-   */
-  private FileSystemInterface $fileSystem;
-
-  /**
-   * The logger.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  private LoggerInterface $logger;
-
-  /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  private ConfigFactoryInterface $configFactory;
-
-  /**
-   * The lock object.
-   *
-   * @var \Drupal\Core\Lock\LockBackendInterface
-   */
-  private LockBackendInterface $lock;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(Client $client, FileSystemInterface $file_system, LoggerInterface $logger, ConfigFactoryInterface $config_factory, LockBackendInterface $lock) {
-    $this->client = $client;
-    $this->fileSystem = $file_system;
-    $this->logger = $logger;
-    $this->configFactory = $config_factory;
-    $this->lock = $lock;
+  public function __construct(
+    protected Client $client,
+    protected FileSystemInterface $fileSystem,
+    protected LoggerInterface $logger,
+    protected ConfigFactoryInterface $configFactory,
+    protected LockBackendInterface $lock,
+  ) {
   }
 
   /**
@@ -188,12 +154,12 @@ final class DownloadManager implements DownloadManagerInterface {
     }
 
     // It is a styles path, so we extract the different parts.
-    if (strpos($path, 'styles') === 0) {
+    if (str_starts_with($path, 'styles')) {
       // Then the path is like styles/[style_name]/[schema]/[original_path].
       return preg_replace('/styles\/.*\/(.*)\/(.*)/U', '$1://$2', $path);
     }
     // Else it seems to be the original.
-    elseif ($style_only == FALSE) {
+    elseif (!$style_only) {
       return "$scheme://$path";
     }
     else {
@@ -218,7 +184,7 @@ final class DownloadManager implements DownloadManagerInterface {
    * @return bool
    *   True if write was successful. False if write or rename failed.
    */
-  private function writeFile($destination, $data) {
+  private function writeFile(string $destination, string $data): bool {
     // Get a temporary filename in the destination directory.
     $dir = $this->fileSystem->dirname($destination) . '/';
     $temporary_file = $this->fileSystem->tempnam($dir, 'stage_file_proxy_');
@@ -247,7 +213,7 @@ final class DownloadManager implements DownloadManagerInterface {
     // Save to temporary filename in the destination directory.
     $filepath = $this->fileSystem->saveData($data, $temporary_file, FileSystemInterface::EXISTS_REPLACE);
 
-    // Perform the rename operation if the write succeeded.
+    // Perform the rename operation if the "write" operation succeeded.
     if ($filepath) {
       if (!@rename($filepath, $destination)) {
         // Unlink and try again for windows. Rename on windows does not replace

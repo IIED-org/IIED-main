@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation_google_maps\Plugin\geolocation\MapFeature;
 
-use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\geolocation\MapFeatureBase;
 use Drupal\geolocation_google_maps\Plugin\geolocation\MapProvider\GoogleMaps;
 

@@ -18,7 +18,7 @@ class AvailableTestDumper extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public function dump($input, $name = NULL) {
+  public function dump($input, $name = NULL): void {
     // Add a predetermined string to $input to check if this dumper has been
     // selected successfully.
     $input = '<pre>' . 'AvailableTestDumper::dump() ' . $input . '</pre>';
@@ -38,7 +38,7 @@ class AvailableTestDumper extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public function exportAsRenderable($input, $name = NULL) {
+  public function exportAsRenderable($input, $name = NULL): array {
     // Add a predetermined string to $input to check if this dumper has been
     // selected successfully.
     $input = '<pre>' . 'AvailableTestDumper::exportAsRenderable() ' . $input . '</pre>';
@@ -54,7 +54,7 @@ class AvailableTestDumper extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public static function checkRequirements() {
+  public static function checkRequirements(): bool {
     return TRUE;
   }
 

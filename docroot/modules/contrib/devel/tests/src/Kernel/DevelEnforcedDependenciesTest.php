@@ -18,7 +18,7 @@ class DevelEnforcedDependenciesTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['devel', 'block', 'user', 'system'];
+  protected static $modules = ['devel', 'block', 'user', 'system'];
 
   /**
    * {@inheritdoc}
@@ -35,7 +35,7 @@ class DevelEnforcedDependenciesTest extends KernelTestBase {
   /**
    * Tests devel menu enforced dependencies.
    */
-  public function testMenuEnforcedDependencies() {
+  public function testMenuEnforcedDependencies(): void {
     /** @var \Drupal\Core\Config\ConfigManagerInterface $config_manager */
     $config_manager = $this->container->get('config.manager');
 

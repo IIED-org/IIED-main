@@ -11,6 +11,7 @@ use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file_mdm\Plugin\FileMetadataPluginManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * A service class to provide file metadata.
@@ -28,9 +29,11 @@ class FileMetadataManager implements FileMetadataManagerInterface {
 
   public function __construct(
     protected readonly FileMetadataPluginManagerInterface $pluginManager,
+    #[Autowire(service: 'logger.channel.file_mdm')]
     protected readonly LoggerInterface $logger,
     protected readonly ConfigFactoryInterface $configFactory,
     protected readonly FileSystemInterface $fileSystem,
+    #[Autowire(service: 'cache.file_mdm')]
     protected readonly CacheBackendInterface $cache,
     protected readonly StreamWrapperManagerInterface $streamWrapperManager,
   ) {}

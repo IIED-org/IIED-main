@@ -24,7 +24,6 @@ class SingleFilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
    */
   public function testSingleExposedCheckbox() {
     $view = Views::getView('bef_test');
-    $display = &$view->storage->getDisplay('default');
 
     // Change exposed filter "field_bef_boolean" to single on/off (i.e.
     // 'bef_single').

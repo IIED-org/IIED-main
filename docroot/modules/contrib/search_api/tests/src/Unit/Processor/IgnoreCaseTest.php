@@ -49,7 +49,7 @@ class IgnoreCaseTest extends UnitTestCase {
    * @return array[]
    *   Arrays of arguments for testProcess().
    */
-  public function processDataProvider() {
+  public static function processDataProvider() {
     return [
       ['Foo bar', 'foo bar'],
       ['foo Bar', 'foo bar'],

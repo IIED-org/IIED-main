@@ -1,0 +1,26 @@
+{
+  "name": "drupal/views_json_source",
+  "description": "Views Json Source is an extension of views module to work with external JSON data.",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "keywords": ["Drupal"],
+  "homepage": "https://www.drupal.org/project/views_json_source",
+  "authors": [
+    {
+      "name": "Pradeep Venugopal (venugopp)",
+      "homepage": "https://www.drupal.org/u/venugopp",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Viktor Holovachek (AstonVictor)",
+      "homepage": "https://www.drupal.org/u/astonvictor",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/views_json_source",
+    "source": "https://git.drupalcode.org/project/views_json_source"
+  },
+  "require": {  }
+}

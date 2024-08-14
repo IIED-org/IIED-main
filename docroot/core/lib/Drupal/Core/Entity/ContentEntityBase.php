@@ -34,9 +34,9 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
    * are keyed by language code, whereas LanguageInterface::LANGCODE_DEFAULT
    * is used for values in default language.
    *
-   * @todo: Add methods for getting original fields and for determining
+   * @todo Add methods for getting original fields and for determining
    * changes.
-   * @todo: Provide a better way for defining default values.
+   * @todo Provide a better way for defining default values.
    *
    * @var array
    */
@@ -218,7 +218,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
     foreach ($values as $key => $value) {
       // If the key matches an existing property set the value to the property
       // to set properties like isDefaultRevision.
-      // @todo: Should this be converted somehow?
+      // @todo Should this be converted somehow?
       if (property_exists($this, $key) && isset($value[LanguageInterface::LANGCODE_DEFAULT])) {
         $this->$key = $value[LanguageInterface::LANGCODE_DEFAULT];
       }
@@ -738,7 +738,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   /**
    * {@inheritdoc}
    */
-  public function access($operation, AccountInterface $account = NULL, $return_as_object = FALSE) {
+  public function access($operation, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     if ($operation == 'create') {
       return $this->entityTypeManager()
         ->getAccessControlHandler($this->entityTypeId)
@@ -1092,7 +1092,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   /**
    * Implements the magic method for getting object properties.
    *
-   * @todo: A lot of code still uses non-fields (e.g. $entity->content in view
+   * @todo A lot of code still uses non-fields (e.g. $entity->content in view
    *   builders) by reference. Clean that up.
    */
   public function &__get($name) {
@@ -1472,7 +1472,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
     $original = $this->original ? $this->original : NULL;
 
     if (!$original) {
-      $id = $this->getOriginalId() !== NULL ? $this->getOriginalId() : $this->id();
+      $id = $this->getOriginalId() ?? $this->id();
       $original = $this->entityTypeManager()->getStorage($this->getEntityTypeId())->loadUnchanged($id);
     }
 

@@ -31,7 +31,7 @@ class AcquiaSearchData implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     // Don't use AcquiaConnectorEvents::GET_SUBSCRIPTION, due to a race
     // condition caused by the update system when the class may not exist yet.
     $events['acquia_connector_get_subscription'][] = [

@@ -11,6 +11,7 @@ use Drupal\search_api\Entity\Server;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\ServerInterface;
 use Drupal\search_api\Task\TaskManagerInterface;
+use Drupal\search_api_test\MethodOverrides;
 use Drupal\search_api_test\PluginTestTrait;
 use Drupal\user\Entity\User;
 
@@ -137,15 +138,8 @@ class IndexListCacheTest extends KernelTestBase {
 
     // Override test plugin methods to make sure one item is deleted from the
     // server and that indexing the other will throw a TypeError.
-    $this->setMethodOverride('processor', 'alterIndexedItems', function (array &$items) {
-      $id = 'entity:entity_test_mulrev_changed/1:en';
-      $this->assertArrayHasKey($id, $items);
-      unset($items[$id]);
-    });
-    $this->setMethodOverride('backend', 'indexItems', function (IndexInterface $index, array $items) {
-      // This will throw a TypeError.
-      count(1);
-    });
+    $this->setMethodOverride('processor', 'alterIndexedItems', [$this, 'alterIndexedItemsOverride']);
+    $this->setMethodOverride('backend', 'indexItems', [MethodOverrides::class, 'throwTypeError']);
 
     // Indexing lock should be available.
     $this->assertTrue(\Drupal::lock()->lockMayBeAvailable($this->index->getLockId()));
@@ -160,6 +154,22 @@ class IndexListCacheTest extends KernelTestBase {
     // released and the index list cache tag invalidated.
     $this->assertTrue(\Drupal::lock()->lockMayBeAvailable($this->index->getLockId()));
     $this->assertEmpty(\Drupal::cache()->get($cid));
+  }
+
+  /**
+   * Provides a custom override for ProcessorInterface::alterIndexedItems().
+   *
+   * Alters the items to be indexed.
+   *
+   * @param \Drupal\search_api\Item\ItemInterface[] $items
+   *   An array of items to be indexed, passed by reference.
+   *
+   * @see \Drupal\search_api\Processor\ProcessorInterface::alterIndexedItems()
+   */
+  public function alterIndexedItemsOverride(array &$items): void {
+    $id = 'entity:entity_test_mulrev_changed/1:en';
+    $this->assertArrayHasKey($id, $items);
+    unset($items[$id]);
   }
 
 }

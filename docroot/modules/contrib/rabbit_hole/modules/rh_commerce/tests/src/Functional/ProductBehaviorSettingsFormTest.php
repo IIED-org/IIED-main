@@ -44,7 +44,7 @@ class ProductBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTest
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_commerce'];
+  protected static $modules = ['rh_commerce'];
 
   /**
    * {@inheritdoc}

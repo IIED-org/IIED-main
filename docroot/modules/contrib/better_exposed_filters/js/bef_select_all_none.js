@@ -17,16 +17,18 @@
         var selNone = Drupal.t('Select None');
 
         // Set up a prototype link and event handlers.
-        var link = $('<a class="bef-toggle" href="#">' + selAll + '</a>')
+        var link = $('<a class="bef-toggle bef-toggle--select-all" href="#">' + selAll + '</a>');
         link.click(function (event) {
           // Don't actually follow the link...
           event.preventDefault();
           event.stopPropagation();
 
-          if (selAll == $(this).text()) {
+          if (selAll === $(this).text()) {
             // Select all the checkboxes.
             $(this)
               .html(selNone)
+              .removeClass('bef-toggle--select-all')
+              .addClass('bef-toggle--deselect-all')
               .siblings('.bef-select-all-none, .bef-tree')
               .find('input:checkbox').each(function () {
                 $(this).prop('checked', true);
@@ -43,6 +45,8 @@
             // Unselect all the checkboxes.
             $(this)
               .html(selAll)
+              .removeClass('bef-toggle--deselect-all')
+              .addClass('bef-toggle--select-all')
               .siblings('.bef-select-all-none, .bef-tree')
               .find('input:checkbox').each(function () {
                 $(this).prop('checked', false);
@@ -66,9 +70,19 @@
 
             newLink.insertBefore($(this));
 
+             // Show select all/none when single checkbox is checked/unchecked
+             $('input:checkbox', this).click(function() {
+              if ($(this).prop("checked") === true) {
+                newLink.text(selNone);
+              }
+              else if ($(this).prop("checked") === false) {
+                newLink.text(selAll);
+              }
+            });
+
             // If all checkboxes are already checked by default then switch to Select None.
-            if ($('input:checkbox:checked', this).length == $('input:checkbox', this).length) {
-              newLink.text(selNone);
+            if ($('input:checkbox:checked', this).length === $('input:checkbox', this).length) {
+              newLink.text(selNone).removeClass('bef-toggle--select-all').addClass('bef-toggle--deselect-all');
             }
           });
       }
@@ -99,7 +113,7 @@
   };                    // Drupal.behaviors.better_exposed_filters = {.
 
   Drupal.behaviors.betterExposedFiltersAllNoneNested = {
-    attach:function (context, settings) {
+    attach: function (context, settings) {
       $(once('bef-all-none-nested', '.bef-select-all-none-nested ul li')).each(function () {
         var $this = $(this);
         // Check/uncheck child terms along with their parent.
@@ -129,6 +143,6 @@
         });
       });
     }
-  }
+  };
 
 })(jQuery, once);

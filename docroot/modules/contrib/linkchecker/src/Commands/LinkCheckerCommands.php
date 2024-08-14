@@ -3,12 +3,12 @@
 namespace Drupal\linkchecker\Commands;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Psr\Log\LoggerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\linkchecker\LinkCheckerBatch;
 use Drupal\linkchecker\LinkCleanUp;
 use Drupal\linkchecker\LinkExtractorBatch;
 use Drush\Commands\DrushCommands;
+use Psr\Log\LoggerInterface;
 
 /**
  * Drush 10 commands for Linkchecker module.
@@ -57,11 +57,13 @@ class LinkCheckerCommands extends DrushCommands {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   A config factory for retrieving required config objects.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   The logger service.
    * @param \Drupal\linkchecker\LinkExtractorBatch $extractorBatch
    *   The extractor batch helper.
    * @param \Drupal\linkchecker\LinkCheckerBatch $checkerBatch
    *   The checker batch helper.
-   * @param \Drupal\linkchecker\LinkCleanUp  $linkCleanUp
+   * @param \Drupal\linkchecker\LinkCleanUp $linkCleanUp
    *   The link clean up.
    */
   public function __construct(ConfigFactoryInterface $configFactory, LoggerInterface $logger, LinkExtractorBatch $extractorBatch, LinkCheckerBatch $checkerBatch, LinkCleanUp $linkCleanUp) {
@@ -154,11 +156,11 @@ class LinkCheckerCommands extends DrushCommands {
     }
 
     if (empty($baseUrl)) {
-      throw new \Exception($this->t('You MUST configure the site base_url or provide --uri parameter.'));
+      throw new \Exception('You MUST configure the site base_url or provide --uri parameter.');
     }
 
     if (mb_strpos($baseUrl, 'http') !== 0) {
-      throw new \Exception($this->t('Base url should start with http scheme (http:// or https://)'));
+      throw new \Exception('Base url should start with http scheme (http:// or https://)');
     }
   }
 

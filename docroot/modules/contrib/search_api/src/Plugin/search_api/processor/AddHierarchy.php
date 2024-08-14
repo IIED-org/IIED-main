@@ -227,7 +227,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
       $form['fields'][$field_id]['property'] = [
         '#type' => 'radios',
         '#title' => $this->t('Hierarchy property to use'),
-        '#description' => $this->t("This field has several nested properties which look like they might contain hierarchy data for the field. Please pick the one that should be used."),
+        '#description' => $this->t("This field has several nested properties which look like they might contain hierarchy data for the field. Pick the one that should be used."),
         '#options' => $options,
         '#default_value' => $enabled ? $this->configuration['fields'][$field_id] : key($options),
         '#access' => count($options) > 1,

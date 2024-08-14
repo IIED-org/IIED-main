@@ -232,7 +232,7 @@ class MediaFileDeleteSettingsTest extends BrowserTestBase {
   /**
    * Tests the disable user control setting on a single media entity.
    */
-  public function testDisableDeleteControlonSingleMediaEntityDeletion(): void {
+  public function testDisableDeleteControlOnSingleMediaEntityDeletion(): void {
     $session = $this->assertSession();
     // Create file and media entity:
     $fileMediaArray = $this->createMediaEntity();
@@ -257,7 +257,7 @@ class MediaFileDeleteSettingsTest extends BrowserTestBase {
   /**
    * Tests the disable user control setting on a multiple media entities.
    */
-  public function testDisableDeleteControlonMultipleMediaEntityDeletion(): void {
+  public function testDisableDeleteControlOnMultipleMediaEntityDeletion(): void {
     $session = $this->assertSession();
     $page = $this->getSession()->getPage();
     // Create file and media entity:

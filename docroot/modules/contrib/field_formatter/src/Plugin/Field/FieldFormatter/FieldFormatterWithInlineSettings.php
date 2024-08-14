@@ -225,8 +225,8 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
       $formatter_options = $this->getAvailableFormatterOptions($field_storage);
     }
 
-    $form['#prefix'] = '<div id="field-formatter-ajax">';
-    $form['#suffix'] = '</div>';
+    $form['#prefix'] = '<div id="field-formatter-ajax">'. ($form['#prefix'] ?? '');
+    $form['#suffix'] = ($form['#suffix'] ?? '') . '</div>';
     $form['field_name'] = [
       '#type' => 'select',
       '#title' => $this->t('Field name'),
@@ -235,7 +235,7 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
       // Note: We cannot use ::foo syntax, because the form is the entity form
       // display.
       '#ajax' => [
-        'callback' => [get_class(), 'onFieldNameChange'],
+        'callback' => [get_class($this), 'onFieldNameChange'],
         'wrapper' => 'field-formatter-ajax',
         'method' => 'replace',
       ],
@@ -269,7 +269,7 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
         // Note: We cannot use ::foo syntax, because the form is the entity form
         // display.
         '#ajax' => [
-          'callback' => [get_class(), 'onFormatterTypeChange'],
+          'callback' => [get_class($this), 'onFormatterTypeChange'],
           'wrapper' => 'field-formatter-settings-ajax',
           'method' => 'replace',
         ],
@@ -292,8 +292,8 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
         $settings_form = $formatter->settingsForm([], $form_state);
       }
       $form['settings'] = $settings_form;
-      $form['settings']['#prefix'] = '<div id="field-formatter-settings-ajax">';
-      $form['settings']['#suffix'] = '</div>';
+      $form['settings']['#prefix'] = '<div id="field-formatter-settings-ajax">' . ($form['settings']['#prefix'] ?? '');
+      $form['settings']['#suffix'] = ($form['settings']['#suffix'] ?? '') . '</div>';
     }
 
     return $form;

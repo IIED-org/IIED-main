@@ -185,9 +185,9 @@ class PolicyConfiguration extends ProcessPluginBase implements ContainerFactoryP
   private function transformV1(array &$value) {
     $value['label'] = $value['name'];
     $value['password_reset'] = $value['expiration'];
-    $value['send_reset_email'] = ($value['warning'] !== 0) ? 1 : 0;
+    $value['send_reset_email'] = ($value['warning'] !== 0) ? TRUE : FALSE;
     $value['days'] = explode(',', $value['warning']);
-    $unserialize_constraints = unserialize($value["constraints"]);
+    $unserialize_constraints = unserialize($value["constraints"], ['allowed_classes' => FALSE]);
     unset($value['constraints']);
     $policy_constraints_index = 0;
     foreach ($unserialize_constraints as $constraint => $count) {

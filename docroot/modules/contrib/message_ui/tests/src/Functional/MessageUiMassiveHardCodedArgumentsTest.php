@@ -14,7 +14,7 @@ class MessageUiMassiveHardCodedArgumentsTest extends AbstractTestMessageUi {
   /**
    * The message template object.
    *
-   * @var \Drupal\message\Entity\MessageTemplateInterface
+   * @var \Drupal\message\MessageTemplateInterface
    */
   protected $messageTemplate;
 

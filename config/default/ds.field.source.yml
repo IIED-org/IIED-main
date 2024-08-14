@@ -1,3 +1,4 @@
+langcode: en
 id: source
 label: Source
 ui_limit: 'publication|*'

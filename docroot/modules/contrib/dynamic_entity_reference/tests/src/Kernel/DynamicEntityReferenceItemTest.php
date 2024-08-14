@@ -3,8 +3,8 @@
 namespace Drupal\Tests\dynamic_entity_reference\Kernel;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldItemInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\entity_test\Entity\EntityTest;

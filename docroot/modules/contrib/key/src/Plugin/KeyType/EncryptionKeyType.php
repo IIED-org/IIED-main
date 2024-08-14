@@ -121,7 +121,7 @@ class EncryptionKeyType extends KeyTypeBase implements KeyPluginFormInterface {
 
     // Validate the key size.
     $bytes = $form_state->getValue('key_size') / 8;
-    if (strlen($key_value) != $bytes) {
+    if (is_string($key_value) && (strlen($key_value) != $bytes)) {
       $form_state->setErrorByName('key_size', $this->t('The selected key size does not match the actual size of the key.'));
     }
   }

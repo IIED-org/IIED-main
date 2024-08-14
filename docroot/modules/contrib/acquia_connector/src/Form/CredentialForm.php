@@ -124,6 +124,7 @@ class CredentialForm extends FormBase {
 
     // Our status gets updated locally via the return data.
     // Don't use dependency injection here because we just created the sub.
+    // phpcs:ignore
     $subscription = \Drupal::service('acquia_connector.subscription');
     $subscription->populateSettings();
 

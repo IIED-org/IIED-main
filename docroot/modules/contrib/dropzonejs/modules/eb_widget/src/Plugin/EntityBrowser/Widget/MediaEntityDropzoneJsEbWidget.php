@@ -57,6 +57,7 @@ class MediaEntityDropzoneJsEbWidget extends DropzoneJsEbWidget {
   public function defaultConfiguration() {
     return array_merge(parent::defaultConfiguration(), [
       'media_type' => '',
+      'inherit_settings' => TRUE,
     ]);
   }
 
@@ -104,10 +105,27 @@ class MediaEntityDropzoneJsEbWidget extends DropzoneJsEbWidget {
       ]);
     }
 
+    $form['inherit_settings'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Inherit settings from the media type'),
+      '#default_value' => $this->configuration['inherit_settings'],
+      '#weight' => 20,
+      '#attributes' => ['class' => ['dropzonejs-inherit-settings']],
+    ];
+
+    $states = [
+      'visible' => [
+        '.dropzonejs-inherit-settings' => ['checked' => FALSE],
+      ]
+    ];
+
     // Remove these config options as these are propagated from the field.
-    $form['max_filesize']['#access'] = FALSE;
-    $form['extensions']['#access'] = FALSE;
-    $form['upload_location']['#access'] = FALSE;
+    $form['max_filesize']['#weight'] = 21;
+    $form['max_filesize']['#states'] = $states;
+    $form['extensions']['#weight'] = 22;
+    $form['extensions']['#states'] = $states;
+    $form['upload_location']['#weight'] = 23;
+    $form['upload_location']['#states'] = $states;
 
     return $form;
   }
@@ -176,14 +194,21 @@ class MediaEntityDropzoneJsEbWidget extends DropzoneJsEbWidget {
    * {@inheritdoc}
    */
   protected function handleWidgetContext($widget_context) {
-    parent::handleWidgetContext($widget_context);
-    $bundle = $this->getType();
-    $source = $bundle->getSource();
-    $field = $source->getSourceFieldDefinition($bundle);
-    $field_storage = $field->getFieldStorageDefinition();
-    $this->configuration['upload_location'] = $field_storage->getSettings()['uri_scheme'] . '://' . $field->getSettings()['file_directory'];
-    $this->configuration['max_filesize'] = $field->getSettings()['max_filesize'];
-    $this->configuration['extensions'] = $field->getSettings()['file_extensions'];
+    // Copied default implementation to prevent the parent method from
+    foreach ($this->defaultConfiguration() as $key => $value) {
+      if (isset($widget_context[$key]) && isset($this->configuration[$key])) {
+        $this->configuration[$key] = $widget_context[$key];
+      }
+    }
+    if ($this->configuration['inherit_settings']) {
+      $bundle = $this->getType();
+      $source = $bundle->getSource();
+      $field = $source->getSourceFieldDefinition($bundle);
+      $field_storage = $field->getFieldStorageDefinition();
+      $this->configuration['upload_location'] = $field_storage->getSettings()['uri_scheme'] . '://' . $field->getSettings()['file_directory'];
+      $this->configuration['max_filesize'] = $field->getSettings()['max_filesize'];
+      $this->configuration['extensions'] = $field->getSettings()['file_extensions'];
+    }
   }
 
 }

@@ -20,17 +20,13 @@ class RouteSubscriber extends RouteSubscriberBase {
 
   /**
    * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The router service.
-   *
-   * @var \Symfony\Component\Routing\RouterInterface
    */
-  protected $routeProvider;
+  protected RouteProviderInterface $routeProvider;
 
   /**
    * Constructs a new RouteSubscriber object.
@@ -87,9 +83,13 @@ class RouteSubscriber extends RouteSubscriberBase {
         ->setOption('_admin_route', TRUE)
         ->setOption('_devel_entity_type_id', $entity_type->id());
 
-      if ($parameters = $this->getRouteParameters($entity_type, 'edit-form')) {
-        $route->setOption('parameters', $parameters);
-      }
+      // Set the parameters of the new route using the existing 'edit-form'
+      // route parameters. If there are none (for example, where Devel creates
+      // a link for entities with no edit-form) then we need to set the basic
+      // parameter [entity_type_id => [type => 'entity:entity_type_id']].
+      // @see https://gitlab.com/drupalspoons/devel/-/issues/377
+      $parameters = $this->getRouteParameters($entity_type, 'edit-form') ?: [$entity_type->id() => ['type' => 'entity:' . $entity_type->id()]];
+      $route->setOption('parameters', $parameters);
 
       return $route;
     }

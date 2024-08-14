@@ -2,8 +2,8 @@
 
 namespace Drupal\rabbit_hole\Plugin;
 
-use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -25,14 +25,7 @@ abstract class RabbitHoleBehaviorPluginBase extends PluginBase implements Rabbit
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(
-    array &$form,
-    FormStateInterface $form_state,
-    $form_id,
-    EntityInterface $entity = NULL,
-    $entity_is_bundle = FALSE,
-    ImmutableConfig $bundle_settings = NULL
-  ) {
+  public function settingsForm(array &$form, FormStateInterface $form_state, $form_id, EntityInterface $entity = NULL, $entity_is_bundle = FALSE, ImmutableConfig $bundle_settings = NULL) {
     // Present no settings form.
   }
 
@@ -68,6 +61,7 @@ abstract class RabbitHoleBehaviorPluginBase extends PluginBase implements Rabbit
    */
   protected function getBundleSettings(EntityInterface $entity) {
     $bundle_entity_type = $entity->getEntityType()->getBundleEntityType();
+    // @phpstan-ignore-next-line
     return \Drupal::service('rabbit_hole.behavior_settings_manager')
       ->loadBehaviorSettingsAsConfig(
         $bundle_entity_type ?: $entity->getEntityType()->id(),

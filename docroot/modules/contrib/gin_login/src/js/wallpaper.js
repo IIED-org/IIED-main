@@ -24,6 +24,7 @@
       const wallpaper = wallpapers[Math.floor(Math.random() * wallpapers.length)];
       let image = new Image();
       image.src = path+wallpaper;
+      image.alt = '';
       document.querySelector('.gin-login .user-form-page__wallpaper').appendChild(image);
     },
 

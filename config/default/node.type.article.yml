@@ -13,7 +13,7 @@ _core:
 name: Article
 type: article
 description: 'Theme-based page such as interview, research update, essay, background, summary or case study.'
-help: ''
+help: null
 new_revision: true
 preview_mode: 1
 display_submitted: false

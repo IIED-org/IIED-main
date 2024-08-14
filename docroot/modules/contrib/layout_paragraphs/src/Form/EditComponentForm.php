@@ -28,7 +28,8 @@ class EditComponentForm extends ComponentFormBase {
     $this->paragraph = $this->layoutParagraphsLayout
       ->getComponentByUuid($component_uuid)
       ->getEntity();
-    $form = $this->buildComponentForm($form, $form_state);
+    $form_display_mode = $this->layoutParagraphsLayout->getSetting('form_display_mode');
+    $form = $this->buildComponentForm($form, $form_state, $form_display_mode);
 
     if ($selected_layout = $form_state->getValue(['layout_paragraphs', 'layout'])) {
       $section = $this->layoutParagraphsLayout->getLayoutSection($this->paragraph);

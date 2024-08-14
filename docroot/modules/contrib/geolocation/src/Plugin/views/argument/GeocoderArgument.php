@@ -2,9 +2,9 @@
 
 namespace Drupal\geolocation\Plugin\views\argument;
 
-use Drupal\geolocation\GeocoderManager;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\geolocation\GeocoderManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

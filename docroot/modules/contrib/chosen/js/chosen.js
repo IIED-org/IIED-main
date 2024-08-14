@@ -6,6 +6,17 @@
 (function($, Drupal, drupalSettings, once) {
   'use strict';
 
+  // Define a fallback for jQuery.trim using String.prototype.trim
+  // as it has been removed from jQuery 4.0.0.
+  if (typeof $ !== "undefined" && typeof $.trim === "undefined") {
+    $.trim = function(text) {
+      if (text == null) {
+        return "";
+      }
+      return String.prototype.trim.call(String(text));
+    };
+  }
+
   // Temporal workaround while  https://github.com/harvesthq/chosen/issues/515
   // is fixed. This fix was taken from:
   // https://github.com/harvesthq/chosen/issues/515#issuecomment-104602031

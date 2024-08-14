@@ -6,3 +6,4 @@ name: Series
 vid: series
 description: 'Publication series'
 weight: -9
+new_revision: false

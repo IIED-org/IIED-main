@@ -20,30 +20,38 @@
         $('.taxonomy-manager-autocomplete-input').show();
         return true;
       });
-      // Handle click on autocomplete suggestion
-      $(once('input', '.ui-autocomplete', context)).on('click', function (e) {
-        e.stopPropagation();
-        var tidMatch = $('input[name="search_terms"]').val().match(/\([0-9]*\)/g)
-        if (tidMatch.length) {
-          var tid = parseInt(tidMatch[0].replace(/^[^0-9]+/, ''), 10);
-          // Request tree keys to activate via ajax.
-          $.ajax({
-            url: Drupal.url('taxonomy_manager/subtree/child-parents'),
-            dataType: 'json',
-            data: {
-              'tid': tid
-            },
-            success: function (termData) {
-              var $tree = $("#edit-taxonomy-manager-tree").fancytree("getTree");
-              var path = termData.path;
-              $tree.loadKeyPath(path).progress(function (keyData) {
-                if (keyData.status === 'ok') {
-                  $tree.activateKey(keyData.node.key);
-                }
-              });
-            }
-          });
-        }
+
+      once('input','input[name="search_terms"]', context).forEach(value => {
+        const uiAutocomplete = $(value);
+
+        //Bind the autocomplete widget to the input field
+        // @see https://api.jqueryui.com/autocomplete/#event-select
+        uiAutocomplete.bind('autocompleteselect', (event, ui) => {
+          event.stopPropagation();
+          const tidMatch = ui.item.value.match(/\([0-9]*\)/g)
+          if (tidMatch.length) {
+            const tid = parseInt(tidMatch[0].replace(/^[^0-9]+/, ''), 10);
+            $.ajax({
+              url: Drupal.url('taxonomy_manager/subtree/child-parents'),
+              dataType: 'json',
+              data: {
+                'tid': tid
+              },
+              success: termData => {
+                const $tree = $("#edit-taxonomy-manager-tree").fancytree("getTree");
+                const path = termData.path;
+                $tree.loadKeyPath(path).progress(keyData => {
+                  if (keyData.status === 'ok') {
+                    $tree.activateKey(keyData.node.key);
+                  }
+                });
+              },
+              error: (jqXHR, textStatus, errorThrown) => {
+                console.error(`Request failed: ${textStatus}, ${errorThrown}`);
+              }
+            });
+          }
+        });
       });
     }
   };
@@ -88,8 +96,8 @@
       },
       source: source,
       select: function (event, data) {
-        // We update the the form inputs on every checkbox state change as
-        // ajax events might require the latest state.
+        // We update the form inputs on every checkbox state change as ajax
+        // events might require the latest state.
         data.tree.generateFormElements(name + '[]');
         // If no item is selected then disable delete button.
         if (data.tree.getSelectedNodes().length < 1) {
@@ -101,6 +109,13 @@
             $deleteButton.classList.remove('is-disabled');
           }
         }
+
+        // Create custom event for tree selection so other modules are able to
+        // react on selection changes.
+        let treeSelectEvent = new CustomEvent('taxonomy_manager-tree-select', {
+          detail: data
+        });
+        document.dispatchEvent(treeSelectEvent);
       },
       focus: function (event, data) {
         new Drupal.TaxonomyManagerTermData(data.node.key, data.tree);

@@ -12,7 +12,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 /**
  * Implements hook_entity_base_field_info_alter().
  */
-function devel_generate_fields_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
+function devel_generate_fields_entity_base_field_info_alter(array &$fields, EntityTypeInterface $entity_type): void {
   if (in_array($entity_type->id(), ['node', 'media'])) {
     $fields['phish'] = BaseFieldDefinition::create('string')
       ->setName('phish')

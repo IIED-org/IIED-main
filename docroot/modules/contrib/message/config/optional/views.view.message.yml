@@ -1,4 +1,3 @@
-uuid: 746ddbc4-4082-4754-bf00-dd6fe24048d5
 langcode: en
 status: true
 dependencies:
@@ -6,8 +5,6 @@ dependencies:
     - message
     - system
     - user
-_core:
-  default_config_hash: GKrcfaIe9qBlUC4cSTPci6aze8glF3EohYpBrN0chic
 id: message
 label: Message
 module: views
@@ -15,7 +12,6 @@ description: ''
 tag: ''
 base_table: message_field_data
 base_field: mid
-core: 8.x
 display:
   default:
     display_plugin: default
@@ -570,7 +566,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: admin/content/messages
+      path: admin/content/message
       menu:
         type: tab
         title: Message

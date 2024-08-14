@@ -6,7 +6,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\linkchecker\Plugin\LinkExtractorBase;
 
 /**
- * Class HtmlLinkExtractor.
+ * Created a class to extract links.
  *
  * @LinkExtractor(
  *   id = "html_link_extractor",
@@ -102,8 +102,7 @@ class HtmlLinkExtractor extends LinkExtractorBase {
         // Finds param tags with links in the object tag.
         $params = $object->getElementsByTagName('param');
         foreach ($params as $param) {
-          // @todo
-          // - Try to extract links in unkown "flashvars" values
+          // @todo Try to extract links in unkown "flashvars" values
           //   (e.g., file=http://, data=http://).
           $names = ['archive', 'filename', 'href', 'movie', 'src', 'url'];
           if ($param->hasAttribute('name') && in_array($param->getAttribute('name'), $names)) {

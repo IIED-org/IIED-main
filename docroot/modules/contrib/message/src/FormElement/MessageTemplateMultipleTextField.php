@@ -30,6 +30,13 @@ class MessageTemplateMultipleTextField {
   protected $callback;
 
   /**
+   * The language code of the element.
+   *
+   * @var string
+   */
+  protected $langcode;
+
+  /**
    * Constructing the element.
    *
    * @param \Drupal\message\Entity\MessageTemplate $entity
@@ -113,7 +120,7 @@ class MessageTemplateMultipleTextField {
   protected function singleElement($delta, array $text) {
     $element = [
       '#type' => 'text_format',
-      '#format' => isset($text['format']) ? $text['format'] : filter_default_format(),
+      '#format' => $text['format'] ?? filter_default_format(),
       '#default_value' => $text['value'],
       '#rows' => 1,
     ];

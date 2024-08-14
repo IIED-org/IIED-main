@@ -24,7 +24,7 @@ class ProductBehaviorInvocationTest extends RabbitHoleBehaviorInvocationTestBase
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_commerce'];
+  protected static $modules = ['rh_commerce'];
 
   /**
    * Product type.

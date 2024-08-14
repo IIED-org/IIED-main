@@ -2,16 +2,16 @@
 
 namespace Drupal\geolocation;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Plugin\PluginBase;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemInterface;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\views\ResultRow;
+use Drupal\Core\Plugin\PluginBase;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Component\Utility\Html;
+use Drupal\views\ResultRow;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class DataProvider Base.
@@ -217,8 +217,21 @@ abstract class DataProviderBase extends PluginBase implements DataProviderInterf
   public function getPositionsFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
     $positions = [];
 
-    foreach ($this->getFieldItemsFromViewsRow($row, $viewsField) as $item) {
-      $positions = array_merge($this->getPositionsFromItem($item), $positions);
+    if (!$viewsField) {
+      $viewsField = $this->viewsField;
+    }
+
+    if (!empty($viewsField->limit_values)) {
+      // Get position from row value.
+      $lat_field_name = $viewsField->table . '_' . $viewsField->field . '_lat';
+      $lng_field_name = $viewsField->table . '_' . $viewsField->field . '_lng';
+      $positions[] = ['lat' => $row->$lat_field_name, 'lng' => $row->$lng_field_name];
+    }
+    else {
+      // Get all positions from row entity values.
+      foreach ($this->getFieldItemsFromViewsRow($row, $viewsField) as $item) {
+        $positions = array_merge($this->getPositionsFromItem($item), $positions);
+      }
     }
 
     return $positions;
@@ -254,11 +267,11 @@ abstract class DataProviderBase extends PluginBase implements DataProviderInterf
    * {@inheritdoc}
    */
   protected function getFieldItemsFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
-    if (empty($viewsField)) {
-      if (empty($this->viewsField)) {
-        return [];
-      }
+    if (!$viewsField) {
       $viewsField = $this->viewsField;
+    }
+    if (!$viewsField) {
+      return [];
     }
 
     $entity = $viewsField->getEntity($row);

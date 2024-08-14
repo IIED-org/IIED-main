@@ -3,9 +3,9 @@
 namespace Drupal\geolocation_geometry\Feeds\Target;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\feeds\FieldTargetDefinition;
 use Drupal\feeds\Plugin\Type\Target\FieldTargetBase;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Defines a geolocation field mapper for WKT/JSON sources.
@@ -74,7 +74,7 @@ class GeolocationGeometryBase extends FieldTargetBase {
    * {@inheritdoc}
    */
   protected function prepareValue($delta, array &$values) {
-    switch($this->configuration['format']) {
+    switch ($this->configuration['format']) {
       case 'wkt':
         $values['wkt'] = $values['placeholder'];
         break;
@@ -83,7 +83,7 @@ class GeolocationGeometryBase extends FieldTargetBase {
         $values['json'] = $values['placeholder'];
         break;
     }
-    unset ($values['placeholder']);
+    unset($values['placeholder']);
   }
 
   /**

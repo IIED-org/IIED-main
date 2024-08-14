@@ -23,71 +23,35 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class StageFileProxySubscriber implements EventSubscriberInterface {
 
   /**
-   * The manager used to fetch the file against.
-   *
-   * @var \Drupal\stage_file_proxy\DownloadManagerInterface
-   */
-  protected $manager;
-
-  /**
-   * The logger.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected $logger;
-
-  /**
-   * The event dispatcher.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $eventDispatcher;
-
-  /**
-   * The configuration factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
    * Construct the FetchManager.
    *
    * @param \Drupal\stage_file_proxy\DownloadManagerInterface $manager
    *   The manager used to fetch the file against.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger interface.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   The event dispatcher.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack.
    */
-  public function __construct(DownloadManagerInterface $manager, LoggerInterface $logger, EventDispatcherInterface $event_dispatcher, ConfigFactoryInterface $config_factory, RequestStack $request_stack) {
-    $this->manager = $manager;
-    $this->logger = $logger;
-    $this->eventDispatcher = $event_dispatcher;
-    $this->configFactory = $config_factory;
-    $this->requestStack = $request_stack;
+  public function __construct(
+    protected DownloadManagerInterface $manager,
+    protected LoggerInterface $logger,
+    protected EventDispatcherInterface $eventDispatcher,
+    protected ConfigFactoryInterface $configFactory,
+    protected RequestStack $requestStack,
+  ) {
   }
 
   /**
-   * Fetch the file from it's origin.
+   * Fetch the file from its origin.
    *
    * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The event to process.
-   *
-   * @todo Drop GetRequestEvent typehint when dropping Drupal 9 support.
    */
-  public function checkFileOrigin(RequestEvent|GetRequestEvent $event) {
+  public function checkFileOrigin(RequestEvent $event) {
     $config = $this->configFactory->get('stage_file_proxy.settings');
 
     // Get the origin server.
@@ -108,12 +72,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
 
     $request_path = mb_substr($request_path, 1);
 
-    if (strpos($request_path, '' . $file_dir) !== 0) {
-      return;
-    }
-
-    // Disallow directory traversal.
-    if (in_array('..', explode('/', $request_path))) {
+    if (!str_starts_with($request_path, '' . $file_dir)) {
       return;
     }
 
@@ -155,18 +114,11 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
     // If file is fetched and use_imagecache_root is set, original is used.
     $paths = [$relative_path];
 
-    // Image style file conversion support.
-    $unconverted_path = static::getFilePathWithoutConvertedExtension($relative_path);
-    if ($unconverted_path !== $relative_path) {
-      if ($config->get('use_imagecache_root')) {
-        // Check the unconverted file path first in order to use the local
-        // original image.
-        array_unshift($paths, $unconverted_path);
-      }
-      else {
-        // Check the unconverted path after the image derivative.
-        $paths[] = $unconverted_path;
-      }
+    // Webp support.
+    $is_webp = FALSE;
+    if (strpos($relative_path, '.webp')) {
+      $paths[] = str_replace('.webp', '', $relative_path);
+      $is_webp = TRUE;
     }
 
     foreach ($paths as $relative_path) {
@@ -182,12 +134,12 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
       // Is this imagecache? Request the root file and let imagecache resize.
       // We check this first so locally added files have precedence.
       $original_path = $this->manager->styleOriginalPath($relative_path, TRUE);
-      if ($original_path) {
+      if ($original_path && !$is_webp) {
         if (file_exists($original_path)) {
           // Imagecache can generate it without our help.
           return;
         }
-        if ($config->get('use_imagecache_root') && $unconverted_path === $relative_path) {
+        if ($config->get('use_imagecache_root')) {
           // Config says: Fetch the original.
           $fetch_path = StreamWrapperManager::getTarget($original_path);
         }
@@ -198,6 +150,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
       $options = [
         'verify' => $config->get('verify'),
         'query' => $query_parameters,
+        'headers' => $this->createProxyHeadersArray($config->get('proxy_headers')),
       ];
 
       if ($config->get('hotlink')) {
@@ -235,6 +188,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
    *   Defaults to the $path when the $path does not have a double extension.
    *
    * @todo Use ImageStyleDownloadController method for a URI once https://www.drupal.org/project/drupal/issues/2786735 has been committed.
+   * @todo this is used by #3402972 but caused regressions.
    */
   public static function getFilePathWithoutConvertedExtension(string $path): string {
     $original_path = $path;
@@ -258,10 +212,31 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
    * @return array
    *   An array of event listener definitions.
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     // Priority 240 is after ban middleware but before page cache.
     $events[KernelEvents::REQUEST][] = ['checkFileOrigin', 240];
     return $events;
+  }
+
+  /**
+   * Helper function to generate HTTP headers array.
+   *
+   * @param string $headers_string
+   *   Header string to break apart.
+   *
+   * @return array
+   *   Any array for proxy headers.
+   */
+  protected function createProxyHeadersArray(string $headers_string): array {
+    $lines = explode("\n", $headers_string);
+    $headers = [];
+    foreach ($lines as $line) {
+      $header = explode('|', $line);
+      if (count($header) > 1) {
+        $headers[$header[0]] = $header[1];
+      }
+    }
+    return $headers;
   }
 
 }

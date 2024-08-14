@@ -1,0 +1,274 @@
+default:
+  image: drupalci/php-8.1-apache:production
+
+variables:
+  ORCA_VERSION: ^4
+  ORCA_SUT_NAME: drupal/acquia_connector
+  ORCA_SUT_BRANCH: 4.x
+  ORCA_SUT_DIR: $CI_PROJECT_DIR
+  ORCA_PACKAGES_CONFIG_ALTER: $CI_PROJECT_DIR/.acquia/packages_alter.yml
+  # Specify JUNIT log file path for tests results to show up in Tests tab (need not be changed).
+  ORCA_JUNIT_LOG: $CI_PROJECT_DIR/var/logs/junit.xml
+  # CPU allocation for containers.
+  # Projects with complex tests are welcome to increase this.
+  # Keeping this low helps jobs find an available runner without waiting.
+  KUBERNETES_CPU_REQUEST: 2
+
+.with-chrome: &with-chrome
+  name: drupalci/chromedriver:production
+  alias: chrome-orca
+  entrypoint:
+    - chromedriver
+    - "--no-sandbox"
+    - "--log-path=/tmp/chromedriver.log"
+    - "--verbose"
+    - "--whitelisted-ips="
+
+.orca_run_tests:
+  stage: test
+  services:
+    - <<: *with-chrome
+  script:
+    - apt update && apt upgrade -y
+    # Installing missing packages.
+    - apt-get update && apt-get install -y apt-utils libsodium-dev patch unzip
+    # Installing sodiun extension required by ACMS.
+    - |
+      php_version="$(php -r 'echo PHP_VERSION;' | cut -d '.' -f 1,2)"
+      if [ ${php_version} = 8.1 ]; then
+        apt-get update && apt-get install -y --no-install-recommends --allow-downgrades \
+          autoconf ca-certificates curl file  g++ gcc gdb gnupg2 libc-dev libedit2 \
+          libsqlite3-0 	libxml2  make pkg-config 	re2c 	rsync unzip xz-utils \
+          && rm -rf /var/lib/apt/lists/*;
+
+        export PHP_URL="https://secure.php.net/get/php-8.1.28.tar.xz/from/this/mirror";
+
+        set -xe; 		fetchDeps='wget'; apt-get update; apt-get install -y --no-install-recommends --allow-downgrades $fetchDeps;
+        rm -rf /var/lib/apt/lists/*;
+        mkdir -p /usr/src; 	cd /usr/src;
+        wget -O php.tar.xz "$PHP_URL";
+        apt-get purge -y --auto-remove $fetchDeps
+      fi
+    - cd $CI_PROJECT_DIR
+    - docker-php-ext-install sodium
+    - composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca $ORCA_VERSION
+    - |
+      # We need to have dev-dependencies like phan/phan in STATIC_CODE_ANALYSIS job.
+      if [[ "$ORCA_JOB" == "STATIC_CODE_ANALYSIS" ]]; then
+        composer -d"../orca" install
+      fi
+    - |
+      if [ "$ORCA_COVERAGE_COBERTURA_ENABLE" = "TRUE" ]; then
+        echo xdebug.mode=coverage > /usr/local/etc/php/conf.d/xdebug.ini
+        echo zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20210902/xdebug.so >> /usr/local/etc/php/conf.d/xdebug.ini
+      fi
+    - cd $CI_PROJECT_DIR
+    - ../orca/bin/ci/before_install.sh
+    - ../orca/bin/ci/install.sh
+    - ../orca/bin/ci/script.sh
+  after_script:
+    - ../orca/bin/ci/after_success.sh
+    - ../orca/bin/ci/after_failure.sh
+    - ../orca/bin/ci/after_script.sh
+  artifacts:
+    expire_in: 6 mos
+    when: always
+    reports:
+      junit: $CI_PROJECT_DIR/var/logs/junit.xml
+    paths:
+      - $CI_PROJECT_DIR/var/logs/junit.xml
+
+# PHP 8.0 tests.
+INTEGRATED_TEST_ON_LATEST_EOL_MAJOR_PHP8:
+  image: drupalci/php-8.0-apache:production
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_LATEST_EOL_MAJOR"
+    ORCA_VERSION: ^3
+
+# PHP 8.1 tests.
+STATIC_CODE_ANALYSIS:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "STATIC_CODE_ANALYSIS"
+
+INTEGRATED_TEST_ON_LATEST_EOL_MAJOR:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_LATEST_EOL_MAJOR"
+
+INTEGRATED_TEST_ON_OLDEST_SUPPORTED:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_OLDEST_SUPPORTED"
+
+INTEGRATED_TEST_ON_LATEST_LTS:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_LATEST_LTS"
+
+INTEGRATED_TEST_ON_PREVIOUS_MINOR:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_PREVIOUS_MINOR"
+
+ISOLATED_TEST_ON_CURRENT:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT"
+
+ISOLATED_TEST_ON_CURRENT_DEV:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT_DEV"
+
+ISOLATED_TEST_ON_CURRENT_COVERAGE:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT"
+    ORCA_COVERAGE_COBERTURA_ENABLE: "TRUE"
+    ORCA_COVERAGE_COBERTURA: "$CI_PROJECT_DIR/var/logs/cobertura.xml"
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/var/logs/cobertura.xml
+      - $CI_PROJECT_DIR/var/logs/junit.xml
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: $CI_PROJECT_DIR/var/logs/cobertura.xml
+
+INTEGRATED_TEST_ON_CURRENT:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_CURRENT"
+
+INTEGRATED_TEST_ON_CURRENT_DEV:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_CURRENT_DEV"
+
+ISOLATED_TEST_ON_NEXT_MINOR:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "ISOLATED_TEST_ON_NEXT_MINOR"
+
+ISOLATED_TEST_ON_NEXT_MINOR_DEV:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "ISOLATED_TEST_ON_NEXT_MINOR_DEV"
+
+INTEGRATED_TEST_ON_NEXT_MINOR:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_NEXT_MINOR"
+
+INTEGRATED_TEST_ON_NEXT_MINOR_DEV:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_NEXT_MINOR_DEV"
+
+DEPRECATED_CODE_SCAN_W_CONTRIB:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "DEPRECATED_CODE_SCAN_W_CONTRIB"
+
+LOOSE_DEPRECATED_CODE_SCAN:
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "LOOSE_DEPRECATED_CODE_SCAN"
+
+
+# PHP 8.3 tests.
+STATIC_CODE_ANALYSIS_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "STATIC_CODE_ANALYSIS"
+
+ISOLATED_TEST_ON_CURRENT_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT"
+
+ISOLATED_TEST_ON_CURRENT_DEV_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "ISOLATED_TEST_ON_CURRENT_DEV"
+
+INTEGRATED_TEST_ON_CURRENT_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_CURRENT"
+
+INTEGRATED_TEST_ON_CURRENT_DEV_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_CURRENT_DEV"
+
+ISOLATED_TEST_ON_NEXT_MINOR_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "ISOLATED_TEST_ON_NEXT_MINOR"
+
+ISOLATED_TEST_ON_NEXT_MINOR_DEV_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "ISOLATED_TEST_ON_NEXT_MINOR_DEV"
+
+INTEGRATED_TEST_ON_NEXT_MINOR_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_NEXT_MINOR"
+
+INTEGRATED_TEST_ON_NEXT_MINOR_DEV_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "INTEGRATED_TEST_ON_NEXT_MINOR_DEV"
+
+DEPRECATED_CODE_SCAN_W_CONTRIB_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "DEPRECATED_CODE_SCAN_W_CONTRIB"
+
+LOOSE_DEPRECATED_CODE_SCAN_PHP83:
+  image: drupalci/php-8.3-apache:production-old
+  extends:
+    - .orca_run_tests
+  variables:
+    ORCA_JOB: "LOOSE_DEPRECATED_CODE_SCAN"

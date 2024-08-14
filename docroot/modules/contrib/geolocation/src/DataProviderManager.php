@@ -2,13 +2,13 @@
 
 namespace Drupal\geolocation;
 
-use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\views\Plugin\views\field\FieldPluginBase;
 
 /**
  * Search plugin manager.

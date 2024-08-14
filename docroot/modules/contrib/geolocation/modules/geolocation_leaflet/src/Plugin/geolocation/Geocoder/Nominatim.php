@@ -2,11 +2,11 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\Geocoder;
 
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Url;
 use Drupal\geolocation\GeocoderBase;
 use Drupal\geolocation\GeocoderInterface;
-use Drupal\Component\Serialization\Json;
 use GuzzleHttp\Exception\RequestException;
-use Drupal\Core\Url;
 
 /**
  * Provides the Nominatim API.
@@ -39,8 +39,9 @@ class Nominatim extends GeocoderBase implements GeocoderInterface {
     }
 
     $request_url_base = $this->getRequestUrlBase();
-    $url = Url::fromUri($request_url_base . '/search/' . $address, [
+    $url = Url::fromUri($request_url_base . '/search', [
       'query' => [
+        'q' => $address,
         'email' => $this->getRequestEmail(),
         'limit' => 1,
         'format' => 'json',
@@ -89,7 +90,7 @@ class Nominatim extends GeocoderBase implements GeocoderInterface {
    */
   public function reverseGeocode($latitude, $longitude) {
     $request_url_base = $this->getRequestUrlBase();
-    $url = Url::fromUri($request_url_base . '/reverse/', [
+    $url = Url::fromUri($request_url_base . '/reverse', [
       'query' => [
         'lat' => $latitude,
         'lon' => $longitude,

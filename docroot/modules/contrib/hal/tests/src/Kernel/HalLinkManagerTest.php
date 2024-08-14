@@ -74,7 +74,7 @@ class HalLinkManagerTest extends KernelTestBase {
     $this->assertEquals($context, $expected_context);
   }
 
-  public function providerTestGetTypeUri() {
+  public static function providerTestGetTypeUri(): array {
     $serialization_context_collecting_cacheability = [
       CacheableNormalizerInterface::SERIALIZATION_CONTEXT_CACHEABILITY => new CacheableMetadata(),
     ];
@@ -92,41 +92,41 @@ class HalLinkManagerTest extends KernelTestBase {
       'site URL' => $base_test_case + [
         'context' => [],
         'link_domain' => NULL,
-        'expected return' => 'BASE_URL/rest/type/node/page',
-        'expected context' => [],
+        'expected_return' => 'BASE_URL/rest/type/node/page',
+        'expected_context' => [],
       ],
       'site URL, with optional context to collect cacheability metadata' => $base_test_case + [
         'context' => $serialization_context_collecting_cacheability,
-        'expected return' => 'BASE_URL/rest/type/node/page',
-        'expected context' => $expected_serialization_context_cacheability_url_site,
+        'expected_return' => 'BASE_URL/rest/type/node/page',
+        'expected_context' => $expected_serialization_context_cacheability_url_site,
       ],
       // Test hook_hal_type_uri_alter().
       'site URL, with optional context, to test hook_hal_type_uri_alter()' => $base_test_case + [
         'context' => ['hal_test' => TRUE],
-        'expected return' => 'hal_test_type',
-        'expected context' => ['hal_test' => TRUE],
+        'expected_return' => 'hal_test_type',
+        'expected_context' => ['hal_test' => TRUE],
       ],
       'site URL, with optional context, to test hook_hal_type_uri_alter(), and collecting cacheability metadata' => $base_test_case + [
         'context' => ['hal_test' => TRUE] + $serialization_context_collecting_cacheability,
-        'expected return' => 'hal_test_type',
+        'expected_return' => 'hal_test_type',
         // No cacheability metadata bubbled.
-        'expected context' => ['hal_test' => TRUE] + $serialization_context_collecting_cacheability,
+        'expected_context' => ['hal_test' => TRUE] + $serialization_context_collecting_cacheability,
       ],
       'configured URL' => [
         'link_domain' => 'http://llamas-rock.com/for-real/',
         'entity_type' => 'node',
         'bundle' => 'page',
         'context' => [],
-        'expected return' => 'http://llamas-rock.com/for-real/rest/type/node/page',
-        'expected context' => [],
+        'expected_return' => 'http://llamas-rock.com/for-real/rest/type/node/page',
+        'expected_context' => [],
       ],
       'configured URL, with optional context to collect cacheability metadata' => [
         'link_domain' => 'http://llamas-rock.com/for-real/',
         'entity_type' => 'node',
         'bundle' => 'page',
         'context' => $serialization_context_collecting_cacheability,
-        'expected return' => 'http://llamas-rock.com/for-real/rest/type/node/page',
-        'expected context' => [
+        'expected_return' => 'http://llamas-rock.com/for-real/rest/type/node/page',
+        'expected_context' => [
           CacheableNormalizerInterface::SERIALIZATION_CONTEXT_CACHEABILITY => (new CacheableMetadata())->setCacheTags(['config:hal.settings']),
         ],
       ],
@@ -155,7 +155,7 @@ class HalLinkManagerTest extends KernelTestBase {
     $this->assertEquals($context, $expected_context);
   }
 
-  public function providerTestGetRelationUri() {
+  public static function providerTestGetRelationUri(): array {
     $serialization_context_collecting_cacheability = [
       CacheableNormalizerInterface::SERIALIZATION_CONTEXT_CACHEABILITY => new CacheableMetadata(),
     ];
@@ -163,7 +163,7 @@ class HalLinkManagerTest extends KernelTestBase {
       CacheableNormalizerInterface::SERIALIZATION_CONTEXT_CACHEABILITY => (new CacheableMetadata())->setCacheContexts(['url.site']),
     ];
 
-    $field_name = $this->randomMachineName();
+    $field_name = 'field_abc';
     $base_test_case = [
       'link_domain' => NULL,
       'entity_type' => 'node',
@@ -175,25 +175,25 @@ class HalLinkManagerTest extends KernelTestBase {
       'site URL' => $base_test_case + [
         'context' => [],
         'link_domain' => NULL,
-        'expected return' => 'BASE_URL/rest/relation/node/page/' . $field_name,
-        'expected context' => [],
+        'expected_return' => 'BASE_URL/rest/relation/node/page/' . $field_name,
+        'expected_context' => [],
       ],
       'site URL, with optional context to collect cacheability metadata' => $base_test_case + [
         'context' => $serialization_context_collecting_cacheability,
-        'expected return' => 'BASE_URL/rest/relation/node/page/' . $field_name,
-        'expected context' => $expected_serialization_context_cacheability_url_site,
+        'expected_return' => 'BASE_URL/rest/relation/node/page/' . $field_name,
+        'expected_context' => $expected_serialization_context_cacheability_url_site,
       ],
       // Test hook_hal_relation_uri_alter().
       'site URL, with optional context, to test hook_hal_relation_uri_alter()' => $base_test_case + [
         'context' => ['hal_test' => TRUE],
-        'expected return' => 'hal_test_relation',
-        'expected context' => ['hal_test' => TRUE],
+        'expected_return' => 'hal_test_relation',
+        'expected_context' => ['hal_test' => TRUE],
       ],
       'site URL, with optional context, to test hook_hal_relation_uri_alter(), and collecting cacheability metadata' => $base_test_case + [
         'context' => ['hal_test' => TRUE] + $serialization_context_collecting_cacheability,
-        'expected return' => 'hal_test_relation',
+        'expected_return' => 'hal_test_relation',
         // No cacheability metadata bubbled.
-        'expected context' => ['hal_test' => TRUE] + $serialization_context_collecting_cacheability,
+        'expected_context' => ['hal_test' => TRUE] + $serialization_context_collecting_cacheability,
       ],
       'configured URL' => [
         'link_domain' => 'http://llamas-rock.com/for-real/',
@@ -201,8 +201,8 @@ class HalLinkManagerTest extends KernelTestBase {
         'bundle' => 'page',
         'field_name' => $field_name,
         'context' => [],
-        'expected return' => 'http://llamas-rock.com/for-real/rest/relation/node/page/' . $field_name,
-        'expected context' => [],
+        'expected_return' => 'http://llamas-rock.com/for-real/rest/relation/node/page/' . $field_name,
+        'expected_context' => [],
       ],
       'configured URL, with optional context to collect cacheability metadata' => [
         'link_domain' => 'http://llamas-rock.com/for-real/',
@@ -210,8 +210,8 @@ class HalLinkManagerTest extends KernelTestBase {
         'bundle' => 'page',
         'field_name' => $field_name,
         'context' => $serialization_context_collecting_cacheability,
-        'expected return' => 'http://llamas-rock.com/for-real/rest/relation/node/page/' . $field_name,
-        'expected context' => [
+        'expected_return' => 'http://llamas-rock.com/for-real/rest/relation/node/page/' . $field_name,
+        'expected_context' => [
           CacheableNormalizerInterface::SERIALIZATION_CONTEXT_CACHEABILITY => (new CacheableMetadata())->setCacheTags(['config:hal.settings']),
         ],
       ],

@@ -32,7 +32,7 @@ class AddressFieldMapping extends FieldMappingBase {
 
   public function mapEntityField(ContentEntityInterface &$content, array $webform_element, FieldDefinitionInterface $field_definition, array $data = [], array $attributes = []) {
     $field_id = $field_definition->getName();
-    $field_value = $field_definition->getDefaultValue($content)[0];
+    $field_value = $field_definition->getDefaultValue($content)[0] ?? [];
     $is_address = FALSE;
     if (!empty($data[$field_id]['address'])) {
       $is_address = TRUE;
@@ -54,7 +54,7 @@ class AddressFieldMapping extends FieldMappingBase {
       $field_value['country_code'] = $data[$field_id]['country'];
     }
 
-    if (!$is_address) {
+    if (!$is_address && is_array($data[$field_id])) {
       $field_value = array_merge($field_value, $data[$field_id]);
     }
 

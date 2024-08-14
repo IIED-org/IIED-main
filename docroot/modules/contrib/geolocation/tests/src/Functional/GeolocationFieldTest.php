@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\geolocation\Functional;
 
-use Drupal\Tests\BrowserTestBase;
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests the creation of geolocation fields.
@@ -94,7 +94,7 @@ class GeolocationFieldTest extends BrowserTestBase {
     ];
 
     // Test if the raw lat, lng values are found on the page.
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->responseContains($lat);
     $this->assertSession()->responseContains($lng);
 
@@ -110,7 +110,7 @@ class GeolocationFieldTest extends BrowserTestBase {
     ];
 
     // Test if the raw lat, lng values are found on the page.
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->responseContains($lat);
     $this->assertSession()->responseContains($lng);
   }

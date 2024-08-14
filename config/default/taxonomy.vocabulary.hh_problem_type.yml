@@ -6,3 +6,4 @@ name: 'HH problem type'
 vid: hh_problem_type
 description: 'Hidden handbrake content problem type'
 weight: 0
+new_revision: false

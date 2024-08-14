@@ -2,15 +2,15 @@
 
 namespace Drupal\geolocation\Plugin\views\filter;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\views\Plugin\views\filter\FilterPluginBase;
-use Drupal\views\Plugin\views\query\Sql;
-use Drupal\geolocation\GeocoderManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\geolocation\BoundaryTrait;
-use Drupal\Component\Utility\NestedArray;
+use Drupal\geolocation\GeocoderManager;
+use Drupal\views\Plugin\views\filter\FilterPluginBase;
+use Drupal\views\Plugin\views\query\Sql;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Filter handler for search keywords.
@@ -26,7 +26,7 @@ class BoundaryFilter extends FilterPluginBase implements ContainerFactoryPluginI
   /**
    * {@inheritdoc}
    */
-  public $no_operator = TRUE;
+  public $no_operator = TRUE; // phpcs:ignore
 
   /**
    * Can be used for CommonMap interactive filtering.
@@ -366,6 +366,15 @@ class BoundaryFilter extends FilterPluginBase implements ContainerFactoryPluginI
     );
   }
 
+  /**
+   * Test validity of boundary values.
+   *
+   * @param mixed $values
+   *   Values to test.
+   *
+   * @return bool
+   *   Success.
+   */
   private function isBoundarySet($values): bool {
     if (!is_array($values)) {
       return FALSE;

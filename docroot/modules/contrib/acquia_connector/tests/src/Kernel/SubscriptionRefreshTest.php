@@ -7,6 +7,8 @@ namespace Drupal\Tests\acquia_connector\Kernel;
 use Drupal\Component\Uuid\Php as PhpUuid;
 
 /**
+ * Tests for refreshing a subscription.
+ *
  * @group acquia_connector
  */
 final class SubscriptionRefreshTest extends AcquiaConnectorTestBase {

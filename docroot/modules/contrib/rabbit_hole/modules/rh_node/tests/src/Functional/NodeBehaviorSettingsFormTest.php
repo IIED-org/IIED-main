@@ -37,7 +37,7 @@ class NodeBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTestBas
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_node', 'node'];
+  protected static $modules = ['rh_node', 'node'];
 
   /**
    * Test that Rabbit Hole settings are created with "Field UI" enabled.
@@ -78,7 +78,15 @@ class NodeBehaviorSettingsFormTest extends RabbitHoleBehaviorSettingsFormTestBas
     ];
     $this->drupalGet(Url::fromRoute('node.type_add'));
     $this->assertRabbitHoleSettings();
-    $button_label = \Drupal::moduleHandler()->moduleExists('field_ui') ? 'Save and manage fields' : 'Save content type';
+    // Remove after dropping support for Drupal 10.2 and lower.
+    if (version_compare(\Drupal::VERSION, '10.2', '<')) {
+      $button_label = 'Save content type';
+    }
+    else {
+      $button_label = 'Save';
+    }
+
+    $button_label = \Drupal::moduleHandler()->moduleExists('field_ui') ? 'Save and manage fields' : $button_label;
     $this->submitForm($edit, $button_label);
     $this->bundle = $this->loadBundle($edit['type']);
     return $edit['type'];

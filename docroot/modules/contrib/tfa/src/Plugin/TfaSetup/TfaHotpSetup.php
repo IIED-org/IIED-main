@@ -2,19 +2,19 @@
 
 namespace Drupal\tfa\Plugin\TfaSetup;
 
+use chillerlan\QRCode\QRCode;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\tfa\Plugin\TfaValidation\TfaHotpValidation;
-use ParagonIE\ConstantTime\Encoding;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\encrypt\EncryptionProfileManagerInterface;
 use Drupal\encrypt\EncryptServiceInterface;
 use Drupal\tfa\Plugin\TfaSetupInterface;
+use Drupal\tfa\Plugin\TfaValidation\TfaHotpValidation;
 use Drupal\user\Entity\User;
 use Drupal\user\UserDataInterface;
-use chillerlan\QRCode\QRCode;
+use ParagonIE\ConstantTime\Encoding;
 
 /**
  * HOTP setup class to setup HOTP validation.
@@ -24,7 +24,8 @@ use chillerlan\QRCode\QRCode;
  *   label = @Translation("TFA HOTP Setup"),
  *   description = @Translation("TFA HOTP Setup Plugin"),
  *   helpLinks = {
- *    "Google Authenticator (Android/iOS)" = "https://googleauthenticator.net",
+ *    "Google Authenticator (Android)" = "https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2",
+ *    "Google Authenticator (iOS)" = "https://apps.apple.com/us/app/google-authenticator/id388497605",
  *    "Microsoft Authenticator (Android/iOS)" = "https://www.microsoft.com/en-us/security/mobile-authenticator-app",
  *    "FreeOTP (Android)" = "https://freeotp.github.io"
  *   },

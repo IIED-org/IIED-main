@@ -161,7 +161,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->submitForm($edit, 'Save');
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()
-      ->pageTextContains('Please configure the used datasources.');
+      ->pageTextContains('Configure the used datasources.');
     $this->submitForm([], 'Save');
     $this->checkForMetaRefresh();
     $this->assertSession()->statusCodeEquals(200);
@@ -329,7 +329,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     ];
 
     $this->submitForm($edit, 'Save');
-    $this->assertSession()->pageTextContains('Please configure the used datasources.');
+    $this->assertSession()->pageTextContains('Configure the used datasources.');
 
     $this->submitForm([], 'Save');
     $this->checkForMetaRefresh();
@@ -357,7 +357,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     unset($edit['server']);
     $this->drupalGet($settings_path);
     $this->submitForm($edit, 'Save and add fields');
-    $this->assertSession()->pageTextContains('Please configure the used datasources.');
+    $this->assertSession()->pageTextContains('Configure the used datasources.');
 
     $this->submitForm([], 'Save and add fields');
     $this->assertSession()->pageTextContains('The index was successfully saved.');
@@ -494,7 +494,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->drupalGet('admin/config/search/search-api/add-index');
     $this->submitForm($edit, 'Save');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains('Please configure the used datasources.');
+    $this->assertSession()->pageTextContains('Configure the used datasources.');
 
     $this->submitForm([], 'Save');
     $this->assertSession()->statusCodeEquals(200);
@@ -1401,7 +1401,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     ];
     $this->drupalGet($settings_path);
     $this->submitForm($edit, 'Save');
-    $this->assertSession()->pageTextContains('Please configure the used datasources.');
+    $this->assertSession()->pageTextContains('Configure the used datasources.');
     $this->submitForm([], 'Save');
     $this->checkForMetaRefresh();
     $this->assertSession()->pageTextContains('The index was successfully saved.');

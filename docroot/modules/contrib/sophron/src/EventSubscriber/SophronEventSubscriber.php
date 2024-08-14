@@ -19,8 +19,6 @@ class SophronEventSubscriber implements EventSubscriberInterface {
 
   /**
    * The module configuration settings.
-   *
-   * @var \Drupal\Core\Config\ImmutableConfig
    */
   protected ImmutableConfig $sophronSettings;
 
@@ -31,7 +29,7 @@ class SophronEventSubscriber implements EventSubscriberInterface {
    *   The config factory.
    */
   public function __construct(
-    protected ConfigFactoryInterface $configFactory
+    protected ConfigFactoryInterface $configFactory,
   ) {
     $this->sophronSettings = $this->configFactory->get('sophron.settings');
   }
@@ -39,7 +37,7 @@ class SophronEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       MapEvent::INIT => 'initializeMap',
     ];

@@ -2,17 +2,19 @@
 
 namespace Drupal\message\Plugin\migrate\destination;
 
-use Drupal\migrate\Plugin\migrate\destination\EntityConfigBase;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\migrate\Plugin\migrate\destination\EntityConfigBase;
 use Drupal\migrate\Row;
 
 /**
+ * Message template destination plugin.
+ *
  * @MigrateDestination(
  *   id = "entity:message_template"
  * )
  */
 class MessageTemplateDestination extends EntityConfigBase {
- 
+
   /**
    * {@inheritdoc}
    */

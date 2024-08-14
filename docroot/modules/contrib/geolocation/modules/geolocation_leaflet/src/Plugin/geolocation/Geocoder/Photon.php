@@ -2,12 +2,12 @@
 
 namespace Drupal\geolocation_leaflet\Plugin\geolocation\Geocoder;
 
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Url;
 use Drupal\geolocation\GeocoderBase;
 use Drupal\geolocation\GeocoderInterface;
-use Drupal\Component\Serialization\Json;
 use GuzzleHttp\Exception\RequestException;
-use Drupal\Core\Url;
-use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Provides the Photon.
@@ -217,6 +217,7 @@ class Photon extends GeocoderBase implements GeocoderInterface {
             'state' => $entry['properties']['state'],
             'country' => $entry['properties']['country'],
             'countryCode' => array_search($entry['properties']['country'], $countries),
+            'county' => $entry['properties']['county'],
           ];
           break 2;
       }

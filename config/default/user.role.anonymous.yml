@@ -2,6 +2,9 @@ uuid: 090e5b48-7dd5-434e-b2cb-e8fbffc3ba39
 langcode: en
 status: true
 dependencies:
+  config:
+    - search_api_autocomplete.search.acquia_search
+    - search_api_autocomplete.search.search
   module:
     - comment
     - contact

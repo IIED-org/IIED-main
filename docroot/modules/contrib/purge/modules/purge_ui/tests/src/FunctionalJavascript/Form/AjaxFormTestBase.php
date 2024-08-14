@@ -20,19 +20,6 @@ abstract class AjaxFormTestBase extends FormTestBase {
   }
 
   /**
-   * Tests that forms have the Ajax dialog library loaded.
-   */
-  public function testAjaxDialog(): void {
-    $this->drupalLogin($this->adminUser);
-    $this->drupalGet($this->getPath());
-    $session = $this->getSession();
-    if ($this->shouldReturnAjaxProperties()) {
-      $libraries = $session->evaluateScript('drupalSettings.ajaxPageState.libraries');
-      $this->assertStringContainsString('core/drupal.dialog.ajax', $libraries);
-    }
-  }
-
-  /**
    * Presses a button in the dialog.
    *
    * Drupal hides the original buttons and places them in a special area of
@@ -46,7 +33,7 @@ abstract class AjaxFormTestBase extends FormTestBase {
    */
   protected function pressDialogButton(string $locator): void {
     $this->assertSession()->elementExists('css', '.ui-dialog-buttonpane')->pressButton($locator);
-    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->assertSession()->waitForElementRemoved('css', '#drupal-modal');
   }
 
   /**

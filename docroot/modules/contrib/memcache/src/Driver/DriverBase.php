@@ -4,11 +4,11 @@ namespace Drupal\memcache\Driver;
 
 use Drupal\Component\Utility\Timer;
 use Drupal\Core\Logger\LoggerChannelTrait;
-use Drupal\memcache\MemcacheSettings;
 use Drupal\memcache\DrupalMemcacheInterface;
+use Drupal\memcache\MemcacheSettings;
 
 /**
- * Class DriverBase.
+ * Defines driver base abstract class.
  */
 abstract class DriverBase implements DrupalMemcacheInterface {
 
@@ -66,17 +66,33 @@ abstract class DriverBase implements DrupalMemcacheInterface {
   public function __construct(MemcacheSettings $settings, $memcache, $bin = NULL) {
     $this->settings = $settings;
     $this->memcache = $memcache;
-
     $this->hashAlgorithm = $this->settings->get('key_hash_algorithm', 'sha1');
-
     $prefix = $this->settings->get('key_prefix', '');
     if ($prefix) {
       $this->prefix = $prefix . ':';
     }
-
     if ($bin) {
       $this->prefix .= $bin . ':';
     }
+  }
+
+  /**
+   * Wrapper settings method for config vs settings object.
+   *
+   * @param string $key
+   *   The setting to be retrieved.
+   *
+   * @return array|null
+   *   The settings for a specified parameter.
+   */
+  protected function getMemcacheSetting($key) {
+    // @phpstan-ignore-next-line
+    $setting = \Drupal::configFactory()->getEditable('memcache.settings')->get('memcache_' . $key);
+    if ($setting !== NULL) {
+      @trigger_error('Memcache settings set via configuration is deprecated in memcache:8.x-2.6 and is removed from memcache:3.0.0. Use settings.php to set memcache variables. See https://www.drupal.org/node/3460878', E_USER_DEPRECATED);
+      return $setting;
+    }
+    return $this->settings->get($key);
   }
 
   /**
@@ -230,7 +246,7 @@ abstract class DriverBase implements DrupalMemcacheInterface {
    * Helper function to get the bins.
    */
   public function getBins() {
-    $memcache_bins = \Drupal::configFactory()->getEditable('memcache.settings')->get('memcache_bins');
+    $memcache_bins = $this->getMemcacheSetting('bins');
     if (!isset($memcache_bins)) {
       $memcache_bins = ['cache' => 'default'];
     }
@@ -242,9 +258,10 @@ abstract class DriverBase implements DrupalMemcacheInterface {
    * Helper function to get the servers.
    */
   public function getServers() {
-    $memcache_servers = \Drupal::configFactory()->getEditable('memcache.settings')->get('memcache_servers');
+    $memcache_servers = $this->getMemcacheSetting('servers');
+    $host = getenv('MEMCACHED_HOST') ?: '127.0.0.1:11211';
     if (!isset($memcache_servers)) {
-      $memcache_servers = ['127.0.0.1:11211' => 'default'];
+      $memcache_servers = [$host => 'default'];
     }
 
     return $memcache_servers;
@@ -269,7 +286,7 @@ abstract class DriverBase implements DrupalMemcacheInterface {
    */
   public function statsTypes() {
     if ($this->memcache instanceof \Memcache) {
-      // TODO: Determine which versions of the PECL memcache extension have
+      // @todo Determine which versions of the PECL memcache extension have
       // these other stats types: 'malloc', 'maps', optionally detect this
       // version and expose them.  These stats are "subject to change without
       // warning" unfortunately.
@@ -288,9 +305,10 @@ abstract class DriverBase implements DrupalMemcacheInterface {
     static $drupal_static_fast;
 
     if (!isset($drupal_static_fast)) {
+      // @phpcs:ignore
       $drupal_static_fast = &drupal_static(__FUNCTION__, ['variable_checked' => NULL, 'user_access_checked' => NULL]);
     }
-    $variable_checked    = &$drupal_static_fast['variable_checked'];
+    $variable_checked = &$drupal_static_fast['variable_checked'];
     $user_access_checked = &$drupal_static_fast['user_access_checked'];
 
     // Confirm DRUPAL_BOOTSTRAP_VARIABLES has been reached. We don't use

@@ -20,7 +20,7 @@ abstract class DevelGenerateBrowserTestBase extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'content_translation',
     'devel',
     'devel_generate',

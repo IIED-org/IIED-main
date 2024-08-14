@@ -7,12 +7,14 @@
 
 declare(strict_types=1);
 
+use Drupal\sophron\MimeMapManagerInterface;
+
 /**
  * Implements hook_requirements().
  */
 function sophron_requirements(string $phase) {
   if ($phase === 'runtime') {
-    return \Drupal::service('sophron.mime_map.manager')->requirements($phase);
+    return \Drupal::service(MimeMapManagerInterface::class)->requirements($phase);
   }
   return [];
 }

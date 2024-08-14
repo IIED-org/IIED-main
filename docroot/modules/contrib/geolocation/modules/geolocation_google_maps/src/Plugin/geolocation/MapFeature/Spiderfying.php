@@ -2,8 +2,8 @@
 
 namespace Drupal\geolocation_google_maps\Plugin\geolocation\MapFeature;
 
-use Drupal\geolocation\MapFeatureBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapFeatureBase;
 
 /**
  * Provides Spiderfying function.
@@ -34,6 +34,8 @@ class Spiderfying extends MapFeatureBase {
       'spiralLengthStart' => 11,
       'spiralLengthFactor' => 4,
       'legWeight' => 1.5,
+      'spiralIconWidth' => 23,
+      'spiralIconHeight' => 32,
     ];
   }
 
@@ -124,6 +126,20 @@ class Spiderfying extends MapFeatureBase {
       '#default_value' => $settings['legWeight'],
     ];
 
+    $form['spiralIconWidth'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Spiral Icon width'),
+      '#description' => $this->t('Determines the width in Pixel of the marker'),
+      '#default_value' => $settings['spiralIconWidth'],
+    ];
+
+    $form['spiralIconHeight'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Spiral Icon height'),
+      '#description' => $this->t('Determines the height in Pixel of the marker'),
+      '#default_value' => $settings['spiralIconHeight'],
+    ];
+
     return $form;
   }
 
@@ -157,6 +173,8 @@ class Spiderfying extends MapFeatureBase {
                   'spiralLengthStart' => $feature_settings['spiralLengthStart'],
                   'spiralLengthFactor' => $feature_settings['spiralLengthFactor'],
                   'legWeight' => $feature_settings['legWeight'],
+                  'spiralIconWidth' => $feature_settings['spiralIconWidth'],
+                  'spiralIconHeight' => $feature_settings['spiralIconHeight'],
                 ],
               ],
             ],

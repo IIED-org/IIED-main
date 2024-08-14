@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\file_mdm\Kernel;
 
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file_mdm\FileMetadataInterface;
 use Drupal\file_mdm\FileMetadataManagerInterface;
@@ -22,8 +23,8 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
    */
   public function testFileMetadata(): void {
     // Prepare a copy of test files.
-    $this->fileSystem->copy('core/tests/fixtures/files/image-test.png', 'public://', FileSystemInterface::EXISTS_REPLACE);
-    $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'public://', FileSystemInterface::EXISTS_REPLACE);
+    $this->fileSystem->copy('core/tests/fixtures/files/image-test.png', 'public://', FileExists::Replace);
+    $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'public://', FileExists::Replace);
     // The image files that will be tested.
     $image_files = [
       [
@@ -169,9 +170,9 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
    */
   public function testFileMetadataCaching(): void {
     // Prepare a copy of test files.
-    $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'public://', FileSystemInterface::EXISTS_REPLACE);
-    $this->fileSystem->copy('core/tests/fixtures/files/image-test.gif', 'public://', FileSystemInterface::EXISTS_REPLACE);
-    $this->fileSystem->copy('core/tests/fixtures/files/image-test.png', 'public://', FileSystemInterface::EXISTS_REPLACE);
+    $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'public://', FileExists::Replace);
+    $this->fileSystem->copy('core/tests/fixtures/files/image-test.gif', 'public://', FileExists::Replace);
+    $this->fileSystem->copy('core/tests/fixtures/files/image-test.png', 'public://', FileExists::Replace);
 
     // The image files that will be tested.
     $image_files = [
@@ -272,7 +273,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
         // Release URI.
         $file_metadata = NULL;
         $this->assertTrue($fmdm->release($image_file['uri']));
-        $this->assertSame(0, $fmdm->count());
+        $this->assertCount(0, $fmdm);
 
         // Read from cache.
         $file_metadata = $fmdm->uri($image_file['uri']);
@@ -283,7 +284,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
 
       $file_metadata = NULL;
       $this->assertTrue($fmdm->release($image_file['uri']));
-      $this->assertEquals(0, $fmdm->count());
+      $this->assertCount(0, $fmdm);
     }
   }
 
@@ -313,7 +314,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
     $fmdm = $this->container->get(FileMetadataManagerInterface::class);
 
     // Copy the test file to a temp location.
-    $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'temporary://', FileSystemInterface::EXISTS_REPLACE);
+    $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'temporary://', FileExists::Replace);
 
     // Test setting local temp path explicitly. The files should be parsed
     // even if not available on the URI.
@@ -369,7 +370,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
     $file_system = $this->container->get('file_system');
 
     // Copy the test file to dummy-remote wrapper.
-    $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'dummy-remote://', FileSystemInterface::EXISTS_REPLACE);
+    $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', 'dummy-remote://', FileExists::Replace);
 
     foreach ($image_files as $image_file) {
       $file_metadata = $fmdm->uri($image_file['uri']);
@@ -405,7 +406,7 @@ class FileMetadataManagerTest extends FileMetadataManagerTestBase {
     // Copy a test file to test directory.
     $test_directory = 'public://test-images/';
     $this->fileSystem->prepareDirectory($test_directory, FileSystemInterface::CREATE_DIRECTORY);
-    $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', $test_directory, FileSystemInterface::EXISTS_REPLACE);
+    $this->fileSystem->copy($this->moduleList->getPath('file_mdm') . '/tests/files/test-exif.jpeg', $test_directory, FileExists::Replace);
 
     // Get file metadata object.
     $file_metadata = $fmdm->uri('public://test-images/test-exif.jpeg');

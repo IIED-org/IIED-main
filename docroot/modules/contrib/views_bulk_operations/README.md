@@ -87,5 +87,4 @@ Full documentation with examples is available at
 ## Maintainers
 
 - Marcin Grabias - [Graber](https://www.drupal.org/u/graber)
-- Bojan Živanović - [bojanz](https://www.drupal.org/u/bojanz)
 - Joël Pittet - [joelpittet](https://www.drupal.org/u/joelpittet)

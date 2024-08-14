@@ -2,13 +2,13 @@
 
 namespace Drupal\serial;
 
+use Drupal\Core\Database\Database;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Database\Database;
 
 /**
  * Serial storage service definition.

@@ -12,6 +12,7 @@ Features:
 - mass adding of new terms
 - moving of terms in hierarchies
 - merging of terms (Term merge module)
+- translating terms (content_translation module)
 - fast weight changing with up and down arrows (and AJAX saving)
 - AJAX powered term editing form
 - simple search interface
@@ -111,6 +112,8 @@ lines describe all operations and some terminology.
   one'), which prevents the replacing of old parents.
 
 - Merging
+  To use it add term_merge, term_reference_change modules and
+  enable the taxonomy_manager_merge submodule.
   With the merging action, you can put terms with the same meaning together
   (e.g. your vocabulary contains: SoC, Summer of Code, GSoC, Google Summer of
   Code). All terms, that get merged into one other, get synonyms of resulting
@@ -132,6 +135,15 @@ lines describe all operations and some terminology.
   overridden by the Taxonomy Manager, so that former merged terms can be
   considered (if someone calls a term, that was merged, it redirects to the
   resulting merged term).
+
+- Translating
+  To use this feature:
+  1. content_translation module should be enabled
+  2. At least 1 additional language should be enabled
+  3. Translation options for taxonomy terms should be set
+  4. A corresponding option should be enabled at /admin/config/user-interface/taxonomy-manager-settings
+
+  After all the above steps are done a fieldset of translatable fields `Translatable fields` for each language appears at the bottom of the taxonomy manager's term edit form. By default, it has original values like term name and description fulfilled.
 
   NOTE: At the moment, the Taxonomy Manager only cares about the term-node
   association inserted

@@ -17,7 +17,7 @@ use Drupal\Core\TypedData\TranslatableInterface;
  *   id = "serial",
  *   label = @Translation("Serial"),
  *   description = @Translation("Auto increment serial field type."),
- *   category = @Translation("Number"),
+ *   category = "number",
  *   default_widget = "serial_default_widget",
  *   default_formatter = "serial_default_formatter"
  * )

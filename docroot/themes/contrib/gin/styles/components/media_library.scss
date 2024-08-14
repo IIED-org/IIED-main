@@ -1,6 +1,7 @@
 .media-library {
-  &-edit__link,
+  &-item &-edit__link,
   &-item &-item__edit,
+  &-item &-item__edit.button,
   &-item &-item__remove,
   &-item &-item__remove.button {
     border-color: var(--gin-border-color) !important;
@@ -26,7 +27,7 @@
     &:active {
       width: 32px;
       height: 32px;
-      margin: var(--gin-spacing-s);
+      margin: var(--gin-spacing-xs);
       background-color: white;
       border-radius: 50%;
       box-shadow: 0 2px 4px rgba(0, 0, 0, .15);
@@ -34,7 +35,7 @@
     }
   }
 
-  &-edit__link,
+  &-item &-edit__link,
   &-item &-item__edit {
     top: .625rem;
     right: 3.125rem;
@@ -197,6 +198,7 @@
 fieldset.media-library-widget {
   .media-library-widget__toggle-weight {
     font-size: var(--gin-font-size-xxs);
+    line-height: 1;
     padding: var(--gin-spacing-xs);
   }
 
@@ -356,12 +358,6 @@ fieldset.media-library-widget {
   border-bottom: 1px solid var(--gin-border-color-table-header);
   border-radius: 0;
   box-sizing: border-box;
-
-  // @include mq(medium) {
-  //   z-index: 98;
-  //   position: sticky;
-  //   top: calc(var(--gin-toolbar-y-offset) + var(--gin-sticky-offset));
-  // }
 }
 
 .views-field-thumbnail__target-id {
@@ -416,6 +412,16 @@ fieldset.media-library-widget {
   }
 }
 
+.js-media-library-widget {
+  .fieldset__label {
+    margin-block-end: 0;
+  }
+
+  .media-library-selection {
+    margin-block-start: 0;
+  }
+}
+
 .media-library-selection .media-library-item--grid {
   @include mq(wide) {
     width: 20%;
@@ -462,4 +468,26 @@ fieldset.media-library-widget {
 
 .media-library-selected-count {
   color: var(--gin-color-text-light);
+}
+
+.media-library-new-widget {
+  .fieldset__label {
+    margin-block-end: 0;
+  }
+
+  .label {
+    font-size: var(--gin-font-size-l);
+    font-weight: var(--gin-font-weight-bold);
+    color: var(--gin-color-title);
+    margin-block-start: 0;
+  }
+
+  .description {
+    font-size: var(--gin-font-size-s);
+    color: var(--gin-color-text-light);
+  }
+
+  .form-type--entity-autocomplete {
+    margin-block: var(--gin-spacing-s);
+  }
 }

@@ -6,7 +6,7 @@ font files.
 
 ## Features:
 
-Uses the [PHP Font Lib](https://github.com/PhenX/php-font-lib) to read font
+Uses the [PHP Font Lib](https://github.com/dompdf/php-font-lib) to read font
 information from TTF/OTF/WOFF font files.
 
 

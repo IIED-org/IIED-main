@@ -13,7 +13,6 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Path\CurrentPathStack;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\VocabularyInterface;
@@ -24,13 +23,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Taxonomy manager class.
  */
 class TaxonomyManagerForm extends FormBase {
-
-  /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
 
   /**
    * The form builder.
@@ -232,7 +224,7 @@ class TaxonomyManagerForm extends FormBase {
       }
     }
 
-    $current_path = \Drupal::service('path.current')->getPath();
+    $current_path = $this->currentPath->getPath();
     $url_parts = explode('/', $current_path);
     $voc_id = end($url_parts);
     $form['toolbar']['vocabulary_switcher'] = [
@@ -243,7 +235,7 @@ class TaxonomyManagerForm extends FormBase {
       '#weight' => -1,
     ];
 
-    $form['toolbar']['search_button'] =[
+    $form['toolbar']['search_button'] = [
       '#type' => 'button',
       '#value' => $this->t('Search'),
       '#attributes' => ['class' => ['taxonomy-manager-search-button']],
@@ -371,44 +363,34 @@ class TaxonomyManagerForm extends FormBase {
    */
   public function termDataCallback($form, FormStateInterface $form_state) {
     $taxonomy_term = $this->taxonomyTypeManager->load($form_state->getValue('load-term-data'));
-
-    $term_form = $this->entityFormBuilder->getForm($taxonomy_term, 'default');
-
-    // Move the term data form into a fieldset.
-    $term_form['fieldset']['#type'] = 'fieldset';
-    $term_form['fieldset']['#title'] = Html::escape($taxonomy_term->getName()) . ' (' . $taxonomy_term->id() . ')';
-    $term_form['fieldset']['#attributes'] = [];
-    foreach (Element::children($term_form) as $key) {
-      if ($key != 'fieldset') {
-        $term_form['fieldset'][$key] = $term_form[$key];
-        unset($term_form[$key]);
-      }
-    }
+    $term_form = $this->entityFormBuilder->getForm($taxonomy_term, 'taxonomy_manager');
 
     $term_form['#prefix'] = '<div id="taxonomy-term-data-form">';
     $term_form['#suffix'] = '</div>';
-    $current_path = $this->currentPath->getPath();
-    // Change the form action url form the current site to the add form.
+
     $term_form['#action'] = $this->urlGenerator
       ->generateFromRoute(
-        'entity.taxonomy_term.edit_form',
-        ['taxonomy_term' => $taxonomy_term->id()],
+        'taxonomy_manager.taxonomy_term.edit',
+        [
+          'taxonomy_term' => $taxonomy_term->id(),
+        ],
         [
           'query' => [
-            'destination' => $current_path,
+            'destination' => $this->urlGenerator->generateFromRoute('<current>'),
           ],
         ]
       );
 
     $response = new AjaxResponse();
     $response->addCommand(new ReplaceCommand('#taxonomy-term-data-form', $term_form));
+
     return $response;
   }
 
   /**
    * Term data submit handler.
    *
-   * @todo: redirect to taxonomy manager
+   * @todo redirect to taxonomy manager
    */
   public static function termDataFormSubmit($form, FormStateInterface $form_state) {
 
@@ -430,10 +412,30 @@ class TaxonomyManagerForm extends FormBase {
    *   The ajax response.
    */
   protected function modalHelper(FormStateInterface $form_state, $class_name, $route_name, $title) {
+    return self::modalHelperStatic($form_state, $class_name, $route_name, $title);
+  }
+
+  /**
+   * Static helper function to generate a modal form within an AJAX callback.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state of the current (parent) form.
+   * @param string $class_name
+   *   The class name of the form to embed in the modal.
+   * @param string $route_name
+   *   The route name the form is located.
+   * @param string $title
+   *   The modal title.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   The ajax response.
+   */
+  public static function modalHelperStatic(FormStateInterface $form_state, $class_name, $route_name, $title) {
     $taxonomy_vocabulary = $form_state->getValue('voc');
     $selected_terms = $form_state->getValue(['taxonomy', 'manager', 'tree']);
 
-    $del_form = $this->formBuilder->getForm($class_name, $taxonomy_vocabulary, $selected_terms);
+    // @phpstan-ignore-next-line
+    $del_form = \Drupal::formBuilder()->getForm($class_name, $taxonomy_vocabulary, $selected_terms);
     $del_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
     // Change the form action url form the current site to the current form.

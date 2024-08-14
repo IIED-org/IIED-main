@@ -2,12 +2,12 @@
 
 namespace Drupal\geolocation;
 
-use Drupal\Component\Utility\SortArray;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\Component\Utility\NestedArray;
+use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -100,7 +100,7 @@ class LocationInputManager extends DefaultPluginManager {
       $location_input = $this->createInstance($location_input_id);
       foreach ($location_input->getAvailableLocationInputOptions($context) as $option_id => $label) {
         $option_enable_id = HTML::getUniqueId($option_id . '_enabled');
-        $weight = isset($settings[$option_id]['weight']) ? $settings[$option_id]['weight'] : 0;
+        $weight = $settings[$option_id]['weight'] ?? 0;
 
         $form[$option_id] = [
           '#weight' => $weight,
@@ -114,7 +114,7 @@ class LocationInputManager extends DefaultPluginManager {
               'id' => $option_enable_id,
             ],
             '#type' => 'checkbox',
-            '#default_value' => isset($settings[$option_id]['enable']) ? $settings[$option_id]['enable'] : FALSE,
+            '#default_value' => $settings[$option_id]['enable'] ?? FALSE,
           ],
           'location_input_id' => [
             '#type' => 'value',

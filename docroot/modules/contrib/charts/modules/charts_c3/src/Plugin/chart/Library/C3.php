@@ -266,9 +266,9 @@ class C3 extends ChartBase implements ContainerFactoryPluginInterface {
     foreach ($children as $child) {
       $type = $element[$child]['#type'];
       if ($type === 'chart_xaxis') {
-        $x_axis_key = $child;
+        $chart_definition['axis']['x']['label'] = $element[$child]['#title'] ?? '';
         $chart_type = $this->getType($element['#chart_type']);
-        $categories = $this->stripLabelTags($element[$x_axis_key]['#labels']);
+        $categories = $this->stripLabelTags($element[$child]['#labels']);
         if (!in_array($chart_type, ['pie', 'donut'])) {
           if ($chart_type === 'scatter' || $chart_type === 'bubble') {
             // Scatter is not supported: https://github.com/c3js/c3/issues/1902
@@ -288,14 +288,37 @@ class C3 extends ChartBase implements ContainerFactoryPluginInterface {
         }
       }
       if ($type === 'chart_yaxis') {
-        $y_axis_key = $child;
-        if (!empty($element[$y_axis_key]['#opposite']) && $element[$y_axis_key]['#opposite'] === TRUE) {
+        if (!empty($element[$child]['#opposite']) && $element[$child]['#opposite'] === TRUE) {
           $chart_definition['axis']['y2']['show'] = TRUE;
+          $this->setLabelMinMax($chart_definition, 'y2', $element[$child]);
+        }
+        else {
+          $this->setLabelMinMax($chart_definition, 'y', $element[$child]);
         }
       }
     }
 
     return $chart_definition;
+  }
+
+  /**
+   * Set the label, min, and max.
+   *
+   * @param array $chart_definition
+   *   The chart definition.
+   * @param string $axis
+   *   The axis.
+   * @param array $element
+   *   The element.
+   */
+  private function setLabelMinMax(array &$chart_definition, string $axis, array $element): void {
+    $chart_definition['axis'][$axis]['label'] = $element['#title'] ?? '';
+    if (!empty($element['#min'])) {
+      $chart_definition['axis'][$axis]['min'] = $element['#min'];
+    }
+    if (!empty($element['#max'])) {
+      $chart_definition['axis'][$axis]['max'] = $element['#max'];
+    }
   }
 
   /**
@@ -378,6 +401,12 @@ class C3 extends ChartBase implements ContainerFactoryPluginInterface {
             $datum = array_values($datum);
           }
           $columns[] = $datum;
+        }
+
+        // Add colors for each segment.
+        foreach ($child_element['#grouping_colors'] ?? [] as $key => $colors_array) {
+          $color = reset($colors_array);
+          $chart_definition['color']['pattern'][$key] = $color;
         }
       }
 

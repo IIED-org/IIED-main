@@ -3,14 +3,17 @@
 namespace Drupal\better_exposed_filters\Plugin\views\exposed_form;
 
 use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetManager;
+use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Url;
 use Drupal\views\Plugin\views\exposed_form\InputRequired;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Exposed form plugin that provides a basic exposed form.
@@ -54,6 +57,20 @@ class BetterExposedFilters extends InputRequired {
   protected $moduleHandler;
 
   /**
+   * The element info manager.
+   *
+   * @var \Drupal\Core\Render\ElementInfoManagerInterface
+   */
+  protected $elementInfo;
+
+  /**
+   * The current Request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * BetterExposedFilters constructor.
    *
    * @param array $configuration
@@ -70,19 +87,37 @@ class BetterExposedFilters extends InputRequired {
    *   The better exposed filter widget manager for sort widgets.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Manage drupal modules.
+   * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
+   *   The element info manager.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The Request object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, BetterExposedFiltersWidgetManager $filter_widget_manager, BetterExposedFiltersWidgetManager $pager_widget_manager, BetterExposedFiltersWidgetManager $sort_widget_manager, ModuleHandlerInterface $module_handler) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    BetterExposedFiltersWidgetManager $filter_widget_manager,
+    BetterExposedFiltersWidgetManager $pager_widget_manager,
+    BetterExposedFiltersWidgetManager $sort_widget_manager,
+    ModuleHandlerInterface $module_handler,
+    ElementInfoManagerInterface $element_info,
+    Request $request,
+  ) {
+
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->filterWidgetManager = $filter_widget_manager;
     $this->pagerWidgetManager = $pager_widget_manager;
     $this->sortWidgetManager = $sort_widget_manager;
     $this->moduleHandler = $module_handler;
+    $this->elementInfo = $element_info;
+    $this->request = $request;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    // @phpstan-ignore-next-line
     return new static(
       $configuration,
       $plugin_id,
@@ -90,7 +125,9 @@ class BetterExposedFilters extends InputRequired {
       $container->get('plugin.manager.better_exposed_filters_filter_widget'),
       $container->get('plugin.manager.better_exposed_filters_pager_widget'),
       $container->get('plugin.manager.better_exposed_filters_sort_widget'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('element_info'),
+      $container->get('request_stack')->getCurrentRequest()
     );
   }
 
@@ -329,7 +366,7 @@ class BetterExposedFilters extends InputRequired {
      * Add options for exposed sorts.
      */
     // Add intro explaining BEF sorts.
-    $documentation_uri = Url::fromUri('http://drupal.org/node/1701012')->toString();
+    $documentation_uri = Url::fromUri('https://drupal.org/node/1701012')->toString();
     $form['bef']['sort']['bef_intro'] = [
       '#markup' => '<h3>' . $this->t('Exposed Sort Settings') . '</h3><p>' . $this->t('This section lets you select additional options for exposed sorts. Some options are only available in certain situations. If you do not see the options you expect, please see the <a href=":link">BEF settings documentation page</a> for more details.', [':link' => $documentation_uri]) . '</p>',
     ];
@@ -407,7 +444,7 @@ class BetterExposedFilters extends InputRequired {
     /*
      * Add options for exposed pager.
      */
-    $documentation_uri = Url::fromUri('http://drupal.org/node/1701012')->toString();
+    $documentation_uri = Url::fromUri('https://drupal.org/node/1701012')->toString();
     $form['bef']['pager']['bef_intro'] = [
       '#markup' => '<h3>' . $this->t('Exposed Pager Settings') . '</h3><p>' . $this->t('This section lets you select additional options for exposed pagers. Some options are only available in certain situations. If you do not see the options you expect, please see the <a href=":link">BEF settings documentation page</a> for more details.', [':link' => $documentation_uri]) . '</p>',
     ];
@@ -472,7 +509,7 @@ class BetterExposedFilters extends InputRequired {
     /*
      * Add options for exposed filters.
      */
-    $documentation_uri = Url::fromUri('http://drupal.org/node/1701012')->toString();
+    $documentation_uri = Url::fromUri('https://drupal.org/node/1701012')->toString();
     $form['bef']['filter']['bef_intro'] = [
       '#markup' => '<h3>' . $this->t('Exposed Filter Settings') . '</h3><p>' . $this->t('This section lets you select additional options for exposed filters. Some options are only available in certain situations. If you do not see the options you expect, please see the <a href=":link">BEF settings documentation page</a> for more details.', [':link' => $documentation_uri]) . '</p>',
     ];
@@ -750,6 +787,7 @@ class BetterExposedFilters extends InputRequired {
             $element['#attributes']['data-bef-auto-submit-exclude'] = '';
           }
         }
+        unset($element);
       }
 
       if (!empty($bef_options['general']['autosubmit_hide'])) {
@@ -830,16 +868,25 @@ class BetterExposedFilters extends InputRequired {
     }
 
     // If our form has no visible filters, hide the submit button.
-    $has_visible_filters = !empty(Element::getVisibleChildren($form)) ?: FALSE;
+    $has_visible_filters = !empty(Element::getVisibleChildren($form));
     $form['actions']['submit']['#access'] = $has_visible_filters;
 
     if ($bef_options['general']['reset_button_always_show']) {
       $form['actions']['reset']['#access'] = TRUE;
     }
 
-    // Never enable a reset button that has already been disabled.
-    if (!isset($form['actions']['reset']['#access']) || $form['actions']['reset']['#access'] === TRUE) {
-      $form['actions']['reset']['#access'] = $has_visible_filters;
+    if (isset($form['actions']['reset'])) {
+      // Never enable a reset button that has already been disabled.
+      if (!isset($form['actions']['reset']['#access']) || $form['actions']['reset']['#access'] === TRUE) {
+        $form['actions']['reset']['#access'] = $has_visible_filters;
+      }
+
+      // Prevent from showing up in \Drupal::request()->query.
+      // See ViewsExposedForm::buildForm() for more details.
+      $form['actions']['reset']['#name'] = 'reset';
+      $form['actions']['reset']['#op'] = 'reset';
+      $form['actions']['reset']['#type'] = 'submit';
+      $form['actions']['reset']['#id'] = Html::getUniqueId('edit-reset-' . $this->view->storage->id());
     }
 
     // Ensure default process/pre_render callbacks are included when a BEF
@@ -848,6 +895,101 @@ class BetterExposedFilters extends InputRequired {
       $element = &$form[$key];
       $this->addDefaultElementInfo($element);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function exposedFormSubmit(&$form, FormStateInterface $form_state, &$exclude) {
+    parent::exposedFormSubmit($form, $form_state, $exclude);
+
+    $triggering_element = $form_state->getTriggeringElement();
+    if ($triggering_element && !empty($triggering_element['#name']) && $triggering_element['#name'] == 'reset') {
+      $params = $this->request->request->all();
+      if (empty($params) || in_array('reset', array_keys($params))) {
+        $this->resetForm($form, $form_state);
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function resetForm(&$form, FormStateInterface $form_state) {
+    // _SESSION is not defined for users who are not logged in.
+    // If filters are not overridden, store the 'remember' settings on the
+    // default display. If they are, store them on this display. This way,
+    // multiple displays in the same view can share the same filters and
+    // remember settings.
+    $display_id = ($this->view->display_handler->isDefaulted('filters')) ? 'default' : $this->view->current_display;
+
+    if (isset($_SESSION['views'][$this->view->storage->id()][$display_id])) {
+      unset($_SESSION['views'][$this->view->storage->id()][$display_id]);
+    }
+
+    // Set the form to allow redirect.
+    if (empty($this->view->live_preview) && !$this->request->isXmlHttpRequest()) {
+      $form_state->disableRedirect(FALSE);
+    }
+    else {
+      $form_state->setRebuild();
+      $this->view->setExposedInput([]);
+
+      // Go through each handler and let it generate its exposed widget.
+      // See ViewsExposedForm::buildForm() for more details.
+      foreach ($this->view->display_handler->handlers as $type => $value) {
+        /** @var \Drupal\views\Plugin\views\ViewsHandlerInterface $handler */
+        foreach ($this->view->$type as $id => $handler) {
+          if ($handler->canExpose() && $handler->isExposed()) {
+            // Reset exposed sorts filter elements if they exist.
+            if ($type === 'sort') {
+              foreach (['sort_bef_combine', 'sort_by', 'sort_order'] as $sort_el) {
+                if (isset($this->view->exposed_data[$sort_el])) {
+                  $this->request->query->remove($sort_el);
+                  $form_state->setValue($sort_el, $form[$sort_el]['#default_value']);
+                }
+              }
+              continue 2;
+            }
+
+            $handler->value = $handler->options['value'];
+
+            // Grouped exposed filters have their own forms.
+            // Instead of render the standard exposed form, a new Select or
+            // Radio form field is rendered with the available groups.
+            // When an user choose an option the selected value is split
+            // into the operator and value that the item represents.
+            if ($handler->isAGroup()) {
+              $handler->groupForm($form, $form_state);
+              $id = $value_identifier = $handler->options['group_info']['identifier'];
+            }
+            else {
+              $handler->buildExposedForm($form, $form_state);
+              $value_identifier = $handler->options['expose']['identifier'];
+            }
+            if ($info = $handler->exposedInfo()) {
+              $form['#info']["$type-$id"] = $info;
+            }
+
+            // Checks if this is a complex value.
+            if (isset($form[$value_identifier]) && Element::children($form[$value_identifier])) {
+              foreach (Element::children($form[$value_identifier]) as $child) {
+                $form_state->setValue([$value_identifier, $child], $form[$value_identifier][$child]['#default_value'] ?? NULL);
+              }
+            }
+            else {
+              $form_state->setValue($value_identifier, $form[$value_identifier]['#default_value'] ?? NULL);
+            }
+
+            // Cleanup query.
+            $this->request->query->remove($value_identifier);
+          }
+        }
+      }
+      $this->view->exposed_data = $form_state->getValues();
+    }
+
+    $form_state->setRedirect('<current>');
   }
 
   /**
@@ -899,7 +1041,7 @@ class BetterExposedFilters extends InputRequired {
    */
   protected function addDefaultElementInfo(array &$element) {
     /** @var \Drupal\Core\Render\ElementInfoManager $element_info_manager */
-    $element_info = \Drupal::service('element_info');
+    $element_info = $this->elementInfo;
     if (isset($element['#type']) && empty($element['#defaults_loaded']) && ($info = $element_info->getInfo($element['#type']))) {
       $element['#process'] = $element['#process'] ?? [];
       $element['#pre_render'] = $element['#pre_render'] ?? [];

@@ -7,7 +7,7 @@ message.settings:
     delete_on_entity_delete:
       type: sequence
       sequence:
-        - type: string
+        type: string
     purge_enable:
       type: boolean
     purge_methods:
@@ -75,10 +75,6 @@ message.template.*:
               weight:
                 type: integer
 
-action.configuration.message_delete_action:
-  type: action_configuration_default
-  label: 'Delete message configuration'
-
 message.message:
   type: mapping
   label: 'Message settings'
@@ -90,8 +86,8 @@ message.message:
       type: sequence
       label: 'Auto delete messages referencing the following entities'
       sequence:
-        - type: string
-          label: 'Entity type'
+        type: string
+        label: 'Entity type'
 
 
 # This is modeled the same as image styles are - each plugin has its own config.

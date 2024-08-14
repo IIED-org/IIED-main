@@ -4,8 +4,8 @@ namespace Drupal\geolocation_google_maps\Plugin\geolocation\MapFeature;
 
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\geolocation\MapFeatureBase;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\geolocation\MapFeatureBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -18,14 +18,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   type = "google_maps",
  * )
  */
-class MarkerIcon extends MapFeatureBase implements ContainerFactoryPluginInterface{
+class MarkerIcon extends MapFeatureBase implements ContainerFactoryPluginInterface {
 
   /**
-   * File uri generator.
+   * File URL Generator service.
    *
    * @var \Drupal\Core\File\FileUrlGeneratorInterface
    */
-  protected $fileUrlGenerator;
+  protected FileUrlGeneratorInterface $fileUrlGenerator;
 
   /**
    * Constructs a new LeafletMarkerIcon plugin object.

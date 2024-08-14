@@ -23,15 +23,36 @@ webform_content_creator.webform_content_creator.*:
     encryption_profile:
       type: string
       label: 'Encryption profile'
+    redirect_to_entity:
+      type: boolean
+      label: 'Redirect to new entity'
+    redirect_to_entity_message:
+      type: string
+      label: 'Message after redirection'
+    redirect_to_entity_message_on_update:
+      type: string
+      label: 'Display message after redirection on submission update'
+    sync_unique:
+      type: boolean
+      label: 'Synchronize content based on unique field'   
     sync_content:
       type: boolean
       label: 'Synchronize content in edition'
     sync_content_delete:
       type: boolean
       label: 'Synchronize content in deletion'
+    sync_content_field:
+      type: string
+      label: 'Sync content field'
     sync_content_node_field:
       type: string
       label: 'Synchronization field machine name'
+    target_bundle:
+      type: string
+      label: 'Target bundle'
+    target_entity_type:
+      type: string
+      label: 'Target entity type'
     elements:
       type: ignore
       label: 'Elements'

@@ -57,9 +57,14 @@ class DropzoneJsElementTest extends KernelTestBase {
     $this->assertNotEmpty($this->xpath("$xpath_base/input[contains(@data-drupal-selector, 'edit-dropzonejs-uploaded-files')]"));
     // Upload files path.
     $this->assertNotEmpty($this->xpath("$xpath_base/input[contains(@data-upload-path, '/dropzonejs/upload?token=')]"));
+
     // Js is attached.
-    $this->assertNotEmpty($this->xpath("/html/body/script[contains(@src, 'libraries/dropzone/dist/min/dropzone.min.js')]"));
-    $this->assertNotEmpty($this->xpath("/html/body/script[contains(@src, 'dropzonejs/js/dropzone.integration.js')]"));
+    $new_js_path = $this->xpath("//html/body/script[contains(@src, 'libraries/dropzone/dropzone-min.js')]");
+    $v6_js_path = $this->xpath("//html/body/script[contains(@src, 'libraries/dropzone/min/dropzone.min.js')]");
+    $old_js_path = $this->xpath("//html/body/script[contains(@src, 'libraries/dropzone/dist/min/dropzone.min.js')]");
+
+    $this->assertTrue($new_js_path || $v6_js_path || $old_js_path);
+    $this->assertNotEmpty($this->xpath("//html/body/script[contains(@src, 'js/dropzone.integration.js')]"));
   }
 
 }

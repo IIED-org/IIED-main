@@ -33,13 +33,13 @@ class MenuTest extends BrowserTestBase {
 
     // Link should appear on main config page.
     $this->drupalGet(Url::fromRoute('system.admin_config'));
-    $this->assertSession()->linkExists(t('Message'));
+    $this->assertSession()->linkExists('Message');
 
     // Link should be on the message-specific overview page.
     $this->drupalGet(Url::fromRoute('message.main_settings'));
-    $this->assertSession()->linkExists(t('Message'));
+    $this->assertSession()->linkExists('Message');
 
-    $this->clickLink(t('Message'));
+    $this->clickLink('Message');
     $this->assertSession()->statusCodeEquals(200);
   }
 

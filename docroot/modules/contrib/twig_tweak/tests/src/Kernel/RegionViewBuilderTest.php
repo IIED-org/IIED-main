@@ -3,6 +3,7 @@
 namespace Drupal\Tests\twig_tweak\Kernel;
 
 use Drupal\block\Entity\Block;
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Tests\user\Traits\UserCreationTrait;
@@ -58,6 +59,7 @@ final class RegionViewBuilderTest extends AbstractTestCase {
   public function testRegionViewBuilder(): void {
 
     $view_builder = $this->container->get('twig_tweak.region_view_builder');
+    /** @var \Drupal\Core\Render\RendererInterface $renderer */
     $renderer = $this->container->get('renderer');
 
     $build = $view_builder->build('sidebar_first');
@@ -126,7 +128,11 @@ final class RegionViewBuilderTest extends AbstractTestCase {
         </div>
       </div>
     HTML;
-    $actual_html = $renderer->renderPlain($build);
+    $actual_html = DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION, '10.3.0',
+      fn () => $renderer->renderInIsolation($build),
+      fn () => $renderer->renderPlain($build),
+    );
     self::assertSame(self::normalizeHtml($expected_html), self::normalizeHtml($actual_html));
 
     // Set 'stark' as default site theme and check if the view builder without
@@ -140,7 +146,11 @@ final class RegionViewBuilderTest extends AbstractTestCase {
     self::assertRenderArray($expected_build, $build);
 
     Html::resetSeenIds();
-    $actual_html = $renderer->renderPlain($expected_build);
+    $actual_html = DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION, '10.3.0',
+      fn () => $renderer->renderInIsolation($build),
+      fn () => $renderer->renderPlain($expected_build),
+    );
     self::assertSame(self::normalizeHtml($expected_html), self::normalizeHtml($actual_html));
   }
 

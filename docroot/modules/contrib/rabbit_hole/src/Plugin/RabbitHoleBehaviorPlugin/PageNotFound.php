@@ -3,9 +3,9 @@
 namespace Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPlugin;
 
 use Drupal\Core\Entity\EntityInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\rabbit_hole\Plugin\RabbitHoleBehaviorPluginBase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Denies access to a page.

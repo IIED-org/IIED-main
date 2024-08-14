@@ -6,8 +6,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\linkchecker\LinkCheckerService;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use GuzzleHttp\Promise\Utils;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Checks the link.
@@ -69,7 +69,7 @@ class LinkCheck extends QueueWorkerBase implements ContainerFactoryPluginInterfa
         ->getStorage('linkcheckerlink')
         ->load($id);
 
-      if ($link && !is_null($link->getUrl())) {
+      if ($link && !is_null($link->getUrl()) && $link->isLinkCheckStatus()) {
         $promises[] = $this->linkChecker->check($link);
       }
     }

@@ -19,7 +19,7 @@ class UserBehaviorInvocationTest extends RabbitHoleBehaviorInvocationTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['rh_user', 'user'];
+  protected static $modules = ['rh_user', 'user'];
 
   /**
    * {@inheritdoc}

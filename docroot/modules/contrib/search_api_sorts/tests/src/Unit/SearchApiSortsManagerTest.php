@@ -119,9 +119,7 @@ class SearchApiSortsManagerTest extends UnitTestCase {
 
     $sortsField = new SearchApiSortsField(['id' => $this->randomMachineName()], 'search_api_sorts_field');
 
-    $storage = $this->getMockBuilder(EntityStorageInterface::class)
-      ->disableOriginalConstructor()
-      ->getMock();
+    $storage = $this->createMock(EntityStorageInterface::class);
 
     $storage->expects($this->once())
       ->method('loadByProperties')

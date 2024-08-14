@@ -13,3 +13,4 @@ name: Theme
 vid: theme
 description: 'Interest or category'
 weight: -10
+new_revision: false

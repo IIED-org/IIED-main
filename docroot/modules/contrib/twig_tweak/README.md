@@ -3,6 +3,10 @@
 The Twig Tweak module provides a Twig extension with some useful functions
 and filters that can improve development experience.
 
+Some functions and filters are built in the Twig Tweak module, while others are
+simple wrappers to integrate Drupal functions and services into Twig (for
+example: `format_size`, `drupal_view_result`).
+
 ## Requirements
 
 This module requires no modules outside of Drupal core.

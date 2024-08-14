@@ -2,13 +2,13 @@
 
 namespace Drupal\multiple_registration\Form;
 
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\ProxyClass\Routing\RouteBuilder;
 use Drupal\multiple_registration\Controller\MultipleRegistrationController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\ProxyClass\Routing\RouteBuilder;
 
 /**
  * Provides a form for configuring common settings for Multiple Registration.

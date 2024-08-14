@@ -3,10 +3,10 @@
 namespace Drupal\geolocation_address\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\geolocation\GeocoderManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\geolocation\GeocoderManager;
 
 /**
  * Class AddressWidgetController.
