@@ -4388,6 +4388,13 @@ cite {
   padding-right: 0.25rem;
 }
 
+/* sets top margin for info boxes */
+
+.paragraph--type--info-box aside .relative h2:first-of-type, 
+  .paragraph--type--info-box aside .relative h3:first-of-type{
+  margin-top: 1rem;
+}
+
 .visible{
   visibility: visible;
 }
@@ -7438,6 +7445,11 @@ cite {
     --tw-bg-opacity: 1;
     background-color: rgb(250 237 245 / var(--tw-bg-opacity));
   }
+
+  .paragraph--type--info-box aside .lg\:relative h2:first-of-type, 
+  .paragraph--type--info-box aside .lg\:relative h3:first-of-type{
+    margin-top: 1rem;
+  }
 }
 
 @media (min-width: 1280px){
@@ -8953,4 +8965,3 @@ cite {
     display: inline;
   }
 }
-
