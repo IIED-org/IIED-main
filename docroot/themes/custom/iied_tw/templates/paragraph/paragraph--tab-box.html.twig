@@ -64,7 +64,7 @@
         </nav>
 
         {% for key, tab_body in tab_bodies %}
-        <div class="tab-panel" :class="{ 'active': activeTab === {{key}} }" x-show.transition.in.opacity.duration.600="activeTab === {{key}}">
+        <div class="tab-panel" :class="{ 'active': activeTab === {{key}} }" x-transition.in.opacity.duration.600="activeTab === {{key}}">
           {{ tab_body|raw }}
         </div>
         {% endfor %}
