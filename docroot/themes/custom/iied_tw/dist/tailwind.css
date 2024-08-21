@@ -4869,6 +4869,10 @@ cite {
   margin-top: 1rem;
 }
 
+.mt-5{
+  margin-top: 1.25rem;
+}
+
 .mt-6{
   margin-top: 1.5rem;
 }
@@ -5493,6 +5497,10 @@ cite {
 
 .self-center{
   align-self: center;
+}
+
+.justify-self-start{
+  justify-self: start;
 }
 
 .justify-self-end{
@@ -7980,6 +7988,10 @@ cite {
     margin-top: 0px;
   }
 
+  .sm\:block{
+    display: block;
+  }
+
   .sm\:inline{
     display: inline;
   }
@@ -8191,6 +8203,14 @@ cite {
     margin-top: 0px;
   }
 
+  .md\:block{
+    display: block;
+  }
+
+  .md\:inline{
+    display: inline;
+  }
+
   .md\:flex{
     display: flex;
   }
@@ -8263,6 +8283,10 @@ cite {
 
   .md\:pl-4{
     padding-left: 1rem;
+  }
+
+  .md\:text-center{
+    text-align: center;
   }
 
   .md\:text-4xl{
@@ -8389,6 +8413,10 @@ cite {
 
   .lg\:inline-block{
     display: inline-block;
+  }
+
+  .lg\:inline{
+    display: inline;
   }
 
   .lg\:flex{
@@ -8606,6 +8634,10 @@ cite {
     padding-bottom: 6rem;
   }
 
+  .lg\:text-center{
+    text-align: center;
+  }
+
   .lg\:text-2xl{
     font-size: 1.5rem;
     line-height: 2rem;
@@ -8737,6 +8769,10 @@ cite {
     display: block;
   }
 
+  .xl\:inline{
+    display: inline;
+  }
+
   .xl\:flex{
     display: flex;
   }
@@ -8856,6 +8892,10 @@ cite {
 
   .xl\:pt-6{
     padding-top: 1.5rem;
+  }
+
+  .xl\:text-center{
+    text-align: center;
   }
 
   .xl\:text-3xl{
