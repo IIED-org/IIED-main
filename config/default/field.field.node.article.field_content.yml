@@ -206,6 +206,9 @@ settings:
       timeline:
         weight: -40
         enabled: true
+      unstyled:
+        weight: 44
+        enabled: false
       video_embed:
         weight: -39
         enabled: true
