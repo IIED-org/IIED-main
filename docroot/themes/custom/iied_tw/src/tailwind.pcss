@@ -269,6 +269,10 @@
   .tertiary-menu .is-active {
     @apply bg-iiedgreen-10;
   }
+  .secondary .is-active {
+    @apply font-bold;
+  }
+
   /*-- extra padding for secondary menu --*/
   .priority-nav__dropdown.show {
     @apply pb-2;
@@ -558,5 +562,10 @@
     content: ',';
     padding-right: 0.25rem;
   }
+  /* makes sure responsive menu is hidden initially */
+  [x-cloak] {
+    display: none !important;
+  }
+
 }
 

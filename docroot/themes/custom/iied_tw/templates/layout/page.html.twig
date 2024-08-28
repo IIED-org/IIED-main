@@ -63,7 +63,11 @@
   
       {# Secondary nav #}
       <div class="px-4">
-        <div class="relative my-2"
+      <div class="relative my-2"
+        x-data="scrollMenu()"
+        x-init="updateScrollState($refs.scrollContainer)"
+        @scroll="updateScrollState($refs.scrollContainer)">
+        {# <div class="relative my-2"
           x-data="{
             isAtStart: true,
             isAtEnd: false,
@@ -94,13 +98,12 @@
                 animateScroll();
             },
             updateScrollState(element) {
-                const threshold = 5; // A small threshold to help with exact pixel comparison
+                const threshold = 5; 
                 this.isAtStart = element.scrollLeft <= threshold;
-                // Determine if scrolled to the end considering a small threshold to help with exact pixel comparison
                 const scrolledToEnd = element.scrollWidth - element.scrollLeft - element.clientWidth <= threshold;
                 this.isAtEnd = scrolledToEnd;
             }
-            }" x-init="updateScrollState($refs.scrollContainer)" @scroll="updateScrollState($refs.scrollContainer)">
+            }" x-init="updateScrollState($refs.scrollContainer)" @scroll="updateScrollState($refs.scrollContainer)"> #}
            {{ page.secondary_menu }}
 
               <!-- Button to scroll left -->

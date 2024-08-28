@@ -12,20 +12,53 @@ function smoothScroll(element, endX, duration) {
         currentTime += increment;
         let val = easeInOutQuad(currentTime / duration);
         element.scrollLeft = startX + (change * val);
-        if(currentTime < duration) {
+        if (currentTime < duration) {
             setTimeout(animateScroll, increment);
         }
     };
     animateScroll();
 }
 
+function scrollByPage(element, direction) {
+    const containerWidth = element.offsetWidth;
+    const currentScroll = element.scrollLeft;
+    const maxScrollLeft = element.scrollWidth - containerWidth;
+
+    // Use 20% of the container width as offset
+    const percentageOffset = 0.20;
+    const offset = containerWidth * percentageOffset;
+
+    // Define the scroll amount subtracting the percentage-based offset
+    let scrollAmount = containerWidth - offset;
+
+    if (direction === 'right') {
+        // Stop scrolling at the rightmost edge
+        const remainingScroll = maxScrollLeft - currentScroll;
+        scrollAmount = Math.min(scrollAmount, remainingScroll);
+    } else {
+        // Stop scrolling at the leftmost edge
+        scrollAmount = Math.min(scrollAmount, currentScroll);
+    }
+
+    const targetScroll = direction === 'left' ? currentScroll - scrollAmount : currentScroll + scrollAmount;
+    smoothScroll(element, targetScroll, 600); // Duration: 600ms
+}
+
+function updateScrollState(element, data) {
+    const threshold = 5;
+    data.isAtStart = element.scrollLeft <= threshold;
+    const scrolledToEnd = element.scrollWidth - element.scrollLeft - element.clientWidth <= threshold;
+    data.isAtEnd = scrolledToEnd;
+}
+
 document.addEventListener('alpine:init', () => {
-    Alpine.data('scroll', () => ({
-        scrollByPage(element, direction) {
-            const containerWidth = element.offsetWidth;
-            const currentScroll = element.scrollLeft;
-            const targetScroll = direction === 'left' ? currentScroll - containerWidth : currentScroll + containerWidth;
-            smoothScroll(element, targetScroll, 1000); // Scroll duration: 600ms
+    Alpine.data('scrollMenu', () => ({
+        isAtStart: true,
+        isAtEnd: false,
+        scrollByPage: (element, direction) => scrollByPage(element, direction),
+        smoothScroll: (element, endX, duration) => smoothScroll(element, endX, duration),
+        updateScrollState: function(element) {
+            return updateScrollState(element, this);
         }
     }));
 });

@@ -9,7 +9,7 @@
  *   - attributes: HTML attributes for the menu item.
  *   - below: The menu item child items.
  *   - title: The menu link title.
- *   - url: The menu link url, instance of \Drupal\Core\Url
+ *   - url: The menu link URL, instance of \Drupal\Core\Url
  *   - localized_options: Menu link localized options.
  *   - is_expanded: TRUE if the link has visible children within the current
  *     menu tree.
@@ -18,11 +18,11 @@
  *   - in_active_trail: TRUE if the link is in the active trail.
  */
 #}
-
 {% import _self as menus %}
+
 {#
   We call a macro which calls itself to render the full tree.
-  @see https://twig.symfony.com/doc/1.x/tags/macro.html
+  @see https://twig.symfony.com/doc/3.x/tags/macro.html
 #}
 {{ menus.menu_links(items, attributes, 0) }}
 
@@ -30,13 +30,13 @@
   {% import _self as menus %}
   {% if items %}
     {% if menu_level == 0 %}
-      <ul{{ attributes.addClass('flex flex-row items-center justify-start space-x-4 overflow-x-scroll whitespace-no-wrap no-scrollbar flex-nowrap') }} x-ref="scrollContainer" @scroll="updateScrollState($refs.scrollContainer)">
+      <ul{{ attributes.addClass('lg:grid-cols-2', 'lg:grid') }}>
     {% else %}
       <ul>
     {% endif %}
     {% for item in items %}
-      <li{{ item.attributes.addClass('flex-shrink-0 transition-colors ease-out border border-gray-300 rounded-full hover:bg-gray-100') }}>
-        {{ link(item.title, item.url, { 'class':['block', 'py-1.5', 'px-4', 'text-gray-900', 'hover:text-gray-900','visited:text-gray-900']}) }}
+       <li{{ item.attributes.addClass('rounded-full', 'hover:bg-gray-100') }}>
+        {{ link(item.title, item.url, {'class': ['px-4', 'py-2', 'block', 'lg:py-4', 'text-gray-900', 'visited:text-gray-900', 'hover:no-underline']}) }}
         {% if item.below %}
           {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
         {% endif %}

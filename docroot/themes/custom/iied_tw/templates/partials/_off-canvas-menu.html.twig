@@ -1,11 +1,12 @@
 <!-- Off canvas menu -->
     <div x-show="isOpen" 
+        x-cloak 
         x-transition:enter="transition ease-out duration-300 transform"
-        x-transition:enter-start="opacity-0 -translate-x-full"
-        x-transition:enter-end="opacity-100 translate-x-0"
+        x-transition:enter-start="opacity-0 -translate-y-full"
+        x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-300 transform"
-        x-transition:leave-start="opacity-100 translate-x-0"
-        x-transition:leave-end="opacity-0 -translate-x-full"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-full"
         @click.stop
         class="fixed overflow-y-auto h-screen inset-y-0 left-0 z-[999] transition-transform duration-300 ease-in-out transform max-w-fit max-h-fit"
         id="menu"
@@ -18,26 +19,12 @@
         <!-- main links -->
         <div class="py-4 pl-4 pr-14 sm:pr-4 bg-iiedblue-50 rounded-tr-2xl">
             <div class="pb-4 mb-6 border-b border-white">
-                <ul class="font-semibold">
-                <li class="py-2 rounded-full hover:bg-iiedblue-100">
-                    <a href="/about" class="px-4 text-gray-900 visited:text-gray-900 hover:no-underline">About</a>
-                </li>
-                <li class="py-2 rounded-full hover:bg-iiedblue-100">
-                    <a href="/news-insight" class="px-4 text-gray-900 visited:text-gray-900 hover:no-underline">News and insight</a>
-                </li>
-                <li class="py-2 rounded-full hover:bg-iiedblue-100">
-                    <a href="/approach" class="px-4 text-gray-900 visited:text-gray-900 hover:no-underline">Our approach</a>
-                </li>
-                <li class="py-2 rounded-full hover:bg-iiedblue-100">
-                    <a href="/publications" class="px-4 text-gray-900 visited:text-gray-900 hover:no-underline">Publications</a>
-                </li>
-                </ul>
+            {{ drupal_block('system_menu_block:primary-expanded', {wrapper: false}) }}
             </div>
 
-            <div class="py-2 pl-4 my-2 rounded-full hover:bg-iiedblue-100">
-            <a href="/newsletters" class="text-gray-900 hover:no-underline">Sign up for our newsletters</a>
+            <div class="my-2 rounded-full hover:bg-iiedblue-100">
+            <a href="/newsletters" class="block px-4 py-2 text-gray-900 lg:py-4 hover:no-underline">Sign up for our newsletters</a>
             </div>
-
             <!-- Social links -->
             <div class="py-4">
             <div class="flex items-center">
@@ -78,8 +65,9 @@
         </div>
 
         <!-- Secondary links -->
-        <div class="p-4 bg-gray-50 rounded-r-2xl">
-            <ul class="sm:grid-cols-2 sm:grid">
+        <div class="p-4 mb-4 bg-gray-50 rounded-r-2xl">
+        {{ drupal_block('system_menu_block:secondary-expanded', {wrapper: false}) }} 
+            {# <ul class="lg:grid-cols-2 lg:grid">
                 <li class="rounded-full hover:bg-gray-100">
                 <a
                     href="#"
@@ -214,7 +202,7 @@
                     >
                 </li>
         
-            </ul>
+            </ul> #}
         </div>
 
         <!-- close button -->
