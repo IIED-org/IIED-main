@@ -50,12 +50,12 @@
 {{ attach_library('iied_tw/alpine-collapse') }}
 {{ attach_library('iied_tw/scroll-nav') }}
 
-<header role="banner" x-data="{ showSearch: false }" x-cloak>
-  <nav x-data="{ isOpen: false }" 
-  @click.away="isOpen = false"
-  @keydown.escape.window="isOpen = false"
-  role="navigation"
-  aria-label="Main navigation">
+  <header role="banner" x-data="{ showSearch: false }" x-cloak>
+    <nav x-data="{ isOpen: false }" 
+    @click.away="isOpen = false"
+    @keydown.escape.window="isOpen = false"
+    role="navigation"
+    aria-label="Main navigation">
 
       <div>
       {{ page.navbar_branding }}
@@ -63,44 +63,10 @@
   
       {# Secondary nav #}
       <div class="px-4">
-        <div class="relative my-2"
-          x-data="{
-            isAtStart: true,
-            isAtEnd: false,
-            scrollByPage(element, direction) {
-                const containerWidth = element.offsetWidth;
-                const maxScrollLeft = element.scrollWidth - containerWidth;
-                const currentScroll = element.scrollLeft;                
-                const targetScroll = direction === 'left' ? currentScroll - (containerWidth - 96) : currentScroll + (containerWidth - 96);
-                this.smoothScroll(element, targetScroll, 1000); // Duration is 1000ms
-            },
-            smoothScroll(element, endX, duration) {
-                let startX = element.scrollLeft,
-                    change = endX - startX,
-                    currentTime = 0,
-                    increment = 20,
-                    vm = this;
-        
-                const animateScroll = function() {
-                    currentTime += increment;
-                    const val = easeInOutQuad(currentTime / duration);
-                    element.scrollLeft = startX + (change * val);
-                    vm.updateScrollState(element);
-        
-                    if(currentTime < duration) {
-                        setTimeout(animateScroll, increment);
-                    }
-                };
-                animateScroll();
-            },
-            updateScrollState(element) {
-                const threshold = 5; // A small threshold to help with exact pixel comparison
-                this.isAtStart = element.scrollLeft <= threshold;
-                // Determine if scrolled to the end considering a small threshold to help with exact pixel comparison
-                const scrolledToEnd = element.scrollWidth - element.scrollLeft - element.clientWidth <= threshold;
-                this.isAtEnd = scrolledToEnd;
-            }
-            }" x-init="updateScrollState($refs.scrollContainer)" @scroll="updateScrollState($refs.scrollContainer)">
+      <div class="relative my-2"
+        x-data="scrollMenu()"
+        x-init="updateScrollState($refs.scrollContainer)"
+        @scroll="updateScrollState($refs.scrollContainer)">
            {{ page.secondary_menu }}
 
               <!-- Button to scroll left -->
@@ -145,15 +111,13 @@
       {% include '@iied_tw/partials/_search_expand.html.twig' %}
       {% include '@iied_tw/partials/_off-canvas-menu.html.twig' %}
     </nav>
-</header>
+  </header>
 
   {{ page.breadcrumb }}
 
   {{ page.highlighted }}
 
   {{ page.help }}
-
-
 
 <div class="container my-12">
   <main role="main">

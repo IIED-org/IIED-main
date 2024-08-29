@@ -67,43 +67,6 @@
         x-data="scrollMenu()"
         x-init="updateScrollState($refs.scrollContainer)"
         @scroll="updateScrollState($refs.scrollContainer)">
-        {# <div class="relative my-2"
-          x-data="{
-            isAtStart: true,
-            isAtEnd: false,
-            scrollByPage(element, direction) {
-                const containerWidth = element.offsetWidth;
-                const maxScrollLeft = element.scrollWidth - containerWidth;
-                const currentScroll = element.scrollLeft;                
-                const targetScroll = direction === 'left' ? currentScroll - (containerWidth - 96) : currentScroll + (containerWidth - 96);
-                this.smoothScroll(element, targetScroll, 1000); // Duration is 1000ms
-            },
-            smoothScroll(element, endX, duration) {
-                let startX = element.scrollLeft,
-                    change = endX - startX,
-                    currentTime = 0,
-                    increment = 20,
-                    vm = this;
-        
-                const animateScroll = function() {
-                    currentTime += increment;
-                    const val = easeInOutQuad(currentTime / duration);
-                    element.scrollLeft = startX + (change * val);
-                    vm.updateScrollState(element);
-        
-                    if(currentTime < duration) {
-                        setTimeout(animateScroll, increment);
-                    }
-                };
-                animateScroll();
-            },
-            updateScrollState(element) {
-                const threshold = 5; 
-                this.isAtStart = element.scrollLeft <= threshold;
-                const scrolledToEnd = element.scrollWidth - element.scrollLeft - element.clientWidth <= threshold;
-                this.isAtEnd = scrolledToEnd;
-            }
-            }" x-init="updateScrollState($refs.scrollContainer)" @scroll="updateScrollState($refs.scrollContainer)"> #}
            {{ page.secondary_menu }}
 
               <!-- Button to scroll left -->
@@ -150,10 +113,6 @@
     </nav>
   </header>
 
-
-
-
-
   {{ page.breadcrumb }}
 
   {{ page.highlighted }}
@@ -162,23 +121,14 @@
 
   {{ page.preface }}
 
-<div>  {# move class="container p-4 mx-auto" #}
-  <main role="main">
-    <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
-
-        {{ page.content }}
-
-  </main>
-</div>{# /.layout-container #}
-
- {# {% if page.postscript %}
-    <section>
-      <div class="container p-4">
-        {{ page.postscript }}
-      </div>
-    </section>
-  {% endif %}
-        #}
+  {% block pagemain %}
+    <div>
+      <main role="main">
+        <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
+            {{ page.content }}
+      </main>
+    </div>
+  {% endblock %}
 
   {% if page.footer %}
     <footer role="contentinfo">

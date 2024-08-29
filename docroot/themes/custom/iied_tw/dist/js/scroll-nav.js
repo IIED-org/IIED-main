@@ -49,16 +49,36 @@ function updateScrollState(element, data) {
     data.isAtStart = element.scrollLeft <= threshold;
     const scrolledToEnd = element.scrollWidth - element.scrollLeft - element.clientWidth <= threshold;
     data.isAtEnd = scrolledToEnd;
+
+    console.log("Updating Scroll State:");
+    console.log("Current Scroll Left:", element.scrollLeft);
+    console.log("Maximum Scroll Left:", element.scrollWidth - element.clientWidth);
+    console.log("isAtStart:", data.isAtStart);
+    console.log("isAtEnd:", data.isAtEnd);
 }
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('scrollMenu', () => ({
         isAtStart: true,
         isAtEnd: false,
-        scrollByPage: (element, direction) => scrollByPage(element, direction),
-        smoothScroll: (element, endX, duration) => smoothScroll(element, endX, duration),
+        init() {
+            this.updateScrollState(this.$refs.scrollContainer);
+            this.$refs.scrollContainer.addEventListener('scroll', () => {
+                this.updateScrollState(this.$refs.scrollContainer);
+            });
+
+            // Initial check if elements exist already
+            requestAnimationFrame(() => {
+                this.updateScrollState(this.$refs.scrollContainer);
+            });
+        },
+        scrollByPage(element, direction) {
+            scrollByPage(element, direction);
+            setTimeout(() => this.updateScrollState(element), 650); // Allow enough time for the smooth scroll to finish
+        },
         updateScrollState: function(element) {
             return updateScrollState(element, this);
         }
     }));
 });
+
