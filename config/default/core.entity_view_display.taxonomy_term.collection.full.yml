@@ -16,6 +16,7 @@ dependencies:
     - field.field.taxonomy_term.collection.field_term_image
     - field.field.taxonomy_term.collection.field_theme
     - field.field.taxonomy_term.collection.layout_builder__layout
+    - field.field.taxonomy_term.collection.subheading
     - taxonomy.vocabulary.collection
     - views.view.taxonomy_all_display
     - views.view.taxonomy_featured_display
@@ -37,15 +38,15 @@ third_party_settings:
         layout_settings:
           label: ''
           context_mapping: {  }
+          classes:
+            layout_class: {  }
+            first: {  }
           wrappers:
             first: div
           outer_wrapper: div
           attributes: ''
           link_attribute: ''
           link_custom: ''
-          classes:
-            layout_class: {  }
-            first: {  }
         components:
           e228e755-d051-4dcd-a893-0b69562f5f29:
             uuid: e228e755-d051-4dcd-a893-0b69562f5f29
@@ -76,16 +77,16 @@ third_party_settings:
         layout_settings:
           label: ''
           context_mapping: {  }
+          classes:
+            layout_class:
+              bg-fill: bg-fill
+            first: {  }
           wrappers:
             first: div
           outer_wrapper: div
           attributes: ''
           link_attribute: ''
           link_custom: ''
-          classes:
-            layout_class:
-              bg-fill: bg-fill
-            first: {  }
         components:
           94c48576-f5a7-4673-a96f-b45516fcedcb:
             uuid: 94c48576-f5a7-4673-a96f-b45516fcedcb
@@ -106,15 +107,15 @@ third_party_settings:
         layout_settings:
           label: ''
           context_mapping: {  }
+          classes:
+            layout_class: {  }
+            first: {  }
           wrappers:
             first: div
           outer_wrapper: div
           attributes: ''
           link_attribute: ''
           link_custom: ''
-          classes:
-            layout_class: {  }
-            first: {  }
         components:
           4d0d1344-f04c-426c-8770-67e1f0c9bd7d:
             uuid: 4d0d1344-f04c-426c-8770-67e1f0c9bd7d
@@ -231,3 +232,4 @@ hidden:
   langcode: true
   layout_builder__layout: true
   search_api_excerpt: true
+  subheading: true

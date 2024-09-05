@@ -1,0 +1,19 @@
+uuid: 4bfb19e9-3796-4ae9-85b3-dc6ca4ddfc56
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.subheading
+    - taxonomy.vocabulary.collection
+id: taxonomy_term.collection.subheading
+field_name: subheading
+entity_type: taxonomy_term
+bundle: collection
+label: Subheading
+description: "\r\nOptional, only use to split a long title"
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
