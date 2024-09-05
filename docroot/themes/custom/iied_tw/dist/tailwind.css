@@ -4407,6 +4407,13 @@ cite {
   padding-right: 0.25rem;
 }
 
+/* sets top margin for info boxes */
+
+.paragraph--type--info-box aside .relative h2:first-of-type, 
+  .paragraph--type--info-box aside .relative h3:first-of-type{
+  margin-top: 1rem;
+}
+
 /* makes sure responsive menu is hidden initially */
 
 [x-cloak] {
@@ -4930,6 +4937,10 @@ cite {
 
 .mt-4{
   margin-top: 1rem;
+}
+
+.mt-5{
+  margin-top: 1.25rem;
 }
 
 .mt-6{
@@ -5610,6 +5621,10 @@ cite {
 
 .self-center{
   align-self: center;
+}
+
+.justify-self-start{
+  justify-self: start;
 }
 
 .justify-self-end{
@@ -7658,6 +7673,11 @@ cite {
     --tw-bg-opacity: 1;
     background-color: rgb(250 237 245 / var(--tw-bg-opacity));
   }
+
+  .paragraph--type--info-box aside .lg\:relative h2:first-of-type, 
+  .paragraph--type--info-box aside .lg\:relative h3:first-of-type{
+    margin-top: 1rem;
+  }
 }
 
 @media (min-width: 1280px){
@@ -8226,6 +8246,10 @@ cite {
     display: block;
   }
 
+  .sm\:inline{
+    display: inline;
+  }
+
   .sm\:flex{
     display: flex;
   }
@@ -8441,6 +8465,14 @@ cite {
     margin-top: 0px;
   }
 
+  .md\:block{
+    display: block;
+  }
+
+  .md\:inline{
+    display: inline;
+  }
+
   .md\:flex{
     display: flex;
   }
@@ -8513,6 +8545,10 @@ cite {
 
   .md\:pl-4{
     padding-left: 1rem;
+  }
+
+  .md\:text-center{
+    text-align: center;
   }
 
   .md\:text-4xl{
@@ -8639,6 +8675,10 @@ cite {
 
   .lg\:inline-block{
     display: inline-block;
+  }
+
+  .lg\:inline{
+    display: inline;
   }
 
   .lg\:flex{
@@ -8864,6 +8904,10 @@ cite {
     padding-bottom: 6rem;
   }
 
+  .lg\:text-center{
+    text-align: center;
+  }
+
   .lg\:py-4{
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -9005,6 +9049,10 @@ cite {
     display: block;
   }
 
+  .xl\:inline{
+    display: inline;
+  }
+
   .xl\:flex{
     display: flex;
   }
@@ -9132,6 +9180,10 @@ cite {
     padding-top: 1.5rem;
   }
 
+  .xl\:text-center{
+    text-align: center;
+  }
+
   .xl\:text-3xl{
     font-size: 1.875rem;
     line-height: 2.25rem;
@@ -9239,4 +9291,3 @@ cite {
     display: inline;
   }
 }
-
