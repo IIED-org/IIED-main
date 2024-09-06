@@ -36,3 +36,57 @@ function media_pdf_thumbnail_update_8005(&$sandbox) {
   $role = Role::load(RoleInterface::AUTHENTICATED_ID);
   $role->grantPermission('view private pdf thumbnails')->save();
 }
+
+/**
+ * Update field definitions.
+ */
+function media_pdf_thumbnail_update_8006(&$sandbox) {
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+  $fieldStorageDefinitions = Drupal::service('entity_field.manager')->getFieldStorageDefinitions('pdf_image_entity');
+  $imageFormatDefinition = $fieldStorageDefinitions['image_format'];
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('image_format', 'pdf_image_entity', 'media_pdf_entity', $imageFormatDefinition);
+}
+
+/**
+ * Update view configs
+ */
+function media_pdf_thumbnail_update_8007(&$sandbox) {
+  \Drupal::service('config.installer')->installDefaultConfig('module', 'media_pdf_thumbnail');
+}
+
+/**
+ * Update default image format
+ */
+function media_pdf_thumbnail_update_8008(&$sandbox) {
+
+  if (!isset($sandbox['progress'])) {
+    $ids = \Drupal::entityTypeManager()->getStorage('pdf_image_entity')->getQuery()->accessCheck(false)->execute();
+
+    if (empty($ids)) {
+      return;
+    }
+
+    foreach ($ids as $id) {
+      $sandbox['ids'][] = $id;
+    }
+    $sandbox['max'] = count($sandbox['ids']);
+    if (empty($sandbox['max'])) {
+      $sandbox['#finished'] = 1;
+      return;
+    }
+    $sandbox['progress'] = 0;
+  }
+
+  if (!empty($sandbox['ids'])) {
+    $entity = \Drupal::entityTypeManager()->getStorage('pdf_image_entity')->load($sandbox['ids'][$sandbox['progress']]);
+    Drupal::logger('')->notice($entity->getName() . ' (' . $entity->id() . ')');
+    $entity->set('image_format', 'jpg');
+    $entity->save();
+  }
+
+  $sandbox['progress'] += 1;
+  $progress_fraction = $sandbox['progress'] / $sandbox['max'];
+  $sandbox['#finished'] = empty($sandbox['max']) ? 1 : $progress_fraction;
+
+  Drupal::logger('')->notice('Progress: ' . (round($progress_fraction * 100)) . '% (' . $sandbox['progress'] . ' of ' . $sandbox['max'] . ' processed)');
+}

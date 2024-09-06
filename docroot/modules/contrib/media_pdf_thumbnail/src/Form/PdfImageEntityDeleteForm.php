@@ -14,22 +14,16 @@ use Drupal\Core\Url;
 class PdfImageEntityDeleteForm extends ContentEntityDeleteForm {
 
   /**
-   * Returns the question to ask the user.
-   *
-   * @return string
-   *   The form question. The page title will be set to this value.
+   * {@inheritdoc}
    */
-  public function getQuestion() {
+  public function getQuestion(): string {
     return $this->t('Are you sure you want to delete %name?', ['%name' => $this->entity->label()]);
   }
 
   /**
-   * Returns the route to go to if the user cancels the action.
-   *
-   * @return \Drupal\Core\Url
-   *   A URL object.
+   * {@inheritdoc}
    */
-  public function getCancelUrl() {
+  public function getCancelUrl(): Url {
     return new Url('entity.pdf_image_entity.collection');
   }
 
