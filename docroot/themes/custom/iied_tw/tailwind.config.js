@@ -86,6 +86,9 @@ module.exports = {
       content: {
         'keypoint': 'url("/themes/custom/iied_tw/templates/layout/icons/keypoint.svg")',
       },
+      minHeight: {
+        '112': '28rem',
+      },
       backgroundImage: {
         'throbber': 'url("../images/ajax-throbber.png")',
       },

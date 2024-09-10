@@ -1,0 +1,25 @@
+
+
+{% set form_type = content.form_type[0]['#markup'] %}
+
+
+<div{{ attributes }}>
+  {{ title_prefix }}
+  {% if label %}
+    <h2{{ title_attributes.addClass('mb-6') }}>{{ label }}</h2>
+  {% endif %}
+  {{ title_suffix }}
+  {% block content %}
+      {% if form_type == 'clickdimensions' %}
+        {{ attach_library('iied_tw/clickdimensions') }}
+        <div id="clickdimform" class="signup {{ form_type }}">
+        <script type="text/javascript">var loc = "https://analytics-eu.clickdimensions.com/iiedorg-asnkj/pages/";</script>
+          {{ content.body }}
+        </div>
+        {% else %}
+        <div class="signup {{ form_type }}">
+        {{ content.body }}
+        </div>  
+      {% endif %}
+  {% endblock %}
+</div>

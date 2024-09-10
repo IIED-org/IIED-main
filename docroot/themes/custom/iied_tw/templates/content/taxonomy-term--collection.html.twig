@@ -77,12 +77,15 @@
     </div>
   {% endblock %}
 
+  
   {% if term.field_collection_type %}
     {% set collectionType = term.field_collection_type.0.value|lower %}
   {% endif %}
 
   {% if term.field_overview.value is not empty %}
    {{ attach_library('iied_tw/alpine') }}
+
+  {% block main %}
     <div>
       <div class="tab-wrapper" 
         x-data="{ tab: window.location.hash ? window.location.hash.substring(1) : 'inthiscollection' }"
@@ -110,6 +113,8 @@
         </div>
       </div>
     </div>
+  {% endblock %}
+  
 </div>
 {% else %}
   <div class="content">

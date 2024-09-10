@@ -4917,6 +4917,11 @@ cite {
   display: none;
 }
 
+.size-6{
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .h-0{
   height: 0px;
 }
@@ -5004,6 +5009,10 @@ cite {
 
 .max-h-44{
   max-height: 11rem;
+}
+
+.min-h-112{
+  min-height: 28rem;
 }
 
 .min-h-\[12rem\]{
@@ -5808,6 +5817,10 @@ cite {
   background-image: url('/sites/default/files/2023-10/cloudsbd.svg');
 }
 
+.bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/city\.svg\'\)\]{
+  background-image: url('/themes/custom/iied_tw/images/city.svg');
+}
+
 .bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/hh-main-bg\.svg\'\)\]{
   background-image: url('/themes/custom/iied_tw/images/hh-main-bg.svg');
 }
@@ -6214,6 +6227,10 @@ cite {
 
 .lowercase{
   text-transform: lowercase;
+}
+
+.capitalize{
+  text-transform: capitalize;
 }
 
 .not-italic{
@@ -8273,6 +8290,10 @@ cite {
 
   .md\:items-center{
     align-items: center;
+  }
+
+  .md\:gap-12{
+    gap: 3rem;
   }
 
   .md\:space-y-0 > :not([hidden]) ~ :not([hidden]){
