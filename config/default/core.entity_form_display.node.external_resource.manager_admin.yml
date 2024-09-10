@@ -1,0 +1,93 @@
+uuid: 8168b847-c784-48ae-b495-c8bafe7df228
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.node.manager_admin
+    - field.field.node.external_resource.field_link
+    - field.field.node.external_resource.field_tagline
+    - field.field.node.external_resource.field_tags
+    - field.field.node.external_resource.resource_type
+    - field.field.node.external_resource.source
+    - node.type.external_resource
+  module:
+    - path
+id: node.external_resource.manager_admin
+targetEntityType: node
+bundle: external_resource
+mode: manager_admin
+content:
+  created:
+    type: datetime_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  promote:
+    type: boolean_checkbox
+    weight: 15
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 120
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  sticky:
+    type: boolean_checkbox
+    weight: 16
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  translation:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  url_redirects:
+    weight: 50
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_link: true
+  field_tagline: true
+  field_tags: true
+  resource_type: true
+  source: true

@@ -1,0 +1,8 @@
+uuid: c2835b80-0786-4249-91fc-f08fd9b0d75c
+langcode: en
+status: true
+dependencies: {  }
+id: form_block
+label: 'Form block'
+revision: false
+description: 'Add an embedded subscription from '

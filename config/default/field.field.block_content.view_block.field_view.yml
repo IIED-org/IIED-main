@@ -21,78 +21,12 @@ settings:
   handler: 'default:view'
   handler_settings:
     target_bundles: null
-    auto_create: 0
+    auto_create: false
   plugin_types:
     block: block
-    default: 0
-    entity_reference: 0
-    page: 0
-    embed: 0
-    feed: 0
-    data_export: 0
   preselect_views:
     publication_list_slider: publication_list_slider
-    approach_lists: 0
-    authors: 0
-    block_content: 0
-    citation: 0
-    cited_publishers: 0
-    collection_publications: 0
-    comment: 0
-    comments_recent: 0
-    content: 0
-    content_recent: 0
-    control_comments: 0
-    control_content: 0
-    control_content_panes: 0
-    control_terms: 0
-    control_users: 0
-    control_users_panes: 0
-    country_list: 0
-    cover_image: 0
-    draggableviews_demo: 0
-    duplicate_of_authors_editors: 0
-    external_links: 0
-    files: 0
-    frontpage: 0
-    history_slider: 0
-    list_rows: 0
-    maint: 0
-    manage_lists: 0
-    manage_terms: 0
-    media_library: 0
-    news_insight_all_display: 0
-    news_insight_featured: 0
-    organisation_locations: 0
-    page_count: 0
-    pdf_download: 0
-    pdf_image_entity: 0
-    people_section: 0
-    person_content: 0
-    popular_tags: 0
-    popular_terms: 0
-    project_publication_card: 0
-    publication_blocks: 0
-    publication_slider: 0
-    redirect: 0
-    related_nodes: 0
-    related_project: 0
-    related_publications: 0
-    related_pubs: 0
-    related_to_project: 0
-    search: 0
-    taxonomy_all_display: 0
-    taxonomy_featured_display: 0
-    term_featured_draggable: 0
-    term_publications: 0
-    test: 0
-    user_admin_people: 0
-    who_s_new: 0
-    who_s_online: 0
   enabled_settings:
     argument: argument
-    limit: 0
-    offset: 0
-    pager: 0
-    title: 0
+    limit: limit
 field_type: viewsreference

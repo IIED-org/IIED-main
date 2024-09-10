@@ -1,0 +1,17 @@
+uuid: ee5586fe-9962-45d4-a623-d23a7a3b4db5
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'External resource'
+type: external_resource
+description: 'Used to represent external links that point to resources outside of iied.org.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false
