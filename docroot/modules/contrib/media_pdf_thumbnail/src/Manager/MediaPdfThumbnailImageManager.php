@@ -7,9 +7,12 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\file\FileInterface;
+use Drupal\media_pdf_thumbnail\Form\MediaPdfThumbnailSettingsForm;
 use Exception;
 
 /**
@@ -28,7 +31,7 @@ class MediaPdfThumbnailImageManager {
    *
    * @var \Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImagickManager
    */
-  protected $mediaPdfThumbnailImagickManager;
+  protected MediaPdfThumbnailImagickManager $mediaPdfThumbnailImagickManager;
 
   /**
    * EntityTypeManager.
@@ -52,7 +55,7 @@ class MediaPdfThumbnailImageManager {
   /**
    * @var \Drupal\Core\Database\Connection
    */
-  protected $connection;
+  protected Connection $connection;
 
   /**
    * @var \Drupal\Core\Cache\Cache
@@ -62,7 +65,12 @@ class MediaPdfThumbnailImageManager {
   /**
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected $logger;
+  protected LoggerChannelInterface $logger;
+
+  /**
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected ModuleHandlerInterface $moduleHandler;
 
   /**
    * MediaPdfThumbnailImageManager constructor.
@@ -74,8 +82,9 @@ class MediaPdfThumbnailImageManager {
    * @param \Drupal\Core\Database\Connection $connection
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    */
-  public function __construct(MediaPdfThumbnailImagickManager $mediaPdfThumbnailImagickManager, EntityTypeManagerInterface $entityTypeManager, FileSystemInterface $fileSystem, ConfigFactoryInterface $configFactory, Connection $connection, CacheTagsInvalidatorInterface $cache, LoggerChannelFactoryInterface $loggerChannelFactory) {
+  public function __construct(MediaPdfThumbnailImagickManager $mediaPdfThumbnailImagickManager, EntityTypeManagerInterface $entityTypeManager, FileSystemInterface $fileSystem, ConfigFactoryInterface $configFactory, Connection $connection, CacheTagsInvalidatorInterface $cache, LoggerChannelFactoryInterface $loggerChannelFactory, ModuleHandlerInterface $moduleHandler) {
     $this->mediaPdfThumbnailImagickManager = $mediaPdfThumbnailImagickManager;
     $this->entityTypeManager = $entityTypeManager;
     $this->fileSystem = $fileSystem;
@@ -83,34 +92,76 @@ class MediaPdfThumbnailImageManager {
     $this->connection = $connection;
     $this->cache = $cache;
     $this->logger = $loggerChannelFactory->get('Media pdf thumbnail');
+    $this->moduleHandler = $moduleHandler;
+  }
+
+  /**
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param $fileFieldName
+   * @param $imageFormat
+   * @param $page
+   *
+   * @return array|false|null
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function createThumbnail(EntityInterface $entity, $fileFieldName, $imageFormat, $page = 1) {
+
+    if (empty($entity->id())) {
+      $this->logger->error('Entity id is empty');
+      return FALSE;
+    }
+
+    $fileEntity = $this->getFileEntityFromField($entity, $fileFieldName);
+
+    if (empty($fileEntity)) {
+      $this->logger->error('File entity is empty');
+      return FALSE;
+    }
+
+    $pdfImage = $this->getImageIfExists($entity, $fileEntity, $fileFieldName, $imageFormat, $page);
+
+    if (empty($pdfImage)) {
+      $pdfImage = $this->createPdfImageEntity($entity, $fileFieldName, $fileEntity, $page, $this->createThumbnailFileEntity($this->generatePdfImage($fileEntity, $imageFormat, $page)));
+    }
+
+    return $pdfImage;
+
+  }
+
+  /**
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\file\FileInterface $fileEntity
+   * @param $fieldName
+   * @param $format
+   * @param $page
+   *
+   * @return array|null
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getImageIfExists(EntityInterface $entity, FileInterface $fileEntity, $fieldName, $format, $page = 1): ?array {
+    if (in_array($fileEntity->getMimeType(), self::VALID_MIME_TYPE)) {
+      return $this->getPdfImage($entity, $fieldName, $fileEntity, $format, $page);
+    }
+    return NULL;
   }
 
   /**
    * @param \Drupal\Core\Entity\EntityInterface $entity
    * @param $fieldName
-   * @param int $page
    *
-   * @return array|\Drupal\Core\Entity\EntityInterface[]|false|void|null
+   * @return \Drupal\Core\Entity\EntityInterface|null
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function createThumbnail(EntityInterface $entity, $fieldName, $page = 1) {
-
-    if (empty($entity)) {
-      return FALSE;
-    }
-
+  public function getFileEntityFromField(EntityInterface $entity, $fieldName): ?EntityInterface {
+    $fileEntity = NULL;
     if ($entity->hasField($fieldName) && !empty($entity->get($fieldName)->getValue())) {
       $fileEntity = $this->getFileEntity($entity->get($fieldName)->getValue()[0]['target_id']);
-      if ($fileEntity && in_array($fileEntity->getMimeType(), self::VALID_MIME_TYPE)) {
-        $pdfImage = $this->getPdfImage($entity, $fieldName, $fileEntity, $page);
-        if (empty($pdfImage)) {
-          $pdfImage = $this->createPdfImageEntity($entity, $fieldName, $fileEntity, $page, $this->createThumbnailFileEntity($this->generatePdfImage($fileEntity, $page)));
-        }
-        return $pdfImage;
-      }
     }
+    return $fileEntity;
   }
 
   /**
@@ -128,13 +179,14 @@ class MediaPdfThumbnailImageManager {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    * @param string $fieldName
    * @param \Drupal\file\FileInterface $fileEntity
+   * @param $format
    * @param $page
    *
    * @return array|null
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getPdfImage(EntityInterface $entity, string $fieldName, FileInterface $fileEntity, $page) {
+  public function getPdfImage(EntityInterface $entity, string $fieldName, FileInterface $fileEntity, $format, $page) {
 
     $pdfImageEntity = $this->entityTypeManager->getStorage('pdf_image_entity')->loadByProperties([
       'referenced_entity_type' => $entity->getEntityTypeId(),
@@ -144,6 +196,7 @@ class MediaPdfThumbnailImageManager {
       'referenced_entity_field' => $fieldName,
       'pdf_file_id' => $fileEntity->id(),
       'pdf_file_page' => $page,
+      'image_format' => $format,
     ]);
 
     $pdfImageEntity = !empty($pdfImageEntity) ? reset($pdfImageEntity) : NULL;
@@ -184,6 +237,7 @@ class MediaPdfThumbnailImageManager {
           'pdf_file_page' => $page,
           'image_file_id' => $imageFileInfo['fid'],
           'image_file_uri' => $imageFileInfo['uri'],
+          'image_format' => $imageFileInfo['format'],
         ]);
 
         $newPdfImageFile->save();
@@ -193,6 +247,7 @@ class MediaPdfThumbnailImageManager {
           'pdf_page' => $page,
           'image_id' => $imageFileInfo['fid'],
           'image_uri' => $imageFileInfo['uri'],
+          'image_format' => $imageFileInfo['format'],
         ];
       }
       catch (Exception $e) {
@@ -227,33 +282,54 @@ class MediaPdfThumbnailImageManager {
       'fid' => $fileEntity->id(),
       'filename' => $infos['filename'],
       'uri' => $fileUri,
+      'format' => $infos['extension'],
     ] : NULL;
   }
 
   /**
    * @param \Drupal\file\FileInterface $fileEntity
+   * @param $imageFormat
    * @param $page
    *
    * @return mixed|null
    */
-  protected function generatePdfImage(FileInterface $fileEntity, $page = 1) {
-    $fileInfos = $this->getFileInfos($fileEntity, $page);
+  protected function generatePdfImage(FileInterface $fileEntity, $imageFormat, $page = 1) {
+    $fileInfos = $this->getFileInfos($fileEntity, $imageFormat, $page);
     if (!empty($fileInfos['source']) && !empty($fileInfos['destination'])) {
-      return $this->mediaPdfThumbnailImagickManager->generateImageFromPDF($fileInfos['source'], $fileInfos['destination'], $page);
+      return $this->mediaPdfThumbnailImagickManager->generateImageFromPDF($fileInfos['source'], $fileInfos['destination'], $imageFormat, $page);
     }
     return NULL;
   }
 
   /**
    * @param \Drupal\file\FileInterface $fileEntity
+   * @param $imageFormat
    * @param $page
    *
    * @return array
    */
-  protected function getFileInfos(FileInterface $fileEntity, $page) {
+  protected function getFileInfos(FileInterface $fileEntity, $imageFormat, $page): array {
+
     $sourcePath = $fileEntity->getFileUri();
-    $destinationPath = $sourcePath . '-p' . $page . '.jpeg';
-    return ['source' => $sourcePath, 'destination' => $destinationPath];
+    $path = $sourcePath;
+
+    $destinationUri = str_starts_with($fileEntity->getFileUri(), 'private://') ? 'private' : 'public';
+
+    // Set destination from config.
+    $configDestinationUri = $this->configFactory->get(MediaPdfThumbnailSettingsForm::CONFIG_NAME)->get(MediaPdfThumbnailSettingsForm::getConfigUri($destinationUri));
+    if (!empty($configDestinationUri)) {
+      $fileBaseName = pathinfo($sourcePath)['basename'];
+      $path = $configDestinationUri . '/' . $fileBaseName;
+    }
+
+    $destinationPath = $path . '-p' . $page . '.' . $imageFormat;
+    $infos = ['source' => $sourcePath, 'destination' => $destinationPath];
+    $context = ['file_entity' => $fileEntity, 'image_format' => $imageFormat, 'page' => $page];
+
+    // Give a chance to alter destination with hook.
+    $this->moduleHandler->alter('media_pdf_thumbnail_image_destination', $infos, $context);
+
+    return $infos;
   }
 
   /**

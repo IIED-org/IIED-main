@@ -1,8 +1,0 @@
-field_formatter_form:
-  version: VERSION
-  js:
-    js/ff-form.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery
-    - core/once

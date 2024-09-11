@@ -4,7 +4,7 @@ config:
   acli_version: latest
   ah_application_uuid: a70da4cc-a976-4f36-999d-94e46d72df37
   ah_site_group: irforum
-  php: '8.2'
+  php: '8.3'
 services:
   appserver:
     webroot: docroot
@@ -19,6 +19,7 @@ services:
         PHP_IDE_CONFIG: "serverName=localhost"
     build_as_root:
       - apt update && apt install libgmp-dev -y && docker-php-ext-install gmp
+      - /app/scripts/imagick.sh
   adminer:
     type: compose
     services:
@@ -31,7 +32,7 @@ services:
     # command: cd /app/docroot/themes/custom/iied_tw && npm run watch
     port: 80
     overrides:
-     ports:
+      ports:
       - 3000:3000
       - 3001:3001
   solr:
@@ -65,9 +66,4 @@ tooling:
     service: appserver
     description: Disable xdebug for apache.
     cmd: "rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload"
-    user: root
-  fix-imagick:
-    service: appserver
-    description: Update Imagick policy for PDF
-    cmd: sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml
     user: root

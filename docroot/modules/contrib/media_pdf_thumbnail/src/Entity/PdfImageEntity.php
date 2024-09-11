@@ -105,6 +105,8 @@ class PdfImageEntity extends ContentEntityBase implements PdfImageEntityInterfac
 
     $fields['image_file_uri'] = BaseFieldDefinition::create('string')->setLabel(t('Image file uri'))->setDescription(t('The uri of the image file.'));
 
+    $fields['image_format'] = BaseFieldDefinition::create('string')->setLabel(t('Image format'))->setDescription(t('The format of the image file.'));
+
     return $fields;
   }
 

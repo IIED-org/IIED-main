@@ -5,3 +5,19 @@ media_pdf_thumbnail.settings.purge:
     _title: 'Media PDF Thumbnail'
   requirements:
     _permission: 'administer_media_pdf_thumbnail'
+
+media_pdf_thumbnail.settings.queue:
+  path: '/admin/media-pdf-thumbnail/settings/queue'
+  defaults:
+    _form: '\Drupal\media_pdf_thumbnail\Form\PdfImageEntityQueueForm'
+    _title: 'Media PDF Thumbnail'
+  requirements:
+    _permission: 'administer_media_pdf_thumbnail'
+
+media_pdf_thumbnail.settings.global:
+  path: '/admin/media-pdf-thumbnail/settings/global'
+  defaults:
+    _form: '\Drupal\media_pdf_thumbnail\Form\MediaPdfThumbnailSettingsForm'
+    _title: 'Media PDF Thumbnail'
+  requirements:
+    _permission: 'administer_media_pdf_thumbnail'
