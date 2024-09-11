@@ -16,7 +16,7 @@ class PdfImageEntityListBuilder extends EntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function buildHeader() {
+  public function buildHeader(): array {
     $header['id'] = $this->t('Pdf image entity ID');
     $header['name'] = $this->t('Name');
     return $header + parent::buildHeader();
@@ -25,8 +25,8 @@ class PdfImageEntityListBuilder extends EntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function buildRow(EntityInterface $entity) {
-    /* @var \Drupal\media_pdf_thumbnail\Entity\PdfImageEntity $entity */
+  public function buildRow(EntityInterface $entity): array {
+    /** @var \Drupal\media_pdf_thumbnail\Entity\PdfImageEntity $entity */
     $row['id'] = $entity->id();
     $row['name'] = Link::createFromRoute(
       $entity->label(),

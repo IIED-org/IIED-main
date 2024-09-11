@@ -90,7 +90,7 @@ class PrettyPathsActiveFilters {
 
     $mapping[$facet_source_id] = [];
 
-    // Keep a local cache of already initialised coders.
+    // Keep a local cache of already initialized coders.
     $initialized_coders = [];
 
     $filters = $this->getFiltersFromRoute();

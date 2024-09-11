@@ -6,6 +6,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Plugin\Discovery\DiscoveryInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -14,6 +15,7 @@ use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\devel_generate\DevelGeneratePluginManager;
 use Drupal\devel_generate_example\Plugin\DevelGenerate\ExampleDevelGenerate;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @coversDefaultClass \Drupal\devel_generate\DevelGeneratePluginManager
@@ -23,35 +25,21 @@ class DevelGenerateManagerTest extends UnitTestCase {
 
   /**
    * The plugin discovery.
-   *
-   * @var \Drupal\Component\Plugin\Discovery\DiscoveryInterface|\PHPUnit\Framework\MockObject\MockObject
    */
-  protected $discovery;
-
-  /**
-   * A list of devel generate plugin definitions.
-   *
-   * @var array
-   */
-  protected $definitions = [
-    'devel_generate_example' => [
-      'id' => 'devel_generate_example',
-      'class' => ExampleDevelGenerate::class,
-      'url' => 'devel_generate_example',
-      'dependencies' => [],
-    ],
-  ];
+  protected MockObject|DiscoveryInterface $discovery;
 
   /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
     parent::setUp();
-    // Mock a Discovery object to replace AnnotationClassDiscovery.
+    // Mock the plugin discovery.
     $this->discovery = $this->createMock(DiscoveryInterface::class);
     $this->discovery->expects($this->any())
       ->method('getDefinitions')
-      ->will($this->returnValue($this->definitions));
+      ->willReturnCallback(function (): array {
+        return $this->getMockDefinitions();
+      });
   }
 
   /**
@@ -65,8 +53,9 @@ class DevelGenerateManagerTest extends UnitTestCase {
     $messenger = $this->createMock(MessengerInterface::class);
     $language_manager = $this->createMock(LanguageManagerInterface::class);
     $string_translation = $this->createMock(TranslationInterface::class);
+    $entityFieldManager = $this->createMock(EntityFieldManagerInterface::class);
 
-    $manager = new TestDevelGeneratePluginManager(
+    $manager = new DevelGeneratePluginManager(
       $namespaces,
       $cache_backend,
       $module_handler,
@@ -74,8 +63,13 @@ class DevelGenerateManagerTest extends UnitTestCase {
       $messenger,
       $language_manager,
       $string_translation,
+      $entityFieldManager,
     );
-    $manager->setDiscovery($this->discovery);
+
+    // Use reflection to set the protected discovery property.
+    $reflection = new \ReflectionClass($manager);
+    $property = $reflection->getProperty('discovery');
+    $property->setValue($manager, $this->discovery);
 
     $container = new ContainerBuilder();
     $time = $this->createMock(TimeInterface::class);
@@ -84,6 +78,7 @@ class DevelGenerateManagerTest extends UnitTestCase {
     $container->set('language_manager', $language_manager);
     $container->set('module_handler', $module_handler);
     $container->set('string_translation', $string_translation);
+    $container->set('entity_field.manager', $entityFieldManager);
     $container->set('datetime.time', $time);
     \Drupal::setContainer($container);
 
@@ -95,21 +90,21 @@ class DevelGenerateManagerTest extends UnitTestCase {
     $this->assertTrue($plugin_def['url'] == 'devel_generate_example');
   }
 
-}
-
-/**
- * A testing version of DevelGeneratePluginManager.
- */
-class TestDevelGeneratePluginManager extends DevelGeneratePluginManager {
-
   /**
-   * Sets the discovery for the manager.
+   * Callback function to return mock definitions.
    *
-   * @param \Drupal\Component\Plugin\Discovery\DiscoveryInterface $discovery
-   *   The discovery object.
+   * @return array
+   *   The mock of devel generate plugin definitions.
    */
-  public function setDiscovery(DiscoveryInterface $discovery): void {
-    $this->discovery = $discovery;
+  public function getMockDefinitions(): array {
+    return [
+      'devel_generate_example' => [
+        'id' => 'devel_generate_example',
+        'class' => ExampleDevelGenerate::class,
+        'url' => 'devel_generate_example',
+        'dependencies' => [],
+      ],
+    ];
   }
 
 }

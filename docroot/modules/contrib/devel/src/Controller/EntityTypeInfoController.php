@@ -5,8 +5,6 @@ namespace Drupal\devel\Controller;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Drupal\devel\DevelDumperManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,46 +26,16 @@ class EntityTypeInfoController extends ControllerBase {
   protected EntityLastInstalledSchemaRepositoryInterface $entityLastInstalledSchemaRepository;
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * EntityTypeInfoController constructor.
-   *
-   * @param \Drupal\devel\DevelDumperManagerInterface $dumper
-   *   The dumper service.
-   * @param \Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface $entityLastInstalledSchemaRepository
-   *   The installed entity definition repository service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    DevelDumperManagerInterface $dumper,
-    EntityLastInstalledSchemaRepositoryInterface $entityLastInstalledSchemaRepository,
-    EntityTypeManagerInterface $entity_type_manager,
-    TranslationInterface $string_translation
-  ) {
-    $this->dumper = $dumper;
-    $this->entityLastInstalledSchemaRepository = $entityLastInstalledSchemaRepository;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('devel.dumper'),
-      $container->get('entity.last_installed_schema.repository'),
-      $container->get('entity_type.manager'),
-      $container->get('string_translation'),
-    );
+    $instance = parent::create($container);
+    $instance->dumper = $container->get('devel.dumper');
+    $instance->entityLastInstalledSchemaRepository = $container->get('entity.last_installed_schema.repository');
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**

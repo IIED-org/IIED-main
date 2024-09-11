@@ -5,10 +5,7 @@
  * Contains media_pdf_thumbnail.module.
  */
 
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 
 /**
@@ -21,7 +18,7 @@ function media_pdf_thumbnail_token_info() {
     'description' => t('Media PDF Thumbnail tokens.'),
   ];
 
-  foreach (_media_pdf_thumbnail_getFieldsList() as $key => $list) {
+  foreach (_media_pdf_thumbnail_getFieldsList() as $list) {
 
     if (!empty($list['fields'])) {
 
@@ -52,6 +49,10 @@ function media_pdf_thumbnail_token_info() {
         }
       }
     }
+  }
+
+  if (empty($mediaPdfThumbnail)) {
+    return [];
   }
 
   return [
@@ -104,4 +105,3 @@ function media_pdf_thumbnail_tokens($type, $tokens, array $data, array $options,
 
   return $replacements;
 }
-

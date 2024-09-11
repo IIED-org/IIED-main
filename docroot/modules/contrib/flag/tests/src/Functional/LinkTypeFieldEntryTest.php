@@ -73,9 +73,9 @@ class LinkTypeFieldEntryTest extends FlagTestBase {
     $this->drupalPostAjaxForm(NULL, $edit, 'link_type');
 
     // Check confirm form field entry.
-    $this->assertSession()->responseContains(t('Flag confirmation message'));
-    $this->assertSession()->responseContains(t('Enter flagging details message'));
-    $this->assertSession()->responseContains(t('Unflag confirmation message'));
+    $this->assertSession()->responseContains('Flag confirmation message');
+    $this->assertSession()->responseContains('Enter flagging details message');
+    $this->assertSession()->responseContains('Unflag confirmation message');
   }
 
   /**
@@ -186,7 +186,7 @@ class LinkTypeFieldEntryTest extends FlagTestBase {
     // Test a good flag ID param, but a bad flaggable ID param.
     $this->drupalGet('flag/details/edit/' . $flag_id . '/-9999');
     $this->assertSession()->statusCodeEquals('404');
-        
+
     // Test a bad flag ID param, but a good flaggable ID param.
     $this->drupalGet('flag/details/edit/jibberish/' . $this->nodeId);
     $this->assertSession()->statusCodeEquals('404');

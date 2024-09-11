@@ -133,7 +133,7 @@ class FieldFormatterWithInlineSettingsTest extends KernelTestBase {
   /**
    * Data provider for ::testRender().
    */
-  public function providerTestRender() {
+  public static function providerTestRender() {
     $output_with_label = <<<EXPECTED
 
   <div>

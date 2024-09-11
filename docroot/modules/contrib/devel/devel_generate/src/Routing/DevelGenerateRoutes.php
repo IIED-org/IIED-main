@@ -19,22 +19,13 @@ class DevelGenerateRoutes implements ContainerInjectionInterface {
   protected PluginManagerInterface $develGenerateManager;
 
   /**
-   * Constructs a new devel_generate route subscriber.
-   *
-   * @param \Drupal\Component\Plugin\PluginManagerInterface $devel_generate_manager
-   *   The DevelGeneratePluginManager.
-   */
-  public function __construct(PluginManagerInterface $devel_generate_manager) {
-    $this->develGenerateManager = $devel_generate_manager;
-  }
-
-  /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('plugin.manager.develgenerate')
-    );
+  public static function create(ContainerInterface $container): self {
+    $instance = new self();
+    $instance->develGenerateManager = $container->get('plugin.manager.develgenerate');
+
+    return $instance;
   }
 
   /**
@@ -47,11 +38,11 @@ class DevelGenerateRoutes implements ContainerInjectionInterface {
     foreach ($devel_generate_plugins as $id => $plugin) {
       $label = $plugin['label'];
       $type_url_str = str_replace('_', '-', $plugin['url']);
-      $routes["devel_generate.$id"] = new Route(
-        "admin/config/development/generate/$type_url_str",
+      $routes['devel_generate.' . $id] = new Route(
+        'admin/config/development/generate/' . $type_url_str,
         [
           '_form' => DevelGenerateForm::class,
-          '_title' => "Generate $label",
+          '_title' => 'Generate ' . $label,
           '_plugin_id' => $id,
         ],
         [

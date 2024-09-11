@@ -57,7 +57,7 @@ class SwitchUserListHelper {
     AccountInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager,
     RedirectDestinationInterface $redirect_destination,
-    TranslationInterface $string_translation
+    TranslationInterface $string_translation,
   ) {
     $this->currentUser = $current_user;
     $this->userStorage = $entity_type_manager->getStorage('user');
@@ -95,8 +95,8 @@ class SwitchUserListHelper {
     /** @var array<string, RoleInterface> $roles */
     $roles = $this->roleStorage->loadMultiple();
     unset($roles[AccountInterface::ANONYMOUS_ROLE]);
-    $roles = array_filter($roles, fn($role): bool => $role->hasPermission('switch users'));
-    if (!empty($roles) && !isset($roles[RoleInterface::AUTHENTICATED_ID])) {
+    $roles = array_filter($roles, static fn($role): bool => $role->hasPermission('switch users'));
+    if ($roles !== [] && !isset($roles[RoleInterface::AUTHENTICATED_ID])) {
       $query->condition('roles', array_keys($roles), 'IN');
     }
 
@@ -138,7 +138,7 @@ class SwitchUserListHelper {
   /**
    * Builds the user listing as renderable array.
    *
-   * @param \Drupal\core\Session\AccountInterface[] $accounts
+   * @param \Drupal\Core\Session\AccountInterface[] $accounts
    *   The accounts to be rendered in the list.
    *
    * @return array

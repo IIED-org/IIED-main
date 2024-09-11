@@ -2,6 +2,8 @@
 
 namespace Drupal\devel;
 
+use Drupal\Component\Render\MarkupInterface;
+
 /**
  * Base interface definition for DevelDumper plugins.
  *
@@ -27,13 +29,13 @@ interface DevelDumperInterface {
    *
    * @param mixed $input
    *   The variable to export.
-   * @param string $name
+   * @param ?string $name
    *   (optional) The label to output before variable, defaults to NULL.
    *
-   * @return string
+   * @return \Drupal\Component\Render\MarkupInterface|string
    *   String representation of a variable.
    */
-  public function export(mixed $input, $name = NULL);
+  public function export(mixed $input, ?string $name = NULL): MarkupInterface|string;
 
   /**
    * Returns a string representation of a variable wrapped in a render array.

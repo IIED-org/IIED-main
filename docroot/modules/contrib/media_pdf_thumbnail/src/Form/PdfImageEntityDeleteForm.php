@@ -7,7 +7,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Class PdfImageEntityDeleteForm
+ * Class PdfImageEntityDeleteForm.
+ *
+ * Provides a form for deleting a pdf image entity.
  *
  * @ingroup media_pdf_thumbnail
  */
@@ -39,7 +41,7 @@ class PdfImageEntityDeleteForm extends ContentEntityDeleteForm {
    *
    * Delete the entity and log the event. logger() replaces the watchdog.
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $entity = $this->getEntity();
     $entity->delete();
 
@@ -50,4 +52,5 @@ class PdfImageEntityDeleteForm extends ContentEntityDeleteForm {
     // Redirect to term list after delete.
     $form_state->setRedirect('view.pdf_image_entity.list');
   }
+
 }

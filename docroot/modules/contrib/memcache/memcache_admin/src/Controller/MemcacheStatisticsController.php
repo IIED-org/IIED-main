@@ -174,9 +174,13 @@ class MemcacheStatisticsController extends ControllerBase {
       $links = [];
       asort($servers_settings);
       foreach ($servers_settings as $end_point => $cluster_name) {
-        sort($bins[$cluster_name]);
+        $bin_description = $this->t("No bins allocated to this endpoint");
+        if (isset($bins[$cluster_name])) {
+          sort($bins[$cluster_name]);
+          $bin_description = implode(',', $bins[$cluster_name]);
+        }
         $links[] = Link::createFromRoute(
-          $end_point . ' (' . implode(',', $bins[$cluster_name]) . ')',
+          $end_point . ' (' . $bin_description . ')',
           'memcache_admin.reports_cluster', ['cluster' => $cluster_name]
         )->toRenderable();
       }

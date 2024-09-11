@@ -4,10 +4,11 @@ namespace Drupal\devel\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslationManager;
 use Drupal\devel\DevelDumperManagerInterface;
+use Drupal\path_alias\PathAliasStorage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -24,36 +25,27 @@ class EntityDebugController extends ControllerBase {
   protected DevelDumperManagerInterface $dumper;
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * The translation manager.
    */
-  protected $entityTypeManager;
+  protected TranslationManager $translationManager;
 
   /**
-   * EntityDebugController constructor.
-   *
-   * @param \Drupal\devel\DevelDumperManagerInterface $dumper
-   *   The dumper service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
+   * The alias storage.
    */
-  public function __construct(
-    DevelDumperManagerInterface $dumper,
-    EntityTypeManagerInterface $entity_type_manager
-  ) {
-    $this->dumper = $dumper;
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  protected PathAliasStorage $aliasStorage;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('devel.dumper'),
-      $container->get('entity_type.manager'),
-    );
+    $entityTypeManager = $container->get('entity_type.manager');
+    $instance = parent::create($container);
+    $instance->dumper = $container->get('devel.dumper');
+    $instance->entityTypeManager = $entityTypeManager;
+    $instance->translationManager = $container->get('string_translation');
+    $instance->aliasStorage = $entityTypeManager->getStorage('path_alias');
+
+    return $instance;
   }
 
   /**
@@ -66,15 +58,12 @@ class EntityDebugController extends ControllerBase {
    *   Array of page elements to render.
    */
   public function entityTypeDefinition(RouteMatchInterface $route_match): array {
-    $output = [];
-
     $entity = $this->getEntityFromRouteMatch($route_match);
-
-    if ($entity instanceof EntityInterface) {
-      $output = $this->dumper->exportAsRenderable($entity->getEntityType());
+    if (!$entity instanceof EntityInterface) {
+      return [];
     }
 
-    return $output;
+    return $this->dumper->exportAsRenderable($entity->getEntityType());
   }
 
   /**
@@ -116,15 +105,12 @@ class EntityDebugController extends ControllerBase {
    *   Array of page elements to render.
    */
   public function entityLoadWithReferences(RouteMatchInterface $route_match): array {
-    $output = [];
-
     $entity = $this->getEntityWithFieldDefinitions($route_match);
-
-    if ($entity instanceof EntityInterface) {
-      $output = $this->dumper->exportAsRenderable($entity, NULL, NULL, TRUE);
+    if (!$entity instanceof EntityInterface) {
+      return [];
     }
 
-    return $output;
+    return $this->dumper->exportAsRenderable($entity, NULL, NULL, TRUE);
   }
 
   /**
@@ -162,6 +148,51 @@ class EntityDebugController extends ControllerBase {
   }
 
   /**
+   * Return definitions for any related path aliases.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   A RouteMatch object.
+   *
+   * @return array
+   *   Array of page elements to render.
+   */
+  public function pathAliases(RouteMatchInterface $route_match): array {
+    $entity = $this->getEntityFromRouteMatch($route_match);
+    if ($entity === NULL) {
+      return [];
+    }
+
+    $path = sprintf('/%s/%s', $entity->getEntityTypeId(), $entity->id());
+    $aliases = $this->aliasStorage->loadByProperties(['path' => $path]);
+    $aliasCount = count($aliases);
+    if ($aliasCount > 0) {
+      $message = $this->translationManager->formatPlural(
+        $aliasCount,
+        'Found 1 alias with path "@path."',
+        'Found @count aliases with path "@path".',
+        ['@path' => $path]
+      );
+    }
+    else {
+      $message = $this->t('Found no aliases with path "@path".', ['@path' => $path]);
+    }
+
+    $build['header'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => $message,
+    ];
+
+    // Add alias dump to the response.
+    $build['aliases'] = [];
+    foreach ($aliases as $alias) {
+      $build['aliases'][] = $this->dumper->exportAsRenderable($alias);
+    }
+
+    return $build;
+  }
+
+  /**
    * Retrieves entity from route match.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
@@ -172,6 +203,7 @@ class EntityDebugController extends ControllerBase {
    */
   protected function getEntityFromRouteMatch(RouteMatchInterface $route_match) {
     $parameter_name = $route_match->getRouteObject()->getOption('_devel_entity_type_id');
+
     return $route_match->getParameter($parameter_name);
   }
 
@@ -182,7 +214,8 @@ class EntityDebugController extends ControllerBase {
    *   The route match.
    *
    * @return \Drupal\Core\Entity\EntityInterface|null
-   *   The entity object with field definitions as determined from the passed-in route match.
+   *   The entity object with field definitions as determined from the
+   *   passed-in route match.
    */
   protected function getEntityWithFieldDefinitions(RouteMatchInterface $route_match): ?EntityInterface {
     $entity = $this->getEntityFromRouteMatch($route_match);

@@ -2,13 +2,13 @@
 
 namespace Drupal\facets_pretty_paths\Plugin\facets_pretty_paths\coder;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\facets_pretty_paths\Coder\CoderPluginBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\facets_pretty_paths\Coder\CoderPluginBase;
 use Drupal\pathauto\AliasCleanerInterface;
 use Drupal\taxonomy\TermInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Taxonomy term name facets pretty paths coder.
@@ -124,4 +124,3 @@ class TaxonomyTermNameCoder extends CoderPluginBase implements ContainerFactoryP
   }
 
 }
-

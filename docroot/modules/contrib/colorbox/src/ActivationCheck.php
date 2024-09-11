@@ -25,7 +25,7 @@ class ActivationCheck implements ActivationCheckInterface {
   protected $request;
 
   /**
-   * Create an instace of ActivationCheck.
+   * Create an instance of ActivationCheck.
    */
   public function __construct(ConfigFactoryInterface $config, RequestStack $request) {
     $this->settings = $config->get('colorbox.settings');

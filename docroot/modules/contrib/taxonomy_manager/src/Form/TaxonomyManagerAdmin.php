@@ -2,13 +2,39 @@
 
 namespace Drupal\taxonomy_manager\Form;
 
+use Drupal\content_translation\ContentTranslationManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Managing the advanced options for the taxonomy_manager module.
  */
 class TaxonomyManagerAdmin extends ConfigFormBase {
+
+  /**
+   * The module handler.
+   */
+  protected ModuleHandlerInterface $moduleHandler;
+
+  /**
+   * The content translation manager.
+   */
+  protected ?ContentTranslationManagerInterface $contentTranslationManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): static {
+    // @phpstan-ignore ternary.alwaysTrue (False positive)
+    $content_translation_manager = $container->has('content_translation.manager') ? $container->get('content_translation.manager') : NULL;
+    $instance = parent::create($container);
+    $instance->moduleHandler = $container->get('module_handler');
+    $instance->contentTranslationManager = $content_translation_manager;
+
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -53,8 +79,7 @@ class TaxonomyManagerAdmin extends ConfigFormBase {
       '#description' => $this->t('Select how many terms should be listed on one page. Huge page counts can slow down the Taxonomy Manager'),
     ];
 
-    if (\Drupal::service('module_handler')->moduleExists('content_translation')) {
-      $content_translation_manager = \Drupal::service('content_translation.manager');
+    if ($this->moduleHandler->moduleExists('content_translation')) {
 
       $form['taxonomy_manager_translations'] = [
         '#type' => 'checkbox',
@@ -62,7 +87,7 @@ class TaxonomyManagerAdmin extends ConfigFormBase {
         '#default_value' => $config->get('taxonomy_manager_translations'),
         '#description' => $this->t('Translatable term fields will display values side by side for each enabled language. Make sure to configure content translation first.'),
         '#attributes' => [
-          'disabled' => !$content_translation_manager->isEnabled('taxonomy_term'),
+          'disabled' => $this->contentTranslationManager->isEnabled('taxonomy_term'),
         ],
       ];
     }

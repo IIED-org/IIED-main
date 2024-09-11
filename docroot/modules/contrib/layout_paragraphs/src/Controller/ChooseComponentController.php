@@ -13,7 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\layout_paragraphs\LayoutParagraphsLayout;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\layout_paragraphs\Event\LayoutParagraphsComponentDefaultsEvent;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Drupal\layout_paragraphs\LayoutParagraphsLayoutRefreshTrait;
 use Drupal\layout_paragraphs\Event\LayoutParagraphsAllowedTypesEvent;
 
@@ -38,7 +39,7 @@ class ChooseComponentController extends ControllerBase {
   /**
    * The event dispatcher service.
    *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
    */
   protected $eventDispatcher;
 
@@ -47,12 +48,12 @@ class ChooseComponentController extends ControllerBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
    *   The entity type bundle info service.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher_service
    *   The event dispatcher service.
    */
-  public function __construct(EntityTypeBundleInfoInterface $entity_type_bundle_info, EventDispatcherInterface $event_dispatcher) {
+  public function __construct(EntityTypeBundleInfoInterface $entity_type_bundle_info, EventDispatcherInterface $event_dispatcher_service) {
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
-    $this->eventDispatcher = $event_dispatcher;
+    $this->eventDispatcher = $event_dispatcher_service;
   }
 
   /**
@@ -114,7 +115,16 @@ class ChooseComponentController extends ControllerBase {
    *   An ajax response or form render array.
    */
   protected function componentForm(string $type_name, LayoutParagraphsLayout $layout_paragraphs_layout, array $context) {
-    $type = $this->entityTypeManager()->getStorage('paragraphs_type')->load($type_name);
+
+    // Dispatch a LayoutParagraphsComponentDefaultsEvent to allow other modules
+    // to alter the paragraph type and default values.
+    $event = new LayoutParagraphsComponentDefaultsEvent($type_name, []);
+    $this->eventDispatcher->dispatch($event, $event::EVENT_NAME);
+    $type = $this
+      ->entityTypeManager()
+      ->getStorage('paragraphs_type')
+      ->load($event->getParagraphTypeId());
+
     $form = $this->formBuilder()->getForm(
       $this->getInsertComponentFormClass(),
       $layout_paragraphs_layout,
@@ -122,7 +132,8 @@ class ChooseComponentController extends ControllerBase {
       $context['parent_uuid'],
       $context['region'],
       $context['sibling_uuid'],
-      $context['placement']
+      $context['placement'],
+      $event->getDefaultValues()
     );
     if ($this->isAjax()) {
       $response = new AjaxResponse();
@@ -211,15 +222,13 @@ class ChooseComponentController extends ControllerBase {
    *
    * @param \Drupal\layout_paragraphs\LayoutParagraphsLayout $layout
    *   The layout object.
-   * @param string $parent_uuid
-   *   The parent uuid of paragraph we are inserting a component into.
-   * @param string $region
-   *   The region we are inserting a component into.
+   * @param array $context
+   *   The context to be passed to the event.
    *
    * @return array[]
    *   Returns an array of allowed component types.
    */
-  public function getAllowedComponentTypes(LayoutParagraphsLayout $layout, $context) {
+  public function getAllowedComponentTypes(LayoutParagraphsLayout $layout, array $context) {
 
     // @todo Document and add tests for what is happening here.
     $component_types = $this->getComponentTypes($layout, $context);
@@ -259,7 +268,7 @@ class ChooseComponentController extends ControllerBase {
         }
         $route_params = [
           'layout_paragraphs_layout' => $layout->id(),
-          'paragraph_type' => $paragraphs_type->id(),
+          'paragraph_type_id' => $paragraphs_type->id(),
         ];
         $query_params = $context;
         $types[$bundle] = [

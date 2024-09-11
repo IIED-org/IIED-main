@@ -18,7 +18,7 @@ class ModalFormTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}
@@ -96,7 +96,7 @@ class ModalFormTest extends WebDriverTestBase {
       'entity_id' => $this->node->id(),
     ]);
     $this->assertSession()->addressEquals($expected->getInternalPath());
-    $this->assertSession()->buttonExists(t('Create flagging'))->press();
+    $this->assertSession()->buttonExists('Create flagging')->press();
     $this->assertSession()->addressEquals($this->node->toUrl());
 
     // Unflag.
@@ -106,7 +106,7 @@ class ModalFormTest extends WebDriverTestBase {
       'entity_id' => $this->node->id(),
     ]);
     $this->assertSession()->addressEquals($expected->getInternalPath());
-    $this->assertSession()->buttonExists(t('Delete flagging'))->press();
+    $this->assertSession()->buttonExists('Delete flagging')->press();
     $this->assertSession()->addressEquals($this->node->toUrl());
 
     // Set the modal option for the 'confirm' link.
@@ -124,7 +124,7 @@ class ModalFormTest extends WebDriverTestBase {
       ->getInternalPath());
     // Note, there is some odd behavior calling the `press()` method on the
     // button, so after asserting it exists, click via this method.
-    $this->assertSession()->buttonExists(t('Create flagging'));
+    $this->assertSession()->buttonExists('Create flagging');
     $this->click('button:contains("Create flagging")');
     $this->assertSession()->addressEquals($this->node->toUrl()
       ->getInternalPath());
@@ -134,7 +134,7 @@ class ModalFormTest extends WebDriverTestBase {
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->addressEquals($this->node->toUrl()
       ->getInternalPath());
-    $this->assertSession()->buttonExists(t('Delete flagging'));
+    $this->assertSession()->buttonExists('Delete flagging');
     $this->click('button:contains("Delete flagging")');
     $this->assertSession()->addressEquals($this->node->toUrl()
       ->getInternalPath());

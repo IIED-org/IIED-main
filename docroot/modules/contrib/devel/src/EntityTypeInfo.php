@@ -7,7 +7,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -26,29 +25,14 @@ class EntityTypeInfo implements ContainerInjectionInterface {
   protected AccountInterface $currentUser;
 
   /**
-   * EntityTypeInfo constructor.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   Current user.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    AccountInterface $current_user,
-    TranslationInterface $string_translation
-  ) {
-    $this->currentUser = $current_user;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('current_user'),
-      $container->get('string_translation'),
-    );
+  public static function create(ContainerInterface $container): self {
+    $instance = new self();
+    $instance->currentUser = $container->get('current_user');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**
@@ -69,16 +53,17 @@ class EntityTypeInfo implements ContainerInjectionInterface {
       // 'entity_type_id/{entity_type_id}' as the link. This allows devel info
       // to be viewed for any entity, even if the url has to be typed manually.
       // @see https://gitlab.com/drupalspoons/devel/-/issues/377
-      $entity_link = $entity_type->getLinkTemplate('edit-form') ?: $entity_type_id . "/{{$entity_type_id}}";
-      $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-load', "/devel/$entity_type_id");
-      $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-load-with-references', "/devel/load-with-references/$entity_type_id");
+      $entity_link = $entity_type->getLinkTemplate('edit-form') ?: $entity_type_id . sprintf('/{%s}', $entity_type_id);
+      $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-load', '/devel/' . $entity_type_id);
+      $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-load-with-references', '/devel/load-with-references/' . $entity_type_id);
+      $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-path-alias', '/devel/path-alias/' . $entity_type_id);
 
       // Create the devel-render subtask.
       if ($entity_type->hasViewBuilderClass() && $entity_type->hasLinkTemplate('canonical')) {
         // We use canonical template to extract and set additional parameters
         // dynamically.
         $entity_link = $entity_type->getLinkTemplate('canonical');
-        $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-render', "/devel/render/$entity_type_id");
+        $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-render', '/devel/render/' . $entity_type_id);
       }
 
       // Create the devel-definition subtask.
@@ -89,10 +74,10 @@ class EntityTypeInfo implements ContainerInjectionInterface {
         if (empty($entity_link)) {
           $entity_link = $entity_type->getLinkTemplate('canonical');
         }
-        $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-definition', "/devel/definition/$entity_type_id");
+
+        $this->setEntityTypeLinkTemplate($entity_type, $entity_link, 'devel-definition', '/devel/definition/' . $entity_type_id);
       }
     }
-
   }
 
   /**
@@ -132,9 +117,10 @@ class EntityTypeInfo implements ContainerInjectionInterface {
     $path = '';
     if (preg_match_all('/{\w*}/', $entity_path, $matches)) {
       foreach ($matches[0] as $match) {
-        $path .= "/$match";
+        $path .= '/' . $match;
       }
     }
+
     return $path;
   }
 
@@ -150,23 +136,29 @@ class EntityTypeInfo implements ContainerInjectionInterface {
    * @see hook_entity_operation()
    */
   public function entityOperation(EntityInterface $entity): array {
-    $operations = [];
+    $operations = $parameters = [];
     if ($this->currentUser->hasPermission('access devel information')) {
+      if ($entity->hasLinkTemplate('canonical')) {
+        $parameters = $entity->toUrl('canonical')->getRouteParameters();
+      }
       if ($entity->hasLinkTemplate('devel-load')) {
+        $url = $entity->toUrl('devel-load');
         $operations['devel'] = [
           'title' => $this->t('Devel'),
           'weight' => 100,
-          'url' => $entity->toUrl('devel-load'),
+          'url' => $parameters ? $url->setRouteParameters($parameters) : $url,
         ];
       }
       elseif ($entity->hasLinkTemplate('devel-render')) {
+        $url = $entity->toUrl('devel-render');
         $operations['devel'] = [
           'title' => $this->t('Devel'),
           'weight' => 100,
-          'url' => $entity->toUrl('devel-render'),
+          'url' => $parameters ? $url->setRouteParameters($parameters) : $url,
         ];
       }
     }
+
     return $operations;
   }
 

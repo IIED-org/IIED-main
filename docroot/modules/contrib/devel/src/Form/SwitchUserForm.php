@@ -5,7 +5,6 @@ namespace Drupal\devel\Form;
 use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,34 +25,15 @@ class SwitchUserForm extends FormBase {
   protected UserStorageInterface $userStorage;
 
   /**
-   * Constructs a new SwitchUserForm object.
-   *
-   * @param \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator
-   *   The CSRF token generator.
-   * @param \Drupal\user\UserStorageInterface $user_storage
-   *   The user storage.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    CsrfTokenGenerator $csrf_token_generator,
-    UserStorageInterface $user_storage,
-    TranslationInterface $string_translation
-  ) {
-    $this->csrfToken = $csrf_token_generator;
-    $this->userStorage = $user_storage;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('csrf_token'),
-      $container->get('entity_type.manager')->getStorage('user'),
-      $container->get('string_translation'),
-    );
+    $instance = parent::create($container);
+    $instance->csrfToken = $container->get('csrf_token');
+    $instance->userStorage = $container->get('entity_type.manager')->getStorage('user');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**
@@ -106,9 +86,9 @@ class SwitchUserForm extends FormBase {
       return;
     }
 
-    /** @var \Drupal\user\UserInterface $account */
+    /** @var \Drupal\user\UserInterface|null $account */
     $account = $this->userStorage->load($userId);
-    if (!$account) {
+    if ($account === NULL) {
       $form_state->setErrorByName('userid', $this->t('Username not found'));
     }
     else {

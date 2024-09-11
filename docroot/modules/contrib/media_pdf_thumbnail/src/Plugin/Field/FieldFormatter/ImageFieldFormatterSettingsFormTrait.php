@@ -2,24 +2,30 @@
 
 namespace Drupal\media_pdf_thumbnail\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Url;
+
 /**
- * Trait ImageFieldFormatterSettingsFormTrait
+ * Trait ImageFieldFormatterSettingsFormTrait.
+ *
+ * Get settings form element.
  *
  * @package Drupal\media_pdf_thumbnail\Plugin\Field\FieldFormatter
  */
 trait ImageFieldFormatterSettingsFormTrait {
 
   /**
-   * @param $element
+   * Get settings form element.
    *
-   * @return mixed
+   * @param array $element
+   *   Element.
+   *
+   * @return array
+   *   Settings form element.
    */
-  protected function getSettingsFormElement($element) {
-
+  protected function getSettingsFormElement(array $element): array {
     $parentFileFields = $this->getParentEntityFields();
 
     if (!empty($parentFileFields)) {
-
       $element[static::PDF_FILE_FIELD_SETTING] = [
         '#type' => 'select',
         '#title' => $this->t('Field containing the pdf'),
@@ -55,7 +61,7 @@ trait ImageFieldFormatterSettingsFormTrait {
 
       $element[static::IMAGE_LINK_ATTRIBUTE_TARGET_SETTING] = [
         '#type' => 'textfield',
-        '#title' => $this->t('target') . ' :',
+        '#title' => $this->t('target :'),
         '#description' => 'Ex: _self, _blank, _parent, _top',
         '#weight' => 0,
         '#size' => 5,
@@ -65,7 +71,7 @@ trait ImageFieldFormatterSettingsFormTrait {
       $element[static::IMAGE_LINK_ATTRIBUTE_REL_SETTING] = [
         '#suffix' => '</div></div></div>',
         '#type' => 'textfield',
-        '#title' => $this->t('rel') . ' :',
+        '#title' => $this->t('rel :'),
         '#description' => 'Ex: alternate, author, bookmark, icon, nofollow, etc..',
         '#size' => 5,
         '#weight' => 0,
@@ -76,9 +82,9 @@ trait ImageFieldFormatterSettingsFormTrait {
         '#type' => 'checkbox',
         '#title' => 'Use cron',
         '#weight' => 100,
-        '#description' => 'Generates image in queue worker instead of on the fly. 
+        '#description' => 'Generates image in queue worker instead of on the fly.
         The first time the field is displayed, a default image will be shown while queueing image generation</br>
-        You can wait for the cron run or you can execute the queue worker in config page <a href="/admin/media-pdf-thumbnail/settings/queue">queue</a>',
+        You can wait for the cron run or you can execute the queue worker in config page <a href="' . Url::fromRoute('media_pdf_thumbnail.settings.queue')->toString() . '">queue</a>',
         '#default_value' => $this->getSetting(static::IMAGE_USE_CRON),
       ];
     }
@@ -87,7 +93,10 @@ trait ImageFieldFormatterSettingsFormTrait {
   }
 
   /**
-   * @return string[]
+   * Get default settings.
+   *
+   * @return array
+   *   Default settings.
    */
   public static function getDefaultSettings(): array {
     $settings = [
@@ -116,10 +125,12 @@ trait ImageFieldFormatterSettingsFormTrait {
   }
 
   /**
+   * Get settings summary.
+   *
    * @return array
+   *   Settings summary.
    */
   public function getSettingsSummary(): array {
-
     $summary = [];
 
     $image_styles = image_style_options(FALSE);
@@ -149,7 +160,7 @@ trait ImageFieldFormatterSettingsFormTrait {
 
     $image_format = $this->getSetting(static::IMAGE_FORMAT_SETTINGS);
     $image_format = empty($image_format) ? 'jpg' : $image_format;
-    $summary[] = t('Image format: ') . $image_format;
+    $summary[] = t('Image format : @format', ['@format' => $image_format]);
 
     $user_cron = $this->getSetting(static::IMAGE_USE_CRON);
     if (!empty($user_cron)) {

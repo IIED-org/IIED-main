@@ -18,6 +18,6 @@
   },
   "license": "GPL-2.0-or-later",
   "require": {
-      "drupal/core": "^9.3 || ^10.0"
+    "drupal/core": "^10.3 || ^11"
   }
 }

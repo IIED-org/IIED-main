@@ -59,7 +59,7 @@ layout_paragraphs.builder.edit_item:
     _layout_paragraphs_builder_access: 'TRUE'
 
 layout_paragraphs.builder.insert:
-  path: '/layout-paragraphs-builder/{layout_paragraphs_layout}/insert/{paragraph_type}'
+  path: '/layout-paragraphs-builder/{layout_paragraphs_layout}/insert/{paragraph_type_id}'
   defaults:
     _controller: '\Drupal\layout_paragraphs\Controller\ComponentFormController::insertForm'
     operation: 'create'
@@ -67,8 +67,6 @@ layout_paragraphs.builder.insert:
     parameters:
       layout_paragraphs_layout:
         layout_paragraphs_layout_tempstore: TRUE
-      paragraph_type:
-        type: entity:paragraphs_type
   requirements:
     _layout_paragraphs_builder_access: 'TRUE'
 

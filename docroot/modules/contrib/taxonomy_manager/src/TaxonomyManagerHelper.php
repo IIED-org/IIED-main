@@ -2,6 +2,7 @@
 
 namespace Drupal\taxonomy_manager;
 
+use Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -44,6 +45,13 @@ class TaxonomyManagerHelper {
   protected $moduleHandler;
 
   /**
+   * The entity definition update manager.
+   *
+   * @var \Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface
+   */
+  protected $entityLastInstalledSchemaRepository;
+
+  /**
    * Create an TaxonomyManagerHelper object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -54,12 +62,15 @@ class TaxonomyManagerHelper {
    *   The current user.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The manages modules.
+   * @param \Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface $entityLastInstalledSchemaRepository
+   *   Entity Last Installed Schema Repository.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, AccountInterface $current_user, ModuleHandlerInterface $module_handler) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, AccountInterface $current_user, ModuleHandlerInterface $module_handler, EntityLastInstalledSchemaRepositoryInterface $entityLastInstalledSchemaRepository) {
     $this->taxonomyTypeManager = $entity_type_manager->getStorage('taxonomy_term');
     $this->languageManager = $language_manager;
     $this->currentUser = $current_user;
     $this->moduleHandler = $module_handler;
+    $this->entityLastInstalledSchemaRepository = $entityLastInstalledSchemaRepository;
   }
 
   /**
@@ -70,7 +81,8 @@ class TaxonomyManagerHelper {
       $container->get('entity_type.manager'),
       $container->get('language_manager'),
       $container->get('current_user'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('entity.last_installed_schema.repository')
     );
   }
 
@@ -148,9 +160,11 @@ class TaxonomyManagerHelper {
       }
 
       // Truncate long string names that will cause database exceptions.
-      if (strlen($name) > 255) {
+      $fieldNameLength = $this->getFieldNameLength();
+
+      if (strlen($name) > $fieldNameLength) {
         $term_names_too_long[] = $name;
-        $name = substr($name, 0, 255);
+        $name = substr($name, 0, $fieldNameLength);
       }
 
       $filter_formats = filter_formats();
@@ -160,7 +174,7 @@ class TaxonomyManagerHelper {
       $langcode = LanguageInterface::LANGCODE_NOT_SPECIFIED;
 
       // Check if site is multilingual.
-      if (\Drupal::moduleHandler()->moduleExists('language')) {
+      if ($this->moduleHandler->moduleExists('language')) {
         $language_configuration = ContentLanguageSettings::loadByEntityTypeBundle('taxonomy_term', $vid);
         $lang_setting = $language_configuration->getDefaultLangcode();
 
@@ -309,6 +323,23 @@ class TaxonomyManagerHelper {
       $max_weight = max($parent_max_weights) ?? 0;
     }
     return $max_weight;
+  }
+
+  /**
+   * Helper function to retrieve the field name length.
+   *
+   * @return int
+   *   The field name length.
+   */
+  public function getFieldNameLength(): int {
+    $fieldStorageDefinitions = $this->entityLastInstalledSchemaRepository->getLastInstalledFieldStorageDefinitions('taxonomy_term');
+
+    if (!array_key_exists('name', $fieldStorageDefinitions)) {
+      return 255;
+    }
+
+    $fieldNameStorageDefinition = $fieldStorageDefinitions['name'];
+    return $fieldNameStorageDefinition->getSetting('max_length');
   }
 
 }

@@ -304,7 +304,9 @@ class MemcacheBackend implements CacheBackendInterface {
    *   The combined an unserialized value that was originally stored.
    */
   private function combineItems(array $items) {
-    return unserialize(implode(array_column($items, 'data')), ['allowed_classes' => FALSE]);
+    // phpcs:disable
+    return unserialize(implode(array_column($items, 'data')));
+    // phpcs:enable
   }
 
   /**

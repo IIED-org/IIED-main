@@ -197,7 +197,7 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
     $entity = $flagging->getFlaggable();
 
     $this->connection->merge('flag_counts')
-      ->key([
+      ->keys([
         'flag_id' => $flag->id(),
         'entity_id' => $entity->id(),
         'entity_type' => $entity->getEntityTypeId(),
@@ -243,7 +243,11 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
         $flaggings_count[$flag_id][$entity_id]++;
       }
 
-      $this->resetLoadedCounts($flagging->getFlaggable(), $flagging->getFlag());
+      // Workaround to correct error caused by orphaned flags.
+      $entity = $flagging->getFlaggable();
+      if ($entity) {
+        $this->resetLoadedCounts($entity, $flagging->getFlag());
+      }
     }
 
     // Build a query that fetches the count for all flag and entity ID

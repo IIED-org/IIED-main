@@ -123,7 +123,10 @@ abstract class MessageNotifierBase extends PluginBase implements MessageNotifier
     $save = FALSE;
     // NULL means skip delivery. False signifies failure. Strict check.
     if ($result === FALSE) {
-      $this->logger->error('Could not send message using {title} to user ID {uid}.', ['{title}' => $this->pluginDefinition['title'], '{uid}' => $this->message->getOwnerId()]);
+      $this->logger->error('Could not send message using {title} to user ID {uid}.', [
+        '{title}' => $this->pluginDefinition['title'],
+        '{uid}' => $this->message->getOwnerId(),
+      ]);
       if ($this->configuration['save on fail']) {
         $save = TRUE;
       }

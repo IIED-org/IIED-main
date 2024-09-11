@@ -18,6 +18,8 @@ class MasqueradeTest extends MasqueradeWebTestBase {
    * Tests masquerade user links.
    */
   public function testMasquerade() {
+    $original_last_access = $this->authUser->getLastAccessedTime();
+
     $this->drupalLogin($this->adminUser);
 
     // Verify that a token is required.
@@ -48,6 +50,13 @@ class MasqueradeTest extends MasqueradeWebTestBase {
     $this->unmasquerade($this->authUser);
     $this->assertNoSessionByUid($this->authUser->id());
     $this->assertSessionByUid($this->adminUser->id());
+
+    // Verify that masquerading as $authUser did not change the last login
+    // time.
+    $authUser = \Drupal::entityTypeManager()
+      ->getStorage('user')
+      ->loadUnchanged($this->authUser->id());
+    $this->assertEquals($original_last_access, $authUser->getLastAccessedTime(), 'Last access timestamp for impersonated user was not changed.');
   }
 
   /**

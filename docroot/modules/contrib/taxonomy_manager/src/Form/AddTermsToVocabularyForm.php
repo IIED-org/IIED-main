@@ -116,8 +116,13 @@ class AddTermsToVocabularyForm extends FormBase {
       $term_names[] = $term->label();
     }
 
+    $fieldNameLength = $this->taxonomyManagerHelper->getFieldNameLength();
+
     if (count($term_names_too_long)) {
-      $this->messenger()->addWarning($this->t("Following term names were too long and truncated to 255 characters: %names.", ['%names' => implode(', ', $term_names_too_long)]));
+      $this->messenger()->addWarning($this->t("Following term names were too long and truncated to %length characters: %names.", [
+        '%length' => $fieldNameLength,
+        '%names' => implode(', ', $term_names_too_long),
+      ]));
     }
     $this->messenger()->addMessage($this->t("Terms added: %terms", ['%terms' => implode(', ', $term_names)]));
     $form_state->setRedirect('taxonomy_manager.admin_vocabulary', ['taxonomy_vocabulary' => $taxonomy_vocabulary->id()]);

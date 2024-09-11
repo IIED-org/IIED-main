@@ -21,6 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Defines the access control handler for the asset_injector entity types.
  *
  * @see \Drupal\asset_injector\Entity\AssetInjectorCss
+ * @see \Drupal\asset_injector\Entity\AssetInjectorJs
  */
 class AssetInjectorAccessControlHandler extends EntityAccessControlHandler implements EntityHandlerInterface {
 
@@ -161,7 +162,9 @@ class AssetInjectorAccessControlHandler extends EntityAccessControlHandler imple
     $config = $theme_condition->getConfig();
 
     $themes = is_array($config['theme']) ? $config['theme'] : [$config['theme']];
-    // If no themes were selected in the UI, the value of `theme` is an empty string. Change it to an array.
+    // If no themes were selected in the UI, the value of `theme`
+    // is an empty string.
+    // Change it to an array.
     foreach ($themes as $theme) {
       $new_theme_conditions = clone $theme_condition;
       $new_theme_conditions->setConfig('theme', $theme);

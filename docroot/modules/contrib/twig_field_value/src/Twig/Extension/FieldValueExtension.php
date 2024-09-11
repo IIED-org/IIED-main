@@ -2,15 +2,17 @@
 
 namespace Drupal\twig_field_value\Twig\Extension;
 
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerResolverInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\RenderCallbackInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Security\DoTrustedCallbackTrait;
 use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
@@ -53,6 +55,13 @@ class FieldValueExtension extends AbstractExtension {
   protected $loggerChannel;
 
   /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected RendererInterface $renderer;
+
+  /**
    * Constructs a FieldValueExtension.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
@@ -63,12 +72,15 @@ class FieldValueExtension extends AbstractExtension {
    *   The controller resolver.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
    *   The logger channel factory.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
-  public function __construct(LanguageManagerInterface $language_manager, EntityRepositoryInterface $entityRepository, ControllerResolverInterface $controllerResolver, LoggerChannelFactoryInterface $loggerFactory) {
+  public function __construct(LanguageManagerInterface $language_manager, EntityRepositoryInterface $entityRepository, ControllerResolverInterface $controllerResolver, LoggerChannelFactoryInterface $loggerFactory, RendererInterface $renderer) {
     $this->languageManager = $language_manager;
     $this->entityRepository = $entityRepository;
     $this->controllerResolver = $controllerResolver;
     $this->loggerChannel = $loggerFactory->get('twig_field_value');
+    $this->renderer = $renderer;
   }
 
   /**
@@ -103,6 +115,11 @@ class FieldValueExtension extends AbstractExtension {
       return NULL;
     }
 
+    // Make sure to bubble all cache and metadata information, like libraries.
+    $bubbleable = [];
+    BubbleableMetadata::createFromRenderArray($build)->applyTo($bubbleable);
+    $this->renderer->render($bubbleable);
+
     return $build['#title'] ?? NULL;
   }
 
@@ -131,6 +148,11 @@ class FieldValueExtension extends AbstractExtension {
     foreach ($children as $delta => $child) {
       $items[$delta] = $child;
     }
+
+    // Make sure to bubble all cache and metadata information, like libraries.
+    $bubbleable = [];
+    BubbleableMetadata::createFromRenderArray($build)->applyTo($bubbleable);
+    $this->renderer->render($bubbleable);
 
     return $items;
   }
@@ -168,6 +190,11 @@ class FieldValueExtension extends AbstractExtension {
       }
       $raw_values[$delta] = $raw_value;
     }
+
+    // Make sure to bubble all cache and metadata information, like libraries.
+    $bubbleable = [];
+    BubbleableMetadata::createFromRenderArray($build)->applyTo($bubbleable);
+    $this->renderer->render($bubbleable);
 
     return count($raw_values) > 1 ? $raw_values : reset($raw_values);
   }
@@ -231,6 +258,11 @@ class FieldValueExtension extends AbstractExtension {
       ]);
       return NULL;
     }
+
+    // Make sure to bubble all cache and metadata information, like libraries.
+    $bubbleable = [];
+    BubbleableMetadata::createFromRenderArray($build)->applyTo($bubbleable);
+    $this->renderer->render($bubbleable);
 
     return count($entities) > 1 ? $entities : reset($entities);
   }

@@ -2,26 +2,35 @@
 
 namespace Drupal\media_pdf_thumbnail\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Entity\EntityInterface;
+
 /**
- * Trait ImageFieldFormatterElementViewTrait
+ * Trait ImageFieldFormatterElementViewTrait.
+ *
+ * Get settings from entity view mode field formatter.
  *
  * @package Drupal\media_pdf_thumbnail\Plugin\Field\FieldFormatter
  */
 trait ImageFieldFormatterElementViewTrait {
 
   /**
-   * @param $entity
+   * Get settings from entity view mode field formatter.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity.
    *
    * @return array|null
+   *   Settings.
+   *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getElementSettings($entity): ?array {
-
+  protected function getElementSettings(EntityInterface $entity): ?array {
     // All settings.
     $settings = $this->getSettings();
 
-    // If no settings from entity view mode field formatter, it means it's a single field render.
+    // If no settings from entity view mode field formatter,
+    // it means it's a single field render.
     if (empty($settings[static::PDF_FILE_FIELD_SETTING])) {
       $bundle = $entity->bundle();
       // Search for available options in all settings.
@@ -49,14 +58,21 @@ trait ImageFieldFormatterElementViewTrait {
   }
 
   /**
-   * @param $element
-   * @param $imageId
-   * @param $entity
+   * Get image element.
+   *
+   * @param array $element
+   *   Element.
+   * @param string|int $imageId
+   *   Image id.
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity.
    *
    * @return array
+   *   Element.
+   *
    * @throws \Drupal\Core\TypedData\Exception\ReadOnlyException
    */
-  protected function renderImage($element, $imageId, $entity): array {
+  protected function renderImage(array $element, string | int $imageId, EntityInterface $entity): array {
     /**
      * @var \Drupal\image\Plugin\Field\FieldType\ImageItem $imageItem
      */
@@ -70,11 +86,15 @@ trait ImageFieldFormatterElementViewTrait {
   }
 
   /**
-   * @param $settings
+   * Get html attributes.
+   *
+   * @param array $settings
+   *   Settings.
    *
    * @return array
+   *   Html attributes.
    */
-  protected function htmlAttributes($settings): array {
+  protected function htmlAttributes(array $settings): array {
     $options = [];
     if (!empty($settings[static::IMAGE_LINK_ATTRIBUTE_DOWNLOAD_SETTING])) {
       $options['attributes']['download'] = '';
@@ -87,4 +107,5 @@ trait ImageFieldFormatterElementViewTrait {
     }
     return $options;
   }
+
 }

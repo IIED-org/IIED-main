@@ -11,13 +11,13 @@
  * Implements hook_admin_menu_map().
  */
 function taxonomy_manager_admin_menu_map() {
-  if (!user_access('administer taxonomy')) {
+  if (!\Drupal::currentUser()->hasPermission('administer taxonomy')) {
     return;
   }
   $map['admin/structure/taxonomy_manager/voc/%taxonomy_vocabulary_machine_name'] = [
     'parent' => 'admin/structure/taxonomy_manager/voc',
     'arguments' => [
-      ['%taxonomy_vocabulary_machine_name' => array_keys(Drupal::entityQuery('taxonomy_vocabulary')->execute())],
+      ['%taxonomy_vocabulary_machine_name' => array_keys(\Drupal::entityQuery('taxonomy_vocabulary')->execute())],
     ],
   ];
   return $map;

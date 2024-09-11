@@ -8,7 +8,7 @@ dependencies:
 type: module
 core_version_requirement: ^9 || ^10
 
-# Information added by Drupal.org packaging script on 2023-10-25
-version: '5.0.0-alpha1'
+# Information added by Drupal.org packaging script on 2024-08-21
+version: '5.0.0-alpha2'
 project: 'responsive_menu'
-datestamp: 1698222945
+datestamp: 1724236733

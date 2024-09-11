@@ -155,7 +155,7 @@ class PasswordPolicyEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     // @todo Evaluate if there is a better place to add this check.
     $events[KernelEvents::REQUEST][] = ['checkForUserPasswordExpiration', 28];
     return $events;

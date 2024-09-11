@@ -1,13 +1,13 @@
 name: Components test base theme
 type: theme
 base theme: stable9
-core_version_requirement: ^9
+core_version_requirement: ^9 || ^10 || ^11
 description: Theme for testing Components functionality.
 components:
   namespaces:
     components: components
 
-# Information added by Drupal.org packaging script on 2022-05-05
-version: '3.0.0-beta3'
+# Information added by Drupal.org packaging script on 2024-09-09
+version: '3.1.0'
 project: 'components'
-datestamp: 1651759491
+datestamp: 1725921125

@@ -2,13 +2,13 @@
 
 namespace Drupal\block_class\Form;
 
+use Drupal\block\Entity\Block;
+use Drupal\block_class\Service\BlockClassHelperService;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\block\Entity\Block;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Form for Block Class Confirm Bulk Operation.
@@ -67,15 +67,15 @@ class BlockClassConfirmBulkOperationForm extends ConfirmFormBase {
   /**
    * The config factory.
    *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   * @var \Drupal\block_class\Service\BlockClassHelperService
    */
-  protected $configFactory;
+  protected $blockClassHelper;
 
   /**
    * Construct of Block Class service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->configFactory = $config_factory;
+  public function __construct(BlockClassHelperService $block_class_helper) {
+    $this->blockClassHelper = $block_class_helper;
   }
 
   /**
@@ -83,7 +83,7 @@ class BlockClassConfirmBulkOperationForm extends ConfirmFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory')
+      $container->get('block_class.helper')
     );
   }
 
@@ -93,18 +93,6 @@ class BlockClassConfirmBulkOperationForm extends ConfirmFormBase {
   // @codingStandardsIgnoreLine
   public function buildForm(array $form, FormStateInterface $form_state, $operation = NULL, $classes_to_be_added = NULL, $current_class = NULL, $new_class = NULL, $attributes_to_be_added = NULL, $current_attribute = NULL, $new_attribute = NULL) {
 
-    // If the user doesn't have the sessions, restrict it.
-    if (empty(\Drupal::service('session')->get('block_class_confirm_bulk_operation'))) {
-
-      // Send a message to the user that is necessary fill the bulk operation
-      // before running the operation.
-      \Drupal::messenger()->addError($this->t('Is necessary fill the Bulk Operation form before running this operation'));
-
-      // Redirect to Bulk Operations.
-      \Drupal::service('block_class.helper')->redirectToBulkOperations();
-
-    }
-
     // Get the default parameters.
     $this->operation = $operation;
     $this->classesToBeAdded = $classes_to_be_added;
@@ -113,23 +101,6 @@ class BlockClassConfirmBulkOperationForm extends ConfirmFormBase {
     $this->attributesToBeAdded = base64_decode($attributes_to_be_added);
     $this->currentAttribute = base64_decode($current_attribute);
     $this->newAttribute = base64_decode($new_attribute);
-
-    // Get the session value.
-    $block_class_confirm_bulk_operation = \Drupal::service('session')->get('block_class_confirm_bulk_operation');
-
-    // Restrict this page to users with the session in the same of operation.
-    if ($this->operation != $block_class_confirm_bulk_operation) {
-
-      // Send a message to the user that is necessary fill the bulk operation
-      // before running the operation.
-      \Drupal::messenger()->addError($this->t('Is necessary fill the Bulk Operation form for <strong>@operation@</strong> before running this operation', [
-        '@operation@' => $this->operation,
-      ]));
-
-      // Redirect to Bulk Operations.
-      \Drupal::service('block_class.helper')->redirectToBulkOperations();
-
-    }
 
     $message_to_confirm = (string) $this->getQuestion();
 
@@ -222,10 +193,7 @@ class BlockClassConfirmBulkOperationForm extends ConfirmFormBase {
       }
     }
 
-    // Clear the session because the confirmation is done.
-    \Drupal::service('session')->remove('block_class_confirm_bulk_operation');
-
-    \Drupal::messenger()->addStatus($this->t('Bulk operation concluded'));
+    $this->messenger()->addStatus($this->t('Bulk operation concluded'));
 
     // Get path bulk operation.
     $bulk_operation_path = Url::fromRoute('block_class.bulk_operations')->toString();
@@ -435,10 +403,10 @@ class BlockClassConfirmBulkOperationForm extends ConfirmFormBase {
     $block->save();
 
     // Get the config object.
-    $config = $this->configFactory->getEditable('block_class.settings');
+    $config = $this->configFactory()->getEditable('block_class.settings');
 
     // Store in the config.
-    $config->set('block_classes_stored', '{}');
+    $config->set('block_classes_stored', []);
 
     // Save.
     $config->save();
@@ -465,7 +433,7 @@ class BlockClassConfirmBulkOperationForm extends ConfirmFormBase {
     $block->save();
 
     // Get the config object.
-    $config = $this->configFactory->getEditable('block_class.settings');
+    $config = $this->configFactory()->getEditable('block_class.settings');
 
     // Remove from settings.
     $config->set('id_replacement_stored', FALSE);
@@ -481,7 +449,7 @@ class BlockClassConfirmBulkOperationForm extends ConfirmFormBase {
   public function deleteAttributes(&$block) {
 
     // Get the config object.
-    $config = $this->configFactory->getEditable('block_class.settings');
+    $config = $this->configFactory()->getEditable('block_class.settings');
 
     // Get the items stored.
     $block_classes_stored = $config->get('block_classes_stored');
@@ -510,7 +478,7 @@ class BlockClassConfirmBulkOperationForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getFormId() : string {
-    return "block_class_confirm_bulk_operation_form";
+    return 'block_class_confirm_bulk_operation_form';
   }
 
   /**

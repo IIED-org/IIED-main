@@ -2,24 +2,25 @@
 
 namespace Drupal\block_class\Service;
 
-use Drupal\Component\Uuid\UuidInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Path\PathMatcherInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\path_alias\AliasManagerInterface;
-use Drupal\Core\Path\CurrentPathStack;
-use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Url;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Drupal\Core\Entity\EntityFormInterface;
-use Drupal\Component\Utility\Html;
 use Drupal\block_class\Constants\BlockClassConstants;
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Html;
+use Drupal\Component\Uuid\UuidInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityFormInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Path\CurrentPathStack;
+use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
+use Drupal\path_alias\AliasManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Block Class Service Class.
@@ -106,6 +107,13 @@ class BlockClassHelperService {
   protected $entityTypeManager;
 
   /**
+   * The list of available modules.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $extensionListModule;
+
+  /**
    * The block entity.
    *
    * @var useDrupal\block\Entity\Block
@@ -115,7 +123,7 @@ class BlockClassHelperService {
   /**
    * Construct of Block Class service.
    */
-  public function __construct(LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, Connection $database, RequestStack $request_stack, PathMatcherInterface $path_matcher, UuidInterface $uuid_service, AliasManagerInterface $alias_manager, CurrentPathStack $current_path, EntityRepositoryInterface $entityRepository, AccountProxy $currentUser, EntityTypeManagerInterface $entity_manager) {
+  public function __construct(LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, Connection $database, RequestStack $request_stack, PathMatcherInterface $path_matcher, UuidInterface $uuid_service, AliasManagerInterface $alias_manager, CurrentPathStack $current_path, EntityRepositoryInterface $entityRepository, AccountProxy $currentUser, EntityTypeManagerInterface $entity_manager, ModuleExtensionList $extension_list_module) {
     $this->languageManager = $language_manager;
     $this->pathMatcher = $path_matcher;
     $this->request = $request_stack->getCurrentRequest();
@@ -128,6 +136,7 @@ class BlockClassHelperService {
     $this->currentUser = $currentUser;
     $this->entityTypeManager = $entity_manager;
     $this->blockEntity = $this->entityTypeManager->getStorage('block');
+    $this->extensionListModule = $extension_list_module;
   }
 
   /**
@@ -186,25 +195,12 @@ class BlockClassHelperService {
       // Get the current classes stored.
       $block_classes_stored = $config->get('block_classes_stored');
 
-      // Get the array from JSON.
-      $block_classes_stored = Json::decode($block_classes_stored ?? '');
-
-      // Verify if is empty.
-      if (empty($block_classes_stored)) {
-        $block_classes_stored = [];
-      }
-
       // Get the current class and export to array.
       $current_block_classes = explode(' ', $block_classes ?? '');
 
-      // Use the key the same as value.
-      $current_block_classes = array_combine($current_block_classes, $current_block_classes);
-
       // Merge with the current one.
       $block_classes_to_store = array_merge($block_classes_stored, $current_block_classes);
-
-      // Get as JSON.
-      $block_classes_to_store = Json::encode($block_classes_to_store);
+      $block_classes_to_store = array_unique($block_classes_to_store);
 
       // Store in the config.
       $config->set('block_classes_stored', $block_classes_to_store);
@@ -400,13 +396,14 @@ class BlockClassHelperService {
       return;
     }
 
+    // Load the block by ID.
+    /** @var \Drupal\block\BlockInterface $block */
+    $block = $this->blockEntity->load($variables['elements']['#id']);
+
     // If there is no block with this ID, skip.
-    if (empty($this->blockEntity->load($variables['elements']['#id']))) {
+    if (is_null($block)) {
       return;
     }
-
-    // Load the block by ID.
-    $block = $this->blockEntity->load($variables['elements']['#id']);
 
     // Add attributes on block.
     $this->addAttributesOnBlock($block, $variables);
@@ -603,7 +600,7 @@ class BlockClassHelperService {
       $maxlength_block_class_field = $config->get('maxlength_block_class_field');
     }
 
-    $image_path = '/' . \Drupal::service('extension.list.module')->getPath('block_class') . '/images/';
+    $image_path = '/' . $this->extensionListModule->getPath('block_class') . '/images/';
 
     if ($config->get('field_type') == 'textfield') {
 
@@ -643,18 +640,18 @@ class BlockClassHelperService {
       for ($index = 0; $index <= ($qty_classes_per_block - 1); $index++) {
 
         // Initial value.
-        $multiclass_default_value = '';
+        $multi_class_default_value = '';
 
         // Verify if there is a value on this class to add in the field.
         if (!empty($classes[$index])) {
-          $multiclass_default_value = $classes[$index];
+          $multi_class_default_value = $classes[$index];
         }
 
         // Insert the new field.
         $form['class']['third_party_settings']['block_class']['classes_' . $index] = [
           '#type' => 'textfield',
           '#title' => $this->t('CSS class'),
-          '#default_value' => $multiclass_default_value,
+          '#default_value' => $multi_class_default_value,
           '#maxlength' => $maxlength_block_class_field,
         ];
 
@@ -835,13 +832,7 @@ class BlockClassHelperService {
           $form['multiple_attributes']['third_party_settings']['block_class']['attribute_' . $index]['#weight'] = $config->get('weight_attributes');
         }
 
-        // Default value for maxlength.
-        $maxlength_multiple_attributes = 255;
-
-        // Get maxlength if exists.
-        if (!empty($config->get('maxlength_attributes'))) {
-          $maxlength_multiple_attributes = $config->get('maxlength_attributes');
-        }
+        $maxlength_multiple_attributes = $config->get('maxlength_attributes');
 
         // Add the attribute key item.
         $form['multiple_attributes']['third_party_settings']['block_class']['attribute_' . $index]['attribute_key_' . $index] = [
@@ -945,7 +936,7 @@ class BlockClassHelperService {
   public function validateDynamicClasses(&$form, &$form_state, $config) {
 
     // Get the ThirdPartySettings.
-    $third_party_settings = $form_state->getValue('class')['third_party_settings'];
+    $third_party_settings = $form_state->getValue('class') ? $form_state->getValue('class')['third_party_settings'] : [];
 
     // Verify if there is attributes enabled.
     if (!empty($form_state->getValue('attributes')['third_party_settings'])) {

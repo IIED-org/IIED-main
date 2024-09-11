@@ -15,6 +15,6 @@
     "require": {
         "ext-imagick": "*",
         "spatie/pdf-to-image": "^2.1.0",
-        "php" : ">=8.0"
+        "php" : ">=8.1"
     }
 }

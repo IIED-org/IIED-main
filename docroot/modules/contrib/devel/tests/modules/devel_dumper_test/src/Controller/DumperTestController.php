@@ -19,22 +19,13 @@ class DumperTestController extends ControllerBase {
   protected DevelDumperManagerInterface $dumper;
 
   /**
-   * Constructs a new DumperTestController object.
-   *
-   * @param \Drupal\devel\DevelDumperManagerInterface $devel_dumper_manager
-   *   The dumper manager.
-   */
-  public function __construct(DevelDumperManagerInterface $devel_dumper_manager) {
-    $this->dumper = $devel_dumper_manager;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('devel.dumper')
-    );
+    $instance = parent::create($container);
+    $instance->dumper = $container->get('devel.dumper');
+
+    return $instance;
   }
 
   /**

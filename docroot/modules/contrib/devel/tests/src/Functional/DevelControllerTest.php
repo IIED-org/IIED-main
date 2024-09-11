@@ -2,6 +2,12 @@
 
 namespace Drupal\Tests\devel\Functional;
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\devel_entity_test\Entity\DevelEntityTestCanonical;
+use Drupal\devel_entity_test\Entity\DevelEntityTestEdit;
+use Drupal\devel_entity_test\Entity\DevelEntityTestNoLinks;
+use Drupal\entity_test\Entity\EntityTest;
+
 /**
  * Tests Devel controller.
  *
@@ -12,7 +18,7 @@ class DevelControllerTest extends DevelBrowserTestBase {
   /**
    * Modules to enable.
    *
-   * @var array
+   * @var string[]
    */
   protected static $modules = [
     'devel',
@@ -24,31 +30,23 @@ class DevelControllerTest extends DevelBrowserTestBase {
 
   /**
    * Test entity provided by Core.
-   *
-   * @var \Drupal\entity_test\Entity\EntityTest
    */
-  protected $entity;
+  protected EntityTest|EntityInterface $entity;
 
   /**
    * Devel test entity with canonical link.
-   *
-   * @var \Drupal\devel_entity_test\Entity\DevelEntityTestCanonical
    */
-  protected $entityCanonical;
+  protected DevelEntityTestCanonical|EntityInterface $entityCanonical;
 
   /**
    * Devel test entity with edit form link.
-   *
-   * @var \Drupal\devel_entity_test\Entity\DevelEntityTestEdit
    */
-  protected $entityEdit;
+  protected DevelEntityTestEdit|EntityInterface $entityEdit;
 
   /**
    * Devel test entity with no links.
-   *
-   * @var \Drupal\devel_entity_test\Entity\DevelEntityTestNoLinks
    */
-  protected $entityNoLinks;
+  protected DevelEntityTestNoLinks|EntityInterface $entityNoLinks;
 
   /**
    * {@inheritdoc}
@@ -107,6 +105,8 @@ class DevelControllerTest extends DevelBrowserTestBase {
     $this->assertSession()->LinkExists('Definition');
     $this->assertSession()->LinkExists('Render');
     $this->assertSession()->LinkExists('Load');
+    $this->assertSession()->LinkExists('Load (with references)');
+    $this->assertSession()->LinkExists('Path alias');
     $this->assertSession()->linkByHrefExists('devel/render/entity_test/' . $this->entity->id());
     $this->drupalGet('devel/render/entity_test/' . $this->entity->id());
     $this->assertSession()->statusCodeEquals(200);
@@ -137,6 +137,8 @@ class DevelControllerTest extends DevelBrowserTestBase {
     $this->assertSession()->LinkExists('Definition');
     $this->assertSession()->LinkExists('Render');
     $this->assertSession()->LinkNotExists('Load');
+    $this->assertSession()->LinkNotExists('Load (with references)');
+    $this->assertSession()->LinkExists('Path alias');
     $this->assertSession()->linkByHrefExists('devel/definition/devel_entity_test_canonical/' . $this->entityCanonical->id());
     $this->drupalGet('devel/definition/devel_entity_test_canonical/' . $this->entityCanonical->id());
     $this->assertSession()->statusCodeEquals(200);
@@ -154,6 +156,8 @@ class DevelControllerTest extends DevelBrowserTestBase {
     $this->assertSession()->LinkExists('Definition');
     $this->assertSession()->LinkNotExists('Render');
     $this->assertSession()->LinkExists('Load');
+    $this->assertSession()->LinkExists('Load (with references)');
+    $this->assertSession()->LinkExists('Path alias');
     $this->assertSession()->linkByHrefExists('devel/definition/devel_entity_test_edit/' . $this->entityEdit->id());
     $this->assertSession()->linkByHrefNotExists('devel/render/devel_entity_test_edit/' . $this->entityEdit->id());
     $this->drupalGet('devel/definition/devel_entity_test_edit/' . $this->entityEdit->id());
@@ -171,6 +175,15 @@ class DevelControllerTest extends DevelBrowserTestBase {
     $this->assertSession()->statusCodeEquals(404);
     $this->drupalGet('devel/definition/devel_entity_test_no_links/' . $this->entityNoLinks->id());
     $this->assertSession()->statusCodeEquals(404);
+  }
+
+  /**
+   * Tests the field info page.
+   */
+  public function testFieldInfoPage(): void {
+    $this->drupalGet('/devel/field/info');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->pageTextContains('Field types');
   }
 
 }

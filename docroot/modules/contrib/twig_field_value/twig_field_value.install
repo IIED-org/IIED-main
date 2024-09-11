@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Rebuild the container cache.
+ */
+function twig_field_value_update_9001() {
+  \Drupal::service('kernel')->rebuildContainer();
+}

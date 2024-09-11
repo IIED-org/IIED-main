@@ -16,7 +16,7 @@ class DevelMailLogTest extends KernelTestBase {
   /**
    * Modules to enable.
    *
-   * @var array
+   * @var string[]
    */
   protected static $modules = ['devel', 'devel_test', 'system'];
 
@@ -95,13 +95,16 @@ class DevelMailLogTest extends KernelTestBase {
   public function testDevelMailLogOutput(): void {
     $config = \Drupal::config('devel.settings');
 
+    /** @var \Drupal\Core\Language\LanguageManagerInterface $language_manager */
+    $language_manager = $this->container->get('language_manager');
+
     // Parameters used for send the email.
     $mail = [
       'module' => 'devel_test',
       'key' => 'devel_mail_log',
       'to' => 'drupal@example.com',
       'reply' => 'replyto@example.com',
-      'lang' => \Drupal::languageManager()->getCurrentLanguage(),
+      'lang' => $language_manager->getCurrentLanguage()->getId(),
     ];
 
     // Parameters used for compose the email in devel_test module.

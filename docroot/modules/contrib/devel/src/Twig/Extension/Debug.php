@@ -84,7 +84,7 @@ class Debug extends AbstractExtension {
    *
    * @see \Drupal\devel\DevelDumperManager::dump()
    */
-  public function dump(Environment $env, array $context, array $args = []) {
+  public function dump(Environment $env, array $context, array $args = []): string|false|null {
     return $this->doDump($env, $context, $args);
   }
 
@@ -112,7 +112,7 @@ class Debug extends AbstractExtension {
     ob_start();
 
     // No arguments passed, display full Twig context.
-    if (empty($args)) {
+    if ($args === []) {
       $context_variables = $this->getContextVariables($context);
       $this->dumper->dump($context_variables, 'Twig context', $plugin_id);
     }
@@ -120,7 +120,7 @@ class Debug extends AbstractExtension {
       $parameters = $this->guessTwigFunctionParameters();
 
       foreach ($args as $index => $variable) {
-        $name = !empty($parameters[$index]) ? $parameters[$index] : NULL;
+        $name = empty($parameters[$index]) ? NULL : $parameters[$index];
         $this->dumper->dump($variable, $name, $plugin_id);
       }
     }
@@ -145,7 +145,7 @@ class Debug extends AbstractExtension {
    *
    * @see \Drupal\devel\DevelDumperManager::dump()
    */
-  public function kint(Environment $env, array $context, array $args = []) {
+  public function kint(Environment $env, array $context, array $args = []): string|false|null {
     return $this->doDump($env, $context, $args, 'kint');
   }
 
@@ -169,7 +169,7 @@ class Debug extends AbstractExtension {
     }
 
     // No arguments passed, display full Twig context.
-    if (empty($args)) {
+    if ($args === []) {
       $context_variables = $this->getContextVariables($context);
       $this->dumper->message($context_variables, 'Twig context');
     }
@@ -177,7 +177,7 @@ class Debug extends AbstractExtension {
       $parameters = $this->guessTwigFunctionParameters();
 
       foreach ($args as $index => $variable) {
-        $name = !empty($parameters[$index]) ? $parameters[$index] : NULL;
+        $name = empty($parameters[$index]) ? NULL : $parameters[$index];
         $this->dumper->message($variable, $name);
       }
     }
@@ -234,6 +234,7 @@ class Debug extends AbstractExtension {
         $context_variables[$key] = $value;
       }
     }
+
     return $context_variables;
   }
 
@@ -250,7 +251,7 @@ class Debug extends AbstractExtension {
     $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS | DEBUG_BACKTRACE_PROVIDE_OBJECT);
 
     foreach ($backtrace as $index => $trace) {
-      if (isset($trace['object']) && $trace['object'] instanceof Template && 'Twig_Template' !== $trace['object']::class) {
+      if (isset($trace['object']) && $trace['object'] instanceof Template) {
         $template = $trace['object'];
         $callee = $backtrace[$index - 1];
         break;
@@ -258,9 +259,7 @@ class Debug extends AbstractExtension {
     }
 
     $parameters = [];
-
-    /** @var \Twig\Template $template */
-    if (NULL !== $template && NULL !== $callee) {
+    if ($template !== NULL && $callee !== NULL) {
       $line_number = $callee['line'];
       $debug_infos = $template->getDebugInfo();
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\devel_dumper_test\Plugin\Devel\Dumper;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\devel\DevelDumperBase;
 
 /**
@@ -21,17 +22,18 @@ class AvailableTestDumper extends DevelDumperBase {
   public function dump($input, $name = NULL): void {
     // Add a predetermined string to $input to check if this dumper has been
     // selected successfully.
-    $input = '<pre>' . 'AvailableTestDumper::dump() ' . $input . '</pre>';
+    $input = '<pre>AvailableTestDumper::dump() ' . $input . '</pre>';
     echo $input;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function export($input, $name = NULL) {
+  public function export(mixed $input, ?string $name = NULL): MarkupInterface|string {
     // Add a predetermined string to $input to check if this dumper has been
     // selected successfully.
-    $input = '<pre>' . 'AvailableTestDumper::export() ' . $input . '</pre>';
+    $input = '<pre>AvailableTestDumper::export() ' . $input . '</pre>';
+
     return $this->setSafeMarkup($input);
   }
 
@@ -41,7 +43,7 @@ class AvailableTestDumper extends DevelDumperBase {
   public function exportAsRenderable($input, $name = NULL): array {
     // Add a predetermined string to $input to check if this dumper has been
     // selected successfully.
-    $input = '<pre>' . 'AvailableTestDumper::exportAsRenderable() ' . $input . '</pre>';
+    $input = '<pre>AvailableTestDumper::exportAsRenderable() ' . $input . '</pre>';
 
     return [
       '#attached' => [

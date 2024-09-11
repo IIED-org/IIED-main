@@ -428,7 +428,7 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
         $max_filesize = min($max_filesize, Bytes::toNumber($settings['max_filesize']));
       }
       // There is always a file size limit due to the PHP server limit.
-      $validators['file_validate_size'] = [$max_filesize];
+      $validators['FileSizeLimit'] = ['fileLimit' => $max_filesize];
     }
 
     // Images have expected defaults for file extensions.
@@ -438,15 +438,18 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
       $supported_extensions = ['png', 'gif', 'jpg', 'jpeg'];
       $extensions = isset($settings['file_extensions']) ? $settings['file_extensions'] : implode(' ', $supported_extensions);
       $extensions = array_intersect(explode(' ', $extensions), $supported_extensions);
-      $validators['file_validate_extensions'] = [implode(' ', $extensions)];
+      $validators['FileExtension'] = ['extensions' => implode(' ', $extensions)];
 
       // Add resolution validation.
       if (!empty($settings['max_resolution']) || !empty($settings['min_resolution'])) {
-        $validators['entity_browser_file_validate_image_resolution'] = [$settings['max_resolution'], $settings['min_resolution']];
+        $validators['EntityBrowserImageDimensions'] = [
+          'maxDimensions' => $settings['max_resolution'],
+          'minDimensions' => $settings['min_resolution'],
+        ];
       }
     }
     elseif (!empty($settings['file_extensions'])) {
-      $validators['file_validate_extensions'] = [$settings['file_extensions']];
+      $validators['FileExtension'] = ['extensions' => $settings['file_extensions']];
     }
 
     return $validators;

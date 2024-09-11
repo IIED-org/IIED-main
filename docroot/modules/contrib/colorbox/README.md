@@ -66,9 +66,8 @@ Or, if you prefer, you can download DOMPurify directly from:
 [DOMPurify](https://github.com/cure53/DOMPurify/releases/latest)
 
 From the above link, you can download a zip or tar.gz archive file.
-To avoid security issues, please only install the dist directory, and
-nothing else from the archive. The drush command above only installs
-the dist directory.
+To avoid security issues, only install the dist directory, and nothing else from
+the archive. The drush command above only installs the dist directory.
 
 The DOMPurify library is optional. Without DOMPurify, the Colorbox module
 will convert all captions to plain text.
@@ -118,6 +117,12 @@ Go to "Configuration" -> "Media" -> "Colorbox" and select "None" under
 "Styles and Options". This will leave the styling of Colorbox up to your theme.
 Make any CSS adjustments to your "colorbox_mycolorbox.css" file.
 
+## Use Responsive Images
+
+Choose "Colorbox Responsive" as your image formatter. Standalone, only the
+content/trigger image can make use of responsive image styles. If you install
+the colorbox_inline module, responsive image styles will be available for the
+Colorbox image as well. Link: https://www.drupal.org/project/colorbox_inline
 
 ## Drush
 

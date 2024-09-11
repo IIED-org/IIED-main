@@ -2,12 +2,12 @@ name: 'Media PDF Thumbnail'
 type: module
 description: 'Generate a thumbnail image from a pdf file in media entity'
 package: 'Media'
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^10.3.2 | ^11
 configure: view.pdf_image_entity.list
 dependencies:
   - drupal:media
 
-# Information added by Drupal.org packaging script on 2024-03-23
-version: '6.0.1'
+# Information added by Drupal.org packaging script on 2024-08-28
+version: '6.1.1'
 project: 'media_pdf_thumbnail'
-datestamp: 1711186212
+datestamp: 1724857282

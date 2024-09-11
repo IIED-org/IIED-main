@@ -412,7 +412,6 @@ class EntityBrowserTest extends EntityBrowserWebDriverTestBase {
 
     // Open the entity browser widget form.
     $this->getSession()->getPage()->clickLink('Select entities');
-    $this->waitForAjaxToFinish();
     $this->getSession()->switchToIFrame('entity_browser_iframe_widget_context_default_value');
 
     // Check that only nodes of an allowed type are listed.

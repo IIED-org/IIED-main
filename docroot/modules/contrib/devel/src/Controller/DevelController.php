@@ -7,8 +7,6 @@ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\Field\FormatterPluginManager;
 use Drupal\Core\Field\WidgetPluginManager;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Theme\Registry;
 use Drupal\Core\Url;
 use Drupal\devel\DevelDumperManagerInterface;
@@ -44,73 +42,27 @@ class DevelController extends ControllerBase {
    */
   protected WidgetPluginManager $widgetPluginManager;
 
-
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
   /**
    * The theme registry.
    */
   protected Registry $themeRegistry;
 
   /**
-   * DevelController constructor.
-   *
-   * @param \Drupal\devel\DevelDumperManagerInterface $dumper
-   *   The dumper service.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *   The entity type bundle info service.
-   * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $field_type_manager
-   *   The field type manager service.
-   * @param \Drupal\Core\Field\FormatterPluginManager $formatter_plugin_manager
-   *   The field formatter plugin manager.
-   * @param \Drupal\Core\Field\WidgetPluginManager $widget_plugin_manager
-   *   The field widget plugin manager.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   The current user.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   * @param \Drupal\Core\Theme\Registry $theme_registry
-   *   The theme registry.
-   */
-  public function __construct(
-    DevelDumperManagerInterface $dumper,
-    EntityTypeBundleInfoInterface $entity_type_bundle_info,
-    FieldTypePluginManagerInterface $field_type_manager,
-    FormatterPluginManager $formatter_plugin_manager,
-    WidgetPluginManager $widget_plugin_manager,
-    AccountInterface $current_user,
-    TranslationInterface $string_translation,
-    Registry $theme_registry
-  ) {
-    $this->dumper = $dumper;
-    $this->entityTypeBundleInfo = $entity_type_bundle_info;
-    $this->fieldTypeManager = $field_type_manager;
-    $this->formatterPluginManager = $formatter_plugin_manager;
-    $this->widgetPluginManager = $widget_plugin_manager;
-    $this->currentUser = $current_user;
-    $this->stringTranslation = $string_translation;
-    $this->themeRegistry = $theme_registry;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('devel.dumper'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('plugin.manager.field.field_type'),
-      $container->get('plugin.manager.field.formatter'),
-      $container->get('plugin.manager.field.widget'),
-      $container->get('current_user'),
-      $container->get('string_translation'),
-      $container->get('theme.registry'),
-    );
+    $instance = parent::create($container);
+    $instance->dumper = $container->get('devel.dumper');
+    $instance->entityTypeBundleInfo = $container->get('entity_type.bundle.info');
+    $instance->fieldTypeManager = $container->get('plugin.manager.field.field_type');
+    $instance->formatterPluginManager = $container->get('plugin.manager.field.formatter');
+    $instance->widgetPluginManager = $container->get('plugin.manager.field.widget');
+    $instance->currentUser = $container->get('current_user');
+    $instance->stringTranslation = $container->get('string_translation');
+    $instance->themeRegistry = $container->get('theme.registry');
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+
+    return $instance;
   }
 
   /**
@@ -144,11 +96,13 @@ class DevelController extends ControllerBase {
    *   Array of page elements to render.
    */
   public function fieldInfoPage() {
-    $fields = $this->entityTypeManager->getStorage('field_storage_config')->loadMultiple();
+    $fields = $this->entityTypeManager->getStorage('field_storage_config')
+      ->loadMultiple();
     ksort($fields);
     $output['fields'] = $this->dumper->exportAsRenderable($fields, $this->t('Fields'));
 
-    $field_instances = $this->entityTypeManager->getStorage('field_config')->loadMultiple();
+    $field_instances = $this->entityTypeManager->getStorage('field_config')
+      ->loadMultiple();
     ksort($field_instances);
     $output['instances'] = $this->dumper->exportAsRenderable($field_instances, $this->t('Instances'));
 

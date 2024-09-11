@@ -80,7 +80,7 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
    *
    * @see testRecursiveMergeFilter()
    */
-  public function providerTestRecursiveMergeFilter(): array {
+  public static function providerTestRecursiveMergeFilter(): array {
     return [
       'Uses positional arguments' => [
         'theme_hook' => 'components_twig_extension_test_recursive_merge_filter',
@@ -130,7 +130,7 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
    *
    * @see testSetFilter()
    */
-  public function providerTestSetFilter(): array {
+  public static function providerTestSetFilter(): array {
     return [
       'Uses positional arguments' => [
         'theme_hook' => 'components_twig_extension_test_set_filter',
@@ -179,7 +179,7 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
    *
    * @see testAddFilter()
    */
-  public function providerTestAddFilter(): array {
+  public static function providerTestAddFilter(): array {
     return [
       'Uses positional arguments' => [
         'theme_hook' => 'components_twig_extension_test_add_filter',

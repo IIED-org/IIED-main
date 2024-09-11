@@ -9,4 +9,4 @@ services:
 
   media_pdf_thumbnail.pdf_image_entity.queue.manager:
     class: Drupal\media_pdf_thumbnail\Manager\PdfImageEntityQueueManager
-    arguments: ['@queue', '@plugin.manager.queue_worker', '@media_pdf_thumbnail.image.manager', '@state', '@logger.factory']
+    arguments: [ '@queue', '@plugin.manager.queue_worker', '@media_pdf_thumbnail.image.manager', '@state', '@logger.factory', '@database' ]

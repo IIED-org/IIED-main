@@ -111,7 +111,7 @@ class FlagService implements FlagServiceInterface {
     }
 
     $request = $this->requestStack->getCurrentRequest();
-    $session_id = $request->hasSession()
+    $session_id = $request->hasSession() && $request->getSession()->isStarted()
       ? $request->getSession()->get('flag.session_id')
       : NULL;
     if (empty($session_id)) {

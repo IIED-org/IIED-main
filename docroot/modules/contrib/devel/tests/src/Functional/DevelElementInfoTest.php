@@ -58,7 +58,7 @@ class DevelElementInfoTest extends DevelBrowserTestBase {
     $this->assertEquals(4, count($headers));
 
     $expected_headers = ['Name', 'Provider', 'Class', 'Operations'];
-    $actual_headers = array_map(fn(NodeElement $element) => $element->getText(), $headers);
+    $actual_headers = array_map(static fn(NodeElement $element) => $element->getText(), $headers);
     $this->assertSame($expected_headers, $actual_headers);
 
     // Tests the presence of some (arbitrarily chosen) elements in the table.
@@ -81,7 +81,6 @@ class DevelElementInfoTest extends DevelBrowserTestBase {
       $row = $table->find('css', sprintf('tbody tr:contains("%s")', $element_name));
       $this->assertNotNull($row);
 
-      /** @var \Behat\Mink\Element\NodeElement[] $cells */
       $cells = $row->findAll('css', 'td');
       $this->assertEquals(4, count($cells));
 
@@ -117,9 +116,9 @@ class DevelElementInfoTest extends DevelBrowserTestBase {
     $element_name = 'button';
 
     // Ensures that the page works as expected.
-    $this->drupalGet("/devel/elements/$element_name");
+    $this->drupalGet('/devel/elements/' . $element_name);
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains("Element $element_name");
+    $this->assertSession()->pageTextContains('Element ' . $element_name);
 
     // Ensures that the page returns a 404 error if the requested element is
     // not defined.
@@ -129,7 +128,7 @@ class DevelElementInfoTest extends DevelBrowserTestBase {
     // Ensures that the page is accessible ony to users with the adequate
     // permissions.
     $this->drupalLogout();
-    $this->drupalGet("/devel/elements/$element_name");
+    $this->drupalGet('/devel/elements/' . $element_name);
     $this->assertSession()->statusCodeEquals(403);
   }
 

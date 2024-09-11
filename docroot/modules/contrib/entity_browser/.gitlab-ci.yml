@@ -17,15 +17,13 @@ include:
 #
 variables:
   # Broaden test coverage.
-  OPT_IN_TEST_PREVIOUS_MAJOR: 1
-  OPT_IN_TEST_NEXT_MINOR: 1
-  OPT_IN_TEST_MAX_PHP: 1
+  OPT_IN_TEST_PREVIOUS_MINOR: 1
   _PHPUNIT_CONCURRENT: 1
 
-composer (previous major):
+composer (next major):
   variables:
-    _TARGET_PHP: $CORE_PREVIOUS_PHP_MAX
+    _LENIENT_ALLOW_LIST: "ckeditor,embed,entity_embed,inline_entity_form"
 
-phpunit (previous major):
-  variables:
-    _TARGET_PHP: $CORE_PREVIOUS_PHP_MAX
+phpunit (next major):
+  before_script:
+    - 'sed -i "s/core_version_requirement.*/core_version_requirement: \^11/" web/modules/contrib/**/*.info.yml'

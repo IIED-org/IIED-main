@@ -130,7 +130,7 @@ class HorizontalTabs extends RenderElement {
       $element['#default_tab'] = $form_state->getValue($name . '__active_tab');
     }
 
-    $displayed_tab = isset($element['#default_tab']) ? $element['#default_tab'] : '';
+    $displayed_tab = $element['#default_tab'] ?? '';
 
     // The JavaScript stores the currently selected tab in this hidden
     // field so that the active tab can be restored the next time the

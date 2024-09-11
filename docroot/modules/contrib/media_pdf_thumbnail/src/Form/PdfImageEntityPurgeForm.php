@@ -2,64 +2,67 @@
 
 namespace Drupal\media_pdf_thumbnail\Form;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class PdfImageEntityPurgeForm
+ * Class PdfImageEntityPurgeForm.
+ *
+ * Purge PDF image entity.
  *
  * @package Drupal\media_pdf_thumbnail\Form
  */
 class PdfImageEntityPurgeForm extends FormBase {
 
   /**
+   * Entity type manager.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
+   * Messenger.
+   *
    * @var \Drupal\Core\Messenger\Messenger
    */
   protected $messenger;
 
   /**
+   * ConfigFactory.
+   *
    * @var \Drupal\Core\Config\ConfigFactory
    */
   protected $configFactory;
 
   /**
-   * PdfImageEntityPurgeForm constructor.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   * @param \Drupal\Core\Messenger\Messenger $messenger
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, MessengerInterface $messenger, ConfigFactoryInterface $configFactory) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->messenger = $messenger;
-    $this->configFactory = $configFactory;
-  }
-
-  /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
-    return new static($container->get('entity_type.manager'), $container->get('messenger'), $container->get('config.factory'));
+  public static function create(ContainerInterface $container): PdfImageEntityPurgeForm | static {
+    $instance = parent::create($container);
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->messenger = $container->get('messenger');
+    $instance->configFactory = $container->get('config.factory');
+    return $instance;
   }
 
   /**
-   * @param $id
-   * @param $context
+   * Purge callback.
+   *
+   * @param string|int $id
+   *   ID.
+   * @param array $context
+   *   Context.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException|\Drupal\Core\Entity\EntityStorageException
    */
-  public static function execute($id, &$context) {
-    $entity = \Drupal::entityTypeManager()->getStorage('pdf_image_entity')->load($id);
+  public static function execute(string | int $id, array &$context): void {
+    $entity = \Drupal::entityTypeManager()
+      ->getStorage('pdf_image_entity')
+      ->load($id);
     $context['message'] = 'Processing - ' . $entity->id();
     $context['results'][] = $entity->id();
     $entity->delete();
@@ -75,7 +78,7 @@ class PdfImageEntityPurgeForm extends FormBase {
    * @param mixed $operations
    *   Operations.
    */
-  public static function finishedCallback($success, $results, $operations) {
+  public static function finishedCallback(mixed $success, mixed $results, mixed $operations): void {
     if ($success) {
       $message = \Drupal::translation()->formatPlural(count($results),
         'One task processed.',
@@ -90,15 +93,14 @@ class PdfImageEntityPurgeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'pdf_image_entity_purge_form';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
-
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     $form['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Clean'),
@@ -111,18 +113,14 @@ class PdfImageEntityPurgeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $operations = [];
 
-    $ids = \Drupal::entityTypeManager()->getStorage('pdf_image_entity')->getQuery()->accessCheck(false)->execute();
+    $ids = $this->entityTypeManager
+      ->getStorage('pdf_image_entity')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->execute();
 
     foreach ($ids as $id) {
       $operations[] = [

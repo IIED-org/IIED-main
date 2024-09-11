@@ -64,30 +64,28 @@ class DevelMenuLinksTest extends DevelBrowserTestBase {
     // By default, in the testing profile, front page is the user canonical URI.
     // For better testing do not use the default frontpage.
     $url = Url::fromRoute('devel.simple_page');
-    $destination = Url::fromRoute('devel.simple_page', [], ['absolute' => FALSE]);
 
     $this->drupalGet($url);
     $this->assertSession()->linkExists('Reinstall Modules');
     $this->clickLink('Reinstall Modules');
-    $this->assertSession()->addressEquals('devel/reinstall', ['query' => ['destination' => $destination->toString()]]);
+    $this->assertSession()->addressEquals('devel/reinstall');
 
     $this->drupalGet($url);
     $this->assertSession()->linkExists('Rebuild Menu');
     $this->clickLink('Rebuild Menu');
-    $this->assertSession()->addressEquals('devel/menu/reset', ['query' => ['destination' => $destination->toString()]]);
+    $this->assertSession()->addressEquals('devel/menu/reset');
 
     $this->drupalGet($url);
     $this->assertSession()->linkExists('Cache clear');
     $this->clickLink('Cache clear');
     $this->assertSession()->pageTextContains('Cache cleared.');
-    $this->assertSession()->addressEquals($url);
+    $this->assertSession()->addressEquals($url->toString());
 
     $this->drupalGet($url);
     $this->assertSession()->linkExists('Run cron');
     $this->clickLink('Run cron');
     $this->assertSession()->pageTextContains('Cron ran successfully.');
-    $this->assertSession()->addressEquals($url);
-
+    $this->assertSession()->addressEquals($url->toString());
   }
 
 }

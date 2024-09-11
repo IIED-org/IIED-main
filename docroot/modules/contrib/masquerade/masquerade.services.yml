@@ -23,3 +23,15 @@ services:
   masquerade.callbacks:
     class: Drupal\masquerade\MasqueradeCallbacks
     arguments: ['@entity_type.manager', '@masquerade']
+  masquerade.user_last_access_subscriber:
+    class: Drupal\masquerade\EventSubscriber\MasqueradeUserRequestSubscriber
+    decorates: user_last_access_subscriber
+    parent: user_last_access_subscriber
+    public: false
+    calls:
+      - [setMasquerade, ['@masquerade', '@config.factory']]
+  masquerade.session_manager.metadata_bag:
+    class: Drupal\masquerade\Session\MetadataBag
+    decorates: session_manager.metadata_bag
+    parent: session_manager.metadata_bag
+    public: false

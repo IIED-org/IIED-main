@@ -36,7 +36,6 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
     $page = $this->getSession()->getPage();
 
     // Ensures that the expected table headers are found.
-    /** @var \Behat\Mink\Element\NodeElement[] $headers */
     $headers = $page->findAll('css', 'table.devel-route-list thead th');
     $this->assertEquals(4, count($headers));
 
@@ -78,7 +77,6 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
       $row = $page->find('css', sprintf('table.devel-route-list tbody tr:contains("%s")', $route_name));
       $this->assertNotNull($row);
 
-      /** @var \Behat\Mink\Element\NodeElement[] $cells */
       $cells = $row->findAll('css', 'td');
       $this->assertEquals(4, count($cells));
 
@@ -101,6 +99,7 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
       else {
         $options = ['query' => ['path' => $expected['path']]];
       }
+
       $expected_href = Url::fromRoute('devel.route_info.item', [], $options)->toString();
       $this->assertEquals($expected_href, $actual_href);
     }

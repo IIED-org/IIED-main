@@ -158,7 +158,7 @@ class ComponentsRegistry {
           foreach ($files as $filePath => $file) {
             // Register the full path and short path to the template.
             $templates = [
-              '@' . $nameSpace . '/' . str_replace($nameSpacePath . '/', '', $filePath),
+              '@' . $nameSpace . '/' . str_replace(rtrim($nameSpacePath, '/') . '/', '', $filePath),
               '@' . $nameSpace . '/' . $file->filename,
             ];
             foreach ($templates as $template) {

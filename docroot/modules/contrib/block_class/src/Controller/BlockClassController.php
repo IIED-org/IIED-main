@@ -2,15 +2,15 @@
 
 namespace Drupal\block_class\Controller;
 
+use Drupal\block\Entity\Block;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Extension\ExtensionList;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\block\Entity\Block;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\Component\Serialization\Json;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -75,7 +75,7 @@ class BlockClassController extends ControllerBase {
     $build = [];
     $projectMachineName = 'block_class';
 
-    $projectName = $this->moduleHandler()->getName($projectMachineName);
+    $projectName = $this->extensionListModule->getName($projectMachineName);
 
     $build['#title'] = 'Block Class Help';
 
@@ -90,9 +90,15 @@ class BlockClassController extends ControllerBase {
 
     $build['top'] = $helperMarkup;
 
+    // Fix compatibility support with versions >= 10.2 which use a string
+    // instead of an array for the second argument.
+    $extension_info = $this->extensionListModule->getExtensionInfo($projectMachineName);
+    $second_argument = (version_compare(\Drupal::VERSION, '10.2', '<')) ? $extension_info : $extension_info['name'];
+
     // Only print list of administration pages if the project in question has
     // any such pages associated with it.
-    $adminTasks = system_get_module_admin_tasks($projectMachineName, $this->extensionListModule->getExtensionInfo($projectMachineName));
+    // @phpstan-ignore-next-line
+    $adminTasks = system_get_module_admin_tasks($projectMachineName, $second_argument);
 
     if (empty($adminTasks)) {
       return $build;
@@ -262,22 +268,8 @@ class BlockClassController extends ControllerBase {
     $table .= '</thead>';
     $table .= '<tbody>';
 
-    $block_classes_stored = '';
-
     $config = $this->configFactory->getEditable('block_class.settings');
-
-    // Get config object.
-    if (!empty($config->get('block_classes_stored'))) {
-      $block_classes_stored = $config->get('block_classes_stored');
-    }
-
-    // Get the array.
-    $block_classes_stored = Json::decode($block_classes_stored);
-
-    if ($block_classes_stored != NULL) {
-      // Get the array values and id in the keys.
-      $block_classes_stored = array_values($block_classes_stored);
-    }
+    $block_classes_stored = $config->get('block_classes_stored');
 
     foreach ($block_classes_stored as $block_class) {
 
@@ -356,21 +348,8 @@ class BlockClassController extends ControllerBase {
    *   Json Response.
    */
   public function handleAutocomplete(Request $request) {
-
-    $block_classes_stored = '{}';
-
     $config = $this->configFactory->getEditable('block_class.settings');
-
-    // Get config object.
-    if (!empty($config->get('block_classes_stored'))) {
-      $block_classes_stored = $config->get('block_classes_stored');
-    }
-
-    // Get the array.
-    $block_classes_stored = Json::decode($block_classes_stored);
-
-    // Get the array values and id in the keys.
-    $block_classes_stored = array_values($block_classes_stored);
+    $block_classes_stored = $config->get('block_classes_stored');
 
     // Return in JSON Response.
     return new JsonResponse($block_classes_stored);

@@ -47,6 +47,7 @@ class AssetInjectorListBuilder extends ConfigEntityListBuilder {
   public function buildHeader() {
     $header['label'] = $this->t('Injector');
     $header['conditions'] = $this->t('Conditions');
+    $header['status'] = $this->t('Status');
     return $header + parent::buildHeader();
   }
 
@@ -82,6 +83,8 @@ class AssetInjectorListBuilder extends ConfigEntityListBuilder {
     ];
     $data['conditions'] = $this->renderer->render($data['conditions']);
 
+    $data['status'] = $entity->status() ? $this->t('Enabled') : $this->t('Disabled');
+
     $row = [
       'class' => $entity->status() ? 'enabled' : 'disabled',
       'data' => $data + parent::buildRow($entity),
@@ -105,7 +108,8 @@ class AssetInjectorListBuilder extends ConfigEntityListBuilder {
 
     // Only alter edit link if we have access.
     if (isset($operations['edit']['url'])) {
-      // Remove query option to allow the save and continue to correctly function.
+      // Remove the query option to allow the "save and continue" functionality
+      // to work correctly.
       $options = $operations['edit']['url']->getOptions();
       unset($options['query']);
       $operations['edit']['url']->setOptions($options);

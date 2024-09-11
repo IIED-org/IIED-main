@@ -101,8 +101,6 @@ class HorizontalMenu extends BlockBase implements ContainerFactoryPluginInterfac
     $parameters->expandedParents = [];
     $tree = $menu_tree->load($menu_name, $parameters);
     $manipulators = [
-      // Show links to nodes that are accessible for the current user.
-      ['callable' => 'menu.default_tree_manipulators:checkNodeAccess'],
       // Only show links that are accessible for the current user.
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       // Use the default sorting of menu links.

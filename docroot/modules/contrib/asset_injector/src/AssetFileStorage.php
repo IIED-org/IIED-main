@@ -2,6 +2,7 @@
 
 namespace Drupal\asset_injector;
 
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 
@@ -28,8 +29,6 @@ final class AssetFileStorage {
 
   use LoggerChannelTrait;
 
-  const DIRECTORY_URI = 'public://asset_injector';
-
   /**
    * Asset with file storage.
    *
@@ -48,6 +47,24 @@ final class AssetFileStorage {
   }
 
   /**
+   * Get the URI where the assets will be stored.
+   *
+   * @return string
+   *   Internal URI using either public:// or assets:// stream wrapper.
+   *   assets:// was introduced in Drupal 10.1.0
+   *   @see https://www.drupal.org/node/3328126
+   */
+  public static function getDirectoryUri(): string {
+    $directory_uri = 'public://asset_injector';
+
+    if (version_compare(\Drupal::VERSION, '10.1', '>=')) {
+      $directory_uri = 'assets://asset_injector';
+    }
+
+    return $directory_uri;
+  }
+
+  /**
    * Create file and return internal uri.
    *
    * @return string
@@ -61,7 +78,7 @@ final class AssetFileStorage {
 
       try {
         $file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
-        $file_system->saveData($this->asset->getCode(), $internal_uri, FileSystemInterface::EXISTS_REPLACE);
+        $file_system->saveData($this->asset->getCode(), $internal_uri, FileExists::Replace);
       }
       catch (\Throwable $e) {
         $this->getLogger('asset_injector')
@@ -101,7 +118,7 @@ final class AssetFileStorage {
     $name = $this->asset->id();
     $extension = $this->asset->extension();
     $hash = $pattern ? '*' : md5($this->asset->getCode());
-    $all_assets_directory = self::DIRECTORY_URI;
+    $all_assets_directory = self::getDirectoryUri();
     if ($pattern) {
       // glob() does not understand stream wrappers. Sigh.
       $all_assets_directory = self::getFileSystemService()
@@ -127,8 +144,8 @@ final class AssetFileStorage {
    * @see asset_injector_cache_flush()
    */
   public static function deleteAllFiles() {
-    if (file_exists(self::DIRECTORY_URI)) {
-      self::getFileSystemService()->deleteRecursive(self::DIRECTORY_URI);
+    if (file_exists(self::getDirectoryUri())) {
+      self::getFileSystemService()->deleteRecursive(self::getDirectoryUri());
     }
   }
 

@@ -5,6 +5,9 @@ block.block.*.third_party.block_class:
     classes:
       type: string
       label: Additional classes for the block
+    attributes:
+      type: string
+      label: Additional attributes for the block
 
 block_class.settings:
   type: config_object
@@ -19,7 +22,9 @@ block_class.settings:
     allow_only_letters_and_numbers:
       type: boolean
     block_classes_stored:
-      type: string
+      type: sequence
+      sequence:
+        type: string
     enable_attributes:
       type: boolean
     enable_auto_complete:
@@ -46,3 +51,9 @@ block_class.settings:
       type: integer
     maxlength_id:
       type: integer
+    attribute_keys_stored:
+      type: string
+    attribute_value_stored:
+      type: string
+    attributes_inline:
+      type: string

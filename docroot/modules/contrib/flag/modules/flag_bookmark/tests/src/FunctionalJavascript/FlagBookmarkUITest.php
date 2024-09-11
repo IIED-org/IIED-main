@@ -92,12 +92,14 @@ class FlagBookmarkUITest extends WebDriverTestBase {
     $this->drupalGet('bookmarks');
     $page = $this->getSession()->getPage();
 
+    // Check bulk actions.
+    $assert_session->optionExists('action', 'Delete flagging');
     // Confirm both articles appear in the table.
-    $assert_session->pageTextContains('Delete flagging');
     $assert_session->pageTextContains($articles[0]->label());
     $assert_session->pageTextContains($articles[1]->label());
 
-    // Select all bookmarks and perform bulk delete.
+    // Select action, select all bookmarks and perform bulk delete.
+    $page->selectFieldOption('action', 'Delete flagging');
     $page
       ->find('css', 'input[title="Select all rows in this table"]')
       ->check();

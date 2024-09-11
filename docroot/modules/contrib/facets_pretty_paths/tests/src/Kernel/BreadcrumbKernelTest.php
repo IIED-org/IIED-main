@@ -37,7 +37,7 @@ class BreadcrumbKernelTest extends KernelTestBase {
    * Tests the Pretty Paths breadcrumb builder.
    */
   public function testBreadcrumb() {
-    // Initialise the current request and route match.
+    // Initialize the current request and route match.
     $stack = $this->container->get('request_stack');
     $this->pushRequest($stack, 'My search title', 'content_type/page');
 

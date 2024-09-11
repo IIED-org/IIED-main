@@ -1,0 +1,12 @@
+parameters:
+    level: 0
+    fileExtensions:
+        - php
+        - module
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        # @see https://www.drupal.org/docs/develop/development-tools/phpstan/handling-unsafe-usage-of-new-static
+        - "#^Unsafe usage of new static#"
+        # Remove once Direct drupal call is replaced with Dependecy injection.
+        - "#^.Drupal calls.*#"
+        - "#^Plugin definitions cannot be altered#"

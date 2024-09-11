@@ -2,6 +2,7 @@
 
 namespace Drupal\ds\Form;
 
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
@@ -30,8 +31,8 @@ class BlockFieldConfigForm extends FieldFormBase implements ContainerInjectionIn
   /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactory $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheTagsInvalidatorInterface $cache_invalidator, ModuleHandlerInterface $module_handler, ContextRepositoryInterface $context_repository) {
-    parent::__construct($config_factory, $entity_type_manager, $cache_invalidator, $module_handler);
+  public function __construct(ConfigFactory $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheTagsInvalidatorInterface $cache_invalidator, ModuleHandlerInterface $module_handler, ContextRepositoryInterface $context_repository, TypedConfigManagerInterface $typed_config_manager) {
+    parent::__construct($config_factory, $entity_type_manager, $cache_invalidator, $module_handler, $typed_config_manager);
     $this->contextRepository = $context_repository;
   }
 
@@ -44,7 +45,8 @@ class BlockFieldConfigForm extends FieldFormBase implements ContainerInjectionIn
       $container->get('entity_type.manager'),
       $container->get('cache_tags.invalidator'),
       $container->get('module_handler'),
-      $container->get('context.repository')
+      $container->get('context.repository'),
+      $container->get('config.typed')
     );
   }
 

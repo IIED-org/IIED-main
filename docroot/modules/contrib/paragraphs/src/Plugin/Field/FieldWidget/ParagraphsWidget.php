@@ -6,6 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldFilteredMarkup;
@@ -18,8 +19,10 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\TypedData\TranslationStatusInterface;
 use Drupal\field_group\FormatterHelper;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\paragraphs\Entity\ParagraphsType;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\paragraphs\Plugin\EntityReferenceSelection\ParagraphSelection;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -95,6 +98,13 @@ class ParagraphsWidget extends WidgetBase {
   protected $accessOptions = NULL;
 
   /**
+   * The entity field manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
+
+  /**
    * Constructs a ParagraphsWidget object.
    *
    * @param string $plugin_id
@@ -107,15 +117,33 @@ class ParagraphsWidget extends WidgetBase {
    *   The widget settings.
    * @param array $third_party_settings
    *   Any third party settings.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
+   *   The entity field manager service.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityFieldManagerInterface $entity_field_manager) {
     // Modify settings that were set before https://www.drupal.org/node/2896115.
     if(isset($settings['edit_mode']) && $settings['edit_mode'] === 'preview') {
       $settings['edit_mode'] = 'closed';
       $settings['closed_mode'] = 'preview';
     }
 
+    $this->entityFieldManager = $entity_field_manager;
+
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $plugin_id,
+      $plugin_definition,
+      $configuration['field_definition'],
+      $configuration['settings'],
+      $configuration['third_party_settings'],
+      $container->get('entity_field.manager'),
+    );
   }
 
   /**
@@ -2530,7 +2558,9 @@ class ParagraphsWidget extends WidgetBase {
   public function errorElement(array $element, ConstraintViolationInterface $error, array $form, FormStateInterface $form_state) {
     // Validation errors might be a about a specific (behavior) form element
     // attempt to find a matching element.
-    if (!empty($error->arrayPropertyPath) && $sub_element = NestedArray::getValue($element, $error->arrayPropertyPath)) {
+    $property_path_array = explode('.', $error->getPropertyPath());
+    array_shift($property_path_array);
+    if (!empty($property_path_array) && $sub_element = NestedArray::getValue($element, $property_path_array)) {
       return $sub_element;
     }
     return $element;
@@ -2565,7 +2595,7 @@ class ParagraphsWidget extends WidgetBase {
   public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
     $field_name = $this->fieldDefinition->getName();
     $widget_state = static::getWidgetState($form['#parents'], $field_name, $form_state);
-    $element = NestedArray::getValue($form_state->getCompleteForm(), $widget_state['array_parents']);
+    $element = NestedArray::getValue($form_state->getCompleteForm(), $widget_state['array_parents'] ?? []);
 
     if (!empty($widget_state['dragdrop'])) {
       $path = array_merge($form['#parents'], array($field_name));
@@ -2653,7 +2683,7 @@ class ParagraphsWidget extends WidgetBase {
                 continue;
               }
 
-              $form_state->setError($element[$item['_original_delta']], $this->t('Validation error on collapsed paragraph @path: @message', ['@path' => $violation->getPropertyPath(), '@message' => $violation->getMessage()]));
+              $this->massageCollapsedParagraphsErrorMessages($form, $form_state, $element, $item, $violation);
             }
           }
         }
@@ -3105,6 +3135,63 @@ class ParagraphsWidget extends WidgetBase {
       return TRUE;
     }
     return FALSE;
+  }
+
+  /**
+   * Improve validation error messages by including additional labels.
+   *
+   * This will convert an error message of type:
+   *   "Text field is required."
+   * into something like:
+   *   "Error in field Content #1 (Hero): Text field is required."
+   * where "Content" is the top-level paragraph field label, "Hero" is the
+   * paragraph type label, and "1" is the position of the paragraph in the
+   * field (delta + 1).
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state object.
+   * @param array $element
+   *   Element with error.
+   * @param array $item
+   *   Sequence of the item.
+   * @param \Symfony\Component\Validator\ConstraintViolationInterface $violation
+   *   Violation of the field.
+   */
+  protected function massageCollapsedParagraphsErrorMessages(array $form, FormStateInterface $form_state, $element, $item, $violation) {
+    $field_name = $this->fieldDefinition->getName();
+    $field_label = $form[$field_name]['widget']['#title'] ?? FALSE;
+    $delta = $item['_original_delta'];
+    $paragraph_type = $form[$field_name]['widget'][$delta]['#paragraph_type'] ?? FALSE;
+    if ($field_label && $paragraph_type) {
+      $paragraph_type_label = ParagraphsType::load($paragraph_type)->label();
+      $property_path = $violation->getPropertyPath();
+      $property_path = explode('.', $property_path)[0];
+
+      $fields = $this->entityFieldManager->getFieldDefinitions('paragraph', $paragraph_type);
+      if (isset($fields[$property_path])) {
+        $new_message = $this->t('Error in field %field #@position (@bundle), %subfield : @message', [
+          '%field' => $field_label,
+          '@position' => $delta + 1,
+          '@bundle' => $paragraph_type_label,
+          '%subfield' => $fields[$property_path]->getLabel(),
+          '@message' => $violation->getMessage(),
+        ]);
+      }
+      else {
+        $new_message = $this->t('Error in field %field #@position (@bundle): @message', [
+          '%field' => $field_label,
+          '@position' => $delta + 1,
+          '@bundle' => $paragraph_type_label,
+          '@message' => $violation->getMessage(),
+        ]);
+      }
+
+      $form_state->setError($element[$item['_original_delta']], $new_message);
+    } else {
+      $form_state->setError($element[$item['_original_delta']], $this->t('Validation error on collapsed paragraph @path: @message', ['@path' => $violation->getPropertyPath(), '@message' => $violation->getMessage()]));
+    }
   }
 
 }

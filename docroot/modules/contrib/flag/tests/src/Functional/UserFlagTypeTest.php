@@ -26,11 +26,11 @@ class UserFlagTypeTest extends FlagTestBase {
     $this->drupalGet('admin/structure/flags/add');
     $this->submitForm([
       'flag_entity_type' => 'entity:user',
-    ], $this->t('Continue'));
+    ], 'Continue');
 
-    $this->assertSession()->responseContains($this->t('Permissions for users to flag themselves.'));
+    $this->assertSession()->responseContains('Permissions for users to flag themselves.');
 
-    $this->assertSession()->responseContains($this->t('Display link on user profile page'));
+    $this->assertSession()->responseContains('Display link on user profile page');
   }
 
   /**
