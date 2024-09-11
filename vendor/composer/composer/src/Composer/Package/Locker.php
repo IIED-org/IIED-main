@@ -66,7 +66,7 @@ class Locker
     {
         $this->lockFile = $lockFile;
         $this->installationManager = $installationManager;
-        $this->hash = md5($composerFileContents);
+        $this->hash = hash('md5', $composerFileContents);
         $this->contentHash = self::getContentHash($composerFileContents);
         $this->loader = new ArrayLoader(null, true);
         $this->dumper = new ArrayDumper();
@@ -107,7 +107,7 @@ class Locker
 
         ksort($relevantContent);
 
-        return md5(JsonFile::encode($relevantContent, 0));
+        return hash('md5', JsonFile::encode($relevantContent, 0));
     }
 
     /**
@@ -247,6 +247,9 @@ class Locker
         return $requirements;
     }
 
+    /**
+     * @return key-of<BasePackage::STABILITIES>
+     */
     public function getMinimumStability(): string
     {
         $lockData = $this->getLockData();
@@ -431,6 +434,14 @@ class Locker
 
             $spec = $this->dumper->dump($package);
             unset($spec['version_normalized']);
+            // remove `transport-options.ssl` from lock file to prevent storing
+            // local-filesystem repo config paths in the lock file as that makes it less portable
+            if (isset($spec['transport-options']['ssl'])) {
+                unset($spec['transport-options']['ssl']);
+                if (\count($spec['transport-options']) === 0) {
+                    unset($spec['transport-options']);
+                }
+            }
 
             // always move time to the end of the package definition
             $time = $spec['time'] ?? null;
