@@ -3,6 +3,8 @@
 namespace Drupal\Tests\twig_field_value\Kernel;
 
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Render\RenderContext;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -58,7 +60,7 @@ class FieldRawTest extends EntityKernelTestBase {
     ]);
     $fieldConfig->save();
     $current_user = $this->container->get('current_user');
-    $current_user->setAccount($this->createUser([], ['view test entity']));
+    $current_user->setAccount($this->createUser(['view test entity']));
   }
 
   /**
@@ -109,7 +111,7 @@ class FieldRawTest extends EntityKernelTestBase {
     $element = $render_field($entity);
 
     // Check the field values by rendering the formatter without any filter.
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertStringContainsString('entity1', (string) $content);
     $this->assertStringNotContainsString('forbid_access', (string) $content);
     $this->assertStringNotContainsString('entity3', (string) $content);
@@ -123,7 +125,7 @@ class FieldRawTest extends EntityKernelTestBase {
         'field' => $render_field($entity),
       ],
     ];
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertSame('', (string) $content);
   }
 
@@ -159,7 +161,7 @@ class FieldRawTest extends EntityKernelTestBase {
     $element = $render_field($entity);
 
     // Check the field values by rendering the formatter without any filter.
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertStringNotContainsString('entity1', (string) $content);
     $this->assertStringNotContainsString('entity2', (string) $content);
 
@@ -171,7 +173,7 @@ class FieldRawTest extends EntityKernelTestBase {
         'field' => $render_field($entity),
       ],
     ];
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertSame('', (string) $content);
   }
 
@@ -203,7 +205,7 @@ class FieldRawTest extends EntityKernelTestBase {
     $element = $string_field($entity);
 
     // Check the field values by rendering the formatter without any filter.
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertStringContainsString('Iet wiet', (string) $content);
     $this->assertStringContainsString('waait', (string) $content);
     $this->assertStringNotContainsString('is eerlijk', (string) $content);
@@ -217,7 +219,7 @@ class FieldRawTest extends EntityKernelTestBase {
         'field' => $string_field($entity),
       ],
     ];
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertSame('Iet wiet, waait, weg', (string) $content);
   }
 
@@ -245,7 +247,7 @@ class FieldRawTest extends EntityKernelTestBase {
     $element = $string_field($entity);
 
     // Check the field values by rendering the formatter without any filter.
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertStringNotContainsString('Iet wiet', (string) $content);
     $this->assertStringNotContainsString('waait', (string) $content);
 
@@ -257,8 +259,62 @@ class FieldRawTest extends EntityKernelTestBase {
         'field' => $string_field($entity),
       ],
     ];
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertSame('', (string) $content);
+  }
+
+  /**
+   * Checks if cache is propagated for a field with the field_raw filter.
+   */
+  public function testFieldRawCache() {
+    $entity = EntityTest::create([
+      'field_string' => [
+        'string one',
+      ],
+    ]);
+    $entity->save();
+
+    $string_field = function (FieldableEntityInterface $entity) {
+      return $entity->get('field_string')->view([
+        'type' => 'entity_reference_hidden_third_child',
+      ]);
+    };
+
+    $field = $string_field($entity);
+
+    // Apply cache and attachments to the field.
+    $metadata = [
+      '#attached' => [
+        'library' => ['core/drupal', 'core/once'],
+        'html_head_link' => ['test' => 'head'],
+      ],
+      '#cache' => [
+        'tags' => ['test_raw_tag', 'test_raw_tag_2'],
+        'contexts' => ['raw_context'],
+        'max-age' => 2,
+      ],
+    ];
+
+    BubbleableMetadata::createFromRenderArray($metadata)->applyTo($field);
+
+    // Check output of the field_value filter.
+    $element = [
+      '#type' => 'inline_template',
+      '#template' => '{{ field|field_raw("value")|safe_join(", ") }}',
+      '#context' => [
+        'field' => $field,
+      ],
+    ];
+
+    // Check that cache and attachments from field are present.
+    $context = new RenderContext();
+    $renderer = \Drupal::service('renderer');
+    $renderer->executeInRenderContext($context, fn () => $renderer->render($element));
+
+    $bubbled_metadata = [];
+    $context->pop()->applyTo($bubbled_metadata);
+
+    $this->assertEqualsCanonicalizing($metadata, $bubbled_metadata);
   }
 
 }

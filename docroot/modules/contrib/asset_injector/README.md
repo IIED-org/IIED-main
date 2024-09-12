@@ -52,9 +52,9 @@ CONFIGURATION
 =============
 1. Configure user permissions in Administration » People » Permissions:
     * Administer CSS Assets
-       Add and configure css injector configurations
+       Add and configure CSS injector configurations
     * Administer JS Assets
-       Add and configure js injector configurations. Give to trusted roles only.
+       Add and configure JS injector configurations. Give to trusted roles only.
 2. Add JS and CSS Assets in Administration » Configuration » Development » 
     Asset Injector
     Choose the desired asset to be injected and click to add a new.

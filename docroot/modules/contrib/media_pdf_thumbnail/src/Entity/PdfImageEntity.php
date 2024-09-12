@@ -2,11 +2,11 @@
 
 namespace Drupal\media_pdf_thumbnail\Entity;
 
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
  * Defines the Pdf image entity entity.
@@ -113,14 +113,14 @@ class PdfImageEntity extends ContentEntityBase implements PdfImageEntityInterfac
   /**
    * {@inheritdoc}
    */
-  public function getName() {
+  public function getName(): string {
     return $this->get('name')->value;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setName($name) {
+  public function setName(string $name): PdfImageEntityInterface|static {
     $this->set('name', $name);
     return $this;
   }
@@ -128,14 +128,14 @@ class PdfImageEntity extends ContentEntityBase implements PdfImageEntityInterfac
   /**
    * {@inheritdoc}
    */
-  public function getCreatedTime() {
+  public function getCreatedTime(): int {
     return $this->get('created')->value;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setCreatedTime($timestamp) {
+  public function setCreatedTime(int $timestamp): PdfImageEntityInterface|static {
     $this->set('created', $timestamp);
     return $this;
   }

@@ -33,7 +33,6 @@ namespace WebDriver;
  * @method void doubleclick() Double-clicks at the current mouse coordinates (set by moveto).
  * @method array execute_sql($jsonQuery) Execute SQL.
  * @method array execute_async($jsonScript) Inject a snippet of JavaScript into the page for execution in the context of the currently selected frame.
- * @method string file($jsonFile) Upload file.
  * @method void forward() Navigates forward in the browser history, if possible.
  * @method void keys($jsonKeys) Send a sequence of key strokes to the active element.
  * @method array getLocation() Get the current geo location.
@@ -557,6 +556,37 @@ class Session extends Container
     protected function getIdentifierPath($identifier)
     {
         return sprintf('%s/element/%s', $this->url, $identifier);
+    }
+
+    /**
+     * Upload a file: /session/:sessionId/se/file (POST)
+     *              : /session/:sessionId/file (POST)
+     *
+     * @param array $arguments
+     *   An array with a single key/value. The key should be 'file' and the
+     *   value should be a string containing base64 encoded contents of a file.
+     *
+     * @return mixed
+     */
+    public function file(array $arguments)
+    {
+        // Since Selenium 4.17 the file URL has been prefixed with /se because
+        // it is not a W3C command. See
+        // https://github.com/w3c/webdriver/issues/1355 for discussions about
+        // the W3C spec and file uploads.
+        if ($this->isW3C()) {
+            try {
+                $result = $this->curl('POST', '/se/file', $arguments);
+            } catch (Exception $e) {
+            }
+        }
+
+        // Fallback to pre Selenium 4.17 behaviour and non W3C behaviour.
+        if (!isset($result)) {
+            $result = $this->curl('POST', '/file', $arguments);
+        }
+
+        return $result['value'];
     }
 
     /**

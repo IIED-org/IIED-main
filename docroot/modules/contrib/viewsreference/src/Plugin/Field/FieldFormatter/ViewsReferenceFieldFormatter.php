@@ -3,6 +3,7 @@
 namespace Drupal\viewsreference\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -77,6 +78,10 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
     $parent_entity_type = $items->getEntity()->getEntityTypeId();
     $parent_entity_id = $items->getEntity()->id();
     $parent_field_name = $items->getFieldDefinition()->getName();
+    $parent_revision_id = NULL;
+    if ($items->getEntity() instanceof RevisionableInterface) {
+      $parent_revision_id = $items->getEntity()->getRevisionId();
+    }
 
     $cacheability = new CacheableMetadata();
 
@@ -109,6 +114,8 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
         'parent_entity_type' => $parent_entity_type,
         'parent_entity_id' => $parent_entity_id,
         'parent_field_name' => $parent_field_name,
+        'parent_revision_id' => $parent_revision_id,
+        'field_item_delta' => $delta,
       ];
 
       $view->preExecute();

@@ -6,16 +6,12 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ExtensionPathResolver;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -82,91 +78,20 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
   protected bool $drushBatch = FALSE;
 
   /**
-   * Constructs a new 'media' plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param array $plugin_definition
-   *   The plugin definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   * @param \Drupal\Core\Entity\ContentEntityStorageInterface $media_storage
-   *   The media type entity storage.
-   * @param \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $media_type_storage
-   *   The media type entity storage.
-   * @param \Drupal\user\UserStorageInterface $user_storage
-   *   The user storage.
-   * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
-   *   The url generator service.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
-   *   The date formatter service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   * @param \Drupal\Core\Extension\ExtensionPathResolver $extension_path_resolver
-   *   The extension path resolver service.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   *   Thrown if the storage handler couldn't be loaded.
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   *   Thrown if the entity type doesn't exist.
-   */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    array $plugin_definition,
-    EntityTypeManagerInterface $entity_type_manager,
-    MessengerInterface $messenger,
-    LanguageManagerInterface $language_manager,
-    ModuleHandlerInterface $module_handler,
-    TranslationInterface $string_translation,
-    ContentEntityStorageInterface $media_storage,
-    ConfigEntityStorageInterface $media_type_storage,
-    UserStorageInterface $user_storage,
-    UrlGeneratorInterface $url_generator,
-    DateFormatterInterface $date_formatter,
-    TimeInterface $time,
-    ExtensionPathResolver $extension_path_resolver
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $messenger, $language_manager, $module_handler, $string_translation);
-    $this->mediaStorage = $media_storage;
-    $this->mediaTypeStorage = $media_type_storage;
-    $this->userStorage = $user_storage;
-    $this->urlGenerator = $url_generator;
-    $this->dateFormatter = $date_formatter;
-    $this->time = $time;
-    $this->extensionPathResolver = $extension_path_resolver;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     $entity_type_manager = $container->get('entity_type.manager');
-    return new static(
-      $configuration, $plugin_id, $plugin_definition,
-      $entity_type_manager,
-      $container->get('messenger'),
-      $container->get('language_manager'),
-      $container->get('module_handler'),
-      $container->get('string_translation'),
-      $entity_type_manager->getStorage('media'),
-      $entity_type_manager->getStorage('media_type'),
-      $entity_type_manager->getStorage('user'),
-      $container->get('url_generator'),
-      $container->get('date.formatter'),
-      $container->get('datetime.time'),
-      $container->get('extension.path.resolver')
-    );
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->mediaStorage = $entity_type_manager->getStorage('media');
+    $instance->mediaTypeStorage = $entity_type_manager->getStorage('media_type');
+    $instance->userStorage = $entity_type_manager->getStorage('user');
+    $instance->urlGenerator = $container->get('url_generator');
+    $instance->dateFormatter = $container->get('date.formatter');
+    $instance->time = $container->get('datetime.time');
+    $instance->extensionPathResolver = $container->get('extension.path.resolver');
+
+    return $instance;
   }
 
   /**
@@ -211,6 +136,7 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
     foreach ([3600, 86400, 604800, 2592000, 31536000] as $interval) {
       $options[$interval] = $this->dateFormatter->formatInterval($interval, 1) . ' ' . $this->t('ago');
     }
+
     $form['time_range'] = [
       '#type' => 'select',
       '#title' => $this->t('How far back in time should the media be dated?'),
@@ -270,9 +196,10 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
   public function settingsFormValidate(array $form, FormStateInterface $form_state): void {
     // Remove the media types not selected.
     $media_types = array_filter($form_state->getValue('media_types'));
-    if (!$media_types) {
+    if ($media_types === []) {
       $form_state->setErrorByName('media_types', $this->t('Please select at least one media type'));
     }
+
     // Store the normalized value back, in form state.
     $form_state->setValue('media_types', array_combine($media_types, $media_types));
 
@@ -316,7 +243,7 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
       // Generate media items.
       $this->preGenerate($values);
       $start = time();
-      for ($i = 1; $i <= $values['num']; $i++) {
+      for ($i = 1; $i <= $values['num']; ++$i) {
         $this->createMediaItem($values);
         if (isset($values['feedback']) && $i % $values['feedback'] == 0) {
           $now = time();
@@ -328,6 +255,7 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
         }
       }
     }
+
     $this->setMessage($this->formatPlural($values['num'], '1 media item created.', 'Finished creating @count media items.'));
   }
 
@@ -355,7 +283,7 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
     }
 
     // Add the operations to create the media.
-    for ($num = 0; $num < $values['num']; $num++) {
+    for ($num = 0; $num < $values['num']; ++$num) {
       $operations[] = [
         'devel_generate_operation',
         [$this, 'batchCreateMediaItem', $values],
@@ -416,10 +344,12 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
     else {
       $this->createMediaItem($context['results']);
     }
+
     if (!isset($context['results']['num'])) {
       $context['results']['num'] = 0;
     }
-    $context['results']['num']++;
+
+    ++$context['results']['num'];
   }
 
   /**
@@ -464,11 +394,12 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
     $all_media_types = array_values($this->mediaTypeStorage->getQuery()->accessCheck(FALSE)->execute());
     $requested_media_types = self::csvToArray($options['media-types'] ?: $all_media_types);
 
-    if (empty($requested_media_types)) {
+    if ($requested_media_types === []) {
       throw new \Exception(dt('No media types available'));
     }
+
     // Check for any missing media type.
-    if ($invalid_media_types = array_diff($requested_media_types, $all_media_types)) {
+    if (($invalid_media_types = array_diff($requested_media_types, $all_media_types)) !== []) {
       throw new \Exception("Requested media types don't exists: " . implode(', ', $invalid_media_types));
     }
 
@@ -553,10 +484,9 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
       'moderation_state' => 'published',
       'created' => $this->time->getRequestTime() - mt_rand(0, $results['time_range']),
       'langcode' => $this->getLangcode($results),
+      // A flag to let hook implementations know that this is a generated item.
+      'devel_generate' => $results,
     ]);
-
-    // A flag to let hook implementations know that this is a generated item.
-    $media->devel_generate = $results;
 
     // Populate all non-skipped fields with sample values.
     $this->populateFields($media, $results['skip_fields'], $results['base_fields']);
@@ -581,12 +511,11 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
   protected function getLangcode(array $results): string {
     if (isset($results['add_language'])) {
       $langcodes = $results['add_language'];
-      $langcode = $langcodes[array_rand($langcodes)];
+
+      return $langcodes[array_rand($langcodes)];
     }
-    else {
-      $langcode = $this->languageManager->getDefaultLanguage()->getId();
-    }
-    return $langcode;
+
+    return $this->languageManager->getDefaultLanguage()->getId();
   }
 
   /**

@@ -2,6 +2,9 @@
 
 namespace Drupal\devel;
 
+use Drupal\Component\Render\MarkupInterface;
+use Drupal\Core\Messenger\MessengerInterface;
+
 /**
  * Interface for DevelDumper manager.
  *
@@ -26,17 +29,17 @@ interface DevelDumperManagerInterface {
    *
    * @param mixed $input
    *   The variable to dump.
-   * @param string $name
+   * @param string|null $name
    *   (optional) The label to output before variable.
-   * @param string $plugin_id
+   * @param string|null $plugin_id
    *   (optional) The plugin ID, defaults to NULL.
    * @param bool $load_references
    *   If the input is an entity, load the referenced entities.
    *
-   * @return string
+   * @return \Drupal\Component\Render\MarkupInterface|string
    *   String representation of a variable.
    */
-  public function export(mixed $input, $name = NULL, $plugin_id = NULL, $load_references = FALSE);
+  public function export(mixed $input, ?string $name = NULL, ?string $plugin_id = NULL, bool $load_references = FALSE): MarkupInterface|string;
 
   /**
    * Sets a message with a string representation of a variable.
@@ -46,13 +49,15 @@ interface DevelDumperManagerInterface {
    * @param string $name
    *   The label to output before variable.
    * @param string $type
-   *   The message's type.
+   *   (optional) The message's type. Defaults to
+   *   MessengerInterface::TYPE_STATUS.
    * @param string $plugin_id
-   *   The plugin ID.
+   *   (optional) The plugin ID. Defaults to NULL.
    * @param bool $load_references
-   *   If the input is an entity, load the referenced entities.
+   *   (optional) If the input is an entity, load the referenced entities.
+   *   Defaults to FALSE.
    */
-  public function message(mixed $input, $name = NULL, $type = 'status', $plugin_id = NULL, $load_references = FALSE);
+  public function message(mixed $input, $name = NULL, $type = MessengerInterface::TYPE_STATUS, $plugin_id = NULL, $load_references = FALSE);
 
   /**
    * Logs a variable to a drupal_debug.txt in the site's temp directory.

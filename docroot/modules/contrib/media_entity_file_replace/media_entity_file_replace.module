@@ -5,8 +5,10 @@
  * Media Entity File Replace module file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
+use Drupal\Component\Utility\DeprecationHelper;
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -154,7 +156,17 @@ function media_entity_file_replace_form_media_form_alter(&$form, FormStateInterf
     '#upload_validators' => $uploadValidators,
     '#cardinality' => 1,
   ];
-  $form['replace_file']['replacement_file']['#description'] = \Drupal::service('renderer')->renderPlain($helpText);
+  /** @var \Drupal\Core\Render\RendererInterface $renderer */
+  $renderer = \Drupal::service('renderer');
+  // @todo Remove the deprecated "renderPlain" method call once we drop the
+  // Drupal 10 support:
+  $renderedDescription = DeprecationHelper::backwardsCompatibleCall(
+  currentVersion: \Drupal::VERSION,
+  deprecatedVersion: '10.3',
+  currentCallable: fn() => $renderer->renderInIsolation($helpText),
+  deprecatedCallable: fn() => $renderer->renderPlain($helpText),
+  );
+  $form['replace_file']['replacement_file']['#description'] = $renderedDescription;
 
   // Inform the user that when replacing the original file, the new one
   // must have the same extension.
@@ -279,10 +291,16 @@ function _media_entity_file_replace_validate(array $form, FormStateInterface $fo
   if ($formState->getValue('keep_original_filename')) {
     $originalFileEntity = $media->get($sourceFieldName)->first()->entity;
     $originalExtension = pathinfo($originalFileEntity->getFileUri(), PATHINFO_EXTENSION);
-    $uploadValidators['file_validate_extensions'] = [$originalExtension];
+    if (version_compare(\Drupal::VERSION, '11', '>=')) {
+      $uploadValidators['FileExtension']['extensions'] = $originalExtension;
+    }
+    // @todo Remove this, once we drop the Drupal 10 support:
+    else {
+      $uploadValidators['file_validate_extensions'] = [$originalExtension];
+    }
   }
 
-  $replacementFile = file_save_upload('replacement_file', $uploadValidators, $uploadDestination, 0, FileSystemInterface::EXISTS_RENAME);
+  $replacementFile = file_save_upload('replacement_file', $uploadValidators, $uploadDestination, 0);
 
   // Return value is NULL if no replacement file was submitted.
   if ($replacementFile === NULL) {
@@ -328,7 +346,14 @@ function _media_entity_file_replace_submit(array $form, FormStateInterface $form
     // files.
     $destination = $fileSystem->dirname($originalFile->getFileUri());
     $fileSystem->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY);
-    if (!$fileSystem->copy($replacementFile->getFileUri(), $originalFile->getFileUri(), FileSystemInterface::EXISTS_REPLACE)) {
+    if (version_compare(\Drupal::VERSION, '11', '>=')) {
+      $file_exists_param = FileExists::Replace;
+    }
+    // @todo Remove this, once we drop the Drupal 10 support:
+    else {
+      $file_exists_param = FileSystemInterface::EXISTS_REPLACE;
+    }
+    if (!$fileSystem->copy($replacementFile->getFileUri(), $originalFile->getFileUri(), $file_exists_param)) {
       \Drupal::messenger()->addError(t('Unable to overwrite original file with the replacement.'));
       return;
     }

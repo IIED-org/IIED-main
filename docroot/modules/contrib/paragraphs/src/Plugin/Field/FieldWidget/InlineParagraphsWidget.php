@@ -1314,7 +1314,7 @@ class InlineParagraphsWidget extends WidgetBase {
   public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
     $field_name = $this->fieldDefinition->getName();
     $widget_state = static::getWidgetState($form['#parents'], $field_name, $form_state);
-    $element = NestedArray::getValue($form_state->getCompleteForm(), $widget_state['array_parents']);
+    $element = NestedArray::getValue($form_state->getCompleteForm(), $widget_state['array_parents'] ?? []);
 
     foreach ($values as &$item) {
       if (isset($widget_state['paragraphs'][$item['_original_delta']]['entity'])

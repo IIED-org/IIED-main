@@ -18,7 +18,7 @@ use Drupal\Core\TypedData\MapDataDefinition;
  *   id = "block_field",
  *   label = @Translation("Block (plugin)"),
  *   description = @Translation("Stores an instance of a configurable or custom block."),
- *   category = @Translation("Reference"),
+ *   category = "reference",
  *   default_widget = "block_field_default",
  *   default_formatter = "block_field",
  * )

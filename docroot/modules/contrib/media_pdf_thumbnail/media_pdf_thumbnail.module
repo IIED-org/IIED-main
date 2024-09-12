@@ -254,16 +254,16 @@ function _get_setting_values(FormStateInterface $form_state) {
 
     // Determine values
     $output = array_merge($output, [
-      $mediaBundleField => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleField] : $displayOptions[$mediaBundleField],
-      $mediaBundlePage => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundlePage] : $displayOptions[$mediaBundlePage],
-      $mediaBundleLink => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleLink] : $displayOptions[$mediaBundleLink],
-      $mediaBundleAttributesDownload => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesDownload] : $displayOptions[$mediaBundleAttributesDownload],
-      $mediaBundleAttributesTarget => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesTarget] : $displayOptions[$mediaBundleAttributesTarget],
-      $mediaBundleAttributesRel => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesRel] : $displayOptions[$mediaBundleAttributesRel],
-      $mediaBundleImageFormat => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleImageFormat] : $displayOptions[$mediaBundleImageFormat],
-      $mediaBundleImageStyle => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleImageStyle] : $displayOptions[$mediaBundleImageStyle],
-      $mediaBundleUseCron => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleUseCron] : $displayOptions[$mediaBundleUseCron],
-      $mediaBundleEnable => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleEnable] : $displayOptions[$mediaBundleEnable],
+      $mediaBundleField => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleField] ?? NULL : $displayOptions[$mediaBundleField],
+      $mediaBundlePage => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundlePage] ?? NULL : $displayOptions[$mediaBundlePage],
+      $mediaBundleLink => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleLink] ?? NULL : $displayOptions[$mediaBundleLink],
+      $mediaBundleAttributesDownload => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesDownload] ?? NULL : $displayOptions[$mediaBundleAttributesDownload],
+      $mediaBundleAttributesTarget => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesTarget] ?? NULL : $displayOptions[$mediaBundleAttributesTarget],
+      $mediaBundleAttributesRel => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesRel] ?? NULL : $displayOptions[$mediaBundleAttributesRel],
+      $mediaBundleImageFormat => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleImageFormat] ?? NULL : $displayOptions[$mediaBundleImageFormat],
+      $mediaBundleImageStyle => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleImageStyle] ?? NULL : $displayOptions[$mediaBundleImageStyle],
+      $mediaBundleUseCron => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleUseCron] ?? NULL : $displayOptions[$mediaBundleUseCron],
+      $mediaBundleEnable => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleEnable] ?? NULL : $displayOptions[$mediaBundleEnable],
     ]);
   }
 

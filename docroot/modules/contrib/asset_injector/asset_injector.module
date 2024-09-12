@@ -7,9 +7,9 @@
 
 use Drupal\asset_injector\AssetFileStorage;
 use Drupal\asset_injector\AssetInjectorInterface;
+use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Config\Entity\ConfigEntityType;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\editor\Entity\Editor;
 
 /**
@@ -106,7 +106,7 @@ function asset_injector_library_info_build() {
  *
  * Concerning cache contexts: The config override system may introduce
  * additional cache contexts to aur assets. Think css that varies by domain.
- * By adding our assets as cacheble dependencies all contexts they may carry
+ * By adding our assets as cacheable dependencies all contexts they may carry
  * apply to the rendered result.
  *
  * Note that the list_cache_tags (library_info) are not added here and need not,
@@ -133,7 +133,7 @@ function asset_injector_preprocess_maintenance_page(array &$variables) {
  * Attach asset libraries to render elements.
  *
  * @param array $element
- *   Render element
+ *   Render element.
  */
 function _asset_injector_add_element_libraries(array &$element) {
   /** @var \Drupal\Core\Render\RendererInterface $renderer */
@@ -154,7 +154,7 @@ function _asset_injector_add_element_libraries(array &$element) {
  *   Array of entity type ids to limit the return.
  *
  * @return \Drupal\asset_injector\AssetInjectorInterface[]
- *   Assets from css & js injectors.
+ *   Assets from CSS & JS injectors.
  */
 function asset_injector_get_assets($active = NULL, array $types = []) {
   /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
@@ -178,7 +178,7 @@ function asset_injector_get_assets($active = NULL, array $types = []) {
         if ($active && $access) {
           $assets[] = $asset;
         }
-        // Get only deactive assets.
+        // Get only nonactive assets.
         elseif (!$active && !$access) {
           $assets[] = $asset;
         }

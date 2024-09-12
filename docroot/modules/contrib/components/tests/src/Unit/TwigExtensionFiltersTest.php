@@ -81,15 +81,9 @@ class TwigExtensionFiltersTest extends UnitTestCase {
    * @dataProvider providerTestRecursiveMergeFilter
    */
   public function testRecursiveMergeFilter(array $element, array $value, array $expected) {
-    $result = NULL;
-    try {
-      $result = TwigExtension::recursiveMergeFilter($element, $value);
-    }
-    catch (\Exception $e) {
-      $this->fail('No Exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
-    }
-    $this->assertEquals($expected, $result, $this->getName());
-    $this->assertEquals(array_replace_recursive($element, $value), $result, $this->getName());
+    $result = TwigExtension::recursiveMergeFilter($element, $value);
+    $this->assertEquals($expected, $result);
+    $this->assertEquals(array_replace_recursive($element, $value), $result);
   }
 
   /**
@@ -97,7 +91,7 @@ class TwigExtensionFiltersTest extends UnitTestCase {
    *
    * @see testRecursiveMergeFilter()
    */
-  public function providerTestRecursiveMergeFilter(): array {
+  public static function providerTestRecursiveMergeFilter(): array {
     return [
       'Recursively sets values' => [
         'element' => [
@@ -171,14 +165,8 @@ class TwigExtensionFiltersTest extends UnitTestCase {
    * @dataProvider providerTestSetFilter
    */
   public function testSetFilter(array $element, string $at, $value, array $expected) {
-    $result = NULL;
-    try {
-      $result = TwigExtension::setFilter($element, $at, $value);
-    }
-    catch (\Exception $e) {
-      $this->fail('No Exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
-    }
-    $this->assertEquals($expected, $result, $this->getName());
+    $result = TwigExtension::setFilter($element, $at, $value);
+    $this->assertEquals($expected, $result);
   }
 
   /**
@@ -186,7 +174,7 @@ class TwigExtensionFiltersTest extends UnitTestCase {
    *
    * @see testSetFilter()
    */
-  public function providerTestSetFilter(): array {
+  public static function providerTestSetFilter(): array {
     return [
       'Sets a new value' => [
         'element' => [
@@ -296,7 +284,7 @@ class TwigExtensionFiltersTest extends UnitTestCase {
    *
    * @see testAddFilter()
    */
-  public function providerTestAddFilter(): array {
+  public static function providerTestAddFilter(): array {
     return [
       'replacing a value' => [
         'at' => 'element.#attributes.id',

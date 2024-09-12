@@ -11,7 +11,7 @@ interface TraceAttributes
     /**
      * The URL of the OpenTelemetry schema for these keys and values.
      */
-    public const SCHEMA_URL = 'https://opentelemetry.io/schemas/1.25.0';
+    public const SCHEMA_URL = 'https://opentelemetry.io/schemas/1.27.0';
 
     /**
      * Uniquely identifies the framework API revision offered by a version (`os.version`) of the android operating system. More information can be found here.
@@ -22,11 +22,91 @@ interface TraceAttributes
     public const ANDROID_OS_API_LEVEL = 'android.os.api_level';
 
     /**
-     * This attribute represents the state the application has transitioned into at the occurrence of the event.
+     * Deprecated use the `device.app.lifecycle` event definition including `android.state` as a payload field instead.
      *
      * The Android lifecycle states are defined in Activity lifecycle callbacks, and from which the `OS identifiers` are derived.
      */
     public const ANDROID_STATE = 'android.state';
+
+    /**
+     * The provenance filename of the built attestation which directly relates to the build artifact filename. This filename SHOULD accompany the artifact at publish time. See the SLSA Relationship specification for more information.
+     *
+     * @example golang-binary-amd64-v0.1.0.attestation
+     * @example docker-image-amd64-v0.1.0.intoto.json1
+     * @example release-1.tar.gz.attestation
+     * @example file-name-package.tar.gz.intoto.json1
+     */
+    public const ARTIFACT_ATTESTATION_FILENAME = 'artifact.attestation.filename';
+
+    /**
+     * The full hash value (see glossary), of the built attestation. Some envelopes in the software attestation space also refer to this as the digest.
+     *
+     * @example 1b31dfcd5b7f9267bf2ff47651df1cfb9147b9e4df1f335accf65b4cda498408
+     */
+    public const ARTIFACT_ATTESTATION_HASH = 'artifact.attestation.hash';
+
+    /**
+     * The id of the build software attestation.
+     *
+     * @example 123
+     */
+    public const ARTIFACT_ATTESTATION_ID = 'artifact.attestation.id';
+
+    /**
+     * The human readable file name of the artifact, typically generated during build and release processes. Often includes the package name and version in the file name.
+     *
+     * This file name can also act as the Package Name
+     * in cases where the package ecosystem maps accordingly.
+     * Additionally, the artifact can be published
+     * for others, but that is not a guarantee.
+     *
+     * @example golang-binary-amd64-v0.1.0
+     * @example docker-image-amd64-v0.1.0
+     * @example release-1.tar.gz
+     * @example file-name-package.tar.gz
+     */
+    public const ARTIFACT_FILENAME = 'artifact.filename';
+
+    /**
+     * The full hash value (see glossary), often found in checksum.txt on a release of the artifact and used to verify package integrity.
+     *
+     * The specific algorithm used to create the cryptographic hash value is
+     * not defined. In situations where an artifact has multiple
+     * cryptographic hashes, it is up to the implementer to choose which
+     * hash value to set here; this should be the most secure hash algorithm
+     * that is suitable for the situation and consistent with the
+     * corresponding attestation. The implementer can then provide the other
+     * hash values through an additional set of attribute extensions as they
+     * deem necessary.
+     *
+     * @example 9ff4c52759e2c4ac70b7d517bc7fcdc1cda631ca0045271ddd1b192544f8a3e9
+     */
+    public const ARTIFACT_HASH = 'artifact.hash';
+
+    /**
+     * The Package URL of the package artifact provides a standard way to identify and locate the packaged artifact.
+     *
+     * @example pkg:github/package-url/purl-spec@1209109710924
+     * @example pkg:npm/foo@12.12.3
+     */
+    public const ARTIFACT_PURL = 'artifact.purl';
+
+    /**
+     * The version of the artifact.
+     *
+     * @example v0.1.0
+     * @example 1.2.1
+     * @example 122691-build
+     */
+    public const ARTIFACT_VERSION = 'artifact.version';
+
+    /**
+     * ASP.NET Core exception middleware handling result.
+     *
+     * @example handled
+     * @example unhandled
+     */
+    public const ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT = 'aspnetcore.diagnostics.exception.result';
 
     /**
      * Full type name of the `IExceptionHandler` implementation that handled the exception.
@@ -65,6 +145,14 @@ interface TraceAttributes
      * @example True
      */
     public const ASPNETCORE_ROUTING_IS_FALLBACK = 'aspnetcore.routing.is_fallback';
+
+    /**
+     * Match result - success or failure.
+     *
+     * @example success
+     * @example failure
+     */
+    public const ASPNETCORE_ROUTING_MATCH_STATUS = 'aspnetcore.routing.match_status';
 
     /**
      * The JSON-serialized value of each item in the `AttributeDefinitions` request field.
@@ -225,6 +313,63 @@ interface TraceAttributes
     public const AWS_DYNAMODB_TOTAL_SEGMENTS = 'aws.dynamodb.total_segments';
 
     /**
+     * The ARN of an ECS cluster.
+     *
+     * @example arn:aws:ecs:us-west-2:123456789123:cluster/my-cluster
+     */
+    public const AWS_ECS_CLUSTER_ARN = 'aws.ecs.cluster.arn';
+
+    /**
+     * The Amazon Resource Name (ARN) of an ECS container instance.
+     *
+     * @example arn:aws:ecs:us-west-1:123456789123:container/32624152-9086-4f0e-acae-1a75b14fe4d9
+     */
+    public const AWS_ECS_CONTAINER_ARN = 'aws.ecs.container.arn';
+
+    /**
+     * The launch type for an ECS task.
+     */
+    public const AWS_ECS_LAUNCHTYPE = 'aws.ecs.launchtype';
+
+    /**
+     * The ARN of a running ECS task.
+     *
+     * @example arn:aws:ecs:us-west-1:123456789123:task/10838bed-421f-43ef-870a-f43feacbbb5b
+     * @example arn:aws:ecs:us-west-1:123456789123:task/my-cluster/task-id/23ebb8ac-c18f-46c6-8bbe-d55d0e37cfbd
+     */
+    public const AWS_ECS_TASK_ARN = 'aws.ecs.task.arn';
+
+    /**
+     * The family name of the ECS task definition used to create the ECS task.
+     *
+     * @example opentelemetry-family
+     */
+    public const AWS_ECS_TASK_FAMILY = 'aws.ecs.task.family';
+
+    /**
+     * The ID of a running ECS task. The ID MUST be extracted from `task.arn`.
+     *
+     * @example 10838bed-421f-43ef-870a-f43feacbbb5b
+     * @example 23ebb8ac-c18f-46c6-8bbe-d55d0e37cfbd
+     */
+    public const AWS_ECS_TASK_ID = 'aws.ecs.task.id';
+
+    /**
+     * The revision for the task definition used to create the ECS task.
+     *
+     * @example 8
+     * @example 26
+     */
+    public const AWS_ECS_TASK_REVISION = 'aws.ecs.task.revision';
+
+    /**
+     * The ARN of an EKS cluster.
+     *
+     * @example arn:aws:ecs:us-west-2:123456789123:cluster/my-cluster
+     */
+    public const AWS_EKS_CLUSTER_ARN = 'aws.eks.cluster.arn';
+
+    /**
      * The full invoked ARN as provided on the `Context` passed to the function (`Lambda-Runtime-Invoked-Function-Arn` header on the `/runtime/invocation/next` applicable).
      *
      * This may be different from `cloud.resource_id` if an alias is involved.
@@ -232,6 +377,41 @@ interface TraceAttributes
      * @example arn:aws:lambda:us-east-1:123456:function:myfunction:myalias
      */
     public const AWS_LAMBDA_INVOKED_ARN = 'aws.lambda.invoked_arn';
+
+    /**
+     * The Amazon Resource Name(s) (ARN) of the AWS log group(s).
+     *
+     * See the log group ARN format documentation.
+     *
+     * @example arn:aws:logs:us-west-1:123456789012:log-group:/aws/my/group:*
+     */
+    public const AWS_LOG_GROUP_ARNS = 'aws.log.group.arns';
+
+    /**
+     * The name(s) of the AWS log group(s) an application is writing to.
+     *
+     * Multiple log groups must be supported for cases like multi-container applications, where a single application has sidecar containers, and each write to their own log group.
+     *
+     * @example /aws/lambda/my-function
+     * @example opentelemetry-service
+     */
+    public const AWS_LOG_GROUP_NAMES = 'aws.log.group.names';
+
+    /**
+     * The ARN(s) of the AWS log stream(s).
+     *
+     * See the log stream ARN format documentation. One log group can contain several log streams, so these ARNs necessarily identify both a log group and a log stream.
+     *
+     * @example arn:aws:logs:us-west-1:123456789012:log-group:/aws/my/group:log-stream:logs/main/10838bed-421f-43ef-870a-f43feacbbb5b
+     */
+    public const AWS_LOG_STREAM_ARNS = 'aws.log.stream.arns';
+
+    /**
+     * The name(s) of the AWS log stream(s) an application is writing to.
+     *
+     * @example logs/main/10838bed-421f-43ef-870a-f43feacbbb5b
+     */
+    public const AWS_LOG_STREAM_NAMES = 'aws.log.stream.names';
 
     /**
      * The AWS request ID as returned in the response headers `x-amz-request-id` or `x-amz-requestid`.
@@ -330,6 +510,13 @@ interface TraceAttributes
     public const AWS_S3_UPLOAD_ID = 'aws.s3.upload_id';
 
     /**
+     * The unique identifier of the service request. It's generated by the Azure service and returned with the response.
+     *
+     * @example 00000000-0000-0000-0000-000000000000
+     */
+    public const AZ_SERVICE_REQUEST_ID = 'az.service_request_id';
+
+    /**
      * Array of brand name and version separated by a space.
      *
      * This value is intended to be taken from the UA client hints API (`navigator.userAgentData.brands`).
@@ -370,6 +557,56 @@ interface TraceAttributes
      * @example Android
      */
     public const BROWSER_PLATFORM = 'browser.platform';
+
+    /**
+     * The human readable name of the pipeline within a CI/CD system.
+     *
+     * @example Build and Test
+     * @example Lint
+     * @example Deploy Go Project
+     * @example deploy_to_environment
+     */
+    public const CICD_PIPELINE_NAME = 'cicd.pipeline.name';
+
+    /**
+     * The unique identifier of a pipeline run within a CI/CD system.
+     *
+     * @example 120912
+     */
+    public const CICD_PIPELINE_RUN_ID = 'cicd.pipeline.run.id';
+
+    /**
+     * The human readable name of a task within a pipeline. Task here most closely aligns with a computing process in a pipeline. Other terms for tasks include commands, steps, and procedures.
+     *
+     * @example Run GoLang Linter
+     * @example Go Build
+     * @example go-test
+     * @example deploy_binary
+     */
+    public const CICD_PIPELINE_TASK_NAME = 'cicd.pipeline.task.name';
+
+    /**
+     * The unique identifier of a task run within a pipeline.
+     *
+     * @example 12097
+     */
+    public const CICD_PIPELINE_TASK_RUN_ID = 'cicd.pipeline.task.run.id';
+
+    /**
+     * The URL of the pipeline run providing the complete address in order to locate and identify the pipeline run.
+     *
+     * @example https://github.com/open-telemetry/semantic-conventions/actions/runs/9753949763/job/26920038674?pr=1075
+     */
+    public const CICD_PIPELINE_TASK_RUN_URL_FULL = 'cicd.pipeline.task.run.url.full';
+
+    /**
+     * The type of the task within a pipeline.
+     *
+     * @example build
+     * @example test
+     * @example deploy
+     */
+    public const CICD_PIPELINE_TASK_TYPE = 'cicd.pipeline.task.type';
 
     /**
      * Client address - domain name if available without reverse DNS lookup; otherwise, IP address or Unix domain socket name.
@@ -431,7 +668,7 @@ interface TraceAttributes
     public const CLOUD_REGION = 'cloud.region';
 
     /**
-     * Cloud provider-specific native identifier of the monitored cloud resource (e.g. an ARN on AWS, a fully qualified resource ID on Azure, a full resource name on GCP).
+     * The Fully Qualified Azure Resource ID the log is emitted for.
      *
      * On some cloud providers, it may not be possible to determine the full ID at startup,
      * so it may be necessary to set `cloud.resource_id` as a span attribute instead.The exact value to use for `cloud.resource_id` depends on the cloud provider.
@@ -439,7 +676,7 @@ interface TraceAttributes
      * <li><strong>AWS Lambda:</strong> The function ARN.
      * Take care not to use the &quot;invoked ARN&quot; directly but replace any
      * alias suffix
-     * with the resolved function version, as the same runtime instance may be invokable with
+     * with the resolved function version, as the same runtime instance may be invocable with
      * multiple different aliases.</li>
      * <li><strong>GCP:</strong> The URI of the resource</li>
      * <li><strong>Azure:</strong> The Fully Qualified Resource ID of the invoked function,
@@ -560,7 +797,9 @@ interface TraceAttributes
     public const CONTAINER_COMMAND_LINE = 'container.command_line';
 
     /**
-     * The CPU state for this data point.
+     * Deprecated, use `cpu.mode` instead.
+     *
+     * @deprecated Replaced by `cpu.mode`.
      *
      * @example user
      * @example kernel
@@ -579,7 +818,7 @@ interface TraceAttributes
      *
      * Docker defines a sha256 of the image id; `container.image.id` corresponds to the `Image` field from the Docker container inspect API endpoint.
      * K8s defines a link to the container registry repository with digest `"imageID": "registry.azurecr.io /namespace/service/dockerfile@sha256:bdeabd40c3a8a492eaf9e8e44d0ebbb84bac7ee25ac0cf8a7159d25f62555625"`.
-     * The ID is assinged by the container runtime and can vary in different environments. Consider using `oci.manifest.digest` if it is important to identify the same image in different environments/runtimes.
+     * The ID is assigned by the container runtime and can vary in different environments. Consider using `oci.manifest.digest` if it is important to identify the same image in different environments/runtimes.
      *
      * @example sha256:19c92d0a00d1b66d897bceaa7319bee0dd38a10a851c60bcec9474aa3f01e50f
      */
@@ -627,6 +866,14 @@ interface TraceAttributes
     public const CONTAINER_RUNTIME = 'container.runtime';
 
     /**
+     * The mode of the CPU.
+     *
+     * @example user
+     * @example system
+     */
+    public const CPU_MODE = 'cpu.mode';
+
+    /**
      * The consistency level of the query. Based on consistency values from CQL.
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL = 'db.cassandra.consistency_level';
@@ -665,13 +912,57 @@ interface TraceAttributes
     public const DB_CASSANDRA_SPECULATIVE_EXECUTION_COUNT = 'db.cassandra.speculative_execution_count';
 
     /**
-     * The name of the primary Cassandra table that the operation is acting upon, including the keyspace name (if applicable).
+     * Deprecated, use `db.collection.name` instead.
      *
-     * This mirrors the db.sql.table attribute but references cassandra rather than sql. It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
+     * @deprecated Replaced by `db.collection.name`.
      *
      * @example mytable
      */
     public const DB_CASSANDRA_TABLE = 'db.cassandra.table';
+
+    /**
+     * The name of the connection pool; unique within the instrumented application. In case the connection pool implementation doesn't provide a name, instrumentation SHOULD use a combination of parameters that would make the name unique, for example, combining attributes `server.address`, `server.port`, and `db.namespace`, formatted as `server.address:server.port/db.namespace`. Instrumentations that generate connection pool name following different patterns SHOULD document it.
+     *
+     * @example myDataSource
+     */
+    public const DB_CLIENT_CONNECTION_POOL_NAME = 'db.client.connection.pool.name';
+
+    /**
+     * The state of a connection in the pool.
+     *
+     * @example idle
+     */
+    public const DB_CLIENT_CONNECTION_STATE = 'db.client.connection.state';
+
+    /**
+     * Deprecated, use `db.client.connection.pool.name` instead.
+     *
+     * @deprecated Replaced by `db.client.connection.pool.name`.
+     *
+     * @example myDataSource
+     */
+    public const DB_CLIENT_CONNECTIONS_POOL_NAME = 'db.client.connections.pool.name';
+
+    /**
+     * Deprecated, use `db.client.connection.state` instead.
+     *
+     * @deprecated Replaced by `db.client.connection.state`.
+     *
+     * @example idle
+     */
+    public const DB_CLIENT_CONNECTIONS_STATE = 'db.client.connections.state';
+
+    /**
+     * The name of a collection (table, container) within the database.
+     *
+     * It is RECOMMENDED to capture the value as provided by the application without attempting to do any case normalization.
+     * If the collection name is parsed from the query text, it SHOULD be the first collection name found in the query and it SHOULD match the value provided in the query text including any schema and database name prefix.
+     * For batch operations, if the individual operations are known to have the same collection name then that collection name SHOULD be used, otherwise `db.collection.name` SHOULD NOT be captured.
+     *
+     * @example public.users
+     * @example customers
+     */
+    public const DB_COLLECTION_NAME = 'db.collection.name';
 
     /**
      * Deprecated, use `server.address`, `server.port` attributes instead.
@@ -695,9 +986,11 @@ interface TraceAttributes
     public const DB_COSMOSDB_CONNECTION_MODE = 'db.cosmosdb.connection_mode';
 
     /**
-     * Cosmos DB container name.
+     * Deprecated, use `db.collection.name` instead.
      *
-     * @example anystring
+     * @deprecated Replaced by `db.collection.name`.
+     *
+     * @example mytable
      */
     public const DB_COSMOSDB_CONTAINER = 'db.cosmosdb.container';
 
@@ -736,23 +1029,25 @@ interface TraceAttributes
     public const DB_COSMOSDB_SUB_STATUS_CODE = 'db.cosmosdb.sub_status_code';
 
     /**
-     * Represents the identifier of an Elasticsearch cluster.
+     * Deprecated, use `db.namespace` instead.
+     *
+     * @deprecated Replaced by `db.namespace`.
      *
      * @example e9106fc68e3044f0b1475b04bf4ffd5f
      */
     public const DB_ELASTICSEARCH_CLUSTER_NAME = 'db.elasticsearch.cluster.name';
 
     /**
-     * Deprecated, use `db.instance.id` instead.
-     *
-     * @deprecated Replaced by `db.instance.id`.
+     * Represents the human-readable identifier of the node/instance to which a request was routed.
      *
      * @example instance-0000000001
      */
     public const DB_ELASTICSEARCH_NODE_NAME = 'db.elasticsearch.node.name';
 
     /**
-     * An identifier (address, unique name, or any other identifier) of the database instance that is executing queries or mutations on the current connection. This is useful in cases where the database is running in a clustered environment and the instrumentation is able to record the node executing the query. The client may obtain this value in databases like MySQL using queries like `select @@hostname`.
+     * Deprecated, no general replacement at this time. For Elasticsearch, use `db.elasticsearch.node.name` instead.
+     *
+     * @deprecated Deprecated, no general replacement at this time. For Elasticsearch, use `db.elasticsearch.node.name` instead.
      *
      * @example mysql-e26b99z.example.com
      */
@@ -769,26 +1064,27 @@ interface TraceAttributes
     public const DB_JDBC_DRIVER_CLASSNAME = 'db.jdbc.driver_classname';
 
     /**
-     * The MongoDB collection being accessed within the database stated in `db.name`.
+     * Deprecated, use `db.collection.name` instead.
      *
-     * @example customers
-     * @example products
+     * @deprecated Replaced by `db.collection.name`.
+     *
+     * @example mytable
      */
     public const DB_MONGODB_COLLECTION = 'db.mongodb.collection';
 
     /**
-     * The Microsoft SQL Server instance name connecting to. This name is used to determine the port of a named instance.
+     * Deprecated, SQL Server instance is now populated as a part of `db.namespace` attribute.
      *
-     * If setting a `db.mssql.instance_name`, `server.port` is no longer required (but still recommended if non-standard).
+     * @deprecated Deprecated, no replacement at this time.
      *
      * @example MSSQLSERVER
      */
     public const DB_MSSQL_INSTANCE_NAME = 'db.mssql.instance_name';
 
     /**
-     * This attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails).
+     * Deprecated, use `db.namespace` instead.
      *
-     * In some SQL databases, the database name to be used is called &quot;schema name&quot;. In case there are multiple layers that could be considered for database name (e.g. Oracle instance name and schema name), the database name to be used is the more specific layer (e.g. Oracle schema name).
+     * @deprecated Replaced by `db.namespace`.
      *
      * @example customers
      * @example main
@@ -796,9 +1092,21 @@ interface TraceAttributes
     public const DB_NAME = 'db.name';
 
     /**
-     * The name of the operation being executed, e.g. the MongoDB command name such as `findAndModify`, or the SQL keyword.
+     * The name of the database, fully qualified within the server address and port.
      *
-     * When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
+     * If a database system has multiple namespace components, they SHOULD be concatenated (potentially using database system specific conventions) from most general to most specific namespace component, and more specific namespaces SHOULD NOT be captured without the more general namespaces, to ensure that &quot;startswith&quot; queries for the more general namespaces will be valid.
+     * Semantic conventions for individual database systems SHOULD document what `db.namespace` means in the context of that system.
+     * It is RECOMMENDED to capture the value as provided by the application without attempting to do any case normalization.
+     *
+     * @example customers
+     * @example test.users
+     */
+    public const DB_NAMESPACE = 'db.namespace';
+
+    /**
+     * Deprecated, use `db.operation.name` instead.
+     *
+     * @deprecated Replaced by `db.operation.name`.
      *
      * @example findAndModify
      * @example HMSET
@@ -807,7 +1115,45 @@ interface TraceAttributes
     public const DB_OPERATION = 'db.operation';
 
     /**
-     * The index of the database being accessed as used in the `SELECT` command, provided as an integer. To be used instead of the generic `db.name` attribute.
+     * The number of queries included in a batch operation.
+     *
+     * Operations are only considered batches when they contain two or more operations, and so `db.operation.batch.size` SHOULD never be `1`.
+     *
+     * @example 2
+     * @example 3
+     * @example 4
+     */
+    public const DB_OPERATION_BATCH_SIZE = 'db.operation.batch.size';
+
+    /**
+     * The name of the operation or command being executed.
+     *
+     * It is RECOMMENDED to capture the value as provided by the application without attempting to do any case normalization.
+     * If the operation name is parsed from the query text, it SHOULD be the first operation name found in the query.
+     * For batch operations, if the individual operations are known to have the same operation name then that operation name SHOULD be used prepended by `BATCH`, otherwise `db.operation.name` SHOULD be `BATCH` or some other database system specific term if more applicable.
+     *
+     * @example findAndModify
+     * @example HMSET
+     * @example SELECT
+     */
+    public const DB_OPERATION_NAME = 'db.operation.name';
+
+    /**
+     * The database query being executed.
+     *
+     * For sanitization see Sanitization of `db.query.text`.
+     * For batch operations, if the individual operations are known to have the same query text then that query text SHOULD be used, otherwise all of the individual query texts SHOULD be concatenated with separator `;` or some other database system specific separator if more applicable.
+     * Even though parameterized query text can potentially have sensitive data, by using a parameterized query the user is giving a strong signal that any sensitive data will be passed as parameter values, and the benefit to observability of capturing the static part of the query text by default outweighs the risk.
+     *
+     * @example SELECT * FROM wuser_table where username = ?
+     * @example SET mykey "WuValue"
+     */
+    public const DB_QUERY_TEXT = 'db.query.text';
+
+    /**
+     * Deprecated, use `db.namespace` instead.
+     *
+     * @deprecated Replaced by `db.namespace`.
      *
      * @example 1
      * @example 15
@@ -815,17 +1161,18 @@ interface TraceAttributes
     public const DB_REDIS_DATABASE_INDEX = 'db.redis.database_index';
 
     /**
-     * The name of the primary table that the operation is acting upon, including the database name (if applicable).
+     * Deprecated, use `db.collection.name` instead.
      *
-     * It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
+     * @deprecated Replaced by `db.collection.name`.
      *
-     * @example public.users
-     * @example customers
+     * @example mytable
      */
     public const DB_SQL_TABLE = 'db.sql.table';
 
     /**
      * The database statement being executed.
+     *
+     * @deprecated Replaced by `db.query.text`.
      *
      * @example SELECT * FROM wuser_table
      * @example SET mykey "WuValue"
@@ -833,12 +1180,16 @@ interface TraceAttributes
     public const DB_STATEMENT = 'db.statement';
 
     /**
-     * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+     * The database management system (DBMS) product as identified by the client instrumentation.
+     *
+     * The actual DBMS may differ from the one identified by the client. For example, when using PostgreSQL client libraries to connect to a CockroachDB, the `db.system` is set to `postgresql` based on the instrumentation's best knowledge.
      */
     public const DB_SYSTEM = 'db.system';
 
     /**
-     * Username for accessing the database.
+     * Deprecated, no replacement at this time.
+     *
+     * @deprecated No replacement at this time.
      *
      * @example readonly_user
      * @example reporting_user
@@ -846,20 +1197,50 @@ interface TraceAttributes
     public const DB_USER = 'db.user';
 
     /**
-     * Name of the deployment environment (aka deployment tier).
+     * 'Deprecated, use `deployment.environment.name` instead.'.
      *
-     * `deployment.environment` does not affect the uniqueness constraints defined through
-     * the `service.namespace`, `service.name` and `service.instance.id` resource attributes.
-     * This implies that resources carrying the following attribute combinations MUST be
-     * considered to be identifying the same service:<ul>
-     * <li>`service.name=frontend`, `deployment.environment=production`</li>
-     * <li>`service.name=frontend`, `deployment.environment=staging`.</li>
-     * </ul>
+     * @deprecated Deprecated, use `deployment.environment.name` instead.
      *
      * @example staging
      * @example production
      */
     public const DEPLOYMENT_ENVIRONMENT = 'deployment.environment';
+
+    /**
+     * Name of the deployment environment (aka deployment tier).
+     *
+     * `deployment.environment.name` does not affect the uniqueness constraints defined through
+     * the `service.namespace`, `service.name` and `service.instance.id` resource attributes.
+     * This implies that resources carrying the following attribute combinations MUST be
+     * considered to be identifying the same service:<ul>
+     * <li>`service.name=frontend`, `deployment.environment.name=production`</li>
+     * <li>`service.name=frontend`, `deployment.environment.name=staging`.</li>
+     * </ul>
+     *
+     * @example staging
+     * @example production
+     */
+    public const DEPLOYMENT_ENVIRONMENT_NAME = 'deployment.environment.name';
+
+    /**
+     * The id of the deployment.
+     *
+     * @example 1208
+     */
+    public const DEPLOYMENT_ID = 'deployment.id';
+
+    /**
+     * The name of the deployment.
+     *
+     * @example deploy my app
+     * @example deploy-frontend
+     */
+    public const DEPLOYMENT_NAME = 'deployment.name';
+
+    /**
+     * The status of the deployment.
+     */
+    public const DEPLOYMENT_STATUS = 'deployment.status';
 
     /**
      * Destination address - domain name if available without reverse DNS lookup; otherwise, IP address or Unix domain socket name.
@@ -937,21 +1318,27 @@ interface TraceAttributes
     public const DNS_QUESTION_NAME = 'dns.question.name';
 
     /**
-     * Username or client_id extracted from the access token or Authorization header in the inbound request from outside the system.
+     * Deprecated, use `user.id` instead.
+     *
+     * @deprecated Replaced by `user.id` attribute.
      *
      * @example username
      */
     public const ENDUSER_ID = 'enduser.id';
 
     /**
-     * Actual/assumed role the client is making the request under extracted from token or application security context.
+     * Deprecated, use `user.roles` instead.
+     *
+     * @deprecated Replaced by `user.roles` attribute.
      *
      * @example admin
      */
     public const ENDUSER_ROLE = 'enduser.role';
 
     /**
-     * Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an OAuth 2.0 Access Token or an attribute value in a SAML 2.0 Assertion.
+     * Deprecated, no replacement at this time.
+     *
+     * @deprecated Removed.
      *
      * @example read:message, write:files
      */
@@ -960,14 +1347,7 @@ interface TraceAttributes
     /**
      * Describes a class of error the operation ended with.
      *
-     * If the request fails with an error before response status code was sent or received,
-     * `error.type` SHOULD be set to exception type (its fully-qualified class name, if applicable)
-     * or a component-specific low cardinality error identifier.If response status code was sent or received and status indicates an error according to HTTP span status definition,
-     * `error.type` SHOULD be set to the status code number (represented as a string), an exception type (if thrown) or a component-specific error identifier.The `error.type` value SHOULD be predictable and SHOULD have low cardinality.
-     * Instrumentations SHOULD document the list of errors they report.The cardinality of `error.type` within one instrumentation library SHOULD be low, but
-     * telemetry consumers that aggregate data from multiple instrumentation libraries and applications
-     * should be prepared for `error.type` to have high cardinality at query time, when no
-     * additional filters are applied.If the request has completed successfully, instrumentations SHOULD NOT set `error.type`.
+     * The `error.type` SHOULD match the error code returned by the database or the client library, the canonical name of exception that occurred, or another low-cardinality error identifier. Instrumentations SHOULD document the list of errors they report.
      *
      * @example timeout
      * @example java.net.UnknownHostException
@@ -1241,6 +1621,19 @@ interface TraceAttributes
     public const FILE_SIZE = 'file.size';
 
     /**
+     * Identifies the Google Cloud service for which the official client library is intended.
+     *
+     * Intended to be a stable identifier for Google Cloud client libraries that is uniform across implementation languages. The value should be derived from the canonical service domain for the service; for example, 'foo.googleapis.com' should result in a value of 'foo'.
+     *
+     * @example appengine
+     * @example run
+     * @example firestore
+     * @example alloydb
+     * @example spanner
+     */
+    public const GCP_CLIENT_SERVICE = 'gcp.client.service';
+
+    /**
      * The name of the Cloud Run execution being run for the Job, as set by the `CLOUD_RUN_EXECUTION` environment variable.
      *
      * @example job-name-xxxx
@@ -1272,6 +1665,169 @@ interface TraceAttributes
     public const GCP_GCE_INSTANCE_NAME = 'gcp.gce.instance.name';
 
     /**
+     * The full response received from the GenAI model.
+     *
+     * It's RECOMMENDED to format completions as JSON string matching OpenAI messages format
+     *
+     * @example [{'role': 'assistant', 'content': 'The capital of France is Paris.'}]
+     */
+    public const GEN_AI_COMPLETION = 'gen_ai.completion';
+
+    /**
+     * The name of the operation being performed.
+     *
+     * If one of the predefined values applies, but specific system uses a different name it's RECOMMENDED to document it in the semantic conventions for specific GenAI system and use system-specific name in the instrumentation. If a different name is not documented, instrumentation libraries SHOULD use applicable predefined value.
+     */
+    public const GEN_AI_OPERATION_NAME = 'gen_ai.operation.name';
+
+    /**
+     * The full prompt sent to the GenAI model.
+     *
+     * It's RECOMMENDED to format prompts as JSON string matching OpenAI messages format
+     *
+     * @example [{'role': 'user', 'content': 'What is the capital of France?'}]
+     */
+    public const GEN_AI_PROMPT = 'gen_ai.prompt';
+
+    /**
+     * The frequency penalty setting for the GenAI request.
+     *
+     * @example 0.1
+     */
+    public const GEN_AI_REQUEST_FREQUENCY_PENALTY = 'gen_ai.request.frequency_penalty';
+
+    /**
+     * The maximum number of tokens the model generates for a request.
+     *
+     * @example 100
+     */
+    public const GEN_AI_REQUEST_MAX_TOKENS = 'gen_ai.request.max_tokens';
+
+    /**
+     * The name of the GenAI model a request is being made to.
+     *
+     * @example gpt-4
+     */
+    public const GEN_AI_REQUEST_MODEL = 'gen_ai.request.model';
+
+    /**
+     * The presence penalty setting for the GenAI request.
+     *
+     * @example 0.1
+     */
+    public const GEN_AI_REQUEST_PRESENCE_PENALTY = 'gen_ai.request.presence_penalty';
+
+    /**
+     * List of sequences that the model will use to stop generating further tokens.
+     *
+     * @example forest
+     * @example lived
+     */
+    public const GEN_AI_REQUEST_STOP_SEQUENCES = 'gen_ai.request.stop_sequences';
+
+    /**
+     * The temperature setting for the GenAI request.
+     *
+     */
+    public const GEN_AI_REQUEST_TEMPERATURE = 'gen_ai.request.temperature';
+
+    /**
+     * The top_k sampling setting for the GenAI request.
+     *
+     * @example 1.0
+     */
+    public const GEN_AI_REQUEST_TOP_K = 'gen_ai.request.top_k';
+
+    /**
+     * The top_p sampling setting for the GenAI request.
+     *
+     * @example 1.0
+     */
+    public const GEN_AI_REQUEST_TOP_P = 'gen_ai.request.top_p';
+
+    /**
+     * Array of reasons the model stopped generating tokens, corresponding to each generation received.
+     *
+     * @example stop
+     */
+    public const GEN_AI_RESPONSE_FINISH_REASONS = 'gen_ai.response.finish_reasons';
+
+    /**
+     * The unique identifier for the completion.
+     *
+     * @example chatcmpl-123
+     */
+    public const GEN_AI_RESPONSE_ID = 'gen_ai.response.id';
+
+    /**
+     * The name of the model that generated the response.
+     *
+     * @example gpt-4-0613
+     */
+    public const GEN_AI_RESPONSE_MODEL = 'gen_ai.response.model';
+
+    /**
+     * The Generative AI product as identified by the client or server instrumentation.
+     *
+     * The `gen_ai.system` describes a family of GenAI models with specific model identified
+     * by `gen_ai.request.model` and `gen_ai.response.model` attributes.The actual GenAI product may differ from the one identified by the client.
+     * For example, when using OpenAI client libraries to communicate with Mistral, the `gen_ai.system`
+     * is set to `openai` based on the instrumentation's best knowledge.For custom model, a custom friendly name SHOULD be used.
+     * If none of these options apply, the `gen_ai.system` SHOULD be set to `_OTHER`.
+     *
+     * @example openai
+     */
+    public const GEN_AI_SYSTEM = 'gen_ai.system';
+
+    /**
+     * The type of token being counted.
+     *
+     * @example input
+     * @example output
+     */
+    public const GEN_AI_TOKEN_TYPE = 'gen_ai.token.type';
+
+    /**
+     * Deprecated, use `gen_ai.usage.output_tokens` instead.
+     *
+     * @deprecated Replaced by `gen_ai.usage.output_tokens` attribute.
+     *
+     * @example 42
+     */
+    public const GEN_AI_USAGE_COMPLETION_TOKENS = 'gen_ai.usage.completion_tokens';
+
+    /**
+     * The number of tokens used in the GenAI input (prompt).
+     *
+     * @example 100
+     */
+    public const GEN_AI_USAGE_INPUT_TOKENS = 'gen_ai.usage.input_tokens';
+
+    /**
+     * The number of tokens used in the GenAI response (completion).
+     *
+     * @example 180
+     */
+    public const GEN_AI_USAGE_OUTPUT_TOKENS = 'gen_ai.usage.output_tokens';
+
+    /**
+     * Deprecated, use `gen_ai.usage.input_tokens` instead.
+     *
+     * @deprecated Replaced by `gen_ai.usage.input_tokens` attribute.
+     *
+     * @example 42
+     */
+    public const GEN_AI_USAGE_PROMPT_TOKENS = 'gen_ai.usage.prompt_tokens';
+
+    /**
+     * The type of memory.
+     *
+     * @example other
+     * @example stack
+     */
+    public const GO_MEMORY_TYPE = 'go.memory.type';
+
+    /**
      * The GraphQL document being executed.
      *
      * The value may be sanitized to exclude sensitive information.
@@ -1295,6 +1851,27 @@ interface TraceAttributes
      * @example subscription
      */
     public const GRAPHQL_OPERATION_TYPE = 'graphql.operation.type';
+
+    /**
+     * Unique identifier for the application.
+     *
+     * @example 2daa2797-e42b-4624-9322-ec3f968df4da
+     */
+    public const HEROKU_APP_ID = 'heroku.app.id';
+
+    /**
+     * Commit hash for the current release.
+     *
+     * @example e6134959463efd8966b20e75b913cafe3f5ec
+     */
+    public const HEROKU_RELEASE_COMMIT = 'heroku.release.commit';
+
+    /**
+     * Time and date the release was created.
+     *
+     * @example 2022-10-23T18:00:42Z
+     */
+    public const HEROKU_RELEASE_CREATION_TIMESTAMP = 'heroku.release.creation_timestamp';
 
     /**
      * The CPU architecture the host system is running on.
@@ -1412,6 +1989,15 @@ interface TraceAttributes
     public const HOST_TYPE = 'host.type';
 
     /**
+     * Deprecated, use `client.address` instead.
+     *
+     * @deprecated Replaced by `client.address`.
+     *
+     * @example 83.164.160.102
+     */
+    public const HTTP_CLIENT_IP = 'http.client_ip';
+
+    /**
      * State of the HTTP connection in the HTTP connection pool.
      *
      * @example active
@@ -1425,6 +2011,15 @@ interface TraceAttributes
      * @deprecated Replaced by `network.protocol.name`.
      */
     public const HTTP_FLAVOR = 'http.flavor';
+
+    /**
+     * Deprecated, use one of `server.address`, `client.address` or `http.request.header.host` instead, depending on the usage.
+     *
+     * @deprecated Replaced by one of `server.address`, `client.address` or `http.request.header.host`, depending on the usage.
+     *
+     * @example www.example.org
+     */
+    public const HTTP_HOST = 'http.host';
 
     /**
      * Deprecated, use `http.request.method` instead.
@@ -1497,6 +2092,15 @@ interface TraceAttributes
     public const HTTP_REQUEST_CONTENT_LENGTH = 'http.request_content_length';
 
     /**
+     * Deprecated, use `http.request.body.size` instead.
+     *
+     * @deprecated Replaced by `http.request.body.size`.
+     *
+     * @example 5493
+     */
+    public const HTTP_REQUEST_CONTENT_LENGTH_UNCOMPRESSED = 'http.request_content_length_uncompressed';
+
+    /**
      * The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the Content-Length header. For requests using transport encoding, this should be the compressed size.
      *
      * @example 3495
@@ -1527,6 +2131,15 @@ interface TraceAttributes
     public const HTTP_RESPONSE_CONTENT_LENGTH = 'http.response_content_length';
 
     /**
+     * Deprecated, use `http.response.body.size` instead.
+     *
+     * @deprecated Replace by `http.response.body.size`.
+     *
+     * @example 5493
+     */
+    public const HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED = 'http.response_content_length_uncompressed';
+
+    /**
      * The matched route, that is, the path template in the format used by the respective server framework.
      *
      * MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
@@ -1546,6 +2159,15 @@ interface TraceAttributes
      * @example https
      */
     public const HTTP_SCHEME = 'http.scheme';
+
+    /**
+     * Deprecated, use `server.address` instead.
+     *
+     * @deprecated Replaced by `server.address`.
+     *
+     * @example example.com
+     */
+    public const HTTP_SERVER_NAME = 'http.server_name';
 
     /**
      * Deprecated, use `http.response.status_code` instead.
@@ -1585,9 +2207,11 @@ interface TraceAttributes
     public const HTTP_USER_AGENT = 'http.user_agent';
 
     /**
-     * This attribute represents the state the application has transitioned into at the occurrence of the event.
+     * Deprecated use the `device.app.lifecycle` event definition including `ios.state` as a payload field instead.
      *
      * The iOS lifecycle states are defined in the UIApplicationDelegate documentation, and from which the `OS terminology` column values are derived.
+     *
+     * @deprecated Moved to a payload field of `device.app.lifecycle`.
      */
     public const IOS_STATE = 'ios.state';
 
@@ -1600,6 +2224,26 @@ interface TraceAttributes
      * @example direct
      */
     public const JVM_BUFFER_POOL_NAME = 'jvm.buffer.pool.name';
+
+    /**
+     * Name of the garbage collector action.
+     *
+     * Garbage collector action is generally obtained via GarbageCollectionNotificationInfo#getGcAction().
+     *
+     * @example end of minor GC
+     * @example end of major GC
+     */
+    public const JVM_GC_ACTION = 'jvm.gc.action';
+
+    /**
+     * Name of the garbage collector.
+     *
+     * Garbage collector name is generally obtained via GarbageCollectionNotificationInfo#getGcName().
+     *
+     * @example G1 Young Generation
+     * @example G1 Old Generation
+     */
+    public const JVM_GC_NAME = 'jvm.gc.name';
 
     /**
      * Name of the memory pool.
@@ -1619,6 +2263,19 @@ interface TraceAttributes
      * @example non_heap
      */
     public const JVM_MEMORY_TYPE = 'jvm.memory.type';
+
+    /**
+     * Whether the thread is daemon or not.
+     */
+    public const JVM_THREAD_DAEMON = 'jvm.thread.daemon';
+
+    /**
+     * State of the thread.
+     *
+     * @example runnable
+     * @example blocked
+     */
+    public const JVM_THREAD_STATE = 'jvm.thread.state';
 
     /**
      * The name of the cluster.
@@ -1661,10 +2318,16 @@ interface TraceAttributes
 
     /**
      * Number of times the container was restarted. This attribute can be used to identify a particular container (running or stopped) within a container spec.
-     *
-     * @example 2
      */
     public const K8S_CONTAINER_RESTART_COUNT = 'k8s.container.restart_count';
+
+    /**
+     * Last terminated reason of the Container.
+     *
+     * @example Evicted
+     * @example Error
+     */
+    public const K8S_CONTAINER_STATUS_LAST_TERMINATED_REASON = 'k8s.container.status.last_terminated_reason';
 
     /**
      * The name of the CronJob.
@@ -1786,6 +2449,14 @@ interface TraceAttributes
     public const K8S_STATEFULSET_UID = 'k8s.statefulset.uid';
 
     /**
+     * The Linux Slab memory state.
+     *
+     * @example reclaimable
+     * @example unreclaimable
+     */
+    public const LINUX_MEMORY_SLAB_STATE = 'linux.memory.slab.state';
+
+    /**
      * The basename of the file.
      *
      * @example audit.log
@@ -1819,6 +2490,16 @@ interface TraceAttributes
     public const LOG_IOSTREAM = 'log.iostream';
 
     /**
+     * The complete orignal Log Record.
+     *
+     * This value MAY be added when processing a Log Record which was originally transmitted as a string or equivalent data type AND the Body field of the Log Record does not contain the same value. (e.g. a syslog or a log record read from a file.)
+     *
+     * @example 77 <86>1 2015-08-06T21:58:59.694Z 192.168.2.133 inactive - - - Something happened
+     * @example [INFO] 8/3/24 12:34:56 Something happened
+     */
+    public const LOG_RECORD_ORIGINAL = 'log.record.original';
+
+    /**
      * A unique identifier for the Log Record.
      *
      * If an id is provided, other log records with the same id will be considered duplicates and can be removed safely. This means, that two distinguishable log records MUST have different values.
@@ -1829,24 +2510,30 @@ interface TraceAttributes
     public const LOG_RECORD_UID = 'log.record.uid';
 
     /**
-     * Compressed size of the message in bytes.
+     * Deprecated, use `rpc.message.compressed_size` instead.
+     *
+     * @deprecated Replaced by `rpc.message.compressed_size`.
      */
     public const MESSAGE_COMPRESSED_SIZE = 'message.compressed_size';
 
     /**
-     * MUST be calculated as two different counters starting from `1` one for sent messages and one for received message.
+     * Deprecated, use `rpc.message.id` instead.
      *
-     * This way we guarantee that the values will be consistent between different implementations.
+     * @deprecated Replaced by `rpc.message.id`.
      */
     public const MESSAGE_ID = 'message.id';
 
     /**
-     * Whether this is a received or sent message.
+     * Deprecated, use `rpc.message.type` instead.
+     *
+     * @deprecated Replaced by `rpc.message.type`.
      */
     public const MESSAGE_TYPE = 'message.type';
 
     /**
-     * Uncompressed size of the message in bytes.
+     * Deprecated, use `rpc.message.uncompressed_size` instead.
+     *
+     * @deprecated Replaced by `rpc.message.uncompressed_size`.
      */
     public const MESSAGE_UNCOMPRESSED_SIZE = 'message.uncompressed_size';
 
@@ -1866,7 +2553,17 @@ interface TraceAttributes
      * @example client-5
      * @example myhost@8742@s8083jm
      */
-    public const MESSAGING_CLIENT_ID = 'messaging.client_id';
+    public const MESSAGING_CLIENT_ID = 'messaging.client.id';
+
+    /**
+     * The name of the consumer group with which a consumer is associated.
+     *
+     * Semantic conventions for individual messaging systems SHOULD document whether `messaging.consumer.group.name` is applicable and what it means in the context of that system.
+     *
+     * @example my-group
+     * @example indexer
+     */
+    public const MESSAGING_CONSUMER_GROUP_NAME = 'messaging.consumer.group.name';
 
     /**
      * A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name).
@@ -1892,6 +2589,15 @@ interface TraceAttributes
     public const MESSAGING_DESTINATION_PARTITION_ID = 'messaging.destination.partition.id';
 
     /**
+     * The name of the destination subscription from which a message is consumed.
+     *
+     * Semantic conventions for individual messaging systems SHOULD document whether `messaging.destination.subscription.name` is applicable and what it means in the context of that system.
+     *
+     * @example subscription-a
+     */
+    public const MESSAGING_DESTINATION_SUBSCRIPTION_NAME = 'messaging.destination.subscription.name';
+
+    /**
      * Low cardinality representation of the messaging destination name.
      *
      * Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
@@ -1906,15 +2612,16 @@ interface TraceAttributes
     public const MESSAGING_DESTINATION_TEMPORARY = 'messaging.destination.temporary';
 
     /**
-     * A boolean that is true if the publish message destination is anonymous (could be unnamed or have auto-generated name).
+     * Deprecated, no replacement at this time.
+     *
+     * @deprecated No replacement at this time.
      */
     public const MESSAGING_DESTINATION_PUBLISH_ANONYMOUS = 'messaging.destination_publish.anonymous';
 
     /**
-     * The name of the original destination the message was published to.
+     * Deprecated, no replacement at this time.
      *
-     * The name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
-     * the broker doesn't have such notion, the original destination name SHOULD uniquely identify the broker.
+     * @deprecated No replacement at this time.
      *
      * @example MyQueue
      * @example MyTopic
@@ -1922,9 +2629,11 @@ interface TraceAttributes
     public const MESSAGING_DESTINATION_PUBLISH_NAME = 'messaging.destination_publish.name';
 
     /**
-     * The name of the consumer group the event consumer is associated with.
+     * Deprecated, use `messaging.consumer.group.name` instead.
      *
-     * @example indexer
+     * @deprecated Replaced by `messaging.consumer.group.name`.
+     *
+     * @example $Default
      */
     public const MESSAGING_EVENTHUBS_CONSUMER_GROUP = 'messaging.eventhubs.consumer.group';
 
@@ -1936,6 +2645,27 @@ interface TraceAttributes
     public const MESSAGING_EVENTHUBS_MESSAGE_ENQUEUED_TIME = 'messaging.eventhubs.message.enqueued_time';
 
     /**
+     * The ack deadline in seconds set for the modify ack deadline request.
+     *
+     * @example 10
+     */
+    public const MESSAGING_GCP_PUBSUB_MESSAGE_ACK_DEADLINE = 'messaging.gcp_pubsub.message.ack_deadline';
+
+    /**
+     * The ack id for a given message.
+     *
+     * @example ack_id
+     */
+    public const MESSAGING_GCP_PUBSUB_MESSAGE_ACK_ID = 'messaging.gcp_pubsub.message.ack_id';
+
+    /**
+     * The delivery attempt for a given message.
+     *
+     * @example 2
+     */
+    public const MESSAGING_GCP_PUBSUB_MESSAGE_DELIVERY_ATTEMPT = 'messaging.gcp_pubsub.message.delivery_attempt';
+
+    /**
      * The ordering key for a given message. If the attribute is not present, the message does not have an ordering key.
      *
      * @example ordering_key
@@ -1943,14 +2673,16 @@ interface TraceAttributes
     public const MESSAGING_GCP_PUBSUB_MESSAGE_ORDERING_KEY = 'messaging.gcp_pubsub.message.ordering_key';
 
     /**
-     * Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers.
+     * Deprecated, use `messaging.consumer.group.name` instead.
+     *
+     * @deprecated Replaced by `messaging.consumer.group.name`.
      *
      * @example my-group
      */
     public const MESSAGING_KAFKA_CONSUMER_GROUP = 'messaging.kafka.consumer.group';
 
     /**
-     * &quot;Deprecated, use `messaging.destination.partition.id` instead.&quot;.
+     * Deprecated, use `messaging.destination.partition.id` instead.
      *
      * @deprecated Replaced by `messaging.destination.partition.id`.
      *
@@ -1968,7 +2700,9 @@ interface TraceAttributes
     public const MESSAGING_KAFKA_MESSAGE_KEY = 'messaging.kafka.message.key';
 
     /**
-     * The offset of a record in the corresponding Kafka partition.
+     * Deprecated, use `messaging.kafka.offset` instead.
+     *
+     * @deprecated Replaced by `messaging.kafka.offset`.
      *
      * @example 42
      */
@@ -1978,6 +2712,13 @@ interface TraceAttributes
      * A boolean that is true if the message is a tombstone.
      */
     public const MESSAGING_KAFKA_MESSAGE_TOMBSTONE = 'messaging.kafka.message.tombstone';
+
+    /**
+     * The offset of a record in the corresponding Kafka partition.
+     *
+     * @example 42
+     */
+    public const MESSAGING_KAFKA_OFFSET = 'messaging.kafka.offset';
 
     /**
      * The size of the message body in bytes.
@@ -2014,11 +2755,31 @@ interface TraceAttributes
     public const MESSAGING_MESSAGE_ID = 'messaging.message.id';
 
     /**
-     * A string identifying the kind of messaging operation.
+     * Deprecated, use `messaging.operation.type` instead.
+     *
+     * @deprecated Replaced by `messaging.operation.type`.
+     *
+     * @example publish
+     * @example create
+     * @example process
+     */
+    public const MESSAGING_OPERATION = 'messaging.operation';
+
+    /**
+     * The system-specific name of the messaging operation.
+     *
+     * @example ack
+     * @example nack
+     * @example send
+     */
+    public const MESSAGING_OPERATION_NAME = 'messaging.operation.name';
+
+    /**
+     * A string identifying the type of the messaging operation.
      *
      * If a custom value is used, it MUST be of low cardinality.
      */
-    public const MESSAGING_OPERATION = 'messaging.operation';
+    public const MESSAGING_OPERATION_TYPE = 'messaging.operation.type';
 
     /**
      * RabbitMQ message routing key.
@@ -2035,7 +2796,9 @@ interface TraceAttributes
     public const MESSAGING_RABBITMQ_MESSAGE_DELIVERY_TAG = 'messaging.rabbitmq.message.delivery_tag';
 
     /**
-     * Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind.
+     * Deprecated, use `messaging.consumer.group.name` instead.
+     *
+     * @deprecated Replaced by `messaging.consumer.group.name` on the consumer spans. No replacement for producer spans.
      *
      * @example myConsumerGroup
      */
@@ -2095,9 +2858,11 @@ interface TraceAttributes
     public const MESSAGING_ROCKETMQ_NAMESPACE = 'messaging.rocketmq.namespace';
 
     /**
-     * The name of the subscription in the topic messages are received from.
+     * Deprecated, use `messaging.servicebus.destination.subscription_name` instead.
      *
-     * @example mySubscription
+     * @deprecated Replaced by `messaging.servicebus.destination.subscription_name`.
+     *
+     * @example subscription-a
      */
     public const MESSAGING_SERVICEBUS_DESTINATION_SUBSCRIPTION_NAME = 'messaging.servicebus.destination.subscription_name';
 
@@ -2121,9 +2886,20 @@ interface TraceAttributes
     public const MESSAGING_SERVICEBUS_MESSAGE_ENQUEUED_TIME = 'messaging.servicebus.message.enqueued_time';
 
     /**
-     * An identifier for the messaging system being used. See below for a list of well-known identifiers.
+     * The messaging system as identified by the client instrumentation.
+     *
+     * The actual messaging system may differ from the one known by the client. For example, when using Kafka client libraries to communicate with Azure Event Hubs, the `messaging.system` is set to `kafka` based on the instrumentation's best knowledge.
      */
     public const MESSAGING_SYSTEM = 'messaging.system';
+
+    /**
+     * Deprecated, use `network.local.address`.
+     *
+     * @deprecated Replaced by `network.local.address`.
+     *
+     * @example 192.168.0.1
+     */
+    public const NET_HOST_IP = 'net.host.ip';
 
     /**
      * Deprecated, use `server.address`.
@@ -2142,6 +2918,15 @@ interface TraceAttributes
      * @example 8080
      */
     public const NET_HOST_PORT = 'net.host.port';
+
+    /**
+     * Deprecated, use `network.peer.address`.
+     *
+     * @deprecated Replaced by `network.peer.address`.
+     *
+     * @example 127.0.0.1
+     */
+    public const NET_PEER_IP = 'net.peer.ip';
 
     /**
      * Deprecated, use `server.address` on client spans and `client.address` on server spans.
@@ -2420,6 +3205,38 @@ interface TraceAttributes
     public const OS_VERSION = 'os.version';
 
     /**
+     * .
+     *
+     * @deprecated use the `otel.scope.name` attribute.
+     *
+     * @example io.opentelemetry.contrib.mongodb
+     */
+    public const OTEL_LIBRARY_NAME = 'otel.library.name';
+
+    /**
+     * .
+     *
+     * @deprecated use the `otel.scope.version` attribute.
+     *
+     * @example 1.0.0
+     */
+    public const OTEL_LIBRARY_VERSION = 'otel.library.version';
+
+    /**
+     * The name of the instrumentation scope - (`InstrumentationScope.Name` in OTLP).
+     *
+     * @example io.opentelemetry.contrib.mongodb
+     */
+    public const OTEL_SCOPE_NAME = 'otel.scope.name';
+
+    /**
+     * The version of the instrumentation scope - (`InstrumentationScope.Version` in OTLP).
+     *
+     * @example 1.0.0
+     */
+    public const OTEL_SCOPE_VERSION = 'otel.scope.version';
+
+    /**
      * Name of the code, either &quot;OK&quot; or &quot;ERROR&quot;. MUST NOT be set if the status code is UNSET.
      */
     public const OTEL_STATUS_CODE = 'otel.status_code';
@@ -2439,7 +3256,9 @@ interface TraceAttributes
     public const PEER_SERVICE = 'peer.service';
 
     /**
-     * The name of the connection pool; unique within the instrumented application. In case the connection pool implementation doesn't provide a name, instrumentation should use a combination of `server.address` and `server.port` attributes formatted as `server.address:server.port`.
+     * Deprecated, use `db.client.connection.pool.name` instead.
+     *
+     * @deprecated Replaced by `db.client.connection.pool.name`.
      *
      * @example myDataSource
      */
@@ -2468,9 +3287,23 @@ interface TraceAttributes
     public const PROCESS_COMMAND_LINE = 'process.command_line';
 
     /**
-     * The CPU state for this data point. A process SHOULD be characterized <em>either</em> by data points with no `state` labels, <em>or only</em> data points with `state` labels.
+     * Specifies whether the context switches for this data point were voluntary or involuntary.
+     */
+    public const PROCESS_CONTEXT_SWITCH_TYPE = 'process.context_switch_type';
+
+    /**
+     * Deprecated, use `cpu.mode` instead.
+     *
+     * @deprecated Replaced by `cpu.mode`.
      */
     public const PROCESS_CPU_STATE = 'process.cpu.state';
+
+    /**
+     * The date and time the process was created, in ISO 8601 format.
+     *
+     * @example 2023-11-21T09:25:34.853Z
+     */
+    public const PROCESS_CREATION_TIME = 'process.creation.time';
 
     /**
      * The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`.
@@ -2487,11 +3320,42 @@ interface TraceAttributes
     public const PROCESS_EXECUTABLE_PATH = 'process.executable.path';
 
     /**
+     * The exit code of the process.
+     *
+     * @example 127
+     */
+    public const PROCESS_EXIT_CODE = 'process.exit.code';
+
+    /**
+     * The date and time the process exited, in ISO 8601 format.
+     *
+     * @example 2023-11-21T09:26:12.315Z
+     */
+    public const PROCESS_EXIT_TIME = 'process.exit.time';
+
+    /**
+     * The PID of the process's group leader. This is also the process group ID (PGID) of the process.
+     *
+     * @example 23
+     */
+    public const PROCESS_GROUP_LEADER_PID = 'process.group_leader.pid';
+
+    /**
+     * Whether the process is connected to an interactive shell.
+     */
+    public const PROCESS_INTERACTIVE = 'process.interactive';
+
+    /**
      * The username of the user that owns the process.
      *
      * @example root
      */
     public const PROCESS_OWNER = 'process.owner';
+
+    /**
+     * The type of page fault for this data point. Type `major` is for major/hard page faults, and `minor` is for minor/soft page faults.
+     */
+    public const PROCESS_PAGING_FAULT_TYPE = 'process.paging.fault_type';
 
     /**
      * Parent Process identifier (PPID).
@@ -2508,6 +3372,20 @@ interface TraceAttributes
     public const PROCESS_PID = 'process.pid';
 
     /**
+     * The real user ID (RUID) of the process.
+     *
+     * @example 1000
+     */
+    public const PROCESS_REAL_USER_ID = 'process.real_user.id';
+
+    /**
+     * The username of the real user of the process.
+     *
+     * @example operator
+     */
+    public const PROCESS_REAL_USER_NAME = 'process.real_user.name';
+
+    /**
      * An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment.
      *
      * @example Eclipse OpenJ9 Eclipse OpenJ9 VM openj9-0.21.0
@@ -2515,7 +3393,7 @@ interface TraceAttributes
     public const PROCESS_RUNTIME_DESCRIPTION = 'process.runtime.description';
 
     /**
-     * The name of the runtime of this process. For compiled native binaries, this SHOULD be the name of the compiler.
+     * The name of the runtime of this process.
      *
      * @example OpenJDK Runtime Environment
      */
@@ -2527,6 +3405,50 @@ interface TraceAttributes
      * @example 14.0.2
      */
     public const PROCESS_RUNTIME_VERSION = 'process.runtime.version';
+
+    /**
+     * The saved user ID (SUID) of the process.
+     *
+     * @example 1002
+     */
+    public const PROCESS_SAVED_USER_ID = 'process.saved_user.id';
+
+    /**
+     * The username of the saved user.
+     *
+     * @example operator
+     */
+    public const PROCESS_SAVED_USER_NAME = 'process.saved_user.name';
+
+    /**
+     * The PID of the process's session leader. This is also the session ID (SID) of the process.
+     *
+     * @example 14
+     */
+    public const PROCESS_SESSION_LEADER_PID = 'process.session_leader.pid';
+
+    /**
+     * The effective user ID (EUID) of the process.
+     *
+     * @example 1001
+     */
+    public const PROCESS_USER_ID = 'process.user.id';
+
+    /**
+     * The username of the effective user of the process.
+     *
+     * @example root
+     */
+    public const PROCESS_USER_NAME = 'process.user.name';
+
+    /**
+     * Virtual process identifier.
+     *
+     * The process ID within a PID namespace. This is not necessarily unique across all processes on the host but it is unique within the process namespace that the process exists within.
+     *
+     * @example 12
+     */
+    public const PROCESS_VPID = 'process.vpid';
 
     /**
      * The error codes of the Connect request. Error codes are always string values.
@@ -2571,6 +3493,28 @@ interface TraceAttributes
     public const RPC_JSONRPC_VERSION = 'rpc.jsonrpc.version';
 
     /**
+     * Compressed size of the message in bytes.
+     */
+    public const RPC_MESSAGE_COMPRESSED_SIZE = 'rpc.message.compressed_size';
+
+    /**
+     * MUST be calculated as two different counters starting from `1` one for sent messages and one for received message.
+     *
+     * This way we guarantee that the values will be consistent between different implementations.
+     */
+    public const RPC_MESSAGE_ID = 'rpc.message.id';
+
+    /**
+     * Whether this is a received or sent message.
+     */
+    public const RPC_MESSAGE_TYPE = 'rpc.message.type';
+
+    /**
+     * Uncompressed size of the message in bytes.
+     */
+    public const RPC_MESSAGE_UNCOMPRESSED_SIZE = 'rpc.message.uncompressed_size';
+
+    /**
      * The name of the (logical) method being called, must be equal to the $method part in the span name.
      *
      * This is the logical name of the method from the RPC interface perspective, which can be different from the name of any implementing method/function. The `code.function` attribute may be used to store the latter (e.g., method actually executing the call on the server side, RPC client stub method on the client side).
@@ -2594,7 +3538,7 @@ interface TraceAttributes
     public const RPC_SYSTEM = 'rpc.system';
 
     /**
-     * Server domain name if available without reverse DNS lookup; otherwise, IP address or Unix domain socket name.
+     * Name of the database host.
      *
      * When observed from the client side, and when communicating through an intermediary, `server.address` SHOULD represent the server address behind any intermediaries, for example proxies, if it's available.
      *
@@ -2717,7 +3661,9 @@ interface TraceAttributes
     public const SOURCE_PORT = 'source.port';
 
     /**
-     * The state of a connection in the pool.
+     * Deprecated, use `db.client.connection.state` instead.
+     *
+     * @deprecated Replaced by `db.client.connection.state`.
      *
      * @example idle
      */
@@ -2731,7 +3677,9 @@ interface TraceAttributes
     public const SYSTEM_CPU_LOGICAL_NUMBER = 'system.cpu.logical_number';
 
     /**
-     * The CPU state for this data point. A system's CPU SHOULD be characterized <em>either</em> by data points with no `state` labels, <em>or only</em> data points with `state` labels.
+     * Deprecated, use `cpu.mode` instead.
+     *
+     * @deprecated Replaced by `cpu.mode`.
      *
      * @example idle
      * @example interrupt
@@ -2869,6 +3817,42 @@ interface TraceAttributes
     public const TELEMETRY_SDK_VERSION = 'telemetry.sdk.version';
 
     /**
+     * The fully qualified human readable name of the test case.
+     *
+     * @example org.example.TestCase1.test1
+     * @example example/tests/TestCase1.test1
+     * @example ExampleTestCase1_test1
+     */
+    public const TEST_CASE_NAME = 'test.case.name';
+
+    /**
+     * The status of the actual test case result from test execution.
+     *
+     * @example pass
+     * @example fail
+     */
+    public const TEST_CASE_RESULT_STATUS = 'test.case.result.status';
+
+    /**
+     * The human readable name of a test suite.
+     *
+     * @example TestSuite1
+     */
+    public const TEST_SUITE_NAME = 'test.suite.name';
+
+    /**
+     * The status of the test suite run.
+     *
+     * @example success
+     * @example failure
+     * @example skipped
+     * @example aborted
+     * @example timed_out
+     * @example in_progress
+     */
+    public const TEST_SUITE_RUN_STATUS = 'test.suite.run.status';
+
+    /**
      * Current &quot;managed&quot; thread ID (as opposed to OS thread ID).
      *
      * @example 42
@@ -2957,7 +3941,9 @@ interface TraceAttributes
     public const TLS_CLIENT_NOT_BEFORE = 'tls.client.not_before';
 
     /**
-     * Also called an SNI, this tells the server which hostname to which the client is attempting to connect to.
+     * Deprecated, use `server.address` instead.
+     *
+     * @deprecated Replaced by `server.address.
      *
      * @example opentelemetry.io
      */
@@ -2973,7 +3959,9 @@ interface TraceAttributes
     /**
      * Array of ciphers offered by the client during the client hello.
      *
-     * @example "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", "..."
+     * @example TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+     * @example TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+     * @example ...
      */
     public const TLS_CLIENT_SUPPORTED_CIPHERS = 'tls.client.supported_ciphers';
 
@@ -3195,6 +4183,17 @@ interface TraceAttributes
     public const URL_SUBDOMAIN = 'url.subdomain';
 
     /**
+     * The low-cardinality template of an absolute path reference.
+     *
+     * The `url.template` MUST have low cardinality. It is not usually available on HTTP clients, but may be known by the application or specialized HTTP instrumentation.
+     *
+     * @example /users/{id}
+     * @example /users/:id
+     * @example /users?id={id}
+     */
+    public const URL_TEMPLATE = 'url.template';
+
+    /**
      * The effective top level domain (eTLD), also known as the domain suffix, is the last part of the domain name. For example, the top level domain for example.com is `com`.
      *
      * This value can be determined precisely with the public suffix list.
@@ -3203,6 +4202,51 @@ interface TraceAttributes
      * @example co.uk
      */
     public const URL_TOP_LEVEL_DOMAIN = 'url.top_level_domain';
+
+    /**
+     * User email address.
+     *
+     * @example a.einstein@example.com
+     */
+    public const USER_EMAIL = 'user.email';
+
+    /**
+     * User's full name.
+     *
+     * @example Albert Einstein
+     */
+    public const USER_FULL_NAME = 'user.full_name';
+
+    /**
+     * Unique user hash to correlate information for a user in anonymized form.
+     *
+     * Useful if `user.id` or `user.name` contain confidential information and cannot be used.
+     *
+     * @example 364fc68eaf4c8acec74a4e52d7d1feaa
+     */
+    public const USER_HASH = 'user.hash';
+
+    /**
+     * Unique identifier of the user.
+     *
+     * @example S-1-5-21-202424912787-2692429404-2351956786-1000
+     */
+    public const USER_ID = 'user.id';
+
+    /**
+     * Short name or login/username of the user.
+     *
+     * @example a.einstein
+     */
+    public const USER_NAME = 'user.name';
+
+    /**
+     * Array of user roles at the time of the event.
+     *
+     * @example admin
+     * @example reporting_user
+     */
+    public const USER_ROLES = 'user.roles';
 
     /**
      * Name of the user-agent extracted from original. Usually refers to the browser's name.
@@ -3234,6 +4278,99 @@ interface TraceAttributes
     public const USER_AGENT_VERSION = 'user_agent.version';
 
     /**
+     * The type of garbage collection.
+     */
+    public const V8JS_GC_TYPE = 'v8js.gc.type';
+
+    /**
+     * The name of the space type of heap memory.
+     *
+     * Value can be retrieved from value `space_name` of `v8.getHeapSpaceStatistics()`
+     */
+    public const V8JS_HEAP_SPACE_NAME = 'v8js.heap.space.name';
+
+    /**
+     * The ID of the change (pull request/merge request) if applicable. This is usually a unique (within repository) identifier generated by the VCS system.
+     *
+     * @example 123
+     */
+    public const VCS_REPOSITORY_CHANGE_ID = 'vcs.repository.change.id';
+
+    /**
+     * The human readable title of the change (pull request/merge request). This title is often a brief summary of the change and may get merged in to a ref as the commit summary.
+     *
+     * @example Fixes broken thing
+     * @example feat: add my new feature
+     * @example [chore] update dependency
+     */
+    public const VCS_REPOSITORY_CHANGE_TITLE = 'vcs.repository.change.title';
+
+    /**
+     * The name of the reference such as <strong>branch</strong> or <strong>tag</strong> in the repository.
+     *
+     * @example my-feature-branch
+     * @example tag-1-test
+     */
+    public const VCS_REPOSITORY_REF_NAME = 'vcs.repository.ref.name';
+
+    /**
+     * The revision, literally revised version, The revision most often refers to a commit object in Git, or a revision number in SVN.
+     *
+     * The revision can be a full hash value (see glossary),
+     * of the recorded change to a ref within a repository pointing to a
+     * commit commit object. It does
+     * not necessarily have to be a hash; it can simply define a
+     * revision number
+     * which is an integer that is monotonically increasing. In cases where
+     * it is identical to the `ref.name`, it SHOULD still be included. It is
+     * up to the implementer to decide which value to set as the revision
+     * based on the VCS system and situational context.
+     *
+     * @example 9d59409acf479dfa0df1aa568182e43e43df8bbe28d60fcf2bc52e30068802cc
+     * @example main
+     * @example 123
+     * @example HEAD
+     */
+    public const VCS_REPOSITORY_REF_REVISION = 'vcs.repository.ref.revision';
+
+    /**
+     * The type of the reference in the repository.
+     *
+     * @example branch
+     * @example tag
+     */
+    public const VCS_REPOSITORY_REF_TYPE = 'vcs.repository.ref.type';
+
+    /**
+     * The URL of the repository providing the complete address in order to locate and identify the repository.
+     *
+     * @example https://github.com/opentelemetry/open-telemetry-collector-contrib
+     * @example https://gitlab.com/my-org/my-project/my-projects-project/repo
+     */
+    public const VCS_REPOSITORY_URL_FULL = 'vcs.repository.url.full';
+
+    /**
+     * Additional description of the web engine (e.g. detailed version and edition information).
+     *
+     * @example WildFly Full 21.0.0.Final (WildFly Core 13.0.1.Final) - 2.2.2.Final
+     */
+    public const WEBENGINE_DESCRIPTION = 'webengine.description';
+
+    /**
+     * The name of the web engine.
+     *
+     * @example WildFly
+     */
+    public const WEBENGINE_NAME = 'webengine.name';
+
+    /**
+     * The version of the web engine.
+     *
+     * @example 21.0.0
+     */
+    public const WEBENGINE_VERSION = 'webengine.version';
+
+    /**
      * @deprecated
      */
     public const FAAS_EXECUTION = 'faas.execution';
@@ -3241,27 +4378,7 @@ interface TraceAttributes
     /**
      * @deprecated
      */
-    public const HTTP_HOST = 'http.host';
-
-    /**
-     * @deprecated
-     */
-    public const HTTP_REQUEST_CONTENT_LENGTH_UNCOMPRESSED = 'http.request_content_length_uncompressed';
-
-    /**
-     * @deprecated
-     */
-    public const HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED = 'http.response_content_length_uncompressed';
-
-    /**
-     * @deprecated
-     */
     public const HTTP_RETRY_COUNT = 'http.retry_count';
-
-    /**
-     * @deprecated
-     */
-    public const HTTP_SERVER_NAME = 'http.server_name';
 
     /**
      * @deprecated
@@ -3307,21 +4424,6 @@ interface TraceAttributes
      * @deprecated
      */
     public const MESSAGING_URL = 'messaging.url';
-
-    /**
-     * @deprecated
-     */
-    public const NET_HOST_IP = 'net.host.ip';
-
-    /**
-     * @deprecated
-     */
-    public const NET_PEER_IP = 'net.peer.ip';
-
-    /**
-     * @deprecated
-     */
-    public const HTTP_CLIENT_IP = 'http.client_ip';
 
     /**
      * @deprecated

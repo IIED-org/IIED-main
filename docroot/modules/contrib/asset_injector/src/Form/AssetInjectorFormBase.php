@@ -2,19 +2,23 @@
 
 namespace Drupal\asset_injector\Form;
 
-use Psr\Log\LoggerInterface;
 use Drupal\Core\Entity\EntityForm;
-use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Form\SubformState;
-use Drupal\Core\Plugin\PluginFormFactoryInterface;
 use Drupal\Core\Executable\ExecutableManagerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\SubformState;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\Context\ContextRepositoryInterface;
+use Drupal\Core\Plugin\PluginFormFactoryInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class AssetInjectorCsssForm.
+ * Provides a form for duplicating JavaScript asset injector configurations.
+ *
+ * This form is used to create a duplicate of an existing JavaScript asset
+ * injector configuration. The duplicated configuration will have the same
+ * settings as the original but with a new label.
  *
  * @package Drupal\asset_injector\Form
  */
@@ -151,6 +155,12 @@ class AssetInjectorFormBase extends EntityForm {
       '#disabled' => !$entity->isNew(),
     ];
 
+    $form['status'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enabled'),
+      '#default_value' => $this->entity->status(),
+    ];
+
     $form['code'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Code'),
@@ -216,7 +226,7 @@ class AssetInjectorFormBase extends EntityForm {
         continue;
       }
 
-      $condition_config = isset($conditions[$condition_id]) ? $conditions[$condition_id] : [];
+      $condition_config = $conditions[$condition_id] ?? [];
       /** @var \Drupal\Core\Condition\ConditionInterface $condition */
       $condition = $this->manager->createInstance($condition_id, $condition_config);
       $form_state->set(['conditions', $condition_id], $condition);
@@ -324,6 +334,19 @@ class AssetInjectorFormBase extends EntityForm {
 
       $condition->validateConfigurationForm($form['conditions'][$condition_id], SubformState::createForSubform($form['conditions'][$condition_id], $form, $form_state));
     }
+
+    // Check for unexpected leading and/or trailing tags in the code field.
+    $rejectedTags = ['script', 'style'];
+    $codeValue = trim($form_state->getValue('code'));
+
+    // In this case we cannot simply call contains() for the check,
+    // as some JS code may have these tags inside of strings, which
+    // should not be removed.
+    foreach ($rejectedTags as $rejectedTag) {
+      if (str_starts_with($codeValue, '<' . $rejectedTag . '>') || str_ends_with($codeValue, '</' . $rejectedTag . '>')) {
+        $form_state->setErrorByName('code', $this->t('There must be no leading or trailing @tag_name tags.', ['@tag_name' => '<' . $rejectedTag . '>']));
+      }
+    }
   }
 
   /**
@@ -383,6 +406,7 @@ class AssetInjectorFormBase extends EntityForm {
     else {
       $form_state->setRedirectUrl($entity->toUrl());
     }
+    return $status;
   }
 
 }

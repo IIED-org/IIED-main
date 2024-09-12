@@ -49,10 +49,25 @@ include:
 # Docs at https://git.drupalcode.org/project/gitlab_templates/-/blob/1.0.x/includes/include.drupalci.variables.yml
 ################
 variables:
+  KUBERNETES_CPU_REQUEST: "5"
+  _CONCURRENCY_THREADS: 20
   _PHPUNIT_CONCURRENT: '1'
   OPT_IN_TEST_PREVIOUS_MINOR: 1
-  OPT_IN_TEST_NEXT_MINOR: 1
-  OPT_IN_TEST_MAX_PHP: 1
+
+# Previous minor defaults to the last security release, currently 10.2.2.
+# Override that to 10.2.7 to avoid MigrateSourceTestBase::providerSource()
+# related errors.
+composer (previous minor):
+  variables:
+    DRUPAL_CORE: 10.2.7
+
+composer (next major):
+  variables:
+    _LENIENT_ALLOW_LIST: "inline_entity_form"
+
+phpunit (next major):
+  before_script:
+    - 'sed -i "s/core_version_requirement.*/core_version_requirement: \^11/" web/modules/contrib/**/*.info.yml'
 
 ###################################################################################
 #

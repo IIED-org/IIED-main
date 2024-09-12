@@ -40,6 +40,13 @@ class WidgetTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   public function setUp(): void {
+
+    // BC for 10.2 and earlier, block_content.type revision schema changed from
+    // integer to boolean.
+    if (version_compare(\Drupal::VERSION, '10.3.0', '<')) {
+      $this->strictConfigSchema = FALSE;
+    }
+
     parent::setUp();
 
     $this->drupalLogin($this->drupalCreateUser([

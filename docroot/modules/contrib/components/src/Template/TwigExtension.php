@@ -17,7 +17,7 @@ class TwigExtension extends AbstractExtension {
    */
   public function getFunctions(): array {
     return [
-      new TwigFunction('template', [$this, 'template'], ['is_variadic' => TRUE]),
+      new TwigFunction('template', $this->template(...), ['is_variadic' => TRUE]),
     ];
   }
 
@@ -124,7 +124,7 @@ class TwigExtension extends AbstractExtension {
    *   When $element is not an array or "Traversable".
    */
   public static function recursiveMergeFilter($element, $array): array {
-    if (!twig_test_iterable($element)) {
+    if (!is_iterable($element)) {
       throw new RuntimeError(sprintf('The recursive_merge filter only works on arrays or "Traversable" objects, got "%s".', gettype($element)));
     }
 
@@ -160,7 +160,7 @@ class TwigExtension extends AbstractExtension {
    *   When $element is not an array or "Traversable".
    */
   public static function setFilter($element, string $at, $value) {
-    if (!twig_test_iterable($element)) {
+    if (!is_iterable($element)) {
       throw new RuntimeError(sprintf('The "set" filter only works on arrays or "Traversable" objects, got "%s".', gettype($element)));
     }
 
@@ -202,7 +202,7 @@ class TwigExtension extends AbstractExtension {
    *   When $element is not an array or "Traversable".
    */
   public static function addFilter($element, string $at, $value = NULL, $values = NULL) {
-    if (!twig_test_iterable($element)) {
+    if (!is_iterable($element)) {
       throw new RuntimeError(sprintf('The "add" filter only works on arrays or "Traversable" objects, got "%s".', gettype($element)));
     }
 

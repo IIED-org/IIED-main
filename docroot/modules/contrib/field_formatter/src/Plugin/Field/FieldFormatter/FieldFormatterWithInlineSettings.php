@@ -2,9 +2,11 @@
 
 namespace Drupal\field_formatter\Plugin\Field\FieldFormatter;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -14,8 +16,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Component\Utility\NestedArray;
 
 /**
  * Plugin implementation of the 'link' formatter.
@@ -167,11 +167,12 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    *
-   * @return array
+   * @return array|null
    *   The replaced form substructure.
    */
   public static function onFieldNameChange(array $form, FormStateInterface $form_state) {
     $triggeringElement = $form_state->getTriggeringElement();
+    $formSubstructure = NULL;
     // Dynamically return the dependent ajax for elements based on the
     // triggering element. This shouldn't be done statically because
     // settings forms may be different, e.g. for layout builder, core, ...
@@ -179,9 +180,10 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
       $subformKeys = $triggeringElement['#array_parents'];
       // Remove the triggering element itself:
       array_pop($subformKeys);
-      // Return the subform:
-      return NestedArray::getValue($form, $subformKeys);
+      $formSubstructure = NestedArray::getValue($form, $subformKeys);
     }
+    // Return the subform:
+    return $formSubstructure;
   }
 
   /**
@@ -192,11 +194,12 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    *
-   * @return array
+   * @return array|null
    *   The replaced form substructure.
    */
   public static function onFormatterTypeChange(array $form, FormStateInterface $form_state) {
     $triggeringElement = $form_state->getTriggeringElement();
+    $formSubstructure = NULL;
     // Dynamically return the dependent ajax for elements based on the
     // triggering element. This shouldn't be done statically because
     // settings forms may be different, e.g. for layout builder, core, ...
@@ -205,9 +208,10 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
       // Remove the triggering element itself and add the 'settings' below key.
       array_pop($subformKeys);
       $subformKeys[] = 'settings';
-      // Return the subform:
-      return NestedArray::getValue($form, $subformKeys);
+      $formSubstructure = NestedArray::getValue($form, $subformKeys);
     }
+    // Return the subform:
+    return $formSubstructure;
   }
 
   /**
@@ -225,7 +229,7 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
       $formatter_options = $this->getAvailableFormatterOptions($field_storage);
     }
 
-    $form['#prefix'] = '<div id="field-formatter-ajax">'. ($form['#prefix'] ?? '');
+    $form['#prefix'] = '<div id="field-formatter-ajax">' . ($form['#prefix'] ?? '');
     $form['#suffix'] = ($form['#suffix'] ?? '') . '</div>';
     $form['field_name'] = [
       '#type' => 'select',
@@ -237,7 +241,7 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
       '#ajax' => [
         'callback' => [get_class($this), 'onFieldNameChange'],
         'wrapper' => 'field-formatter-ajax',
-        'method' => 'replace',
+        'method' => 'replaceWith',
       ],
     ];
 
@@ -271,7 +275,7 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
         '#ajax' => [
           'callback' => [get_class($this), 'onFormatterTypeChange'],
           'wrapper' => 'field-formatter-settings-ajax',
-          'method' => 'replace',
+          'method' => 'replaceWith',
         ],
       ];
 

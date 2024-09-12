@@ -54,12 +54,11 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
     $this->assertNotNull($table);
 
     // Ensures that the expected table headers are found.
-    /** @var \Behat\Mink\Element\NodeElement[] $headers */
     $headers = $table->findAll('css', 'thead th');
     $this->assertEquals(4, count($headers));
 
     $expected_headers = ['ID', 'Class', 'Alias', 'Operations'];
-    $actual_headers = array_map(fn($element) => $element->getText(), $headers);
+    $actual_headers = array_map(static fn($element) => $element->getText(), $headers);
     $this->assertSame($expected_headers, $actual_headers);
 
     // Ensures that all the services are listed in the table.
@@ -89,7 +88,6 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
       $row = $table->find('css', sprintf('tbody tr:contains("%s")', $service_id));
       $this->assertNotNull($row);
 
-      /** @var \Behat\Mink\Element\NodeElement[] $cells */
       $cells = $row->findAll('css', 'td');
       $this->assertEquals(4, count($cells));
 
@@ -125,9 +123,9 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
     $service_id = 'devel.dumper';
 
     // Ensures that the page works as expected.
-    $this->drupalGet("/devel/container/service/$service_id");
+    $this->drupalGet('/devel/container/service/' . $service_id);
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains("Service $service_id detail");
+    $this->assertSession()->pageTextContains(sprintf('Service %s detail', $service_id));
 
     // Ensures that the page returns a 404 error if the requested service is
     // not defined.
@@ -137,7 +135,7 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
     // Ensures that the page is accessible ony to users with the adequate
     // permissions.
     $this->drupalLogout();
-    $this->drupalGet("devel/container/service/$service_id");
+    $this->drupalGet('devel/container/service/' . $service_id);
     $this->assertSession()->statusCodeEquals(403);
   }
 
@@ -158,12 +156,11 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
     $this->assertNotNull($table);
 
     // Ensures that the expected table headers are found.
-    /** @var \Behat\Mink\Element\NodeElement[] $headers */
     $headers = $table->findAll('css', 'thead th');
     $this->assertEquals(2, count($headers));
 
     $expected_headers = ['Name', 'Operations'];
-    $actual_headers = array_map(fn($element) => $element->getText(), $headers);
+    $actual_headers = array_map(static fn($element) => $element->getText(), $headers);
     $this->assertSame($expected_headers, $actual_headers);
 
     // Ensures that all the parameters are listed in the table.
@@ -184,7 +181,6 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
       $row = $table->find('css', sprintf('tbody tr:contains("%s")', $parameter_name));
       $this->assertNotNull($row);
 
-      /** @var \Behat\Mink\Element\NodeElement[] $cells */
       $cells = $row->findAll('css', 'td');
       $this->assertEquals(2, count($cells));
 
@@ -212,9 +208,9 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
     $parameter_name = 'cache_bins';
 
     // Ensures that the page works as expected.
-    $this->drupalGet("/devel/container/parameter/$parameter_name");
+    $this->drupalGet('/devel/container/parameter/' . $parameter_name);
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains("Parameter $parameter_name value");
+    $this->assertSession()->pageTextContains(sprintf('Parameter %s value', $parameter_name));
 
     // Ensures that the page returns a 404 error if the requested parameter is
     // not defined.
@@ -224,7 +220,7 @@ class DevelContainerInfoTest extends DevelBrowserTestBase {
     // Ensures that the page is accessible ony to users with the adequate
     // permissions.
     $this->drupalLogout();
-    $this->drupalGet("devel/container/service/$parameter_name");
+    $this->drupalGet('devel/container/service/' . $parameter_name);
     $this->assertSession()->statusCodeEquals(403);
   }
 

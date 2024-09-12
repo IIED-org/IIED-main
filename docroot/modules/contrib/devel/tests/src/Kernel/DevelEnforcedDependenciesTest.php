@@ -16,7 +16,7 @@ class DevelEnforcedDependenciesTest extends KernelTestBase {
   /**
    * Modules to enable.
    *
-   * @var array
+   * @var string[]
    */
   protected static $modules = ['devel', 'block', 'user', 'system'];
 

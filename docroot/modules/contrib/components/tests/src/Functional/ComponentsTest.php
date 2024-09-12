@@ -46,17 +46,12 @@ class ComponentsTest extends BrowserTestBase {
    * Ensures component templates can be loaded inside a Drupal instance.
    */
   public function testLoadTemplate() {
-    try {
-      $element = [
-        // The templates/components-test.html.twig file determines which
-        // templates are loaded.
-        '#theme' => 'components_test',
-      ];
-      $result = $this->render($element);
-    }
-    catch (\Exception $e) {
-      $this->fail('No Exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
-    }
+    $element = [
+      // The templates/components-test.html.twig file determines which
+      // templates are loaded.
+      '#theme' => 'components_test',
+    ];
+    $result = $this->render($element);
 
     // The following templates are in paths defined in .info namespace
     // definitions.

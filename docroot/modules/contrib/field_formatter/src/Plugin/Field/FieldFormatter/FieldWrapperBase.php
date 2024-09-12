@@ -2,7 +2,9 @@
 
 namespace Drupal\field_formatter\Plugin\Field\FieldFormatter;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -14,7 +16,6 @@ use Drupal\Core\Field\FormatterPluginManager;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Utility\NestedArray;
 
 /**
  * Wraps an existing field.
@@ -50,6 +51,13 @@ abstract class FieldWrapperBase extends FormatterBase implements ContainerFactor
   protected $fieldTypePluginManager;
 
   /**
+   * The entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * Constructs a FieldFormatterWithInlineSettings object.
    *
    * @param string $plugin_id
@@ -70,11 +78,14 @@ abstract class FieldWrapperBase extends FormatterBase implements ContainerFactor
    *   The formatter plugin manager.
    * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $field_type_plugin_manager
    *   The field_type plugin manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, FormatterPluginManager $formatter_plugin_manager, FieldTypePluginManagerInterface $field_type_plugin_manager) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, FormatterPluginManager $formatter_plugin_manager, FieldTypePluginManagerInterface $field_type_plugin_manager, EntityRepositoryInterface $entity_repository) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->formatterPluginManager = $formatter_plugin_manager;
     $this->fieldTypePluginManager = $field_type_plugin_manager;
+    $this->entityRepository = $entity_repository;
   }
 
   /**
@@ -90,7 +101,8 @@ abstract class FieldWrapperBase extends FormatterBase implements ContainerFactor
       $configuration['view_mode'],
       $configuration['third_party_settings'],
       $container->get('plugin.manager.field.formatter'),
-      $container->get('plugin.manager.field.field_type')
+      $container->get('plugin.manager.field.field_type'),
+      $container->get('entity.repository')
     );
   }
 
@@ -169,11 +181,12 @@ abstract class FieldWrapperBase extends FormatterBase implements ContainerFactor
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    *
-   * @return array
+   * @return array|null
    *   The replaced form substructure.
    */
   public static function onFormatterTypeChange(array $form, FormStateInterface $form_state) {
     $triggeringElement = $form_state->getTriggeringElement();
+    $formSubstructure = NULL;
     // Dynamically return the dependent ajax for elements based on the
     // triggering element. This shouldn't be done statically because
     // settings forms may be different, e.g. for layout builder, core, ...
@@ -183,8 +196,9 @@ abstract class FieldWrapperBase extends FormatterBase implements ContainerFactor
       array_pop($subformKeys);
       $subformKeys[] = 'settings';
       // Return the subform:
-      return NestedArray::getValue($form, $subformKeys);
+      $formSubstructure = NestedArray::getValue($form, $subformKeys);
     }
+    return $formSubstructure;
   }
 
   /**
@@ -213,7 +227,7 @@ abstract class FieldWrapperBase extends FormatterBase implements ContainerFactor
         '#ajax' => [
           'callback' => [get_class($this), 'onFormatterTypeChange'],
           'wrapper' => 'field-formatter-settings-ajax',
-          'method' => 'replace',
+          'method' => 'replaceWith',
         ],
       ];
 
@@ -288,7 +302,7 @@ abstract class FieldWrapperBase extends FormatterBase implements ContainerFactor
    */
   protected function getFieldOutput(FieldItemListInterface $items, $langcode) {
     /** @var \Drupal\Core\Entity\FieldableEntityInterface $entity */
-    $entity = $items->getEntity();
+    $entity = $this->entityRepository->getTranslationFromContext($items->getEntity(), $langcode);
 
     $build = $this->getViewDisplay($entity->bundle())->build($entity);
     return $build[$this->fieldDefinition->getName()] ?? [];

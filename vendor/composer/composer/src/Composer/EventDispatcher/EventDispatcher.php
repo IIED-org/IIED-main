@@ -90,7 +90,7 @@ class EventDispatcher
      */
     public function setRunScripts(bool $runScripts = true): self
     {
-        $this->runScripts = (bool) $runScripts;
+        $this->runScripts = $runScripts;
 
         return $this;
     }
@@ -299,7 +299,7 @@ class EventDispatcher
                         // it does not hurt to keep the same stream as the current Application
                         if ($this->io instanceof ConsoleIO) {
                             $reflProp = new \ReflectionProperty($this->io, 'output');
-                            if (PHP_VERSION_ID < 80100) {
+                            if (\PHP_VERSION_ID < 80100) {
                                 $reflProp->setAccessible(true);
                             }
                             $output = $reflProp->getValue($this->io);
@@ -330,7 +330,7 @@ class EventDispatcher
                     }
 
                     $possibleLocalBinaries = $this->composer->getPackage()->getBinaries();
-                    if ($possibleLocalBinaries) {
+                    if (count($possibleLocalBinaries) > 0) {
                         foreach ($possibleLocalBinaries as $localExec) {
                             if (Preg::isMatch('{\b'.preg_quote($callable).'$}', $localExec)) {
                                 $caller = BinaryInstaller::determineBinaryCaller($localExec);
@@ -354,7 +354,7 @@ class EventDispatcher
                         $pathAndArgs = substr($exec, 5);
                         if (Platform::isWindows()) {
                             $pathAndArgs = Preg::replaceCallback('{^\S+}', static function ($path) {
-                                return str_replace('/', '\\', (string) $path[0]);
+                                return str_replace('/', '\\', $path[0]);
                             }, $pathAndArgs);
                         }
                         // match somename (not in quote, and not a qualified path) and if it is not a valid path from CWD then try to find it
@@ -384,8 +384,6 @@ class EventDispatcher
 
                         if (Platform::isWindows()) {
                             $exec = Preg::replaceCallback('{^\S+}', static function ($path) {
-                                assert(is_string($path[0]));
-
                                 return str_replace('/', '\\', $path[0]);
                             }, $exec);
                         }

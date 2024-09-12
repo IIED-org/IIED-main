@@ -25,20 +25,20 @@ readonlymode.settings:
           mapping:
             edit:
               type: sequence
+              label: 'Default forms that can be submitted'
               sequence:
                 type: string
             view:
               type: sequence
+              label: 'Default forms that can be viewed'
               sequence:
                 type: string
         additional:
           type: mapping
           mapping:
             edit:
-              type: sequence
-              sequence:
-                type: string
+              type: string
+              label: 'Additional forms that can be submitted'
             view:
-              type: sequence
-              sequence:
-                type: string
+              type: string
+              label: 'Additional forms that can be viewed'

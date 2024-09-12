@@ -17,7 +17,7 @@ class MemcachedDriver extends DriverBase {
     $result = $this->memcache->set($full_key, $value, $exp);
 
     // Something bad happened. Let's log the problem.
-    if (!$result || $this->settings->get('debug')) {
+    if (!$result && $this->settings->get('debug')) {
       $result_code = $this->memcache->getResultCode();
       $result_message = $this->memcache->getResultMessage();
 

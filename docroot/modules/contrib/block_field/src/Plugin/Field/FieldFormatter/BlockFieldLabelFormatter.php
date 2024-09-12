@@ -22,6 +22,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class BlockFieldLabelFormatter extends FormatterBase {
 
+    /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
   /**
    * Constructs a FormatterBase object.
    *
@@ -39,6 +46,8 @@ class BlockFieldLabelFormatter extends FormatterBase {
    *   The view mode.
    * @param array $third_party_settings
    *   Any third party settings.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user.
    */
   public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, AccountProxyInterface $current_user) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);

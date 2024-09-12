@@ -68,21 +68,21 @@ class ComponentsLoaderTest extends UnitTestCase {
       $result = $this->invokeProtectedMethod($this->systemUnderTest, 'findTemplate', $name, $throw);
 
       if (!$exception) {
-        $this->assertEquals($expected, $result, $this->getName());
+        $this->assertEquals($expected, $result);
       }
     }
     catch (\Exception $e) {
       if ($exception) {
-        $this->assertEquals($exception, $e->getMessage(), $this->getName());
+        $this->assertEquals($exception, $e->getMessage());
         $exception = '';
       }
       else {
-        $this->fail('No exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
+        $this->fail('No exception expected; "' . $e->getMessage() . '"');
       }
     }
 
     if ($exception) {
-      $this->fail('No exception thrown, but "' . $exception . '" was expected during: ' . $this->getName());
+      $this->fail('No exception thrown, but "' . $exception . '"');
     }
   }
 
@@ -91,7 +91,7 @@ class ComponentsLoaderTest extends UnitTestCase {
    *
    * @see testFindTemplate()
    */
-  public function providerTestFindTemplate(): array {
+  public static function providerTestFindTemplate(): array {
     return [
       'error when template name has no @' => [
         'name' => 'n/template.twig',
@@ -176,7 +176,7 @@ class ComponentsLoaderTest extends UnitTestCase {
     $this->systemUnderTest = new ComponentsLoader($componentsRegistry);
 
     $result = $this->systemUnderTest->exists($template);
-    $this->assertEquals($expected, $result, $this->getName());
+    $this->assertEquals($expected, $result);
   }
 
   /**
@@ -184,7 +184,7 @@ class ComponentsLoaderTest extends UnitTestCase {
    *
    * @see testExists()
    */
-  public function providerTestExists(): array {
+  public static function providerTestExists(): array {
     return [
       'confirms a template does exist' => [
         'template' => '@ns/example-exists.twig',

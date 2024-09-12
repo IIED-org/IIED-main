@@ -5,6 +5,24 @@
  * Hook implementations for the Field formatter module.
  */
 
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function field_formatter_help($route_name, RouteMatchInterface $route_match) {
+  if ($route_name == 'help.page.field_formatter') {
+    $output = '';
+    $output .= '<p>' . t('This module provides a collection of generic formatters for entity reference fields that output only a specific field of the referenced entity.') . '</p>';
+    $output .= '<p>' . t('There are currently three formatters:') . '</p>';
+    $output .= '<ul><li>' . t('Field formatter with inline settings (Entity reference fields)') . '</li>' .
+      '<li>' . t('Field formatter from view display (Entity reference fields)') . '</li>' .
+      '<li>' . t('Link field formatter, which will wrap output of any other formatter with a link (all fields)') . '</li></ul>';
+
+    return $output;
+  }
+}
+
 /**
  * Implements hook_field_formatter_info_alter().
  */

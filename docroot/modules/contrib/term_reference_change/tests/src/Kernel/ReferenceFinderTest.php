@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\term_reference_change\Kernel;
 
-use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
+use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\term_reference_change\ReferenceFinder;
 use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
@@ -19,7 +19,7 @@ class ReferenceFinderTest extends KernelTestBase {
   use TaxonomyTestTrait;
   use NodeCreationTrait;
   use ContentTypeCreationTrait;
-  use EntityReferenceTestTrait;
+  use EntityReferenceFieldCreationTrait;
 
   /**
    * {@inheritdoc}

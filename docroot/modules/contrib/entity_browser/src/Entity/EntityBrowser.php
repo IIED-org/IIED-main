@@ -30,7 +30,6 @@ use Symfony\Component\Routing\Route;
  *     "list_builder" = "Drupal\entity_browser\Controllers\EntityBrowserListBuilder",
  *   },
  *   links = {
- *     "canonical" = "/admin/config/content/entity_browser/{entity_browser}",
  *     "collection" = "/admin/config/content/entity_browser",
  *     "edit-form" = "/admin/config/content/entity_browser/{entity_browser}/edit",
  *     "edit-widgets" = "/admin/config/content/entity_browser/{entity_browser}/edit_widgets",
@@ -425,7 +424,7 @@ class EntityBrowser extends ConfigEntityBase implements EntityBrowserInterface, 
    * Prevents plugin collections from being serialized and correctly serializes
    * selected entities.
    */
-  public function __sleep() {
+  public function __sleep(): array {
     // Save configuration for all plugins.
     $this->widgets = $this->getWidgets()->getConfiguration();
     $this->widget_selector_configuration = $this->widgetSelectorPluginCollection()->getConfiguration();

@@ -9,7 +9,7 @@ configure: memcache_admin.settings
 dependencies:
   - memcache:memcache
 
-# Information added by Drupal.org packaging script on 2024-07-11
-version: '8.x-2.6'
+# Information added by Drupal.org packaging script on 2024-08-14
+version: '8.x-2.7'
 project: 'memcache'
-datestamp: 1720732162
+datestamp: 1723657821

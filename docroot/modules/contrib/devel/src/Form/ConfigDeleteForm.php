@@ -2,17 +2,13 @@
 
 namespace Drupal\devel\Form;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfirmFormHelper;
 use Drupal\Core\Form\ConfirmFormInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Edit config variable form.
@@ -20,63 +16,22 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ConfigDeleteForm extends FormBase implements ConfirmFormInterface {
 
   /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
    * Logger service.
    */
   protected LoggerInterface $logger;
 
   /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
-   * Constructs a new ConfigDeleteForm object.
-   *
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   A logger instance.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    MessengerInterface $messenger,
-    LoggerInterface $logger,
-    ConfigFactoryInterface $config_factory,
-    RequestStack $request_stack,
-    TranslationInterface $string_translation
-  ) {
-    $this->messenger = $messenger;
-    $this->logger = $logger;
-    $this->configFactory = $config_factory;
-    $this->requestStack = $request_stack;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('messenger'),
-      $container->get('logger.channel.devel'),
-      $container->get('config.factory'),
-      $container->get('request_stack'),
-      $container->get('string_translation'),
-    );
+  public static function create(ContainerInterface $container): static {
+    $instance = parent::create($container);
+    $instance->messenger = $container->get('messenger');
+    $instance->logger = $container->get('logger.channel.devel');
+    $instance->configFactory = $container->get('config.factory');
+    $instance->requestStack = $container->get('request_stack');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**
@@ -89,11 +44,11 @@ class ConfigDeleteForm extends FormBase implements ConfirmFormInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $config_name = '') {
+  public function buildForm(array $form, FormStateInterface $form_state, $config_name = ''): array {
     $config = $this->configFactory->get($config_name);
-    if ($config === FALSE || $config->isNew()) {
+    if ($config->isNew()) {
       $this->messenger->addError($this->t('Config @name does not exist in the system.', ['@name' => $config_name]));
-      return;
+      return $form;
     }
 
     $form['#title'] = $this->getQuestion();
@@ -116,7 +71,9 @@ class ConfigDeleteForm extends FormBase implements ConfirmFormInterface {
       '#type' => 'submit',
       '#value' => $this->getConfirmText(),
       '#submit' => [
-          [$this, 'submitForm'],
+        function (array &$form, FormStateInterface $form_state): void {
+          $this->submitForm($form, $form_state);
+        },
       ],
     ];
     $form['actions']['cancel'] = ConfirmFormHelper::buildCancelLink($this, $this->requestStack->getCurrentRequest());
@@ -138,7 +95,10 @@ class ConfigDeleteForm extends FormBase implements ConfirmFormInterface {
     }
     catch (\Exception $e) {
       $this->messenger->addError($e->getMessage());
-      $this->logger->error('Error deleting configuration variable %variable : %error.', ['%variable' => $config_name, '%error' => $e->getMessage()]);
+      $this->logger->error('Error deleting configuration variable %variable : %error.', [
+        '%variable' => $config_name,
+        '%error' => $e->getMessage(),
+      ]);
     }
   }
 

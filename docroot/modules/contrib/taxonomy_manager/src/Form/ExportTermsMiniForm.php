@@ -56,8 +56,8 @@ class ExportTermsMiniForm extends FormBase {
     foreach ($tree as $term) {
       $result[] = str_repeat('-', $term->depth) . $term->name;
     }
-    $desc = 'Term names with hierarchy: Only term names are exported. Child terms are prefixed with dashes.';
-    $desccsv = 'CSV: The comma-separated-values export has following columns: voc id | term id | term name | description | parent id 1 | ... | parent id n';
+    $desc = 'Term names with hierarchy: Only term names are exported. Child terms are prefixed with dashes.<br>';
+    $desc .= 'CSV: The comma-separated-values export has following columns: voc id | term id | term name | description | parent id 1 | ... | parent id n';
 
     $form['exported_data'] = [
       '#type' => 'textarea',
@@ -70,13 +70,6 @@ class ExportTermsMiniForm extends FormBase {
     ];
 
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
   }
 
   /**

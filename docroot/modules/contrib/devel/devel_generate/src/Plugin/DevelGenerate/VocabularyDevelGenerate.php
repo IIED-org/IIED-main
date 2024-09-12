@@ -2,14 +2,9 @@
 
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\taxonomy\VocabularyStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -41,56 +36,14 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
   protected VocabularyStorageInterface $vocabularyStorage;
 
   /**
-   * Constructs a new VocabularyDevelGenerate object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   * @param \Drupal\taxonomy\VocabularyStorageInterface $vocabulary_storage
-   *   The vocabulary storage.
-   */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    EntityTypeManagerInterface $entity_type_manager,
-    MessengerInterface $messenger,
-    LanguageManagerInterface $language_manager,
-    ModuleHandlerInterface $module_handler,
-    TranslationInterface $string_translation,
-    VocabularyStorageInterface $vocabulary_storage
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $messenger, $language_manager, $module_handler, $string_translation);
-    $this->vocabularyStorage = $vocabulary_storage;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     $entity_type_manager = $container->get('entity_type.manager');
-    return new static(
-      $configuration, $plugin_id, $plugin_definition,
-      $entity_type_manager,
-      $container->get('messenger'),
-      $container->get('language_manager'),
-      $container->get('module_handler'),
-      $container->get('string_translation'),
-      $entity_type_manager->getStorage('taxonomy_vocabulary')
-    );
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->vocabularyStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
+
+    return $instance;
   }
 
   /**
@@ -124,14 +77,14 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
   /**
    * {@inheritdoc}
    */
-  public function generateElements(array $values): void {
+  protected function generateElements(array $values): void {
     if ($values['kill']) {
       $this->deleteVocabularies();
       $this->setMessage($this->t('Deleted existing vocabularies.'));
     }
 
     $new_vocs = $this->generateVocabularies($values['num'], $values['title_length']);
-    if (!empty($new_vocs)) {
+    if ($new_vocs !== []) {
       $this->setMessage($this->t('Created the following new vocabularies: @vocs', ['@vocs' => implode(', ', $new_vocs)]));
     }
   }
@@ -159,14 +112,14 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
     $vocabularies = [];
 
     // Insert new data:
-    for ($i = 1; $i <= $records; $i++) {
+    for ($i = 1; $i <= $records; ++$i) {
       $name = $this->getRandom()->word(mt_rand(2, $maxlength));
 
       $vocabulary = $this->vocabularyStorage->create([
         'name' => $name,
         'vid' => mb_strtolower($name),
         'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
-        'description' => "Description of $name",
+        'description' => 'Description of ' . $name,
         'hierarchy' => 1,
         'weight' => mt_rand(0, 10),
         'multiple' => 1,

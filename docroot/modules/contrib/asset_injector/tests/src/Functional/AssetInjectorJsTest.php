@@ -2,11 +2,11 @@
 
 namespace Drupal\Tests\asset_injector\Functional;
 
-use Drupal\Tests\BrowserTestBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Tests\BrowserTestBase;
 
 /**
- * Class AssetInjectorJsTest.
+ * Test JS Asset Injector.
  *
  * @package Drupal\Tests\asset_injector\Functional
  *
@@ -71,7 +71,7 @@ class AssetInjectorJsTest extends BrowserTestBase {
   }
 
   /**
-   * Test a created css injector is added to the page and the css file exists.
+   * Test a created JS injector is added to the page and the JS file exists.
    *
    * @throws \Exception
    */
@@ -118,6 +118,45 @@ class AssetInjectorJsTest extends BrowserTestBase {
       ->pageTextContains('Created the test save continue Asset Injector');
     $this->assertSession()
       ->addressEquals('admin/config/development/asset-injector/js/test_save_continue');
+  }
+
+  /**
+   * Tests if the Form functions correctly.
+   *
+   * @throws \Exception
+   */
+  public function testForm() {
+    $session = $this->assertSession();
+    $page = $this->getSession()->getPage();
+    $this->testJsPermissionGranted();
+    // Go to the settings page and check the default values.
+    $this->drupalGet('admin/config/development/asset-injector/js/add');
+    $session->statusCodeEquals(200);
+    $session->fieldValueEquals('label', '');
+    $session->checkboxChecked('status');
+    $session->fieldValueEquals('code', '');
+    $session->checkboxNotChecked('jquery');
+    $session->checkboxChecked('preprocess');
+    $session->checkboxNotChecked('header');
+    $session->checkboxNotChecked('use_noscript');
+    // Change all values and save the form.
+    $page->fillField('label', 'test_label');
+    $page->uncheckField('status');
+    $page->fillField('code', 'test_code');
+    $page->checkField('jquery');
+    $page->uncheckField('preprocess');
+    $page->checkField('header');
+    $page->checkField('use_noscript');
+    $page->pressButton('save_continue');
+    $session->statusCodeEquals(200);
+    // Check if the changed settings still apply.
+    $session->fieldValueEquals('label', 'test_label');
+    $session->checkboxNotChecked('status');
+    $session->fieldValueEquals('code', 'test_code');
+    $session->checkboxChecked('jquery');
+    $session->checkboxNotChecked('preprocess');
+    $session->checkboxChecked('header');
+    $session->checkboxChecked('use_noscript');
   }
 
 }

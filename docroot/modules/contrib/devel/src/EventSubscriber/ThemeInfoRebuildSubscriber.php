@@ -75,7 +75,7 @@ class ThemeInfoRebuildSubscriber implements EventSubscriberInterface {
     ThemeHandlerInterface $theme_handler,
     MessengerInterface $messenger,
     TranslationInterface $string_translation,
-    Registry $theme_registry
+    Registry $theme_registry,
   ) {
     $this->config = $config->get('devel.settings');
     $this->account = $account;
@@ -117,9 +117,9 @@ class ThemeInfoRebuildSubscriber implements EventSubscriberInterface {
    *   The request.
    */
   protected function triggerWarningIfNeeded(Request $request) {
-    if ($this->account && $this->account->hasPermission('access devel information')) {
+    if ($this->account->hasPermission('access devel information')) {
       $session = $request->getSession();
-      if ($session && !$session->has($this->notificationFlag)) {
+      if (!$session->has($this->notificationFlag)) {
         $session->set($this->notificationFlag, TRUE);
         $message = $this->t('The theme information is being rebuilt on every request. Remember to <a href=":url">turn off</a> this feature on production websites.', [':url' => Url::fromRoute('devel.admin_settings')->toString()]);
         $this->messenger->addWarning($message);

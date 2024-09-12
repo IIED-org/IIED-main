@@ -13,7 +13,7 @@ inquisitive admins:
  - A block for masquerading as other users (useful for testing)
  - A mail-system class which redirects outbound email to files
  - Drush commands such as `fn-hook`, `fn-event`, `token`, `uuid`, and `devel-services`
- - *Devel Generate*. Bulk creates nodes, users, comment, taxonomy, media, menus for development. Has
+ - *Devel Generate*. Bulk creates nodes, users, comment, taxonomy, media, menus, block content for development. Has
  Drush integration.
 
 This module is safe to use on a production site. Just be sure to only grant

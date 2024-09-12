@@ -111,14 +111,8 @@ class TwigExtensionFunctionsTest extends UnitTestCase {
       ->with($expected)
       ->willReturn($rendered_output);
 
-    $result = NULL;
-    try {
-      $result = $this->twigEnvironment->render($template, $variables);
-    }
-    catch (\Exception $e) {
-      $this->fail('No Exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
-    }
-    $this->assertEquals($rendered_output, $result, $this->getName());
+    $result = $this->twigEnvironment->render($template, $variables);
+    $this->assertEquals($rendered_output, $result);
   }
 
   /**
@@ -126,7 +120,7 @@ class TwigExtensionFunctionsTest extends UnitTestCase {
    *
    * @see testTemplate()
    */
-  public function providerTestTemplate(): array {
+  public static function providerTestTemplate(): array {
     $link = [
       '#type' => 'link',
       '#title' => 'example link',

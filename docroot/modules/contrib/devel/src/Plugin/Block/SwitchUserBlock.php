@@ -9,7 +9,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\devel\Form\SwitchUserForm;
 use Drupal\devel\SwitchUserListHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -35,46 +34,21 @@ class SwitchUserBlock extends BlockBase implements ContainerFactoryPluginInterfa
    */
   protected SwitchUserListHelper $switchUserListHelper;
 
-  /**
-   * Constructs a new SwitchUserBlock object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
-   *   The form builder service.
-   * @param \Drupal\devel\SwitchUserListHelper $switchUserListHelper
-   *   A helper for creating the user list form.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    FormBuilderInterface $form_builder,
-    SwitchUserListHelper $switchUserListHelper,
-    TranslationInterface $string_translation
-  ) {
+  // phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod.Found
+  final public function __construct(array $configuration, string $plugin_id, array $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->formBuilder = $form_builder;
-    $this->switchUserListHelper = $switchUserListHelper;
-    $this->stringTranslation = $string_translation;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
-    return new static(
-      $configuration, $plugin_id, $plugin_definition,
-      $container->get('form_builder'),
-      $container->get('devel.switch_user_list_helper'),
-      $container->get('string_translation'),
-    );
+    $instance = new static($configuration, $plugin_id, $plugin_definition);
+    $instance->formBuilder = $container->get('form_builder');
+    $instance->switchUserListHelper = $container->get('devel.switch_user_list_helper');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**
@@ -91,7 +65,7 @@ class SwitchUserBlock extends BlockBase implements ContainerFactoryPluginInterfa
   /**
    * {@inheritdoc}
    */
-  public function blockAccess(AccountInterface $account) {
+  protected function blockAccess(AccountInterface $account) {
     return AccessResult::allowedIfHasPermission($account, 'switch users');
   }
 

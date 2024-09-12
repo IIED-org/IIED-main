@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerResolverInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\twig_field_value\Twig\Extension\FieldValueExtension;
 
@@ -27,12 +28,14 @@ class FieldRawValueTest extends UnitTestCase {
    */
   protected function setUp(): void {
 
+    parent::setUp();
     $languageManager = $this->createMock(LanguageManagerInterface::class);
     $entityRepository = $this->createMock(EntityRepositoryInterface::class);
     $controllerResolver = $this->createMock(ControllerResolverInterface::class);
     $loggerFactory = $this->createMock(LoggerChannelFactoryInterface::class);
+    $renderer = $this->createMock(RendererInterface::class);
 
-    $this->extension = new FieldValueExtension($languageManager, $entityRepository, $controllerResolver, $loggerFactory);
+    $this->extension = new FieldValueExtension($languageManager, $entityRepository, $controllerResolver, $loggerFactory, $renderer);
   }
 
   /**

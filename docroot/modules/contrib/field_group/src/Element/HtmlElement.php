@@ -67,11 +67,6 @@ class HtmlElement extends RenderElement {
         $element['#attributes']['classes'] = array_merge($element['#attributes']['classes'], $classes);
       }
 
-      // Add jquery ui effects library for the blind effect.
-      if ($element['#effect'] == 'blind') {
-        $element['#attached']['library'][] = 'core/jquery.ui.effects.blind';
-      }
-
     }
 
     return $element;

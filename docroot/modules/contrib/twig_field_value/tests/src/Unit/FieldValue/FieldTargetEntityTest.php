@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\twig_field_value\Twig\Extension\FieldValueExtension;
 
@@ -30,6 +31,7 @@ class FieldTargetEntityTest extends UnitTestCase {
    */
   protected function setUp(): void {
 
+    parent::setUp();
     $languageManager = $this->createMock(LanguageManagerInterface::class);
     $entityRepository = $this->createMock(EntityRepositoryInterface::class);
     $entityRepository->expects($this->any())
@@ -38,8 +40,9 @@ class FieldTargetEntityTest extends UnitTestCase {
 
     $controllerResolver = $this->createMock(ControllerResolverInterface::class);
     $loggerFactory = $this->createMock(LoggerChannelFactoryInterface::class);
+    $renderer = $this->createMock(RendererInterface::class);
 
-    $this->extension = new FieldValueExtension($languageManager, $entityRepository, $controllerResolver, $loggerFactory);
+    $this->extension = new FieldValueExtension($languageManager, $entityRepository, $controllerResolver, $loggerFactory, $renderer);
   }
 
   /**
@@ -150,7 +153,7 @@ class FieldTargetEntityTest extends UnitTestCase {
         NULL,
         [
           '#theme' => 'field',
-          '#no_field_name',
+          '#no_field_name' => 'nothing',
           '0' => ['target_id' => 1],
         ],
       ],
@@ -217,7 +220,7 @@ class FieldTargetEntityTest extends UnitTestCase {
   /**
    * Mocks an entity reference field item.
    *
-   * @param EntityInterface $referencedEntity
+   * @param \Drupal\Core\Entity\EntityInterface $referencedEntity
    *   The referenced entity.
    *
    * @return \Drupal\Core\Field\FieldItemInterface
@@ -226,13 +229,13 @@ class FieldTargetEntityTest extends UnitTestCase {
   protected function mockEntityReferenceFieldItem(EntityInterface $referencedEntity): FieldItemInterface {
     $fieldItem = $this->createMock(FieldItemInterface::class);
     $fieldItem->expects($this->any())
-    ->method('__isset')
-    ->with('entity')
-    ->willReturn(TRUE);
+      ->method('__isset')
+      ->with('entity')
+      ->willReturn(TRUE);
     $fieldItem->expects($this->any())
-    ->method('__get')
-    ->with('entity')
-    ->willReturn($referencedEntity);
+      ->method('__get')
+      ->with('entity')
+      ->willReturn($referencedEntity);
 
     return $fieldItem;
   }

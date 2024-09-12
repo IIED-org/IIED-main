@@ -70,7 +70,7 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     foreach ($nodes as $node) {
       $alias = 'node-' . $node->id() . '-' . $node->bundle();
       $this->drupalGet($alias);
-      $this->assertSession()->statusCodeEquals('200');
+      $this->assertSession()->statusCodeEquals(200);
       $this->assertSession()->pageTextContains($node->getTitle());
     }
 
@@ -102,7 +102,7 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
         $translation_node = $node->getTranslation($langcode);
         $alias = 'node-' . $translation_node->id() . '-' . $translation_node->bundle() . '-' . $langcode;
         $this->drupalGet($langcode . '/' . $alias);
-        $this->assertSession()->statusCodeEquals('200');
+        $this->assertSession()->statusCodeEquals(200);
         $this->assertSession()->pageTextContains($translation_node->getTitle());
       }
     }
@@ -151,9 +151,10 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
 
     // Test creating content with specified authors. First create 15 more users
     // making 18 in total, to make the test much stronger.
-    for ($i = 0; $i < 15; $i++) {
+    for ($i = 0; $i < 15; ++$i) {
       $this->drupalCreateUser();
     }
+
     $edit = [
       'num' => 10,
       'kill' => TRUE,
@@ -347,8 +348,8 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $edit = [
       'num' => 5,
       'name_length' => 12,
-      "media_types[{$media_type1->id()}]" => 1,
-      "media_types[{$media_type2->id()}]" => 1,
+      sprintf('media_types[%s]', $media_type1->id()) => 1,
+      sprintf('media_types[%s]', $media_type2->id()) => 1,
       'base_fields' => 'phish',
       'kill' => 1,
     ];
@@ -365,8 +366,8 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $edit = [
       'num' => 56,
       'name_length' => 6,
-      "media_types[{$media_type1->id()}]" => 1,
-      "media_types[{$media_type2->id()}]" => 1,
+      sprintf('media_types[%s]', $media_type1->id()) => 1,
+      sprintf('media_types[%s]', $media_type2->id()) => 1,
       'base_fields' => 'phish',
       'kill' => 1,
     ];

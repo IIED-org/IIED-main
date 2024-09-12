@@ -2,12 +2,12 @@
 
 namespace Drupal\asset_injector\Entity;
 
-use Drupal\asset_injector\AssetInjectorInterface;
 use Drupal\asset_injector\AssetFileStorage;
+use Drupal\asset_injector\AssetInjectorInterface;
+use Drupal\Core\Condition\ConditionPluginCollection;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
-use Drupal\Core\Condition\ConditionPluginCollection;
 
 /**
  * Class AssetInjectorBase: Base asset injector class.

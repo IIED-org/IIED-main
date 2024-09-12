@@ -5,7 +5,6 @@ namespace Drupal\devel;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,29 +21,14 @@ class ToolbarHandler implements ContainerInjectionInterface {
   protected AccountProxyInterface $account;
 
   /**
-   * ToolbarHandler constructor.
-   *
-   * @param \Drupal\Core\Session\AccountProxyInterface $account
-   *   The current user.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    AccountProxyInterface $account,
-    TranslationInterface $string_translation
-  ) {
-    $this->account = $account;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('current_user'),
-      $container->get('string_translation'),
-    );
+  public static function create(ContainerInterface $container): self {
+    $instance = new self();
+    $instance->account = $container->get('current_user');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**

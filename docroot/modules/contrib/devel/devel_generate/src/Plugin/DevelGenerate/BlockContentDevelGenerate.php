@@ -6,15 +6,10 @@ use Drupal\block_content\BlockContentInterface;
 use Drupal\content_translation\ContentTranslationManagerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ExtensionPathResolver;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -69,82 +64,29 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
   protected bool $drushBatch = FALSE;
 
   /**
-   * Constructs a BlockContentDevelGenerate object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param array $plugin_definition
-   *   The plugin definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $block_content_storage
-   *   The block content storage.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $block_content_type_storage
-   *   The block content type storage.
-   * @param \Drupal\Core\Extension\ExtensionPathResolver $extensionPathResolver
-   *   The extension path resolver service.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *   The entity type bundle info service.
-   * @param \Drupal\content_translation\ContentTranslationManagerInterface|null $content_translation_manager
-   *   The content translation manager service.
-   */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    EntityTypeManagerInterface $entity_type_manager,
-    MessengerInterface $messenger,
-    LanguageManagerInterface $language_manager,
-    ModuleHandlerInterface $module_handler,
-    TranslationInterface $string_translation,
-    EntityStorageInterface $block_content_storage,
-    EntityStorageInterface $block_content_type_storage,
-    ExtensionPathResolver $extensionPathResolver,
-    EntityTypeBundleInfoInterface $entity_type_bundle_info,
-    ContentTranslationManagerInterface $content_translation_manager = NULL
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $messenger, $language_manager, $module_handler, $string_translation);
-    $this->blockContentStorage = $block_content_storage;
-    $this->blockContentTypeStorage = $block_content_type_storage;
-    $this->extensionPathResolver = $extensionPathResolver;
-    $this->entityTypeBundleInfo = $entity_type_bundle_info;
-    $this->contentTranslationManager = $content_translation_manager;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     $entity_type_manager = $container->get('entity_type.manager');
-    return new static(
-      $configuration, $plugin_id, $plugin_definition,
-      $entity_type_manager,
-      $container->get('messenger'),
-      $container->get('language_manager'),
-      $container->get('module_handler'),
-      $container->get('string_translation'),
-      $entity_type_manager->getStorage('block_content'),
-      $entity_type_manager->getStorage('block_content_type'),
-      $container->get('extension.path.resolver'),
-      $container->get('entity_type.bundle.info'),
-      $container->has('content_translation.manager') ? $container->get('content_translation.manager') : NULL
-    );
+
+    // @phpstan-ignore ternary.alwaysTrue (False positive)
+    $content_translation_manager = $container->has('content_translation.manager') ? $container->get('content_translation.manager') : NULL;
+
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->blockContentStorage = $entity_type_manager->getStorage('block_content');
+    $instance->blockContentTypeStorage = $entity_type_manager->getStorage('block_content_type');
+    $instance->extensionPathResolver = $container->get('extension.path.resolver');
+    $instance->entityTypeBundleInfo = $container->get('entity_type.bundle.info');
+    $instance->contentTranslationManager = $content_translation_manager;
+
+    return $instance;
   }
 
   /**
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state): array {
+    /** @var \Drupal\block_content\BlockContentTypeInterface[] $blockTypes */
     $blockTypes = $this->blockContentTypeStorage->loadMultiple();
     $options = [];
 
@@ -228,9 +170,10 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
    * {@inheritdoc}
    */
   public function settingsFormValidate(array $form, FormStateInterface $form_state): void {
-    if (!array_filter($form_state->getValue('block_types'))) {
+    if (array_filter($form_state->getValue('block_types')) === []) {
       $form_state->setErrorByName('block_types', $this->t('Please select at least one block type'));
     }
+
     $skip_fields = is_null($form_state->getValue('skip_fields')) ? [] : self::csvToArray($form_state->getValue('skip_fields'));
     $base_fields = is_null($form_state->getValue('base_fields')) ? [] : self::csvToArray($form_state->getValue('base_fields'));
     $form_state->setValue('skip_fields', $skip_fields);
@@ -262,19 +205,19 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
     $all_types = array_keys($this->blockContentGetBundles());
     $selected_types = self::csvToArray($options['block_types']);
 
-    if (empty($selected_types)) {
+    if ($selected_types === []) {
       throw new \Exception(dt('No Block content types available'));
     }
 
     $values['block_types'] = array_combine($selected_types, $selected_types);
     $block_types = array_filter($values['block_types']);
 
-    if (!empty($values['kill']) && empty($block_types)) {
+    if (!empty($values['kill']) && $block_types === []) {
       throw new \Exception(dt('To delete content, please provide the Block content types (--bundles)'));
     }
 
     // Checks for any missing block content types before generating blocks.
-    if (array_diff($block_types, $all_types)) {
+    if (array_diff($block_types, $all_types) !== []) {
       throw new \Exception(dt('One or more block content types have been entered that don\'t exist on this site'));
     }
 
@@ -303,20 +246,24 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
    * This method is used when the number of elements is 50 or more.
    */
   private function generateBatchContent(array $values): void {
+    $operations = [];
+
     // Remove unselected block content types.
     $values['block_types'] = array_filter($values['block_types']);
     // If it is drushBatch then this operation is already run in the
     // self::validateDrushParams().
     // Add the kill operation.
     if ($values['kill']) {
-      $operations[] = ['devel_generate_operation',
+      $operations[] = [
+        'devel_generate_operation',
         [$this, 'batchContentKill', $values],
       ];
     }
 
     // Add the operations to create the blocks.
-    for ($num = 0; $num < $values['num']; $num++) {
-      $operations[] = ['devel_generate_operation',
+    for ($num = 0; $num < $values['num']; ++$num) {
+      $operations[] = [
+        'devel_generate_operation',
         [$this, 'batchContentAddBlock', $values],
       ];
     }
@@ -342,14 +289,16 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
     if (!isset($context['results']['num'])) {
       $context['results']['num'] = 0;
     }
+
     if ($this->drushBatch) {
-      $context['results']['num']++;
+      ++$context['results']['num'];
       $this->develGenerateContentAddBlock($vars);
     }
     else {
       $context['results'] = $vars;
       $this->develGenerateContentAddBlock($context['results']);
     }
+
     if (!empty($vars['num_translations'])) {
       $context['results']['num_translations'] += $vars['num_translations'];
     }
@@ -358,7 +307,7 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
   /**
    * Batch wrapper for calling ContentKill.
    */
-  public function batchContentKill(array $vars, &$context): void {
+  public function batchContentKill(array $vars, array &$context): void {
     if ($this->drushBatch) {
       $this->contentKill($vars);
     }
@@ -379,10 +328,10 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
       $this->contentKill($values);
     }
 
-    if (!empty($values['block_types'])) {
+    if (isset($values['block_types']) && $values['block_types'] !== []) {
       $start = time();
       $values['num_translations'] = 0;
-      for ($i = 1; $i <= $values['num']; $i++) {
+      for ($i = 1; $i <= $values['num']; ++$i) {
         $this->develGenerateContentAddBlock($values);
         if (isset($values['feedback']) && $i % $values['feedback'] == 0) {
           $now = time();
@@ -395,6 +344,7 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
         }
       }
     }
+
     $this->setMessage($this->formatPlural($values['num'], 'Created 1 block', 'Created @count blocks'));
     if ($values['num_translations'] > 0) {
       $this->setMessage($this->formatPlural($values['num_translations'], 'Created 1 block translation', 'Created @count block translations'));
@@ -420,19 +370,20 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
     $values = [
       'info' => $title_prefix . $this->getRandom()->sentences(mt_rand(1, $results['title_length']), TRUE),
       'type' => $block_type,
+      // A flag to let hook_block_content_insert() implementations know that this is a generated block.
+      'devel_generate' => $results,
     ];
 
     if (isset($results['add_language'])) {
       $values['langcode'] = $this->getLangcode($results['add_language']);
     }
+
     if (isset($results['reusable'])) {
       $values['reusable'] = (int) $results['reusable'];
     }
-    $block = $this->blockContentStorage->create($values);
 
-    // A flag to let hook_block_content_insert() implementations
-    // know that this is a generated block.
-    $block->devel_generate = $results;
+    /** @var \Drupal\block_content\BlockContentInterface $block */
+    $block = $this->blockContentStorage->create($values);
 
     // Populate non-skipped fields with sample values.
     $this->populateFields($block, $results['skip_fields'], $results['base_fields']);
@@ -442,14 +393,10 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
       unset($block->$field);
     }
 
-    // See devel_generate_entity_insert() for actions that happen before and
-    // after this save.
     $block->save();
 
     // Add translations.
-    if (isset($results['translate_language']) && !empty($results['translate_language'])) {
-      $this->develGenerateContentAddBlockTranslation($results, $block);
-    }
+    $this->develGenerateContentAddBlockTranslation($results, $block);
   }
 
   /**
@@ -463,36 +410,44 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function develGenerateContentAddBlockTranslation(array &$results, BlockContentInterface $block): void {
+    if (empty($results['translate_language'])) {
+      return;
+    }
+
     if (is_null($this->contentTranslationManager)) {
       return;
     }
+
     if (!$this->contentTranslationManager->isEnabled('block_content', $block->bundle())) {
       return;
     }
-    if ($block->langcode == LanguageInterface::LANGCODE_NOT_SPECIFIED || $block->langcode == LanguageInterface::LANGCODE_NOT_APPLICABLE) {
+
+    if ($block->get('langcode')->getLangcode() === LanguageInterface::LANGCODE_NOT_SPECIFIED
+      || $block->get('langcode')->getLangcode() === LanguageInterface::LANGCODE_NOT_APPLICABLE) {
       return;
     }
 
     if (!isset($results['num_translations'])) {
       $results['num_translations'] = 0;
     }
+
     // Translate the block to each target language.
     $skip_languages = [
       LanguageInterface::LANGCODE_NOT_SPECIFIED,
       LanguageInterface::LANGCODE_NOT_APPLICABLE,
-      $block->langcode->value,
+      $block->get('langcode')->getLangcode(),
     ];
     foreach ($results['translate_language'] as $langcode) {
       if (in_array($langcode, $skip_languages)) {
         continue;
       }
+
       $translation_block = $block->addTranslation($langcode);
-      $translation_block->devel_generate = $results;
       $translation_block->setInfo($block->label() . ' (' . $langcode . ')');
       $this->populateFields($translation_block);
       $translation_block->save();
 
-      $results['num_translations']++;
+      ++$results['num_translations'];
     }
   }
 
@@ -532,7 +487,7 @@ class BlockContentDevelGenerate extends DevelGenerateBase implements ContainerFa
    *   keyed by the block content type name.
    */
   public function blockContentGetBundles(): array {
-    return array_map(fn($bundle_info) => $bundle_info['label'], $this->entityTypeBundleInfo->getBundleInfo('block_content'));
+    return array_map(static fn($bundle_info) => $bundle_info['label'], $this->entityTypeBundleInfo->getBundleInfo('block_content'));
   }
 
 }

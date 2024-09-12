@@ -38,9 +38,9 @@ class EmailNotifierTest extends BrowserTestBase {
   /**
    * The message notification service.
    *
-   * @var \Drupal\message_notify\MessageNotifier
+   * @var \Drupal\message_notify\MessageNotifyInterface
    */
-  protected $messageNotifier;
+  protected $messageNotify;
 
   /**
    * {@inheritdoc}
@@ -49,7 +49,7 @@ class EmailNotifierTest extends BrowserTestBase {
     parent::setUp();
 
     $this->messageTemplate = MessageTemplate::load('message_notify_test');
-    $this->messageNotifier = $this->container->get('message_notify.sender');
+    $this->messageNotify = $this->container->get('message_notify.sender');
   }
 
   /**
@@ -58,7 +58,7 @@ class EmailNotifierTest extends BrowserTestBase {
   public function testEmailNotifier() {
     $account = $this->drupalCreateUser();
     $message = Message::create(['template' => $this->messageTemplate->id(), 'uid' => $account->id()]);
-    $this->messageNotifier->send($message, [], 'email');
+    $this->messageNotify->send($message, [], 'email');
     $this->assertMail('subject', 'first partial', 'Expected email subject sent');
     $this->assertMail('body', "second partial\n\n", 'Expected email body sent');
   }

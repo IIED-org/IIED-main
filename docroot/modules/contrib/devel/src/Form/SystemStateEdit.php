@@ -6,10 +6,9 @@ use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\State\StateInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
+use Drupal\devel\DevelDumperManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -24,51 +23,27 @@ class SystemStateEdit extends FormBase {
   protected StateInterface $state;
 
   /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
    * Logger service.
    */
   protected LoggerInterface $logger;
 
   /**
-   * Constructs a new SystemStateEdit object.
-   *
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   A logger instance.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
+   * The dumper service.
    */
-  public function __construct(
-    StateInterface $state,
-    MessengerInterface $messenger,
-    LoggerInterface $logger,
-    TranslationInterface $string_translation
-  ) {
-    $this->state = $state;
-    $this->messenger = $messenger;
-    $this->logger = $logger;
-    $this->stringTranslation = $string_translation;
-  }
+  protected DevelDumperManagerInterface $dumper;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('state'),
-      $container->get('messenger'),
-      $container->get('logger.channel.devel'),
-      $container->get('string_translation'),
-    );
+    $instance = parent::create($container);
+    $instance->state = $container->get('state');
+    $instance->messenger = $container->get('messenger');
+    $instance->logger = $container->get('logger.channel.devel');
+    $instance->stringTranslation = $container->get('string_translation');
+    $instance->dumper = $container->get('devel.dumper');
+
+    return $instance;
   }
 
   /**
@@ -81,13 +56,13 @@ class SystemStateEdit extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $state_name = '') {
+  public function buildForm(array $form, FormStateInterface $form_state, $state_name = ''): array {
     // Get the old value.
     $old_value = $this->state->get($state_name);
 
     if (!isset($old_value)) {
       $this->messenger->addWarning($this->t('State @name does not exist in the system.', ['@name' => $state_name]));
-      return;
+      return $form;
     }
 
     // Only simple structures are allowed to be edited.
@@ -95,15 +70,13 @@ class SystemStateEdit extends FormBase {
 
     if ($disabled) {
       $this->messenger->addWarning($this->t('Only simple structures are allowed to be edited. State @name contains objects.', ['@name' => $state_name]));
-
     }
 
     // First we show the user the content of the variable about to be edited.
     $form['value'] = [
       '#type' => 'item',
       '#title' => $this->t('Current value for %name', ['%name' => $state_name]),
-      // phpcs:ignore Drupal.Functions.DiscouragedFunctions
-      '#markup' => kpr($old_value, TRUE),
+      '#markup' => $this->dumper->dumpOrExport(input: $old_value),
     ];
 
     $transport = 'plain';
@@ -115,7 +88,7 @@ class SystemStateEdit extends FormBase {
       }
       catch (InvalidDataTypeException $e) {
         $this->messenger->addError($this->t('Invalid data detected for @name : %error', ['@name' => $state_name, '%error' => $e->getMessage()]));
-        return;
+        return $form;
       }
     }
 
@@ -203,6 +176,7 @@ class SystemStateEdit extends FormBase {
     if (is_object($data)) {
       return FALSE;
     }
+
     if (is_array($data)) {
       // If the current object is an array, then check recursively.
       foreach ($data as $value) {

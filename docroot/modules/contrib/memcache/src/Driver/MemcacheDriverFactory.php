@@ -168,6 +168,13 @@ class MemcacheDriverFactory {
     elseif (class_exists('Memcache')) {
       $extension = \Memcache::class;
     }
+    // If both the "servers" and "bins" settings for a specified extension are
+    // an empty array, make it possible to have this module enabled and have
+    // neither Memcache nor Memcached installed on this environment.
+    elseif ($this->settings->get('servers', NULL) === []
+      && $this->settings->get('bins', NULL) === []) {
+      $extension = 'disabled';
+    }
     else {
       throw new MemcacheException('No Memcache extension found');
     }

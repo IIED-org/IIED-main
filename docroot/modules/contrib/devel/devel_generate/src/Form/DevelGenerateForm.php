@@ -5,12 +5,9 @@ namespace Drupal\devel_generate\Form;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\devel_generate\DevelGenerateBaseInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Defines a form that allows privileged users to generate entities.
@@ -23,63 +20,22 @@ class DevelGenerateForm extends FormBase {
   protected PluginManagerInterface $develGenerateManager;
 
   /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
    * Logger service.
    */
   protected LoggerInterface $logger;
 
   /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
-   * Constructs a new DevelGenerateForm object.
-   *
-   * @param \Drupal\Component\Plugin\PluginManagerInterface $devel_generate_manager
-   *   The manager to be used for instantiating plugins.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   A logger instance.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    PluginManagerInterface $devel_generate_manager,
-    MessengerInterface $messenger,
-    LoggerInterface $logger,
-    RequestStack $request_stack,
-    TranslationInterface $string_translation
-  ) {
-    $this->develGenerateManager = $devel_generate_manager;
-    $this->messenger = $messenger;
-    $this->logger = $logger;
-    $this->requestStack = $request_stack;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('plugin.manager.develgenerate'),
-      $container->get('messenger'),
-      $container->get('logger.channel.devel_generate'),
-      $container->get('request_stack'),
-      $container->get('string_translation'),
-    );
+    $instance = parent::create($container);
+    $instance->develGenerateManager = $container->get('plugin.manager.develgenerate');
+    $instance->messenger = $container->get('messenger');
+    $instance->logger = $container->get('logger.channel.devel_generate');
+    $instance->requestStack = $container->get('request_stack');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**
