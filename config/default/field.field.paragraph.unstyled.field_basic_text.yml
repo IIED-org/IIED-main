@@ -6,11 +6,7 @@ dependencies:
     - field.storage.paragraph.field_basic_text
     - paragraphs.paragraphs_type.unstyled
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats: {  }
 id: paragraph.unstyled.field_basic_text
 field_name: field_basic_text
 entity_type: paragraph
