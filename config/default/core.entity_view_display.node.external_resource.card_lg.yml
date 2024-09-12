@@ -1,0 +1,32 @@
+uuid: e7a92723-7154-414c-aecb-e957cf0bd96d
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.card_lg
+    - field.field.node.external_resource.field_link
+    - field.field.node.external_resource.field_tagline
+    - field.field.node.external_resource.field_tags
+    - field.field.node.external_resource.resource_type
+    - field.field.node.external_resource.source
+    - node.type.external_resource
+  module:
+    - user
+id: node.external_resource.card_lg
+targetEntityType: node
+bundle: external_resource
+mode: card_lg
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_link: true
+  field_tagline: true
+  field_tags: true
+  langcode: true
+  resource_type: true
+  search_api_excerpt: true
+  source: true

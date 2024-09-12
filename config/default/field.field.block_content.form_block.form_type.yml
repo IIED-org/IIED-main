@@ -1,0 +1,21 @@
+uuid: fe2699fa-d336-4a67-a5d4-43eec099468a
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.form_block
+    - field.storage.block_content.form_type
+  module:
+    - options
+id: block_content.form_block.form_type
+field_name: form_type
+entity_type: block_content
+bundle: form_block
+label: 'Form type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

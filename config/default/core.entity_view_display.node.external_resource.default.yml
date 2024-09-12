@@ -1,0 +1,78 @@
+uuid: 01fcd082-409c-4625-b98a-92a3d106fec8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.external_resource.field_link
+    - field.field.node.external_resource.field_tagline
+    - field.field.node.external_resource.field_tags
+    - field.field.node.external_resource.resource_type
+    - field.field.node.external_resource.source
+    - node.type.external_resource
+  module:
+    - ds
+    - link
+    - options
+    - user
+id: node.external_resource.default
+targetEntityType: node
+bundle: external_resource
+mode: default
+content:
+  field_link:
+    type: link_separate
+    label: above
+    settings:
+      trim_length: null
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 2
+    region: content
+  field_tagline:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 113
+    region: content
+  field_tags:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  resource_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  source:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 114
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

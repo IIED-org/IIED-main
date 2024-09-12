@@ -15,6 +15,7 @@ dependencies:
     - field.field.taxonomy_term.collection.field_term_image
     - field.field.taxonomy_term.collection.field_theme
     - field.field.taxonomy_term.collection.layout_builder__layout
+    - field.field.taxonomy_term.collection.subheading
     - image.style.thumbnail
     - taxonomy.vocabulary.collection
   module:
@@ -28,7 +29,7 @@ mode: default
 content:
   description:
     type: text_textarea
-    weight: 1
+    weight: 2
     region: content
     settings:
       rows: 5
@@ -36,7 +37,7 @@ content:
     third_party_settings: {  }
   field_about:
     type: text_textarea
-    weight: 13
+    weight: 14
     region: content
     settings:
       rows: 5
@@ -44,7 +45,7 @@ content:
     third_party_settings: {  }
   field_badge:
     type: image_image
-    weight: 5
+    weight: 6
     region: content
     settings:
       progress_indicator: throbber
@@ -52,13 +53,13 @@ content:
     third_party_settings: {  }
   field_collection_type:
     type: options_select
-    weight: 3
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
   field_overview:
     type: text_textarea
-    weight: 4
+    weight: 5
     region: content
     settings:
       rows: 5
@@ -66,7 +67,7 @@ content:
     third_party_settings: {  }
   field_short_description:
     type: string_textfield
-    weight: 2
+    weight: 3
     region: content
     settings:
       size: 60
@@ -74,7 +75,7 @@ content:
     third_party_settings: {  }
   field_tags:
     type: entity_reference_autocomplete
-    weight: 11
+    weight: 12
     region: content
     settings:
       match_operator: CONTAINS
@@ -84,7 +85,7 @@ content:
     third_party_settings: {  }
   field_term_image:
     type: image_image
-    weight: 6
+    weight: 7
     region: content
     settings:
       progress_indicator: throbber
@@ -92,7 +93,7 @@ content:
     third_party_settings: {  }
   field_theme:
     type: entity_reference_autocomplete
-    weight: 10
+    weight: 11
     region: content
     settings:
       match_operator: CONTAINS
@@ -102,7 +103,7 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 7
+    weight: 8
     region: content
     settings:
       include_locked: true
@@ -117,19 +118,27 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 8
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 9
+    weight: 10
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
+  subheading:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   translation:
-    weight: 12
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }

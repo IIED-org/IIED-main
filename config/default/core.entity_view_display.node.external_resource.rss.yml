@@ -1,0 +1,52 @@
+uuid: e36a3eda-e81f-46a4-b826-9468bee3183b
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.rss
+    - field.field.node.external_resource.field_link
+    - field.field.node.external_resource.field_tagline
+    - field.field.node.external_resource.field_tags
+    - field.field.node.external_resource.resource_type
+    - field.field.node.external_resource.source
+    - node.type.external_resource
+  module:
+    - ds
+    - link
+    - user
+id: node.external_resource.rss
+targetEntityType: node
+bundle: external_resource
+mode: rss
+content:
+  field_link:
+    type: link_separate
+    label: hidden
+    settings:
+      trim_length: null
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
+    region: ds_content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_tagline: true
+  field_tags: true
+  langcode: true
+  resource_type: true
+  search_api_excerpt: true
+  source: true

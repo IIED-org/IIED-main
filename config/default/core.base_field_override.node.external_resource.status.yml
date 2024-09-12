@@ -1,0 +1,22 @@
+uuid: 62c42391-5660-4f04-95e2-2465ed7f397e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.external_resource
+id: node.external_resource.status
+field_name: status
+entity_type: node
+bundle: external_resource
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

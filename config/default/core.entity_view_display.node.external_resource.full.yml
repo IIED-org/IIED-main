@@ -1,0 +1,39 @@
+uuid: 4ce9bda4-4f2e-48c9-8234-f6491a466db7
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.full
+    - field.field.node.external_resource.field_link
+    - field.field.node.external_resource.field_tagline
+    - field.field.node.external_resource.field_tags
+    - field.field.node.external_resource.resource_type
+    - field.field.node.external_resource.source
+    - node.type.external_resource
+  module:
+    - user
+id: node.external_resource.full
+targetEntityType: node
+bundle: external_resource
+mode: full
+content:
+  field_tags:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_link: true
+  field_tagline: true
+  langcode: true
+  resource_type: true
+  search_api_excerpt: true
+  source: true
