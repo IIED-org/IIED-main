@@ -2,7 +2,7 @@
 
 
 <!-- Search box with transition/close -->
-<div x-show="showSearch" x-collapse @click.away="showSearch = false" @keydown.escape.window="showSearch = false"
+<div x-cloak x-show="showSearch" x-collapse @click.away="showSearch = false" @keydown.escape.window="showSearch = false"
     id="searchbox"
     class="transition-all duration-300 ease-in-out transform" x-ref="searchBox">
     
