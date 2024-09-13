@@ -92,7 +92,7 @@ final class RequirementsTest extends AcquiaConnectorTestBase {
    * @return iterable
    *   Iterable.
    */
-  public function subscriptionDataProvider(): iterable {
+  public static function subscriptionDataProvider(): iterable {
     yield [
       TRUE,
       TRUE,

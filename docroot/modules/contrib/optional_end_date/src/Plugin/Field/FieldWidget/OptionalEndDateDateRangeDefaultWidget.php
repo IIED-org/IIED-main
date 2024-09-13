@@ -2,9 +2,9 @@
 
 namespace Drupal\optional_end_date\Plugin\Field\FieldWidget;
 
-use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDefaultWidget;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDefaultWidget;
 
 /**
  * Override the default widget.

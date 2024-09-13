@@ -7,6 +7,7 @@ namespace Drupal\Tests\acquia_connector\Kernel\Controller;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Logger\RfcLoggerTrait;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\Tests\acquia_connector\Kernel\AcquiaConnectorTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 final class AuthControllerTest extends AcquiaConnectorTestBase implements LoggerInterface {
 
   use UserCreationTrait;
+  use StringTranslationTrait;
   use RfcLoggerTrait;
 
   /**
@@ -152,9 +154,10 @@ final class AuthControllerTest extends AcquiaConnectorTestBase implements Logger
         Url::fromRoute('acquia_connector.setup_oauth')->toString(),
         $response->headers->get('Location')
       );
-      self::assertEquals(
-        ['We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href="https://docs.acquia.com/cloud-platform/known-issues/#unable-to-log-in-through-acquia-connector">this link</a>.'],
-        $this->container->get('messenger')->messagesByType('error')
+      $error_msg = $this->container->get('messenger')->messagesByType('error');
+      self::assertSame(
+        'We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href="https://docs.acquia.com/cloud-platform/known-issues/#unable-to-log-in-through-acquia-connector">this link</a>.',
+        (string)array_shift($error_msg)
       );
       self::assertEquals(
         [$error],
@@ -169,7 +172,7 @@ final class AuthControllerTest extends AcquiaConnectorTestBase implements Logger
    * @return \Generator
    *   The test data.
    */
-  public function authorizationReturnData(): \Generator {
+  public static function authorizationReturnData(): \Generator {
     yield 'success' => ['AUTHORIZATION_SUCCESSFUL'];
     yield 'error' => [
       'AUTHORIZATION_ERROR',
@@ -193,9 +196,10 @@ final class AuthControllerTest extends AcquiaConnectorTestBase implements Logger
       Url::fromRoute('acquia_connector.setup_oauth')->toString(),
       $response->headers->get('Location')
     );
+    $error_msg = $this->container->get('messenger')->messagesByType('error');
     self::assertEquals(
-      ['We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href="https://docs.acquia.com/cloud-platform/known-issues/#unable-to-log-in-through-acquia-connector">this link</a>.'],
-      $this->container->get('messenger')->messagesByType('error')
+      'We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href="https://docs.acquia.com/cloud-platform/known-issues/#unable-to-log-in-through-acquia-connector">this link</a>.',
+      (string)array_shift($error_msg)
     );
     self::assertEquals(
       [

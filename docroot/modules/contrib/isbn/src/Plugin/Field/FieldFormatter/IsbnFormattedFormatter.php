@@ -41,9 +41,12 @@ class IsbnFormattedFormatter extends FormatterBase {
    *
    * @param \Drupal\isbn\IsbnToolsServiceInterface $isbn_tools
    *   The ISBN Tools service.
+   *
+   * @return $this
    */
-  public function setIsbnTools(IsbnToolsServiceInterface $isbn_tools) {
+  public function setIsbnTools(IsbnToolsServiceInterface $isbn_tools): IsbnFormattedFormatter {
     $this->isbnTools = $isbn_tools;
+    return $this;
   }
 
   /**

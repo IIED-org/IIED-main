@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\isbn\Functional;
 
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Tests\BrowserTestBase;
 
 /**

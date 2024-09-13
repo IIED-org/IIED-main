@@ -1,14 +1,13 @@
 name: 'Login And Logout Redirect Per Role'
 type: module
 description: 'Provides ability to redirect user on Log in and Log out depending on user role.'
-core: 8.x
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^10.2 || ^11
 configure: login_redirect_per_role.redirect_url_admin_settings
 dependencies:
   - drupal:user
   - drupal:path_alias
 
-# Information added by Drupal.org packaging script on 2022-08-19
-version: '8.x-1.9'
+# Information added by Drupal.org packaging script on 2024-09-13
+version: '8.x-1.10'
 project: 'login_redirect_per_role'
-datestamp: 1660919147
+datestamp: 1726232153

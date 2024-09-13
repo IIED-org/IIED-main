@@ -2,12 +2,12 @@
 
 namespace Drupal\Tests\isbn\Kernel;
 
-use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldItemInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\Tests\field\Kernel\FieldKernelTestBase;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Tests\field\Kernel\FieldKernelTestBase;
 use PHPUnit\Framework\AssertionFailedError;
 
 /**
@@ -94,7 +94,7 @@ class IsbnItemTest extends FieldKernelTestBase {
   /**
    * Provider for testIsbnValidation().
    */
-  public function isbnValidationProvider() {
+  public static function isbnValidationProvider() {
     return [
       // Invalid ISBN numbers.
       ['abcdefghij'],
