@@ -3,26 +3,23 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.node.body
+    - field.storage.taxonomy_term.field_name
     - field.storage.node.field_area_list
     - field.storage.node.field_author_s_
-    - field.storage.node.body
     - field.storage.node.field_collections
+    - field.storage.node.field_date_published
     - field.storage.node.field_document_type
     - field.storage.node.field_product_code
     - field.storage.node.field_product_code_new
-    - field.storage.node.field_date_published
     - field.storage.node.field_theme_s_
-    - field.storage.taxonomy_term.field_name
     - search_api.server.acquia_search_server
   module:
-    - acquia_search
     - search_api_solr
-    - taxonomy
     - node
+    - taxonomy
     - search_api
 third_party_settings:
-  acquia_search:
-    use_edismax: 0
   search_api_solr:
     finalize: false
     commit_before_finalize: false
@@ -57,6 +54,7 @@ third_party_settings:
     term_modifiers:
       slop: 10000000
       fuzzy: 2
+      fuzzy_analyzer: true
     advanced:
       index_prefix: ''
       collection: ''
@@ -65,7 +63,25 @@ third_party_settings:
       limit_to_content_language: false
       include_language_independent: true
       use_language_undefined_as_fallback_language: false
-      specific_languages: {  }
+      specific_languages:
+        ar: '0'
+        bm: '0'
+        my: '0'
+        zh-hans: '0'
+        hr: '0'
+        en: '0'
+        es: '0'
+        fr: '0'
+        id: '0'
+        pl: '0'
+        pt-br: '0'
+        pt-pt: '0'
+        ru: '0'
+        si: '0'
+        sm: '0'
+        sw: '0'
+        te: '0'
+        vi: '0'
       use_universal_collation: false
 _core:
   default_config_hash: m3BA7ry9oerhED2EXWWHra57A4vZj7Eobsr5-29dq4M
@@ -426,4 +442,4 @@ options:
   cron_limit: 1000
   index_directly: true
   track_changes_in_references: false
-server: acquia_search_server
+server: solr

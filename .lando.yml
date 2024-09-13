@@ -41,9 +41,9 @@ services:
   solr:
     type: solr:8.11
     portforward: true
-    core: lando
+    core: search
     config:
-      dir: lando/solr
+      dir: config/solr
   mailhog:
     type: mailhog
     hogfrom:
