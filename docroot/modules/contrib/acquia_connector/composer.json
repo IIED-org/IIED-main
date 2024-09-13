@@ -6,6 +6,9 @@
     "require": {
         "ext-json": "*"
     },
+    "require-dev": {
+        "acquia/coding-standards": "^2"
+    },
     "extra": {
         "branch-alias": {
             "dev-4.x": "4.x-dev"

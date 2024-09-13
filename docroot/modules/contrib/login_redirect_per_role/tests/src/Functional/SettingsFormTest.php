@@ -187,14 +187,14 @@ class SettingsFormTest extends BrowserTestBase {
    * Test access to the settings form.
    */
   public function testAccess() {
-    // An anonymous user doens't have the right permission to access the
+    // An anonymous user doesn't have the right permission to access the
     // settings form.
     $this->drupalGet(Url::fromRoute('login_redirect_per_role.redirect_url_admin_settings'));
     $this->assertSession()->statusCodeEquals(403);
 
     // Login as a regular user.
     $this->drupalLogin($this->webUser);
-    // The web user doens't have the 'administer site configuration' permission.
+    // The web user doesn't have the 'administer site configuration' permission.
     $this->drupalGet(Url::fromRoute('login_redirect_per_role.redirect_url_admin_settings'));
     $this->assertSession()->statusCodeEquals(403);
 

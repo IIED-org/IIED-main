@@ -65,7 +65,8 @@ final class CodeStudioMessageTest extends AcquiaConnectorTestBase {
       self::assertEquals([], $messenger->all());
     }
     else {
-      self::assertEquals(['status' => [$expected_message]], $messenger->all());
+      $actual_msg = $messenger->all()['status'];
+      self::assertSame(['status' => $expected_message], ['status' => (string)array_shift($actual_msg)]);
     }
   }
 
@@ -75,7 +76,7 @@ final class CodeStudioMessageTest extends AcquiaConnectorTestBase {
    * @return iterable
    *   The test data.
    */
-  public function environmentData(): iterable {
+  public static function environmentData(): iterable {
     yield 'not ah' => [
       '',
       '',

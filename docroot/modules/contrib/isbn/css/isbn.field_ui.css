@@ -1,0 +1,8 @@
+/**
+ * @file
+ * Styling for the field UI.
+ */
+
+.field-icon-isbn {
+  background-image: url("../icons/55565b/isbn.svg");
+}

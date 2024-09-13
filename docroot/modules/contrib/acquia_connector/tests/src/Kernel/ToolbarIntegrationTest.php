@@ -72,7 +72,7 @@ final class ToolbarIntegrationTest extends AcquiaConnectorTestBase {
    * @return \Generator
    *   The data.
    */
-  public function credentialData() {
+  public static function credentialData() {
     yield 'no credentials' => [
       '',
       '',

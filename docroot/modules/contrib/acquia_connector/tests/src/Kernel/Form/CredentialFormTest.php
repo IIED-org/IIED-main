@@ -58,9 +58,10 @@ final class CredentialFormTest extends AcquiaConnectorTestBase {
       Url::fromRoute('acquia_connector.settings')->setAbsolute()->toString(),
       $response->headers->get('Location')
     );
-    self::assertEquals(
-      ['status' => ['<h3>Connection successful!</h3>You are now connected to Acquia Cloud. Please enter a name for your site to begin sending profile data.']],
-      $this->container->get('messenger')->all()
+    $actual_msg = $this->container->get('messenger')->all()['status'];
+    self::assertSame(
+      ['status' => '<h3>Connection successful!</h3>You are now connected to Acquia Cloud. Please enter a name for your site to begin sending profile data.'],
+      ['status' => (string)array_shift($actual_msg)]
     );
   }
 
@@ -70,7 +71,7 @@ final class CredentialFormTest extends AcquiaConnectorTestBase {
    * @return \Generator
    *   The data.
    */
-  public function credentialData() {
+  public static function credentialData() {
     yield ['ABC', 'CDE', 'a47ac10b-58cc-4372-a567-0e02b2c3d470'];
   }
 
