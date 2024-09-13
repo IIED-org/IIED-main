@@ -154,6 +154,19 @@ $settings['skip_permissions_hardening'] = TRUE;
  */
 # $settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
 
+/**
+ * Lando database credentials.
+ */
+$databases['default']['default'] = array (
+  'database' => 'database',
+  'username' => 'database',
+  'password' => 'database',
+  'host' => 'database',
+  'port' => '3306',
+  'driver' => 'mysql',
+  'prefix' => '',
+  'collation' => 'utf8mb4_general_ci',
+);
 
 // Migration database source for Drupal 7 migrations.
 $databases['d7migrate']['default'] = [
@@ -169,7 +182,6 @@ $databases['d7migrate']['default'] = [
 
 // Defining the pubs key as legacy migrations require this.
 $databases['pubs'] = $databases['d7migrate'];
-
 
 /**
  * Use "local" config split
