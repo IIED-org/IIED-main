@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '43018fdde3305e0416d39386dcb2855cde917ceb',
+        'reference' => 'e90184438f363ed7f88f3edf60d38c727dae2128',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1564,7 +1564,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '43018fdde3305e0416d39386dcb2855cde917ceb',
+            'reference' => 'e90184438f363ed7f88f3edf60d38c727dae2128',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1823,6 +1823,15 @@
             'install_path' => __DIR__ . '/../../docroot/modules/contrib/twig_xdebug',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'drupal/varnish_purge' => array(
+            'pretty_version' => '2.2.0',
+            'version' => '2.2.0.0',
+            'reference' => '8.x-2.2',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/varnish_purge',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'drupal/video_embed_field' => array(
             'pretty_version' => '2.5.0',

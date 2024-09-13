@@ -169,6 +169,7 @@
         "drupal/token": "^1.10",
         "drupal/twig_field_value": "^2.0",
         "drupal/twig_tweak": "^3.2",
+        "drupal/varnish_purge": "^2.2",
         "drupal/view_password": "^6.0",
         "drupal/view_unpublished": "^1.0",
         "drupal/views_autocomplete_filters": "^1.3",

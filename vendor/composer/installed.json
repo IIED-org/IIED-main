@@ -12712,6 +12712,69 @@
             "install-path": "../../docroot/modules/contrib/twig_xdebug"
         },
         {
+            "name": "drupal/varnish_purge",
+            "version": "2.2.0",
+            "version_normalized": "2.2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/varnish_purge.git",
+                "reference": "8.x-2.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/varnish_purge-8.x-2.2.zip",
+                "reference": "8.x-2.2",
+                "shasum": "9fbddb71417113d58345d2fbe9d0a1aa9c5d5c36"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10"
+            },
+            "require-dev": {
+                "drupal/purge": "*",
+                "drupal/purge_tokens": "*",
+                "drupal/varnish_purger-varnish_purger": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.2",
+                    "datestamp": "1681218333",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "deadbeef",
+                    "homepage": "https://www.drupal.org/user/93644"
+                },
+                {
+                    "name": "javivf",
+                    "homepage": "https://www.drupal.org/user/2789335"
+                },
+                {
+                    "name": "littlethoughts",
+                    "homepage": "https://www.drupal.org/user/2479724"
+                },
+                {
+                    "name": "MiSc",
+                    "homepage": "https://www.drupal.org/user/382892"
+                }
+            ],
+            "homepage": "https://www.drupal.org/project/varnish_purge",
+            "support": {
+                "source": "https://git.drupalcode.org/project/varnish_purge"
+            },
+            "install-path": "../../docroot/modules/contrib/varnish_purge"
+        },
+        {
             "name": "drupal/video_embed_field",
             "version": "2.5.0",
             "version_normalized": "2.5.0.0",
