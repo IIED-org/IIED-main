@@ -4,10 +4,8 @@ namespace Drupal\devel\Controller;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\RouteProviderInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Drupal\devel\DevelDumperManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -35,51 +33,17 @@ class RouteInfoController extends ControllerBase {
   protected DevelDumperManagerInterface $dumper;
 
   /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
-   * RouterInfoController constructor.
-   *
-   * @param \Drupal\Core\Routing\RouteProviderInterface $provider
-   *   The route provider.
-   * @param \Symfony\Component\Routing\RouterInterface $router
-   *   The router service.
-   * @param \Drupal\devel\DevelDumperManagerInterface $dumper
-   *   The dumper service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    RouteProviderInterface $provider,
-    RouterInterface $router,
-    DevelDumperManagerInterface $dumper,
-    MessengerInterface $messenger,
-    TranslationInterface $string_translation
-  ) {
-    $this->routeProvider = $provider;
-    $this->router = $router;
-    $this->dumper = $dumper;
-    $this->messenger = $messenger;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('router.route_provider'),
-      $container->get('router.no_access_checks'),
-      $container->get('devel.dumper'),
-      $container->get('messenger'),
-      $container->get('string_translation'),
-    );
+    $instance = parent::create($container);
+    $instance->routeProvider = $container->get('router.route_provider');
+    $instance->router = $container->get('router.no_access_checks');
+    $instance->dumper = $container->get('devel.dumper');
+    $instance->messenger = $container->get('messenger');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**

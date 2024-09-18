@@ -343,11 +343,8 @@ libraries:
     - tabby
     - tippyjs/6.x
 requirements:
-  cdn: true
+  cdn: false
   clientside_validation: true
   bootstrap: true
   spam: true
-third_party_settings:
-  honeypot:
-    honeypot: true
-    time_restriction: true
+third_party_settings: {  }

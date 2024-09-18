@@ -24,26 +24,14 @@ class SwitchUserPageForm extends FormBase {
   protected SwitchUserListHelper $switchUserListHelper;
 
   /**
-   * Constructs a new SwitchUserPageForm object.
-   *
-   * @param \Drupal\devel\SwitchUserListHelper $switchUserListHelper
-   *   A helper for creating the user list form.
-   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
-   *   The form builder service.
-   */
-  public function __construct(SwitchUserListHelper $switchUserListHelper, FormBuilderInterface $form_builder) {
-    $this->switchUserListHelper = $switchUserListHelper;
-    $this->formBuilder = $form_builder;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('devel.switch_user_list_helper'),
-      $container->get('form_builder'),
-    );
+    $instance = parent::create($container);
+    $instance->switchUserListHelper = $container->get('devel.switch_user_list_helper');
+    $instance->formBuilder = $container->get('form_builder');
+
+    return $instance;
   }
 
   /**

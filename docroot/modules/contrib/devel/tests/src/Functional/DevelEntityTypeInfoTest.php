@@ -57,7 +57,7 @@ class DevelEntityTypeInfoTest extends DevelBrowserTestBase {
     $this->assertEquals(5, count($headers));
 
     $expected_headers = ['ID', 'Name', 'Provider', 'Class', 'Operations'];
-    $actual_headers = array_map(fn(NodeElement $element) => $element->getText(), $headers);
+    $actual_headers = array_map(static fn(NodeElement $element) => $element->getText(), $headers);
     $this->assertSame($expected_headers, $actual_headers);
 
     // Tests the presence of some (arbitrarily chosen) entity types in the
@@ -84,7 +84,6 @@ class DevelEntityTypeInfoTest extends DevelBrowserTestBase {
       $row = $table->find('css', sprintf('tbody tr:contains("%s")', $entity_type_id));
       $this->assertNotNull($row);
 
-      /** @var \Behat\Mink\Element\NodeElement[] $cells */
       $cells = $row->findAll('css', 'td');
       $this->assertEquals(5, count($cells));
 
@@ -128,9 +127,9 @@ class DevelEntityTypeInfoTest extends DevelBrowserTestBase {
     $entity_type_id = 'date_format';
 
     // Ensures that the page works as expected.
-    $this->drupalGet("/devel/entity/info/$entity_type_id");
+    $this->drupalGet('/devel/entity/info/' . $entity_type_id);
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains("Entity type $entity_type_id");
+    $this->assertSession()->pageTextContains('Entity type ' . $entity_type_id);
 
     // Ensures that the page returns a 404 error if the requested entity type is
     // not defined.
@@ -140,7 +139,7 @@ class DevelEntityTypeInfoTest extends DevelBrowserTestBase {
     // Ensures that the page is accessible ony to users with the adequate
     // permissions.
     $this->drupalLogout();
-    $this->drupalGet("/devel/entity/info/$entity_type_id");
+    $this->drupalGet('/devel/entity/info/' . $entity_type_id);
     $this->assertSession()->statusCodeEquals(403);
   }
 
@@ -151,9 +150,9 @@ class DevelEntityTypeInfoTest extends DevelBrowserTestBase {
     $entity_type_id = 'date_format';
 
     // Ensures that the page works as expected.
-    $this->drupalGet("/devel/entity/fields/$entity_type_id");
+    $this->drupalGet('/devel/entity/fields/' . $entity_type_id);
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains("Entity fields $entity_type_id");
+    $this->assertSession()->pageTextContains('Entity fields ' . $entity_type_id);
 
     // Ensures that the page returns a 404 error if the requested entity type is
     // not defined.
@@ -163,7 +162,7 @@ class DevelEntityTypeInfoTest extends DevelBrowserTestBase {
     // Ensures that the page is accessible ony to users with the adequate
     // permissions.
     $this->drupalLogout();
-    $this->drupalGet("/devel/entity/fields/$entity_type_id");
+    $this->drupalGet('/devel/entity/fields/' . $entity_type_id);
     $this->assertSession()->statusCodeEquals(403);
   }
 

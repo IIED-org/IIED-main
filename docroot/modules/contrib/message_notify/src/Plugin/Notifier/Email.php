@@ -11,7 +11,7 @@ use Drupal\message_notify\Exception\MessageNotifyException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Email notifier.
+ * Email notifier plugin.
  *
  * @Notifier(
  *   id = "email",
@@ -89,8 +89,8 @@ class Email extends MessageNotifierBase {
   public function deliver(array $output = []) {
     /** @var \Drupal\user\UserInterface $account */
     $account = $this->message->getOwner();
-
-    if (!$this->configuration['mail'] && !$account->id()) {
+    $invalid_account = (!$account || (!$this->configuration['mail'] && !$account->id()));
+    if ($invalid_account) {
       // The message has no owner and no mail was passed. This will cause an
       // exception, we just make sure it's a clear one.
       throw new MessageNotifyException('It is not possible to send a Message to an anonymous owner. You may set an owner using ::setOwner() or pass a "mail" to the $options array.');
@@ -121,7 +121,7 @@ class Email extends MessageNotifierBase {
       $from
     );
 
-    return isset($result['result']);
+    return $result['result'] ?? FALSE;
   }
 
 }

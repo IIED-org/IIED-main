@@ -16,6 +16,25 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function readonlymode_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the readonlymode module.
+    case 'help.page.readonlymode':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Read Only Mode provides an alternate to the built in Maintenance Mode in Drupal..') . '</p>';
+      $output .= '<p>' . t('Drupal. Instead of displaying a static text file to users while the site is in maintenance mode, Read Only Mode will allow access (reading) of new content while preventing the addition of new content (posting / submitting forms / etc)..') . '</p>';
+
+      return $output;
+
+    default:
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().

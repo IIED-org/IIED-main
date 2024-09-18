@@ -118,6 +118,11 @@ class DefaultFacetsSummaryManager {
       ],
     ];
 
+    // Order results by the $facets_config.
+    usort($facets, function ($a, $b) use ($facets_config) {
+      return $facets_config[$a->id()]['weight'] <=> $facets_config[$b->id()]['weight'];
+    });
+
     $results = [];
     foreach ($facets as $facet) {
       $show_count = $facets_config[$facet->id()]['show_count'];

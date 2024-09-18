@@ -5,6 +5,8 @@ namespace Drupal\Tests\facets_pretty_paths\Traits;
 use Drupal\Core\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -32,6 +34,7 @@ trait FacetsRequestTrait {
     $route->setDefault('facets_query', '');
 
     $request = Request::create("admin/$filters");
+    $request->setSession(new Session(new MockArraySessionStorage()));
     $request->attributes->set(RouteObjectInterface::ROUTE_OBJECT, $route);
     $request->attributes->set(RouteObjectInterface::ROUTE_NAME, 'system.admin');
     $request->attributes->set('facets_query', $filters);

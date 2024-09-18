@@ -3,7 +3,6 @@
 namespace Drupal\devel_test\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -12,21 +11,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DevelTestController extends ControllerBase {
 
   /**
-   * Constructs a new DevelTestController object.
-   *
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
+   * {@inheritdoc}
    */
-  public function __construct(
-    TranslationInterface $string_translation
-  ) {
-    $this->stringTranslation = $string_translation;
-  }
+  public static function create(ContainerInterface $container): static {
+    $instance = parent::create($container);
+    $instance->stringTranslation = $container->get('string_translation');
 
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('string_translation'),
-    );
+    return $instance;
   }
 
   /**

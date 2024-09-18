@@ -43,7 +43,7 @@ class TaxonomyManagerForm extends FormBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $taxonomyTypeManager;
+  protected $entityTypeManager;
 
   /**
    * Current path.
@@ -73,7 +73,7 @@ class TaxonomyManagerForm extends FormBase {
    *   The factory for configuration objects.
    * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
    *   The form builder.
-   * @param \Drupal\Core\Entity\EntityFormBuilderInterface $form_builder
+   * @param \Drupal\Core\Entity\EntityFormBuilderInterface $entity_form_builder
    *   The entity form builder.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
@@ -88,7 +88,7 @@ class TaxonomyManagerForm extends FormBase {
     $this->configFactory = $config_factory;
     $this->formBuilder = $form_builder;
     $this->entityFormBuilder = $entity_form_builder;
-    $this->taxonomyTypeManager = $entity_type_manager->getStorage('taxonomy_term');
+    $this->entityTypeManager = $entity_type_manager;
     $this->currentPath = $current_path;
     $this->urlGenerator = $url_generator;
     $this->taxonomyManagerHelper = $taxonomy_manager_helper;
@@ -119,7 +119,7 @@ class TaxonomyManagerForm extends FormBase {
   /**
    * Returns the title for the whole page.
    *
-   * @param string $taxonomy_vocabulary
+   * @param object $taxonomy_vocabulary
    *   The name of the vocabulary.
    *
    * @return string
@@ -146,7 +146,7 @@ class TaxonomyManagerForm extends FormBase {
    *   The form structure.
    */
   public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL) {
-    $current_user = \Drupal::currentUser();
+    $current_user = $this->currentUser();
     $form['voc'] = [
       '#type' => 'value',
       "#value" => $taxonomy_vocabulary,
@@ -201,7 +201,7 @@ class TaxonomyManagerForm extends FormBase {
     $form['toolbar']['export'] = [
       '#type' => 'submit',
       '#name' => 'export',
-      '#value' => $this->t('Export'),
+      '#value' => $this->t('Export CSV'),
       '#ajax' => [
         'callback' => '::exportFormCallback',
       ],
@@ -210,16 +210,16 @@ class TaxonomyManagerForm extends FormBase {
     $form['toolbar']['miniexport'] = [
       '#type' => 'submit',
       '#name' => 'export',
-      '#value' => $this->t('Export all'),
+      '#value' => $this->t('Export list'),
       '#ajax' => [
         'callback' => '::exportListFormCallback',
       ],
     ];
 
     /* Vocabulary switcher */
-    $vocabularies = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple();
+    $vocabularies = $this->entityTypeManager->getStorage('taxonomy_vocabulary')->loadMultiple();
     foreach ($vocabularies as $voc) {
-      if (\Drupal::entityTypeManager()->getAccessControlHandler('taxonomy_term')->createAccess($voc->id())) {
+      if ($this->entityTypeManager->getAccessControlHandler('taxonomy_term')->createAccess($voc->id())) {
         $voc_list[$voc->id()] = $voc->label();
       }
     }
@@ -297,7 +297,7 @@ class TaxonomyManagerForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function taxonomy_term_submit_handler(array &$form, FormStateInterface $form_state) {
+  public function taxonomyTermSubmitHandler(array &$form, FormStateInterface $form_state) {
     $tid = $form_state->getValue(['search_terms']);
     $url = Url::fromRoute('entity.taxonomy_term.edit_form', [
       'taxonomy_term' => $tid,
@@ -341,7 +341,7 @@ class TaxonomyManagerForm extends FormBase {
    * AJAX callback handler for export terms from a given vocabulary.
    */
   public function exportFormCallback($form, FormStateInterface $form_state) {
-    return $this->modalHelper($form_state, 'Drupal\taxonomy_manager\Form\ExportTermsForm', 'taxonomy_manager.admin_vocabulary.export', $this->t('Export terms'));
+    return $this->modalHelper($form_state, 'Drupal\taxonomy_manager\Form\ExportTermsForm', 'taxonomy_manager.admin_vocabulary.export', $this->t('Export CSV'));
   }
 
   /**
@@ -352,17 +352,10 @@ class TaxonomyManagerForm extends FormBase {
   }
 
   /**
-   * AJAX callback handler for export terms from a given vocabulary.
-   */
-  public function exportCsvFormCallback($form, FormStateInterface $form_state) {
-    return $this->modalHelper($form_state, 'Drupal\taxonomy_manager\Form\ExportTermsMiniForm', 'taxonomy_manager.admin_vocabulary.exportlist', $this->t('Export terms (CSV)'));
-  }
-
-  /**
    * AJAX callback handler for the term data form.
    */
   public function termDataCallback($form, FormStateInterface $form_state) {
-    $taxonomy_term = $this->taxonomyTypeManager->load($form_state->getValue('load-term-data'));
+    $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($form_state->getValue('load-term-data'));
     $term_form = $this->entityFormBuilder->getForm($taxonomy_term, 'taxonomy_manager');
 
     $term_form['#prefix'] = '<div id="taxonomy-term-data-form">';

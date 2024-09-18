@@ -47,6 +47,8 @@ class ParagraphSelection extends DefaultSelection {
       $bundle_options_simple[$bundle_name] = $bundle_info['label'];
       $bundle_options[$bundle_name] = array(
         'label' => $bundle_info['label'],
+        'description' => $this->entityTypeManager->getStorage('paragraphs_type')
+          ->load($bundle_name)?->getDescription(),
         'enabled' => $this->configuration['target_bundles_drag_drop'][$bundle_name]['enabled'] ?? FALSE,
         'weight' => $this->configuration['target_bundles_drag_drop'][$bundle_name]['weight'] ?? $weight,
       );
@@ -78,6 +80,7 @@ class ParagraphSelection extends DefaultSelection {
         '#type' => 'table',
         '#header' => [
           $this->t('Type'),
+          $this->t('Description'),
           $this->t('Weight'),
         ],
         '#attributes' => [
@@ -113,6 +116,10 @@ class ParagraphSelection extends DefaultSelection {
         '#title_display' => 'after',
         '#default_value' => $bundle_info['enabled'],
       );
+
+      $form['target_bundles_drag_drop'][$bundle_name]['description'] = [
+        '#markup' => $bundle_info['description'],
+      ];
 
       $form['target_bundles_drag_drop'][$bundle_name]['weight'] = array(
         '#type' => 'weight',

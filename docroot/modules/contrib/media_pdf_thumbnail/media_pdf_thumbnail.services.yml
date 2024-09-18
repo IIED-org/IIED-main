@@ -1,8 +1,12 @@
 services:
   media_pdf_thumbnail.image.manager:
     class: Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImageManager
-    arguments: [ '@media_pdf_thumbnail.imagick.manager', '@entity_type.manager', '@file_system', '@config.factory', '@database', '@cache_tags.invalidator', '@logger.factory' ]
+    arguments: [ '@media_pdf_thumbnail.imagick.manager', '@entity_type.manager', '@file_system', '@config.factory', '@database', '@cache_tags.invalidator', '@logger.factory', '@module_handler' ]
 
   media_pdf_thumbnail.imagick.manager:
     class: Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImagickManager
-    arguments: [ '@logger.factory', '@file_system' ]
+    arguments: [ '@logger.factory', '@file_system', '@stream_wrapper_manager' ]
+
+  media_pdf_thumbnail.pdf_image_entity.queue.manager:
+    class: Drupal\media_pdf_thumbnail\Manager\PdfImageEntityQueueManager
+    arguments: [ '@queue', '@plugin.manager.queue_worker', '@media_pdf_thumbnail.image.manager', '@state', '@logger.factory', '@database' ]

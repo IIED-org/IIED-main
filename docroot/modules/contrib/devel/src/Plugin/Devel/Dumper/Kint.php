@@ -2,9 +2,13 @@
 
 namespace Drupal\devel\Plugin\Devel\Dumper;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\devel\DevelDumperBase;
 use Kint\Kint as KintOriginal;
 use Kint\Parser\BlacklistPlugin;
+use Kint\Parser\ClassMethodsPlugin;
+use Kint\Parser\ClassStaticsPlugin;
+use Kint\Parser\IteratorPlugin;
 use Kint\Renderer\RichRenderer;
 use Psr\Container\ContainerInterface;
 
@@ -33,9 +37,9 @@ class Kint extends DevelDumperBase {
   protected function configure() {
     // Remove resource-hungry plugins.
     \Kint::$plugins = array_diff(\Kint::$plugins, [
-      'Kint\\Parser\\ClassMethodsPlugin',
-      'Kint\\Parser\\ClassStaticsPlugin',
-      'Kint\\Parser\\IteratorPlugin',
+      ClassMethodsPlugin::class,
+      ClassStaticsPlugin::class,
+      IteratorPlugin::class,
     ]);
     \Kint::$aliases = $this->getInternalFunctions();
 
@@ -46,7 +50,7 @@ class Kint extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public function export($input, $name = NULL) {
+  public function export(mixed $input, ?string $name = NULL): MarkupInterface|string {
     ob_start();
     if ($name == '__ARGS__') {
       call_user_func_array(['Kint', 'dump'], $input);
@@ -66,8 +70,9 @@ class Kint extends DevelDumperBase {
     else {
       \Kint::dump($input);
     }
+
     $dump = ob_get_clean();
-    if ($name) {
+    if ($name !== NULL && $name !== '') {
       // Kint no longer treats an additional parameter as a custom title, but we
       // can add the required $name as a label at the top of the output.
       $dump = str_replace('<div class="kint-rich">', '<div class="kint-rich">' . $name . ': ', $dump);
@@ -76,7 +81,7 @@ class Kint extends DevelDumperBase {
       // matches the minimum to ensure we get just the string to be removed.
       $pattern = '/(<dl><dt>[\w\d\s<>\/()]*"---temporary-fix-see-issue-252---"<\/dt><\/dl>)/';
       preg_match($pattern, $dump, $matches);
-      if (!preg_last_error() && isset($matches[1])) {
+      if (preg_last_error() === 0 && isset($matches[1])) {
         $dump = str_replace($matches[1], '', $dump);
       }
     }
@@ -87,7 +92,7 @@ class Kint extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public function getInternalFunctions(): array {
+  protected function getInternalFunctions(): array {
     return array_merge(parent::getInternalFunctions(), KintOriginal::$aliases);
   }
 

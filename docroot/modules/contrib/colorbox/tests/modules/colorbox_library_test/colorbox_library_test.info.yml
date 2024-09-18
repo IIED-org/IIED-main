@@ -3,9 +3,9 @@ description: 'Ensure colorbox can be tested properly with the downloaded library
 type: module
 hidden: true
 package: Testing
-core_version_requirement: ^8.8 || ^9 || ^10
+core_version_requirement: ^10.2 || ^11
 
-# Information added by Drupal.org packaging script on 2024-03-08
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2024-08-12
+version: '2.1.1'
 project: 'colorbox'
-datestamp: 1709927276
+datestamp: 1723487175

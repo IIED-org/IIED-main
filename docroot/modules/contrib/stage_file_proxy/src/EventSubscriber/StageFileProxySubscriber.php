@@ -7,6 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\Core\Url;
+use Drupal\image\Controller\ImageStyleDownloadController;
 use Drupal\stage_file_proxy\DownloadManagerInterface;
 use Drupal\stage_file_proxy\EventDispatcher\AlterExcludedPathsEvent;
 use Psr\Log\LoggerInterface;
@@ -114,11 +115,18 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
     // If file is fetched and use_imagecache_root is set, original is used.
     $paths = [$relative_path];
 
-    // Webp support.
-    $is_webp = FALSE;
-    if (strpos($relative_path, '.webp')) {
-      $paths[] = str_replace('.webp', '', $relative_path);
-      $is_webp = TRUE;
+    // Image style file conversion support.
+    $unconverted_path = substr(ImageStyleDownloadController::getUriWithoutConvertedExtension('public://' . $relative_path), strlen('public://'));
+    if ($unconverted_path !== $relative_path) {
+      if ($config->get('use_imagecache_root')) {
+        // Check the unconverted file path first in order to use the local
+        // original image.
+        array_unshift($paths, $unconverted_path);
+      }
+      else {
+        // Check the unconverted path after the image derivative.
+        $paths[] = $unconverted_path;
+      }
     }
 
     foreach ($paths as $relative_path) {
@@ -134,12 +142,12 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
       // Is this imagecache? Request the root file and let imagecache resize.
       // We check this first so locally added files have precedence.
       $original_path = $this->manager->styleOriginalPath($relative_path, TRUE);
-      if ($original_path && !$is_webp) {
+      if ($original_path) {
         if (file_exists($original_path)) {
           // Imagecache can generate it without our help.
           return;
         }
-        if ($config->get('use_imagecache_root')) {
+        if ($config->get('use_imagecache_root') && $unconverted_path === $relative_path) {
           // Config says: Fetch the original.
           $fetch_path = StreamWrapperManager::getTarget($original_path);
         }
@@ -172,38 +180,6 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
         $event->setResponse(new RedirectResponse($location));
       }
     }
-  }
-
-  /**
-   * Get the file URI without the extension from any conversion image style.
-   *
-   * If the image style converted the image, then an extension has been added
-   * to the original file, resulting in filenames like image.png.jpeg.
-   *
-   * @param string $path
-   *   The file path.
-   *
-   * @return string
-   *   The file path without the extension from any conversion image style.
-   *   Defaults to the $path when the $path does not have a double extension.
-   *
-   * @todo Use ImageStyleDownloadController method for a URI once https://www.drupal.org/project/drupal/issues/2786735 has been committed.
-   * @todo this is used by #3402972 but caused regressions.
-   */
-  public static function getFilePathWithoutConvertedExtension(string $path): string {
-    $original_path = $path;
-    $original_path = '/' . ltrim($original_path, '/');
-    $path_info = pathinfo($original_path);
-    // Only convert the URI when the filename still has an extension.
-    if (!empty($path_info['filename']) && pathinfo($path_info['filename'], PATHINFO_EXTENSION)) {
-      $original_path = '';
-      if (!empty($path_info['dirname']) && $path_info['dirname'] !== '.') {
-        $original_path .= $path_info['dirname'] . DIRECTORY_SEPARATOR;
-      }
-      $original_path .= $path_info['filename'];
-    }
-
-    return str_starts_with($path, '/') ? $original_path : ltrim($original_path, '/');
   }
 
   /**

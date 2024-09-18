@@ -5,6 +5,7 @@ namespace Drupal\ds\Form;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -57,9 +58,11 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
    *   The cache invalidator.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
+   *    The typed config manager.
    */
-  public function __construct(ConfigFactory $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheTagsInvalidatorInterface $cache_invalidator, ModuleHandlerInterface $module_handler) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactory $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheTagsInvalidatorInterface $cache_invalidator, ModuleHandlerInterface $module_handler, TypedConfigManagerInterface $typed_config_manager) {
+    parent::__construct($config_factory, $typed_config_manager);
     $this->entityTypeManager = $entity_type_manager;
     $this->cacheInvalidator = $cache_invalidator;
     $this->moduleHandler = $module_handler;
@@ -73,7 +76,8 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get('cache_tags.invalidator'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('config.typed')
     );
   }
 

@@ -1,0 +1,13 @@
+--- allowed_formats.module
++++ allowed_formats.module
+@@ -100,6 +100,10 @@ function allowed_formats_field_widget_form_alter(&$element, FormStateInterface $
+ 
+     if (!empty($allowed_formats_setting) && is_array($allowed_formats_setting)) {
+       $element['#allowed_formats'] = $allowed_formats_setting;
++
++      if (!in_array($element['#format'], $element['#allowed_formats'])) {
++        $element['#format'] = NULL;
++      }
+     }
+ 
+     /** @var \Drupal\Core\Field\WidgetInterface $widget */

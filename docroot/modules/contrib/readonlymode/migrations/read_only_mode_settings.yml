@@ -1,0 +1,25 @@
+id: read_only_mode_settings
+label: Read only mode configuration
+migration_tags:
+  - Drupal 7
+  - Configuration
+source:
+  plugin: variable
+  variables:
+    - site_readonly
+    - site_readonly_message
+    - site_readonly_message_form_not_saved
+    - site_readonly_url
+    - site_readonly_forms_allowed
+    - site_readonly_forms_viewonly
+  source_module: readonlymode
+process:
+  enabled: site_readonly
+  url: site_readonly_url
+  messages/default: site_readonly_message
+  messages/not_saved: site_readonly_message_form_not_saved
+  forms/additional/edit: site_readonly_forms_allowed
+  forms/additional/view: site_readonly_forms_viewonly
+destination:
+  plugin: config
+  config_name: readonlymode.settings

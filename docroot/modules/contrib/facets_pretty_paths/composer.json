@@ -13,7 +13,7 @@
     }
   ],
   "require": {
-    "drupal/facets": "^1 || ^2 || ^3",
+    "drupal/facets": "^2 || ^3",
     "drupal/pathauto": "^1"
   },
   "require-dev": {

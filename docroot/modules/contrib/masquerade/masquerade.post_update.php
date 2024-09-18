@@ -23,3 +23,13 @@ function masquerade_post_update_add_block_setting_link(&$sandbox) {
     return FALSE;
   });
 }
+
+/**
+ * Add configuration to force update last user's access time.
+ */
+function masquerade_post_update_add_settings() {
+  \Drupal::configFactory()
+    ->getEditable('masquerade.settings')
+    ->set('update_user_last_access', TRUE)
+    ->save(TRUE);
+}

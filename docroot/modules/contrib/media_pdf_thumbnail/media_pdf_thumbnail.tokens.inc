@@ -5,10 +5,7 @@
  * Contains media_pdf_thumbnail.module.
  */
 
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 
 /**
@@ -21,7 +18,7 @@ function media_pdf_thumbnail_token_info() {
     'description' => t('Media PDF Thumbnail tokens.'),
   ];
 
-  foreach (_media_pdf_thumbnail_getFieldsList() as $key => $list) {
+  foreach (_media_pdf_thumbnail_getFieldsList() as $list) {
 
     if (!empty($list['fields'])) {
 
@@ -54,6 +51,10 @@ function media_pdf_thumbnail_token_info() {
     }
   }
 
+  if (empty($mediaPdfThumbnail)) {
+    return [];
+  }
+
   return [
     'types' => $types,
     'tokens' => ['media_pdf_thumbnail' => $mediaPdfThumbnail],
@@ -74,12 +75,13 @@ function media_pdf_thumbnail_tokens($type, $tokens, array $data, array $options,
       $nameArray = explode(':', $name);
       $pdfField = $nameArray[0];
       $page = $nameArray[1];
-      $value = $nameArray[2];
-      $imageStyle = !empty($nameArray[3]) ? $nameArray[3] : NULL;
-      $linkPdf = !empty($nameArray[4]) ? $nameArray[4] : NULL;
+      $format = $nameArray[2];
+      $value = $nameArray[3];
+      $imageStyle = !empty($nameArray[4]) ? $nameArray[4] : NULL;
+      $linkPdf = !empty($nameArray[5]) ? $nameArray[5] : NULL;
       $media = $data['media'];
       $mediaPdfThumbnailImageManager = Drupal::service('media_pdf_thumbnail.image.manager');
-      $infos = $mediaPdfThumbnailImageManager->createThumbnail($media, $pdfField, $page);
+      $infos = $mediaPdfThumbnailImageManager->createThumbnail($media, $pdfField, $format, $page);
 
       if ($value == 'render' && $imageStyle) {
         $text = [
@@ -103,4 +105,3 @@ function media_pdf_thumbnail_tokens($type, $tokens, array $data, array $options,
 
   return $replacements;
 }
-

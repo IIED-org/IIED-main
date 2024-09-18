@@ -1,10 +1,9 @@
 name: Facets Pretty Paths test
 description: Test module for Facets Pretty Paths
-core_version_requirement: '^9.1 || ^10'
 type: module
 package: Testing
 
-# Information added by Drupal.org packaging script on 2024-02-29
-version: '2.0.1'
+# Information added by Drupal.org packaging script on 2024-08-07
+version: '2.0.2'
 project: 'facets_pretty_paths'
-datestamp: 1709249048
+datestamp: 1723043306

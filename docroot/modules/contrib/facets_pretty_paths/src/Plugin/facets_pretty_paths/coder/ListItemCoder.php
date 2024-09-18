@@ -2,10 +2,7 @@
 
 namespace Drupal\facets_pretty_paths\Plugin\facets_pretty_paths\coder;
 
-use Drupal\Core\Field\FieldItemList;
 use Drupal\facets_pretty_paths\Coder\CoderPluginBase;
-use Drupal\field\Entity\FieldConfig;
-use Drupal\node\Entity\Node;
 
 /**
  * List item facets pretty paths coder.

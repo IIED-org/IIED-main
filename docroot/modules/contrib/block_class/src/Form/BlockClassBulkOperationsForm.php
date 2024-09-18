@@ -7,12 +7,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Drupal\Core\Extension\ExtensionList;
-use Drupal\Core\Routing\RouteMatchInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 
 /**
  * Form for Block Class Settings.
@@ -20,66 +14,6 @@ use Drupal\Core\Messenger\MessengerInterface;
 class BlockClassBulkOperationsForm extends ConfigFormBase {
 
   use StringTranslationTrait;
-
-  /**
-   * The messenger.
-   *
-   * @var \Symfony\Component\HttpFoundation\Session\Session
-   */
-  protected $session;
-
-
-  /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
-   * The current route match.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected $routeMatch;
-
-  /**
-   * The extension list module.
-   *
-   * @var \Drupal\Core\Extension\ExtensionList
-   */
-  protected $extensionListModule;
-
-  /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * Creates the construct.
-   */
-  public function __construct(RouteMatchInterface $route_match, ExtensionList $extension_list_module, ConfigFactoryInterface $config_factory, MessengerInterface $messenger, Session $session) {
-    $this->routeMatch = $route_match;
-    $this->extensionListModule = $extension_list_module;
-    $this->configFactory = $config_factory;
-    $this->messenger = $messenger;
-    $this->session = $session;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('current_route_match'),
-      $container->get('extension.list.module'),
-      $container->get('config.factory'),
-      $container->get('messenger'),
-      $container->get('session')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -103,7 +37,7 @@ class BlockClassBulkOperationsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     // Get config object.
-    $config = $this->configFactory->getEditable('block_class.settings');
+    $config = $this->config('block_class.settings');
 
     $enable_attributes = $config->get('enable_attributes', FALSE);
 
@@ -189,19 +123,11 @@ class BlockClassBulkOperationsForm extends ConfigFormBase {
 
     $form['classes_to_be_added']['#attributes']['class'][] = 'block-class-bulk-operations-insert-classes_to_be_added';
 
-    // Default value for maxlength on attributes.
-    $maxlength_attributes = FALSE;
-
-    // Get maxlength if exists.
-    if (!empty($config->get('maxlength_attributes'))) {
-      $maxlength_attributes = $config->get('maxlength_attributes');
-    }
-
     $form['attributes_to_be_added'] = [
       '#title' => $this->t("Attributes to be added"),
       '#type' => 'textarea',
       '#description' => $this->t('Here you can insert any attributes, use one per line. For example: data-block-type|info'),
-      '#maxlength' => $maxlength_attributes,
+      '#maxlength' => $config->get('maxlength_attributes'),
       '#states' => [
         'visible' => [
           ':input[name="operation"]' => [
@@ -305,7 +231,7 @@ class BlockClassBulkOperationsForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
 
     // Get config object.
-    $config = $this->configFactory->getEditable('block_class.settings');
+    $config = $this->config('block_class.settings');
 
     switch ($form_state->getValue('operation')) {
 
@@ -487,11 +413,6 @@ class BlockClassBulkOperationsForm extends ConfigFormBase {
       $new_attribute = $form_state->getValue('new_attribute');
       $parameters['new_attribute'] = base64_encode($new_attribute);
     }
-
-    // Set session to confirm bulk operation. This session will be used on
-    // confirmation page. So we'll show the confirmation only for users with
-    // this session.
-    $this->session->set('block_class_confirm_bulk_operation', $operation);
 
     // Get path confirmation bulk operation.
     $path_confirm_bulk_operation = Url::fromRoute('block_class.confirm_bulk_operation', $parameters)->toString();

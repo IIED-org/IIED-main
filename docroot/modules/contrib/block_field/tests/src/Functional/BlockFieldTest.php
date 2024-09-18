@@ -32,6 +32,18 @@ class BlockFieldTest extends BrowserTestBase {
   ];
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp(): void {
+    // BC for 10.2 and earlier, block_content.type revision schema changed from
+    // integer to boolean.
+    if (version_compare(\Drupal::VERSION, '10.3.0', '<')) {
+      $this->strictConfigSchema = FALSE;
+    }
+    parent::setUp();
+  }
+
+  /**
    * Tests block field.
    */
   public function testBlockField() {
@@ -72,9 +84,19 @@ class BlockFieldTest extends BrowserTestBase {
     ], 'Add another item');
     $this->submitForm([], 'Save');
 
+
+
     // Check blocks displayed to authenticated.
     $node = $this->drupalGetNodeByTitle('Block field test');
+
+    // Edit and resave as a workaround, as Drupal 10.2+ no longer triggers a
+    // rebuild when adding another item and the function test doesn't trigger
+    // the select ajax callback.
+    // @todo Change the widget to add a non-js fallback button instead.
+    $this->drupalGet($node->toUrl('edit-form'));
+    $this->submitForm([], 'Save');
     $this->drupalGet($node->toUrl());
+
     $selector = '.field--name-field-block-field-test';
     $assert->elementExists('css', $selector);
     $assert->elementContains('css', $selector, '<div class="field__label">Block field test</div>');

@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\taxonomy\VocabularyInterface;
@@ -20,6 +21,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Form for merging the selected terms into a target term.
  */
 class MergeTermsForm extends MergeTerms {
+
+  use StringTranslationTrait;
 
   /**
    * The module handler service.

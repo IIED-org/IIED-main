@@ -3,22 +3,20 @@
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
 use Drupal\comment\CommentManagerInterface;
+use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Utility\Random;
 use Drupal\content_translation\ContentTranslationManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ExtensionPathResolver;
-use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\node\NodeInterface;
@@ -117,111 +115,32 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   protected bool $drushBatch = FALSE;
 
   /**
-   * The construct.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param array $plugin_definition
-   *   The plugin definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   * @param \Drupal\node\NodeStorageInterface $node_storage
-   *   The node storage.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $node_type_storage
-   *   The node type storage.
-   * @param \Drupal\user\UserStorageInterface $user_storage
-   *   The user storage.
-   * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
-   *   The url generator service.
-   * @param \Drupal\path_alias\PathAliasStorage $alias_storage
-   *   The alias storage.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
-   *   The date formatter service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   Provides system time.
-   * @param \Drupal\Core\Database\Connection $database
-   *   Database connection.
-   * @param \Drupal\Core\Extension\ExtensionPathResolver $extensionPathResolver
-   *   The extension path resolver service.
-   * @param \Drupal\user\RoleStorageInterface $role_storage
-   *   The role storage.
-   * @param \Drupal\comment\CommentManagerInterface|null $comment_manager
-   *   The comment manager service.
-   * @param \Drupal\content_translation\ContentTranslationManagerInterface|null $content_translation_manager
-   *   The content translation manager service.
-   */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    array $plugin_definition,
-    EntityTypeManagerInterface $entity_type_manager,
-    MessengerInterface $messenger,
-    LanguageManagerInterface $language_manager,
-    ModuleHandlerInterface $module_handler,
-    TranslationInterface $string_translation,
-    NodeStorageInterface $node_storage,
-    EntityStorageInterface $node_type_storage,
-    UserStorageInterface $user_storage,
-    UrlGeneratorInterface $url_generator,
-    PathAliasStorage $alias_storage,
-    DateFormatterInterface $date_formatter,
-    TimeInterface $time,
-    Connection $database,
-    ExtensionPathResolver $extensionPathResolver,
-    RoleStorageInterface $role_storage,
-    CommentManagerInterface $comment_manager = NULL,
-    ContentTranslationManagerInterface $content_translation_manager = NULL
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $messenger, $language_manager, $module_handler, $string_translation);
-    $this->nodeStorage = $node_storage;
-    $this->nodeTypeStorage = $node_type_storage;
-    $this->userStorage = $user_storage;
-    $this->urlGenerator = $url_generator;
-    $this->aliasStorage = $alias_storage;
-    $this->dateFormatter = $date_formatter;
-    $this->time = $time;
-    $this->database = $database;
-    $this->extensionPathResolver = $extensionPathResolver;
-    $this->roleStorage = $role_storage;
-    $this->commentManager = $comment_manager;
-    $this->contentTranslationManager = $content_translation_manager;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     $entity_type_manager = $container->get('entity_type.manager');
-    return new static(
-      $configuration, $plugin_id, $plugin_definition,
-      $entity_type_manager,
-      $container->get('messenger'),
-      $container->get('language_manager'),
-      $container->get('module_handler'),
-      $container->get('string_translation'),
-      $entity_type_manager->getStorage('node'),
-      $entity_type_manager->getStorage('node_type'),
-      $entity_type_manager->getStorage('user'),
-      $container->get('url_generator'),
-      $entity_type_manager->getStorage('path_alias'),
-      $container->get('date.formatter'),
-      $container->get('datetime.time'),
-      $container->get('database'),
-      $container->get('extension.path.resolver'),
-      $container->get('entity_type.manager')->getStorage('user_role'),
-      $container->has('comment.manager') ? $container->get('comment.manager') : NULL,
-      $container->has('content_translation.manager') ? $container->get('content_translation.manager') : NULL,
-    );
+
+    // @phpstan-ignore ternary.alwaysTrue (False positive)
+    $comment_manager = $container->has('comment.manager') ? $container->get('comment.manager') : NULL;
+
+    // @phpstan-ignore ternary.alwaysTrue (False positive)
+    $content_translation_manager = $container->has('content_translation.manager') ? $container->get('content_translation.manager') : NULL;
+
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->nodeTypeStorage = $entity_type_manager->getStorage('node_type');
+    $instance->nodeStorage = $entity_type_manager->getStorage('node');
+    $instance->userStorage = $entity_type_manager->getStorage('user');
+    $instance->urlGenerator = $container->get('url_generator');
+    $instance->aliasStorage = $entity_type_manager->getStorage('path_alias');
+    $instance->dateFormatter = $container->get('date.formatter');
+    $instance->time = $container->get('datetime.time');
+    $instance->database = $container->get('database');
+    $instance->extensionPathResolver = $container->get('extension.path.resolver');
+    $instance->roleStorage = $entity_type_manager->getStorage('user_role');
+    $instance->commentManager = $comment_manager;
+    $instance->contentTranslationManager = $content_translation_manager;
+
+    return $instance;
   }
 
   /**
@@ -242,7 +161,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $options[$type->id()] = [
         'type' => ['#markup' => $type->label()],
       ];
-      if ($this->commentManager) {
+      if ($this->commentManager instanceof CommentManagerInterface) {
         $comment_fields = $this->commentManager->getFields('node');
         $map = [$this->t('Hidden'), $this->t('Closed'), $this->t('Open')];
 
@@ -259,8 +178,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
             ]);
           }
         }
+
         // @todo Refactor display of comment fields.
-        if (!empty($fields)) {
+        if ($fields !== []) {
           $options[$type->id()]['comments'] = [
             'data' => [
               '#theme' => 'item_list',
@@ -277,7 +197,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $header = [
       'type' => $this->t('Content type'),
     ];
-    if ($this->commentManager) {
+    if ($this->commentManager instanceof CommentManagerInterface) {
       $header['comments'] = [
         'data' => $this->t('Comments'),
         'class' => [RESPONSIVE_PRIORITY_MEDIUM],
@@ -307,6 +227,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     foreach ([3600, 86400, 604800, 2592000, 31536000] as $interval) {
       $options[$interval] = $this->dateFormatter->formatInterval($interval, 1) . ' ' . $this->t('ago');
     }
+
     $form['time_range'] = [
       '#type' => 'select',
       '#title' => $this->t('How far back in time should the nodes be dated?'),
@@ -373,7 +294,10 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       'role' => $this->t('Role(s)'),
     ];
 
-    $num_users = $this->database->select('users')->countQuery()->execute()->fetchField();
+    $num_users = $this->database->select('users')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
     $author_form_limit = 50;
     $query = $this->database->select('users', 'u')
       ->fields('u', ['uid'])
@@ -407,16 +331,20 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     ];
 
     $role_rows = [];
-    $roles = array_map(fn($role): string => $role->label(), $this->roleStorage->loadMultiple());
+    $roles = array_map(static fn($role): string => $role->label(), $this->roleStorage->loadMultiple());
     foreach ($roles as $role_id => $role_name) {
       $role_rows[$role_id] = [
         'id' => ['#markup' => $role_id],
         'role' => ['#markup' => $role_name],
       ];
     }
+
     $form['authors-wrap']['roles'] = [
       '#type' => 'tableselect',
-      '#header' => ['id' => $this->t('Role ID'), 'role' => $this->t('Role Description')],
+      '#header' => [
+        'id' => $this->t('Role ID'),
+        'role' => $this->t('Role Description'),
+      ],
       '#options' => $role_rows,
       '#prefix' => $this->t('Specify the roles that randomly selected authors must have.'),
       '#suffix' => $this->t('You can select users and roles. Authors will be randomly selected that match at least one of the criteria. Leave <em>both</em> selections unchecked to use a random selection of @$author_form_limit users, including Anonymous.', ['@$author_form_limit' => $author_form_limit]),
@@ -431,9 +359,10 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * {@inheritdoc}
    */
   public function settingsFormValidate(array $form, FormStateInterface $form_state): void {
-    if (!array_filter($form_state->getValue('node_types'))) {
+    if (array_filter($form_state->getValue('node_types')) === []) {
       $form_state->setErrorByName('node_types', $this->t('Please select at least one content type'));
     }
+
     $skip_fields = is_null($form_state->getValue('skip_fields')) ? [] : self::csvToArray($form_state->getValue('skip_fields'));
     $base_fields = is_null($form_state->getValue('base_fields')) ? [] : self::csvToArray($form_state->getValue('base_fields'));
     $form_state->setValue('skip_fields', $skip_fields);
@@ -463,12 +392,12 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $this->contentKill($values);
     }
 
-    if (!empty($values['node_types'])) {
+    if ($values['node_types'] !== []) {
       // Generate nodes.
       $this->develGenerateContentPreNode($values);
       $start = time();
       $values['num_translations'] = 0;
-      for ($i = 1; $i <= $values['num']; $i++) {
+      for ($i = 1; $i <= $values['num']; ++$i) {
         $this->develGenerateContentAddNode($values);
         if (isset($values['feedback']) && $i % $values['feedback'] == 0) {
           $now = time();
@@ -481,6 +410,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
         }
       }
     }
+
     $this->setMessage($this->formatPlural($values['num'], 'Created 1 node', 'Created @count nodes'));
     if ($values['num_translations'] > 0) {
       $this->setMessage($this->formatPlural($values['num_translations'], 'Created 1 node translation', 'Created @count node translations'));
@@ -493,27 +423,32 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * This method is used when the number of elements is 50 or more.
    */
   private function generateBatchContent(array $values): void {
+    $operations = [];
+
     // Remove unselected node types.
     $values['node_types'] = array_filter($values['node_types']);
     // If it is drushBatch then this operation is already run in the
     // self::validateDrushParams().
     if (!$this->drushBatch) {
       // Setup the batch operations and save the variables.
-      $operations[] = ['devel_generate_operation',
+      $operations[] = [
+        'devel_generate_operation',
         [$this, 'batchContentPreNode', $values],
       ];
     }
 
     // Add the kill operation.
     if ($values['kill']) {
-      $operations[] = ['devel_generate_operation',
+      $operations[] = [
+        'devel_generate_operation',
         [$this, 'batchContentKill', $values],
       ];
     }
 
     // Add the operations to create the nodes.
-    for ($num = 0; $num < $values['num']; $num++) {
-      $operations[] = ['devel_generate_operation',
+    for ($num = 0; $num < $values['num']; ++$num) {
+      $operations[] = [
+        'devel_generate_operation',
         [$this, 'batchContentAddNode', $values],
       ];
     }
@@ -545,17 +480,19 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   /**
    * Batch wrapper for calling ContentAddNode.
    */
-  public function batchContentAddNode(array $vars, &$context): void {
+  public function batchContentAddNode(array $vars, array &$context): void {
     if ($this->drushBatch) {
       $this->develGenerateContentAddNode($vars);
     }
     else {
       $this->develGenerateContentAddNode($context['results']);
     }
+
     if (!isset($context['results']['num'])) {
       $context['results']['num'] = 0;
     }
-    $context['results']['num']++;
+
+    ++$context['results']['num'];
     if (!empty($vars['num_translations'])) {
       $context['results']['num_translations'] += $vars['num_translations'];
     }
@@ -564,7 +501,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   /**
    * Batch wrapper for calling ContentKill.
    */
-  public function batchContentKill(array $vars, &$context): void {
+  public function batchContentKill(array $vars, array &$context): void {
     if ($this->drushBatch) {
       $this->contentKill($vars);
     }
@@ -602,19 +539,19 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $default_types = array_intersect(['page', 'article'], $all_types);
     $selected_types = self::csvToArray($options['bundles'] ?: $default_types);
 
-    if (empty($selected_types)) {
+    if ($selected_types === []) {
       throw new \Exception(dt('No content types available'));
     }
 
     $values['node_types'] = array_combine($selected_types, $selected_types);
     $node_types = array_filter($values['node_types']);
 
-    if (!empty($values['kill']) && empty($node_types)) {
+    if (!empty($values['kill']) && $node_types === []) {
       throw new \Exception(dt('To delete content, please provide the content types (--bundles)'));
     }
 
     // Checks for any missing content types before generating nodes.
-    if (array_diff($node_types, $all_types)) {
+    if (array_diff($node_types, $all_types) !== []) {
       throw new \Exception(dt('One or more content types have been entered that don\'t exist on this site'));
     }
 
@@ -662,15 +599,15 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $authors = $results['authors'];
     // Remove non-selected users. !== 0 will leave the Anonymous user in if it
     // was selected on the form or entered in the drush parameters.
-    $authors = array_filter($authors, fn($k): bool => $k !== 0);
+    $authors = array_filter($authors, static fn($k): bool => $k !== 0);
     // Likewise remove non-selected roles.
     $roles = $results['roles'];
-    $roles = array_filter($roles, fn($k): bool => $k !== 0);
+    $roles = array_filter($roles, static fn($k): bool => $k !== 0);
 
     // If specific roles have been selected then also add up to 50 users who
     // have one of these roles. There is no direct way randomise the selection
     // using entity queries, so we use a database query instead.
-    if (!empty($roles) && !in_array('authenticated', $roles)) {
+    if ($roles !== [] && !in_array('authenticated', $roles)) {
       $query = $this->database->select('user__roles', 'ur')
         ->fields('ur', ['entity_id', 'roles_target_id'])
         ->condition('roles_target_id', $roles, 'in')
@@ -682,15 +619,16 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       // requested. This makes it clear that no users were found. It would be
       // worse to fall through and select completely random users who do not
       // have any of the roles requested.
-      if (in_array('anonymous', $roles) || (empty($authors) && empty($uids))) {
+      if (in_array('anonymous', $roles) || ($authors === [] && $uids === [])) {
         $uids[] = '0';
       }
+
       $authors = array_unique(array_merge($authors, $uids));
     }
 
     // If still no authors have been collected, or the 'authenticated' role was
     // requested then add a random set of users up to a maximum of 50.
-    if (empty($authors) || in_array('authenticated', $roles)) {
+    if ($authors === [] || in_array('authenticated', $roles)) {
       $query = $this->database->select('users', 'u')
         ->fields('u', ['uid'])
         ->range(0, 50)
@@ -698,6 +636,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $uids = $query->execute()->fetchCol();
       $authors = array_unique(array_merge($authors, $uids));
     }
+
     $results['users'] = $authors;
   }
 
@@ -711,6 +650,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     if (!isset($results['time_range'])) {
       $results['time_range'] = 0;
     }
+
     $users = $results['users'];
 
     $node_type = array_rand($results['node_types']);
@@ -729,17 +669,17 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       'status' => TRUE,
       'promote' => mt_rand(0, 1),
       'created' => $this->time->getRequestTime() - mt_rand(0, $results['time_range']),
+      // A flag to let hook_node_insert() implementations know that this is a
+      // generated node.
+      'devel_generate' => $results,
     ];
 
     if (isset($results['add_language'])) {
       $values['langcode'] = $this->getLangcode($results['add_language']);
     }
 
+    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->nodeStorage->create($values);
-
-    // A flag to let hook_node_insert() implementations know that this is a
-    // generated node.
-    $node->devel_generate = $results;
 
     // Populate non-skipped fields with sample values.
     $this->populateFields($node, $results['skip_fields'], $results['base_fields']);
@@ -749,9 +689,8 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       unset($node->$field);
     }
 
-    // See devel_generate_entity_insert() for actions that happen before and
-    // after this save.
     $node->save();
+    $this->insertNodeData($node);
 
     // Add url alias if required.
     if (!empty($results['add_alias'])) {
@@ -764,9 +703,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     }
 
     // Add translations.
-    if (isset($results['translate_language']) && !empty($results['translate_language'])) {
-      $this->develGenerateContentAddNodeTranslation($results, $node);
-    }
+    $this->develGenerateContentAddNodeTranslation($results, $node);
   }
 
   /**
@@ -780,31 +717,39 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function develGenerateContentAddNodeTranslation(array &$results, NodeInterface $node): void {
+    if (empty($results['translate_language'])) {
+      return;
+    }
+
     if (is_null($this->contentTranslationManager)) {
       return;
     }
+
     if (!$this->contentTranslationManager->isEnabled('node', $node->getType())) {
       return;
     }
-    if ($node->langcode == LanguageInterface::LANGCODE_NOT_SPECIFIED || $node->langcode == LanguageInterface::LANGCODE_NOT_APPLICABLE) {
+
+    if ($node->get('langcode')->getLangcode() === LanguageInterface::LANGCODE_NOT_SPECIFIED
+      || $node->get('langcode')->getLangcode() === LanguageInterface::LANGCODE_NOT_APPLICABLE) {
       return;
     }
 
     if (!isset($results['num_translations'])) {
       $results['num_translations'] = 0;
     }
+
     // Translate node to each target language.
     $skip_languages = [
       LanguageInterface::LANGCODE_NOT_SPECIFIED,
       LanguageInterface::LANGCODE_NOT_APPLICABLE,
-      $node->langcode->value,
+      $node->get('langcode')->getLangcode(),
     ];
     foreach ($results['translate_language'] as $langcode) {
       if (in_array($langcode, $skip_languages)) {
         continue;
       }
+
       $translation_node = $node->addTranslation($langcode);
-      $translation_node->devel_generate = $results;
       $translation_node->setTitle($node->getTitle() . ' (' . $langcode . ')');
       $this->populateFields($translation_node);
       $translation_node->save();
@@ -816,8 +761,128 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
         ]);
         $path_alias->save();
       }
-      $results['num_translations']++;
+
+      ++$results['num_translations'];
     }
+  }
+
+  private function insertNodeData(NodeInterface $node): void {
+    if (!isset($node->devel_generate)) {
+      return;
+    }
+
+    $results = $node->devel_generate;
+    if (!empty($results['max_comments'])) {
+      foreach ($node->getFieldDefinitions() as $field_name => $field_definition) {
+        if ($field_definition->getType() !== 'comment') {
+          continue;
+        }
+
+        if ($node->get($field_name)->getValue()[0]['status'] !== CommentItemInterface::OPEN) {
+          continue;
+        }
+
+        // Add comments for each comment field on entity.
+        $this->addNodeComments($node, $field_definition, $results['users'], $results['max_comments'], $results['title_length']);
+      }
+    }
+
+    if ($results['add_statistics']) {
+      $this->addNodeStatistics($node);
+    }
+  }
+
+  /**
+   * Create comments and add them to a node.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Node to add comments to.
+   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
+   *   The field storage definition.
+   * @param array $users
+   *   Array of users to assign comment authors.
+   * @param int $max_comments
+   *   Max number of comments to generate per node.
+   * @param int $title_length
+   *   Max length of the title of the comments.
+   */
+  private function addNodeComments(NodeInterface $node, FieldDefinitionInterface $field_definition, array $users, int $max_comments, int $title_length = 8): void {
+    $parents = [];
+    $commentStorage = $this->entityTypeManager->getStorage('comment');
+    $field_name = $field_definition->getName();
+    $num_comments = mt_rand(0, $max_comments);
+    for ($i = 1; $i <= $num_comments; ++$i) {
+      $query = $commentStorage->getQuery();
+      switch ($i % 3) {
+        case 0:
+          // No parent.
+        case 1:
+          // Top level parent.
+          $parents = $query
+            ->condition('pid', 0)
+            ->condition('entity_id', $node->id())
+            ->condition('entity_type', 'node')
+            ->condition('field_name', $field_name)
+            ->range(0, 1)
+            ->accessCheck(FALSE)
+            ->execute();
+          break;
+
+        case 2:
+          // Non top level parent.
+          $parents = $query
+            ->condition('pid', 0, '>')
+            ->condition('entity_id', $node->id())
+            ->condition('entity_type', 'node')
+            ->condition('field_name', $field_name)
+            ->range(0, 1)
+            ->accessCheck(FALSE)
+            ->execute();
+          break;
+      }
+
+      $random = new Random();
+      $stub = [
+        'entity_type' => $node->getEntityTypeId(),
+        'entity_id' => $node->id(),
+        'field_name' => $field_name,
+        'name' => 'devel generate',
+        'mail' => 'devel_generate@example.com',
+        'timestamp' => mt_rand($node->getCreatedTime(), $this->time->getRequestTime()),
+        'subject' => substr($random->sentences(mt_rand(1, $title_length), TRUE), 0, 63),
+        'uid' => $users[array_rand($users)],
+        'langcode' => $node->language()->getId(),
+      ];
+      if ($parents) {
+        $stub['pid'] = current($parents);
+      }
+
+      $comment = $commentStorage->create($stub);
+
+      // Populate all core fields.
+      $this->populateFields($comment);
+      $comment->save();
+    }
+  }
+
+  /**
+   * Generate statistics information for a node.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   A node object.
+   */
+  private function addNodeStatistics(NodeInterface $node): void {
+    if (!$this->moduleHandler->moduleExists('statistics')) {
+      return;
+    }
+
+    $statistic = [
+      'nid' => $node->id(),
+      'totalcount' => mt_rand(0, 500),
+      'timestamp' => $this->time->getRequestTime() - mt_rand(0, $node->getCreatedTime()),
+    ];
+    $statistic['daycount'] = mt_rand(0, $statistic['totalcount']);
+    $this->database->insert('node_counter')->fields($statistic)->execute();
   }
 
 }

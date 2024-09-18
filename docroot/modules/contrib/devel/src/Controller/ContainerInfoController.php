@@ -5,7 +5,6 @@ namespace Drupal\devel\Controller;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DrupalKernelInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Drupal\devel\DevelDumperManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,34 +27,15 @@ class ContainerInfoController extends ControllerBase {
   protected DevelDumperManagerInterface $dumper;
 
   /**
-   * ServiceInfoController constructor.
-   *
-   * @param \Drupal\Core\DrupalKernelInterface $drupalKernel
-   *   The drupal kernel.
-   * @param \Drupal\devel\DevelDumperManagerInterface $dumper
-   *   The dumper manager service.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    DrupalKernelInterface $drupalKernel,
-    DevelDumperManagerInterface $dumper,
-    TranslationInterface $string_translation
-  ) {
-    $this->kernel = $drupalKernel;
-    $this->dumper = $dumper;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('kernel'),
-      $container->get('devel.dumper'),
-      $container->get('string_translation'),
-    );
+    $instance = parent::create($container);
+    $instance->kernel = $container->get('kernel');
+    $instance->dumper = $container->get('devel.dumper');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**
@@ -87,7 +67,7 @@ class ContainerInfoController extends ControllerBase {
           'filter' => TRUE,
         ];
         $row['alias'] = [
-          'data' => array_search($service_id, $cached_definitions['aliases']) ?: '',
+          'data' => array_search($service_id, $cached_definitions['aliases'], TRUE) ?: '',
           'filter' => TRUE,
         ];
         $row['operations']['data'] = [
@@ -143,8 +123,9 @@ class ContainerInfoController extends ControllerBase {
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    *   If the requested service is not defined.
    */
-  public function serviceDetail($service_id): array {
+  public function serviceDetail(string $service_id): array {
     $container = $this->kernel->getContainer();
+    /** @var object|null $instance */
     $instance = $container->get($service_id, ContainerInterface::NULL_ON_INVALID_REFERENCE);
     if ($instance === NULL) {
       throw new NotFoundHttpException();
@@ -152,19 +133,18 @@ class ContainerInfoController extends ControllerBase {
 
     $output = [];
 
-    if ($cached_definitions = $this->kernel->getCachedContainerDefinition()) {
-      // Tries to retrieve the service definition from the kernel's cached
-      // container definition.
-      if (isset($cached_definitions['services'][$service_id])) {
-        $definition = unserialize($cached_definitions['services'][$service_id]);
+    // Tries to retrieve the service definition from the kernel's cached
+    // container definition.
+    $cached_definitions = $this->kernel->getCachedContainerDefinition();
+    if ($cached_definitions && isset($cached_definitions['services'][$service_id])) {
+      $definition = unserialize($cached_definitions['services'][$service_id]);
 
-        // If the service has an alias add it to the definition.
-        if ($alias = array_search($service_id, $cached_definitions['aliases'])) {
-          $definition['alias'] = $alias;
-        }
-
-        $output['definition'] = $this->dumper->exportAsRenderable($definition, $this->t('Computed Definition'));
+      // If the service has an alias add it to the definition.
+      if ($alias = array_search($service_id, $cached_definitions['aliases'], TRUE)) {
+        $definition['alias'] = $alias;
       }
+
+      $output['definition'] = $this->dumper->exportAsRenderable($definition, $this->t('Computed Definition'));
     }
 
     $output['instance'] = $this->dumper->exportAsRenderable($instance, $this->t('Instance'));
@@ -245,7 +225,7 @@ class ContainerInfoController extends ControllerBase {
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    *   If the requested parameter is not defined.
    */
-  public function parameterDetail($parameter_name): array {
+  public function parameterDetail(string $parameter_name): array {
     $container = $this->kernel->getContainer();
     try {
       $parameter = $container->getParameter($parameter_name);

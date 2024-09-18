@@ -45,6 +45,7 @@ abstract class AcquiaConnectorTestBase extends KernelTestBase {
     $this->installEntitySchema('user');
     // Burn uid:1.
     $this->createUser();
+    $this->enableModules($this::$modules);
   }
 
   /**

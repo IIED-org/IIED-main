@@ -5,15 +5,12 @@ namespace Drupal\devel\Form;
 use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
+use Drupal\devel\DevelDumperManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Edit config variable form.
@@ -21,70 +18,28 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ConfigEditor extends FormBase {
 
   /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
    * Logger service.
    */
   protected LoggerInterface $logger;
 
   /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   * The dumper service.
    */
-  protected $configFactory;
-
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
-   * Constructs a new ConfigDeleteForm object.
-   *
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   A logger instance.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    MessengerInterface $messenger,
-    LoggerInterface $logger,
-    ConfigFactoryInterface $config_factory,
-    RequestStack $request_stack,
-    TranslationInterface $string_translation
-  ) {
-    $this->messenger = $messenger;
-    $this->logger = $logger;
-    $this->configFactory = $config_factory;
-    $this->requestStack = $request_stack;
-    $this->stringTranslation = $string_translation;
-  }
+  protected DevelDumperManagerInterface $dumper;
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('messenger'),
-      $container->get('logger.channel.devel'),
-      $container->get('config.factory'),
-      $container->get('request_stack'),
-      $container->get('string_translation'),
-    );
+  public static function create(ContainerInterface $container): static {
+    $instance = parent::create($container);
+    $instance->messenger = $container->get('messenger');
+    $instance->logger = $container->get('logger.channel.devel');
+    $instance->configFactory = $container->get('config.factory');
+    $instance->requestStack = $container->get('request_stack');
+    $instance->stringTranslation = $container->get('string_translation');
+    $instance->dumper = $container->get('devel.dumper');
+
+    return $instance;
   }
 
   /**
@@ -97,26 +52,29 @@ class ConfigEditor extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $config_name = '') {
+  public function buildForm(array $form, FormStateInterface $form_state, $config_name = ''): array {
     $config = $this->configFactory->get($config_name);
-    if ($config === FALSE || $config->isNew()) {
+    if ($config->isNew()) {
       $this->messenger->addError($this->t('Config @name does not exist in the system.', ['@name' => $config_name]));
-      return;
+      return $form;
     }
 
     $data = $config->getOriginal();
 
     if (empty($data)) {
       $this->messenger->addWarning($this->t('Config @name exists but has no data.', ['@name' => $config_name]));
-      return;
+      return $form;
     }
 
     try {
       $output = Yaml::encode($data);
     }
     catch (InvalidDataTypeException $e) {
-      $this->messenger->addError($this->t('Invalid data detected for @name : %error', ['@name' => $config_name, '%error' => $e->getMessage()]));
-      return;
+      $this->messenger->addError($this->t('Invalid data detected for @name : %error', [
+        '@name' => $config_name,
+        '%error' => $e->getMessage(),
+      ]));
+      return $form;
     }
 
     $form['current'] = [
@@ -126,8 +84,7 @@ class ConfigEditor extends FormBase {
     ];
     $form['current']['value'] = [
       '#type' => 'item',
-      // phpcs:ignore Drupal.Functions.DiscouragedFunctions
-      '#markup' => dpr($output, TRUE),
+      '#markup' => $this->dumper->dumpOrExport(input: $output, plugin_id: 'default'),
     ];
 
     $form['name'] = [
@@ -192,7 +149,9 @@ class ConfigEditor extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $values = $form_state->getValues();
     try {
-      $this->configFactory->getEditable($values['name'])->setData($values['parsed_value'])->save();
+      $this->configFactory->getEditable($values['name'])
+        ->setData($values['parsed_value'])
+        ->save();
       $this->messenger->addMessage($this->t('Configuration variable %variable was successfully saved.', ['%variable' => $values['name']]));
       $this->logger->info('Configuration variable %variable was successfully saved.', ['%variable' => $values['name']]);
 
@@ -200,7 +159,10 @@ class ConfigEditor extends FormBase {
     }
     catch (\Exception $e) {
       $this->messenger->addError($e->getMessage());
-      $this->logger->error('Error saving configuration variable %variable : %error.', ['%variable' => $values['name'], '%error' => $e->getMessage()]);
+      $this->logger->error('Error saving configuration variable %variable : %error.', [
+        '%variable' => $values['name'],
+        '%error' => $e->getMessage(),
+      ]);
     }
   }
 
@@ -210,18 +172,16 @@ class ConfigEditor extends FormBase {
    * @return \Drupal\Core\Url
    *   Cancel url
    */
-  private function buildCancelLinkUrl() {
+  private function buildCancelLinkUrl(): Url {
     $query = $this->requestStack->getCurrentRequest()->query;
 
     if ($query->has('destination')) {
       $options = UrlHelper::parse($query->get('destination'));
-      $url = Url::fromUserInput('/' . ltrim($options['path'], '/'), $options);
-    }
-    else {
-      $url = Url::fromRoute('devel.configs_list');
+
+      return Url::fromUserInput('/' . ltrim($options['path'], '/'), $options);
     }
 
-    return $url;
+    return Url::fromRoute('devel.configs_list');
   }
 
 }

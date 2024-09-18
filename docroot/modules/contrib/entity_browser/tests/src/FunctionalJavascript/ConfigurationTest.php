@@ -73,7 +73,6 @@ class ConfigurationTest extends WebDriverTestBase {
     $this->getSession()->executeScript("jQuery('.visually-hidden, .hidden').removeClass('visually-hidden hidden');");
     $this->assertSession()->fieldExists('name')->setValue('test_entity_browser');
     $this->assertSession()->selectExists('display')->selectOption('modal');
-    $this->assertSession()->assertWaitOnAjaxRequest();
     // Make sure fields in details elements are visible.
     $this->getSession()->executeScript("jQuery('details').attr('open', 'open');");
     $this->assertSession()->fieldExists('display_configuration[width]')->setValue('700');

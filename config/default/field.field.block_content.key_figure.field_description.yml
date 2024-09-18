@@ -6,11 +6,7 @@ dependencies:
     - block_content.type.key_figure
     - field.storage.block_content.field_description
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats: {  }
 id: block_content.key_figure.field_description
 field_name: field_description
 entity_type: block_content

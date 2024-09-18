@@ -10,7 +10,6 @@
 }
 
 .form-item-load-term-data,
-.taxonomy-manager-vocabulary-terms-form #edit-export,
 .taxonomy-manager-vocabulary-terms-form #edit-move {
   display: none;
 }

@@ -2,21 +2,20 @@
 
 namespace Drupal\colorbox\Plugin\Field\FieldFormatter;
 
+use Drupal\colorbox\ElementAttachmentInterface;
 use Drupal\Core\Asset\LibraryDiscoveryInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\image\Entity\ImageStyle;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Cache\Cache;
-use Drupal\colorbox\ElementAttachmentInterface;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatterBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'colorbox' formatter.
@@ -95,18 +94,20 @@ class ColorboxFormatter extends ImageFormatterBase implements ContainerFactoryPl
    * @param \Drupal\Core\Asset\LibraryDiscoveryInterface $libraryDiscovery
    *   Library discovery service.
    */
-  public function __construct($plugin_id,
-                              $plugin_definition,
-                              FieldDefinitionInterface $field_definition,
-                              array $settings,
-                              $label,
-                              $view_mode,
-                              array $third_party_settings,
-                              AccountInterface $current_user,
-                              EntityStorageInterface $image_style_storage,
-                              ElementAttachmentInterface $attachment,
-                              ModuleHandlerInterface $moduleHandler,
-                              LibraryDiscoveryInterface $libraryDiscovery) {
+  public function __construct(
+    $plugin_id,
+    $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    $label,
+    $view_mode,
+    array $third_party_settings,
+    AccountInterface $current_user,
+    EntityStorageInterface $image_style_storage,
+    ElementAttachmentInterface $attachment,
+    ModuleHandlerInterface $moduleHandler,
+    LibraryDiscoveryInterface $libraryDiscovery,
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->currentUser = $current_user;
     $this->imageStyleStorage = $image_style_storage;
@@ -460,7 +461,7 @@ class ColorboxFormatter extends ImageFormatterBase implements ContainerFactoryPl
     $style_ids[] = $this->getSetting('colorbox_image_style');
     foreach ($style_ids as $style_id) {
       /** @var \Drupal\image\ImageStyleInterface $style */
-      if ($style_id && $style = ImageStyle::load($style_id)) {
+      if ($style_id && $style = $this->imageStyleStorage->load($style_id)) {
         // If this formatter uses a valid image style to display the image, add
         // the image style configuration entity as dependency of this formatter.
         $dependencies[$style->getConfigDependencyKey()][] = $style->getConfigDependencyName();
@@ -482,14 +483,14 @@ class ColorboxFormatter extends ImageFormatterBase implements ContainerFactoryPl
     $style_ids['colorbox_image_style'] = $this->getSetting('colorbox_image_style');
     foreach ($style_ids as $name => $style_id) {
       /** @var \Drupal\image\ImageStyleInterface $style */
-      if ($style_id && $style = ImageStyle::load($style_id)) {
+      if ($style_id && $style = $this->imageStyleStorage->load($style_id)) {
         if (!empty($dependencies[$style->getConfigDependencyKey()][$style->getConfigDependencyName()])) {
           $replacement_id = $this->imageStyleStorage->getReplacementId($style_id);
           // If a valid replacement has been provided in the storage,
           // replace the image style with the replacement and signal
           // that the formatter plugin.
           // Settings were updated.
-          if ($replacement_id && ImageStyle::load($replacement_id)) {
+          if ($replacement_id && $this->imageStyleStorage->load($replacement_id)) {
             $this->setSetting($name, $replacement_id);
             $changed = TRUE;
           }

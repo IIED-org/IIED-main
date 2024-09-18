@@ -4,6 +4,7 @@ namespace Drupal\flag\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\flag\ActionLink\ActionLinkPluginManager;
@@ -40,6 +41,13 @@ abstract class FlagFormBase extends EntityForm {
   protected $linkGenerator;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Constructs a new form.
    *
    * @param \Drupal\flag\ActionLink\ActionLinkPluginManager $action_link_manager
@@ -48,11 +56,14 @@ abstract class FlagFormBase extends EntityForm {
    *   The bundle info service.
    * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
    *   The link generator service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
    */
-  public function __construct(ActionLinkPluginManager $action_link_manager, EntityTypeBundleInfoInterface $bundle_info_service, LinkGeneratorInterface $link_generator) {
+  public function __construct(ActionLinkPluginManager $action_link_manager, EntityTypeBundleInfoInterface $bundle_info_service, LinkGeneratorInterface $link_generator, EntityTypeManagerInterface $entity_type_manager) {
     $this->actionLinkManager = $action_link_manager;
     $this->bundleInfoService = $bundle_info_service;
     $this->linkGenerator = $link_generator;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -62,7 +73,8 @@ abstract class FlagFormBase extends EntityForm {
     return new static(
       $container->get('plugin.manager.flag.linktype'),
       $container->get('entity_type.bundle.info'),
-      $container->get('link_generator')
+      $container->get('link_generator'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -238,7 +250,7 @@ abstract class FlagFormBase extends EntityForm {
         'callback' => '::updateSelectedPluginType',
         'wrapper' => 'link-type-settings-wrapper',
         'event' => 'change',
-        'method' => 'replace',
+        'method' => 'replaceWith',
       ],
     ];
     //debug($flag->getLinkTypePlugin()->getPluginId(), 'default value');
@@ -347,7 +359,8 @@ abstract class FlagFormBase extends EntityForm {
     if ($flag->id() != $form['#flag_name']) {
       $old_name = $form['#flag_name'];
       $permissions = ["flag $old_name", "unflag $old_name"];
-      foreach (array_keys(user_roles()) as $rid) {
+      $roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple();
+      foreach (array_keys($roles) as $rid) {
         user_role_revoke_permissions($rid, $permissions);
       }
     }

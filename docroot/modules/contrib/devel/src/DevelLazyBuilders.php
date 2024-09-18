@@ -34,7 +34,7 @@ class DevelLazyBuilders implements TrustedCallbackInterface {
    */
   public function __construct(
     MenuLinkTreeInterface $menu_link_tree,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
   ) {
     $this->menuLinkTree = $menu_link_tree;
     $this->config = $config_factory->get('devel.toolbar.settings');
@@ -61,7 +61,11 @@ class DevelLazyBuilders implements TrustedCallbackInterface {
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-      ['callable' => [$this, 'processTree']],
+      [
+        'callable' => function (array $tree): array {
+          return $this->processTree($tree);
+        },
+      ],
     ];
     $tree = $this->menuLinkTree->transform($tree, $manipulators);
 

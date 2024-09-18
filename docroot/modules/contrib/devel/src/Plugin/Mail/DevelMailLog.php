@@ -3,7 +3,7 @@
 namespace Drupal\devel\Plugin\Mail;
 
 use Drupal\Component\FileSecurity\FileSecurity;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\Config;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Mail\MailInterface;
@@ -16,21 +16,24 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * To enable, save a variable in settings.php (or otherwise) whose value
  * can be as simple as:
+ *
  * @code
  * $config['system.mail']['interface']['default'] = 'devel_mail_log';
  * @endcode
  *
- * By default the mails are saved in 'temporary://devel-mails'. This setting
+ * By default, the mails are saved in 'temporary://devel-mails'. This setting
  * can be changed using 'debug_mail_directory' config setting. For example:
  * @code
- * $config['devel.settings']['debug_mail_directory'] = 'temporary://my-directory';
+ * $config['devel.settings']['debug_mail_directory'] =
+ *   'temporary://my-directory';
  * @endcode
  *
  * The default filename pattern used is '%to-%subject-%datetime.mail.txt'. This
  * setting can be changed using 'debug_mail_directory' config setting.
  * For example:
  * @code
- * $config['devel.settings']['debug_mail_file_format'] = 'devel-mail-%to-%subject-%datetime.mail.txt';
+ * $config['devel.settings']['debug_mail_file_format'] =
+ *   'devel-mail-%to-%subject-%datetime.mail.txt';
  * @endcode
  *
  * The following placeholders can be used in the filename pattern:
@@ -41,59 +44,33 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Mail(
  *   id = "devel_mail_log",
  *   label = @Translation("Devel Logging Mailer"),
- *   description = @Translation("Outputs the message as a file in the temporary directory.")
+ *   description = @Translation("Outputs the message as a file in the temporary
+ *   directory.")
  * )
  */
 class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
 
   /**
-   * The devel.settings config object.
-   *
-   * @var \Drupal\Core\Config\Config
+   * The 'devel.settings' config object.
    */
-  protected $config;
+  protected Config $config;
 
   /**
    * The file system service.
    */
   protected FileSystemInterface $fileSystem;
 
-  /**
-   * Constructs a new DevelMailLog object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory service.
-   * @param \Drupal\Core\File\FileSystemInterface $file_system
-   *   The file system service.
-   */
-  public function __construct(
-    array $configuration,
-    string $plugin_id,
-    mixed $plugin_definition,
-    ConfigFactoryInterface $config_factory,
-    FileSystemInterface $file_system,
-  ) {
-    $this->config = $config_factory->get('devel.settings');
-    $this->fileSystem = $file_system;
-  }
+  final public function __construct() {}
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('config.factory'),
-      $container->get('file_system')
-    );
+    $instance = new static();
+    $instance->config = $container->get('config.factory')->get('devel.settings');
+    $instance->fileSystem = $container->get('file_system');
+
+    return $instance;
   }
 
   /**
@@ -195,6 +172,7 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
     if (!$this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
       return FALSE;
     }
+
     if (str_starts_with($directory, 'public://')) {
       return FileSecurity::writeHtaccess($directory);
     }

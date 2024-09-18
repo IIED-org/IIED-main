@@ -3,7 +3,6 @@
 namespace Drupal\devel\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -18,29 +17,14 @@ class EventInfoController extends ControllerBase {
   protected EventDispatcherInterface $eventDispatcher;
 
   /**
-   * EventInfoController constructor.
-   *
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
-   *   Event dispatcher service.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    EventDispatcherInterface $event_dispatcher,
-    TranslationInterface $string_translation
-  ) {
-    $this->eventDispatcher = $event_dispatcher;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('event_dispatcher'),
-      $container->get('string_translation'),
-    );
+    $instance = parent::create($container);
+    $instance->eventDispatcher = $container->get('event_dispatcher');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**
@@ -121,6 +105,7 @@ class EventInfoController extends ControllerBase {
     if (is_callable($callable, TRUE, $callable_name)) {
       return $callable_name;
     }
+
     return '';
   }
 

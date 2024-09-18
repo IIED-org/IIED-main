@@ -13,10 +13,10 @@ use Drupal\Core\TypedData\DataDefinition;
  *   id = "isbn",
  *   label = @Translation("ISBN Field"),
  *   module = "isbn",
- *   description = @Translation("Add ability to insert an ISBN field."),
+ *   description = @Translation("Text field for storing 10 and 13 digit ISBNs."),
  *   default_widget = "isbn_widget",
  *   default_formatter = "isbn_default",
- *   constraints = {"IsbnValidation" = {}}
+ *   constraints = {"IsbnValidation" = {}},
  * )
  */
 class IsbnItem extends FieldItemBase {
@@ -48,6 +48,7 @@ class IsbnItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
+    $properties = [];
     $properties['value'] = DataDefinition::create('string')
       ->addConstraint('IsbnValidation')
       ->setLabel(t('ISBN value'));
@@ -60,7 +61,9 @@ class IsbnItem extends FieldItemBase {
    */
   public function preSave() {
     parent::preSave();
-    $clean_value = \Drupal::service('isbn.isbn_service')->cleanup($this->getString());
+    /** @var \Drupal\isbn\IsbnToolsServiceInterface $isbn_tools */
+    $isbn_tools = \Drupal::service('isbn.isbn_service');
+    $clean_value = $isbn_tools->cleanup($this->getString());
     $this->setValue($clean_value);
   }
 

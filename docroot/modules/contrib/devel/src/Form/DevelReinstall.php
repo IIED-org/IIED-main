@@ -6,7 +6,6 @@ use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Update\UpdateHookRegistry;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -31,39 +30,16 @@ class DevelReinstall extends FormBase {
   protected UpdateHookRegistry $updateHookRegistry;
 
   /**
-   * Constructs a new DevelReinstall form.
-   *
-   * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
-   *   The module installer.
-   * @param \Drupal\Core\Extension\ModuleExtensionList $extension_list_module
-   *   The module extension list.
-   * @param \Drupal\Core\Update\UpdateHookRegistry $update_hook_registry
-   *   The update hook registry.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    ModuleInstallerInterface $module_installer,
-    ModuleExtensionList $extension_list_module,
-    UpdateHookRegistry $update_hook_registry,
-    TranslationInterface $string_translation
-  ) {
-    $this->moduleInstaller = $module_installer;
-    $this->moduleExtensionList = $extension_list_module;
-    $this->updateHookRegistry = $update_hook_registry;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('module_installer'),
-      $container->get('extension.list.module'),
-      $container->get('update.update_hook_registry'),
-      $container->get('string_translation'),
-    );
+    $instance = parent::create($container);
+    $instance->moduleInstaller = $container->get('module_installer');
+    $instance->moduleExtensionList = $container->get('extension.list.module');
+    $instance->updateHookRegistry = $container->get('update.update_hook_registry');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**
@@ -105,7 +81,7 @@ class DevelReinstall extends FormBase {
 
     // Only build the rest of the form if there are any modules available to
     // uninstall.
-    if (empty($uninstallable)) {
+    if ($uninstallable === []) {
       return $form;
     }
 
@@ -158,7 +134,7 @@ class DevelReinstall extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
     // Form submitted, but no modules selected.
-    if (!array_filter($form_state->getValue('reinstall'))) {
+    if (array_filter($form_state->getValue('reinstall')) === []) {
       $form_state->setErrorByName('reinstall', $this->t('No modules selected.'));
     }
   }

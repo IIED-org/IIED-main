@@ -22,22 +22,28 @@ final class DevelGenerateCommands extends DrushCommands {
   use AutowireTrait;
 
   const USERS = 'devel-generate:users';
+
   const TERMS = 'devel-generate:terms';
+
   const VOCABS = 'devel-generate:vocabs';
+
   const MENUS = 'devel-generate:menus';
+
   const CONTENT = 'devel-generate:content';
+
   const BLOCK_CONTENT = 'devel-generate:block-content';
+
   const MEDIA = 'devel-generate:media';
 
   /**
    * The plugin instance.
    */
-  protected DevelGenerateBaseInterface $pluginInstance;
+  private DevelGenerateBaseInterface $pluginInstance;
 
   /**
    * The Generate plugin parameters.
    */
-  protected array $parameters;
+  private array $parameters;
 
   /**
    * DevelGenerateCommands constructor.
@@ -235,7 +241,7 @@ final class DevelGenerateCommands extends DrushCommands {
    */
   #[CLI\Hook(HookManager::ARGUMENT_VALIDATOR)]
   public function validate(CommandData $commandData): void {
-    $manager = $this->getManager();
+    $manager = $this->manager;
     $args = $commandData->input()->getArguments();
     // The command name is the first argument but we do not need this.
     array_shift($args);
@@ -250,8 +256,8 @@ final class DevelGenerateCommands extends DrushCommands {
    * Wrapper for calling the plugin instance generate function.
    */
   public function generate(): void {
-    $instance = $this->getPluginInstance();
-    $instance->generate($this->getParameters());
+    $instance = $this->pluginInstance;
+    $instance->generate($this->parameters);
   }
 
 }

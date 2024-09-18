@@ -5,9 +5,9 @@ namespace Drupal\facets_pretty_paths;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
-use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Pretty Paths breadcrumb builder.

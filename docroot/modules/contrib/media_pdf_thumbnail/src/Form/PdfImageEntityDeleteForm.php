@@ -7,29 +7,25 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Class PdfImageEntityDeleteForm
+ * Class PdfImageEntityDeleteForm.
+ *
+ * Provides a form for deleting a pdf image entity.
  *
  * @ingroup media_pdf_thumbnail
  */
 class PdfImageEntityDeleteForm extends ContentEntityDeleteForm {
 
   /**
-   * Returns the question to ask the user.
-   *
-   * @return string
-   *   The form question. The page title will be set to this value.
+   * {@inheritdoc}
    */
-  public function getQuestion() {
+  public function getQuestion(): string {
     return $this->t('Are you sure you want to delete %name?', ['%name' => $this->entity->label()]);
   }
 
   /**
-   * Returns the route to go to if the user cancels the action.
-   *
-   * @return \Drupal\Core\Url
-   *   A URL object.
+   * {@inheritdoc}
    */
-  public function getCancelUrl() {
+  public function getCancelUrl(): Url {
     return new Url('entity.pdf_image_entity.collection');
   }
 
@@ -45,7 +41,7 @@ class PdfImageEntityDeleteForm extends ContentEntityDeleteForm {
    *
    * Delete the entity and log the event. logger() replaces the watchdog.
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $entity = $this->getEntity();
     $entity->delete();
 
@@ -56,4 +52,5 @@ class PdfImageEntityDeleteForm extends ContentEntityDeleteForm {
     // Redirect to term list after delete.
     $form_state->setRedirect('view.pdf_image_entity.list');
   }
+
 }

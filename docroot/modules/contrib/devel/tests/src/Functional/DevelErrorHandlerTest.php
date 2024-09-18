@@ -28,7 +28,7 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
     $error_handlers = \Drupal::config('devel.settings')->get('error_handlers');
     $this->assertEquals($error_handlers, [DEVEL_ERROR_HANDLER_STANDARD => DEVEL_ERROR_HANDLER_STANDARD]);
     $this->drupalGet('admin/config/development/devel');
-    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', DEVEL_ERROR_HANDLER_STANDARD)->hasAttribute('selected'));
+    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', (string) DEVEL_ERROR_HANDLER_STANDARD)->hasAttribute('selected'));
 
     // Ensures that selecting the DEVEL_ERROR_HANDLER_NONE option no error
     // (raw or message) is shown on the site in case of php errors.
@@ -40,7 +40,7 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
 
     $error_handlers = \Drupal::config('devel.settings')->get('error_handlers');
     $this->assertEquals($error_handlers, [DEVEL_ERROR_HANDLER_NONE => DEVEL_ERROR_HANDLER_NONE]);
-    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', DEVEL_ERROR_HANDLER_NONE)->hasAttribute('selected'));
+    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', (string) DEVEL_ERROR_HANDLER_NONE)->hasAttribute('selected'));
 
     $this->clickLink('notice+warning');
     $this->assertSession()->statusCodeEquals(200);
@@ -62,7 +62,7 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
 
     $error_handlers = \Drupal::config('devel.settings')->get('error_handlers');
     $this->assertEquals($error_handlers, [DEVEL_ERROR_HANDLER_BACKTRACE_KINT => DEVEL_ERROR_HANDLER_BACKTRACE_KINT]);
-    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', DEVEL_ERROR_HANDLER_BACKTRACE_KINT)->hasAttribute('selected'));
+    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', (string) DEVEL_ERROR_HANDLER_BACKTRACE_KINT)->hasAttribute('selected'));
 
     $this->clickLink('notice+warning');
     $this->assertSession()->statusCodeEquals(200);
@@ -78,7 +78,7 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
 
     $error_handlers = \Drupal::config('devel.settings')->get('error_handlers');
     $this->assertEquals($error_handlers, [DEVEL_ERROR_HANDLER_BACKTRACE_DPM => DEVEL_ERROR_HANDLER_BACKTRACE_DPM]);
-    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', DEVEL_ERROR_HANDLER_BACKTRACE_DPM)->hasAttribute('selected'));
+    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', (string) DEVEL_ERROR_HANDLER_BACKTRACE_DPM)->hasAttribute('selected'));
 
     $this->clickLink('notice+warning');
     $this->assertSession()->statusCodeEquals(200);
@@ -101,8 +101,8 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
       DEVEL_ERROR_HANDLER_BACKTRACE_KINT => DEVEL_ERROR_HANDLER_BACKTRACE_KINT,
       DEVEL_ERROR_HANDLER_BACKTRACE_DPM => DEVEL_ERROR_HANDLER_BACKTRACE_DPM,
     ]);
-    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', DEVEL_ERROR_HANDLER_BACKTRACE_KINT)->hasAttribute('selected'));
-    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', DEVEL_ERROR_HANDLER_BACKTRACE_DPM)->hasAttribute('selected'));
+    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', (string) DEVEL_ERROR_HANDLER_BACKTRACE_KINT)->hasAttribute('selected'));
+    $this->assertTrue($this->assertSession()->optionExists('edit-error-handlers', (string) DEVEL_ERROR_HANDLER_BACKTRACE_DPM)->hasAttribute('selected'));
 
     $this->clickLink('notice+warning');
     $this->assertSession()->statusCodeEquals(200);

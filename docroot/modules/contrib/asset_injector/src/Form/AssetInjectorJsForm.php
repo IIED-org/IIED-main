@@ -5,7 +5,7 @@ namespace Drupal\asset_injector\Form;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class AssetInjectorJsForm.
+ * Form controller for the duplication of JavaScript asset injector.
  *
  * @package Drupal\asset_injector\Form
  */
@@ -103,7 +103,7 @@ class AssetInjectorJsForm extends AssetInjectorFormBase {
         '#options' => $theme->info['regions'],
         "#empty_option" => $this->t('-- None --'),
         '#multiple' => FALSE,
-        '#default_value' => isset($entity->noscriptRegion[$name]) ? $entity->noscriptRegion[$name] : NULL,
+        '#default_value' => $entity->noscriptRegion[$name] ?? NULL,
       ];
     }
 

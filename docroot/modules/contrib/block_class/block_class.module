@@ -5,9 +5,9 @@
  * Adding classes to blocks.
  */
 
+use Drupal\block\BlockInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\block\BlockInterface;
 
 /**
  * Implements hook_help().
@@ -43,7 +43,7 @@ function block_class_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<li>' . t('Class') . '</li>';
       $output .= '<ul>';
       $output .= '<li>' . t('Qty of classes per block: You can select this number to use in the multiple items. By default is 10 but you can modify if necessary') . '</li>';
-      $output .= '<li>' . t('Field Type: By default the block class is using the field type as a "texfield", with that configuration you can select textarea as well, it\'s recommended if you have many classes per block') . '</li>';
+      $output .= '<li>' . t('Field Type: By default the block class is using the field type as a "textfield", with that configuration you can select textarea as well, it\'s recommended if you have many classes per block') . '</li>';
       $output .= '<li>' . t('The max-length by default is 255, after the 2.0.x version there is a Global Settings Page and you can modify if you need at: /admin/config/content/block-class/settings or Configuration » Content authoring » Block Class') . '</li>';
       $output .= '<li>' . t('Weight: Set the weight to organize better the field items in the block settings') . '</li>';
       $output .= '</ul>';
@@ -52,14 +52,14 @@ function block_class_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<ul>';
       $output .= '<li>' . t('Enable attributes: Mark this option to be able to use attributes.') . '</li>';
       $output .= '<li>' . t('Qty of attributes per block: On this field you can define how many attribute field will be implemented per block. By default is 10 but you can increase and decrease if you want.') . '</li>';
-      $output .= '<li>' . t('Maxlengh: In the attributes field group you can insert the maxlengh, by default there is no limit for attributes but you can insert if you want.') . '</li>';
+      $output .= '<li>' . t('Maxlength: In the attributes field group you can insert the maxlength, by default there is no limit for attributes but you can insert if you want.') . '</li>';
       $output .= '<li>' . t('Weight: Set the weight to organize better the field items in the block settings') . '</li>';
       $output .= '</ul>';
 
       $output .= '<li>' . t('ID') . '</li>';
       $output .= '<ul>';
       $output .= '<li>' . t('Enable id replacement: Mark this option to be able to use ID.') . '</li>';
-      $output .= '<li>' . t('Maxlengh: In the ID field group you can insert the maxlengh, by default there is no limit for ID but you can insert if you want.') . '</li>';
+      $output .= '<li>' . t('Maxlength: In the ID field group you can insert the maxlength, by default there is no limit for ID but you can insert if you want.') . '</li>';
       $output .= '<li>' . t('Weight: Set the weight to organize better the field items in the block settings') . '</li>';
       $output .= '</ul>';
 

@@ -23,7 +23,7 @@ interface PdfImageEntityInterface extends ContentEntityInterface, EntityChangedI
    * @return string
    *   Name of the Pdf image entity.
    */
-  public function getName();
+  public function getName(): string;
 
   /**
    * Sets the Pdf image entity name.
@@ -34,7 +34,7 @@ interface PdfImageEntityInterface extends ContentEntityInterface, EntityChangedI
    * @return \Drupal\media_pdf_thumbnail\Entity\PdfImageEntityInterface
    *   The called Pdf image entity entity.
    */
-  public function setName($name);
+  public function setName(string $name): PdfImageEntityInterface;
 
   /**
    * Gets the Pdf image entity creation timestamp.
@@ -42,7 +42,7 @@ interface PdfImageEntityInterface extends ContentEntityInterface, EntityChangedI
    * @return int
    *   Creation timestamp of the Pdf image entity.
    */
-  public function getCreatedTime();
+  public function getCreatedTime(): int;
 
   /**
    * Sets the Pdf image entity creation timestamp.
@@ -53,6 +53,6 @@ interface PdfImageEntityInterface extends ContentEntityInterface, EntityChangedI
    * @return \Drupal\media_pdf_thumbnail\Entity\PdfImageEntityInterface
    *   The called Pdf image entity entity.
    */
-  public function setCreatedTime($timestamp);
+  public function setCreatedTime(int $timestamp): PdfImageEntityInterface;
 
 }

@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - block_content.type.form_block
+    - block_content.type.key_figure
     - filter.format.basic_html
     - filter.format.full_html
     - filter.format.restricted_html
@@ -12,6 +14,7 @@ dependencies:
     - node.type.article
     - node.type.blog
     - node.type.event
+    - node.type.external_resource
     - node.type.hidden_handbrake
     - node.type.hidden_page
     - node.type.impact_story
@@ -116,10 +119,13 @@ permissions:
   - 'create content translations'
   - 'create document media'
   - 'create event content'
+  - 'create external_resource content'
+  - 'create form_block block content'
   - 'create hidden_handbrake content'
   - 'create hidden_page content'
   - 'create image media'
   - 'create impact_story content'
+  - 'create key_figure block content'
   - 'create long_read content'
   - 'create media'
   - 'create news content'
@@ -141,11 +147,14 @@ permissions:
   - 'delete any blog content'
   - 'delete any document media'
   - 'delete any event content'
+  - 'delete any external_resource content'
   - 'delete any file'
+  - 'delete any form_block block content'
   - 'delete any hidden_handbrake content'
   - 'delete any hidden_page content'
   - 'delete any image media'
   - 'delete any impact_story content'
+  - 'delete any key_figure block content'
   - 'delete any long_read content'
   - 'delete any media'
   - 'delete any news content'
@@ -155,6 +164,7 @@ permissions:
   - 'delete any webform content'
   - 'delete content translations'
   - 'delete document media revisions'
+  - 'delete external_resource revisions'
   - 'delete hidden_handbrake revisions'
   - 'delete image media revisions'
   - 'delete impact_story revisions'
@@ -163,6 +173,7 @@ permissions:
   - 'delete own blog content'
   - 'delete own document media'
   - 'delete own event content'
+  - 'delete own external_resource content'
   - 'delete own files'
   - 'delete own hidden_handbrake content'
   - 'delete own hidden_page content'
@@ -188,10 +199,13 @@ permissions:
   - 'edit any blog content'
   - 'edit any document media'
   - 'edit any event content'
+  - 'edit any external_resource content'
+  - 'edit any form_block block content'
   - 'edit any hidden_handbrake content'
   - 'edit any hidden_page content'
   - 'edit any image media'
   - 'edit any impact_story content'
+  - 'edit any key_figure block content'
   - 'edit any long_read content'
   - 'edit any news content'
   - 'edit any page content'
@@ -203,6 +217,7 @@ permissions:
   - 'edit own comments'
   - 'edit own document media'
   - 'edit own event content'
+  - 'edit own external_resource content'
   - 'edit own hidden_handbrake content'
   - 'edit own hidden_page content'
   - 'edit own image media'
@@ -250,6 +265,7 @@ permissions:
   - 'revert blog revisions'
   - 'revert document media revisions'
   - 'revert event revisions'
+  - 'revert external_resource revisions'
   - 'revert hidden_handbrake revisions'
   - 'revert hidden_page revisions'
   - 'revert image media revisions'
@@ -264,6 +280,7 @@ permissions:
   - 'switch shortcut sets'
   - 'translate any entity'
   - 'translate editable entities'
+  - 'translate external_resource node'
   - 'translate impact_story node'
   - 'translate paragraph'
   - 'unpublish any content'
@@ -287,12 +304,14 @@ permissions:
   - 'view all media revisions'
   - 'view all revisions'
   - 'view any unpublished content'
+  - 'view any unpublished external_resource content'
   - 'view any unpublished hidden_handbrake content'
   - 'view any unpublished webform content'
   - 'view article revisions'
   - 'view blog revisions'
   - 'view document media revisions'
   - 'view event revisions'
+  - 'view external_resource revisions'
   - 'view hidden_handbrake revisions'
   - 'view hidden_page revisions'
   - 'view image media revisions'

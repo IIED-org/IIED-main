@@ -2,10 +2,13 @@
 
 namespace Drupal\media_pdf_thumbnail;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Access\AccessResultNeutral;
+use Drupal\Core\Access\AccessResultReasonInterface;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
 
 /**
  * Access controller for the Pdf image entity entity.
@@ -17,17 +20,15 @@ class PdfImageEntityAccessControlHandler extends EntityAccessControlHandler {
   /**
    * {@inheritdoc}
    */
-  protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
+  protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account): AccessResultReasonInterface|AccessResultNeutral|AccessResult|AccessResultInterface {
     /** @var \Drupal\media_pdf_thumbnail\Entity\PdfImageEntityInterface $entity */
 
     switch ($operation) {
-
       case 'view':
 
         if (!$entity->isPublished()) {
           return AccessResult::allowedIfHasPermission($account, 'view unpublished pdf image entity entities');
         }
-
 
         return AccessResult::allowedIfHasPermission($account, 'view published pdf image entity entities');
 
@@ -47,9 +48,8 @@ class PdfImageEntityAccessControlHandler extends EntityAccessControlHandler {
   /**
    * {@inheritdoc}
    */
-  protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
+  protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL): AccessResultReasonInterface|AccessResult|AccessResultInterface {
     return AccessResult::allowedIfHasPermission($account, 'add pdf image entity entities');
   }
-
 
 }

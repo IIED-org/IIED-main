@@ -4407,17 +4407,17 @@ cite {
   padding-right: 0.25rem;
 }
 
+/* makes sure responsive menu is hidden initially */
+
+[x-cloak] {
+  display: none !important;
+}
+
 /* sets top margin for info boxes */
 
 .paragraph--type--info-box aside .relative h2:first-of-type, 
   .paragraph--type--info-box aside .relative h3:first-of-type{
   margin-top: 1rem;
-}
-
-/* makes sure responsive menu is hidden initially */
-
-[x-cloak] {
-  display: none !important;
 }
 
 .pointer-events-none{
@@ -4974,6 +4974,11 @@ cite {
   display: none;
 }
 
+.size-6{
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .h-0{
   height: 0px;
 }
@@ -5066,6 +5071,10 @@ cite {
 .max-h-fit{
   max-height: -moz-fit-content;
   max-height: fit-content;
+}
+
+.min-h-112{
+  min-height: 28rem;
 }
 
 .min-h-\[12rem\]{
@@ -5950,6 +5959,10 @@ cite {
   background-image: url('/themes/custom/iied_tw/images/bg-shape-pink.svg');
 }
 
+.bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/city\.svg\'\)\]{
+  background-image: url('/themes/custom/iied_tw/images/city.svg');
+}
+
 .bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/hh-main-bg\.svg\'\)\]{
   background-image: url('/themes/custom/iied_tw/images/hh-main-bg.svg');
 }
@@ -6396,6 +6409,10 @@ cite {
 
 .lowercase{
   text-transform: lowercase;
+}
+
+.capitalize{
+  text-transform: capitalize;
 }
 
 .not-italic{
@@ -8516,6 +8533,10 @@ cite {
     align-items: center;
   }
 
+  .md\:gap-12{
+    gap: 3rem;
+  }
+
   .md\:space-y-0 > :not([hidden]) ~ :not([hidden]){
     --tw-space-y-reverse: 0;
     margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
@@ -8895,10 +8916,6 @@ cite {
     padding-bottom: 6rem;
   }
 
-  .lg\:text-center{
-    text-align: center;
-  }
-
   .lg\:py-3{
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
@@ -8907,6 +8924,10 @@ cite {
   .lg\:py-4{
     padding-top: 1rem;
     padding-bottom: 1rem;
+  }
+
+  .lg\:text-center{
+    text-align: center;
   }
 
   .lg\:text-2xl{

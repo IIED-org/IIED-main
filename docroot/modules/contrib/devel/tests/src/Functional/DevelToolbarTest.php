@@ -24,14 +24,7 @@ class DevelToolbarTest extends DevelBrowserTestBase {
   protected $toolbarUser;
 
   /**
-   * The user for tests.
-   *
-   * @var \Drupal\user\UserInterface
-   */
-  protected $develUser;
-
-  /**
-   * The dafault toolbar items.
+   * The default toolbar items.
    *
    * @var array
    */
@@ -48,7 +41,7 @@ class DevelToolbarTest extends DevelBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->drupalPlaceBlock('local_tasks_block');
@@ -264,6 +257,7 @@ class DevelToolbarTest extends DevelBrowserTestBase {
         'url' => $element->link->getUrlObject()->toString(),
       ];
     }
+
     return $links;
   }
 

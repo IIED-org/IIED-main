@@ -11,7 +11,7 @@ dependencies:
   - drupal:user
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2022-11-03
-version: '8.x-1.0-rc4'
+# Information added by Drupal.org packaging script on 2024-08-13
+version: '8.x-1.0-rc5'
 project: 'block_field'
-datestamp: 1667511466
+datestamp: 1723550579

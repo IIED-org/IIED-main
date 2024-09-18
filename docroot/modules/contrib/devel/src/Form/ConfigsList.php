@@ -3,11 +3,8 @@
 namespace Drupal\devel\Form;
 
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Routing\RedirectDestinationInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -17,48 +14,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ConfigsList extends FormBase {
 
   /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * The redirect destination service.
-   *
-   * @var \Drupal\Core\Routing\RedirectDestinationInterface
-   */
-  protected $redirectDestination;
-
-  /**
-   * Constructs a new ConfigsList object.
-   *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
-   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
-   *   The redirect destination service.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    ConfigFactoryInterface $config_factory,
-    RedirectDestinationInterface $redirect_destination,
-    TranslationInterface $string_translation
-  ) {
-    $this->configFactory = $config_factory;
-    $this->redirectDestination = $redirect_destination;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('redirect.destination'),
-      $container->get('string_translation'),
-    );
+  public static function create(ContainerInterface $container): static {
+    $instance = parent::create($container);
+    $instance->configFactory = $container->get('config.factory');
+    $instance->redirectDestination = $container->get('redirect.destination');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**
@@ -76,7 +40,7 @@ class ConfigsList extends FormBase {
       '#type' => 'details',
       '#title' => $this->t('Filter variables'),
       '#attributes' => ['class' => ['container-inline']],
-      '#open' => isset($filter) && trim($filter) != '',
+      '#open' => isset($filter) && trim($filter) !== '',
     ];
     $form['filter']['name'] = [
       '#type' => 'textfield',
@@ -109,7 +73,12 @@ class ConfigsList extends FormBase {
       ];
       $rows[] = [
         'name' => $config_name,
-        'operation' => ['data' => ['#type' => 'operations', '#links' => $operations]],
+        'operation' => [
+          'data' => [
+            '#type' => 'operations',
+            '#links' => $operations,
+          ],
+        ],
       ];
     }
 

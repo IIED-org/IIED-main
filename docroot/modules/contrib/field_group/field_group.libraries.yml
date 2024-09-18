@@ -6,26 +6,16 @@ field_ui:
       css/field_group.field_ui.css: {}
   dependencies:
     - core/jquery
-    - core/once
     - core/drupal
-    - core/drupalSettings
+    - core/once
 
 core:
   js:
     js/field_group.js: {}
   dependencies:
     - core/jquery
-    - core/once
     - core/drupal
     - core/drupalSettings
-
-formatter.accordion:
-  js:
-    formatters/accordion/accordion.js: {}
-  dependencies:
-    - core/jquery
-    - core/once
-    - jquery_ui_accordion/accordion
 
 formatter.html_element:
   js:
@@ -46,6 +36,7 @@ formatter.details:
     formatters/details/details.js: {}
   dependencies:
     - core/jquery
+    - core/once
 
 formatter.tabs:
   js:
@@ -53,7 +44,6 @@ formatter.tabs:
   dependencies:
     - core/jquery
     - core/once
-    - core/modernizr
 
 element.horizontal_tabs:
   js:
@@ -66,4 +56,3 @@ element.horizontal_tabs:
     - core/jquery
     - core/once
     - core/drupal.collapse
-    - core/modernizr

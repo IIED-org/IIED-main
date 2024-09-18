@@ -1,0 +1,19 @@
+uuid: 12684cc2-1710-4d33-9dec-9d2d942b8dcd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tagline
+    - node.type.external_resource
+id: node.external_resource.field_tagline
+field_name: field_tagline
+entity_type: node
+bundle: external_resource
+label: Tagline
+description: 'Short description'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

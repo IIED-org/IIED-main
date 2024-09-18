@@ -168,21 +168,3 @@ The Block Class requires Block:
    Extends the Block Class module to incorporate styles (or themes) rather than
    css classes. Adds style-based tpl suggestions. Allows HTML in your block
    titles.
-
-
-## MAINTAINERS
------------
-
-### Current maintainers:
- * Todd Nienkerk - https://www.drupal.org/user/92096
- * Renato Gonçalves (RenatoG) - https://www.drupal.org/user/3326031
- * Neslee Canil Pinto - https://www.drupal.org/u/neslee-canil-pinto
- * Aaron Stanush - https://www.drupal.org/user/89718
- * David Suissa (DYdave) - https://www.drupal.org/user/467284
- * Four Kitchens - https://www.drupal.org/user/358502
- * berenddeboer - https://www.drupal.org/user/143552
- * elliotttf - https://www.drupal.org/user/61601
- * Michal Minecki (mirzu) - https://www.drupal.org/user/7710
- * Patrick Coffey (patrickcoffeyo) - https://www.drupal.org/user/2837945
- * Patrick Coffey (pcoffey) - https://www.drupal.org/user/1595818
- * Taylor Smith (tsmith512) - https://www.drupal.org/user/2031446

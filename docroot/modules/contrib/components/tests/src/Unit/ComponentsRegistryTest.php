@@ -29,20 +29,6 @@ class ComponentsRegistryTest extends UnitTestCase {
   protected $systemUnderTest;
 
   /**
-   * Path to the mocked modules directory.
-   *
-   * @var string
-   */
-  protected $modulesDir = 'modules/contrib';
-
-  /**
-   * Path to the mocked themes directory.
-   *
-   * @var string
-   */
-  protected $themesDir = 'themes/contrib';
-
-  /**
    * {@inheritdoc}
    */
   public function setUp(): void {
@@ -211,7 +197,7 @@ class ComponentsRegistryTest extends UnitTestCase {
     }
 
     $result = $this->systemUnderTest->getTemplate($name);
-    $this->assertEquals($expected, $result, $this->getName());
+    $this->assertEquals($expected, $result);
   }
 
   /**
@@ -219,7 +205,7 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @see testGetTemplate()
    */
-  public function providerTestGetTemplate(): array {
+  public static function providerTestGetTemplate(): array {
     return [
       'gets the template from registry' => [
         'name' => '@components/tubman.twig',
@@ -294,14 +280,13 @@ class ComponentsRegistryTest extends UnitTestCase {
       );
 
     if (!empty($expectedWarnings)) {
-      $consecutiveCalls = [];
-      foreach ($expectedWarnings as $key => $warning) {
-        $consecutiveCalls[$key] = [$warning];
-      }
       $this->loggerChannel
         ->expects($this->exactly(count($expectedWarnings)))
         ->method('warning')
-        ->withConsecutive(...$consecutiveCalls);
+        ->with($this->callback(function (string $value) use (&$expectedWarnings) {
+          return $value === array_shift($expectedWarnings);
+        }));
+
     }
 
     $fileSystem = $this->createMock('\Drupal\Core\File\FileSystemInterface');
@@ -326,7 +311,7 @@ class ComponentsRegistryTest extends UnitTestCase {
       $fileSystem
         ->expects($this->exactly(count($scanDirectory)))
         ->method('scanDirectory')
-        ->will($this->returnValueMap($valueMap));
+        ->willReturnMap($valueMap);
     }
 
     $this->systemUnderTest = $this->newSystemUnderTest(NULL, NULL, $moduleHandler, NULL, $cacheBackend, $fileSystem);
@@ -334,7 +319,7 @@ class ComponentsRegistryTest extends UnitTestCase {
     // Use reflection to test a protected method.
     $this->invokeProtectedMethod($this->systemUnderTest, 'load', $themeName);
     $result = $this->getProtectedProperty($this->systemUnderTest, 'registry')[$themeName];
-    $this->assertEquals($expected, $result, $this->getName());
+    $this->assertEquals($expected, $result);
   }
 
   /**
@@ -342,7 +327,7 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @see testLoad()
    */
-  public function providerTestLoad(): array {
+  public static function providerTestLoad(): array {
     return [
       'loads registry from cache' => [
         'themeName' => 'activeTheme',
@@ -498,7 +483,7 @@ class ComponentsRegistryTest extends UnitTestCase {
       ->willReturn($themeInfo);
     $themeExtensionList
       ->method('getPath')
-      ->will($this->returnValueMap($getPath));
+      ->willReturnMap($getPath);
     $themeList = [];
     foreach ($themeInfo as $info) {
       $extension = $this->createMock('\Drupal\Core\Extension\Extension');
@@ -521,7 +506,7 @@ class ComponentsRegistryTest extends UnitTestCase {
       ->willReturn($themeList);
     $themeExtensionList
       ->method('getBaseThemes')
-      ->will($this->returnValueMap($valueMap));
+      ->willReturnMap($valueMap);
 
     $activeThemes = [];
     foreach (array_keys($themeInfo) as $activeThemeName) {
@@ -545,16 +530,8 @@ class ComponentsRegistryTest extends UnitTestCase {
         !empty($themeCache) ? (object) ['data' => $themeCache] : FALSE,
         !empty($allNamespacesCache) ? (object) ['data' => $allNamespacesCache] : FALSE,
       );
-    $set = [];
-    $alter = [];
+    $protected = [];
     if (empty($allNamespacesCache)) {
-      $set[] = [
-        'components:namespaces',
-        $expected,
-        Cache::PERMANENT,
-        ['theme_registry'],
-      ];
-      $protected = [];
       foreach ($themeInfo as $key => $value) {
         $protected[$key] = [
           'name' => $value['name'],
@@ -562,43 +539,41 @@ class ComponentsRegistryTest extends UnitTestCase {
           'package' => $value['package'] ?? '',
         ];
       }
-      $alter[] = [
-        'protected_twig_namespaces',
-        $protected,
-      ];
     }
-    if (empty($themeCache)) {
-      $set[] = [
-        'components:namespaces:' . $themeName,
-        $expected[$themeName],
-        Cache::PERMANENT,
-        ['theme_registry'],
-      ];
-      if (!empty($allNamespacesCache)) {
-        $alter[] = [
-          'components_namespaces',
-          $allNamespacesCache[$themeName],
-          $themeName,
-        ];
-      }
-    }
-    if (!empty($set)) {
+    if (empty($allNamespacesCache) || empty($themeCache)) {
       $cacheBackend
         ->method('set')
-        ->withConsecutive(...$set);
-    }
-    if (!empty($alter)) {
-      foreach ([$moduleHandler, $themeManager] as &$extensionHandler) {
+        ->with(
+          $this->callback(function ($value) use ($themeName, $allNamespacesCache, $expected) {
+            return $value === 'components:namespaces' || $value === ('components:namespaces:' . $themeName);
+          }),
+          $this->callback(function ($value) use ($themeName, $allNamespacesCache, $expected) {
+            return $value === $expected || $value === $expected[$themeName] ?? [];
+          }),
+          Cache::PERMANENT,
+          ['theme_registry'],
+        );
+
+      foreach ([$moduleHandler, $themeManager] as $extensionHandler) {
         $extensionHandler
           ->method('alter')
-          ->withConsecutive(...$alter);
+          ->with(
+            $this->callback(function ($value) {
+              return $value === 'protected_twig_namespaces' || $value === 'components_namespaces';
+            }),
+            $this->callback(function ($value) use ($themeName, $allNamespacesCache, $expected, $protected) {
+              return $value === $protected || $value === ($allNamespacesCache[$themeName] ?? []) || ($value === $expected[$themeName] ?? []);
+            }),
+            $this->callback(function ($value) use ($themeName) {
+              return $value === NULL || $value === $themeName;
+            }),
+          );
       }
     }
-
     $this->systemUnderTest = $this->newSystemUnderTest(NULL, $themeExtensionList, $moduleHandler, $themeManager, $cacheBackend);
 
     $result = $this->systemUnderTest->getNamespaces($themeName);
-    $this->assertEquals($expected[$themeName], $result, $this->getName());
+    $this->assertEquals($expected[$themeName], $result);
   }
 
   /**
@@ -606,7 +581,7 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @see testGetNamespaces()
    */
-  public function providerTestGetNamespaces(): array {
+  public static function providerTestGetNamespaces(): array {
     return [
       'gets namespaces from extension list' => [
         'themeName' => 'activeTheme',
@@ -632,22 +607,22 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [
-          ['activeTheme', $this->themesDir . '/activeTheme'],
-          ['baseTheme', $this->themesDir . '/baseTheme'],
+          ['activeTheme', 'themes/contrib/activeTheme'],
+          ['baseTheme', 'themes/contrib/baseTheme'],
         ],
         'themeCache' => [],
         'allNamespacesCache' => [],
         'expected' => [
           'activeTheme' => [
             'components' => [
-              $this->themesDir . '/activeTheme/path1',
-              $this->themesDir . '/activeTheme/path2',
-              $this->themesDir . '/baseTheme/path3',
+              'themes/contrib/activeTheme/path1',
+              'themes/contrib/activeTheme/path2',
+              'themes/contrib/baseTheme/path3',
             ],
           ],
           'baseTheme' => [
             'components' => [
-              $this->themesDir . '/baseTheme/path3',
+              'themes/contrib/baseTheme/path3',
             ],
           ],
         ],
@@ -660,28 +635,28 @@ class ComponentsRegistryTest extends UnitTestCase {
         'allNamespacesCache' => [
           'activeTheme' => [
             'components' => [
-              $this->themesDir . '/activeTheme/path1',
-              $this->themesDir . '/activeTheme/path2',
-              $this->themesDir . '/baseTheme/path1',
+              'themes/contrib/activeTheme/path1',
+              'themes/contrib/activeTheme/path2',
+              'themes/contrib/baseTheme/path1',
             ],
           ],
           'baseTheme' => [
             'components' => [
-              $this->themesDir . '/baseTheme/path1',
+              'themes/contrib/baseTheme/path1',
             ],
           ],
         ],
         'expected' => [
           'activeTheme' => [
             'components' => [
-              $this->themesDir . '/activeTheme/path1',
-              $this->themesDir . '/activeTheme/path2',
-              $this->themesDir . '/baseTheme/path1',
+              'themes/contrib/activeTheme/path1',
+              'themes/contrib/activeTheme/path2',
+              'themes/contrib/baseTheme/path1',
             ],
           ],
           'baseTheme' => [
             'components' => [
-              $this->themesDir . '/baseTheme/path1',
+              'themes/contrib/baseTheme/path1',
             ],
           ],
         ],
@@ -692,16 +667,16 @@ class ComponentsRegistryTest extends UnitTestCase {
         'getPath' => [],
         'themeCache' => [
           'components' => [
-            $this->themesDir . '/activeTheme/path1',
-            $this->themesDir . '/activeTheme/path2',
+            'themes/contrib/activeTheme/path1',
+            'themes/contrib/activeTheme/path2',
           ],
         ],
         'allNamespacesCache' => [],
         'expected' => [
           'activeTheme' => [
             'components' => [
-              $this->themesDir . '/activeTheme/path1',
-              $this->themesDir . '/activeTheme/path2',
+              'themes/contrib/activeTheme/path1',
+              'themes/contrib/activeTheme/path2',
             ],
           ],
         ],
@@ -745,10 +720,10 @@ class ComponentsRegistryTest extends UnitTestCase {
     if (!empty($getPath)) {
       $moduleExtensionList
         ->method('getPath')
-        ->will($this->returnValueMap($getPath));
+        ->willReturnMap($getPath);
       $themeExtensionList
         ->method('getPath')
-        ->will($this->returnValueMap($getPath));
+        ->willReturnMap($getPath);
     }
     $themeList = [];
     foreach ($themeInfo as $info) {
@@ -766,23 +741,21 @@ class ComponentsRegistryTest extends UnitTestCase {
       ->willReturn($themeList);
     $themeExtensionList
       ->method('getBaseThemes')
-      ->will($this->returnValueMap($valueMap));
+      ->willReturnMap($valueMap);
     if (!empty($expectedWarnings)) {
-      $consecutiveCalls = [];
-      foreach ($expectedWarnings as $key => $warning) {
-        $consecutiveCalls[$key] = [$warning];
-      }
       $this->loggerChannel
         ->expects($this->exactly(count($expectedWarnings)))
         ->method('warning')
-        ->withConsecutive(...$consecutiveCalls);
+        ->with($this->callback(function (string $value) use (&$expectedWarnings) {
+          return $value === array_shift($expectedWarnings);
+        }));
     }
 
     $this->systemUnderTest = $this->newSystemUnderTest();
 
     // Use reflection to test a protected method.
     $result = $this->invokeProtectedMethod($this->systemUnderTest, 'findNamespaces', $moduleExtensionList, $themeExtensionList);
-    $this->assertEquals($expected, $result, $this->getName());
+    $this->assertEquals($expected, $result);
   }
 
   /**
@@ -790,7 +763,7 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @see testFindNamespaces()
    */
-  public function providerTestFindNamespaces(): array {
+  public static function providerTestFindNamespaces(): array {
     return [
       'namespace paths are ordered properly' => [
         'moduleInfo' => [
@@ -847,11 +820,11 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [
-          ['components', $this->modulesDir . '/components'],
-          ['weight1', $this->modulesDir . '/weight1'],
-          ['weight2', $this->modulesDir . '/weight2'],
-          ['activeTheme', $this->themesDir . '/activeTheme'],
-          ['baseTheme', $this->themesDir . '/baseTheme'],
+          ['components', 'modules/contrib/components'],
+          ['weight1', 'modules/contrib/weight1'],
+          ['weight2', 'modules/contrib/weight2'],
+          ['activeTheme', 'themes/contrib/activeTheme'],
+          ['baseTheme', 'themes/contrib/baseTheme'],
         ],
         'getBaseThemes' => [
           'activeTheme' => ['baseTheme' => 'Base theme'],
@@ -860,44 +833,44 @@ class ComponentsRegistryTest extends UnitTestCase {
         'expected' => [
           'activeTheme' => [
             'components' => [
-              $this->themesDir . '/activeTheme/path1',
-              $this->themesDir . '/activeTheme/path2',
-              $this->themesDir . '/baseTheme/path1',
-              $this->themesDir . '/baseTheme/path2',
-              $this->modulesDir . '/weight2/path1',
-              $this->modulesDir . '/weight2/path2',
-              $this->modulesDir . '/weight1/path1',
-              $this->modulesDir . '/weight1/path2',
-              $this->modulesDir . '/components/path1',
-              $this->modulesDir . '/components/path2',
+              'themes/contrib/activeTheme/path1',
+              'themes/contrib/activeTheme/path2',
+              'themes/contrib/baseTheme/path1',
+              'themes/contrib/baseTheme/path2',
+              'modules/contrib/weight2/path1',
+              'modules/contrib/weight2/path2',
+              'modules/contrib/weight1/path1',
+              'modules/contrib/weight1/path2',
+              'modules/contrib/components/path1',
+              'modules/contrib/components/path2',
             ],
             'baseTheme' => [
-              $this->themesDir . '/baseTheme/path3',
-              $this->themesDir . '/baseTheme/path4',
-              $this->modulesDir . '/weight2/path3',
-              $this->modulesDir . '/weight2/path4',
-              $this->modulesDir . '/weight1/path3',
-              $this->modulesDir . '/weight1/path4',
+              'themes/contrib/baseTheme/path3',
+              'themes/contrib/baseTheme/path4',
+              'modules/contrib/weight2/path3',
+              'modules/contrib/weight2/path4',
+              'modules/contrib/weight1/path3',
+              'modules/contrib/weight1/path4',
             ],
           ],
           'baseTheme' => [
             'components' => [
-              $this->themesDir . '/baseTheme/path1',
-              $this->themesDir . '/baseTheme/path2',
-              $this->modulesDir . '/weight2/path1',
-              $this->modulesDir . '/weight2/path2',
-              $this->modulesDir . '/weight1/path1',
-              $this->modulesDir . '/weight1/path2',
-              $this->modulesDir . '/components/path1',
-              $this->modulesDir . '/components/path2',
+              'themes/contrib/baseTheme/path1',
+              'themes/contrib/baseTheme/path2',
+              'modules/contrib/weight2/path1',
+              'modules/contrib/weight2/path2',
+              'modules/contrib/weight1/path1',
+              'modules/contrib/weight1/path2',
+              'modules/contrib/components/path1',
+              'modules/contrib/components/path2',
             ],
             'baseTheme' => [
-              $this->themesDir . '/baseTheme/path3',
-              $this->themesDir . '/baseTheme/path4',
-              $this->modulesDir . '/weight2/path3',
-              $this->modulesDir . '/weight2/path4',
-              $this->modulesDir . '/weight1/path3',
-              $this->modulesDir . '/weight1/path4',
+              'themes/contrib/baseTheme/path3',
+              'themes/contrib/baseTheme/path4',
+              'modules/contrib/weight2/path3',
+              'modules/contrib/weight2/path4',
+              'modules/contrib/weight1/path3',
+              'modules/contrib/weight1/path4',
             ],
           ],
         ],
@@ -940,8 +913,8 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [
-          ['components', $this->modulesDir . '/components'],
-          ['zen', $this->themesDir . '/zen'],
+          ['components', 'modules/contrib/components'],
+          ['zen', 'themes/contrib/zen'],
         ],
         'getBaseThemes' => [
           'classy' => [],
@@ -950,7 +923,7 @@ class ComponentsRegistryTest extends UnitTestCase {
         'expected' => [
           'zen' => [
             'zen' => [
-              $this->themesDir . '/zen/zen-namespace',
+              'themes/contrib/zen/zen-namespace',
             ],
           ],
           'classy' => [],
@@ -1001,8 +974,8 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [
-          ['components', $this->modulesDir . '/components'],
-          ['zen', $this->themesDir . '/zen'],
+          ['components', 'modules/contrib/components'],
+          ['zen', 'themes/contrib/zen'],
         ],
         'getBaseThemes' => [
           'classy' => [],
@@ -1011,16 +984,16 @@ class ComponentsRegistryTest extends UnitTestCase {
         'expected' => [
           'zen' => [
             'zen' => [
-              $this->themesDir . '/zen/zen-namespace',
+              'themes/contrib/zen/zen-namespace',
             ],
             'components' => [
-              $this->themesDir . '/zen/components-namespace',
-              $this->modulesDir . '/components/default-namespace',
+              'themes/contrib/zen/components-namespace',
+              'modules/contrib/components/default-namespace',
             ],
           ],
           'classy' => [
             'components' => [
-              $this->modulesDir . '/components/default-namespace',
+              'modules/contrib/components/default-namespace',
             ],
           ],
         ],
@@ -1065,8 +1038,8 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [
-          ['components', $this->modulesDir . '/components'],
-          ['zen', $this->themesDir . '/zen'],
+          ['components', 'modules/contrib/components'],
+          ['zen', 'themes/contrib/zen'],
         ],
         'getBaseThemes' => [
           'classy' => [],
@@ -1075,10 +1048,10 @@ class ComponentsRegistryTest extends UnitTestCase {
         'expected' => [
           'zen' => [
             'zen' => [
-              $this->themesDir . '/zen/zen-namespace',
+              'themes/contrib/zen/zen-namespace',
             ],
             'components' => [
-              $this->themesDir . '/zen/components-namespace',
+              'themes/contrib/zen/components-namespace',
             ],
           ],
           'classy' => [],
@@ -1125,7 +1098,7 @@ class ComponentsRegistryTest extends UnitTestCase {
     if (!empty($getPath)) {
       $extensionList
         ->method('getPath')
-        ->will($this->returnValueMap($getPath));
+        ->willReturnMap($getPath);
     }
     if (!is_null($getBaseThemes)) {
       $themeList = [];
@@ -1144,12 +1117,12 @@ class ComponentsRegistryTest extends UnitTestCase {
         ->willReturn($themeList);
       $extensionList
         ->method('getBaseThemes')
-        ->will($this->returnValueMap($valueMap));
+        ->willReturnMap($valueMap);
     }
 
     // Use reflection to test a protected method.
     $result = $this->invokeProtectedMethod($this->systemUnderTest, 'normalizeExtensionListInfo', $extensionList);
-    $this->assertEquals($expected, $result, $this->getName());
+    $this->assertEquals($expected, $result);
   }
 
   /**
@@ -1157,7 +1130,7 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @see testNormalizeNamespacePaths()
    */
-  public function providerTestNormalizeExtensionListInfo(): array {
+  public static function providerTestNormalizeExtensionListInfo(): array {
     return [
       'saves extension info, including package' => [
         'getAllInstalledInfo' => [
@@ -1250,7 +1223,7 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [
-          ['phillis_wheatley', $this->modulesDir . '/phillis_wheatley'],
+          ['phillis_wheatley', 'modules/contrib/phillis_wheatley'],
         ],
         'getBaseThemes' => NULL,
         'expected' => [
@@ -1261,8 +1234,8 @@ class ComponentsRegistryTest extends UnitTestCase {
               'package' => '',
             ],
             'namespaces' => [
-              'wheatley' => [$this->modulesDir . '/phillis_wheatley/components'],
-              'wheatley_too' => [$this->modulesDir . '/phillis_wheatley/templates'],
+              'wheatley' => ['modules/contrib/phillis_wheatley/components'],
+              'wheatley_too' => ['modules/contrib/phillis_wheatley/templates'],
               'wheatley_adjacent' => [
                 'libraries/chapman/components',
                 '../vendor/vendorOrg/vendorComponents',
@@ -1330,9 +1303,9 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [
-          ['activeTheme', $this->themesDir . '/activeTheme'],
-          ['baseTheme', $this->themesDir . '/baseTheme'],
-          ['basestTheme', $this->themesDir . '/basestTheme'],
+          ['activeTheme', 'themes/contrib/activeTheme'],
+          ['baseTheme', 'themes/contrib/baseTheme'],
+          ['basestTheme', 'themes/contrib/basestTheme'],
         ],
         'getBaseThemes' => [
           'activeTheme' => [
@@ -1353,8 +1326,8 @@ class ComponentsRegistryTest extends UnitTestCase {
               'baseThemes' => ['basestTheme', 'baseTheme'],
             ],
             'namespaces' => [
-              'activeTheme' => [$this->themesDir . '/activeTheme/active'],
-              'components' => [$this->themesDir . '/activeTheme/components'],
+              'activeTheme' => ['themes/contrib/activeTheme/active'],
+              'components' => ['themes/contrib/activeTheme/components'],
             ],
             'allow_default_namespace_reuse' => FALSE,
           ],
@@ -1366,7 +1339,7 @@ class ComponentsRegistryTest extends UnitTestCase {
               'baseThemes' => ['basestTheme'],
             ],
             'namespaces' => [
-              'components' => [$this->themesDir . '/baseTheme/components'],
+              'components' => ['themes/contrib/baseTheme/components'],
             ],
             'allow_default_namespace_reuse' => FALSE,
           ],
@@ -1378,7 +1351,7 @@ class ComponentsRegistryTest extends UnitTestCase {
               'baseThemes' => [],
             ],
             'namespaces' => [
-              'components' => [$this->themesDir . '/basestTheme/components'],
+              'components' => ['themes/contrib/basestTheme/components'],
             ],
             'allow_default_namespace_reuse' => FALSE,
           ],
@@ -1409,8 +1382,8 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [
-          ['activeTheme', $this->themesDir . '/activeTheme'],
-          ['baseTheme', $this->themesDir . '/baseTheme'],
+          ['activeTheme', 'themes/contrib/activeTheme'],
+          ['baseTheme', 'themes/contrib/baseTheme'],
         ],
         'getBaseThemes' => [
           'activeTheme' => [
@@ -1430,8 +1403,8 @@ class ComponentsRegistryTest extends UnitTestCase {
               'baseThemes' => ['baseTheme'],
             ],
             'namespaces' => [
-              'activeTheme' => [$this->themesDir . '/activeTheme/active'],
-              'components' => [$this->themesDir . '/activeTheme/components'],
+              'activeTheme' => ['themes/contrib/activeTheme/active'],
+              'components' => ['themes/contrib/activeTheme/components'],
             ],
             'allow_default_namespace_reuse' => FALSE,
           ],
@@ -1443,7 +1416,7 @@ class ComponentsRegistryTest extends UnitTestCase {
               'baseThemes' => [],
             ],
             'namespaces' => [
-              'components' => [$this->themesDir . '/baseTheme/components'],
+              'components' => ['themes/contrib/baseTheme/components'],
             ],
             'allow_default_namespace_reuse' => FALSE,
           ],
@@ -1469,18 +1442,24 @@ class ComponentsRegistryTest extends UnitTestCase {
   public function testFindProtectedNamespaces(array $extensionInfo, array $expected): void {
     // Test that hook_protected_twig_namespaces_alter() is called for modules.
     $moduleHandler = $this->createMock('\Drupal\Core\Extension\ModuleHandlerInterface');
+    $moduleCalls = ['protected_twig_namespaces', $expected, NULL, NULL];
     $moduleHandler
       ->method('alter')
-      ->withConsecutive(
-        ['protected_twig_namespaces', $expected, NULL, NULL],
+      ->with(
+        $this->callback(function ($value) use (&$moduleCalls): bool {
+          return array_shift($moduleCalls) === $value;
+        }),
       );
 
     // Test that hook_protected_twig_namespaces_alter() is called for themes.
     $themeManager = $this->createMock('\Drupal\Core\Theme\ThemeManagerInterface');
+    $themeCalls = ['protected_twig_namespaces', $expected, NULL, NULL];
     $themeManager
       ->method('alter')
-      ->withConsecutive(
-        ['protected_twig_namespaces', $expected, NULL, NULL],
+      ->with(
+        $this->callback(function ($value) use (&$themeCalls): bool {
+          return array_shift($themeCalls) === $value;
+        }),
       );
 
     // Mock the system under test.
@@ -1492,7 +1471,7 @@ class ComponentsRegistryTest extends UnitTestCase {
     );
 
     $result = $this->invokeProtectedMethod($this->systemUnderTest, 'findProtectedNamespaces', $extensionInfo);
-    $this->assertEquals($expected, $result, $this->getName());
+    $this->assertEquals($expected, $result);
   }
 
   /**
@@ -1500,7 +1479,7 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @see testFindProtectedNamespaces()
    */
-  public function providerTestFindProtectedNamespaces(): array {
+  public static function providerTestFindProtectedNamespaces(): array {
     return [
       'Manual opt-in' => [
         'extensionInfo' => [
@@ -1526,7 +1505,7 @@ class ComponentsRegistryTest extends UnitTestCase {
             ],
             'namespaces' => [
               'edna_lewis' => [
-                $this->modulesDir . '/edna_lewis/components',
+                'modules/contrib/edna_lewis/components',
               ],
             ],
             'allow_default_namespace_reuse' => FALSE,

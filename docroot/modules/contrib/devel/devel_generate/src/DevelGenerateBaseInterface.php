@@ -17,6 +17,8 @@ use Drupal\Core\Form\FormStateInterface;
  */
 interface DevelGenerateBaseInterface extends PluginInspectionInterface {
 
+  public function __construct(array $configuration, $plugin_id, $plugin_definition);
+
   /**
    * Returns the array of settings, including defaults for missing settings.
    *

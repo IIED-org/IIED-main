@@ -21,7 +21,7 @@ class DevelStateEditorTest extends DevelBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  protected function setUp(): void {
     parent::setUp();
     $this->state = $this->container->get('state');
     $this->drupalPlaceBlock('page_title_block');
@@ -175,7 +175,7 @@ class DevelStateEditorTest extends DevelBrowserTestBase {
    *   The expected text for the passed in elements.
    */
   protected function assertElementsTextEquals(array $elements, array $expected_elements_text) {
-    $actual_text = array_map(fn(NodeElement $element) => $element->getText(), $elements);
+    $actual_text = array_map(static fn(NodeElement $element) => $element->getText(), $elements);
     $this->assertSame($expected_elements_text, $actual_text);
   }
 

@@ -58,8 +58,11 @@ class DevelEntityToArrayTest extends EntityKernelTestBase {
 
     $this->installEntitySchema('entity_test_rev');
 
-    $user = $this->createUser(['name' => 'test'], ['access devel information']);
-    $this->container->get('current_user')->setAccount($user);
+    $user = $this->createUser(permissions: ['access devel information'], values: ['name' => 'test']);
+
+    /** @var \Drupal\Core\Session\AccountProxyInterface $current_user */
+    $current_user = $this->container->get('current_user');
+    $current_user->setAccount($user);
 
     // Create a field.
     $this->createEntityReferenceField(
@@ -86,12 +89,12 @@ class DevelEntityToArrayTest extends EntityKernelTestBase {
     // Create three target entities and attach them to parent field.
     $target_entities = [];
     $reference_field = [];
-    for ($i = 0; $i < 3; $i++) {
+    for ($i = 0; $i < 3; ++$i) {
       $target_entity = $this->container->get('entity_type.manager')
         ->getStorage($this->referencedEntityType)
         ->create([
           'type' => $this->bundle,
-          'name' => "Related $i",
+          'name' => 'Related ' . $i,
         ]);
       $target_entity->save();
       $target_entities[] = $target_entity;
@@ -105,8 +108,8 @@ class DevelEntityToArrayTest extends EntityKernelTestBase {
     /** @var \Drupal\devel\DevelDumperManagerInterface $dumper */
     $dumper = $this->container->get('devel.dumper');
     $result = $dumper->export($entity, NULL, 'drupal_variable', TRUE);
-    for ($i = 0; $i < 3; $i++) {
-      $this->assertStringContainsString("Related $i", (string) $result, 'The referenced entities are present in the dumper output.');
+    for ($i = 0; $i < 3; ++$i) {
+      $this->assertStringContainsString('Related ' . $i, (string) $result, 'The referenced entities are present in the dumper output.');
     }
   }
 

@@ -19,7 +19,7 @@ function facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, FormState
   // Only alter form when pretty paths is active.
   if ($facetsource_config->getUrlProcessorName() == 'facets_pretty_paths') {
 
-    /* @var $pretty_paths_coder_manager \Drupal\facets_pretty_paths\Coder\CoderPluginManager */
+    /** @var \Drupal\facets_pretty_paths\Coder\CoderPluginManager $pretty_paths_coder_manager */
     $pretty_paths_coder_manager = \Drupal::service('plugin.manager.facets_pretty_paths.coder');
     $coders = [];
     $coder_descriptions = [];

@@ -141,6 +141,19 @@
         dialog.option('position', dialog.options.position);
       }
     });
+
+    /**
+     * Close modal popup on escape key press.
+     */
+    Drupal.behaviors.closeModalOnEscapeKeyPress = {
+      attach: function (context) {
+        $(document).on('keydown', function (event) {
+          if (event.key == 'Escape') {
+            $(document).find('.entity-browser-modal-iframe').parents('.ui-dialog').eq(0).find('.ui-dialog-titlebar-close').click();
+          }
+        });
+      }
+    };
   };
 
 }(jQuery, Drupal, drupalSettings, window, document));

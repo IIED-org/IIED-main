@@ -1,16 +1,33 @@
 {
   "name": "drupal/taxonomy_manager",
+  "license": "GPL-2.0-or-later",
   "type": "drupal-module",
-  "description": "This module provides a powerful interface for managing taxonomies.",
-  "keywords": ["Drupal"],
-  "license": "GPL-2.0+",
-  "homepage": "https://www.drupal.org/project/taxonomy_manager",
-  "minimum-stability": "dev",
+  "description": "Tool for administrating taxonomy terms",
   "support": {
-    "issues": "https://www.drupal.org/project/issues/taxonomy_manager",
-    "source": "https://git.drupalcode.org/project/taxonomy_manager"
+    "issues": "https://drupal.org/project/issues/taxonomy_manager",
+    "source": "https://drupal.org/project/taxonomy_manager"
+  },
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "fancytree/fancytree",
+        "version": "2.38.3",
+        "type": "drupal-library",
+        "extra": {
+          "installer-name": "jquery.fancytree"
+        },
+        "dist": {
+          "url": "https://github.com/mar10/fancytree/archive/refs/tags/v2.38.3.zip",
+          "type": "zip"
+        }
+      }
+    }
+  ],
+  "suggest": {
+    "fancytree/fancytree": "The fancytree library is required to use the drupal/taxonomy_manager module."
   },
   "require": {
-    "drupal/jquery_ui":"^1.4"
+    "drupal/jquery_ui": "^1.7"
   }
 }

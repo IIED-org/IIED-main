@@ -35,9 +35,10 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
       Url::fromRoute('acquia_connector.setup_oauth')->toString(),
       $response->headers->get('Location')
     );
+    $error_msg = $this->container->get('messenger')->messagesByType('error');
     self::assertEquals(
-      ['We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href="https://docs.acquia.com/cloud-platform/known-issues/#unable-to-log-in-through-acquia-connector">this link</a>.'],
-      $this->container->get('messenger')->messagesByType('error')
+      'We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href="https://docs.acquia.com/cloud-platform/known-issues/#unable-to-log-in-through-acquia-connector">this link</a>.',
+      (string)array_shift($error_msg)
     );
   }
 
@@ -139,9 +140,10 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
       Url::fromRoute('acquia_connector.settings')->setAbsolute()->toString(),
       $response->headers->get('Location')
     );
-    self::assertEquals(
-      ['status' => ['<h3>Connection successful!</h3>You are now connected to Acquia Cloud.']],
-      $this->container->get('messenger')->all()
+    $actual_msg = $this->container->get('messenger')->all()['status'];
+    self::assertSame(
+      ['status' => '<h3>Connection successful!</h3>You are now connected to Acquia Cloud.'],
+      ['status' => (string)array_shift($actual_msg)]
     );
 
     self::assertEquals(
@@ -204,9 +206,10 @@ final class ConfigureApplicationFormTest extends AcquiaConnectorTestBase {
       Url::fromRoute('acquia_connector.settings')->setAbsolute()->toString(),
       $response->headers->get('Location')
     );
-    self::assertEquals(
-      ['status' => ['<h3>Connection successful!</h3>You are now connected to Acquia Cloud.']],
-      $this->container->get('messenger')->all()
+    $actual_msg = $this->container->get('messenger')->all()['status'];
+    self::assertSame(
+      ['status' => '<h3>Connection successful!</h3>You are now connected to Acquia Cloud.'],
+      ['status' => (string)array_shift($actual_msg)]
     );
 
     self::assertEquals(

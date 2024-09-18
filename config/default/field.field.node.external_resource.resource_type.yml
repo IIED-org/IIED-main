@@ -1,0 +1,21 @@
+uuid: 77e79934-1bc8-4bda-92b9-8f54eeaddb61
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.resource_type
+    - node.type.external_resource
+  module:
+    - options
+id: node.external_resource.resource_type
+field_name: resource_type
+entity_type: node
+bundle: external_resource
+label: 'Resource type'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

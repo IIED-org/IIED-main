@@ -1,0 +1,33 @@
+uuid: 91651c85-7372-472a-b4af-100f49dd6ec6
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.form_block
+    - field.field.block_content.form_block.body
+    - field.field.block_content.form_block.form_type
+  module:
+    - options
+    - text
+id: block_content.form_block.default
+targetEntityType: block_content
+bundle: form_block
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  form_type:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

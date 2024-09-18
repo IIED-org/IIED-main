@@ -20,6 +20,9 @@ settings:
     -
       value: Series
       label: Series
+    -
+      value: hub
+      label: Hub
   allowed_values_function: ''
 module: options
 locked: false

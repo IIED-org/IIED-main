@@ -1,0 +1,38 @@
+uuid: 56b4f9f6-1a3e-451e-8447-9b1dc38b844f
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.card_slider
+    - field.field.node.external_resource.field_link
+    - field.field.node.external_resource.field_tagline
+    - field.field.node.external_resource.field_tags
+    - field.field.node.external_resource.resource_type
+    - field.field.node.external_resource.source
+    - node.type.external_resource
+  module:
+    - user
+id: node.external_resource.card_slider
+targetEntityType: node
+bundle: external_resource
+mode: card_slider
+content:
+  field_tagline:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_link: true
+  field_tags: true
+  langcode: true
+  resource_type: true
+  search_api_excerpt: true
+  source: true

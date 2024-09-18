@@ -3,6 +3,7 @@
 namespace Drupal\login_redirect_per_role\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
@@ -67,6 +68,8 @@ class RedirectURLSettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
+   *   The typed config manager.
    * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
    *   The path validator.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -80,8 +83,8 @@ class RedirectURLSettingsForm extends ConfigFormBase {
    * @param \Drupal\login_redirect_per_role\LoginRedirectPerRoleInterface $login_redirect_per_role
    *   The login redirect per role service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, PathValidatorInterface $path_validator, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, Token $token, AliasManagerInterface $alias_manager, LoginRedirectPerRoleInterface $login_redirect_per_role) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typed_config_manager, PathValidatorInterface $path_validator, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, Token $token, AliasManagerInterface $alias_manager, LoginRedirectPerRoleInterface $login_redirect_per_role) {
+    parent::__construct($config_factory, $typed_config_manager);
 
     $this->pathValidator = $path_validator;
     $this->entityTypeManager = $entity_type_manager;
@@ -97,6 +100,7 @@ class RedirectURLSettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get('path.validator'),
       $container->get('entity_type.manager'),
       $container->get('module_handler'),
@@ -169,7 +173,7 @@ class RedirectURLSettingsForm extends ConfigFormBase {
         $row = $config->get($action_id . '.' . $role_id);
 
         $form[$holder_id][$action_id][$role_id]['#attributes']['class'][] = 'draggable';
-        $form[$holder_id][$action_id][$role_id]['#weight'] = isset($row['weight']) ? $row['weight'] : 0;
+        $form[$holder_id][$action_id][$role_id]['#weight'] = $row['weight'] ?? 0;
 
         $form[$holder_id][$action_id][$role_id]['role'] = [
           '#markup' => $role_name,
@@ -178,7 +182,7 @@ class RedirectURLSettingsForm extends ConfigFormBase {
           '#type' => 'textfield',
           '#title' => $this->t('Redirect URL'),
           '#title_display' => 'invisible',
-          '#default_value' => isset($row['redirect_url']) ? $row['redirect_url'] : '',
+          '#default_value' => $row['redirect_url'] ?? '',
         ];
 
         // When a token is entered, check if the token is valid.

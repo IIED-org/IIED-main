@@ -4,14 +4,10 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_problems
+    - filter.format.simple_html
     - node.type.hidden_handbrake
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats:
-      - simple_html
 id: node.hidden_handbrake.field_problems
 field_name: field_problems
 entity_type: node
@@ -22,5 +18,7 @@ required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings: {  }
+settings:
+  allowed_formats:
+    - simple_html
 field_type: text_long

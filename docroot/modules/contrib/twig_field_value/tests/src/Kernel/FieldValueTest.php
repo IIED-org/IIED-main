@@ -3,6 +3,8 @@
 namespace Drupal\Tests\twig_field_value\Kernel;
 
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Render\RenderContext;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -58,7 +60,7 @@ class FieldValueTest extends EntityKernelTestBase {
     ]);
     $fieldConfig->save();
     $current_user = $this->container->get('current_user');
-    $current_user->setAccount($this->createUser([], ['view test entity']));
+    $current_user->setAccount($this->createUser(['view test entity']));
   }
 
   /**
@@ -109,7 +111,7 @@ class FieldValueTest extends EntityKernelTestBase {
     $element = $render_field($entity);
 
     // Check the field values by rendering the formatter without any filter.
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertStringContainsString('entity1', (string) $content);
     $this->assertStringNotContainsString('forbid_access', (string) $content);
     $this->assertStringNotContainsString('entity3', (string) $content);
@@ -123,7 +125,7 @@ class FieldValueTest extends EntityKernelTestBase {
         'field' => $render_field($entity),
       ],
     ];
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertSame('entity1, entity4', (string) $content);
   }
 
@@ -159,7 +161,7 @@ class FieldValueTest extends EntityKernelTestBase {
     $element = $render_field($entity);
 
     // Check the field values by rendering the formatter without any filter.
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertStringNotContainsString('entity1', (string) $content);
     $this->assertStringNotContainsString('entity2', (string) $content);
 
@@ -171,7 +173,7 @@ class FieldValueTest extends EntityKernelTestBase {
         'field' => $render_field($entity),
       ],
     ];
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertSame('', (string) $content);
   }
 
@@ -200,7 +202,7 @@ class FieldValueTest extends EntityKernelTestBase {
     $element = $render_field($entity);
 
     // Check the field values by rendering the formatter without any filter.
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertStringContainsString('string one', (string) $content);
     $this->assertStringContainsString('string two', (string) $content);
     $this->assertStringNotContainsString('string three', (string) $content);
@@ -214,7 +216,7 @@ class FieldValueTest extends EntityKernelTestBase {
         'field' => $render_field($entity),
       ],
     ];
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertSame('string one, string two, string four', (string) $content);
   }
 
@@ -239,7 +241,7 @@ class FieldValueTest extends EntityKernelTestBase {
     $element = $render_field($entity);
 
     // Check the field values by rendering the formatter without any filter.
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertStringNotContainsString('string one', (string) $content);
     $this->assertStringNotContainsString('string two', (string) $content);
 
@@ -251,8 +253,61 @@ class FieldValueTest extends EntityKernelTestBase {
         'field' => $render_field($entity),
       ],
     ];
-    $content = \Drupal::service('renderer')->renderPlain($element);
+    $content = \Drupal::service('renderer')->renderInIsolation($element);
     $this->assertSame('', (string) $content);
+  }
+
+  /**
+   * Checks if cache is propagated for a field with the field_value filter.
+   */
+  public function testFieldValueCache() {
+    $entity = EntityTest::create([
+      'field_string' => [
+        'string one',
+      ],
+    ]);
+    $entity->save();
+
+    $render_field = function (FieldableEntityInterface $entity) {
+      return $entity->get('field_string')->view([
+        'type' => 'string_hidden_third_child',
+      ]);
+    };
+
+    $field = $render_field($entity);
+
+    // Apply cache and attachments to the field.
+    $metadata = [
+      '#attached' => [
+        'library' => ['core/drupal', 'core/once'],
+        'html_head_link' => ['test' => 'head'],
+      ],
+      '#cache' => [
+        'tags' => ['test_value_tag', 'test_value_tag_2'],
+        'contexts' => ['value_context'],
+        'max-age' => 1,
+      ],
+    ];
+
+    BubbleableMetadata::createFromRenderArray($metadata)->applyTo($field);
+
+    $element = [
+      '#type' => 'inline_template',
+      '#template' => '{{ field|field_value|safe_join(", ") }}',
+      '#context' => [
+        'field' => $field,
+      ],
+    ];
+
+    // Check that cache and attachments from field are present.
+    $context = new RenderContext();
+    $renderer = \Drupal::service('renderer');
+    $renderer->executeInRenderContext($context, fn () => $renderer->render($element));
+
+    $bubbled_metadata = [];
+    $context->pop()->applyTo($bubbled_metadata);
+
+    $this->assertEqualsCanonicalizing($metadata, $bubbled_metadata);
   }
 
 }

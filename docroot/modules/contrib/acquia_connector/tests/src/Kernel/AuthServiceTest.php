@@ -95,7 +95,7 @@ final class AuthServiceTest extends AcquiaConnectorTestBase {
   /**
    * Test data for ::finalize.
    */
-  public function finalizeData() {
+  public static function finalizeData() {
     yield 'success' => [
       'AUTHORIZATION_SUCCESSFUL',
       [

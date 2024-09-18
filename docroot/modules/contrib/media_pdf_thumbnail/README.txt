@@ -67,27 +67,27 @@ USAGE
 
     Getting values :
     // @value can be "image_uri" or "image_id"
-    [media_pdf_thumbnail:@pdf_field_name:@pdf_page:@value]
+    [media_pdf_thumbnail:@pdf_field_name:@pdf_page:@format:@value]
 
     Getting render :
-    [media_pdf_thumbnail:@pdf_field_name:@pdf_page:render:@image_style]
+    [media_pdf_thumbnail:@pdf_field_name:@pdf_page:@format:render:@image_style]
 
     Getting render and link image to pdf file :
-    [media_pdf_thumbnail:@pdf_field_name:@pdf_page:render:@image_style:link_pdf]
+    [media_pdf_thumbnail:@pdf_field_name:@pdf_page:@format:render:@image_style:link_pdf]
 
     Examples :
 
     // Returns image file uri
-    $fileUri = Drupal::token()->replace('[media_pdf_thumbnail:field_media_file:1:image_uri]', ['media' => $media]);
+    $fileUri = Drupal::token()->replace('[media_pdf_thumbnail:field_media_file:1:jpg:image_uri]', ['media' => $media]);
 
     // Returns image file id
-    $fileId = Drupal::token()->replace('[media_pdf_thumbnail:field_media_file:1:image_id]', ['media' => $media]);
+    $fileId = Drupal::token()->replace('[media_pdf_thumbnail:field_media_file:1:jpg:image_id]', ['media' => $media]);
 
     // Returns image html render
-    $render = $token->replace('[media_pdf_thumbnail:field_media_file:1:render:medium]', ['media' => $media]);
+    $render = $token->replace('[media_pdf_thumbnail:field_media_file:1:jpg:render:medium]', ['media' => $media]);
 
     // Returns image linked to pdf html render
-    $renderLink = $token->replace('[media_pdf_thumbnail:field_media_file:1:render:medium:link_pdf]', ['media' => $media]);
+    $renderLink = $token->replace('[media_pdf_thumbnail:field_media_file:1:jpg:render:medium:link_pdf]', ['media' => $media]);
 
   * Hook :
 

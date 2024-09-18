@@ -82,7 +82,7 @@ class SettingsOverriddenTest extends UnitTestCase {
    * @return iterable
    *   Data provider.
    */
-  public function settingsDataProvider(): iterable {
+  public static function settingsDataProvider(): iterable {
     yield [
       'network_id',
       'secret_key',

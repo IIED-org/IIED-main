@@ -3,13 +3,8 @@
 namespace Drupal\devel_generate_example\Plugin\DevelGenerate;
 
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -36,53 +31,13 @@ class ExampleDevelGenerate extends DevelGenerateBase implements ContainerFactory
   protected TimeInterface $time;
 
   /**
-   * Constructs a new UserDevelGenerate object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   Provides system time.
+   * {@inheritdoc}
    */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    EntityTypeManagerInterface $entity_type_manager,
-    MessengerInterface $messenger,
-    LanguageManagerInterface $language_manager,
-    ModuleHandlerInterface $module_handler,
-    TranslationInterface $string_translation,
-    TimeInterface $time
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $messenger, $language_manager, $module_handler, $string_translation);
-    $this->time = $time;
-  }
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->time = $container->get('datetime.time');
 
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $entity_type_manager = $container->get('entity_type.manager');
-    return new static(
-      $configuration, $plugin_id, $plugin_definition,
-      $entity_type_manager,
-      $container->get('messenger'),
-      $container->get('language_manager'),
-      $container->get('module_handler'),
-      $container->get('string_translation'),
-      $container->get('datetime.time'),
-    );
+    return $instance;
   }
 
   /**

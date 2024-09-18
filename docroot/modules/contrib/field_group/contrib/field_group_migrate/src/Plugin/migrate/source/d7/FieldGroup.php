@@ -89,7 +89,7 @@ class FieldGroup extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function prepareRow(Row $row) {
-    $data = unserialize($row->getSourceProperty('data'));
+    $data = unserialize($row->getSourceProperty('data'), ['allowed_classes' => FALSE]);
     $format_settings = $data['format_settings'] + $data['format_settings']['instance_settings'];
     unset($format_settings['instance_settings']);
     $settings = [

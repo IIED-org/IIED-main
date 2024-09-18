@@ -18,7 +18,7 @@ class ReadonlymodeBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    $output = '';
+    $output = [];
     $config = \Drupal::config('readonlymode.settings');
     if ($config->get('enabled')) {
       $site = \Drupal::config('system.site');

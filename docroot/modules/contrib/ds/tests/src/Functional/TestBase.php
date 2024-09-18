@@ -7,7 +7,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
+use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 use Drupal\Tests\field_ui\Traits\FieldUiTestTrait;
 use \Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
@@ -19,7 +19,7 @@ use \Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 abstract class TestBase extends BrowserTestBase {
 
   use DsTestTrait;
-  use EntityReferenceTestTrait;
+  use EntityReferenceFieldCreationTrait;
   use FieldUiTestTrait;
   use TaxonomyTestTrait;
   use StringTranslationTrait;

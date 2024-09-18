@@ -3,12 +3,11 @@ type: module
 description: 'Allows assigning the classes to Blocks.'
 package: User interface
 configure: block_class.settings
-core: 8.x
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^9 || ^10 || ^11
 dependencies:
   - drupal:block
 
-# Information added by Drupal.org packaging script on 2022-12-26
-version: '2.0.11'
+# Information added by Drupal.org packaging script on 2024-08-09
+version: '2.0.12'
 project: 'block_class'
-datestamp: 1672065315
+datestamp: 1723243077

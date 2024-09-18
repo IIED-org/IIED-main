@@ -4,7 +4,6 @@ namespace Drupal\devel\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -18,29 +17,14 @@ class LayoutInfoController extends ControllerBase {
   protected LayoutPluginManagerInterface $layoutPluginManager;
 
   /**
-   * LayoutInfoController constructor.
-   *
-   * @param \Drupal\Core\Layout\LayoutPluginManagerInterface $pluginManagerLayout
-   *   The layout manager.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The translation manager.
-   */
-  public function __construct(
-    LayoutPluginManagerInterface $pluginManagerLayout,
-    TranslationInterface $string_translation
-  ) {
-    $this->layoutPluginManager = $pluginManagerLayout;
-    $this->stringTranslation = $string_translation;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('plugin.manager.core.layout'),
-      $container->get('string_translation'),
-    );
+    $instance = parent::create($container);
+    $instance->layoutPluginManager = $container->get('plugin.manager.core.layout');
+    $instance->stringTranslation = $container->get('string_translation');
+
+    return $instance;
   }
 
   /**

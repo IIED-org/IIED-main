@@ -11,7 +11,7 @@ interface ResourceAttributes
     /**
      * The URL of the OpenTelemetry schema for these keys and values.
      */
-    public const SCHEMA_URL = 'https://opentelemetry.io/schemas/1.25.0';
+    public const SCHEMA_URL = 'https://opentelemetry.io/schemas/1.27.0';
 
     /**
      * Uniquely identifies the framework API revision offered by a version (`os.version`) of the android operating system. More information can be found here.
@@ -203,7 +203,7 @@ interface ResourceAttributes
      * <li><strong>AWS Lambda:</strong> The function ARN.
      * Take care not to use the &quot;invoked ARN&quot; directly but replace any
      * alias suffix
-     * with the resolved function version, as the same runtime instance may be invokable with
+     * with the resolved function version, as the same runtime instance may be invocable with
      * multiple different aliases.</li>
      * <li><strong>GCP:</strong> The URI of the resource</li>
      * <li><strong>Azure:</strong> The Fully Qualified Resource ID of the invoked function,
@@ -254,7 +254,7 @@ interface ResourceAttributes
      *
      * Docker defines a sha256 of the image id; `container.image.id` corresponds to the `Image` field from the Docker container inspect API endpoint.
      * K8s defines a link to the container registry repository with digest `"imageID": "registry.azurecr.io /namespace/service/dockerfile@sha256:bdeabd40c3a8a492eaf9e8e44d0ebbb84bac7ee25ac0cf8a7159d25f62555625"`.
-     * The ID is assinged by the container runtime and can vary in different environments. Consider using `oci.manifest.digest` if it is important to identify the same image in different environments/runtimes.
+     * The ID is assigned by the container runtime and can vary in different environments. Consider using `oci.manifest.digest` if it is important to identify the same image in different environments/runtimes.
      *
      * @example sha256:19c92d0a00d1b66d897bceaa7319bee0dd38a10a851c60bcec9474aa3f01e50f
      */
@@ -304,18 +304,18 @@ interface ResourceAttributes
     /**
      * Name of the deployment environment (aka deployment tier).
      *
-     * `deployment.environment` does not affect the uniqueness constraints defined through
+     * `deployment.environment.name` does not affect the uniqueness constraints defined through
      * the `service.namespace`, `service.name` and `service.instance.id` resource attributes.
      * This implies that resources carrying the following attribute combinations MUST be
      * considered to be identifying the same service:<ul>
-     * <li>`service.name=frontend`, `deployment.environment=production`</li>
-     * <li>`service.name=frontend`, `deployment.environment=staging`.</li>
+     * <li>`service.name=frontend`, `deployment.environment.name=production`</li>
+     * <li>`service.name=frontend`, `deployment.environment.name=staging`.</li>
      * </ul>
      *
      * @example staging
      * @example production
      */
-    public const DEPLOYMENT_ENVIRONMENT = 'deployment.environment';
+    public const DEPLOYMENT_ENVIRONMENT_NAME = 'deployment.environment.name';
 
     /**
      * A unique identifier representing the device.
@@ -625,10 +625,16 @@ interface ResourceAttributes
 
     /**
      * Number of times the container was restarted. This attribute can be used to identify a particular container (running or stopped) within a container spec.
-     *
-     * @example 2
      */
     public const K8S_CONTAINER_RESTART_COUNT = 'k8s.container.restart_count';
+
+    /**
+     * Last terminated reason of the Container.
+     *
+     * @example Evicted
+     * @example Error
+     */
+    public const K8S_CONTAINER_STATUS_LAST_TERMINATED_REASON = 'k8s.container.status.last_terminated_reason';
 
     /**
      * The name of the CronJob.
@@ -799,24 +805,6 @@ interface ResourceAttributes
     public const OS_VERSION = 'os.version';
 
     /**
-     * None.
-     *
-     * @deprecated use the `otel.scope.name` attribute.
-     *
-     * @example io.opentelemetry.contrib.mongodb
-     */
-    public const OTEL_LIBRARY_NAME = 'otel.library.name';
-
-    /**
-     * None.
-     *
-     * @deprecated use the `otel.scope.version` attribute.
-     *
-     * @example 1.0.0
-     */
-    public const OTEL_LIBRARY_VERSION = 'otel.library.version';
-
-    /**
      * The name of the instrumentation scope - (`InstrumentationScope.Name` in OTLP).
      *
      * @example io.opentelemetry.contrib.mongodb
@@ -895,7 +883,7 @@ interface ResourceAttributes
     public const PROCESS_RUNTIME_DESCRIPTION = 'process.runtime.description';
 
     /**
-     * The name of the runtime of this process. For compiled native binaries, this SHOULD be the name of the compiler.
+     * The name of the runtime of this process.
      *
      * @example OpenJDK Runtime Environment
      */
@@ -1052,4 +1040,19 @@ interface ResourceAttributes
      * @deprecated Use CONTAINER_IMAGE_TAGS
      */
     public const CONTAINER_IMAGE_TAG = 'container.image.tag';
+
+    /**
+     * @deprecated Use `otel.scope.name`
+     */
+    public const OTEL_LIBRARY_NAME = 'otel.library.name';
+
+    /**
+     * @deprecated Use `otel.scope.version`
+     */
+    public const OTEL_LIBRARY_VERSION = 'otel.library.version';
+
+    /**
+     * @deprecated Use `deployment.environment.name`
+     */
+    public const DEPLOYMENT_ENVIRONMENT = 'deployment.environment';
 }

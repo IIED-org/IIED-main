@@ -2,11 +2,23 @@
 
 namespace Drupal\media_pdf_thumbnail\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
+use Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImageManager;
+use Drupal\media_pdf_thumbnail\Manager\PdfImageEntityQueueManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,50 +37,121 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
 
+  use ImageFieldFormatterElementViewTrait;
+
+  use ImageFieldFormatterSettingsFormTrait;
+
+  const PDF_FILE_FIELD_SETTING = 'pdf_file_field';
+
+  const PDF_PAGE_SETTING = 'pdf_page';
+
+  const DEFAULT_PDF_PAGE_SETTING = 1;
+
+  const IMAGE_FORMAT_SETTINGS = 'image_format';
+
+  const IMAGE_LINK_SETTINGS = 'image_link';
+
+  const IMAGE_STYLE_SETTINGS = 'image_style';
+
+  const DEFAULT_IMAGE_FORMAT_SETTING = 'jpg';
+
+  const IMAGE_LINK_TYPE_SETTING = 'pdf_file';
+
+  const IMAGE_LINK_ATTRIBUTE_DOWNLOAD_SETTING = 'image_link_attributes_download';
+
+  const IMAGE_LINK_ATTRIBUTE_TARGET_SETTING = 'image_link_attributes_target';
+
+  const IMAGE_LINK_ATTRIBUTE_REL_SETTING = 'image_link_attributes_rel';
+
+  const IMAGE_USE_CRON = 'use_cron';
+
+  const MEDIA_BUNDLE_PAGE = '_page';
+
+  const MEDIA_BUNDLE_FIELD = '_field';
+
+  const MEDIA_BUNDLE_ENABLE = '_enable';
+
+  const MEDIA_BUNDLE_LINK = '_link';
+
+  const MEDIA_BUNDLE_IMAGE_STYLE = '_image_style';
+
+  const MEDIA_BUNDLE_ATTRIBUTES_DOWNLOAD = '_attributes_download';
+
+  const MEDIA_BUNDLE_ATTRIBUTES_TARGET = '_attributes_target';
+
+  const MEDIA_BUNDLE_ATTRIBUTES_REL = '_attributes_rel';
+
+  const MEDIA_BUNDLE_USE_CRON = '_use_cron';
+
+  const MEDIA_BUNDLE_IMAGE_FORMAT = '_format';
+
   /**
+   * Config factory.
+   *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $configFactory;
+  protected ConfigFactoryInterface $configFactory;
 
   /**
+   * Entity type manager.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
+   * Entity type bundle info.
+   *
    * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
    */
-  protected $entityTypeBundleInfo;
+  protected EntityTypeBundleInfoInterface $entityTypeBundleInfo;
 
   /**
+   * Entity field manager.
+   *
    * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
-  protected $entityFieldManager;
+  protected EntityFieldManagerInterface $entityFieldManager;
 
   /**
+   * MediaPdfThumbnailImageManager.
+   *
    * @var \Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImageManager
    */
-  protected $mediaPdfThumbnailImageManager;
+  protected MediaPdfThumbnailImageManager $mediaPdfThumbnailImageManager;
 
   /**
+   * PdfImageEntityQueueManager.
+   *
+   * @var \Drupal\media_pdf_thumbnail\Manager\PdfImageEntityQueueManager
+   */
+  protected PdfImageEntityQueueManager $pdfImageEntityQueueManager;
+
+  /**
+   * StreamWrapperManager.
+   *
    * @var \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface
    */
-  protected $streamWrapperManager;
+  protected StreamWrapperManagerInterface $streamWrapperManager;
 
   /**
+   * RouteMatch.
+   *
    * @var \Drupal\Core\Routing\RouteMatchInterface
    */
-  protected $routeMatch;
+  protected RouteMatchInterface $routeMatch;
 
   /**
+   * ModuleHandler.
+   *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $moduleHandler;
+  protected ModuleHandlerInterface $moduleHandler;
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): FormatterBase | ImageFormatter | MediaPdfThumbnailImageFieldFormatter | ContainerFactoryPluginInterface {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
 
     $instance->configFactory = $container->get('config.factory');
@@ -76,6 +159,7 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
     $instance->entityTypeBundleInfo = $container->get('entity_type.bundle.info');
     $instance->entityFieldManager = $container->get('entity_field.manager');
     $instance->mediaPdfThumbnailImageManager = $container->get('media_pdf_thumbnail.image.manager');
+    $instance->pdfImageEntityQueueManager = $container->get('media_pdf_thumbnail.pdf_image_entity.queue.manager');
     $instance->streamWrapperManager = $container->get('stream_wrapper_manager');
     $instance->routeMatch = $container->get('current_route_match');
     $instance->moduleHandler = $container->get('module_handler');
@@ -86,91 +170,166 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-
-    $settings = [
-      'pdf_file_field' => '',
-      'pdf_page' => '',
-      'image_link_attributes_download' => '',
-      'image_link_attributes_target' => '',
-      'image_link_attributes_rel' => '',
-    ];
-
-    foreach (_media_pdf_thumbnail_getFieldsList() as $bundleId => $infos) {
-      $settings[$bundleId . '_page'] = '';
-      $settings[$bundleId . '_field'] = '';
-      $settings[$bundleId . '_enable'] = '';
-      $settings[$bundleId . '_link'] = '';
-      $settings[$bundleId . '_attributes_download'] = '';
-      $settings[$bundleId . '_attributes_target'] = '';
-      $settings[$bundleId . '_attributes_rel'] = '';
-    }
-    return $settings + parent::defaultSettings();
+  public static function defaultSettings(): array {
+    return static::getDefaultSettings();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $element = parent::settingsForm($form, $form_state);
-    $parentFileFields = $this->getParentEntityFields();
-    if (!empty($parentFileFields)) {
+    return $this->getSettingsFormElement($element);
+  }
 
-      $element['pdf_file_field'] = [
-        '#type' => 'select',
-        '#title' => $this->t('Field containing the pdf'),
-        '#options' => $parentFileFields,
-        '#default_value' => $this->getSetting('pdf_file_field'),
-      ];
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsSummary(): array {
+    return $this->getSettingsSummary();
+  }
 
-      $element['pdf_page'] = [
-        '#type' => 'number',
-        '#title' => $this->t('Choose the page of the pdf to get the image from'),
-        '#min' => 1,
-        '#default_value' => !empty($this->getSetting('pdf_page')) ? $this->getSetting('pdf_page') : 1,
-      ];
+  /**
+   * {@inheritdoc}
+   */
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
+    $element = parent::viewElements($items, $langcode);
 
-      $element['image_link']['#options']['pdf_file'] = $this->t('PDF File');
-      $element['image_link']['#weight'] = 0;
-      $element['image_link']['#attributes']['class'][] = 'thumbnail-pdf-link';
-
-      $element['image_link_attributes_download'] = [
-        '#prefix' => '<div id="thumbnail-pdf-link-attributes" class="fieldset"><div class="fieldset__legend"><span class="fieldset__label">' . $this->t('HTML attributes') . '</span><div class="fieldset__wrapper">',
-        '#type' => 'checkbox',
-        '#title' => 'download',
-        '#weight' => 0,
-        '#default_value' => $this->getSetting('image_link_attributes_download'),
-      ];
-
-      $element['image_link_attributes_target'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('target') . ' :',
-        '#description' => 'Ex: _self, _blank, _parent, _top',
-        '#weight' => 0,
-        '#size' => 5,
-        '#default_value' => $this->getSetting('image_link_attributes_target'),
-      ];
-
-      $element['image_link_attributes_rel'] = [
-        '#suffix' => '</div></div></div>',
-        '#type' => 'textfield',
-        '#title' => $this->t('rel') . ' :',
-        '#description' => 'Ex: alternate, author, bookmark, icon, nofollow, etc..',
-        '#size' => 5,
-        '#weight' => 0,
-        '#default_value' => $this->getSetting('image_link_attributes_rel'),
-      ];
-
-      $element['#attached']['library'] = 'media_pdf_thumbnail/field_formatter_form';
-
+    // If empty element.
+    if (empty($element)) {
+      return $element;
     }
+
+    $entity = $element[0]['#item']->getParent()->getParent()->getEntity();
+
+    // Get settings.
+    $settings = $this->getElementSettings($entity);
+
+    if (empty($settings)) {
+      return $element;
+    }
+
+    // If file is not a PDF, don't try to generate.
+    $fileEntity = $this->mediaPdfThumbnailImageManager->getFileEntityFromField($entity, $settings[static::PDF_FILE_FIELD_SETTING]);
+    $handlePdfGeneration = $fileEntity instanceof FileInterface && $fileEntity->getMimeType() == 'application/pdf';
+
+    if ($handlePdfGeneration) {
+      // Getting thumbnail info.
+      if (!empty($settings[static::IMAGE_USE_CRON])) {
+        $fieldInfos = $this->pdfImageEntityQueueManager->getThumbnail($entity,
+          $items->getName(),
+          $settings[static::PDF_FILE_FIELD_SETTING],
+          $settings[static::IMAGE_FORMAT_SETTINGS],
+          $settings[static::PDF_PAGE_SETTING]);
+      }
+      else {
+        $fieldInfos = $this->getThumbnail($entity, $items->getName(), $settings[static::PDF_FILE_FIELD_SETTING], $settings[static::IMAGE_FORMAT_SETTINGS], $settings[static::PDF_PAGE_SETTING]);
+      }
+
+      if (!$fieldInfos) {
+        return $element;
+      }
+    }
+    // If pdf is not handled.
+    else {
+      $fieldInfos = [
+        'image_id' => $this->mediaPdfThumbnailImageManager->getGenericThumbnail(),
+        'pdf_uri' => $fileEntity->getFileUri(),
+      ];
+    }
+
+    // Rendering image.
+    if (!empty($fieldInfos['image_id'])) {
+      $element[0]['#image_style'] = $settings['image_style'];
+      $element = $this->renderImage($element, $fieldInfos['image_id'], $entity);
+    }
+
+    // Get html attributes.
+    $options = $this->htmlAttributes($settings);
+
+    // Linking image.
+    switch ($settings['image_link']) {
+      case 'pdf_file':
+        if (!empty($fieldInfos['pdf_uri'])) {
+          $stream = $this->streamWrapperManager->getViaUri($fieldInfos['pdf_uri'])
+            ->getExternalUrl();
+          $element[0]['#url'] = Url::fromUri($stream, $options);
+        }
+        break;
+
+      case 'content':
+        $element[0]['#url'] = $entity->toUrl('canonical', $options);
+        break;
+
+      case 'file':
+        if (!empty($fieldInfos['pdf_uri'])) {
+          $stream = $this->streamWrapperManager->getViaUri($fieldInfos['image_uri'])
+            ->getExternalUrl();
+          $element[0]['#url'] = Url::fromUri($stream, $options);
+        }
+        break;
+    }
+
+    // Invokes preprocessing hook.
+    $infos = [
+      'fieldInfo' => $fieldInfos,
+      'mediaEntity' => $entity,
+      'pdfEntity' => !empty($fieldInfos['image_uri']) ? $this->mediaPdfThumbnailImageManager->getPdfEntityByPdfFileUri($fieldInfos['image_uri']) : NULL,
+    ];
+
+    $this->moduleHandler->alter('media_pdf_thumbnail_image_render', $element, $infos);
+
     return $element;
   }
 
   /**
-   * @return array
+   * Get thumbnail info.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity.
+   * @param string $imageFieldName
+   *   The image field name.
+   * @param string $fileFieldName
+   *   The file field name.
+   * @param string $imageFormat
+   *   The image format.
+   * @param string|int $page
+   *   The page.
+   *
+   * @return bool|array|null
+   *   Pdf image.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function getParentEntityFields() {
+  protected function getThumbnail(EntityInterface $entity, string $imageFieldName, string $fileFieldName, string $imageFormat, string | int $page = 1) {
+    $fieldInfos = $this->mediaPdfThumbnailImageManager->createThumbnail($entity, $fileFieldName, $imageFormat, $page);
+
+    if (!$fieldInfos) {
+      return FALSE;
+    }
+
+    if (empty($fieldInfos['image_id'])) {
+      $fileEntity = $this->mediaPdfThumbnailImageManager->getFileEntityFromField($entity, $fileFieldName);
+      $imageId = $entity->getEntityTypeId() !== 'media' && $entity->hasField($imageFieldName) ? $entity->get($imageFieldName)->target_id : $this->mediaPdfThumbnailImageManager->getGenericThumbnail();
+
+      $fieldInfos = [
+        'image_id' => $imageId,
+        'pdf_uri' => $fileEntity->getFileUri(),
+      ];
+    }
+
+    return $fieldInfos;
+  }
+
+  /**
+   * Get parent entity fields.
+   *
+   * @return array
+   *   Return parent entity fields.
+   */
+  protected function getParentEntityFields(): array {
     $entityTypeId = $this->fieldDefinition->getTargetEntityTypeId();
     $targetBundle = $this->fieldDefinition->getTargetBundle();
     $targetBundle = !empty($targetBundle) ? $targetBundle : $this->routeMatch->getRawParameter('media_type');
@@ -196,143 +355,6 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
     }
 
     return $output;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsSummary() {
-
-    $summary = [];
-
-    $image_styles = image_style_options(FALSE);
-    // Unset possible 'No defined styles' option.
-    unset($image_styles['']);
-    // Styles could be lost because of enabled/disabled modules that defines
-    // their styles in code.
-    $image_style_setting = $this->getSetting('image_style');
-    if (isset($image_styles[$image_style_setting])) {
-      $summary[] = t('Image style: @style', ['@style' => $image_styles[$image_style_setting]]);
-    }
-    else {
-      $summary[] = t('Original image');
-    }
-
-    $link_types = [
-      'content' => t('Linked to content'),
-      'file' => t('Linked to file'),
-      'pdf_file' => t('Linked to pdf file'),
-    ];
-
-    // Display this setting only if image is linked.
-    $image_link_setting = $this->getSetting('image_link');
-    if (isset($link_types[$image_link_setting])) {
-      $summary[] = $link_types[$image_link_setting];
-    }
-    return $summary;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
-
-    // All settings.
-    $settings = $this->getSettings();
-
-    // Settings from entity view mode field formatter.
-    $imageLinkSetting = $this->getSetting('image_link');
-    $imageLinkDownload = $this->getSetting('image_link_attributes_download');
-    $imageLinkTarget = $this->getSetting('image_link_attributes_target');
-    $imageLinkRel = $this->getSetting('image_link_attributes_rel');
-    $pdfFileField = $this->getSetting('pdf_file_field');
-    $pdfPage = $this->getSetting('pdf_page');
-
-    $element = parent::viewElements($items, $langcode);
-
-    // If empty element.
-    if (empty($element)) {
-      return $element;
-    }
-
-    $entity = $element[0]['#item']->getParent()->getParent()->getEntity();
-
-    // If no settings from entity view mode field formatter, it means it's a single field render.
-    if (empty($pdfFileField)) {
-      $bundle = $entity->bundle();
-      // Search for available options in all settings.
-      if (!empty($settings[$bundle . '_enable']) && !empty($settings[$bundle . '_field'])) {
-        $pdfFileField = $settings[$bundle . '_field'];
-        $pdfPage = $settings[$bundle . '_page'];
-        $imageLinkSetting = $settings[$bundle . '_link'];
-        $imageLinkDownload = $settings[$bundle . '_attributes_download'];
-        $imageLinkTarget = $settings[$bundle . '_attributes_target'];
-        $imageLinkRel = $settings[$bundle . '_attributes_rel'];
-      }
-      else {
-        $this->mediaPdfThumbnailImageManager->getGenericThumbnail();
-        return $element;
-      }
-    }
-
-    // Getting thumbnail info.
-    $fieldInfos = $this->getThumbnail($entity, $pdfFileField, $pdfPage);
-
-    // Rendering image.
-    if (!empty($fieldInfos['image_id'])) {
-      /**
-       * @var \Drupal\image\Plugin\Field\FieldType\ImageItem $imageItem
-       */
-      $imageItem = $element[0]['#item'];
-      $value = $imageItem->getValue();
-      $value['target_id'] = $fieldInfos['image_id'];
-      $value['alt'] = $entity->name->value;
-      $imageItem->setValue($value);
-      $element[0]['#item'] = $imageItem;
-    }
-
-    // Linking image to pdf to file.
-    if ($imageLinkSetting == 'pdf_file' && !empty($fieldInfos['pdf_uri'])) {
-      $stream = $this->streamWrapperManager->getViaUri($fieldInfos['pdf_uri'])->getExternalUrl();
-
-      // Set html attributes.
-      $options = [];
-      if (!empty($imageLinkDownload)) {
-        $options['attributes']['download'] = '';
-      }
-      if (!empty($imageLinkTarget)) {
-        $options['attributes']['target'] = $imageLinkTarget;
-      }
-      if (!empty($imageLinkRel)) {
-        $options['attributes']['rel'] = $imageLinkRel;
-      }
-
-      $element[0]['#url'] = Url::fromUri($stream, $options);
-    }
-
-    // Invokes preprocessing hook
-    $infos = [
-      'fieldInfo' => $fieldInfos,
-      'mediaEntity' => $entity,
-      'pdfEntity' => !empty($fieldInfos['image_uri']) ? $this->mediaPdfThumbnailImageManager->getPdfEntityByPdfFileUri($fieldInfos['image_uri']) : NULL,
-    ];
-    $this->moduleHandler->alter('media_pdf_thumbnail_image_render', $element, $infos);
-
-    return $element;
-  }
-
-  /**
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   * @param $field
-   * @param $page
-   *
-   * @return array|\Drupal\Core\Entity\EntityInterface[]|false|null
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  protected function getThumbnail(EntityInterface $entity, $field, $page) {
-    return $this->mediaPdfThumbnailImageManager->createThumbnail($entity, $field, $page);
   }
 
 }

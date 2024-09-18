@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\honeypot\Functional;
 
 use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
@@ -175,7 +177,7 @@ class HoneypotFormTest extends BrowserTestBase {
    * Test that any (not-strict-empty) value triggers protection.
    */
   public function testStrictEmptinessOnHoneypotField(): void {
-    // Initialise the form values.
+    // Initialize the form values.
     $edit['name'] = $this->randomMachineName();
     $edit['mail'] = $edit['name'] . '@example.com';
 

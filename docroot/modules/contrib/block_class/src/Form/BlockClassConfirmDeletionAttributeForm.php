@@ -2,10 +2,10 @@
 
 namespace Drupal\block_class\Form;
 
+use Drupal\block\Entity\Block;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\block\Entity\Block;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -52,8 +52,8 @@ class BlockClassConfirmDeletionAttributeForm extends ConfirmFormBase {
     // Block save.
     $block->save();
 
-    // Set a messsage.
-    \Drupal::messenger()->addStatus($this->t('Attributes deleted'));
+    // Set a message.
+    $this->messenger()->addStatus($this->t('Attributes deleted'));
 
     // Get the block class list path.
     $block_class_list_path = Url::fromRoute('block_class.list')->toString();

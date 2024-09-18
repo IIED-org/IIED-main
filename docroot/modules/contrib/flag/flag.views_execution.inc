@@ -11,6 +11,11 @@ use \Drupal\views\ViewExecutable;
  * Implements hook_views_query_substitutions().
  */
 function flag_views_query_substitutions(ViewExecutable $view) {
+  // Only act on views with flag relationships.
+  if (!in_array('flagging', $view->getBaseTables())) {
+    return [];
+  }
+
   // Allow replacement of current user's session id so we can cache these
   // queries.
   $flag_service = \Drupal::service('flag');
