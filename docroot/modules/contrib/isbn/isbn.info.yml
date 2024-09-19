@@ -1,9 +1,9 @@
 name: ISBN
 type: module
 description: 'Add ISBN field to Drupal.'
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^8 || ^9 || ^10 || ^11
 
-# Information added by Drupal.org packaging script on 2023-06-13
-version: '8.x-1.4'
+# Information added by Drupal.org packaging script on 2024-09-12
+version: '8.x-1.5'
 project: 'isbn'
-datestamp: 1686659993
+datestamp: 1726143418

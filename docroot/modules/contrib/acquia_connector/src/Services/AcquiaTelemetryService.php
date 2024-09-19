@@ -136,22 +136,34 @@ final class AcquiaTelemetryService {
   private function getExtensionInfo(): array {
     $all_modules = $this->moduleList->getAllAvailableInfo();
     $installed_modules = $this->moduleList->getAllInstalledInfo();
-    $extension_info = [];
+    $all_paths = $this->moduleList->getPathNames();
+
+    // Set default values for extension info to avoid type errors.
+    $extension_info = [
+      'core' => [],
+      'contrib' => [],
+      'profile' => [],
+    ];
 
     foreach ($all_modules as $name => $extension) {
-      // Remove all custom modules from reporting.
-      if (strpos($this->moduleList->getPath($name), '/custom/') !== FALSE) {
+      // Extensions without an associated path should be removed from reporting.
+      if (!isset($all_paths[$name])) {
         continue;
       }
 
-      // Tag all core modules in use. If the version matches the core
-      // Version, assume it is a core module.
-      $core_comparison = [
-        $extension['version'],
-        $extension['core_version_requirement'],
-        \Drupal::VERSION,
-      ];
-      if (count(array_unique($core_comparison)) === 1) {
+      // Remove all custom modules from reporting.
+      if (strpos($all_paths[$name], '/custom/') !== FALSE) {
+        continue;
+      }
+      // Track profiles located in core or contrib folders.
+      if (strpos($all_paths[$name], 'core/profiles/') !== FALSE || (strpos($all_paths[$name], 'profiles/contrib/') !== FALSE)) {
+        $extension_info['profile'][$name]['version'] = $extension['version'] ?? 'dev';
+        $extension_info['profile'][$name]['status'] = array_key_exists($name, $installed_modules) ? 'enabled' : 'disabled';
+        continue;
+      }
+
+      // This should be rewritten so core and contrib report in the same format.
+      if (strpos($all_paths[$name], 'core/modules/') !== FALSE) {
         if (array_key_exists($name, $installed_modules)) {
           $extension_info['core'][$name] = 'enabled';
         }
@@ -184,6 +196,7 @@ final class AcquiaTelemetryService {
     $modules = $this->getExtensionInfo();
     $default_properties = [
       'extensions' => $modules['contrib'],
+      'profiles' => $modules['profile'],
       'php' => [
         'version' => phpversion(),
       ],

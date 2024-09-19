@@ -4,12 +4,22 @@
  * Template to output the menu toggle icon (burger).
  */
 #}
+{# old
 <a id="toggle-icon"title="Menu" href="#off-canvas">
-    <span class="block py-4 px-4 ">
+    <span class="block px-4 py-4 ">
       <svg viewBox="0 0 100 80" class="w-6 h-6 fill-current">
         <rect y="5" width="100" height="12"></rect>
         <rect y="35" width="100" height="12"></rect>
         <rect y="65" width="100" height="12"></rect>
       </svg>
     </span>
+</a> #}
+
+<a id="toggle-icon" title="Menu" href="#off-canvas" x-data="{showMenu : false}">
+    <button @click.prevent="showMenu = !showMenu " class="px-2 py-4">
+            <svg x-show="!showMenu" class="w-6 h-6 mr-2" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+            <svg x-show="showMenu" class="w-6 h-6 mr-2" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
 </a>

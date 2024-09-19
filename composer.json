@@ -71,7 +71,7 @@
         "drupal/acquia_search": "^3.1",
         "drupal/address": "^1.10",
         "drupal/admin_toolbar": "^3.1",
-        "drupal/allowed_formats": "^2.0",
+        "drupal/allowed_formats": "^3.0",
         "drupal/asset_injector": "^2.10",
         "drupal/better_exposed_filters": "^6.0",
         "drupal/better_passwords": "^2.2",
@@ -297,7 +297,7 @@
           "drupal/responsive_menu": {
             "Add 'front' options to menu position":"https://www.drupal.org/files/issues/2022-06-20/responsive_menu-menuposition-3274889-3.diff"
           },
-	        "drupal/readmore_js": {
+          "drupal/readmore_js": {
             "Fix readmore_js to prevent scroll to top.":"https://git.drupalcode.org/issue/readmore_js-3312818/-/commit/67f2912296417d5a3db83045909323c73dcdd605.patch",
             "3385364":"https://www.drupal.org/files/issues/2023-09-06/drupal-10-compatibility-fixes-3385364-2.patch"
           },
@@ -312,9 +312,6 @@
           },
           "drupal/google_analytics": {
             "3258588": "https://www.drupal.org/files/issues/2022-09-01/3258588_google_analytics_deprecated_function_2_5_001.patch"
-          },
-          "drupal/allowed_formats": {
-            "Default value for format dropdown missing": "https://www.drupal.org/files/issues/2022-02-02/2950548-allowed_formats-missing_default_value.patch"
           },
           "drupal/video_embed_field": {
             "3311063": "https://www.drupal.org/files/issues/2023-09-12/3311063-35.patch"

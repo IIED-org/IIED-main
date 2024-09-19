@@ -4,14 +4,9 @@ status: true
 dependencies:
   config:
     - field.storage.paragraph.field_description
-    - filter.format.basic_html
     - paragraphs.paragraphs_type.key_figure
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats: {  }
 id: paragraph.key_figure.field_description
 field_name: field_description
 entity_type: paragraph
@@ -23,6 +18,5 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  allowed_formats:
-    - basic_html
+  allowed_formats: {  }
 field_type: text_long

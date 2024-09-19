@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations.
+ */
+
+use Drupal\Core\Field\FieldTypeCategoryManagerInterface;
+
+/**
+ * Implements hook_field_type_category_info_alter().
+ */
+function isbn_field_type_category_info_alter(&$definitions) {
+  // The `isbn` field type belongs in the `general` category, so the libraries
+  // need to be attached using an alter hook.
+  $definitions[FieldTypeCategoryManagerInterface::FALLBACK_CATEGORY]['libraries'][] = 'isbn/field-ui';
+}

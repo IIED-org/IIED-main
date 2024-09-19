@@ -71,7 +71,7 @@ function login_redirect_per_role_post_update_convert_configuration() {
 
           default:
             $new_data['login'][$role_id] = [
-              'redirect_url' => isset($old_role_url_pairs[$role_id]) ? $old_role_url_pairs[$role_id] : '',
+              'redirect_url' => $old_role_url_pairs[$role_id] ?? '',
               'allow_destination' => $allow_destination,
               'weight' => $weight,
             ];

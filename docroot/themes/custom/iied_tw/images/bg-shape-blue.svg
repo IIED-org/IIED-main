@@ -1,0 +1,6 @@
+<svg id="background" data-name="background-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1536" height="864" viewBox="0 0 1536 864">
+  <g id="background" data-name="background-svg">
+    <path id="Path_8426" data-name="Path 8426" d="M1160.28,0a133.876,133.876,0,0,0-133.87,133.87V746A134.561,134.561,0,0,1,892.89,864H0V0Z" fill="#f9f8f6"/>
+    <path id="Path_8427" data-name="Path 8427" d="M1536,0V863.91H1027.46V864H892.89a134.561,134.561,0,0,0,133.52-118V133.87A133.876,133.876,0,0,1,1160.28,0Z" fill="#00b3df"/>
+  </g>
+</svg>

@@ -1,0 +1,37 @@
+<div class="flex items-center my-2">
+
+    <!-- search button -->
+    <button @click.prevent="showSearch = !showSearch; $nextTick(() => {if(showSearch) {$refs.searchInput.focus();}})" 
+    :aria-expanded="showSearch.toString()"
+    aria-controls="searchbox"
+    class="focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mx-2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+    </svg>
+    </button> 
+
+    <!-- donate -->
+    {# <button class="h-10 px-4 mx-2 transition-colors duration-150 rounded-full shadow-sm hover:shadow-none bg-iiedblue-500 hover:bg-iiedblue-600 focus:shadow-outline">
+        <a class="text-gray-900 visited:text-gray-900 hover:no-underline" id="topnav-donate" href="/donate" title="Donate">Donate</a>
+    </button> #}
+
+    <!-- menu toggle button -->
+    <div class="flex items-center">
+    <button @click="isOpen = !isOpen" type="button" class="p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-iiedblue-300"
+            :aria-expanded="isOpen ? 'true' : 'false'"
+            aria-controls="menu"
+            aria-label="Toggle menu">
+        <svg x-show="!isOpen" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg x-show="isOpen" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
+    </div>
+
+     
+     {# If we wanted to use the responsive menu module we could add the button like this
+     {{ drupal_block('responsive_menu_toggle', {wrapper: false}) }} #}
+
+</div>

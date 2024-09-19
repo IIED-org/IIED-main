@@ -1,0 +1,4 @@
+field-ui:
+  css:
+    theme:
+      css/isbn.field_ui.css: {}

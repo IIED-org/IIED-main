@@ -39,6 +39,7 @@ class IsbnToolsService implements IsbnToolsServiceInterface {
     }
     catch (InvalidIsbnException $e) {
     }
+    return NULL;
   }
 
   /**
@@ -57,6 +58,7 @@ class IsbnToolsService implements IsbnToolsServiceInterface {
     }
     catch (InvalidIsbnException $e) {
     }
+    return NULL;
   }
 
   /**
@@ -68,13 +70,18 @@ class IsbnToolsService implements IsbnToolsServiceInterface {
     }
     catch (\Exception $e) {
     }
+    return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
   public function cleanup(string $isbn): string {
-    return preg_replace('/[^0-9a-zA-Z]/', '', $isbn);
+    $result = preg_replace('/[^0-9a-zA-Z]/', '', $isbn);
+    if (is_null($result)) {
+      return '';
+    }
+    return $result;
   }
 
 }

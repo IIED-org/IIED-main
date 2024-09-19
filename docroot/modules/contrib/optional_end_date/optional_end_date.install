@@ -36,7 +36,7 @@ function optional_end_date_install() {
  */
 function optional_end_date_update_8001() {
   $field_configs = Drupal::entityTypeManager()->getStorage('field_storage_config')->loadByProperties([
-    'type' => 'daterange'
+    'type' => 'daterange',
   ]);
   foreach ($field_configs as $field_config) {
     // Saving the config is only needed if the setting is not already a boolean.

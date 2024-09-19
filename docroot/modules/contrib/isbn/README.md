@@ -59,6 +59,6 @@ austinone@gmail.com
 ## Maintainers
 
 - Jon Pugh - [Jon Pugh](https://www.drupal.org/u/jon-pugh)
-- Matt A  - [zbricoleur](https://www.drupal.org/u/zbricoleur)
+- Matt A - [zbricoleur](https://www.drupal.org/u/zbricoleur)
 - Rafael Silva - [rfsbsb](https://www.drupal.org/u/rfsbsb)
 - Youri van Koppen - [MegaChriz](https://www.drupal.org/u/megachriz)

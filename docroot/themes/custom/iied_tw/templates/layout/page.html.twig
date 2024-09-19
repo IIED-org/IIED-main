@@ -46,24 +46,72 @@
  */
 #}
 
-  <header role="banner">
-    {{ page.header }}
+{{ attach_library('iied_tw/alpine') }}
+{{ attach_library('iied_tw/alpine-collapse') }}
+{{ attach_library('iied_tw/scroll-nav') }}
+
+  <header role="banner" x-data="{ showSearch: false }" x-cloak>
+    <nav x-data="{ isOpen: false }" 
+    @click.away="isOpen = false"
+    @keydown.escape.window="isOpen = false"
+    role="navigation"
+    aria-label="Main navigation">
+
+      <div>
+      {{ page.navbar_branding }}
+      </div>
+  
+      {# Secondary nav #}
+      <div class="px-4">
+      <div class="relative my-2 lg:my-3"
+        x-data="scrollMenu()"
+        x-init="updateScrollState($refs.scrollContainer)"
+        @scroll="updateScrollState($refs.scrollContainer)">
+           {{ page.secondary_menu }}
+
+              <!-- Button to scroll left -->
+              <div x-show="!isAtStart" class="absolute top-0 left-0 justify-start hidden w-20 h-full pointer-events-none sm:flex bg-gradient-to-r from-white via-white to-transparent">
+                  <div class="pointer-events-auto">
+                    <button 
+                    @click="scrollByPage($refs.scrollContainer, 'left')" 
+                    x-show="!isAtStart" 
+                    x-transition:opacity 
+                    :aria-hidden="isAtStart.toString()" 
+                    class="relative flex items-center justify-center w-10 h-10 transition-colors ease-out bg-transparent rounded-full cursor-pointer hover:bg-gray-100 focus:outline-none"
+                    aria-label="Scroll left"
+                    >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                          </svg>
+                      </button>
+                  </div>
+              </div>
+
+              <!-- Button to scroll right -->
+              <div x-show="!isAtEnd" class="absolute top-0 right-0 justify-end hidden w-20 h-full pointer-events-none sm:flex bg-gradient-to-l from-white via-white to-transparent">
+                  <div class="pointer-events-auto">
+                    <button 
+                    @click="scrollByPage($refs.scrollContainer, 'right')" 
+                    x-show="!isAtEnd"
+                    x-transition:opacity
+                    :aria-hidden="isAtEnd.toString()" 
+                    class="relative flex items-center justify-center w-10 h-10 transition-colors ease-out bg-transparent rounded-full cursor-pointer hover:bg-gray-100 focus:outline-none"
+                    aria-label="Scroll right"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                          </svg>
+                      </button>
+                  </div>
+              </div>
+
+        </div>
+      </div>
+
+      {% include '@iied_tw/partials/_search_expand.html.twig' %}
+      {% include '@iied_tw/partials/_off-canvas-menu.html.twig' %}
+    </nav>
   </header>
-
-<div>
-  {{ page.navbar_branding }}
-    {# <div class="hidden mt-4 lg:inline-block">
-      {{ page.primary_menu }}
-    </div>
-    {{ page.navbar_left }}
-   <div class="right-8">
-      {{ page.navbar_right }}
-    </div> #}
- </div>
-  <div class="hidden lg:block bg-iiedblue-10">
-        {{ page.secondary_menu }}
-  </div>
-
 
   {{ page.breadcrumb }}
 
@@ -73,23 +121,14 @@
 
   {{ page.preface }}
 
-<div>  {# move class="container p-4 mx-auto" #}
-  <main role="main">
-    <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
-
-        {{ page.content }}
-
-  </main>
-</div>{# /.layout-container #}
-
- {# {% if page.postscript %}
-    <section>
-      <div class="container p-4">
-        {{ page.postscript }}
-      </div>
-    </section>
-  {% endif %}
-        #}
+  {% block pagemain %}
+    <div>
+      <main role="main">
+        <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
+            {{ page.content }}
+      </main>
+    </div>
+  {% endblock %}
 
   {% if page.footer %}
     <footer role="contentinfo">

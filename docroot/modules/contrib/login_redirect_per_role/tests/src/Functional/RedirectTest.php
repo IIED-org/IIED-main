@@ -23,6 +23,11 @@ class RedirectTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
+   * Disable using one time login links to log in.
+   */
+  protected bool $useOneTimeLoginLinks = FALSE;
+
+  /**
    * A user entity.
    *
    * @var \Drupal\user\UserInterface
@@ -125,21 +130,27 @@ class RedirectTest extends BrowserTestBase {
     $this->drupalLogin($this->user1);
     $this->assertSession()->addressEquals('login-url-role1');
 
-    $this->drupalGet(Url::fromRoute('user.logout'));
+    $this->drupalGet(Url::fromRoute('user.logout.confirm'));
+    $this->submitForm([], 'op', 'user-logout-confirm');
     $this->assertSession()->addressEquals('logout-url-role1');
+    $this->drupalResetSession();
 
     $this->drupalLogin($this->user2);
     $this->assertSession()->addressEquals('login-url-role2');
 
-    $this->drupalGet(Url::fromRoute('user.logout'));
+    $this->drupalGet(Url::fromRoute('user.logout.confirm'));
+    $this->submitForm([], 'op', 'user-logout-confirm');
     $this->assertSession()->addressEquals('logout-url-role2');
+    $this->drupalResetSession();
 
     // Test redirect with token.
     $this->drupalLogin($this->user3);
     $this->assertSession()->addressEquals('valid-path');
 
-    $this->drupalGet(Url::fromRoute('user.logout'));
+    $this->drupalGet(Url::fromRoute('user.logout.confirm'));
+    $this->submitForm([], 'op', 'user-logout-confirm');
     $this->assertSession()->addressEquals('invalid-path');
+    $this->drupalResetSession();
 
     // Test <front> as destination URL.
     $this->drupalLogin($this->user4);
@@ -147,7 +158,8 @@ class RedirectTest extends BrowserTestBase {
     // own user page.
     $this->assertSession()->addressEquals('user/' . $this->user4->id());
 
-    $this->drupalGet(Url::fromRoute('user.logout'));
+    $this->drupalGet(Url::fromRoute('user.logout.confirm'));
+    $this->submitForm([], 'op', 'user-logout-confirm');
     $this->assertSession()->addressEquals('');
   }
 
@@ -163,7 +175,8 @@ class RedirectTest extends BrowserTestBase {
     ], 'Log in');
     $this->assertSession()->addressEquals('destination-url');
 
-    $this->drupalGet(Url::fromRoute('user.logout', [], ['query' => ['destination' => 'destination-url']]));
+    $this->drupalGet(Url::fromRoute('user.logout.confirm', options: ['query' => ['destination' => 'destination-url']]));
+    $this->submitForm([], 'op', 'user-logout-confirm');
     $this->assertSession()->addressEquals('destination-url');
 
     // Test redirect with allow_destination disabled.
@@ -174,7 +187,8 @@ class RedirectTest extends BrowserTestBase {
     ], 'Log in');
     $this->assertSession()->addressEquals('login-url-role2');
 
-    $this->drupalGet(Url::fromRoute('user.logout', [], ['query' => ['destination' => 'destination-url']]));
+    $this->drupalGet(Url::fromRoute('user.logout.confirm', options: ['query' => ['destination' => 'destination-url']]));
+    $this->submitForm([], 'op', 'user-logout-confirm');
     $this->assertSession()->addressEquals('logout-url-role2');
   }
 
@@ -192,7 +206,8 @@ class RedirectTest extends BrowserTestBase {
     $this->drupalLogin($this->user1);
     $this->assertEquals(TRUE, $this->state->get('login_redirect_per_role_test.user_login_called'));
 
-    $this->drupalGet(Url::fromRoute('user.logout'));
+    $this->drupalGet(Url::fromRoute('user.logout.confirm'));
+    $this->submitForm([], 'op', 'user-logout-confirm');
     $this->assertEquals(TRUE, $this->state->get('login_redirect_per_role_test.user_logout_called'));
   }
 
