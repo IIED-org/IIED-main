@@ -269,6 +269,10 @@
   .tertiary-menu .is-active {
     @apply bg-iiedgreen-10;
   }
+  .secondary .is-active {
+    @apply font-bold;
+  }
+
   /*-- extra padding for secondary menu --*/
   .priority-nav__dropdown.show {
     @apply pb-2;
@@ -543,11 +547,26 @@
   .bg-active figcaption, .bg-active p {
     color: #111827 !important;
   }
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
   /* comma after text */
   .item-with-comma::after {
     content: ',';
     padding-right: 0.25rem;
   }
+  /* makes sure responsive menu is hidden initially */
+  [x-cloak] {
+    display: none !important;
+  }
+
  
   /* sets top margin for info boxes */
   .paragraph--type--info-box aside .relative h2:first-of-type, 

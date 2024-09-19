@@ -4,10 +4,10 @@ global-styling:
       dist/tailwind.css: {}
 alpine:
   js:
-    https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js: { type: external, minified: true }
+    https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js: { type: external, minified: true }
 alpine-collapse:
   js:
-    https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js: { type: external, minified: true }
+    https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js: { type: external, minified: true }
 priority-nav:
   header: true
   css:
@@ -26,11 +26,15 @@ counter:
     dist/js/counter.js: {}
 paypal:
   header: true
-  js:
+  js: 
     https://www.paypalobjects.com/donate/sdk/donate-sdk.js: { type: external }
 bg-colour:
    js:
     dist/js/bg-colour.js: { async: true }
+scroll-nav:
+  header: true
+  js:
+    dist/js/scroll-nav.js: { async: true }
 clickdimensions:
   js:
     https://cdn-eu.clickdimensions.com/web/v10/CDWidget.js: { type: external, attributes: { defer: true } }

@@ -13,18 +13,24 @@
  */
 #}
 
+
 {%
   set classes = [
     'flex',
-    'flex-row',
     'w-full',
     'container',
-    'justify-between'
+    'justify-between',
+    'items-end'
   ]
 %}
 
 {% if content %}
-  <div{{ attributes.addClass(classes) }}>
-    {{ content }}
+  <div class="border-b border-iiedblue-100">
+    <div{{ attributes.addClass(classes) }}>
+      {{ content }}
+      {# Buttons: search, Donate, menu toggle #}
+      {% include '@iied_tw/partials/_topnav_actions.html.twig' %} 
+      {% include '@iied_tw/partials/_off-canvas-menu.html.twig' %} 
+    </div>
   </div>
 {% endif %}
