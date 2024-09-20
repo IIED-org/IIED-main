@@ -202,6 +202,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./ar</str>
     </lst>
   
     <lst name="suggester">
@@ -213,6 +214,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./hr</str>
     </lst>
   
     <lst name="suggester">
@@ -224,6 +226,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./en</str>
     </lst>
   
     <lst name="suggester">
@@ -235,6 +238,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./fr</str>
     </lst>
   
     <lst name="suggester">
@@ -246,6 +250,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./id</str>
     </lst>
   
     <lst name="suggester">
@@ -257,6 +262,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./und</str>
     </lst>
   
     <lst name="suggester">
@@ -268,6 +274,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./pl</str>
     </lst>
   
     <lst name="suggester">
@@ -279,6 +286,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./pt_br</str>
     </lst>
   
     <lst name="suggester">
@@ -290,6 +298,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./pt_pt</str>
     </lst>
   
     <lst name="suggester">
@@ -301,6 +310,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./ru</str>
     </lst>
   
     <lst name="suggester">
@@ -312,6 +322,7 @@
       <str name="contextField">sm_context_tags</str>
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./es</str>
     </lst>
   </searchComponent>
 <!--
