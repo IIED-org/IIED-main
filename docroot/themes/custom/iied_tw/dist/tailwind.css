@@ -7881,9 +7881,19 @@ cite {
   border-color: rgb(0 179 223 / var(--tw-border-opacity));
 }
 
+.hover\:border-iiedblue-600:hover{
+  --tw-border-opacity: 1;
+  border-color: rgb(0 169 213 / var(--tw-border-opacity));
+}
+
 .hover\:border-iiedblue-700:hover{
   --tw-border-opacity: 1;
   border-color: rgb(0 159 203 / var(--tw-border-opacity));
+}
+
+.hover\:border-iiedgreen-600:hover{
+  --tw-border-opacity: 1;
+  border-color: rgb(160 182 34 / var(--tw-border-opacity));
 }
 
 .hover\:border-iiedorange-600:hover{
@@ -7926,9 +7936,19 @@ cite {
   background-color: rgb(243 246 225 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-iiedorange-10:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 243 217 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-iiedorange-600:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(242 169 12 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-iiedpink-10:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 237 245 / var(--tw-bg-opacity));
 }
 
 .hover\:stroke-gray-400:hover{
