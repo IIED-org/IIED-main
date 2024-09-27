@@ -1,0 +1,29 @@
+uuid: 17a73f96-89f2-4f40-848d-1faac200a064
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.document
+    - media.type.image
+  module:
+    - file
+    - form_mode_control
+    - media
+id: publications_manager
+label: 'Publications manager'
+weight: -4
+is_admin: null
+permissions:
+  - 'access media overview'
+  - 'create document media'
+  - 'create image media'
+  - 'delete any document media'
+  - 'delete any file'
+  - 'delete any image media'
+  - 'edit any document media'
+  - 'edit any image media'
+  - 'use  The form mode default linked to  media entity( document )'
+  - 'use  The form mode default linked to  media entity( image )'
+  - 'use  The form mode default linked to  media entity( remote_video )'
+  - 'use  The form mode default linked to  media entity( video )'
+  - 'use  The form mode manager_admin linked to  node entity( publication )'

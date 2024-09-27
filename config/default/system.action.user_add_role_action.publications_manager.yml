@@ -1,0 +1,14 @@
+uuid: 8cb266ee-0fd1-4bda-8415-da46e3ec759e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.publications_manager
+  module:
+    - user
+id: user_add_role_action.publications_manager
+label: 'Add the Publications manager role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: publications_manager

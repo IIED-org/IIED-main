@@ -43,7 +43,7 @@ dependencies:
     - view_unpublished
 id: editor
 label: Editor
-weight: -4
+weight: -3
 is_admin: null
 permissions:
   - 'access administration pages'
@@ -197,6 +197,7 @@ permissions:
   - 'use  The form mode default linked to  taxonomy_term entity( tags )'
   - 'use  The form mode default linked to  taxonomy_term entity( theme )'
   - 'use  The form mode default linked to  user entity( user )'
+  - 'use  The form mode manager_admin linked to  node entity( publication )'
   - 'use  The form mode media_library linked to  media entity( audio )'
   - 'use  The form mode media_library linked to  media entity( document )'
   - 'use  The form mode media_library linked to  media entity( image )'

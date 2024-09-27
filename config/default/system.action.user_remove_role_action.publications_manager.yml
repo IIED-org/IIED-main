@@ -1,0 +1,14 @@
+uuid: 1963e2f6-e4a7-4d3f-9995-bcd3bc2c1ed5
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.publications_manager
+  module:
+    - user
+id: user_remove_role_action.publications_manager
+label: 'Remove the Publications manager role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: publications_manager
