@@ -45,9 +45,8 @@
  * @ingroup themeable
  */
 #}
-
-{{ attach_library('iied_tw/alpine') }}
 {{ attach_library('iied_tw/alpine-collapse') }}
+{{ attach_library('iied_tw/alpine') }}
 {{ attach_library('iied_tw/scroll-nav') }}
 
   <header role="banner" x-data="{ showSearch: false }" x-cloak>
@@ -63,7 +62,7 @@
   
       {# Secondary nav #}
       <div class="px-4">
-      <div class="relative my-2"
+      <div class="relative my-2 lg:my-3"
         x-data="scrollMenu()"
         x-init="updateScrollState($refs.scrollContainer)"
         @scroll="updateScrollState($refs.scrollContainer)">
