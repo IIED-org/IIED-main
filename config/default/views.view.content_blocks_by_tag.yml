@@ -313,10 +313,11 @@ display:
       tags: {  }
   block_1:
     id: block_1
-    display_title: Block
+    display_title: 'All by tag block'
     display_plugin: block
     position: 1
     display_options:
+      display_description: ''
       display_extenders: {  }
       block_description: 'All by tag'
     cache_metadata:
@@ -482,7 +483,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      block_description: 'All by tag'
+      block_description: 'All by tag (podcasts)'
     cache_metadata:
       max-age: -1
       contexts:
@@ -618,7 +619,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      block_description: 'All by tag'
+      block_description: 'All by tag (hub block)'
     cache_metadata:
       max-age: -1
       contexts:

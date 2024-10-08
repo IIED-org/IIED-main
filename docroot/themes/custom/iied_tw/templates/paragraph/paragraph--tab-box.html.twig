@@ -55,6 +55,53 @@
 
     {% block content %}
 
+      <div class="p-4 mb-8 prose border border-gray-300 max-w-none tab-wrapper rounded-xl" 
+        x-data="{ activeTab: 0 }">
+
+        <nav class="flex flex-col mb-4 border-b border-gray-300 sm:flex-row">
+          {% for key, tab_title in tab_titles %}
+          <button 
+            @click="activeTab = {{ key }}"
+            class="block px-6 py-2 font-semibold text-gray-700 tab-control hover:text-gray-900 focus:outline-none" 
+            :class="{ 'active': activeTab === {{ key }} }">
+            {{ tab_title }}
+          </button>
+          {% endfor %}
+        </nav>
+
+          {% for key, tab_body in tab_bodies %}
+          <div class="tab-panel"
+            x-show="activeTab === {{ key }}"
+            x-cloak>
+            {{ tab_body|raw }}
+          </div>
+          {% endfor %}
+
+      </div>
+    {% endblock %}
+
+  </div>
+
+{% endblock paragraph %} 
+
+
+{# old version
+{%
+  set classes = [
+    'paragraph',
+    'my-6',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished'
+  ]
+%}
+
+{% block paragraph %}
+
+  <div{{attributes.addClass(classes)}}>
+
+    {% block content %}
+
       <div class="p-4 mb-8 prose border border-gray-300 max-w-none tab-wrapper rounded-xl" x-data="{ activeTab:  0 }">
 
         <nav class="flex flex-col mb-4 border-b border-gray-300 sm:flex-row">
@@ -74,4 +121,5 @@
 
   </div>
 
-{% endblock paragraph %}
+{% endblock paragraph %} 
+#}
