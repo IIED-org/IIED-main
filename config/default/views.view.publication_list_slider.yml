@@ -282,6 +282,7 @@ display:
       defaults:
         title: false
       display_extenders: {  }
+      block_description: 'Publication list slider'
     cache_metadata:
       max-age: -1
       contexts:

@@ -77,7 +77,6 @@
 
 
 {% if term.field_overview.value is not empty %}
-  {{ attach_library('iied_tw/alpine') }}
   <div class="pt-6">
     <div class="tab-wrapper" 
       x-data="{ tab: window.location.hash ? window.location.hash.substring(1) : 'discover' }"

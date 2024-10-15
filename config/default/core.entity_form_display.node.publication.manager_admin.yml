@@ -372,6 +372,7 @@ content:
     region: content
     settings:
       sidebar: false
+      use_details: true
     third_party_settings: {  }
   field_parent:
     type: entity_reference_autocomplete

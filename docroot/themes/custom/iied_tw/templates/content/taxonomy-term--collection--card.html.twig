@@ -30,7 +30,7 @@ Standard collection card
 
               <div class="flex items-end justify-between w-full">
               {% if content.field_collection_type %}
-                <span class="font-bold text-gray-700">{{ content.field_collection_type|render|striptags }}</span>
+                <span class="text-gray-500">{{ content.field_collection_type|render|striptags }}</span>
               {% endif %}  
 
                 {% for key, item in term.field_badge %}
