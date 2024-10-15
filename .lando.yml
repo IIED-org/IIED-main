@@ -1,14 +1,11 @@
 name: iied-main
-recipe: acquia
+recipe: drupal10
 config:
-  acli_version: latest
-  ah_application_uuid: a70da4cc-a976-4f36-999d-94e46d72df37
-  ah_site_group: irforum
   php: '8.3'
+  webroot: docroot
+  xdebug: debug
 services:
   appserver:
-    webroot: docroot
-    xdebug: debug
     config:
       php: .vscode/php.ini
     overrides:
@@ -20,6 +17,12 @@ services:
     build_as_root:
       - apt update && apt install libgmp-dev -y && docker-php-ext-install gmp
       - /app/scripts/imagick.sh
+  database:
+    type: mariadb:10.11
+    creds:
+      user: database
+      password: database
+      database: database
   adminer:
     type: compose
     services:
@@ -38,17 +41,27 @@ services:
   solr:
     type: solr:8.11
     portforward: true
-    core: lando
+    core: search
     config:
-      dir: lando/solr
+      dir: config/solr
+  mailhog:
+    type: mailhog
+    hogfrom:
+      - appserver
+    portforward: true
 proxy:
   adminer:
     - adminer.iied-main.lndo.site
+  mailhog:
+    - mail.iied-main.lndo.site
   node:
     - bs.iied-main.lndo.site:3000
   solr:
-  - solr.iied-main.lndo.site:8983
+    - solr.iied-main.lndo.site:8983
 tooling:
+  composer:
+    service: appserver
+    cmd: '/usr/local/bin/composer'
   npm:
     service: node
   yarn:
