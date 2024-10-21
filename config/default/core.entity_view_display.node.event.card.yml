@@ -61,10 +61,9 @@ content:
     weight: 2
     region: content
   field_main_image:
-    type: entity_reference_entity_view
+    type: entity_reference_label
     label: hidden
     settings:
-      view_mode: default
       link: true
     third_party_settings: {  }
     weight: 0

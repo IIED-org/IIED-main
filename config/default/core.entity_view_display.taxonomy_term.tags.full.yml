@@ -14,6 +14,7 @@ dependencies:
     - views.view.taxonomy_featured_display
   module:
     - layout_builder
+    - layout_builder_restrictions
     - text
     - views
   theme:
@@ -28,15 +29,15 @@ third_party_settings:
         layout_settings:
           label: ''
           context_mapping: {  }
+          classes:
+            layout_class: {  }
+            first: {  }
           wrappers:
             first: div
           outer_wrapper: div
           attributes: ''
           link_attribute: ''
           link_custom: ''
-          classes:
-            layout_class: {  }
-            first: {  }
         components:
           5d323bd3-4559-4605-b79a-32b419c1f4a2:
             uuid: 5d323bd3-4559-4605-b79a-32b419c1f4a2
@@ -57,15 +58,15 @@ third_party_settings:
         layout_settings:
           label: ''
           context_mapping: {  }
+          classes:
+            layout_class: {  }
+            first: {  }
           wrappers:
             first: div
           outer_wrapper: div
           attributes: ''
           link_attribute: ''
           link_custom: ''
-          classes:
-            layout_class: {  }
-            first: {  }
         components:
           1b3292d6-ff15-4ffc-b159-602e6bac7080:
             uuid: 1b3292d6-ff15-4ffc-b159-602e6bac7080
@@ -81,6 +82,17 @@ third_party_settings:
             weight: 0
             additional: {  }
         third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts:
+        - tw-1-2-col-grid
+        - tw-1-2-4-col-grid
+        - tw-container
+        - tw-fluid
+      denylisted_blocks: {  }
+      allowlisted_blocks: {  }
+      restricted_categories: {  }
 id: taxonomy_term.tags.full
 targetEntityType: taxonomy_term
 bundle: tags
