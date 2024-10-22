@@ -1,0 +1,10 @@
+client_ip_restore_enabled: false
+remote_addr_validate: true
+bypass_host: ''
+valid_credentials: false
+zone_id: { }
+apikey: ''
+email: ''
+zone_name: ''
+auth_using: 'key'
+api_token: ''

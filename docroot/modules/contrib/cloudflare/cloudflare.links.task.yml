@@ -1,0 +1,4 @@
+cloudflare.admin_settings_form:
+  title: 'Config'
+  route_name: cloudflare.admin_settings_form
+  base_route: cloudflare.admin_settings_form

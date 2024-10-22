@@ -1,0 +1,4 @@
+cloudflarepurger.admin_settings_form:
+  title: 'Purger'
+  route_name: cloudflarepurger.admin_settings_form
+  base_route: cloudflare.admin_settings_form

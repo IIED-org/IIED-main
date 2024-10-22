@@ -1,0 +1,5 @@
+cloudflarepurger.admin_settings:
+  title: 'CloudFlare Purger'
+  description: 'Configure purge settings for the CloudFlare CDN service.'
+  parent: cloudflare.admin_settings_form
+  route_name: cloudflarepurger.admin_settings_form

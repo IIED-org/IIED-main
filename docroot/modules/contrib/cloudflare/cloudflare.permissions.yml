@@ -1,0 +1,4 @@
+administer cloudflare:
+  title: 'Administer CloudFlare settings'
+  description: 'Allows the user to change CloudFlare API settings.'
+  restrict access: TRUE

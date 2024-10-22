@@ -1,0 +1,30 @@
+services:
+  cloudflare.composer_dependency_check:
+    class: Drupal\cloudflare\ComposerDependenciesCheck
+    factory: Drupal\cloudflare\ComposerDependenciesCheck::create
+    arguments: ['@logger.channel.cloudflare']
+    tags:
+      - { name: cloudflare}
+  cloudflare.timestamp:
+    class: Drupal\cloudflare\Timestamp
+  cloudflare.state:
+    class: Drupal\cloudflare\State
+    arguments: ['@state', '@cloudflare.timestamp']
+    tags:
+      - { name: cloudflare}
+  cloudflare.zone:
+    class: Drupal\cloudflare\Zone
+    factory: Drupal\cloudflare\Zone::create
+    arguments: ['@config.factory', '@logger.channel.cloudflare', '@cache.data', '@cloudflare.state', '@cloudflare.composer_dependency_check']
+    tags:
+      - { name: cloudflare}
+  logger.channel.cloudflare:
+    parent: logger.channel_base
+    arguments: ['cloudflare']
+
+  http_middleware.cloudflare:
+    class: Drupal\cloudflare\CloudFlareMiddleware
+    arguments: ['@config.factory', '@cache.data', '@http_client', '@logger.channel.cloudflare']
+    tags:
+      # Must run before http_middleware.ajax_page_state
+      - { name: http_middleware, priority: 600 }

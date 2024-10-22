@@ -1,0 +1,107 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the CloudFlare module.
+ */
+
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Core\Entity\EntityStorageException;
+use Drupal\Core\Url;
+use Drupal\Core\Utility\UpdateException;
+
+/**
+ * Implements hook_requirements().
+ */
+function cloudflare_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'runtime') {
+    $config = \Drupal::config('cloudflare.settings');
+    $valid_credentials = $config->get('valid_credentials') === TRUE;
+
+    if (!$valid_credentials) {
+      $link_to_settings = Url::fromRoute('cloudflare.admin_settings_form')->toString();
+      $message = t('Missing valid credentials for CloudFlare. Please go <a href="@link_to_settings">here</a> to set.', ['@link_to_settings' => $link_to_settings]);
+
+      $requirements['cloudflare'] = [
+        'title' => t('CloudFlare - Credentials'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $message,
+      ];
+    }
+    if (\Drupal::moduleHandler()->moduleExists('cloudflare_zone_ui')) {
+      \Drupal::service('module_installer')->uninstall([('cloudflare_zone_ui')]);
+    }
+
+  }
+  return $requirements;
+}
+
+/**
+ * Installs ctools module.  Uninstalls cloudflare_zone_ui.
+ */
+function cloudflare_update_8001(&$sandbox) {
+  \Drupal::service('module_installer')->install(['ctools']);
+}
+
+/**
+ * Grants the 'administer cloudflare' permission to eligible roles.
+ */
+function cloudflare_update_8002(&$sandbox) {
+
+  try {
+    /** @var \Drupal\user\RoleStorageInterface $user_role_storage */
+    $user_role_storage = \Drupal::entityTypeManager()->getStorage('user_role');
+
+    /** @var \Drupal\user\RoleInterface[] $roles */
+    $roles = $user_role_storage->loadMultiple();
+
+    foreach ($roles as $role) {
+      if ($role->hasPermission('access administration pages')) {
+        $role->grantPermission('administer cloudflare')->save();
+      }
+    }
+  }
+  catch (EntityStorageException $e) {
+    throw new UpdateException('Update 8002 failed with the following: ' . $e->getMessage(), $e->getCode(), $e);
+  }
+  catch (InvalidPluginDefinitionException $e) {
+    throw new UpdateException('Update 8002 failed with the following: ' . $e->getMessage(), $e->getCode(), $e);
+  }
+  catch (PluginNotFoundException $e) {
+    throw new UpdateException('Update 8002 failed with the following: ' . $e->getMessage(), $e->getCode(), $e);
+  }
+}
+
+/**
+ * Cloudflare to support multiple zones for multiple domains.
+ */
+function cloudflare_update_8003(&$sandbox) {
+  // Convert existing zone id value from type string to array.
+  $config = \Drupal::service('config.factory')->getEditable('cloudflare.settings');
+  $zone_id = $config->get('zone_id');
+  $config->set('zone_id', $zone_id ? [$zone_id] : [])->save();
+}
+
+/**
+ * Cloudflare to support multiple zones for multiple domains.
+ */
+function cloudflare_update_8004(&$sandbox) {
+  // Ensure auth_using is set.
+  $config = \Drupal::service('config.factory')->getEditable('cloudflare.settings');
+  $auth_using = $config->get('auth_using');
+  if (!in_array($auth_using, ['key', 'token'])) {
+    $config->set('auth_using', 'key')->save();
+  }
+}
+
+/**
+ * Set `remote_addr_validate` on existing installations.
+ */
+function cloudflare_update_8005() {
+  \Drupal::configFactory()->getEditable('cloudflare.settings')->set('remote_addr_validate', TRUE)->save();
+
+  return 'Cloudflare configuration ( cloudflare.settings ) was successfully updated.';
+}

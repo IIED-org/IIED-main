@@ -180,7 +180,13 @@ class TypeParser
 				} elseif ($tokens->isCurrentTokenType(Lexer::TOKEN_OPEN_SQUARE_BRACKET)) {
 					$type = $this->tryParseArrayOrOffsetAccess($tokens, $type);
 
-				} elseif (in_array($type->name, ['array', 'list', 'object'], true) && $tokens->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET) && !$tokens->isPrecededByHorizontalWhitespace()) {
+				} elseif (in_array($type->name, [
+					Ast\Type\ArrayShapeNode::KIND_ARRAY,
+					Ast\Type\ArrayShapeNode::KIND_LIST,
+					Ast\Type\ArrayShapeNode::KIND_NON_EMPTY_ARRAY,
+					Ast\Type\ArrayShapeNode::KIND_NON_EMPTY_LIST,
+					'object',
+				], true) && $tokens->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET) && !$tokens->isPrecededByHorizontalWhitespace()) {
 					if ($type->name === 'object') {
 						$type = $this->parseObjectShape($tokens);
 					} else {
@@ -491,11 +497,14 @@ class TypeParser
 		$name = $tokens->currentTokenValue();
 		$tokens->consumeTokenType(Lexer::TOKEN_IDENTIFIER);
 
-		if ($tokens->tryConsumeTokenValue('of') || $tokens->tryConsumeTokenValue('as')) {
-			$bound = $this->parse($tokens);
+		$upperBound = $lowerBound = null;
 
-		} else {
-			$bound = null;
+		if ($tokens->tryConsumeTokenValue('of') || $tokens->tryConsumeTokenValue('as')) {
+			$upperBound = $this->parse($tokens);
+		}
+
+		if ($tokens->tryConsumeTokenValue('super')) {
+			$lowerBound = $this->parse($tokens);
 		}
 
 		if ($tokens->tryConsumeTokenValue('=')) {
@@ -514,7 +523,7 @@ class TypeParser
 			throw new LogicException('Template tag name cannot be empty.');
 		}
 
-		return new Ast\PhpDoc\TemplateTagValueNode($name, $bound, $description, $default);
+		return new Ast\PhpDoc\TemplateTagValueNode($name, $upperBound, $description, $default, $lowerBound);
 	}
 
 
@@ -687,7 +696,13 @@ class TypeParser
 							$startIndex
 						));
 
-					} elseif (in_array($type->name, ['array', 'list', 'object'], true) && $tokens->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET) && !$tokens->isPrecededByHorizontalWhitespace()) {
+					} elseif (in_array($type->name, [
+						Ast\Type\ArrayShapeNode::KIND_ARRAY,
+						Ast\Type\ArrayShapeNode::KIND_LIST,
+						Ast\Type\ArrayShapeNode::KIND_NON_EMPTY_ARRAY,
+						Ast\Type\ArrayShapeNode::KIND_NON_EMPTY_LIST,
+						'object',
+					], true) && $tokens->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET) && !$tokens->isPrecededByHorizontalWhitespace()) {
 						if ($type->name === 'object') {
 							$type = $this->parseObjectShape($tokens);
 						} else {

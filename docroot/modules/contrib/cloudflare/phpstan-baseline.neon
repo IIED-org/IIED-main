@@ -1,0 +1,41 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Variable \\$key might not be defined\\.$#"
+			count: 1
+			path: modules/cloudflarepurger/src/Plugin/Purge/Purger/CloudFlarePurger.php
+
+		-
+			message: "#^Variable \\$zone_text might not be defined\\.$#"
+			count: 1
+			path: src/Form/SettingsForm.php
+
+		-
+			message: "#^Variable \\$api_key might not be defined\\.$#"
+			count: 1
+			path: src/Zone.php
+
+		-
+			message: "#^Variable \\$email might not be defined\\.$#"
+			count: 1
+			path: src/Zone.php
+
+		-
+			message: "#^Variable \\$key might not be defined\\.$#"
+			count: 1
+			path: src/Zone.php
+
+		-
+			message: "#^Variable \\$token might not be defined\\.$#"
+			count: 1
+			path: src/Zone.php
+
+		-
+			message: "#^\\\\Drupal calls should be avoided in classes, use dependency injection instead$#"
+			count: 1
+			path: tests/modules/cloudflare_form_tester/src/Mocks/ComposerDependenciesCheckMock.php
+
+		-
+			message: "#^\\\\Drupal calls should be avoided in classes, use dependency injection instead$#"
+			count: 1
+			path: tests/modules/cloudflare_form_tester/src/Mocks/ZoneMock.php

@@ -1,0 +1,11 @@
+cloudflarepurger.settings:
+  type: config_object
+  label: 'CloudFlare Purger Config'
+  mapping:
+    edge_cache_tag_header_blacklist:
+      label: 'Cache tag blacklist'
+      type: sequence
+      translatable: false
+      sequence:
+        type: string
+        label: 'Tag Prefix'

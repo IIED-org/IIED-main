@@ -1,0 +1,14 @@
+name: CloudFlare
+type: module
+description: CloudFlare CDN integration.
+core_version_requirement: ^10 || ^11
+package: Web services
+configure: cloudflare.admin_settings_form
+
+dependencies:
+  - ctools:ctools
+
+# Information added by Drupal.org packaging script on 2024-04-15
+version: '2.0.0-beta1'
+project: 'cloudflare'
+datestamp: 1713179441

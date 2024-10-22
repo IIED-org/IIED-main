@@ -1,0 +1,18 @@
+cloudflare.admin_settings_form:
+  path: '/admin/config/services/cloudflare'
+  defaults:
+    _wizard: '\Drupal\cloudflare\Wizard\ConfigWizard'
+    _title: 'CloudFlare Settings'
+    tempstore_id: 'cloudflare.wizard.settings'
+    machine_name: 'CloudFlareSettings'
+  requirements:
+    _permission: 'administer cloudflare'
+cloudflare.admin_settings_form.step:
+  path: '/admin/config/services/cloudflare/{step}'
+  defaults:
+    _wizard: '\Drupal\cloudflare\Wizard\ConfigWizard'
+    _title: 'Wizard Test'
+    tempstore_id: 'cloudflare.wizard.settings'
+    machine_name: 'CloudFlareSettings'
+  requirements:
+    _permission: 'administer cloudflare'
