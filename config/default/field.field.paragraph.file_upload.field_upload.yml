@@ -21,7 +21,7 @@ settings:
   handler: 'default:file'
   handler_settings: {  }
   file_directory: 'uploads/[current-date:custom:Y/m]'
-  file_extensions: 'pdf xls xlsm xlsx pptx json doc docx'
+  file_extensions: 'pdf xls xlsm xlsx pptx json doc docx mp3'
   max_filesize: ''
   description_field: true
 field_type: file
