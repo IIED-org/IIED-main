@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.long_read.field_theme_s_
     - node.type.long_read
   module:
-    - ds
     - layout_builder
     - user
 third_party_settings:
@@ -37,10 +36,9 @@ content:
     weight: 105
     region: content
   field_main_image:
-    type: entity_reference_entity_view
+    type: entity_reference_label
     label: hidden
     settings:
-      view_mode: default
       link: false
     third_party_settings:
       ds:

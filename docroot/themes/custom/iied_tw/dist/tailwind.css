@@ -385,6 +385,13 @@ input::-moz-placeholder, textarea::-moz-placeholder {
   /* 2 */
 }
 
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
 input::placeholder,
 textarea::placeholder {
   opacity: 1;
@@ -481,6 +488,11 @@ input::-moz-placeholder, textarea::-moz-placeholder{
   opacity: 1;
 }
 
+input:-ms-input-placeholder, textarea:-ms-input-placeholder{
+  color: #6b7280;
+  opacity: 1;
+}
+
 input::placeholder,textarea::placeholder{
   color: #6b7280;
   opacity: 1;
@@ -510,8 +522,7 @@ select{
   background-repeat: no-repeat;
   background-size: 1.5em 1.5em;
   padding-right: 2.5rem;
-  -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 [multiple],[size]:where(select:not([size="1"])){
@@ -520,8 +531,7 @@ select{
   background-repeat: unset;
   background-size: initial;
   padding-right: 0.75rem;
-  -webkit-print-color-adjust: unset;
-          print-color-adjust: unset;
+  print-color-adjust: unset;
 }
 
 [type='checkbox'],[type='radio']{
@@ -529,13 +539,13 @@ select{
      -moz-appearance: none;
           appearance: none;
   padding: 0;
-  -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
+  print-color-adjust: exact;
   display: inline-block;
   vertical-align: middle;
   background-origin: border-box;
   -webkit-user-select: none;
      -moz-user-select: none;
+      -ms-user-select: none;
           user-select: none;
   flex-shrink: 0;
   height: 1rem;
@@ -679,9 +689,9 @@ a{
   --tw-text-opacity: 1;
   color: rgb(17 115 179 / var(--tw-text-opacity));
   text-underline-offset: 4px;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-duration: 300ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -723,6 +733,56 @@ cite {
 }
 
 *, ::before, ::after{
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+}
+
+::-webkit-backdrop{
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
   --tw-translate-x: 0;
@@ -1931,9 +1991,9 @@ cite {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -1952,9 +2012,9 @@ cite {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
   &:hover{
@@ -3395,9 +3455,9 @@ cite {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -3445,7 +3505,9 @@ cite {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  transition-property: color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -4071,28 +4133,43 @@ cite {
 /*-- hidden handbrakes how stuck is this handbrake --*/
 
 .slightly {
-  animation: slightly 2s;
+  -webkit-animation: slightly 2s;
+          animation: slightly 2s;
   transform: translate(-50%, -50%) rotate(-72deg);
 }
 
 .moderately {
-  animation: moderately 2s;
+  -webkit-animation: moderately 2s;
+          animation: moderately 2s;
   transform: translate(-50%, -50%) rotate(-36deg);
 }
 
 .very {
-  animation: very 2s;
+  -webkit-animation: very 2s;
+          animation: very 2s;
   transform: translate(-50%, -50%) rotate(0deg);
 }
 
 .extremely {
-  animation: extremely 2s;
+  -webkit-animation: extremely 2s;
+          animation: extremely 2s;
   transform: translate(-50%, -50%) rotate(36deg);
 }
 
 .jammed {
-  animation: jammed 2s;
+  -webkit-animation: jammed 2s;
+          animation: jammed 2s;
   transform: translate(0%, -56%) rotate(72deg);
+}
+
+@-webkit-keyframes slightly {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(-72deg);
+  }
 }
 
 @keyframes slightly {
@@ -4102,6 +4179,16 @@ cite {
 
   100% {
     transform: translate(-50%, -50%) rotate(-72deg);
+  }
+}
+
+@-webkit-keyframes moderately {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(-36deg);
   }
 }
 
@@ -4115,6 +4202,16 @@ cite {
   }
 }
 
+@-webkit-keyframes very {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}
+
 @keyframes very {
   0% {
     transform: translate(-50%, -50%) rotate(-90deg);
@@ -4125,6 +4222,16 @@ cite {
   }
 }
 
+@-webkit-keyframes extremely {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(36deg);
+  }
+}
+
 @keyframes extremely {
   0% {
     transform: translate(-50%, -50%) rotate(-90deg);
@@ -4132,6 +4239,16 @@ cite {
 
   100% {
     transform: translate(-50%, -50%) rotate(36deg);
+  }
+}
+
+@-webkit-keyframes jammed {
+  0% {
+    transform: translate(0%, -50%) rotate(-90deg);
+  }
+
+  100% {
+    transform: translate(0%, -56%) rotate(72deg);
   }
 }
 
@@ -4251,15 +4368,31 @@ cite {
 
 /*-- animations --*/
 
-@keyframes bounce-x {
+@-webkit-keyframes bounce-x {
   0%, 100% {
     transform: translateX(-25%);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    -webkit-animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
 
   50% {
     transform: translateX(0);
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    -webkit-animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes bounce-x {
+  0%, 100% {
+    transform: translateX(-25%);
+    -webkit-animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+
+  50% {
+    transform: translateX(0);
+    -webkit-animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
 }
 
@@ -4305,7 +4438,7 @@ cite {
   background-color: rgb(250 237 245 / var(--tw-bg-opacity));
 }
 
-.paragraph--type--related-card, .paragraph--type--related-publication-inline{
+.paragraph--type--related-card, .paragraph--type--related-publication-inline, .paragraph--type--related-publication-inline article{
   margin-bottom: 1.5rem;
 }
 
@@ -4355,7 +4488,9 @@ cite {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  transition-property: color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -4366,6 +4501,17 @@ cite {
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+#mce-success-response{
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.75rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 229 72 / var(--tw-bg-opacity));
+  padding: 1rem;
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 
 /* Dynamic colour change */
@@ -4449,6 +4595,7 @@ cite {
 }
 
 .sticky{
+  position: -webkit-sticky;
   position: sticky;
 }
 
@@ -5056,6 +5203,7 @@ cite {
 }
 
 .h-max{
+  height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
 }
@@ -5069,6 +5217,7 @@ cite {
 }
 
 .max-h-fit{
+  max-height: -webkit-fit-content;
   max-height: -moz-fit-content;
   max-height: fit-content;
 }
@@ -5182,6 +5331,7 @@ cite {
 }
 
 .w-fit{
+  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -5215,6 +5365,7 @@ cite {
 }
 
 .max-w-fit{
+  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
@@ -5224,6 +5375,7 @@ cite {
 }
 
 .max-w-max{
+  max-width: -webkit-max-content;
   max-width: -moz-max-content;
   max-width: max-content;
 }
@@ -5372,7 +5524,8 @@ cite {
 }
 
 .snap-x{
-  scroll-snap-type: x var(--tw-scroll-snap-strictness);
+  -ms-scroll-snap-type: x var(--tw-scroll-snap-strictness);
+      scroll-snap-type: x var(--tw-scroll-snap-strictness);
 }
 
 .snap-mandatory{
@@ -6239,12 +6392,9 @@ cite {
   padding-bottom: 1.5rem;
 }
 
-.pb-8{
-  padding-bottom: 2rem;
-}
-
 .pe-3{
-  padding-inline-end: 0.75rem;
+  -webkit-padding-end: 0.75rem;
+          padding-inline-end: 0.75rem;
 }
 
 .pl-0{
@@ -6532,7 +6682,8 @@ cite {
 }
 
 .no-underline{
-  text-decoration-line: none;
+  -webkit-text-decoration-line: none;
+          text-decoration-line: none;
 }
 
 .underline-offset-4{
@@ -6622,9 +6773,9 @@ cite {
 }
 
 .transition{
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -6636,7 +6787,9 @@ cite {
 }
 
 .transition-colors{
+  transition-property: color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -7971,7 +8124,8 @@ cite {
 }
 
 .hover\:no-underline:hover{
-  text-decoration-line: none;
+  -webkit-text-decoration-line: none;
+          text-decoration-line: none;
 }
 
 .hover\:shadow-lg:hover{
@@ -8197,7 +8351,8 @@ cite {
 
 @media (prefers-reduced-motion: no-preference){
   .motion-safe\:animate-\[bounce-x_2s_ease-in-out_infinite\]{
-    animation: bounce-x 2s ease-in-out infinite;
+    -webkit-animation: bounce-x 2s ease-in-out infinite;
+            animation: bounce-x 2s ease-in-out infinite;
   }
 }
 
@@ -8291,6 +8446,7 @@ cite {
   }
 
   .sm\:w-fit{
+    width: -webkit-fit-content;
     width: -moz-fit-content;
     width: fit-content;
   }
@@ -8426,6 +8582,7 @@ cite {
 
 @media (min-width: 768px){
   .md\:sticky{
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -8459,10 +8616,6 @@ cite {
 
   .md\:row-span-2{
     grid-row: span 2 / span 2;
-  }
-
-  .md\:ml-4{
-    margin-left: 1rem;
   }
 
   .md\:mr-4{
@@ -8563,10 +8716,6 @@ cite {
     margin-bottom: calc(0px * var(--tw-space-y-reverse));
   }
 
-  .md\:pl-4{
-    padding-left: 1rem;
-  }
-
   .md\:text-center{
     text-align: center;
   }
@@ -8601,6 +8750,7 @@ cite {
   }
 
   .lg\:sticky{
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -8759,6 +8909,7 @@ cite {
   }
 
   .lg\:w-fit{
+    width: -webkit-fit-content;
     width: -moz-fit-content;
     width: fit-content;
   }
@@ -8768,6 +8919,7 @@ cite {
   }
 
   .lg\:max-w-max{
+    max-width: -webkit-max-content;
     max-width: -moz-max-content;
     max-width: max-content;
   }
@@ -8987,6 +9139,7 @@ cite {
   }
 
   .xl\:sticky{
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -9265,6 +9418,7 @@ cite {
 
 @media (min-width: 1536px){
   .\32xl\:sticky{
+    position: -webkit-sticky;
     position: sticky;
   }
 

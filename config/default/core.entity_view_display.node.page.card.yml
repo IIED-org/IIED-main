@@ -19,7 +19,6 @@ dependencies:
     - node.type.page
   module:
     - layout_builder
-    - text
     - user
 third_party_settings:
   layout_builder:
@@ -32,12 +31,13 @@ targetEntityType: node
 bundle: page
 mode: card
 content:
-  body:
-    type: text_default
+  field_alternative_label:
+    type: string
     label: hidden
-    settings: {  }
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: 2
     region: content
   field_date_or_caption:
     type: string
@@ -45,15 +45,22 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
+    region: content
+  field_tagline:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
     weight: 1
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
 hidden:
-  field_alternative_label: true
+  body: true
   field_content: true
   field_display_image: true
   field_global_term: true
@@ -61,7 +68,6 @@ hidden:
   field_main_image: true
   field_rows: true
   field_standfirst: true
-  field_tagline: true
   field_tags: true
   langcode: true
   search_api_excerpt: true
