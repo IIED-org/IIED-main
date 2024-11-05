@@ -411,9 +411,9 @@ display:
       path: admin/audit/gender/gender-terms
       menu:
         type: tab
-        title: 'Gender tags'
+        title: 'Gender related tags'
         description: ''
-        weight: 0
+        weight: 7
         expanded: false
         menu_name: admin
         parent: 'admin_toolbar_tools.extra_links:views_ui.gender_audit_content'
@@ -557,7 +557,7 @@ display:
         type: tab
         title: 'Tag by gender audit'
         description: ''
-        weight: 0
+        weight: 6
         expanded: false
         menu_name: admin
         parent: 'admin_toolbar_tools.extra_links:views_ui.gender_audit_content'
@@ -950,7 +950,7 @@ display:
         type: tab
         title: 'People+orgs by theme'
         description: ''
-        weight: 0
+        weight: 8
         expanded: false
         menu_name: admin
         parent: 'admin_toolbar_tools.extra_links:views_ui.gender_audit_content'
