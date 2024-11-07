@@ -3521,6 +3521,10 @@ cite {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.clickdform.mainDiv {
+  height: 100% !important;
+}
+
 .tracker-select select, .search-select select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -4566,6 +4570,16 @@ cite {
   margin-top: 1rem;
 }
 
+/* fix timely embed */
+
+.timely-frame{
+  height: 36rem;
+}
+
+.timely-frame iframe {
+  height: 100%;
+}
+
 .pointer-events-none{
   pointer-events: none;
 }
@@ -5192,6 +5206,10 @@ cite {
 
 .h-9{
   height: 2.25rem;
+}
+
+.h-\[36rem\]{
+  height: 36rem;
 }
 
 .h-auto{

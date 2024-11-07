@@ -323,6 +323,9 @@
    {
     @apply px-3 py-2 border-none rounded-full bg-iiedorange-500 cursor-pointer font-sans text-gray-800 transition-colors duration-150 shadow-sm hover:shadow-none hover:bg-iiedorange-600;
   }
+  .clickdform.mainDiv {
+    height: 100% !important;
+}
 
   .tracker-select select, .search-select select {
     -webkit-appearance: none;
@@ -570,10 +573,18 @@
     display: none !important;
   }
 
- 
   /* sets top margin for info boxes */
   .paragraph--type--info-box aside .relative h2:first-of-type, 
   .paragraph--type--info-box aside .relative h3:first-of-type {
     @apply mt-4;
   }
+
+  /* fix timely embed */
+  .timely-frame {
+    @apply h-[36rem];
+  }
+  .timely-frame iframe {
+    height: 100%;
+  }
+
 }

@@ -24,8 +24,21 @@
       </div>
     {% endif %}
 
-  {{ node.field_series.entity.name.value }} 
-  
+    {% if node.field_series is not empty and node.field_series.entity is not empty %}
+      {% set series_term = node.field_series.entity %}
+      <div class="flex gap-1">
+        <span class="font-bold">Series:</span>
+        {% if series_term.field_status|length > 0 and series_term.field_status.0.value == 'cur' %}
+          <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': series_term.id()}) }}">
+            {{ series_term.name.value }}
+          </a>
+        {% else %}
+          {{ series_term.name.value }}
+        {% endif %}
+      </div>
+    {% endif %}
+
+
   {{ content.field_journal_ref }} 
 
   <div class="flex gap-1">  
