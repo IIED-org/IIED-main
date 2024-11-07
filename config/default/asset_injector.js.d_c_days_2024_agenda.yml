@@ -22,6 +22,7 @@ code: |
           iframe.className = "timely-frame";
           iframe.sandbox = "allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation allow-downloads";
           iframe.style.width = "100%";
+          iframe.style.height = "600px";
           iframe.style.border = "none";
           
           a.appendChild(iframe);

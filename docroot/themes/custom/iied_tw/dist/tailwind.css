@@ -4570,16 +4570,6 @@ cite {
   margin-top: 1rem;
 }
 
-/* fix timely embed */
-
-.timely-frame{
-  height: 36rem;
-}
-
-.timely-frame iframe {
-  height: 100%;
-}
-
 .pointer-events-none{
   pointer-events: none;
 }
@@ -5206,10 +5196,6 @@ cite {
 
 .h-9{
   height: 2.25rem;
-}
-
-.h-\[36rem\]{
-  height: 36rem;
 }
 
 .h-auto{
