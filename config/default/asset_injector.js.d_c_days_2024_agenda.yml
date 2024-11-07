@@ -1,0 +1,41 @@
+uuid: c4e439ef-d277-4c4f-8555-0be68099ee7f
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+id: d_c_days_2024_agenda
+label: 'D&C Days 2024 agenda'
+code: |
+  document.addEventListener("DOMContentLoaded", function() {
+      var a = document.querySelector("#timely_script");
+      
+      if (a) {
+          var l = a.getAttribute("data-src") || "https://events.timely.fun/4dx38e5w?range=custom&start_date=2024-11-17&end_date=2024-11-17";
+          var p = document.querySelectorAll('iframe[id^="timely-iframe-embed-"]').length;
+          var frameId = "timely-iframe-embed-" + p;
+          a.id = frameId;
+
+          var iframe = document.createElement("iframe");
+          iframe.id = frameId;
+          iframe.src = l + "?timely_id=" + frameId;
+          iframe.className = "timely-frame";
+          iframe.sandbox = "allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation allow-downloads";
+          iframe.style.width = "100%";
+          iframe.style.border = "none";
+          
+          a.appendChild(iframe);
+      }
+  });
+noscript: ''
+noscriptRegion: {  }
+jquery: false
+header: false
+preprocess: true
+conditions:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/82531
+contexts: {  }
+conditions_require_all: true
