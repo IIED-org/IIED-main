@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Cloudflare Purge.
+ *
+ * Filename:     cloudflare_purge.module
+ * Website:      https://www.flashwebcenter.com
+ * Description:  template.
+ * Developer:    Alaa Haddad https://www.alaahaddad.com.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function cloudflare_purge_help($route_name, RouteMatchInterface $route_match) {
+
+  switch ($route_name) {
+    case 'help.page.cloudflare_purge':
+
+      $text = file_get_contents(__DIR__ . "/README.md");
+
+      if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
+        return '<pre>' . $text . '</pre>';
+      }
+
+      // Use the Markdown filter to render the README.
+      $filter_manager = \Drupal::service('plugin.manager.filter');
+      $settings = \Drupal::configFactory()
+        ->get('markdown.settings')
+        ->getRawData();
+      $config = ['settings' => $settings];
+      return $filter_manager->createInstance('markdown', $config)->process($text, 'en');
+  }
+
+  return NULL;
+}

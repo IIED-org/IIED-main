@@ -1,0 +1,11 @@
+name: 'Cloudflare Purge'
+type: module
+description: 'Allow customers to purge cached resources from Cloudflare.'
+package: CDN
+core_version_requirement: ^10.1 || ^11
+configure: cloudflare_purge.form
+
+# Information added by Drupal.org packaging script on 2024-03-17
+version: '2.0.0'
+project: 'cloudflare_purge'
+datestamp: 1710648686

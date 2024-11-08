@@ -1,0 +1,5 @@
+services:
+  cloudflare_purge.logger.channel.cloudflare_purge:
+    class: Drupal\Core\Logger\LoggerChannelInterface
+    parent: logger.channel_base
+    arguments: ['cloudflare_purge']

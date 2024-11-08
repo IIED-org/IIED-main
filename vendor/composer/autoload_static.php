@@ -233,6 +233,7 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
             'Drush\\' => 6,
             'Drupal\\sophron\\' => 15,
             'Drupal\\facets_pretty_paths\\' => 27,
+            'Drupal\\cloudflare_purge\\' => 24,
             'Drupal\\Core\\' => 12,
             'Drupal\\Composer\\Plugin\\VendorHardening\\' => 39,
             'Drupal\\Composer\\Plugin\\Scaffold\\' => 32,
@@ -753,6 +754,10 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         'Drupal\\facets_pretty_paths\\' => 
         array (
             0 => __DIR__ . '/../..' . '/docroot/modules/contrib/facets_pretty_paths/src',
+        ),
+        'Drupal\\cloudflare_purge\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/docroot/modules/contrib/cloudflare_purge/src',
         ),
         'Drupal\\Core\\' => 
         array (

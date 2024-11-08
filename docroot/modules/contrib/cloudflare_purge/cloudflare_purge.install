@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Cloudflare Purge.
+ *
+ * Filename:     cloudflare_purge.install
+ * Website:      https://www.flashwebcenter.com
+ * Description:  template.
+ * Developer:    Alaa Haddad https://www.alaahaddad.com.
+ */
+
+use Drupal\cloudflare_purge\Form\CloudflarePurgeForm;
+
+/**
+ * Implements hook_uninstall().
+ */
+function cloudflare_purge_uninstall($is_syncing) {
+  if ($is_syncing) {
+    return;
+  }
+  \Drupal::configFactory()
+    ->getEditable(CloudflarePurgeForm::SETTINGS)
+    ->delete();
+}

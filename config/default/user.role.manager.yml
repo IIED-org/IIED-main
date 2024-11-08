@@ -37,6 +37,7 @@ dependencies:
     - block_class
     - block_content
     - charts
+    - cloudflare_purge
     - comment
     - contact
     - content_translation
@@ -74,6 +75,7 @@ label: Manager
 weight: -2
 is_admin: null
 permissions:
+  - 'Cloudflare Purge'
   - 'access administration pages'
   - 'access all charts'
   - 'access block library'

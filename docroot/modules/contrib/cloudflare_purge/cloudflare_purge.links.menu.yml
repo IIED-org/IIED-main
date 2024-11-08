@@ -1,0 +1,12 @@
+cloudflare_purge.admin:
+  title: 'Cloudflare Purge'
+  route_name: cloudflare_purge.admin
+  parent: system.admin_config
+cloudflare_purge.form:
+  title: 'Credentials form'
+  route_name: cloudflare_purge.form
+  parent: cloudflare_purge.admin
+cloudflare_purge.cache:
+  title: 'Purge Cloudflare'
+  route_name: cloudflare_purge.cache
+  parent: cloudflare_purge.admin

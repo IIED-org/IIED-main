@@ -1,0 +1,3 @@
+Cloudflare Purge:
+  title: 'Cloudflare Purge'
+  restrict access: true

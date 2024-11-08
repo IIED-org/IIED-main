@@ -1,0 +1,29 @@
+{
+    "name": "drupal/cloudflare_purge",
+    "description": "Allow customers to purge cached resources from Cloudflare.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Alaa Haddad (alaahaddad.com)",
+            "homepage": "https://www.drupal.org/u/flashwebcenter",
+            "role": "Maintainer"
+        }
+    ],
+    "homepage": "https://drupal.org/project/cloudflare_purge",
+    "support": {
+        "issues": "https://drupal.org/project/issues/cloudflare_purge",
+        "source": "https://git.drupalcode.org/project/cloudflare_purge"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Drupal\\cloudflare_purge\\": "src"
+        }
+    }
+}

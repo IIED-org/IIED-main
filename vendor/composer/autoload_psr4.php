@@ -121,6 +121,7 @@ return array(
     'Drush\\' => array($vendorDir . '/drush/drush/src'),
     'Drupal\\sophron\\' => array($baseDir . '/docroot/modules/contrib/sophron/src'),
     'Drupal\\facets_pretty_paths\\' => array($baseDir . '/docroot/modules/contrib/facets_pretty_paths/src'),
+    'Drupal\\cloudflare_purge\\' => array($baseDir . '/docroot/modules/contrib/cloudflare_purge/src'),
     'Drupal\\Core\\' => array($baseDir . '/docroot/core/lib/Drupal/Core'),
     'Drupal\\Composer\\Plugin\\VendorHardening\\' => array($vendorDir . '/drupal/core-vendor-hardening'),
     'Drupal\\Composer\\Plugin\\Scaffold\\' => array($vendorDir . '/drupal/core-composer-scaffold'),
