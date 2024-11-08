@@ -6,6 +6,7 @@ const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const postcssRTLCSS = require('postcss-rtlcss');
+const postcssRtlLogicalProperties = require('postcss-rtl-logical-properties');
 
 module.exports = {
   entry: {
@@ -67,6 +68,7 @@ module.exports = {
     'components/sidebar': ['./styles/components/sidebar.scss'],
     'components/tableselect': ['./styles/components/tableselect.scss'],
     'components/tabs': ['./styles/components/tabs.scss'],
+    'components/term_reference_tree': ['./styles/components/term_reference_tree.scss'],
     'components/top_bar': ['./styles/components/top_bar.scss'],
     'components/toolbar': ['./styles/components/toolbar.scss'],
     'components/toolbar_secondary': ['./styles/components/toolbar_secondary.scss'],
@@ -164,6 +166,7 @@ module.exports = {
               postcssOptions: {
                 plugins: [
                   autoprefixer(),
+                  postcssRtlLogicalProperties(),
                   postcssRTLCSS(),
                   ['postcss-perfectionist', {
                     format: 'expanded',

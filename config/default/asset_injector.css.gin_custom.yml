@@ -6,7 +6,7 @@ dependencies:
     - system
 id: gin_custom
 label: 'Gin custom'
-code: |
+code: |-
   /*-- CKE link button fix --*/
   .ck-body-wrapper .ck {
     --ck-z-modal: 1261;
@@ -17,6 +17,13 @@ code: |
   /*-- bigger paragraph icons --*/
   .lpb-component-list__item img {
     min-width: 50px;
+  }
+
+  .paragraph--type--file-upload {
+  	padding-bottom:3rem;
+  }
+  .paragraph--type--file-upload:after {
+    content: 'File upload';
   }
 media: all
 preprocess: true

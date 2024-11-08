@@ -3521,6 +3521,10 @@ cite {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.clickdform.mainDiv {
+  height: 100% !important;
+}
+
 .tracker-select select, .search-select select {
   -webkit-appearance: none;
   -moz-appearance: none;

@@ -300,7 +300,7 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: "<div class=\"flex flex-wrap justify-between\">\r\n<h2 class=\"mb-6\">Publications</h2>\r\n<a href=\"/search/type/publication/theme/{{ arguments.tid|lower|replace({' ': '-', ' and ': '-'}) }}\" class=\"mb-4 mt-2\">View more <span class=\"lowercase\">{{ arguments.tid }}</span> publications</a>\r\n</div>"
+            value: "<div class=\"flex flex-wrap justify-between\">\r\n<h2 class=\"mb-6\">Publications</h2>\r\n<a href=\"/search/type/publication/theme/{{ arguments.tid|lower|replace({' ': '-', ' and ': '-', ',': ''}) }}\" class=\"mb-4 mt-2\">View more <span class=\"lowercase\">{{ arguments.tid }}</span> publications</a>\r\n</div>"
             format: full_html
           tokenize: true
       display_extenders: {  }
