@@ -1,6 +1,6 @@
 html {
   font-family: var(--gin-font);
-  scroll-padding-top: var(--gin-scroll-offset) !important;
+  scroll-padding-block-start: var(--gin-scroll-offset) !important;
 }
 
 body {
@@ -32,6 +32,10 @@ h3 {
 
 ::-moz-selection {
   background: var(--gin-color-primary-light-hover);
+}
+
+@view-transition {
+  navigation: auto;
 }
 
 a {

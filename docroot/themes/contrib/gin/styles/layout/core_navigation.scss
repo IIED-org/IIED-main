@@ -54,13 +54,14 @@ body.gin--core-navigation {
 // Custom overrides
 // --------------------------------------------------
 
-.gin--core-navigation .top-bar {
+.gin--core-navigation .top-bar,
+.gin--core-navigation .admin-toolbar-control-bar {
   position: sticky;
-  top: 0;
+  inset-block-start: 0;
 }
 
 .gin--core-navigation .gin-secondary-toolbar:not(.gin-secondary-toolbar--frontend) {
-  margin-bottom: var(--gin-spacing-xxs);
+  margin-block-end: var(--gin-spacing-xxs);
 }
 
 .gin--core-navigation .gin-secondary-toolbar--frontend {
@@ -104,7 +105,8 @@ body.gin--core-navigation {
 // --------------------------------------------------
 .toolbar-anti-flicker.toolbar-loading.toolbar-fixed body.gin--core-navigation,
 body.gin--core-navigation {
-  padding-top: unset !important;
+  padding-block-start: unset !important;
+  margin-inline-start: auto !important;
 }
 
 // --------------------------------------------------
@@ -135,6 +137,20 @@ body.gin--core-navigation {
 // --------------------------------------------------
 // Button style overrides
 // --------------------------------------------------
+#navigation-link-navigationcreate {
+  margin-block-start: var(--gin-spacing-xxs);
+}
+
+.toolbar-block__list {
+  gap: 0;
+}
+
+.toolbar-button {
+  padding-inline: 10px;
+  padding-block: calc(var(--gin-spacing-xs) + 1px);
+  margin-block-end: var(--gin-spacing-xxxs);
+}
+
 .toolbar-button,
 .toolbar-menu__link {
   color: var(--gin-color-text);
@@ -290,9 +306,12 @@ body.gin--core-navigation {
 // --------------------------------------------------
 // Hide Shortcuts & Announcements in primary nav
 // --------------------------------------------------
+// #toolbar-item-shortcuts,
 #navigation-block-shortcuts,
-#navigation-link-announcements-feedannouncement,
-.toolbar-block:has(.admin-toolbar__item:first-of-type:last-of-type > #menu--shortcuts) {
+#toolbar-item-announcement,
+// #navigation-link-announcements-feedannouncement,
+.toolbar-block:has(.admin-toolbar__item:first-of-type:last-of-type > #menu--shortcuts)
+{
   display: none;
 }
 
@@ -315,15 +334,12 @@ body.gin--core-navigation {
   }
 
   .toolbar-tray .menu-item + .menu-item {
-    border-left: none;
-  }
-
-  .toolbar-secondary .toolbar-bar .toolbar-id--toolbar-icon-user {
-    margin-right: -1em;
+    border-inline-start: none;
   }
 }
 
 // Fix weird shortcuts menu flickering.
-.toolbar-loading #toolbar-item-shortcuts-tray {
+.toolbar-loading #toolbar-item-shortcuts-tray,
+.toolbar-loading #toolbar-item-shortcuts {
   visibility: hidden;
 }
