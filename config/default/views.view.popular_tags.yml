@@ -1642,6 +1642,7 @@ display:
     display_plugin: page
     position: 5
     display_options:
+      title: 'Simple tags count'
       fields:
         name:
           id: name
@@ -1720,7 +1721,7 @@ display:
           entity_type: node
           entity_field: nid
           plugin_id: field
-          label: ID
+          label: 'ID count'
           exclude: false
           alter:
             alter_text: false
@@ -1818,49 +1819,6 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
-        status:
-          id: status
-          table: node_field_data
-          field: status
-          relationship: reverse__node__field_tags
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: status
-          plugin_id: boolean
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -1913,6 +1871,7 @@ display:
           query_tags: {  }
       defaults:
         query: false
+        title: false
         pager: false
         group_by: false
         style: false

@@ -82,7 +82,8 @@ display:
         type: full
         options:
           offset: 0
-          items_per_page: 10
+          pagination_heading_level: h4
+          items_per_page: 24
           total_pages: null
           id: 0
           tags:
@@ -99,7 +100,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -255,17 +255,7 @@ display:
       css_class: ''
       use_ajax: true
       header: {  }
-      footer:
-        result:
-          id: result
-          table: views
-          field: result
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: result
-          empty: false
-          content: '<p class="py-4">@total entries<p>'
+      footer: {  }
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -303,7 +293,7 @@ display:
           exposed: false
           draggable_views_reference: 'term_featured_draggable:page_1'
           draggable_views_null_order: after
-          draggable_views_pass_arguments: false
+          draggable_views_pass_arguments: 0
         created:
           id: created
           table: node_field_data
@@ -413,12 +403,106 @@ display:
     display_plugin: block
     position: 1
     display_options:
+      sorts:
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          granularity: second
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+        langcode:
+          id: langcode
+          table: node_field_data
+          field: langcode
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: langcode
+          plugin_id: language
+          operator: in
+          value:
+            '***LANGUAGE_language_content***': '***LANGUAGE_language_content***'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       defaults:
         use_ajax: false
         show_admin_links: false
+        relationships: false
+        sorts: false
+        filters: false
+        filter_groups: false
+        header: false
+      relationships: {  }
       use_ajax: true
       display_description: ''
       show_admin_links: true
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '<p class="py-4">@total entries<p>'
       display_extenders: {  }
       block_description: 'All in tag'
     cache_metadata:
@@ -441,6 +525,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 10
           total_pages: null
           id: 0
@@ -458,7 +543,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       filters:
         status:
           id: status

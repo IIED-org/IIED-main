@@ -1,0 +1,28 @@
+uuid: bb444715-ed5c-4395-b60a-feab2e683a15
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.heading
+  module:
+    - layout_builder
+    - layout_discovery
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components: {  }
+        third_party_settings: {  }
+id: block_content.heading.default
+targetEntityType: block_content
+bundle: heading
+mode: default
+content: {  }
+hidden:
+  langcode: true
+  search_api_excerpt: true
