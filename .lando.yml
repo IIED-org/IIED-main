@@ -31,6 +31,7 @@ services:
     portforward: true
   node:
     type: node:16
+    scanner: false
     ssl: true
     # command: cd /app/docroot/themes/custom/iied_tw && npm run watch
     port: 80
