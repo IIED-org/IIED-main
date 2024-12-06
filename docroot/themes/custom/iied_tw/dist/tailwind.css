@@ -4913,6 +4913,11 @@ cite {
   margin-bottom: 2rem;
 }
 
+.my-16{
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
 .-mb-10{
   margin-bottom: -2.5rem;
 }
@@ -9339,6 +9344,16 @@ cite {
   .xl\:gap-x-6{
     -moz-column-gap: 1.5rem;
          column-gap: 1.5rem;
+  }
+
+  .xl\:gap-x-8{
+    -moz-column-gap: 2rem;
+         column-gap: 2rem;
+  }
+
+  .xl\:gap-x-12{
+    -moz-column-gap: 3rem;
+         column-gap: 3rem;
   }
 
   .xl\:space-x-8 > :not([hidden]) ~ :not([hidden]){
