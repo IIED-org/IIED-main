@@ -657,9 +657,21 @@ display:
         pager: false
         filters: false
         filter_groups: false
+        header: false
       use_ajax: true
       display_description: ''
       show_admin_links: true
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '<p class="py-4">@total entries<p>'
       display_extenders: {  }
       block_description: 'All in theme'
     cache_metadata:
