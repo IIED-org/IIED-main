@@ -5673,11 +5673,6 @@ cite {
   gap: 1.5rem;
 }
 
-.gap-x-12{
-  -moz-column-gap: 3rem;
-       column-gap: 3rem;
-}
-
 .gap-x-6{
   -moz-column-gap: 1.5rem;
        column-gap: 1.5rem;
@@ -5938,6 +5933,11 @@ cite {
 
 .border-none{
   border-style: none;
+}
+
+.border-\[\#0C4C7B\]{
+  --tw-border-opacity: 1;
+  border-color: rgb(12 76 123 / var(--tw-border-opacity));
 }
 
 .border-gray-200{
@@ -8329,6 +8329,11 @@ cite {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
+.group:hover .group-hover\:bg-iiedorange-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(252 179 22 / var(--tw-bg-opacity));
+}
+
 .group:hover .group-hover\:bg-iiedpink-500{
   --tw-bg-opacity: 1;
   background-color: rgb(206 83 158 / var(--tw-bg-opacity));
@@ -8642,6 +8647,10 @@ cite {
     margin-top: 0px;
   }
 
+  .md\:mb-0{
+    margin-bottom: 0px;
+  }
+
   .md\:block{
     display: block;
   }
@@ -8722,6 +8731,10 @@ cite {
     --tw-space-y-reverse: 0;
     margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
     margin-bottom: calc(0px * var(--tw-space-y-reverse));
+  }
+
+  .md\:rounded-3xl{
+    border-radius: 1.5rem;
   }
 
   .md\:text-center{
@@ -9332,6 +9345,10 @@ cite {
     --tw-space-x-reverse: 0;
     margin-right: calc(2rem * var(--tw-space-x-reverse));
     margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+
+  .xl\:rounded-full{
+    border-radius: 9999px;
   }
 
   .xl\:rounded-bl-xl{

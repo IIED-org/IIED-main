@@ -30,7 +30,7 @@
   ]
 %}
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
-    <div class="container my-12 overflow-hidden">
+    <div class="container mt-8 overflow-hidden">
       <div class="max-w-3xl">
         <p class="mb-2 text-gray-500">Publication series</p>
         {{ title_prefix }}
@@ -41,9 +41,10 @@
          {{ term.description.0.value|raw }}
         </div>
    
-  <div class="content">
-    {{ drupal_view('term_publications', 'block_1') }}
-  </div>
-
     </div>
+
+    <div class="mb-24 content">
+    {{ content }}
+    </div>
+
 </div>
