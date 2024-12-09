@@ -6,6 +6,7 @@ dependencies:
     - field.field.taxonomy_term.series.field_code
     - field.field.taxonomy_term.series.field_purpose
     - field.field.taxonomy_term.series.field_status
+    - field.field.taxonomy_term.series.layout_builder__layout
     - taxonomy.vocabulary.series
   module:
     - path
@@ -73,4 +74,10 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-hidden: {  }
+  translation:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  layout_builder__layout: true

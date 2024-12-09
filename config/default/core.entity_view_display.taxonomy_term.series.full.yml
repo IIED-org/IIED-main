@@ -7,16 +7,65 @@ dependencies:
     - field.field.taxonomy_term.series.field_code
     - field.field.taxonomy_term.series.field_purpose
     - field.field.taxonomy_term.series.field_status
+    - field.field.taxonomy_term.series.layout_builder__layout
     - taxonomy.vocabulary.series
+    - views.view.term_publications
   module:
     - ds
     - layout_builder
+    - layout_builder_restrictions
     - options
     - text
+    - views
+  theme:
+    - iied_tw
 third_party_settings:
   layout_builder:
-    enabled: false
-    allow_custom: false
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: tw-container
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          classes:
+            layout_class: {  }
+            first: {  }
+          wrappers:
+            first: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          layout_builder_styles_style:
+            - ''
+        components:
+          1f022be8-e036-45d6-8d90-629551081c61:
+            uuid: 1f022be8-e036-45d6-8d90-629551081c61
+            region: first
+            configuration:
+              id: 'views_block:term_publications-block_1'
+              label: ''
+              label_display: '0'
+              provider: views
+              context_mapping: {  }
+              views_label: ''
+              items_per_page: none
+              exposed: {  }
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts:
+        - tw-1-2-col-grid
+        - tw-1-2-4-col-grid
+        - tw-container
+      denylisted_blocks: {  }
+      allowlisted_blocks: {  }
+      restricted_categories: {  }
 id: taxonomy_term.series.full
 targetEntityType: taxonomy_term
 bundle: series
@@ -96,4 +145,5 @@ hidden:
   field_code: true
   field_purpose: true
   langcode: true
+  layout_builder__layout: true
   search_api_excerpt: true

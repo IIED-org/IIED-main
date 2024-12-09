@@ -26,26 +26,40 @@
 {%
   set classes = [
     'taxonomy-term',
+    'mb-12',
     'vocabulary-' ~ term.bundle|clean_class,
   ]
 %}
 <div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
-    <div class="container flex flex-wrap items-baseline justify-between mt-6 overflow-hidden gap-x-12">
+    <div class="container">
+
+      <div class="flex flex-wrap items-center space-x-3">
+        {% if drupal_view_result('tag_related_themes', 'block_1') is not empty %}
+            {{ drupal_view('tag_related_themes', 'block_1') }}
+        {% endif %}
+      </div>
+
       <div class="max-w-3xl">
+        <p class="mb-2 text-gray-500">Pages tagged with</p>
         {{ title_prefix }}
         <h1 class="mb-6">{{ name }}</h1>
         {{ title_suffix }}
       </div>
-      <div class="max-w-3xl">
-        <p class="mb-4 prose prose-lg">
-         {{ term.description.0.value|striptags }}
-        </p>
-      </div>
+
     </div>
 
 
   <div class="content">
     {{ content }}
   </div>
+
+
+
+    <div class="container">
+        {% if drupal_view_result('tag_related_tags', 'block_1') is not empty %}
+            {{ drupal_view('tag_related_tags', 'block_1') }}
+        {% endif %}
+    </div>
+
 
 </div>

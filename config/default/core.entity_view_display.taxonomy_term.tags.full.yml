@@ -3,15 +3,16 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.base_field_override.taxonomy_term.tags.description
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.tags.field_display_name
     - field.field.taxonomy_term.tags.field_iied_tid
     - field.field.taxonomy_term.tags.field_importance
     - field.field.taxonomy_term.tags.field_tag_type
     - field.field.taxonomy_term.tags.layout_builder__layout
+    - field.field.taxonomy_term.tags.quick_links
     - taxonomy.vocabulary.tags
     - views.view.taxonomy_all_display
-    - views.view.taxonomy_featured_display
   module:
     - layout_builder
     - layout_builder_restrictions
@@ -25,7 +26,7 @@ third_party_settings:
     allow_custom: true
     sections:
       -
-        layout_id: tw-container
+        layout_id: tw-1-2-col-grid
         layout_settings:
           label: ''
           context_mapping: {  }
@@ -38,19 +39,106 @@ third_party_settings:
           attributes: ''
           link_attribute: ''
           link_custom: ''
+          layout_builder_styles_style:
+            - ''
         components:
-          5d323bd3-4559-4605-b79a-32b419c1f4a2:
-            uuid: 5d323bd3-4559-4605-b79a-32b419c1f4a2
+          8297d518-f2fe-4e29-867d-bf7cb0465ccb:
+            uuid: 8297d518-f2fe-4e29-867d-bf7cb0465ccb
             region: first
             configuration:
-              id: 'views_block:taxonomy_featured_display-block_2'
-              label: ''
+              id: 'field_block:taxonomy_term:tags:description'
+              label: Description
               label_display: '0'
-              provider: views
-              context_mapping: {  }
-              views_label: ''
-              items_per_page: none
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: visually_hidden
+                settings: {  }
+                third_party_settings:
+                  ds:
+                    ft:
+                      id: expert
+                      settings:
+                        lb: ''
+                        lbw: false
+                        lbw-el: ''
+                        lbw-cl: ''
+                        lbw-at: ''
+                        lb-col: false
+                        ow: false
+                        ow-el: ''
+                        ow-cl: ''
+                        ow-at: ''
+                        ow-def-at: false
+                        ow-def-cl: false
+                        fis: true
+                        fis-el: div
+                        fis-cl: 'prose prose-lg mb-6'
+                        fis-at: ''
+                        fis-def-at: false
+                        fi: false
+                        fi-el: ''
+                        fi-cl: ''
+                        fi-at: ''
+                        fi-def-at: false
+                        prefix: ''
+                        suffix: ''
             weight: 0
+            additional: {  }
+          4b7f19fd-6a7c-4457-9c8c-1644ac822c21:
+            uuid: 4b7f19fd-6a7c-4457-9c8c-1644ac822c21
+            region: first
+            configuration:
+              id: 'field_block:taxonomy_term:tags:quick_links'
+              label: 'Quick links'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: link
+                label: visually_hidden
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: '0'
+                  target: '0'
+                third_party_settings:
+                  ds:
+                    ds_limit: ''
+                    ft:
+                      id: expert
+                      settings:
+                        lb: ''
+                        lbw: false
+                        lbw-el: ''
+                        lbw-cl: ''
+                        lbw-at: ''
+                        lb-col: false
+                        ow: false
+                        ow-el: ''
+                        ow-cl: ''
+                        ow-at: ''
+                        ow-def-at: false
+                        ow-def-cl: false
+                        fis: true
+                        fis-el: ul
+                        fis-cl: 'prose prose-lg mb-6 border-l border-iiedblue-500 pl-4'
+                        fis-at: ''
+                        fis-def-at: false
+                        fi: true
+                        fi-el: li
+                        fi-cl: ''
+                        fi-at: ''
+                        fi-def-at: false
+                        prefix: ''
+                        suffix: ''
+            weight: 1
             additional: {  }
         third_party_settings: {  }
       -
@@ -112,4 +200,5 @@ hidden:
   field_tag_type: true
   langcode: true
   layout_builder__layout: true
+  quick_links: true
   search_api_excerpt: true
