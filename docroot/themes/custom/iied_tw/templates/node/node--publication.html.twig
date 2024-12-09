@@ -118,7 +118,7 @@
             <div class="md:flex">
               <div class="flex flex-col items-center justify-center">
                 {% set size = content.field_media[0]["field_size"][0]["#markup"] %}
-                {% if size %}
+                {% if size and (node.field_media[0] | file_url) %}
                   {% include '@iied_tw/partials/_button.html.twig' with {'button_title':'Download', 'url': node.field_media[0] | file_url} %}
                    <div class="-mt-4">PDF ({{ size | format_bytes }})
                   </div>
