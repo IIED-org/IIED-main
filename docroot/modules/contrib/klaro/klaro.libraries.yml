@@ -1,0 +1,33 @@
+admin:
+  version: VERSION
+  css:
+    theme:
+      css/klaro.admin.css: {}
+
+library:
+  remote: https://github.com/klaro-org/klaro-js/
+  license:
+    name: BSD 3-Clause
+    url: https://github.com/klaro-org/klaro-js/blob/master/LICENSE
+    gpl-compatible: true
+  # Render early for screenreaders.
+  header: true
+  js:
+    /libraries/klaro-js/dist/klaro-no-css.js:
+      minified: true
+      preprocess: false
+  css:
+    base:
+      /libraries/klaro-js/dist/klaro.min.css: { minified: true }
+
+klaro:
+  js:
+    js/klaro.drupal.js: {}
+  css:
+    base:
+      css/klaro_extend.css: { minified: true }
+  dependencies:
+    - klaro/library
+    - core/drupal
+    - core/drupalSettings
+    - core/once
