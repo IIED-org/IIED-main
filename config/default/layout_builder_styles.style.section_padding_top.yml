@@ -1,10 +1,10 @@
-uuid: 292838e0-05e6-4884-9872-95964dbd2238
+uuid: 0fdbdbdc-22a8-4a8d-9aad-b0550e79fd0d
 langcode: en
 status: true
 dependencies: {  }
-id: no_overflow
-label: 'No overflow'
-classes: overflow-hidden
+id: section_padding_top
+label: 'Section padding top'
+classes: pt-12
 type: section
 group: spacing
 block_restrictions: {  }
@@ -14,4 +14,4 @@ layout_restrictions:
   - tw-container
   - tw-fluid
   - tw-1-2-col-thirds
-weight: 2
+weight: 1
