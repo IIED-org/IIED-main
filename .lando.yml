@@ -4,6 +4,8 @@ config:
   php: '8.3'
   webroot: docroot
   xdebug: debug
+env_file:
+  - .env
 services:
   appserver:
     config:
@@ -31,6 +33,7 @@ services:
     portforward: true
   node:
     type: node:16
+    scanner: false
     ssl: true
     # command: cd /app/docroot/themes/custom/iied_tw && npm run watch
     port: 80

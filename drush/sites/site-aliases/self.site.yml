@@ -1,0 +1,25 @@
+'*':
+  paths:
+    drush-script: /var/www/${env-name}.iied.org/gitroot/bin/drush
+    files: sites/default/files
+    private: ../private_files
+local:
+  root: /app/docroot
+  uri: https://iied-main.lndo.site
+  paths:
+    private: private_files
+dev:
+  host: kr3.iied.org
+  user: ${env.SSH_USER}
+  root: /var/www/dev.iied.org/gitroot/docroot
+  uri: dev.iied.org
+stage:
+  host: kr3.iied.org
+  user: ${env.SSH_USER}
+  root: /var/www/stage.iied.org/gitroot/docroot
+  uri: stage.iied.org
+prod:
+  host: kr1.iied.org
+  user: ${env.SSH_USER}
+  root: /var/www/prod.iied.org/gitroot/docroot
+  uri: www.iied.org
