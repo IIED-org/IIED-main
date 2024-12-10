@@ -4,6 +4,8 @@ config:
   php: '8.3'
   webroot: docroot
   xdebug: debug
+env_file:
+  - .env
 services:
   appserver:
     config:
