@@ -43,7 +43,7 @@ class BlockComponentRenderArraySubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     // Layout Builder also subscribes to this event to build the initial render
     // array. We use a higher weight so that we execute after it.
     $events[LayoutBuilderEvents::SECTION_COMPONENT_BUILD_RENDER_ARRAY] = [

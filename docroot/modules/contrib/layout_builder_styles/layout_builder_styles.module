@@ -122,6 +122,7 @@ function _layout_builder_styles_retrieve_by_type($type) {
   $query = \Drupal::entityTypeManager()
     ->getStorage('layout_builder_style')
     ->getQuery()
+    ->accessCheck(FALSE)
     ->condition('type', $type)
     ->sort('weight', 'ASC');
   $ids = $query->execute();
@@ -172,7 +173,7 @@ function _layout_builder_styles_add_style_selection_form_elements(array &$form, 
 
   // Import all groups, sorted by weight.
   $group_storage = \Drupal::entityTypeManager()->getStorage('layout_builder_style_group');
-  $query = $group_storage->getQuery();
+  $query = $group_storage->getQuery()->accessCheck(FALSE);
   $query->sort('weight', 'ASC');
   $groups = $query->execute();
 

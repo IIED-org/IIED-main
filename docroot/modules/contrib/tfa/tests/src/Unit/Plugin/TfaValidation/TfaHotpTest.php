@@ -11,7 +11,6 @@ use Drupal\Core\Site\Settings;
 use Drupal\encrypt\EncryptionProfileInterface;
 use Drupal\encrypt\EncryptionProfileManagerInterface;
 use Drupal\encrypt\EncryptServiceInterface;
-use Drupal\Tests\Core\Routing\MethodFilterTest;
 use Drupal\Tests\UnitTestCase;
 use Drupal\tfa\Plugin\TfaValidation\TfaHotpValidation;
 use Drupal\user\UserDataInterface;

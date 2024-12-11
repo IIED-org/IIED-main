@@ -231,3 +231,17 @@ function layout_builder_styles_update_8005() {
 function layout_builder_styles_update_8006() {
   \Drupal::service('router.builder')->rebuild();
 }
+
+/**
+ * Map old settings permission to new group permission (#3323459).
+ */
+function layout_builder_styles_update_8007() {
+  $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple();
+  foreach ($roles as $role) {
+    /** @var \Drupal\user\RoleInterface $role */
+    if ($role->hasPermission('administer layout builder styles configuration')) {
+      $role->revokePermission('administer layout builder styles configuration');
+      $role->save();
+    }
+  }
+}
