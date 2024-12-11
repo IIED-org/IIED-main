@@ -8,6 +8,7 @@ dependencies:
     - field.field.taxonomy_term.tags.field_importance
     - field.field.taxonomy_term.tags.field_tag_type
     - field.field.taxonomy_term.tags.layout_builder__layout
+    - field.field.taxonomy_term.tags.quick_links
     - taxonomy.vocabulary.tags
   module:
     - link
@@ -36,7 +37,7 @@ content:
     third_party_settings: {  }
   field_iied_tid:
     type: link_default
-    weight: 8
+    weight: 9
     region: content
     settings:
       placeholder_url: ''
@@ -44,19 +45,19 @@ content:
     third_party_settings: {  }
   field_importance:
     type: options_select
-    weight: 7
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
   field_tag_type:
     type: options_select
-    weight: 6
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 3
+    weight: 4
     region: content
     settings:
       include_locked: true
@@ -71,13 +72,21 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 4
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
+  quick_links:
+    type: link_default
+    weight: 3
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 5
+    weight: 6
     region: content
     settings:
       display_label: true

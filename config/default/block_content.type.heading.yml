@@ -1,0 +1,8 @@
+uuid: f216f0e2-edb6-4415-b6af-ba3450076ed0
+langcode: en
+status: true
+dependencies: {  }
+id: heading
+label: Heading
+revision: false
+description: 'For section headings'
