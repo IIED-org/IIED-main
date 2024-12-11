@@ -46,6 +46,7 @@ class FunctionCommentSniff implements Sniff
         'Bool'      => 'bool',
         'Int'       => 'int',
         'Integer'   => 'int',
+        // cspell:ignore TRUEFALSE
         'TRUEFALSE' => 'bool',
     ];
 
@@ -440,6 +441,7 @@ class FunctionCommentSniff implements Sniff
                         $comment .= ' '.$tokens[$i]['content'];
                         if ($indent < 3) {
                             $error = 'Throws comment indentation must be 3 spaces, found %s spaces';
+                            // cspell:ignore TrhowsCommentIndentation
                             $phpcsFile->addError($error, $i, 'TrhowsCommentIndentation', [$indent]);
                         }
                     }
@@ -456,7 +458,7 @@ class FunctionCommentSniff implements Sniff
                     return;
                 }
 
-                // Starts with a capital letter and ends with a fullstop.
+                // Starts with a capital letter and ends with a full stop.
                 $firstChar = $comment[0];
                 if (strtoupper($firstChar) !== $firstChar) {
                     $error = '@throws tag comment must start with a capital letter';
@@ -769,7 +771,7 @@ class FunctionCommentSniff implements Sniff
                     $content .= $param['var'];
                     $content .= str_repeat(' ', $param['var_space']);
                     // At this point there is no description expected in the
-                    // @param line so no need to append comment.
+                    // param line so no need to append comment.
                     $phpcsFile->fixer->replaceToken(($param['tag'] + 2), $content);
 
                     // Fix up the indent of additional comment lines.

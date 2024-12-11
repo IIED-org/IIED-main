@@ -32,13 +32,18 @@
  <rule ref="Drupal.Functions.FunctionDeclaration.SpaceBeforeParenthesis">
   <severity>0</severity>
  </rule>
- <!-- Silence mmethod name underscore warning which is coverd already in
+ <!-- Silence method name underscore warning which is covered already in
    Drupal.NamingConventions.ValidFunctionName.ScopeNotCamelCaps. -->
  <rule ref="Drupal.Methods.MethodDeclaration.Underscore">
   <severity>0</severity>
  </rule>
 
  <rule ref="Drupal.WhiteSpace.ScopeIndent">
+  <!-- Do not run this sniff on template files, as the indentation might follow
+  the HTML -->
+  <exclude-pattern>*.tpl.php</exclude-pattern>
+ </rule>
+ <rule ref="Drupal.WhiteSpace.ScopeClosingBrace">
   <!-- Do not run this sniff on template files, as the indentation might follow
   the HTML -->
   <exclude-pattern>*.tpl.php</exclude-pattern>
@@ -116,7 +121,6 @@
  <rule ref="PSR2.Namespaces.UseDeclaration" />
 
  <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator" />
- <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses" />
  <rule ref="SlevomatCodingStandard.PHP.ShortList" />
  <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
   <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing"/>
@@ -126,6 +130,7 @@
    <property name="spacesCountAroundEqualsSign" value="0"/>
   </properties>
  </rule>
+ <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue" />
 
  <rule ref="Squiz.Arrays.ArrayDeclaration" />
  <!-- Disable some error messages that we do not want. -->

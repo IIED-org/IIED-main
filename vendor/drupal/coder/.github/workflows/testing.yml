@@ -62,6 +62,12 @@ jobs:
         if: ${{ matrix.extra-tests == '1' }}
         run: ./vendor/bin/phpstan analyse
 
+      - name: Run Cspell
+        if: ${{ matrix.extra-tests == '1' }}
+        uses: streetsidesoftware/cspell-action@v6
+        with:
+          incremental_files_only: false
+
       - name: Checkout Drupal core
         if: ${{ matrix.extra-tests == '1' }}
         uses: actions/checkout@v3
