@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\tfa\Commands;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\tfa\TfaUserDataTrait;
 use Drupal\user\UserDataInterface;
 use Drush\Exceptions\UserAbortException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -44,7 +44,7 @@ final class TfaTokenManagement {
   /**
    * The logger service for {tfa} channel.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   * @var \Psr\Log\LoggerInterface
    */
   protected $logger;
 
@@ -57,10 +57,10 @@ final class TfaTokenManagement {
    *   The user data object to store user information.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager .
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   * @param \Psr\Log\LoggerInterface $logger
    *   The logger.channel.tfa service.
    */
-  public function __construct(MailManagerInterface $mail_manager, UserDataInterface $user_data, EntityTypeManagerInterface $entity_type_manager, LoggerChannelInterface $logger) {
+  public function __construct(MailManagerInterface $mail_manager, UserDataInterface $user_data, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger) {
     $this->mailManager = $mail_manager;
     $this->userData = $user_data;
     $this->entityTypeManager = $entity_type_manager;

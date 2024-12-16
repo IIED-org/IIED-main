@@ -6,5 +6,7 @@ parameters:
 	excludePaths:
 		- services_tfa/*
 		- src/Controller/TfaUserControllerDeprecated.php
+	scanDirectories:
+		- ../../../../vendor/drush/drush/src-symfony-compatibility
 includes:
 	- phpstan-baseline.neon

@@ -4,6 +4,7 @@ namespace Drupal\tfa\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -46,9 +47,15 @@ class TfaUserLoginBlock extends UserLoginBlock {
    *   The route match.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
+   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
+   *   The form builder.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, ConfigFactoryInterface $config_factory) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $route_match);
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, ConfigFactoryInterface $config_factory, ?FormBuilderInterface $form_builder = NULL) {
+    if ($form_builder == NULL) {
+      // @phpstan-ignore-next-line
+      $form_builder = \Drupal::service('form_builder');
+    }
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $route_match, $form_builder);
     $this->configFactory = $config_factory;
   }
 
@@ -61,7 +68,8 @@ class TfaUserLoginBlock extends UserLoginBlock {
       $plugin_id,
       $plugin_definition,
       $container->get('current_route_match'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('form_builder')
     );
   }
 

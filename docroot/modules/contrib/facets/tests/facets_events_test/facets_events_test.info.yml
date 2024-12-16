@@ -4,7 +4,7 @@ description: 'Facets events test'
 package: 'Testing'
 hidden: true
 
-# Information added by Drupal.org packaging script on 2024-08-07
-version: '2.0.8'
+# Information added by Drupal.org packaging script on 2024-10-09
+version: '2.0.9'
 project: 'facets'
-datestamp: 1723040929
+datestamp: 1728458766

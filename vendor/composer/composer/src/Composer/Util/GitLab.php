@@ -65,14 +65,14 @@ class GitLab
         }
 
         // if available use token from git config
-        if (0 === $this->process->execute('git config gitlab.accesstoken', $output)) {
+        if (0 === $this->process->execute(['git', 'config', 'gitlab.accesstoken'], $output)) {
             $this->io->setAuthentication($originUrl, trim($output), 'oauth2');
 
             return true;
         }
 
         // if available use deploy token from git config
-        if (0 === $this->process->execute('git config gitlab.deploytoken.user', $tokenUser) && 0 === $this->process->execute('git config gitlab.deploytoken.token', $tokenPassword)) {
+        if (0 === $this->process->execute(['git', 'config', 'gitlab.deploytoken.user'], $tokenUser) && 0 === $this->process->execute(['git', 'config', 'gitlab.deploytoken.token'], $tokenPassword)) {
             $this->io->setAuthentication($originUrl, trim($tokenUser), trim($tokenPassword));
 
             return true;
@@ -126,8 +126,8 @@ class GitLab
         }
 
         $localAuthConfig = $this->config->getLocalAuthConfigSource();
-        $personalAccessTokenLink = $scheme.'://'.$originUrl.'/-/profile/personal_access_tokens';
-        $revokeLink = $scheme.'://'.$originUrl.'/-/profile/applications';
+        $personalAccessTokenLink = $scheme.'://'.$originUrl.'/-/user_settings/personal_access_tokens';
+        $revokeLink = $scheme.'://'.$originUrl.'/-/user_settings/applications';
         $this->io->writeError(sprintf('A token will be created and stored in "%s", your password will never be stored', ($localAuthConfig !== null ? $localAuthConfig->getName() . ' OR ' : '') . $this->config->getAuthConfigSource()->getName()));
         $this->io->writeError('To revoke access to this token you can visit:');
         $this->io->writeError($revokeLink);
@@ -312,7 +312,7 @@ class GitLab
 
         $token = $this->httpDownloader->get($scheme.'://'.$originUrl.'/oauth/token', $options)->decodeJson();
         $this->io->writeError('GitLab token successfully refreshed', true, IOInterface::VERY_VERBOSE);
-        $this->io->writeError('To revoke access to this token you can visit '.$scheme.'://'.$originUrl.'/-/profile/applications', true, IOInterface::VERY_VERBOSE);
+        $this->io->writeError('To revoke access to this token you can visit '.$scheme.'://'.$originUrl.'/-/user_settings/applications', true, IOInterface::VERY_VERBOSE);
 
         return $token;
     }

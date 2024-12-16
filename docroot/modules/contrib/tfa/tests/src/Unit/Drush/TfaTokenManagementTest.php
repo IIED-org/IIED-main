@@ -120,7 +120,7 @@ final class TfaTokenManagementTest extends UnitTestCase {
   /**
    * Generator for the tesetResetUserTfaData().
    */
-  public function providerTestResetUserTfaData(): \Generator {
+  public static function providerTestResetUserTfaData(): \Generator {
     yield 'Successful reset by username' => [
       function (self $context) {
         $context->userStorageMock

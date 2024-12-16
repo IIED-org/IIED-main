@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\views_bulk_edit\Kernel;
 
-use Drupal\Tests\views_bulk_operations\Kernel\ViewsBulkOperationsKernelTestBase;
 use Drupal\node\NodeInterface;
+use Drupal\Tests\views_bulk_operations\Kernel\ViewsBulkOperationsKernelTestBase;
 
 /**
  * @coversDefaultClass \Drupal\views_bulk_edit\Plugin\Action\ModifyEntityValues
@@ -14,7 +14,7 @@ class ViewsBulkEditActionTest extends ViewsBulkOperationsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'views_bulk_edit',
   ];
 
@@ -62,11 +62,11 @@ class ViewsBulkEditActionTest extends ViewsBulkOperationsKernelTestBase {
     $vbo_data['list'] = $this->getResultsList($vbo_data, $selection);
 
     // Execute the action.
-    $results = $this->executeAction($vbo_data);
+    $this->executeAction($vbo_data);
 
     $nodeStorage = $this->container->get('entity_type.manager')->getStorage('node');
 
-    $statuses = [];
+    $status = [];
 
     foreach ($this->testNodesData as $id => $lang_data) {
       $node = $nodeStorage->load($id);

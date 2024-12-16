@@ -11,6 +11,7 @@ use Drupal\facets_summary\Processor\BuildProcessorInterface;
 use Drupal\facets_summary\Processor\ProcessorInterface;
 use Drupal\facets_summary\Processor\ProcessorPluginManager;
 use Drupal\facets_summary\FacetsSummaryInterface;
+use Drupal\Component\Utility\Xss;
 
 /**
  * The facet summary manager.
@@ -137,6 +138,14 @@ class DefaultFacetsSummaryManager {
         throw new InvalidProcessorException("The processor {$processor->getPluginDefinition()['id']} has a build definition but doesn't implement the required BuildProcessorInterface interface");
       }
       $build = $processor->build($facets_summary, $build, $facets);
+    }
+
+    if (isset($build["#items"])) {
+      foreach ($build["#items"] as &$item) {
+        if (isset($item["#title"]) and is_string($item["#title"])) {
+          $item["#title"] = Xss::filter($item["#title"]);
+        }
+      }
     }
 
     return $build;

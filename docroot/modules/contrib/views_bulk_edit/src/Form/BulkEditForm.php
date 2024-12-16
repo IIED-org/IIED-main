@@ -115,16 +115,20 @@ class BulkEditForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-
     $this->submitConfigurationForm($form, $form_state);
-
     foreach ($this->getBulkEditEntityData() as $entity_type_id => $bundle_entities) {
-      foreach ($bundle_entities as $bundle => $entities) {
-
+      foreach ($bundle_entities as $bundle => $entities_with_langcode) {
         $entities = $this->entityTypeManager->getStorage($entity_type_id)
-          ->loadMultiple(array_keys($entities));
+          ->loadMultiple(array_keys($entities_with_langcode));
         foreach ($entities as $entity) {
-          $this->execute($entity);
+          // Load the correct languages.
+          $langcodes = $entities_with_langcode[$entity->id()];
+          foreach ($langcodes as $langcode) {
+            if ($entity->hasTranslation($langcode)) {
+              $entity = $entity->getTranslation($langcode);
+            }
+            $this->execute($entity);
+          }
         }
       }
     }

@@ -153,8 +153,15 @@ class LayoutBuilderStyleForm extends EntityForm implements ContainerInjectionInt
     $blockDefinitions = $this->blockManager->getDefinitions();
     $blockDefinitions = $this->blockManager->getGroupedDefinitions($blockDefinitions);
 
+    // As per CR - https://www.drupal.org/node/3320855
+    // changed the definition from custom to content.
     // Remove individual reusable blocks from list.
-    unset($blockDefinitions['Custom']);
+    if (version_compare(\Drupal::VERSION, '10.1.0', '>=')) {
+      unset($blockDefinitions['Content block']);
+    }
+    else {
+      unset($blockDefinitions['Custom']);
+    }
 
     if (isset($blockDefinitions['Inline blocks'])) {
       // Relabel the inline block type listing as generic "Custom block types".

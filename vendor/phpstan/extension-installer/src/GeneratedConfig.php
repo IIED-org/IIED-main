@@ -21,7 +21,7 @@ final class GeneratedConfig
         0 => 'phpstan/rules.neon',
       ),
     ),
-    'version' => '2.7.9',
+    'version' => '2.8.4',
     'phpstanVersionConstraint' => NULL,
   ),
   'composer/pcre' => 
@@ -35,7 +35,7 @@ final class GeneratedConfig
         0 => 'extension.neon',
       ),
     ),
-    'version' => '3.3.1',
+    'version' => '3.3.2',
     'phpstanVersionConstraint' => NULL,
   ),
   'mglaman/phpstan-drupal' => 
@@ -50,7 +50,7 @@ final class GeneratedConfig
         1 => 'rules.neon',
       ),
     ),
-    'version' => '1.2.12',
+    'version' => '1.3.1',
     'phpstanVersionConstraint' => '>=1.10.56.0-dev, <2.0.0.0-dev',
   ),
   'phpstan/phpstan-deprecation-rules' => 
@@ -79,8 +79,8 @@ final class GeneratedConfig
         1 => 'rules.neon',
       ),
     ),
-    'version' => '1.4.0',
-    'phpstanVersionConstraint' => '>=1.11.0.0-dev, <2.0.0.0-dev',
+    'version' => '1.4.1',
+    'phpstanVersionConstraint' => '>=1.12.0.0-dev, <2.0.0.0-dev',
   ),
 );
 

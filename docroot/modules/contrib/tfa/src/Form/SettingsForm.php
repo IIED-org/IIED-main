@@ -3,6 +3,7 @@
 namespace Drupal\tfa\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -19,6 +20,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * The admin configuration page.
+ *
+ * @phpcs:disable DrupalPractice.Objects.GlobalDrupal.GlobalDrupal
+ *    PHPStan protects against this sniff.
  */
 class SettingsForm extends ConfigFormBase {
 
@@ -90,9 +94,15 @@ class SettingsForm extends ConfigFormBase {
    *   Encrypt profile manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The Entity Type Manager service.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
+   *   The typed config manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, TfaLoginPluginManager $tfa_login, TfaSendPluginManager $tfa_send, TfaValidationPluginManager $tfa_validation, TfaSetupPluginManager $tfa_setup, UserDataInterface $user_data, EncryptionProfileManagerInterface $encryption_profile_manager, ?EntityTypeManagerInterface $entity_type_manager = NULL) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, TfaLoginPluginManager $tfa_login, TfaSendPluginManager $tfa_send, TfaValidationPluginManager $tfa_validation, TfaSetupPluginManager $tfa_setup, UserDataInterface $user_data, EncryptionProfileManagerInterface $encryption_profile_manager, ?EntityTypeManagerInterface $entity_type_manager = NULL, ?TypedConfigManagerInterface $typed_config_manager = NULL) {
+    if ($typed_config_manager == NULL) {
+      // @phpstan-ignore-next-line
+      $typed_config_manager = \Drupal::service('config.typed');
+    }
+    parent::__construct($config_factory, $typed_config_manager);
     $this->tfaLogin = $tfa_login;
     $this->tfaSend = $tfa_send;
     $this->tfaSetup = $tfa_setup;
@@ -122,7 +132,8 @@ class SettingsForm extends ConfigFormBase {
       $container->get('plugin.manager.tfa.setup'),
       $container->get('user.data'),
       $container->get('encrypt.encryption_profile.manager'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('config.typed')
     );
   }
 

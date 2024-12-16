@@ -191,7 +191,7 @@ class ClassMapGenerator
             foreach ($classes as $class) {
                 if (!$this->classMap->hasClass($class)) {
                     $this->classMap->addClass($class, $filePath);
-                } elseif ($filePath !== $this->classMap->getClassPath($class) && !Preg::isMatch('{/(test|fixture|example|stub)s?/}i', strtr($this->classMap->getClassPath($class).' '.$filePath, '\\', '/'))) {
+                } elseif ($filePath !== $this->classMap->getClassPath($class)) {
                     $this->classMap->addAmbiguousClass($class, $filePath);
                 }
             }
@@ -207,6 +207,8 @@ class ClassMapGenerator
      * @param  'psr-0'|'psr-4'          $namespaceType
      * @param  string                   $basePath      root directory of given autoload mapping
      * @return array<int, class-string> valid classes
+     *
+     * @throws \InvalidArgumentException When namespaceType is neither psr-0 nor psr-4
      */
     private function filterByNamespace(array $classes, string $filePath, string $baseNamespace, string $namespaceType, string $basePath): array
     {

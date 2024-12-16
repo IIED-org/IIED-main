@@ -18,6 +18,13 @@ abstract class TfaUserControllerBase extends UserController {
   use TfaLoginTrait;
 
   /**
+   * The current session.
+   *
+   * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+   */
+  protected $session;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -27,6 +34,7 @@ abstract class TfaUserControllerBase extends UserController {
     $instance->tfaLoginManager = $container->get('plugin.manager.tfa.login');
     $instance->tfaSettings = $container->get('config.factory')->get('tfa.settings');
     $instance->privateTempStore = $container->get('tempstore.private')->get('tfa');
+    $instance->session = $container->get('session');
 
     return $instance;
   }
@@ -110,6 +118,9 @@ abstract class TfaUserControllerBase extends UserController {
         // The one time login has been validated.
         // Check if TFA is set up for this user.
         if ($tfa_ready) {
+          // Regenerate the session ID to prevent session fixation attacks.
+          $this->session->migrate();
+
           // TFA is set up.
           // Let the user's password be changed without the current password
           // check.

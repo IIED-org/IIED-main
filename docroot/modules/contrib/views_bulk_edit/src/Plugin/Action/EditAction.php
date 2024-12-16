@@ -51,7 +51,14 @@ class EditAction extends EntityActionBase implements ContainerFactoryPluginInter
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   Current user.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, PrivateTempStoreFactory $temp_store_factory, AccountInterface $current_user) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    EntityTypeManagerInterface $entity_type_manager,
+    PrivateTempStoreFactory $temp_store_factory,
+    AccountInterface $current_user,
+  ) {
     $this->currentUser = $current_user;
     $this->tempStore = $temp_store_factory->get('entity_edit_multiple');
 
