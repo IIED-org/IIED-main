@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+ Update to add odd / even classes
+#}
+{% if title %}
+  <p>{{ title }}</p>
+{% endif %}
+
+      <div
+        class="flex items-center w-full gap-2 my-6 mr-2"
+      >
+
+{% for row in rows %}
+  {%
+    set row_classes = [
+      default_row_class ? 'views-row', 'text-base',
+    ]
+  %}
+  <div{{ row.attributes.addClass(row_classes) }}>
+    {{- row.content -}}
+  </div>
+
+      {% if not loop.last %}
+      <div aria-hidden="true" class="w-px h-4 bg-gray-300"></div>
+    {% endif %}
+    
+{% endfor %}
+</div>

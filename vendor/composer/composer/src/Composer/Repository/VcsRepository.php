@@ -66,7 +66,7 @@ class VcsRepository extends ArrayRepository implements ConfigurableRepositoryInt
     private $driver;
     /** @var ?VersionCacheInterface */
     private $versionCache;
-    /** @var string[] */
+    /** @var list<string> */
     private $emptyReferences = [];
     /** @var array<'tags'|'branches', array<string, TransportException>> */
     private $versionTransportExceptions = [];
@@ -165,7 +165,7 @@ class VcsRepository extends ArrayRepository implements ConfigurableRepositoryInt
     }
 
     /**
-     * @return string[]
+     * @return list<string>
      */
     public function getEmptyReferences(): array
     {
@@ -217,11 +217,6 @@ class VcsRepository extends ArrayRepository implements ConfigurableRepositoryInt
         foreach ($driver->getTags() as $tag => $identifier) {
             $tag = (string) $tag;
             $msg = 'Reading composer.json of <info>' . ($this->packageName ?: $this->url) . '</info> (<comment>' . $tag . '</comment>)';
-            if ($isVeryVerbose) {
-                $this->io->writeError($msg);
-            } elseif ($isVerbose) {
-                $this->io->overwriteError($msg, false);
-            }
 
             // strip the release- prefix from tags if present
             $tag = str_replace('release-', '', $tag);
@@ -243,6 +238,12 @@ class VcsRepository extends ArrayRepository implements ConfigurableRepositoryInt
                     $this->io->writeError('<warning>Skipped tag '.$tag.', invalid tag name</warning>');
                 }
                 continue;
+            }
+
+            if ($isVeryVerbose) {
+                $this->io->writeError($msg);
+            } elseif ($isVerbose) {
+                $this->io->overwriteError($msg, false);
             }
 
             try {

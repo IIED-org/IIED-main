@@ -11,8 +11,7 @@
         "drupal/encrypt": "~3.0"
     },
     "require-dev": {
-    "drupal/services": "^4 || ^5",
-        "drush/drush": "^10 || ^11 || ^12",
+        "drush/drush": "^10 || ^11 || ^12 || ^13",
         "mglaman/phpstan-drupal": "^1.1",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.9",

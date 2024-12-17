@@ -164,7 +164,7 @@ class TfaSetupForm extends FormBase {
     $plugin = $this->findPlugin($method);
     $setup_plugin_id = $plugin['setupPluginId'];
     if (!$this->tfaSetup->hasDefinition($setup_plugin_id)) {
-      throw new NotFoundHttpException($this->t('Plugin @plugin not found.', ['@plugin' => $method]));
+      throw new NotFoundHttpException("Plugin {$method} not found.");
     }
     /** @var \Drupal\user\Entity\User $account */
     $account = $this->userStorage->load($this->currentUser()->id());

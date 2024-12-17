@@ -8,6 +8,7 @@ dependencies:
     - field.field.taxonomy_term.tags.field_importance
     - field.field.taxonomy_term.tags.field_tag_type
     - field.field.taxonomy_term.tags.layout_builder__layout
+    - field.field.taxonomy_term.tags.quick_links
     - taxonomy.vocabulary.tags
   module:
     - link
@@ -58,6 +59,18 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 1
+    region: content
+  quick_links:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 5
     region: content
 hidden:
   langcode: true

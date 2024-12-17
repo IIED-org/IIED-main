@@ -3,21 +3,21 @@
 namespace Drupal\views_bulk_edit\Plugin\Action;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\views\Views;
 use Drupal\views_bulk_edit\Form\BulkEditFormTrait;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsPreconfigurationInterface;
+use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessorInterface;
+use Drupal\views_bulk_operations\Service\ViewsBulkOperationsViewDataInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\views\Views;
-use Drupal\views_bulk_operations\Service\ViewsbulkOperationsViewData;
-use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Database\Connection;
 
 /**
  * Modify entity field values.
@@ -35,14 +35,14 @@ class ModifyEntityValues extends ViewsBulkOperationsActionBase implements Contai
   /**
    * VBO views data service.
    *
-   * @var \Drupal\views_bulk_operations\Service\ViewsbulkOperationsViewData
+   * @var \Drupal\views_bulk_operations\Service\ViewsBulkOperationsViewDataInterface
    */
   protected $viewDataService;
 
   /**
    * VBO action processor.
    *
-   * @var \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor
+   * @var \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessorInterface
    */
   protected $actionProcessor;
 
@@ -69,9 +69,9 @@ class ModifyEntityValues extends ViewsBulkOperationsActionBase implements Contai
    *   The plugin Id.
    * @param mixed $plugin_definition
    *   Plugin definition.
-   * @param \Drupal\views_bulk_operations\Service\ViewsbulkOperationsViewData $viewDataService
+   * @param \Drupal\views_bulk_operations\Service\ViewsBulkOperationsViewDataInterface $viewDataService
    *   The VBO view data service.
-   * @param \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor $actionProcessor
+   * @param \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessorInterface $actionProcessor
    *   The VBO action processor.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
@@ -92,15 +92,15 @@ class ModifyEntityValues extends ViewsBulkOperationsActionBase implements Contai
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    ViewsbulkOperationsViewData $viewDataService,
-    ViewsBulkOperationsActionProcessor $actionProcessor,
+    ViewsBulkOperationsViewDataInterface $viewDataService,
+    ViewsBulkOperationsActionProcessorInterface $actionProcessor,
     EntityTypeManagerInterface $entityTypeManager,
     EntityTypeBundleInfoInterface $bundleInfo,
     Connection $database,
     TimeInterface $time,
     AccountInterface $currentUser,
     EntityRepositoryInterface $entityRepository,
-    EntityFieldManagerInterface $entityFieldManager
+    EntityFieldManagerInterface $entityFieldManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->viewDataService = $viewDataService;
@@ -141,7 +141,7 @@ class ModifyEntityValues extends ViewsBulkOperationsActionBase implements Contai
     $form['get_bundles_from_results'] = [
       '#title' => $this->t('Get entity bundles from results'),
       '#type' => 'checkbox',
-      '#default_value' => isset($values['get_bundles_from_results']) ? $values['get_bundles_from_results'] : TRUE,
+      '#default_value' => $values['get_bundles_from_results'] ?? TRUE,
       '#description' => $this->t('NOTE: If performance issues are observed when using "All results in this view" selector in case of large result sets, uncheck this and use a bundle filter (node type, taxonomy vocabulary etc.) on the view.'),
     ];
     return $form;
@@ -174,7 +174,7 @@ class ModifyEntityValues extends ViewsBulkOperationsActionBase implements Contai
     if (!empty($this->context['list'])) {
       $query_data = [];
       foreach ($this->context['list'] as $item) {
-        list(,, $entity_type_id, $id,) = $item;
+        [,, $entity_type_id, $id] = $item;
         $query_data[$entity_type_id][$id] = $id;
       }
       foreach ($query_data as $entity_type_id => $entity_ids) {

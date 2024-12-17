@@ -117,9 +117,14 @@ phpunit:
   before_script:
     # Install and enable PCOV.
     - echo -e "\e[0Ksection_start:`date +%s`:php_ext_install[collapsed=true]\r\e[0KInstall PHP Extensions"
-    - apt-get update && apt-get install -qy --no-install-recommends $PHPIZE_DEPS
+    - |
+      PCOV_INSTALLED=$(/usr/local/bin/pecl list | /bin/grep -i pcov | /usr/bin/wc -l) && true;
+      if [ "$PCOV_INSTALLED" == "0" ]; then
+        apt-get update && apt-get install -qy --no-install-recommends $PHPIZE_DEPS
+        pecl install pcov
+      fi
     - echo -e '[pcov]\npcov.directory=.' > /usr/local/etc/php/conf.d/pcov.ini
-    - pecl install pcov && docker-php-ext-enable pcov
+    - docker-php-ext-enable pcov
     - echo -e "\e[0Ksection_end:`date +%s`:php_ext_install\r\e[0K"
   after_script:
     # Ensure paths for coverage are git-relative.

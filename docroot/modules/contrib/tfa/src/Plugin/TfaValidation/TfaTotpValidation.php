@@ -125,7 +125,7 @@ class TfaTotpValidation extends TfaBasePlugin implements TfaValidationInterface,
     $this->time = $time;
 
     if (!$lock) {
-      @trigger_error('Constructing ' . __CLASS__ . ' without the lock service parameter is deprecated in TFA 8.x-1.3 and will be required before TFA 2.0.0.', E_USER_DEPRECATED);
+      @trigger_error('Constructing ' . __CLASS__ . ' without the lock service parameter is deprecated in tfa:8.x-1.3 and will be required before tfa:2.0.0. See https://www.drupal.org/node/3396512', E_USER_DEPRECATED);
       $lock = \Drupal::service('lock');
     }
     $this->lock = $lock;

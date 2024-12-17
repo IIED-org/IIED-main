@@ -5,7 +5,7 @@ namespace Drupal\Tests\views_bulk_edit\Functional;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityFormMode;
 use Drupal\field\FieldStorageConfigInterface;
-use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
+use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 use Drupal\Tests\node\Functional\Views\NodeTestBase;
 
 /**
@@ -15,7 +15,7 @@ use Drupal\Tests\node\Functional\Views\NodeTestBase;
  */
 class ViewsBulkEditActionTest extends NodeTestBase {
 
-  use EntityReferenceTestTrait;
+  use EntityReferenceFieldCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -57,9 +57,9 @@ class ViewsBulkEditActionTest extends NodeTestBase {
   }
 
   /**
-   * Test VBE from the UI using the node module.
+   * Tests bulk editing of nodes, using the "replace" method.
    */
-  public function testViewsBulkEdit() {
+  public function testViewsBulkEditReplace() {
     $storage = $this->container->get('entity_type.manager')->getStorage('node');
     $page1 = $this->createNode();
     $page2 = $this->createNode();
@@ -80,6 +80,7 @@ class ViewsBulkEditActionTest extends NodeTestBase {
 
     $this->submitForm([
       'node[page][_field_selector][title]' => '1',
+      'node[page][title_change_method]' => 'replace',
       'node[page][title][0][value]' => $random_title,
     ], 'Confirm');
 
@@ -96,9 +97,9 @@ class ViewsBulkEditActionTest extends NodeTestBase {
   }
 
   /**
-   * Test editing an article and a page bundle.
+   * Test editing an article and a page bundle using the "replace" method.
    */
-  public function testBulkEditMultipleBundles() {
+  public function testBulkEditMultipleBundlesReplace() {
     $page1 = $this->createNode();
     $article1 = $this->createNode(['type' => 'article']);
     $this->drupalGet('test-node-bulk-form');
@@ -112,8 +113,10 @@ class ViewsBulkEditActionTest extends NodeTestBase {
     $this->submitForm([
       'node[page][_field_selector][title]' => '1',
       'node[page][title][0][value]' => $random_title,
+      'node[page][title_change_method]' => 'replace',
       'node[article][_field_selector][title]' => '1',
       'node[article][title][0][value]' => $random_title,
+      'node[article][title_change_method]' => 'replace',
     ], 'Confirm');
 
     // Assert property and field is changed.
@@ -126,6 +129,11 @@ class ViewsBulkEditActionTest extends NodeTestBase {
     $this->assertEquals($random_title, $nodes[0]->getTitle());
     $this->assertEquals($random_title, $nodes[1]->getTitle());
   }
+
+  /**
+   * @todo The bulk edit form was only tested, using the "replace" method. Also
+   * test the "append" method.
+   */
 
   /**
    * Values that are not selected or displayed are never changed.
@@ -164,11 +172,12 @@ class ViewsBulkEditActionTest extends NodeTestBase {
 
     $storage = $this->container->get('entity_type.manager')->getStorage('node');
 
-    $latestes_revision = $page1->getRevisionId();
+    $latest_revision = $page1->getRevisionId();
 
     $this->submitForm([
       'node[page][_field_selector][title]' => '1',
       'node[page][title][0][value]' => $random_title,
+      'node[page][title_change_method]' => 'replace',
       'node[page][revision_information][revision]' => FALSE,
     ], 'Confirm');
 
@@ -176,7 +185,7 @@ class ViewsBulkEditActionTest extends NodeTestBase {
     $page1 = $storage->load($page1->id());
     $this->assertEquals($random_title, $page1->getTitle());
     // No new revision was created.
-    $this->assertEquals($latestes_revision, $page1->getRevisionId());
+    $this->assertEquals($latest_revision, $page1->getRevisionId());
 
     $this->drupalGet('test-node-bulk-form');
     $this->submitForm([
@@ -189,6 +198,7 @@ class ViewsBulkEditActionTest extends NodeTestBase {
     $this->submitForm([
       'node[page][_field_selector][title]' => '1',
       'node[page][title][0][value]' => $random_title,
+      'node[page][title_change_method]' => 'replace',
       'node[page][revision_information][revision]' => TRUE,
       'node[page][revision_information][revision_log]' => 'My new revision',
     ], 'Confirm');
@@ -197,7 +207,7 @@ class ViewsBulkEditActionTest extends NodeTestBase {
     $page1 = $storage->load($page1->id());
 
     $this->assertEquals($random_title, $page1->getTitle());
-    $this->assertNotEquals($latestes_revision, $page1->getRevisionId());
+    $this->assertNotEquals($latest_revision, $page1->getRevisionId());
     $this->assertEquals('My new revision', $page1->getRevisionLogMessage());
   }
 
@@ -304,7 +314,7 @@ class ViewsBulkEditActionTest extends NodeTestBase {
 
     $storage->resetCache();
     $page1 = $storage->load($page1->id());
-    $this->assertEquals($page_title . ' ' . $random_title, $page1->getTitle());
+    $this->assertEquals($page_title . $random_title, $page1->getTitle());
     $this->assertEquals([
       ['target_id' => $article1->id()],
       ['target_id' => $article2->id()],

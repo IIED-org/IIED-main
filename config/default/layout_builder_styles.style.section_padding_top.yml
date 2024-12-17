@@ -1,0 +1,17 @@
+uuid: 0fdbdbdc-22a8-4a8d-9aad-b0550e79fd0d
+langcode: en
+status: true
+dependencies: {  }
+id: section_padding_top
+label: 'Section padding top'
+classes: pt-12
+type: section
+group: spacing
+block_restrictions: {  }
+layout_restrictions:
+  - tw-1-2-col-grid
+  - tw-1-2-4-col-grid
+  - tw-container
+  - tw-fluid
+  - tw-1-2-col-thirds
+weight: 1

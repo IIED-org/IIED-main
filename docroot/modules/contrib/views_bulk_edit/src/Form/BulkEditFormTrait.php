@@ -6,10 +6,10 @@ use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\RevisionableEntityBundleInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Plugin\Context\Context;
 use Drupal\Core\Plugin\Context\ContextDefinition;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 
 /**
@@ -276,7 +276,7 @@ trait BulkEditFormTrait {
       $selector['_field_selector'][$key] = [
         '#type' => 'checkbox',
         '#title' => $element['#title'],
-        '#weight' => isset($form[$key]['#weight']) ? $form[$key]['#weight'] : 0,
+        '#weight' => $form[$key]['#weight'] ?? 0,
         '#tree' => TRUE,
       ];
 
@@ -289,7 +289,6 @@ trait BulkEditFormTrait {
 
       // Add options.
       $options = [];
-      $options['replace'] = $this->t('Replace the current value');
       if (in_array($definitions[$key]->getType(), [
         'string',
         'string_long',
@@ -301,6 +300,7 @@ trait BulkEditFormTrait {
       if ($definitions[$key]->getFieldStorageDefinition()->getCardinality() !== 1) {
         $options['new'] = $this->t('Add a new value to the multivalue field');
       }
+      $options['replace'] = $this->t('Replace the current value');
 
       $option_keys = array_keys($options);
       $form["{$key}_change_method"] = [
@@ -424,7 +424,8 @@ trait BulkEditFormTrait {
     $bundle = $entity->bundle();
     $result = $this->t('No values changed');
 
-    // Get the language context so we load the edit revision with the same language
+    // Get the language context so we load the edit revision with
+    // the same language.
     $entityLangcode = $entity->language()->getId();
     $languageContext = $this->getLanguageContexts($entityLangcode);
 
@@ -445,7 +446,7 @@ trait BulkEditFormTrait {
             case 'append':
               $current_value = $entity->{$field}->getValue();
               if ($current_value) {
-                $value[0]['value'] = $current_value[0]['value'] . ' ' . $value[0]['value'];
+                $value[0]['value'] = $current_value[0]['value'] . $value[0]['value'];
               }
               break;
           }

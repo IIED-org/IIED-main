@@ -150,6 +150,12 @@ class LayoutBuilderStyleRestrictionsTest extends BrowserTestBase {
   public function testBlockRestrictions() {
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
+    $block_type_action_label = 'Create custom block';
+    // As per CR - https://www.drupal.org/node/3320855
+    // changed the action label from custom to content.
+    if (version_compare(\Drupal::VERSION, '10.1.0', '>=')) {
+      $block_type_action_label = 'Create content block';
+    }
 
     $block_node = $this->createNode([
       'type' => 'bundle_with_section_field',
@@ -291,7 +297,7 @@ class LayoutBuilderStyleRestrictionsTest extends BrowserTestBase {
     $this->drupalGet($block_node->toUrl());
     $page->clickLink('Layout');
     $page->clickLink('Add block');
-    $page->clickLink('Create custom block');
+    $page->clickLink($block_type_action_label);
     $page->clickLink('Basic');
     // Basic block can use "Unrestricted" and "Basic only".
     $assert_session->elementExists('css', 'select#edit-layout-builder-style-group option[value="basic_only"]');
@@ -303,7 +309,7 @@ class LayoutBuilderStyleRestrictionsTest extends BrowserTestBase {
     $this->drupalGet($block_node->toUrl());
     $page->clickLink('Layout');
     $page->clickLink('Add block');
-    $page->clickLink('Create custom block');
+    $page->clickLink($block_type_action_label);
     $page->clickLink('Alternate');
     // Alternate block can use "Unrestricted" and "Alternate only".
     $assert_session->elementNotExists('css', 'select#edit-layout-builder-style-group option[value="basic_only"]');

@@ -337,6 +337,7 @@ display:
         exposed_form: false
         relationships: false
         arguments: false
+        header: false
         footer: false
       relationships:
         field_project:
@@ -359,7 +360,7 @@ display:
           required: false
       use_ajax: true
       display_description: ''
-      footer:
+      header:
         result:
           id: result
           table: views
@@ -369,7 +370,8 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: '@total publications'
+          content: '<p class="mb-4">@total publications</p>'
+      footer: {  }
       display_extenders: {  }
       block_description: 'Collection publications'
     cache_metadata:

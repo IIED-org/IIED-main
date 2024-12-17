@@ -25,6 +25,13 @@ class TfaLoginForm extends UserLoginForm {
   protected $destination;
 
   /**
+   * The current session.
+   *
+   * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+   */
+  protected $session;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -38,6 +45,7 @@ class TfaLoginForm extends UserLoginForm {
 
     $instance->destination = $container->get('redirect.destination');
     $instance->privateTempStore = $container->get('tempstore.private')->get('tfa');
+    $instance->session = $container->get('session');
 
     return $instance;
   }
@@ -65,6 +73,9 @@ class TfaLoginForm extends UserLoginForm {
     if (empty($uid = $form_state->get('uid'))) {
       return;
     }
+
+    // Regenerate the session ID to prevent against session fixation attacks.
+    $this->session->migrate();
 
     // Similar to tfa_user_login() but not required to force user logout.
     /** @var \Drupal\user\UserInterface $user */

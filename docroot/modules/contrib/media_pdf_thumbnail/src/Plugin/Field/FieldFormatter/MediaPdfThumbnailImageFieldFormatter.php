@@ -213,6 +213,7 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
     $fileEntity = $this->mediaPdfThumbnailImageManager->getFileEntityFromField($entity, $settings[static::PDF_FILE_FIELD_SETTING]);
     $handlePdfGeneration = $fileEntity instanceof FileInterface && $fileEntity->getMimeType() == 'application/pdf';
 
+
     if ($handlePdfGeneration) {
       // Getting thumbnail info.
       if (!empty($settings[static::IMAGE_USE_CRON])) {
@@ -230,12 +231,22 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
         return $element;
       }
     }
-    // If pdf is not handled.
+  
+    // If pdf is not available.
     else {
-      $fieldInfos = [
-        'image_id' => $this->mediaPdfThumbnailImageManager->getGenericThumbnail(),
-        'pdf_uri' => $fileEntity->getFileUri(),
-      ];
+      if (is_null($fileEntity)) { 
+        $fieldInfos = [
+          'image_id' => $this->mediaPdfThumbnailImageManager->getGenericThumbnail(),
+          'pdf_uri' => null,
+        ];
+      }
+    // If pdf is not handled.
+      else { 
+        $fieldInfos = [
+          'image_id' => $this->mediaPdfThumbnailImageManager->getGenericThumbnail(),
+          'pdf_uri' => $fileEntity->getFileUri(),
+        ];
+      }
     }
 
     // Rendering image.

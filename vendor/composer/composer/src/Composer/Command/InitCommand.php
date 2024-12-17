@@ -21,11 +21,13 @@ use Composer\Pcre\Preg;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\PlatformRepository;
 use Composer\Repository\RepositoryFactory;
+use Composer\Spdx\SpdxLicenses;
 use Composer\Util\Filesystem;
 use Composer\Util\Silencer;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Composer\Console\Input\InputOption;
+use Composer\Util\ProcessExecutor;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -398,6 +400,10 @@ EOT
             'License [<comment>'.$license.'</comment>]: ',
             $license
         );
+        $spdx = new SpdxLicenses();
+        if (null !== $license && !$spdx->validate($license) && $license !== 'proprietary') {
+            throw new \InvalidArgumentException('Invalid license provided: '.$license.'. Only SPDX license identifiers (https://spdx.org/licenses/) or "proprietary" are accepted.');
+        }
         $input->setOption('license', $license);
 
         $io->writeError(['', 'Define your dependencies.', '']);
@@ -530,15 +536,11 @@ EOT
             return $this->gitConfig;
         }
 
-        $finder = new ExecutableFinder();
-        $gitBin = $finder->find('git');
+        $process = new ProcessExecutor($this->getIO());
 
-        $cmd = new Process([$gitBin, 'config', '-l']);
-        $cmd->run();
-
-        if ($cmd->isSuccessful()) {
+        if (0 === $process->execute(['git', 'config', '-l'], $output)) {
             $this->gitConfig = [];
-            Preg::matchAllStrictGroups('{^([^=]+)=(.*)$}m', $cmd->getOutput(), $matches);
+            Preg::matchAllStrictGroups('{^([^=]+)=(.*)$}m', $output, $matches);
             foreach ($matches[1] as $key => $match) {
                 $this->gitConfig[$match] = $matches[2][$key];
             }

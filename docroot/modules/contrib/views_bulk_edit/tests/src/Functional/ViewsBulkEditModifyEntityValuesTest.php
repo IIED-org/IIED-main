@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\views_bulk_edit\Functional;
 
-use Drupal\Tests\BrowserTestBase;
 use Drupal\node\NodeInterface;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * @coversDefaultClass \Drupal\views_bulk_edit\Plugin\Action\ModifyEntityValues
@@ -26,6 +26,13 @@ class ViewsBulkEditModifyEntityValuesTest extends BrowserTestBase {
     'views_bulk_operations_test',
     'views_bulk_edit',
   ];
+
+  /**
+   * The testing nodes.
+   *
+   * @var array
+   */
+  protected $testNodes;
 
   /**
    * {@inheritdoc}
@@ -116,7 +123,7 @@ class ViewsBulkEditModifyEntityValuesTest extends BrowserTestBase {
       'views_bulk_operations_bulk_form[2]' => TRUE,
     ];
     $this->drupalGet('views-bulk-operations-test-advanced');
-    $this->submitForm($edit, t('Apply to selected items'));
+    $this->submitForm($edit, 'Apply to selected items');
 
     // Post the configuration form: modify status and text value field on the
     // article content type.
@@ -128,7 +135,7 @@ class ViewsBulkEditModifyEntityValuesTest extends BrowserTestBase {
       'node[page][status][value]' => FALSE,
       'node[page][_field_selector][text]' => TRUE,
       'node[page][text][0][value]' => $expected_text_value,
-    ], t('Apply'));
+    ], 'Apply');
 
     // Assert if field values have been changed on the selected entities
     // and unchanged otherwise.

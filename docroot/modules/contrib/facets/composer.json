@@ -12,7 +12,7 @@
   "support": {
     "issues": "https://www.drupal.org/project/issues/facets",
     "irc": "irc://irc.freenode.org/drupal-search-api",
-    "source": "git://git.drupal.org/project/facets.git"
+    "source": "https://git.drupalcode.org/project/facets"
   },
   "license": "GPL-2.0+",
   "require-dev": {
