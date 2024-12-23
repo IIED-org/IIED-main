@@ -3,16 +3,16 @@ langcode: en
 status: true
 dependencies:
   module:
+    - context
     - node
     - system
-    - user
 id: iied_publications_container
 label: 'IIED main container'
 weight: 0
 tag_container_ids:
   - GTM-5QNCJ5
 advanced_settings:
-  consent_mode: false
+  consent_mode: true
   gtm:
     GTM-5QNCJ5:
       data_layer: dataLayer
@@ -40,20 +40,101 @@ conditions:
     response_codes: |-
       403
       404
-  user_role:
-    id: user_role
-    negate: false
-    context_mapping:
-      user: '@user.current_user_context:current_user'
-    roles:
-      anonymous: anonymous
-      authenticated: authenticated
   'entity_bundle:node':
     id: 'entity_bundle:node'
     negate: true
     context_mapping:
       node: '@node.node_route_context:node'
     bundles: {  }
+  view_inclusion:
+    id: view_inclusion
+    negate: false
+    view_inclusion:
+      view-acquia_search-page: view-acquia_search-page
+      view-archive-page_1: view-archive-page_1
+      view-authors-page_1: view-authors-page_1
+      view-authors-page_2: view-authors-page_2
+      view-authors-page_3: view-authors-page_3
+      view-authors_and_organisations-page_1: view-authors_and_organisations-page_1
+      view-authors_and_organisations-page_2: view-authors_and_organisations-page_2
+      view-authors_and_organisations-page_3: view-authors_and_organisations-page_3
+      view-block_content-page_1: view-block_content-page_1
+      view-comment-page_1: view-comment-page_1
+      view-comment-page_published: view-comment-page_published
+      view-comment-page_unapproved: view-comment-page_unapproved
+      view-components-page_3: view-components-page_3
+      view-content-page_1: view-content-page_1
+      view-content_recent-page_1: view-content_recent-page_1
+      view-content_recent-page_2: view-content_recent-page_2
+      view-content_recent-page_3: view-content_recent-page_3
+      view-content_recent-page_4: view-content_recent-page_4
+      view-content_recent-page_5: view-content_recent-page_5
+      view-contributors-page_1: view-contributors-page_1
+      view-control_comments-page_1: view-control_comments-page_1
+      view-control_content-page_1: view-control_content-page_1
+      view-control_content-page_2: view-control_content-page_2
+      view-control_terms-page_1: view-control_terms-page_1
+      view-control_users-page_1: view-control_users-page_1
+      view-duplicate_of_authors_editors-page_1: view-duplicate_of_authors_editors-page_1
+      view-files-page_1: view-files-page_1
+      view-files-page_2: view-files-page_2
+      view-frontpage-page_1: view-frontpage-page_1
+      view-gender_audit_content-page_1: view-gender_audit_content-page_1
+      view-gender_audit_content-page_2: view-gender_audit_content-page_2
+      view-gender_audit_content-page_3: view-gender_audit_content-page_3
+      view-gender_audit_content-page_4: view-gender_audit_content-page_4
+      view-gender_audit_content-page_5: view-gender_audit_content-page_5
+      view-gender_audit_terms-page_1: view-gender_audit_terms-page_1
+      view-gender_audit_terms-page_2: view-gender_audit_terms-page_2
+      view-gender_audit_terms-page_3: view-gender_audit_terms-page_3
+      view-glossary-page_1: view-glossary-page_1
+      view-maint-page_1: view-maint-page_1
+      view-maint-page_10: view-maint-page_10
+      view-maint-page_11: view-maint-page_11
+      view-maint-page_12: view-maint-page_12
+      view-maint-page_13: view-maint-page_13
+      view-maint-page_2: view-maint-page_2
+      view-maint-page_3: view-maint-page_3
+      view-maint-page_4: view-maint-page_4
+      view-maint-page_5: view-maint-page_5
+      view-maint-page_6: view-maint-page_6
+      view-maint-page_7: view-maint-page_7
+      view-maint-page_8: view-maint-page_8
+      view-maint-page_9: view-maint-page_9
+      view-manage_lists-page_1: view-manage_lists-page_1
+      view-manage_terms-page_1: view-manage_terms-page_1
+      view-manage_terms-page_2: view-manage_terms-page_2
+      view-manage_terms-page_3: view-manage_terms-page_3
+      view-manage_terms-page_4: view-manage_terms-page_4
+      view-media_library-page: view-media_library-page
+      view-media_library-widget: view-media_library-widget
+      view-media_library-widget_table: view-media_library-widget_table
+      view-organisation_locations-page_2: view-organisation_locations-page_2
+      view-partner_reports_content-page_1: view-partner_reports_content-page_1
+      view-partner_reports_content-page_2: view-partner_reports_content-page_2
+      view-partner_reports_content-page_3: view-partner_reports_content-page_3
+      view-partner_reports_content-page_4: view-partner_reports_content-page_4
+      view-partner_reports_terms-page_1: view-partner_reports_terms-page_1
+      view-partner_reports_terms-page_2: view-partner_reports_terms-page_2
+      view-pdf_image_entity-list: view-pdf_image_entity-list
+      view-popular_tags-page_1: view-popular_tags-page_1
+      view-popular_tags-page_2: view-popular_tags-page_2
+      view-popular_tags-page_3: view-popular_tags-page_3
+      view-redirect-page_1: view-redirect-page_1
+      view-search-page_1: view-search-page_1
+      view-search-page_2: view-search-page_2
+      view-taxonomy_term-page_1: view-taxonomy_term-page_1
+      view-term_featured_draggable-page_1: view-term_featured_draggable-page_1
+      view-test-page_1: view-test-page_1
+      view-user_admin_people-page_1: view-user_admin_people-page_1
+      view-views_json_source-example_1: view-views_json_source-example_1
+      view-views_json_source-example_2: view-views_json_source-example_2
+      view-views_json_source-example_3: view-views_json_source-example_3
+  http_status_code:
+    id: http_status_code
+    negate: false
+    status_codes:
+      200: 200
 events:
   generate_lead:
     value: ''

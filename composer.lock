@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "806cfbeb7ab2cd241315728c626c95cd",
+    "content-hash": "7652e4dac2065117a53a491d860bd180",
     "packages": [
         {
             "name": "acquia/http-hmac-php",
@@ -4690,6 +4690,65 @@
                 "forum": "https://drupal.stackexchange.com/search?q=eu+cookie+compliance",
                 "issues": "https://www.drupal.org/project/issues/eu_cookie_compliance?version=8.x",
                 "slack": "https://app.slack.com/client/T06GX3JTS/C012XBTH81E"
+            }
+        },
+        {
+            "name": "drupal/eu_cookie_compliance_gtm",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/eu_cookie_compliance_gtm.git",
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/eu_cookie_compliance_gtm-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "f02bfd13976a51fe47cf63d06bfd1a29ab6bf35b"
+            },
+            "require": {
+                "drupal/core": "^9.3 || ^10",
+                "drupal/eu_cookie_compliance": "^1.24",
+                "drupal/google_tag": "^1.6 || ^2.0",
+                "php": ">=5.4"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.0",
+                    "datestamp": "1691746157",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "daften",
+                    "homepage": "https://www.drupal.org/user/176274"
+                },
+                {
+                    "name": "Nick_vh",
+                    "homepage": "https://www.drupal.org/user/122682"
+                },
+                {
+                    "name": "nielsaers",
+                    "homepage": "https://www.drupal.org/user/752444"
+                },
+                {
+                    "name": "reszli",
+                    "homepage": "https://www.drupal.org/user/710368"
+                }
+            ],
+            "description": "Extends EU Cookie Compliance module and allows pushing custom data to GTM for each cookie category.",
+            "homepage": "https://www.drupal.org/project/eu_cookie_compliance_gtm",
+            "support": {
+                "source": "https://git.drupalcode.org/project/eu_cookie_compliance_gtm"
             }
         },
         {

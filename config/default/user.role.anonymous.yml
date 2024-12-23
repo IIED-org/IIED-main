@@ -4,11 +4,10 @@ status: true
 dependencies:
   config:
     - search_api_autocomplete.search.acquia_search
-    - search_api_autocomplete.search.search
   module:
     - comment
     - contact
-    - eu_cookie_compliance
+    - klaro
     - media
     - media_pdf_thumbnail
     - search_api_autocomplete
@@ -24,9 +23,8 @@ permissions:
   - 'access comments'
   - 'access content'
   - 'access site-wide contact form'
-  - 'display eu cookie compliance popup'
   - 'export tablefield'
+  - 'use klaro'
   - 'use search_api_autocomplete for acquia_search'
-  - 'use search_api_autocomplete for search'
   - 'view media'
   - 'view published pdf image entity entities'

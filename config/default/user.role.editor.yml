@@ -23,7 +23,6 @@ dependencies:
   module:
     - comment
     - content_translation
-    - eu_cookie_compliance
     - file
     - filter
     - form_mode_control
@@ -74,7 +73,6 @@ permissions:
   - 'delete any hidden_handbrake content'
   - 'delete own files'
   - 'delete own hidden_handbrake content'
-  - 'display eu cookie compliance popup'
   - 'edit any document media'
   - 'edit any hidden_handbrake content'
   - 'edit any image media'

@@ -1,0 +1,35 @@
+uuid: 804605ca-2ba5-459b-beae-7b8d16e22005
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: YU-m0m2InQbh0ItutgOeQLS095yTOegQof72qSnyv7A
+id: gtm
+label: 'Google Tag Manager'
+description: 'Manages and deploys analytics and marketing tags.'
+default: false
+purposes:
+  - advertising
+  - analytics
+cookies:
+  -
+    regex: '^_ga(_.*)?'
+    path: ''
+    domain: ''
+  -
+    regex: '^_gcl(.*)'
+    path: ''
+    domain: ''
+required: false
+opt_out: false
+only_once: false
+info_url: 'https://marketingplatform.google.com/intl/de/about/tag-manager/'
+privacy_policy_url: 'https://policies.google.com/privacy'
+javascripts:
+  - modules/contrib/google_tag/js/gtm.js
+  - 'https://www.googletagmanager.com/*'
+callback_code: "if(typeof gtag !== 'undefined') {\r\n if(consent) {\r\n gtag('consent', 'update', {\r\n  'analytics_storage': 'granted',\r\n  'ad_storage': 'granted',\r\n  'ad_user_data': 'granted',\r\n  'ad_personalization': 'granted'\r\n  })\r\n}\r\nelse {\r\n gtag('consent', 'update', {\r\n  'analytics_storage': 'denied',\r\n  'ad_storage': 'denied',\r\n  'ad_user_data': 'denied',\r\n  'ad_personalization': 'denied'\r\n  })\r\n}\r\n}"
+wrapper_identifier: {  }
+attachments:
+  - gtm
+weight: -8

@@ -1,0 +1,25 @@
+uuid: a62a43b5-34a9-422d-a200-70939b819650
+langcode: en
+status: false
+dependencies: {  }
+_core:
+  default_config_hash: A1lBPDkQCr_3X51o6--KwCiGVuX8g3KETZ1QsImLWXM
+id: instagram
+label: Instagram
+description: 'Instagram is a social media platform by Meta Platforms, Inc (USA).'
+default: false
+purposes:
+  - external_content
+cookies: {  }
+required: false
+opt_out: false
+only_once: false
+info_url: 'https://about.instagram.com/'
+privacy_policy_url: 'https://privacycenter.instagram.com/policy'
+javascripts:
+  - www.instagram.com/embed.js
+callback_code: ''
+wrapper_identifier:
+  - instagram-media
+attachments: {  }
+weight: -3

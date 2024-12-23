@@ -86,6 +86,7 @@ module:
   jquery_ui_touch_punch: 0
   jsonapi: 0
   key: 0
+  klaro: 0
   language: 0
   language_switcher_extended: 0
   layout_builder: 0
@@ -211,7 +212,6 @@ module:
   login_redirect_per_role: 1000
   standard: 1000
   readonlymode: 9999
-  eu_cookie_compliance: 10000
 theme:
   claro: 0
   stable9: 0

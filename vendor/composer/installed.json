@@ -6591,6 +6591,68 @@
             "install-path": "../../docroot/modules/contrib/eu_cookie_compliance"
         },
         {
+            "name": "drupal/eu_cookie_compliance_gtm",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/eu_cookie_compliance_gtm.git",
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/eu_cookie_compliance_gtm-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "f02bfd13976a51fe47cf63d06bfd1a29ab6bf35b"
+            },
+            "require": {
+                "drupal/core": "^9.3 || ^10",
+                "drupal/eu_cookie_compliance": "^1.24",
+                "drupal/google_tag": "^1.6 || ^2.0",
+                "php": ">=5.4"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.0",
+                    "datestamp": "1691746157",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "daften",
+                    "homepage": "https://www.drupal.org/user/176274"
+                },
+                {
+                    "name": "Nick_vh",
+                    "homepage": "https://www.drupal.org/user/122682"
+                },
+                {
+                    "name": "nielsaers",
+                    "homepage": "https://www.drupal.org/user/752444"
+                },
+                {
+                    "name": "reszli",
+                    "homepage": "https://www.drupal.org/user/710368"
+                }
+            ],
+            "description": "Extends EU Cookie Compliance module and allows pushing custom data to GTM for each cookie category.",
+            "homepage": "https://www.drupal.org/project/eu_cookie_compliance_gtm",
+            "support": {
+                "source": "https://git.drupalcode.org/project/eu_cookie_compliance_gtm"
+            },
+            "install-path": "../../docroot/modules/contrib/eu_cookie_compliance_gtm"
+        },
+        {
             "name": "drupal/facets",
             "version": "2.0.9",
             "version_normalized": "2.0.9.0",
