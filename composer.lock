@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ac3892f05707f367c7e20d4444baf49",
+    "content-hash": "7652e4dac2065117a53a491d860bd180",
     "packages": [
         {
             "name": "acquia/http-hmac-php",
@@ -6979,58 +6979,6 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/layout_paragraphs",
                 "issues": "https://www.drupal.org/project/issues/layout_paragraphs"
-            }
-        },
-        {
-            "name": "drupal/link_attributes",
-            "version": "2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/link_attributes.git",
-                "reference": "2.1.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/link_attributes-2.1.1.zip",
-                "reference": "2.1.1",
-                "shasum": "fc71571fc41adeda6b39ccefd3c8e21955c0d96f"
-            },
-            "require": {
-                "drupal/core": "^9 || ^10 || ^11",
-                "php": ">=8.0"
-            },
-            "require-dev": {
-                "drupal/linkit": "~6 || ~7"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.1.1",
-                    "datestamp": "1721366572",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "larowlan",
-                    "homepage": "https://www.drupal.org/user/395439"
-                }
-            ],
-            "description": "Provides a widget to allow settings of link attributes for menu links.",
-            "homepage": "https://www.drupal.org/project/link_attributes",
-            "keywords": [
-                "Drupal"
-            ],
-            "support": {
-                "source": "https://git.drupalcode.org/project/link_attributes",
-                "issues": "https://www.drupal.org/project/issues/link_attributes"
             }
         },
         {

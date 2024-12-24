@@ -800,7 +800,8 @@ $settings['config_sync_directory'] = $app_root . '/../config/default/';
 
 // See https://docs.acquia.com/acquia-search/multiple-cores/override/
 
-function acquia_search_override_example_20210427() {
+function acquia_search_override_example_20210427()
+{
   $solr_core_mapping = [
     // Acquia environments.
     'prod' => 'AGHX-142716.prod.irforum',
@@ -853,7 +854,6 @@ $config['image.settings']['suppress_itok_output'] = TRUE;
  */
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
   include $app_root . '/' . $site_path . '/settings.local.php';
-}
-elseif (getenv('LANDO_INFO') !== FALSE && file_exists($app_root . '/' . $site_path . '/settings.lando.php')) {
+} elseif (getenv('LANDO_INFO') !== FALSE && file_exists($app_root . '/' . $site_path . '/settings.lando.php')) {
   include $app_root . '/' . $site_path . '/settings.lando.php';
 }

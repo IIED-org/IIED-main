@@ -97,8 +97,6 @@ module:
   layout_discovery: 0
   layout_paragraphs: 0
   link: 0
-  link_attributes: 0
-  link_attributes_menu_link_content: 0
   locale: 0
   login_destination: 0
   masquerade: 0

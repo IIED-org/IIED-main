@@ -124,7 +124,6 @@
         "drupal/layout_builder_styles": "^2.1",
         "drupal/layout_builder_tabs": "^1.0@beta",
         "drupal/layout_paragraphs": "^2.0",
-        "drupal/link_attributes": "^2.1",
         "drupal/linkchecker": "^2.0@alpha",
         "drupal/login_destination": "^2.0",
         "drupal/login_redirect_per_role": "^1.9",
