@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - context
-    - node
     - system
 id: iied_publications_container
 label: 'IIED main container'
@@ -40,12 +39,6 @@ conditions:
     response_codes: |-
       403
       404
-  'entity_bundle:node':
-    id: 'entity_bundle:node'
-    negate: true
-    context_mapping:
-      node: '@node.node_route_context:node'
-    bundles: {  }
   view_inclusion:
     id: view_inclusion
     negate: false
@@ -130,11 +123,6 @@ conditions:
       view-views_json_source-example_1: view-views_json_source-example_1
       view-views_json_source-example_2: view-views_json_source-example_2
       view-views_json_source-example_3: view-views_json_source-example_3
-  http_status_code:
-    id: http_status_code
-    negate: false
-    status_codes:
-      200: 200
 events:
   generate_lead:
     value: ''

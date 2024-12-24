@@ -11,7 +11,7 @@ block_unknown: false
 log_unknown_resources: false
 block_unknown_label: 'Unknown services'
 block_unknown_description: 'Allow loading of unknown external resources'
-show_toggle_button: true
+show_toggle_button: false
 show_close_button: true
 deletable_cookie_domains: {  }
 exclude_urls: {  }
@@ -25,7 +25,7 @@ library:
   cookie_name: klaro
   cookie_expires_after_days: 1
   cookie_domain: ''
-  group_by_purpose: false
+  group_by_purpose: true
   accept_all: true
   hide_decline_all: false
   hide_learn_more: false
