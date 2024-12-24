@@ -20,6 +20,10 @@ cookies:
     regex: '^_gcl(.*)'
     path: ''
     domain: ''
+  -
+    regex: '^_ga(.*)'
+    path: ''
+    domain: ''
 required: false
 opt_out: false
 only_once: false
