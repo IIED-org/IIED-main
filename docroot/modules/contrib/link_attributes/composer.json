@@ -1,0 +1,21 @@
+{
+  "name": "drupal/link_attributes",
+  "type": "drupal-module",
+  "description": "Provides a widget to allow settings of link attributes for menu links.",
+  "keywords": [
+    "Drupal"
+  ],
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://www.drupal.org/project/link_attributes",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/link_attributes",
+    "source": "https://git.drupalcode.org/project/link_attributes"
+  },
+  "require": {
+      "php": ">=8.0"
+  },
+  "require-dev": {
+    "drupal/linkit": "~6 || ~7"
+  }
+}

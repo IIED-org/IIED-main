@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Link attributes module.
+ */
+
+/**
+ * Update.
+ *
+ * Link Attribute's "menu_link_content" support is now a submodule.
+ * You may uninstall 'link_attributes_menu_link_content' if you do not use this
+ * functionality or have compatibility issue with other menu attribute modules.
+ */
+function link_attributes_update_9001() {
+  // Enable the link_attributes_menu_link_content submodule:
+  \Drupal::service('module_installer')->install(['link_attributes_menu_link_content']);
+}

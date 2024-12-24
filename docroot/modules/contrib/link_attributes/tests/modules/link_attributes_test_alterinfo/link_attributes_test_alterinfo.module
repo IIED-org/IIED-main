@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Link attributes test module.
+ */
+
+/**
+ * Implements hook_link_attributes_plugin_alter().
+ */
+function link_attributes_test_alterinfo_link_attributes_plugin_alter(array &$definitions) {
+
+  $state = \Drupal::state();
+  $id = 'link_attributes_test_alterinfo.hook_link_attributes_plugin_alter';
+
+  // Alter only if our state flag is set.
+  switch ($state->get($id)) {
+    case 'type_one':
+      link_attributes_test_alterinfo_alter_type_one($definitions);
+      break;
+
+    case 'type_two':
+      link_attributes_test_alterinfo_alter_type_two($definitions);
+      break;
+  }
+
+}
+
+/**
+ * Link alter for testing type one.
+ */
+function link_attributes_test_alterinfo_alter_type_one(array &$definitions) {
+  $definitions['class']['title'] = t('Link style');
+  $definitions['class']['description'] = t('Select how the link should be displayed.');
+  $definitions['class']['type'] = 'select';
+  $definitions['class']['options'] = [
+    'link' => 'Link',
+    'button' => 'Button',
+  ];
+  $definitions['class']['default_value'] = 'button';
+  $definitions['target']['default_value'] = '_blank';
+}
+
+/**
+ * Link alter for testing type two.
+ */
+function link_attributes_test_alterinfo_alter_type_two(array &$definitions) {
+  $definitions['class']['required'] = TRUE;
+}

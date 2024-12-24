@@ -1,0 +1,12 @@
+name: Link attributes
+type: module
+description: Provides a widget to allow settings of link attributes for link fields.
+core_version_requirement: ^9 || ^10 || ^11
+php: 8.0
+dependencies:
+  - drupal:link
+
+# Information added by Drupal.org packaging script on 2024-07-19
+version: '2.1.1'
+project: 'link_attributes'
+datestamp: 1721366574
