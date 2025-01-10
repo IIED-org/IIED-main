@@ -6,10 +6,9 @@ _core:
   default_config_hash: YU-m0m2InQbh0ItutgOeQLS095yTOegQof72qSnyv7A
 id: gtm
 label: 'Google Tag Manager'
-description: 'Manages and deploys analytics and marketing tags.'
+description: 'Manages and deploys analytics tags.'
 default: false
 purposes:
-  - advertising
   - analytics
 cookies:
   -
