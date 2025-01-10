@@ -5,5 +5,5 @@ dependencies: {  }
 _core:
   default_config_hash: DaAAmHlWMVahC2MmhRKQN8Lun9hBPT6LR6PCjkCEikI
 id: analytics
-label: Analytics
+label: 'Analytics and engagement monitoring'
 weight: 1
