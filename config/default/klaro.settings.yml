@@ -7,7 +7,7 @@ auto_decorate_js_alter: true
 auto_decorate_page_attachments: true
 auto_decorate_preprocess_field: true
 get_entity_thumbnail: true
-block_unknown: true
+block_unknown: false
 log_unknown_resources: false
 block_unknown_label: 'Unknown services'
 block_unknown_description: 'Allow loading of unknown external resources'
