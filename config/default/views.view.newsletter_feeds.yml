@@ -3,6 +3,17 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.node.body
+    - field.storage.node.field_content
+    - field.storage.node.field_standfirst
+    - node.type.article
+    - node.type.blog
+    - node.type.event
+    - node.type.impact_story
+    - node.type.long_read
+    - node.type.news
+    - node.type.project
+    - node.type.publication
     - taxonomy.vocabulary.theme
   content:
     - 'taxonomy_term:theme:05306ec4-511e-4011-afd1-f8c727b1345c'
@@ -18,8 +29,10 @@ dependencies:
     - 'taxonomy_term:theme:d7d32ebb-7699-4f9f-81fa-202b26eef6cc'
     - 'taxonomy_term:theme:fab991c3-6163-466d-b7a9-9879169e48b9'
   module:
+    - entity_reference_revisions
     - node
     - taxonomy
+    - text
     - user
 id: newsletter_feeds
 label: 'Newsletter feeds'
@@ -50,18 +63,36 @@ display:
           exclude: false
           alter:
             alter_text: false
+            text: ''
             make_link: false
+            path: ''
             absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
             word_boundary: false
             ellipsis: false
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
+            preserve_tags: ''
             html: false
           element_type: ''
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -72,7 +103,386 @@ display:
           click_sort_column: value
           type: string
           settings:
-            link_to_entity: true
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: created
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: timestamp
+          settings:
+            date_format: custom
+            custom_date_format: 'D, d M y H:i:s O'
+            timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
+              description: ''
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_standfirst:
+          id: field_standfirst
+          table: node__field_standfirst
+          field: field_standfirst
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: text_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_content:
+          id: field_content
+          table: node__field_content
+          field: field_content
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_revisions_entity_view
+          settings:
+            view_mode: default
+          group_column: ''
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        body:
+          id: body
+          table: node__body
+          field: body
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: true
+            text: "{{ field_standfirst }}\r\n{{ field_content }}\r\n{{ body }}"
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: text_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        nothing:
+          id: nothing
+          table: views
+          field: nothing
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: custom
+          label: ''
+          exclude: false
+          alter:
+            alter_text: true
+            text: IIED
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: false
+        nid:
+          id: nid
+          table: node_field_data
+          field: nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: nid
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: true
+            text: 'node/{{ nid }}'
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_integer
+          settings:
+            thousand_separator: ''
+            prefix_suffix: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -84,24 +494,10 @@ display:
           separator: ', '
           field_api_classes: false
       pager:
-        type: mini
+        type: some
         options:
           offset: 0
-          pagination_heading_level: h4
-          items_per_page: 10
-          total_pages: null
-          id: 0
-          tags:
-            next: ››
-            previous: ‹‹
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
+          items_per_page: 25
       exposed_form:
         type: basic
         options:
@@ -200,6 +596,55 @@ display:
           hierarchy: false
           limit: true
           error_message: true
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          operator: in
+          value:
+            article: article
+            event: event
+            impact_story: impact_story
+            blog: blog
+            long_read: long_read
+            news: news
+            project: project
+            publication: publication
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: default
         options:
@@ -231,10 +676,12 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - url.query_args
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.body'
+        - 'config:field.storage.node.field_content'
+        - 'config:field.storage.node.field_standfirst'
   feed_1:
     id: feed_1
     display_title: 'Finance feed'
@@ -242,9 +689,27 @@ display:
     position: 1
     display_options:
       title: 'Finance, law and governance'
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 25
+      style:
+        type: rss
+        options:
+          grouping: {  }
+          description: 'IIED newsletter feed: Finance, law and governance'
       row:
-        type: node_rss
-        options: {  }
+        type: rss_fields
+        options:
+          title_field: title
+          link_field: nid
+          description_field: body
+          creator_field: nothing
+          date_field: created
+          guid_field_options:
+            guid_field: nid
+            guid_field_is_permalink: true
       defaults:
         title: false
         sitename_title: false
@@ -259,7 +724,10 @@ display:
         - 'languages:language_interface'
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.body'
+        - 'config:field.storage.node.field_content'
+        - 'config:field.storage.node.field_standfirst'
   feed_2:
     id: feed_2
     display_title: 'Cities feed'
@@ -267,6 +735,11 @@ display:
     position: 1
     display_options:
       title: 'Cities and people'
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 25
       filters:
         status:
           id: status
@@ -329,9 +802,22 @@ display:
         operator: AND
         groups:
           1: AND
+      style:
+        type: rss
+        options:
+          grouping: {  }
+          description: 'IIED newsletter feed: Cities and people'
       row:
-        type: node_rss
-        options: {  }
+        type: rss_fields
+        options:
+          title_field: title
+          link_field: nid
+          description_field: body
+          creator_field: nothing
+          date_field: created
+          guid_field_options:
+            guid_field: nid
+            guid_field_is_permalink: true
       defaults:
         title: false
         filters: false
@@ -348,7 +834,10 @@ display:
         - 'languages:language_interface'
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.body'
+        - 'config:field.storage.node.field_content'
+        - 'config:field.storage.node.field_standfirst'
   feed_3:
     id: feed_3
     display_title: 'Food feed'
@@ -356,6 +845,11 @@ display:
     position: 1
     display_options:
       title: 'Food systems'
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 25
       filters:
         status:
           id: status
@@ -419,9 +913,22 @@ display:
         operator: AND
         groups:
           1: AND
+      style:
+        type: rss
+        options:
+          grouping: {  }
+          description: 'IIED newsletter feed: Food systems'
       row:
-        type: node_rss
-        options: {  }
+        type: rss_fields
+        options:
+          title_field: title
+          link_field: nid
+          description_field: body
+          creator_field: nothing
+          date_field: created
+          guid_field_options:
+            guid_field: nid
+            guid_field_is_permalink: true
       defaults:
         title: false
         filters: false
@@ -438,7 +945,10 @@ display:
         - 'languages:language_interface'
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.body'
+        - 'config:field.storage.node.field_content'
+        - 'config:field.storage.node.field_standfirst'
   feed_4:
     id: feed_4
     display_title: 'Climate feed'
@@ -446,6 +956,11 @@ display:
     position: 1
     display_options:
       title: 'Climate resilience'
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 25
       filters:
         status:
           id: status
@@ -508,9 +1023,22 @@ display:
         operator: AND
         groups:
           1: AND
+      style:
+        type: rss
+        options:
+          grouping: {  }
+          description: 'IIED newsletter feed: Climate resilience'
       row:
-        type: node_rss
-        options: {  }
+        type: rss_fields
+        options:
+          title_field: title
+          link_field: nid
+          description_field: body
+          creator_field: nothing
+          date_field: created
+          guid_field_options:
+            guid_field: nid
+            guid_field_is_permalink: true
       defaults:
         title: false
         filters: false
@@ -527,7 +1055,10 @@ display:
         - 'languages:language_interface'
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.body'
+        - 'config:field.storage.node.field_content'
+        - 'config:field.storage.node.field_standfirst'
   feed_5:
     id: feed_5
     display_title: 'Nature feed'
@@ -535,6 +1066,11 @@ display:
     position: 1
     display_options:
       title: 'Nature and biodiversity'
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 25
       filters:
         status:
           id: status
@@ -599,9 +1135,22 @@ display:
         operator: AND
         groups:
           1: AND
+      style:
+        type: rss
+        options:
+          uses_fields: false
+          description: 'IIED newsletter feed: Nature and biodiversity'
       row:
-        type: node_rss
-        options: {  }
+        type: rss_fields
+        options:
+          title_field: title
+          link_field: nid
+          description_field: body
+          creator_field: nothing
+          date_field: created
+          guid_field_options:
+            guid_field: nid
+            guid_field_is_permalink: true
       defaults:
         title: false
         filters: false
@@ -618,4 +1167,7 @@ display:
         - 'languages:language_interface'
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.body'
+        - 'config:field.storage.node.field_content'
+        - 'config:field.storage.node.field_standfirst'

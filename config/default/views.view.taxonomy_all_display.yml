@@ -505,6 +505,15 @@ display:
           content: '<p class="py-4">@total entries<p>'
       display_extenders: {  }
       block_description: 'All in tag'
+      allow:
+        items_per_page: true
+        offset: offset
+        pager: '0'
+        hide_fields: '0'
+        sort_fields: '0'
+        configure_filters: '0'
+        disable_filters: '0'
+        configure_sorts: '0'
     cache_metadata:
       max-age: -1
       contexts:
