@@ -10,8 +10,8 @@ consentModal:
     url: 'internal:/privacy-policy'
 consentNotice:
   changeDescription: 'There were changes since your last visit, please update your consent'
-  description: "We use cookies and process personal data for the following purposes: {purposes}.\r\n"
-  learnMore: Customise
+  description: "We use cookies for site functionality, analytics, personalisation, and embedded content. Adjust your settings anytime, or close this banner to continue with essential cookies only. See our <a rel=\"noopener\" tabindex=\"0\" href=\"https://www.iied.org/privacy-policy\" target=\"_blank\" aria-label=\"Learn more about how IIED uses cookies. Opens in a new tab.\">privacy policy</a> for details.\r\n\r\n\r\n"
+  learnMore: 'Customise your settings'
 ok: Accept
 save: Save
 decline: Decline

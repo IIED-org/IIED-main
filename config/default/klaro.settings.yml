@@ -18,6 +18,8 @@ exclude_urls: {  }
 disable_urls: {  }
 styles:
   - light
+  - bottom
+  - wide
 process_descriptions: true
 library:
   element_id: klaro
