@@ -115,9 +115,7 @@
     @apply list-disc list-inside;
   } */
 
-  .box,
-  .box-outline,
-  .boxbox {
+  .box {
     @apply border border-gray-300 p-4 rounded-xl;
   }
 
@@ -579,4 +577,29 @@
     @apply mt-4;
   }
 
+
+  /* Klaro override default styles */
+  #klaro {
+    #klaro-cookie-notice {
+      @apply border border-gray-300 rounded-xl shadow-none;
+    }
+    .cn-body {
+      @apply text-base;
+    }
+    .cm-link {
+      @apply text-link-text;
+    }
+    a {
+      @apply text-link-text;
+    }
+    .cm-btn {
+      @apply px-3 py-2 border-none rounded-full bg-iiedblue-400 cursor-pointer font-sans text-gray-800 transition-colors duration-150 shadow-sm hover:shadow-none hover:bg-iiedblue-500;
+    }
+  
+    .cookie-modal .cm-modal.cm-klaro {
+      @apply rounded-xl;
+    }
+  }
+
 }
+
