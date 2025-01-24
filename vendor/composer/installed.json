@@ -8606,20 +8606,20 @@
         },
         {
             "name": "drupal/klaro_js",
-            "version": "3.0.0",
-            "version_normalized": "3.0.0.0",
+            "version": "3.0.1",
+            "version_normalized": "3.0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/klaro_js.git",
-                "reference": "bd0aa9194e26e2d1b7b7ba2e8607efd4feb58ac3"
+                "reference": "c5398a0bc9dccd3ccc2c33c9393966bc874bba8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fklaro_js/repository/archive.zip?sha=bd0aa9194e26e2d1b7b7ba2e8607efd4feb58ac3",
-                "reference": "bd0aa9194e26e2d1b7b7ba2e8607efd4feb58ac3",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fklaro_js/repository/archive.zip?sha=c5398a0bc9dccd3ccc2c33c9393966bc874bba8c",
+                "reference": "c5398a0bc9dccd3ccc2c33c9393966bc874bba8c",
                 "shasum": ""
             },
-            "time": "2024-10-30T09:59:24+00:00",
+            "time": "2024-12-19T08:40:21+00:00",
             "type": "drupal-library",
             "extra": {
                 "installer-name": "klaro",
@@ -8633,7 +8633,7 @@
             "description": "Mirror of the Klaro consent manager javascript library tagged as a Drupal library.",
             "homepage": "https://github.com/klaro-org/klaro-js/",
             "support": {
-                "source": "https://git.drupalcode.org/project/klaro_js/-/tree/0.7.22.1"
+                "source": "https://git.drupalcode.org/project/klaro_js/-/tree/3.0.1"
             },
             "install-path": "../../docroot/libraries/klaro"
         },
