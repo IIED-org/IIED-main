@@ -2,7 +2,7 @@ _core:
   default_config_hash: 5nJil6GUH-_BvrXbhHMR9dHoTDvtsFBIrldAtAJkv5c
 langcode: en
 dialog_mode: notice
-auto_decorate_final_html: true
+auto_decorate_final_html: false
 auto_decorate_js_alter: true
 auto_decorate_page_attachments: true
 auto_decorate_preprocess_field: true
@@ -21,6 +21,7 @@ styles:
   - bottom
   - wide
 process_descriptions: true
+override_css: false
 library:
   element_id: klaro
   storage_method: cookie
@@ -34,3 +35,4 @@ library:
   learn_more_as_button: false
   additional_class: ''
   html_texts: true
+  auto_focus: true
