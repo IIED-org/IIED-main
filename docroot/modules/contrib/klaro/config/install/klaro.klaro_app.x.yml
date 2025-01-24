@@ -17,6 +17,6 @@ javascripts:
   - platform.twitter.com/widgets.js
 callback_code: ''
 wrapper_identifier:
-  - twitter-tweet
+  - .twitter-tweet
 attachments: {  }
 weight: 0

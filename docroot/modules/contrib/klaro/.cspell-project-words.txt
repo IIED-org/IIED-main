@@ -4,8 +4,11 @@ bluesky
 bsky
 Bytedance
 ckidow
+deepchat
+Deepchat
 Dont
 dont
+gtag
 jurgenhaas
 Jürgen
 Kellermann
@@ -24,6 +27,7 @@ NOERROR
 oembeds
 PBLLC
 piwik
+recaptcha
 Sascha
 sascha
 screenreaders

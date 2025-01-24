@@ -3586,16 +3586,8 @@
                     "homepage": "https://www.drupal.org/user/46549"
                 },
                 {
-                    "name": "googletorp",
-                    "homepage": "https://www.drupal.org/user/386230"
-                },
-                {
                     "name": "jsacksick",
                     "homepage": "https://www.drupal.org/user/972218"
-                },
-                {
-                    "name": "mglaman",
-                    "homepage": "https://www.drupal.org/user/2416470"
                 },
                 {
                     "name": "rszrama",
@@ -3727,8 +3719,7 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": []
+                }
             },
             "installation-source": "dist",
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3873,7 +3864,7 @@
                     "homepage": "https://www.drupal.org/user/192273"
                 },
                 {
-                    "name": "Neslee Canil Pinto",
+                    "name": "neslee canil pinto",
                     "homepage": "https://www.drupal.org/user/3580850"
                 },
                 {
@@ -4220,11 +4211,11 @@
                     "homepage": "https://www.drupal.org/user/1305230"
                 },
                 {
-                    "name": "Dave Reid",
+                    "name": "dave reid",
                     "homepage": "https://www.drupal.org/user/53892"
                 },
                 {
-                    "name": "Hydra",
+                    "name": "hydra",
                     "homepage": "https://www.drupal.org/user/647364"
                 },
                 {
@@ -4293,11 +4284,11 @@
                     "homepage": "https://www.drupal.org/user/1305230"
                 },
                 {
-                    "name": "Dave Reid",
+                    "name": "dave reid",
                     "homepage": "https://www.drupal.org/user/53892"
                 },
                 {
-                    "name": "Hydra",
+                    "name": "hydra",
                     "homepage": "https://www.drupal.org/user/647364"
                 },
                 {
@@ -4762,10 +4753,6 @@
                 {
                     "name": "joachim",
                     "homepage": "https://www.drupal.org/user/107701"
-                },
-                {
-                    "name": "nedjo",
-                    "homepage": "https://www.drupal.org/user/4481"
                 },
                 {
                     "name": "vijaycs85",
@@ -6239,8 +6226,7 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": []
+                }
             },
             "installation-source": "dist",
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6316,10 +6302,6 @@
                 {
                     "name": "alexpott",
                     "homepage": "https://www.drupal.org/user/157725"
-                },
-                {
-                    "name": "gisle",
-                    "homepage": "https://www.drupal.org/user/409554"
                 },
                 {
                     "name": "greggles",
@@ -6928,6 +6910,10 @@
                     "homepage": "https://www.drupal.org/user/647364"
                 },
                 {
+                    "name": "joevagyok",
+                    "homepage": "https://www.drupal.org/user/2876343"
+                },
+                {
                     "name": "jyve",
                     "homepage": "https://www.drupal.org/user/591438"
                 },
@@ -7115,8 +7101,7 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": []
+                }
             },
             "installation-source": "dist",
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7255,6 +7240,10 @@
                     "name": "JohnAlbin",
                     "homepage": "https://www.drupal.org/user/32095",
                     "email": "virtually.johnalbin@gmail.com"
+                },
+                {
+                    "name": "smustgrave",
+                    "homepage": "https://www.drupal.org/user/3252890"
                 }
             ],
             "description": "Provides a set of utilities that make form theming easier.",
@@ -7941,6 +7930,10 @@
                     "homepage": "https://www.drupal.org/user/99340"
                 },
                 {
+                    "name": "dww",
+                    "homepage": "https://www.drupal.org/user/46549"
+                },
+                {
                     "name": "geek-merlin",
                     "homepage": "https://www.drupal.org/user/229048"
                 },
@@ -8549,31 +8542,31 @@
         },
         {
             "name": "drupal/klaro",
-            "version": "3.0.0-rc12",
-            "version_normalized": "3.0.0.0-RC12",
+            "version": "3.0.0",
+            "version_normalized": "3.0.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/klaro.git",
-                "reference": "3.0.0-rc12"
+                "reference": "3.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/klaro-3.0.0-rc12.zip",
-                "reference": "3.0.0-rc12",
-                "shasum": "6f7b0f380720b802827a51110f813189902cb5f3"
+                "url": "https://ftp.drupal.org/files/projects/klaro-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "e8ecfd168845f003e46c4472465e36bab612b510"
             },
             "require": {
                 "drupal/core": "^10.2 || ^11",
-                "drupal/klaro_js": "^3.0"
+                "drupal/klaro_js": "~3.0.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-rc12",
-                    "datestamp": "1732239415",
+                    "version": "3.0.0",
+                    "datestamp": "1736540657",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "RC releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -8583,10 +8576,6 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
-                {
-                    "name": "ckidow",
-                    "homepage": "https://www.drupal.org/user/255262"
-                },
                 {
                     "name": "jan kellermann",
                     "homepage": "https://www.drupal.org/user/371731"
@@ -9038,7 +9027,7 @@
                     "homepage": "https://www.drupal.org/user/3683807"
                 },
                 {
-                    "name": "VladimirAus",
+                    "name": "vladimiraus",
                     "homepage": "https://www.drupal.org/user/673120"
                 }
             ],
@@ -9959,7 +9948,7 @@
                     "role": "Developer"
                 },
                 {
-                    "name": "Dave Reid",
+                    "name": "dave reid",
                     "homepage": "https://www.drupal.org/user/53892"
                 }
             ],
@@ -10548,7 +10537,7 @@
             ],
             "authors": [
                 {
-                    "name": "AaronBauman",
+                    "name": "aaronbauman",
                     "homepage": "https://www.drupal.org/user/384578"
                 },
                 {
@@ -11211,12 +11200,20 @@
                     "homepage": "https://www.drupal.org/user/188049"
                 },
                 {
+                    "name": "Anybody",
+                    "homepage": "https://www.drupal.org/user/291091"
+                },
+                {
                     "name": "binnythomas",
                     "homepage": "https://www.drupal.org/user/3123091"
                 },
                 {
                     "name": "emilymathew",
                     "homepage": "https://www.drupal.org/user/2921997"
+                },
+                {
+                    "name": "Grevil",
+                    "homepage": "https://www.drupal.org/user/3668491"
                 },
                 {
                     "name": "jijojoseph_zyxware",
@@ -11473,7 +11470,7 @@
                     "homepage": "https://www.drupal.org/user/124705"
                 },
                 {
-                    "name": "Nick_vh",
+                    "name": "nick_vh",
                     "homepage": "https://www.drupal.org/user/122682"
                 }
             ],
@@ -11555,7 +11552,7 @@
                 "shasum": "b1b64e55cb497f46f41d51e6e5f0b0afbc6ac19b"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/core": "^8 || ^9 || ^10 || ^11",
                 "drupal/search_api_sorts": "*"
             },
             "type": "drupal-module",
@@ -11567,8 +11564,7 @@
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
-                },
-                "patches_applied": []
+                }
             },
             "installation-source": "dist",
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12087,6 +12083,10 @@
                 {
                     "name": "mayurjadhav",
                     "homepage": "https://www.drupal.org/user/2266604"
+                },
+                {
+                    "name": "Stockticker",
+                    "homepage": "https://www.drupal.org/user/3544586"
                 },
                 {
                     "name": "vitalie",
@@ -13467,7 +13467,7 @@
                     "homepage": "https://www.drupal.org/user/1557710"
                 },
                 {
-                    "name": "Steven Jones",
+                    "name": "steven jones",
                     "homepage": "https://www.drupal.org/user/99644"
                 }
             ],
@@ -13834,7 +13834,7 @@
                     "role": "Contributor"
                 },
                 {
-                    "name": "Liam Morland",
+                    "name": "liam morland",
                     "homepage": "https://www.drupal.org/user/493050"
                 },
                 {
@@ -14110,6 +14110,10 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "alanburke",
+                    "homepage": "https://www.drupal.org/user/35997"
+                },
                 {
                     "name": "amateescu",
                     "homepage": "https://www.drupal.org/user/729614"
@@ -22891,8 +22895,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -23053,8 +23057,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -23136,8 +23140,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -23221,8 +23225,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -23308,8 +23312,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -23384,12 +23388,12 @@
             "time": "2020-10-23T14:02:19+00:00",
             "type": "metapackage",
             "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                },
                 "branch-alias": {
                     "dev-main": "1.20-dev"
-                },
-                "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -23455,8 +23459,8 @@
             "type": "metapackage",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -23522,8 +23526,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -23601,8 +23605,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -23684,8 +23688,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -23763,8 +23767,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -23843,8 +23847,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",

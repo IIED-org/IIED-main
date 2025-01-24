@@ -3,6 +3,7 @@
 namespace Drupal\klaro\Form;
 
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -106,7 +107,7 @@ class KlaroAppForm extends EntityForm {
     $form['general']['purposes'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Purposes', [], ['context' => 'klaro']),
-      '#description' => $this->t('Which purposes does this service match best? This information will appear on the Klaro! consent manager modal.', [], ['context' => 'klaro']),
+      '#description' => $this->t('Which purposes does this service match best? This information will appear on the <em>consent dialog modal</em>.', [], ['context' => 'klaro']),
       '#required' => TRUE,
       '#options' => $this->klaroHelper->optionPurposes(),
       '#default_value' => $app->purposes(),
@@ -115,14 +116,14 @@ class KlaroAppForm extends EntityForm {
     $form['general']['default'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Toggled by default', [], ['context' => 'klaro']),
-      '#description' => $this->t('The default state of the this Klaro! service. If checked, the service is pre-enabled on the <em>Klaro! consent manager</em> modal.', [], ['context' => 'klaro']),
+      '#description' => $this->t('The default state of this Klaro! service. If checked, the service is pre-enabled on the <em>consent dialog modal</em>.', [], ['context' => 'klaro']),
       '#default_value' => $app->isDefault(),
     ];
 
     $form['general']['required'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Required', [], ['context' => 'klaro']),
-      '#description' => $this->t('The user will not be able to disable it on <em>Klaro! consent manager</em> modal.', [], ['context' => 'klaro']),
+      '#description' => $this->t('The user will not be able to disable it on the <em>consent dialog modal</em>.', [], ['context' => 'klaro']),
       '#default_value' => $app->isRequired(),
     ];
 
@@ -138,6 +139,23 @@ class KlaroAppForm extends EntityForm {
       '#title' => $this->t('Only once', [], ['context' => 'klaro']),
       '#description' => $this->t('The Klaro! service will only be executed once. Regardless how often the user toggles it on and off.', [], ['context' => 'klaro']),
       '#default_value' => $app->isOnlyOnce(),
+    ];
+
+    $form['general']['contextual_consent_only'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Contextual Consent Only', [], ['context' => 'klaro']),
+      '#description' => $this->t('This service is not activated when “Accept all” is clicked (only relevant if this button is activated in the module settings).', [], ['context' => 'klaro']),
+      '#default_value' => $app->isContextualConsentOnly(),
+    ];
+
+    $form['general']['contextual_consent_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Contextual Consent Text', [], ['context' => 'klaro']),
+      '#description' => $this->t('This will be shown in the placeholder. Allowed tags: <em>a</em>, <em>em</em>, <em>strong</em>.', [], ['context' => 'klaro']),
+      '#default_value' => $app->contextualConsentText(),
+      '#element_validate' => [
+        [get_class($this), 'validateXss'],
+      ],
     ];
 
     $form['info'] = [
@@ -299,9 +317,9 @@ class KlaroAppForm extends EntityForm {
     $form['advanced']['callback_code'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Callback code', [], ['context' => 'klaro']),
-      '#description' => $this->t('This javascript will be executed after consent change, available variables are `consent` and `service` where consent is either true or false and service is the current service object.', [], ['context' => 'klaro']),
+      '#description' => $this->t('This javascript will be executed after loading the page and every time a Klaro! dialog is saved. Available variables are <em>consent</em> and <em>service</em>. <em>consent</em> is either true or false and contains the current value but not whether there has been a change. <em>service</em> is the current service object.', [], ['context' => 'klaro']),
       '#default_value' => $app->callbackCode(),
-      '#placeholder' => "",
+      '#placeholder' => "console.log('User consent for service ' + service.name + ': consent=' + consent);\nif (consent == true) {\n  _my_call('consentGiven');\n} else {\n  _my_call('consentRevoked');\n}",
     ];
     $form['advanced']['files_wrapper'] = [
       '#type' => 'item',
@@ -318,16 +336,17 @@ class KlaroAppForm extends EntityForm {
     ];
     $form['advanced']['files_wrapper']['wrapper_identifier'] = [
       '#type' => 'textarea',
-      '#title' => $this->t('Classes of additional wrapper', [], ['context' => 'klaro']),
-      '#description' => $this->t('Some embeds have additional markup that must be blocked. Enter the corresponding classes, one per line.<br><strong>Example:</strong> a Bluesky post has additional <code>&lt;blockquote class="bluesky-embed"&gt;</code>, so enter <code>bluesky-embed</code>.', [], ['context' => 'klaro']),
+      '#title' => $this->t('QuerySelector of additional elements', [], ['context' => 'klaro']),
+      '#description' => $this->t('Some embeds have additional markup that must be blocked. Enter the corresponding querySelector, one per line. Klaro! will add a wrapper around these elements and show a contextual consent dialog.<br><strong>Example:</strong> a Bluesky post has additional <code>&lt;blockquote class="bluesky-embed"&gt;</code>, so enter <code>.bluesky-embed</code>.', [], ['context' => 'klaro']),
       '#default_value' => implode("\n", $app->wrapperIdentifier()),
-      '#placeholder' => "geolocation-map-wrapper\ntwitter-tweet\bluesky-embed",
+      '#placeholder' => ".geolocation-map-wrapper\n.twitter-tweet\n.bluesky-embed\n.g-recaptcha",
     ];
     $form['advanced']['files_wrapper']['att'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Attachments', [], ['context' => 'klaro']),
-      '#description' => $this->t('Some Javascript files are added as <em>page attachments</em> with a unique identifier. If Klaro! should take control over these scripts, enter their IDs here, one per line.', [], ['context' => 'klaro']),
+      '#description' => $this->t('Some Javascript files are added as <em>page attachments</em> with a unique identifier. If Klaro! should take control over these scripts, enter their IDs here, one per line.<br>See <a href="@website">this example</a> for <em>hello-world</em>.', ['@website' => 'https://www.drupal.org/node/2274843#entire-page'], ['context' => 'klaro']),
       '#default_value' => implode("\n", $app->attachments()),
+      '#placeholder' => 'hello-world',
     ];
 
     return $form;
@@ -418,6 +437,19 @@ class KlaroAppForm extends EntityForm {
 
     $form_state->set('cookies', $cookies);
     $form_state->setRebuild(TRUE);
+  }
+
+  /**
+   * Form element validation for text with restricted tags.
+   */
+  public static function validateXss(&$element, FormStateInterface $form_state) {
+    $value = trim($element['#value']);
+    $allowed = ['a', 'strong', 'em'];
+    $filtered = Xss::filter($value, $allowed);
+    $form_state->setValueForElement($element, $filtered);
+    if ($filtered != $value) {
+      $form_state->setError($element, t('Only following tags are allowed: a, strong, em.'));
+    }
   }
 
   /**

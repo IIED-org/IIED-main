@@ -8,6 +8,7 @@ dialog_mode: silent
 show_toggle_button: false
 show_close_button: false
 process_descriptions: false
+override_css: true
 auto_decorate_js_alter: true
 auto_decorate_page_attachments: true
 auto_decorate_preprocess_field: true
@@ -21,7 +22,7 @@ library:
   element_id: 'klaro'
   storage_method: 'cookie'
   cookie_name: 'klaro'
-  cookie_expires_after_days: 1
+  cookie_expires_after_days: 180
   cookie_domain: ''
   group_by_purpose: false
   accept_all: false
@@ -30,3 +31,4 @@ library:
   learn_more_as_button: false
   additional_class: ''
   html_texts: false
+  auto_focus: true

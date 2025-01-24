@@ -1,4 +1,4 @@
-name: Klaro Consent Manager
+name: Klaro Cookie & Consent Manager
 description: Implements the <a href="https://github.com/klaro-org/klaro-js" target="_blank">Klaro Consent Manager</a> into Drupal.
 
 type: module
@@ -7,7 +7,7 @@ core_version_requirement: ^10.2 || ^11
 
 configure: klaro.admin
 
-# Information added by Drupal.org packaging script on 2024-11-22
-version: '3.0.0-rc12'
+# Information added by Drupal.org packaging script on 2025-01-10
+version: '3.0.0'
 project: 'klaro'
-datestamp: 1732239418
+datestamp: 1736540660

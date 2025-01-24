@@ -33,6 +33,6 @@ service:
   purpose: Purpose
 contextualConsent:
   acceptAlways: Always
-  acceptOnce: 'Yes'
+  acceptOnce: Yes (this time)
   description: Load external content supplied by {title}?
 poweredBy: Powered by Klaro!

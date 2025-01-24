@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
+class ComposerStaticInit7652e4dac2065117a53a491d860bd180
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -302,9 +302,9 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         ),
         'phpDocumentor\\Reflection\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
         ),
         'phootwork\\lang\\' => 
         array (
@@ -617,8 +617,8 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         ),
         'PHPStan\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phpstan/phpstan-deprecation-rules/src',
-            1 => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src',
+            0 => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src',
+            1 => __DIR__ . '/..' . '/phpstan/phpstan-deprecation-rules/src',
         ),
         'PHPCSStandards\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => 
         array (
@@ -939,8 +939,8 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
         ),
         'Behat\\Mink\\Driver\\' => 
         array (
-            0 => __DIR__ . '/..' . '/behat/mink-browserkit-driver/src',
-            1 => __DIR__ . '/..' . '/lullabot/mink-selenium2-driver/src',
+            0 => __DIR__ . '/..' . '/lullabot/mink-selenium2-driver/src',
+            1 => __DIR__ . '/..' . '/behat/mink-browserkit-driver/src',
         ),
         'Behat\\Mink\\' => 
         array (
@@ -1685,10 +1685,10 @@ class ComposerStaticInitc7142a64c37f96d53e584392e4f37422
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc7142a64c37f96d53e584392e4f37422::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc7142a64c37f96d53e584392e4f37422::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitc7142a64c37f96d53e584392e4f37422::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitc7142a64c37f96d53e584392e4f37422::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7652e4dac2065117a53a491d860bd180::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7652e4dac2065117a53a491d860bd180::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit7652e4dac2065117a53a491d860bd180::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit7652e4dac2065117a53a491d860bd180::$classMap;
 
         }, null, ClassLoader::class);
     }

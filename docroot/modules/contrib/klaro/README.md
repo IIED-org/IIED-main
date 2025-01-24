@@ -10,7 +10,8 @@
  * Automatic attribution of resources
  * Cookies
  * Use Klaro with custom preprocess_field
- * Show thumbnail and title in contextual consent dialog
+ * Use Klaro with custom code and ID
+ * Contextual Consent Dialog
  * Troubleshooting
  * Maintainers
 
@@ -106,14 +107,22 @@ You have to review and enable the services you need for your site.
 
 Klaro offers two services for embedded external content: YouTube and Vimeo.
 Both services are activated by default and take effect for the `oembed` field
-of Drupal Core Media Remote Video.
+of Drupal Core Media Remote Video or the `video_embed_field_video` field by
+[Video Embed Field](https://www.drupal.org/project/video_embed_field) for
+legacy/custom Media Entities.
 
 #### Services for social media platforms
 
 Klaro offers several services for embeds of social media platforms. You have
 to check and adapt these services for your needs. These services are
-deactivated by default and take effect e.g. in combination with the module
+deactivated by default and can take effect e.g. in combination with the module
 [html_field_formatter](https://www.drupal.org/project/html_field_formatter).
+
+#### Services for AI (Artificial Intelligence)
+
+- Klaro offers a service for the new AI Chatbot (Deepchat), submodule of
+[AI (Artificial Intelligence)](https://www.drupal.org/project/ai).
+- Klaro offers also a service for [AI Image Alt Text](https://www.drupal.org/project/ai_image_alt_text).
 
 #### Services for Matomo
 
@@ -131,14 +140,24 @@ and [Issue #3346662](https://www.drupal.org/project/matomo/issues/3346662).
 The module includes services for Google Tag Manager and Google Analytics (GA4).
 As GA4 is mostly used with the GTM, the GA4 service is obsolete in most cases.
 
-The services are designed for the Drupal modules [GoogleTag Manager](https://www.drupal.org/project/gtm) and
+The services are designed for the Drupal modules [GoogleTag Manager](https://www.drupal.org/project/gtm)
+8.x-1.x,
+[Google Tag](https://www.drupal.org/project/google_tag) 2.x (and
 [Google Analytics 4](https://www.drupal.org/project/ga4_google_analytics).
+
+For [Google Tag](https://www.drupal.org/project/google_tag) 2.x you may
+consider to disable the noscript snippet (see [#3106318](https://www.drupal.org/i/3106318)).
 
 Both services can be activated and control the integration of Google code.
 
 It is also possible to integrate the Google Tag Manager (GTM) with
 **Google Consent Mode v2**, see [documentation](https://klaro.org/docs/tutorials/google_tag_manager).
 See also [Issue #3484827](https://www.drupal.org/project/klaro/issues/3484827).
+
+#### Further Services
+
+- [Leaflet](https://www.drupal.org/project/leaflet)
+- [Recaptcha](https://www.drupal.org/project/recaptcha)
 
 ### Backend / UI
 
@@ -161,6 +180,14 @@ infos you find [here](https://github.com/klaro-org/klaro-js/blob/fb4e393d2cd8aee
 The setting "additional css classes" will be added to all klaro elements
 (cookie-notice, consent-dialog, contextual blocking element), so you can
 apply your own css to it.
+
+The setting "Adjust the UI to Drupal themes" enables the loading of
+the `klaro-override.css` file. In this file, most of the Klaro!
+styles are overridden to adopt a Drupal-like appearance. Customized
+CSS settings for Olivero, Claro and Gin are included. You can use
+the CSS variables for your own overrides. Klaro! sets the machine
+name of the theme as class in the main klaro-element (e.g.
+`klaro-theme-gin`). For more details, see the [css/klaro-override.css](https://git.drupalcode.org/project/klaro/-/blob/3.x/css/klaro-override.css).
 
 For the toggle button shipped with this module, there is an override class
 added `klaro_toggle_dialog_override` so you can overwrite the styles with
@@ -201,10 +228,17 @@ In the field `sources` you can add paths as they appear in the src attribute
 of script, iframe, img, video and audio tags, Enter one source per line,
 partial matches are supported.
 
-The preprocess_field handles at this time the "oembed" field formatter (from
-media core) and the field type "iframe" from iframe module. If you need
-further field type, please open a feature request and (optionally) open a
-merge request (see below).
+The preprocess_field handles at this time following fields:
+
+* "oembed" field formatter (provided by Media Core)
+* "video_embed_field_video" field formatter - see [Video Embed Field](https://www.drupal.org/project/video_embed_field)
+* "iframe" field type - see [Iframe](https://www.drupal.org/project/iframe)
+* "html" field formatter - see [HTML Field Formatter](https://www.drupal.org/project/html_field_formatter)
+
+If you need further field type, please open a feature request and (optionally)
+open a merge request (see below).
+
+There is also a preprocessor for [Leaflet](https://www.drupal.org/project/leaflet) mapping library.
 
 The option "Process final HTML" parses the generated HTML and adds attributes
 to all matching tags that are not attributed yet. This feature is rather
@@ -213,12 +247,21 @@ experimental, invalid or malformed html might lead to unknown behavior.
 Known bug: The HTML processor destroys special chars if TWIG Debug mode is
 enabled (see [Issue 3483397](https://www.drupal.org/project/klaro/issues/3483397)).
 
-In the field `Embed wrapper classes` (Klaro > Service > Advanced) you can add
-css-classnames for which a contextual blocking element will be wrapped.
-For example a twitter embed not only contains a script tag (which will be
-blocked by adding the `sources` field) but also some html, in this case a
-blockquote with the class "twitter-tweet". For this feature the option
-"Process final HTML" must be activated.
+### Text Filter for Klaro!
+
+The Klaro! module ships a Text Filter for the use with Klaro! Consent Manager.
+The filter decorates all known external resources and blocks loading them
+without consent. If "blocking of unknown resources" is enabled, all external
+resources will be blocked.
+
+You have to enable this filter for the Input Formats you want to protect.
+
+We generally recommend that you do not allow such HTML tags in the editor,
+but use special field types or formatter such as oEmbed (Core),
+[HTML Field Formatter](https://www.drupal.org/project/html_field_formatter) or [Iframe](https://www.drupal.org/project/iframe)
+or use Drupal Media.
+
+Read more about [Text filters and Input Formats](https://www.drupal.org/node/213156).
 
 ### Automatic blocking of unknown resources
 
@@ -230,8 +273,10 @@ or "final HTML".
 ### What will be blocked automatically:
 
 * script tags with src attribute (only for known services)
-* iframes with field type "iframe"
-* oembed with field formatter "oembed"
+* iframes with field type [Iframe](https://www.drupal.org/project/iframe)
+* oembed with field formatter "oembed" (Core) or "video_embed_field_video" ([Video Embed Field](https://www.drupal.org/project/video_embed_field))
+* html with field formatter "html" ([HTML Field Formatter](https://www.drupal.org/project/html_field_formatter))
+* [Leaflet](https://www.drupal.org/project/leaflet) Maps
 
 ### What will be blocked automatically with "Process final HTML":
 
@@ -268,8 +313,12 @@ as parsing the finished HTML document is time-consuming.
 
 ## COOKIES
 
-Klaro saves the user-decisions as cookies (you can also configure to use the
-browsers localstorage). However to let klaro also delete the service cookies,
+Klaro! saves the user-decisions as cookies (you can also configure to use the
+browsers localstorage). The default expiration time for the Klaro! cookie 
+is set to 180 days.
+Please check whether this meets the requirements of your country.
+
+However to let klaro also delete the service cookies,
 i.e. when you revoke a consent, there are two places to provide information
 about them.
 
@@ -325,13 +374,56 @@ See `klaro_preprocess_field()` in `klaro.module`:
   }
 ```
 
-## SHOW THUMBNAIL AND TITLE IN CONTEXTUAL CONSENT DIALOG
+## USE KLARO WITH CUSTOM CODE AND ID
+
+In some situations, you cannot block Javascript files, but must block document elements, e.g. to block maps.
+
+You can rewrite the ID of an HTML element and add the attributes `data-id` and `data-name` to control the behavior of these elements.
+
+### Example: Block loading external maps by leaflet module
+
+```php
+function klaro_preprocess_leaflet_map(&$variables) {
+  $variables['attributes']['data-name'] = 'leaflet';
+  $variables['attributes']['data-id'] = $variables['map_id'];
+  $variables['map_id'] .= '-protected';
+}
+```
+
+After consent, Klaro! module will rewrite the ID and execute all Drupal
+behaviors to handle it.
+
+You need a Klaro! service with a machine name that matches `data-name`.
+
+## CONTEXTUAL CONSENT DIALOG
+
+Blocked markup elements with `src` attribute (like `<img>` or `<iframe>`)
+show a contextual consent dialog.
+
+Sometimes other elements need to be blocked. These elements can be
+overlaid by specifying the query selector (e.g. `.my-embed .my-element`).
+
+In the field `Embed wrapper classes` (Klaro > Service > Advanced) you can add
+query selectors for which a contextual blocking element will be wrapped.
+For example a twitter embed not only contains a script tag (which will be
+blocked by adding the `sources` field) but also some html, in this case a
+blockquote with the class "twitter-tweet".
+
+### CUSTOMIZE TEXT FOR DIALOG
+
+By default, `Load external content supplied by {title}?` is used for the
+dialog. You can customize this text per service via
+General > Contextual Consent Text. You can use the tags `<a>`, `<em>`,
+`<strong>`.
+
+### SHOW THUMBNAIL AND TITLE IN CONTEXTUAL CONSENT DIALOG
 
 The Klaro! module looks for data-attribute `data-thumbnail` and attribute
 `title` on iframe or other entities with src-attribute and inserts thumbnail
 and title into contextual consent dialog.
 
-While preprocessing fields for automatic attribution, Klaro! tries to determine existing thumbnails and adds them to the markup.
+While preprocessing fields for automatic attribution, Klaro! tries to
+determine existing thumbnails and adds them to the markup.
 You can disable this option in Klaro! Settings -> Automatic Attribution 
 -> Determine thumbnail for preview.
 

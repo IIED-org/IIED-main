@@ -17,6 +17,6 @@ javascripts:
   - www.instagram.com/embed.js
 callback_code: ''
 wrapper_identifier:
-  - instagram-media
+  - .instagram-media
 attachments: {  }
 weight: 0

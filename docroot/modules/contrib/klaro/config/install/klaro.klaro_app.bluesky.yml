@@ -17,6 +17,6 @@ javascripts:
   - embed.bsky.app
 callback_code: ''
 wrapper_identifier:
-  - bluesky-embed
+  - .bluesky-embed
 attachments: {  }
 weight: 0

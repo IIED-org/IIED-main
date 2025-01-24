@@ -198,3 +198,50 @@ function _klaro_update__app_to_service($config) : void {
       ->save();
   }
 }
+
+/**
+ * Change classname to querySelector.
+ */
+function klaro_update_10011() {
+  $storage = \Drupal::entityTypeManager()->getStorage('klaro_app');
+  $query = $storage->getQuery();
+  $result = $storage->loadMultiple($query->accessCheck(FALSE)->execute());
+  foreach ($result as $app) {
+    $wrapperIdentifier = $app->wrapperIdentifier();
+    if (count($wrapperIdentifier) > 0) {
+      foreach ($wrapperIdentifier as $k => $v) {
+        $wrapperIdentifier[$k] = '.' . $v;
+      }
+      $app->setWrapperIdentifier($wrapperIdentifier);
+      $app->save();
+    }
+  }
+}
+
+/**
+ * Issue #3493235: Make autofocus customable.
+ */
+function klaro_update_10012(&$sandbox) {
+  $config_factory = \Drupal::configFactory();
+  $config_settings = $config_factory->getEditable('klaro.settings');
+
+  // Set new config setting.
+  $config_settings->set('library.auto_focus', TRUE);
+
+  $config_settings->save(TRUE);
+
+}
+
+/**
+ * Issue #3495342: Add override CSS.
+ */
+function klaro_update_10013(&$sandbox) {
+  $config_factory = \Drupal::configFactory();
+  $config_settings = $config_factory->getEditable('klaro.settings');
+
+  // Set new config setting.
+  $config_settings->set('override_css', FALSE);
+
+  $config_settings->save(TRUE);
+
+}

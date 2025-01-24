@@ -1,4 +1,4 @@
 langcode: en
 id: cms
-label: 'CMS'
-weight: 2
+label: 'Functional'
+weight: -1
