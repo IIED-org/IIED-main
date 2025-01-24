@@ -6591,6 +6591,68 @@
             "install-path": "../../docroot/modules/contrib/eu_cookie_compliance"
         },
         {
+            "name": "drupal/eu_cookie_compliance_gtm",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/eu_cookie_compliance_gtm.git",
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/eu_cookie_compliance_gtm-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "f02bfd13976a51fe47cf63d06bfd1a29ab6bf35b"
+            },
+            "require": {
+                "drupal/core": "^9.3 || ^10",
+                "drupal/eu_cookie_compliance": "^1.24",
+                "drupal/google_tag": "^1.6 || ^2.0",
+                "php": ">=5.4"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.0",
+                    "datestamp": "1691746157",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "daften",
+                    "homepage": "https://www.drupal.org/user/176274"
+                },
+                {
+                    "name": "Nick_vh",
+                    "homepage": "https://www.drupal.org/user/122682"
+                },
+                {
+                    "name": "nielsaers",
+                    "homepage": "https://www.drupal.org/user/752444"
+                },
+                {
+                    "name": "reszli",
+                    "homepage": "https://www.drupal.org/user/710368"
+                }
+            ],
+            "description": "Extends EU Cookie Compliance module and allows pushing custom data to GTM for each cookie category.",
+            "homepage": "https://www.drupal.org/project/eu_cookie_compliance_gtm",
+            "support": {
+                "source": "https://git.drupalcode.org/project/eu_cookie_compliance_gtm"
+            },
+            "install-path": "../../docroot/modules/contrib/eu_cookie_compliance_gtm"
+        },
+        {
             "name": "drupal/facets",
             "version": "2.0.9",
             "version_normalized": "2.0.9.0",
@@ -8484,6 +8546,107 @@
                 "issues": "http://drupal.org/project/key"
             },
             "install-path": "../../docroot/modules/contrib/key"
+        },
+        {
+            "name": "drupal/klaro",
+            "version": "3.0.0-rc12",
+            "version_normalized": "3.0.0.0-RC12",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/klaro.git",
+                "reference": "3.0.0-rc12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/klaro-3.0.0-rc12.zip",
+                "reference": "3.0.0-rc12",
+                "shasum": "6f7b0f380720b802827a51110f813189902cb5f3"
+            },
+            "require": {
+                "drupal/core": "^10.2 || ^11",
+                "drupal/klaro_js": "^3.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.0.0-rc12",
+                    "datestamp": "1732239415",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "ckidow",
+                    "homepage": "https://www.drupal.org/user/255262"
+                },
+                {
+                    "name": "jan kellermann",
+                    "homepage": "https://www.drupal.org/user/371731"
+                },
+                {
+                    "name": "kulmjens",
+                    "homepage": "https://www.drupal.org/user/3595515"
+                },
+                {
+                    "name": "metalbote",
+                    "homepage": "https://www.drupal.org/user/2809357"
+                },
+                {
+                    "name": "sascha_meissner",
+                    "homepage": "https://www.drupal.org/user/3678470"
+                }
+            ],
+            "description": "Implements the Klaro! consent manager utility into Drupal.",
+            "homepage": "https://www.drupal.org/project/klaro",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/klaro",
+                "issues": "https://www.drupal.org/project/issues/klaro"
+            },
+            "install-path": "../../docroot/modules/contrib/klaro"
+        },
+        {
+            "name": "drupal/klaro_js",
+            "version": "3.0.0",
+            "version_normalized": "3.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/klaro_js.git",
+                "reference": "bd0aa9194e26e2d1b7b7ba2e8607efd4feb58ac3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fklaro_js/repository/archive.zip?sha=bd0aa9194e26e2d1b7b7ba2e8607efd4feb58ac3",
+                "reference": "bd0aa9194e26e2d1b7b7ba2e8607efd4feb58ac3",
+                "shasum": ""
+            },
+            "time": "2024-10-30T09:59:24+00:00",
+            "type": "drupal-library",
+            "extra": {
+                "installer-name": "klaro",
+                "upstream-version": "v0.7.22"
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Mirror of the Klaro consent manager javascript library tagged as a Drupal library.",
+            "homepage": "https://github.com/klaro-org/klaro-js/",
+            "support": {
+                "source": "https://git.drupalcode.org/project/klaro_js/-/tree/0.7.22.1"
+            },
+            "install-path": "../../docroot/libraries/klaro"
         },
         {
             "name": "drupal/language_switcher_extended",

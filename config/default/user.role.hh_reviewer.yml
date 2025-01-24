@@ -8,7 +8,6 @@ dependencies:
     - node.type.hidden_handbrake
   module:
     - comment
-    - eu_cookie_compliance
     - file
     - filter
     - form_mode_control
@@ -35,7 +34,6 @@ permissions:
   - 'delete own files'
   - 'delete own hidden_handbrake content'
   - 'delete own image media'
-  - 'display eu cookie compliance popup'
   - 'edit any hidden_handbrake content'
   - 'edit own hidden_handbrake content'
   - 'publish any node type hidden_handbrake'

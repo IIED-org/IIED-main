@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * @file
+ * Contains eu_cookie_compliance_gtm.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\eu_cookie_compliance\Entity\CookieCategory;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Serialization\Json;
+
+/**
+ * Implements hook_help().
+ */
+function eu_cookie_compliance_gtm_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the eu_cookie_compliance_gtm module.
+    case 'help.page.eu_cookie_compliance_gtm':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This is a complementary module for the <a href="https://www.drupal.org/project/eu_cookie_compliance">EU Cookie Compliance (GDPR Compliance)</a> module, which integrates it with <a href="https://www.drupal.org/project/google_tag">GoogleTagManager</a> module.</br>
+Firstly, it extends the cookie category admin UI by adding a field to store arbitrary data in JSON format for each category.</br>
+Secondly, it exposes that data in drupalSettings.</br>
+Finally, it pushes that data to dataLayer by hooking into events triggered by the main module on user interaction.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function eu_cookie_compliance_gtm_page_attachments(&$attachments) {
+  $attachments['#attached']['library'][] = 'eu_cookie_compliance_gtm/eu_cookie_compliance_gtm';
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function eu_cookie_compliance_gtm_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'cookie_category_edit_form' || $form_id === 'cookie_category_add_form') {
+    eu_cookie_compliance_gtm_alter_category_form($form, $form_state, $form_id);
+  }
+}
+
+/**
+ * Handles the form alter for the category form.
+ */
+function eu_cookie_compliance_gtm_alter_category_form(&$form, FormStateInterface $form_state, $form_id) {
+  $category = $form_state->getFormObject()->getEntity();
+  $gtm_data = $category->getThirdPartySetting('eu_cookie_compliance_gtm', 'gtm_data');
+  $form['gtm_data'] = [
+    '#type' => 'textarea',
+    '#title' => t('GTM data'),
+    '#description' => t('Use plain JSON format to to configure the data to GTM for this category.<br>
+    For example: @example1 where <em>@status</em> will be automatically replaced with 1 or 0, based on whether this category is selected or not.<br>
+    You can also refer to other other categories using their machine names like<br>
+    For example: @example2 where <em>functional</em> is the machine name of another category.', [
+      '@example1' => '{"analytics": "@status"}',
+      '@example2' => '{"analytics": "@status", "functional": "@functional_status"}',
+    ]),
+    '#default_value' => empty($gtm_data) ? "" : json_encode($category->getThirdPartySetting('eu_cookie_compliance_gtm', 'gtm_data'), JSON_PRETTY_PRINT),
+    '#weight' => 1,
+    '#attributes' => ['class' => ['eu_cookie_compliance_gtm_pretty_json']],
+  ];
+  $form['#validate'][] = 'eu_cookie_compliance_gtm_category_form_validate';
+  $form['#entity_builders'][] = 'eu_cookie_compliance_gtm_category_form_builder';
+}
+
+/**
+ * Additional validate handler for the category form.
+ */
+function eu_cookie_compliance_gtm_category_form_validate(&$form, FormStateInterface $form_state) {
+  if ($form_state->hasValue('gtm_data')) {
+    $string = $form_state->getValue('gtm_data');
+
+    if (!empty($string)) {
+      $data = Json::decode($string);
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        $form_state->setErrorByName('gtm_data', t('The GTM data is not a valid JSON.'));
+      }
+      if (!$data || !is_array($data)) {
+        $form_state->setErrorByName('gtm_data', t('The GTM data needs to be a JSON object like @example1.', ['@example1' => '{"analytics": "@status"}']));
+      }
+    }
+  }
+}
+
+/**
+ * Entity builder for the category configuration entity.
+ */
+function eu_cookie_compliance_gtm_category_form_builder($entity_type, CookieCategory $category, &$form, FormStateInterface $form_state) {
+  if ($form_state->getValue('gtm_data')) {
+    $category->setThirdPartySetting('eu_cookie_compliance_gtm', 'gtm_data', Json::decode($form_state->getValue('gtm_data')));
+    return;
+  }
+
+  $category->unsetThirdPartySetting('eu_cookie_compliance_gtm', 'gtm_data');
+}

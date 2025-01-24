@@ -42,7 +42,6 @@ dependencies:
     - content_translation
     - contextual
     - draggableviews
-    - eu_cookie_compliance
     - file
     - filter
     - form_mode_control
@@ -194,7 +193,6 @@ permissions:
   - 'delete terms in person'
   - 'delete terms in tags'
   - 'delete webform revisions'
-  - 'display eu cookie compliance popup'
   - 'edit any article content'
   - 'edit any blog content'
   - 'edit any document media'

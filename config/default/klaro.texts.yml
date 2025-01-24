@@ -1,0 +1,37 @@
+_core:
+  default_config_hash: AdEKzamq-cNB8QrM9QP2dbJ_XtZ0qAf_j8q68fV4HYc
+langcode: en
+consentModal:
+  title: 'Use of personal data and cookies'
+  description: "Please choose the services and 3rd party applications we would like to use.\r\n"
+  privacyPolicy:
+    name: 'privacy policy'
+    text: "To learn more, please read our {privacyPolicy}.\r\n"
+    url: 'internal:/privacy-policy'
+consentNotice:
+  changeDescription: 'There were changes since your last visit, please update your consent'
+  description: "We use cookies for site functionality, analytics, personalisation and embedded content. Change your cookie settings anytime by following the link in the footer. Click Decline or close the banner to continue with essential cookies only. See our <a rel=\"noopener\" tabindex=\"0\" href=\"https://www.iied.org/privacy-policy\" target=\"_blank\" aria-label=\"Learn more about how IIED uses cookies. Opens in a new tab.\">privacy policy</a> for details.\r\n\r\n\r\n"
+  learnMore: 'Customise your settings'
+ok: Accept
+save: Save
+decline: Decline
+close: Close
+acceptAll: 'Accept all'
+acceptSelected: 'Accept selected'
+service:
+  disableAll:
+    title: 'Toggle all services'
+    description: 'Use this switch to enable/disable all services.'
+  optOut:
+    title: (opt-out)
+    description: 'This service is loaded by default (opt-out possible).'
+  required:
+    title: '(always required)'
+    description: 'This service is always required'
+  purposes: Purposes
+  purpose: Purpose
+contextualConsent:
+  acceptAlways: Always
+  acceptOnce: 'Yes'
+  description: 'Load external content supplied by {title}?'
+poweredBy: 'Powered by Klaro!'

@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   module:
-    - eu_cookie_compliance
     - file
     - tfa
 id: hh_contributor
@@ -12,5 +11,4 @@ weight: -7
 is_admin: null
 permissions:
   - 'delete own files'
-  - 'display eu cookie compliance popup'
   - 'setup own tfa'

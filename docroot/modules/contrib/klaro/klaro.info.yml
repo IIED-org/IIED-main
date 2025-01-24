@@ -1,0 +1,13 @@
+name: Klaro Consent Manager
+description: Implements the <a href="https://github.com/klaro-org/klaro-js" target="_blank">Klaro Consent Manager</a> into Drupal.
+
+type: module
+package: User interface
+core_version_requirement: ^10.2 || ^11
+
+configure: klaro.admin
+
+# Information added by Drupal.org packaging script on 2024-11-22
+version: '3.0.0-rc12'
+project: 'klaro'
+datestamp: 1732239418
