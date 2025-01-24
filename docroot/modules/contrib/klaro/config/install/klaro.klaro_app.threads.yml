@@ -2,7 +2,7 @@ langcode: en
 status: false
 dependencies: {  }
 id: threads
-label: Threads
+label: 'Threads by Instagram'
 description: 'Threads is a social media platform by Meta Platforms, Inc (USA).'
 default: false
 purposes:
@@ -17,6 +17,6 @@ javascripts:
   - www.threads.net
 callback_code: ''
 wrapper_identifier:
-  - text-post-media
+  - .text-post-media
 attachments: {  }
 weight: 0

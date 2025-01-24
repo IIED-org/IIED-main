@@ -691,6 +691,13 @@ class IntegrationTest extends FacetsTestBase {
   }
 
   /**
+   * Tests the reset string link.
+   */
+  public function testResetStringLink() {
+    // @todo implement
+  }
+
+  /**
    * Tests the facets summary order.
    */
   public function testOrder() {
@@ -786,13 +793,6 @@ class IntegrationTest extends FacetsTestBase {
     $this->assertEquals($list_items[1]->find('css', '.facet-item__value')->getText(), 'article_category');
     $this->assertEquals($list_items[2]->find('css', '.facet-item__value')->getText(), 'grape');
 
-  }
-
-  /**
-   * Tests the reset string link.
-   */
-  public function testResetStringLink() {
-    // @todo implement
   }
 
 }

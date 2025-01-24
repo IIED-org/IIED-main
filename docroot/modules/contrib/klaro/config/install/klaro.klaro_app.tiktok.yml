@@ -17,6 +17,6 @@ javascripts:
   - www.tiktok.com
 callback_code: ''
 wrapper_identifier:
-  - tiktok-embed
+  - .tiktok-embed
 attachments: {  }
 weight: 0

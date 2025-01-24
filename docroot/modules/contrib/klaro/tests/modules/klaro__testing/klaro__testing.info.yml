@@ -4,7 +4,7 @@ description: Allows for testing of klaro
 type: module
 core_version_requirement: ^10.1 || ^11
 
-# Information added by Drupal.org packaging script on 2024-11-22
-version: '3.0.0-rc12'
+# Information added by Drupal.org packaging script on 2025-01-10
+version: '3.0.0'
 project: 'klaro'
-datestamp: 1732239418
+datestamp: 1736540660

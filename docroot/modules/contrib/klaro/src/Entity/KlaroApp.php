@@ -42,6 +42,8 @@ use Drupal\klaro\KlaroAppInterface;
  *     "required" = "required",
  *     "optOut" = "opt_out",
  *     "onlyOnce" = "only_once",
+ *     "contextualConsentOnly" = "contextual_consent_only",
+ *     "contextualConsentText" = "contextual_consent_text",
  *     "infoUrl" = "info_url",
  *     "privacyPolicyUrl" = "privacy_policy_url",
  *     "purposes" = "purposes",
@@ -61,6 +63,8 @@ use Drupal\klaro\KlaroAppInterface;
  *     "required",
  *     "opt_out",
  *     "only_once",
+ *     "contextual_consent_only",
+ *     "contextual_consent_text",
  *     "info_url",
  *     "privacy_policy_url",
  *     "purposes",
@@ -141,6 +145,24 @@ class KlaroApp extends ConfigEntityBase implements KlaroAppInterface {
    * @var bool
    */
   protected $onlyOnce = FALSE;
+
+  /**
+   * Contextual Consent Only.
+   *
+   * Text for contextual consent for this service.
+   *
+   * @var bool
+   */
+  protected $contextualConsentOnly = FALSE;
+
+  /**
+   * The app will only be executed once.
+   *
+   * Regardless how often the user toggles it on and off.
+   *
+   * @var bool
+   */
+  protected $contextualConsentText = '';
 
   /**
    * The url to find detailed information about the app.
@@ -382,6 +404,34 @@ class KlaroApp extends ConfigEntityBase implements KlaroAppInterface {
    */
   public function setOnlyOnce(bool $only_once): KlaroAppInterface {
     return $this->set('only_once', $only_once);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isContextualConsentOnly(): bool {
+    return $this->get('contextual_consent_only') ?: FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setContextualConsentOnly(bool $contextual_consent_only): KlaroAppInterface {
+    return $this->set('contextual_consent_only', $contextual_consent_only);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function contextualConsentText(): string {
+    return $this->get('contextual_consent_text') ?: '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setContextualConsentText(string $contextual_consent_text): KlaroAppInterface {
+    return $this->set('contextual_consent_text', $contextual_consent_text);
   }
 
   /**

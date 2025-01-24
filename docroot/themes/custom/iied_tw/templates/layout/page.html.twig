@@ -63,21 +63,21 @@
   
       {# Secondary nav #}
       <div class="px-4">
-      <div class="relative my-2 lg:my-3"
+      <div class="lg:my-3 relative my-2"
         x-data="scrollMenu()"
         x-init="updateScrollState($refs.scrollContainer)"
         @scroll="updateScrollState($refs.scrollContainer)">
            {{ page.secondary_menu }}
 
               <!-- Button to scroll left -->
-              <div x-show="!isAtStart" class="absolute top-0 left-0 justify-start hidden w-20 h-full pointer-events-none sm:flex bg-gradient-to-r from-white via-white to-transparent">
+              <div x-show="!isAtStart" class="sm:flex bg-gradient-to-r from-white via-white to-transparent absolute top-0 left-0 justify-start hidden w-20 h-full pointer-events-none">
                   <div class="pointer-events-auto">
                     <button 
                     @click="scrollByPage($refs.scrollContainer, 'left')" 
                     x-show="!isAtStart" 
                     x-transition:opacity 
                     :aria-hidden="isAtStart.toString()" 
-                    class="relative flex items-center justify-center w-10 h-10 transition-colors ease-out bg-transparent rounded-full cursor-pointer hover:bg-gray-100 focus:outline-none"
+                    class="hover:bg-gray-100 focus:outline-none relative flex items-center justify-center w-10 h-10 transition-colors ease-out bg-transparent rounded-full cursor-pointer"
                     aria-label="Scroll left"
                     >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -88,14 +88,14 @@
               </div>
 
               <!-- Button to scroll right -->
-              <div x-show="!isAtEnd" class="absolute top-0 right-0 justify-end hidden w-20 h-full pointer-events-none sm:flex bg-gradient-to-l from-white via-white to-transparent">
+              <div x-show="!isAtEnd" class="sm:flex bg-gradient-to-l from-white via-white to-transparent absolute top-0 right-0 justify-end hidden w-20 h-full pointer-events-none">
                   <div class="pointer-events-auto">
                     <button 
                     @click="scrollByPage($refs.scrollContainer, 'right')" 
                     x-show="!isAtEnd"
                     x-transition:opacity
                     :aria-hidden="isAtEnd.toString()" 
-                    class="relative flex items-center justify-center w-10 h-10 transition-colors ease-out bg-transparent rounded-full cursor-pointer hover:bg-gray-100 focus:outline-none"
+                    class="hover:bg-gray-100 focus:outline-none relative flex items-center justify-center w-10 h-10 transition-colors ease-out bg-transparent rounded-full cursor-pointer"
                     aria-label="Scroll right"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

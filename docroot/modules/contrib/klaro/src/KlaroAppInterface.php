@@ -181,6 +181,44 @@ interface KlaroAppInterface extends ConfigEntityInterface {
   public function setOnlyOnce(bool $only_once): KlaroAppInterface;
 
   /**
+   * Getter for if is contextual consent only.
+   *
+   * @return bool
+   *   If is contextual consent only.
+   */
+  public function isContextualConsentOnly(): bool;
+
+  /**
+   * Setter for contextual consent only.
+   *
+   * @param bool $contextual_consent_only
+   *   If contextual consent only.
+   *
+   * @return \Drupal\klaro\KlaroAppInterface
+   *   The instance.
+   */
+  public function setContextualConsentOnly(bool $contextual_consent_only): KlaroAppInterface;
+
+  /**
+   * Getter for contextual consent text.
+   *
+   * @return string
+   *   Contextual consent text.
+   */
+  public function contextualConsentText(): string;
+
+  /**
+   * Setter for contextual consent text.
+   *
+   * @param string $contextual_consent_text
+   *   Contextual consent text.
+   *
+   * @return \Drupal\klaro\KlaroAppInterface
+   *   The instance.
+   */
+  public function setContextualConsentText(string $contextual_consent_text): KlaroAppInterface;
+
+  /**
    * Getter for the info url.
    *
    * @return string|null

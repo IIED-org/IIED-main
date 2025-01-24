@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7652e4dac2065117a53a491d860bd180",
+    "content-hash": "8c6359279b2732908e79e248e72f7dbd",
     "packages": [
         {
             "name": "acquia/http-hmac-php",
@@ -6574,30 +6574,30 @@
         },
         {
             "name": "drupal/klaro",
-            "version": "3.0.0-rc12",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/klaro.git",
-                "reference": "3.0.0-rc12"
+                "reference": "3.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/klaro-3.0.0-rc12.zip",
-                "reference": "3.0.0-rc12",
-                "shasum": "6f7b0f380720b802827a51110f813189902cb5f3"
+                "url": "https://ftp.drupal.org/files/projects/klaro-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "e8ecfd168845f003e46c4472465e36bab612b510"
             },
             "require": {
                 "drupal/core": "^10.2 || ^11",
-                "drupal/klaro_js": "^3.0"
+                "drupal/klaro_js": "~3.0.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-rc12",
-                    "datestamp": "1732239415",
+                    "version": "3.0.0",
+                    "datestamp": "1736540657",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "RC releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -6606,10 +6606,6 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
-                {
-                    "name": "ckidow",
-                    "homepage": "https://www.drupal.org/user/255262"
-                },
                 {
                     "name": "jan kellermann",
                     "homepage": "https://www.drupal.org/user/371731"
@@ -6639,16 +6635,16 @@
         },
         {
             "name": "drupal/klaro_js",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/klaro_js.git",
-                "reference": "bd0aa9194e26e2d1b7b7ba2e8607efd4feb58ac3"
+                "reference": "c5398a0bc9dccd3ccc2c33c9393966bc874bba8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fklaro_js/repository/archive.zip?sha=bd0aa9194e26e2d1b7b7ba2e8607efd4feb58ac3",
-                "reference": "bd0aa9194e26e2d1b7b7ba2e8607efd4feb58ac3",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fklaro_js/repository/archive.zip?sha=c5398a0bc9dccd3ccc2c33c9393966bc874bba8c",
+                "reference": "c5398a0bc9dccd3ccc2c33c9393966bc874bba8c",
                 "shasum": ""
             },
             "type": "drupal-library",
@@ -6663,9 +6659,9 @@
             "description": "Mirror of the Klaro consent manager javascript library tagged as a Drupal library.",
             "homepage": "https://github.com/klaro-org/klaro-js/",
             "support": {
-                "source": "https://git.drupalcode.org/project/klaro_js/-/tree/0.7.22.1"
+                "source": "https://git.drupalcode.org/project/klaro_js/-/tree/3.0.1"
             },
-            "time": "2024-10-30T09:59:24+00:00"
+            "time": "2024-12-19T08:40:21+00:00"
         },
         {
             "name": "drupal/language_switcher_extended",

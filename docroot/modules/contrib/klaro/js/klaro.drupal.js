@@ -1,4 +1,4 @@
-(function (Drupal, drupalSettings, klaro) {
+(function (Drupal, drupalSettings) {
 
   'use strict';
 
@@ -9,11 +9,22 @@
     config: false,
     manager: false,
     observing: false,
+    needCallBehaviors: false,
+    ready: false,
     attach: function (context, settings) {
-      if (!settings.klaro || !klaro) {
+      if (!settings.klaro) {
         return;
       }
-
+      if (typeof klaro === 'undefined') {
+        document.querySelector('#klaro-js').addEventListener("load", () => {
+          Drupal.behaviors.klaro.proceed(context, settings);
+        });
+      }
+      else {
+        Drupal.behaviors.klaro.proceed(context, settings);
+      }
+    },
+    proceed: function(context, settings) {
       // Bootstrap config once.
       if (!Drupal.behaviors.klaro.config) {
         settings.klaro.config.services.forEach(function (service, a_index) {
@@ -25,9 +36,11 @@
           });
         });
 
-        settings.klaro.config.autoFocus = true;
         Drupal.behaviors.klaro.config = settings.klaro.config;
       }
+
+      // Decorate wrapperIdentifiers in context.
+      Drupal.behaviors.klaro.klaroDecorateWrapper(context, settings);
 
       // Store reference to manager once.
       if (!Drupal.behaviors.klaro.manager) {
@@ -100,6 +113,28 @@
           el.firstChild.prepend(title_elem);
         }
       });
+
+      // Iterate services and replace placeholder texts.
+      Drupal.behaviors.klaro.config.services.forEach(function(service, a_index) {
+        if (service.contextualConsentText) {
+          var elements = once('klaro-text', '[data-type="placeholder"][data-name="' + service.name + '"] div.context-notice > p:first-child', context);
+          if (elements.length > 0) {
+            let title_elem = document.createElement('p');
+            title_elem.innerHTML = service.contextualConsentText;
+            let el = elements[0];
+            el.parentNode.replaceChild(title_elem, el);
+          }
+        }
+      });
+
+      // Call Behaviors if needed.
+      if (Drupal.behaviors.klaro.needCallBehaviors && context === document) {
+        Drupal.behaviors.klaro.needCallBehaviors = false;
+        Drupal.attachBehaviors(document, drupalSettings);
+      }
+
+      // Set ready.
+      Drupal.behaviors.klaro.ready = true;
     },
 
     /**
@@ -120,6 +155,20 @@
       // Do the behaviors only for consent.
       if (!consent) {
         return;
+      }
+
+      // Rewrite data-id to id.
+      var elements = document.querySelectorAll('[data-name="' + service.name + '"][data-id]');
+      if (elements.length > 0) {
+        Array.prototype.forEach.call(elements, function(element) {
+          element.setAttribute('id', element.getAttribute('data-id'));
+        });
+        if (Drupal.behaviors.klaro.ready) {
+          Drupal.attachBehaviors(document, drupalSettings);
+        }
+        else {
+          Drupal.behaviors.klaro.needCallBehaviors = true;
+        }
       }
 
       let knownBehaviors = Object.keys(Drupal.behaviors);
@@ -162,6 +211,27 @@
     },
 
     /**
+     * Decorate wrapperIdentifiers in context.
+     */
+    klaroDecorateWrapper: function(context, settings) {
+      // Iterate services and wrapperIdentifier.
+      settings.klaro.config.services.forEach(function(service, a_index) {
+        service.wrapperIdentifier.forEach(function(wrapperIdentifier) {
+          var elements = once('klaro-wrap', wrapperIdentifier, context);
+          Array.prototype.forEach.call(elements, function(el) {
+            if (el) {
+              var wrapper = document.createElement('div');
+              wrapper.setAttribute('data-name', service.name);
+              wrapper.setAttribute('data-original-display', getComputedStyle(el).display);
+              el.parentNode.insertBefore(wrapper, el);
+              wrapper.appendChild(el);
+            }
+          });
+        });
+      });
+    },
+
+    /**
      * Watch for DOMchanges on klaro-element.
      */
     klaroElementObserver: function() {
@@ -194,13 +264,12 @@
       var labels = document.querySelectorAll('#klaro label')
       if (labels.length > 0){
         for (var i = 0; i < labels.length; i++) {
-          labels[i].setAttribute('tabindex', '0');
           labels[i].setAttribute('onkeydown', 'Drupal.behaviors.klaro.KlaroToggleService(event)');
-          labels[i].setAttribute('aria-role', 'checkbox');
           labels[i].setAttribute('aria-labelledby', labels[i].getAttribute('for') + '-title');
           labels[i].setAttribute('aria-describedby', labels[i].getAttribute('for') + '-description');
           if (labels[i].previousElementSibling && labels[i].previousElementSibling.tagName == 'INPUT') {
-            labels[i].setAttribute('aria-checked', labels[i].previousElementSibling.checked);
+            labels[i].previousElementSibling.setAttribute('tabindex', '0');
+            labels[i].removeAttribute('tabindex');
           }
         }
         labels[0].focus();
@@ -235,7 +304,6 @@
       if (event.key === "Enter") {
         event.target.click();
         event.target.focus();
-        event.target.setAttribute('aria-checked', event.target.previousElementSibling.checked);
       }
     }
   };
@@ -255,4 +323,4 @@
       });
     }
   };
-})(Drupal, drupalSettings, klaro);
+})(Drupal, drupalSettings);

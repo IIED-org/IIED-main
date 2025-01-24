@@ -6,7 +6,6 @@ core_version_requirement: ^10 || ^11
 php: 8.1
 dependencies:
   - drupal:field
-  - hal:hal
 test_dependencies:
   - drupal:field_ui
   - drupal:language

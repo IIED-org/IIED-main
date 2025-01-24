@@ -13,6 +13,9 @@ only_once: false
 weight: 2
 info_url: 'https://marketingplatform.google.com/intl/de/about/tag-manager/'
 privacy_policy_url: 'https://policies.google.com/privacy'
-javascripts: { }
+javascripts:
+  - gtm.js
+  - gtag.js
+  - 'https://www.googletagmanager.com/ns.html'
 attachments:
   - gtm

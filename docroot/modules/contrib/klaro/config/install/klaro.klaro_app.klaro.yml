@@ -1,6 +1,6 @@
 id: klaro
-label: 'Klaro!'
-description: 'Saves the status of the user''s consent in your browser.'
+label: 'Consent manager'
+description: 'Klaro! Cookie & Consent manager saves your consent status in the browser.'
 langcode: en
 status: true
 default: true

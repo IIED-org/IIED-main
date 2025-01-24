@@ -100,7 +100,6 @@ to create a white background.
 .klaro .cookie-modal .cm-list-input.half-checked:checked + .cm-list-label .slider::before,
 .klaro .context-notice .cm-list-input.half-checked:checked + .cm-list-label .slider::before,
 .klaro .cookie-notice .cm-list-input.half-checked:checked + .cm-list-label .slider::before {
-  -ms-transform: translateX(10px);
   transform: translateX(10px);
 }
 .klaro .cookie-modal .cm-list-input.only-required + .cm-list-label .slider,
@@ -113,7 +112,6 @@ to create a white background.
 .klaro .cookie-modal .cm-list-input.only-required + .cm-list-label .slider::before,
 .klaro .context-notice .cm-list-input.only-required + .cm-list-label .slider::before,
 .klaro .cookie-notice .cm-list-input.only-required + .cm-list-label .slider::before {
-  -ms-transform: translateX(10px);
   transform: translateX(10px);
 }
 .klaro .cookie-modal .cm-list-input.required:checked + .cm-list-label .slider,
@@ -213,7 +211,6 @@ to create a white background.
 .klaro .cookie-modal .cm-list-label input:checked + .slider::before,
 .klaro .context-notice .cm-list-label input:checked + .slider::before,
 .klaro .cookie-notice .cm-list-label input:checked + .slider::before {
-  -ms-transform: translateX(20px);
   transform: translateX(20px);
 }
 .klaro .cookie-modal .cm-list-input:focus + .cm-list-label .slider,
@@ -224,7 +221,6 @@ to create a white background.
 .klaro .cookie-modal .cm-list-input:checked + .cm-list-label .slider::before,
 .klaro .context-notice .cm-list-input:checked + .cm-list-label .slider::before,
 .klaro .cookie-notice .cm-list-input:checked + .cm-list-label .slider::before {
-  -ms-transform: translateX(20px);
   transform: translateX(20px);
 }
 .klaro .cookie-modal .slider,
@@ -425,8 +421,7 @@ to create a white background.
 }
 .klaro .cookie-modal.cm-embedded .cm-modal.cm-klaro {
   position: relative;
-  -ms-transform: none;
-      transform: none;
+  transform: none;
 }
 .klaro .cookie-modal .cm-bg {
   background: rgba(0, 0, 0, 0.5);
@@ -446,8 +441,7 @@ to create a white background.
   width: 100%;
   max-height: 98%;
   top: 50%;
-  -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
+  transform: translateY(-50%);
   position: fixed;
   overflow: auto;
 }
@@ -710,8 +704,7 @@ to create a white background.
   width: 100%;
   max-height: 98%;
   top: 50%;
-  -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
+  transform: translateY(-50%);
   position: fixed;
   overflow: auto;
   padding: 1em;

@@ -4,6 +4,7 @@ namespace Drupal\klaro\Utility;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Asset\LibrariesDirectoryFileFinder;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
@@ -15,6 +16,7 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Theme\ThemeManager;
 use Drupal\Core\Url;
 use Drupal\klaro\Entity\KlaroApp;
 use Drupal\klaro\KlaroAppInterface;
@@ -98,6 +100,13 @@ class KlaroHelper {
   protected $fileUrlGenerator;
 
   /**
+   * The theme.manager service.
+   *
+   * @var \Drupal\Core\Theme\ThemeManager
+   */
+  protected $themeManager;
+
+  /**
    * Constructs a KlaroHelper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -118,6 +127,8 @@ class KlaroHelper {
    *   The libraries_finder service.
    * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
    *   The file_url_generator service.
+   * @param \Drupal\Core\Theme\ThemeManager $theme_manager
+   *   Theme theme.manager service.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -129,6 +140,7 @@ class KlaroHelper {
     LoggerChannelFactoryInterface $logger,
     LibrariesDirectoryFileFinder $libraries_finder,
     FileUrlGeneratorInterface $file_url_generator,
+    ThemeManager $theme_manager,
   ) {
     $this->configFactory = $config_factory;
     $this->languageManager = $languages;
@@ -139,6 +151,7 @@ class KlaroHelper {
     $this->logger = $logger;
     $this->librariesFinder = $libraries_finder;
     $this->fileUrlGenerator = $file_url_generator;
+    $this->themeManager = $theme_manager;
   }
 
   /**
@@ -182,6 +195,16 @@ class KlaroHelper {
   }
 
   /**
+   * Returns if at least one app is enabled that requires user consent.
+   *
+   * @return bool
+   *   TRUE, if at least one enabled app requires consent.
+   */
+  public function consentManagementRequired(): bool {
+    return (bool) $this->getApps(TRUE, TRUE);
+  }
+
+  /**
    * Gets klaro.settings config.
    *
    * @return \Drupal\Core\Config\ImmutableConfig
@@ -208,7 +231,7 @@ class KlaroHelper {
    *   Return TRUE if library is found else FALSE.
    */
   public function hasLibraryFiles(): bool {
-    return $this->librariesFinder->find('klaro-js') ? TRUE : FALSE;
+    return $this->librariesFinder->find('klaro') ? TRUE : FALSE;
   }
 
   /**
@@ -218,7 +241,7 @@ class KlaroHelper {
    *   Return TRUE if deprecated library is found else FALSE.
    */
   public function hasDeprecatedLibraryFiles(): bool {
-    return $this->librariesFinder->find('klaro') ? TRUE : FALSE;
+    return $this->librariesFinder->find('klaro-js') ? TRUE : FALSE;
   }
 
   /**
@@ -282,6 +305,9 @@ class KlaroHelper {
         'required' => $app->isRequired(),
         'optOut' => $app->isOptOut(),
         'onlyOnce' => $app->isOnlyOnce(),
+        'contextualConsentOnly' => $app->isContextualConsentOnly(),
+        'contextualConsentText' => $this->filterXss($app->contextualConsentText()),
+        'wrapperIdentifier' => $app->wrapperIdentifier(),
         'translations' => [
           "$langcode" => [
             "title" => $app->label(),
@@ -303,6 +329,8 @@ class KlaroHelper {
       }
       $translations['consentModal']['description'] = $txt;
     }
+    $translations['purposeItem']['service'] = $this->t('Service', [], ['context' => 'klaro']);
+    $translations['purposeItem']['services'] = $this->t('Services', [], ['context' => 'klaro']);
 
     unset($translations['consentModal']['privacyPolicy']['url']);
     $translations['poweredBy'] = !empty($translations['poweredBy']) ? $translations['poweredBy'] : '';
@@ -325,6 +353,7 @@ class KlaroHelper {
     if (isset($settings['config']['learnMoreAsButton']) && $settings['config']['learnMoreAsButton']) {
       $settings['config']['additionalClass'] .= " learn-more-as-button";
     }
+    $settings['config']['additionalClass'] .= " klaro-theme-" . $this->themeManager->getActiveTheme()->getName();
 
     return $settings;
   }
@@ -361,17 +390,25 @@ class KlaroHelper {
    *
    * @param bool $only_enabled
    *   If only enabled apps should be fetched.
+   * @param bool $only_not_required
+   *   If only apps should be fetched that are not set to be required.
    *
    * @return \Drupal\klaro\KlaroAppInterface[]
    *   The enabled apps.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getApps(bool $only_enabled = TRUE): array {
+  public function getApps(bool $only_enabled = TRUE, bool $only_not_required = FALSE): array {
     $storage = $this->entityTypeManager->getStorage('klaro_app');
 
     $query = $storage->getQuery();
     $query->sort('weight');
     if ($only_enabled) {
       $query->condition('status', TRUE);
+    }
+    if ($only_not_required) {
+      $query->condition('required', FALSE);
     }
     $result = $storage->loadMultiple($query->accessCheck(FALSE)->execute());
 
@@ -816,7 +853,7 @@ class KlaroHelper {
         continue;
       }
       $initial_src = $iframe->getAttribute('src');
-      $initial_path = parse_url($initial_src, PHP_URL_PATH);
+      $initial_path = parse_url($initial_src, PHP_URL_PATH) ?? '';
 
       // If remote-video matchKlaroApp against url parameter.
       if (str_ends_with($initial_path, '/media/oembed')) {
@@ -882,21 +919,6 @@ class KlaroHelper {
       return $html;
     }
 
-    foreach ($klaro_apps as $app) {
-      if (!empty($app->wrapperIdentifier())) {
-        foreach ($app->wrapperIdentifier() as $identifier) {
-          $finder = new \DomXPath($dom);
-          $nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $identifier ')]");
-          foreach ($nodes as $node) {
-            $wrapper = $dom->createElement('div');
-            $wrapper->setAttribute('data-name', $app->id());
-            $node->parentNode->replaceChild($wrapper, $node);
-            $wrapper->appendChild($node);
-          }
-        }
-      }
-    }
-
     if ($complete_html) {
       $html = $dom->saveHTML();
       $html = mb_decode_numericentity($html, [0x80, 0x10FFFF, 0, 0x1FFFFF], 'UTF-8');
@@ -905,6 +927,21 @@ class KlaroHelper {
       $html = Html::serialize($dom);
     }
     return $html;
+  }
+
+  /**
+   * Filter text for XSS.
+   *
+   * @param string $text
+   *   Text to be filtered.
+   *
+   * @return string
+   *   The filtered test.
+   */
+  public function filterXss($text) {
+    $allowed = ['a', 'strong', 'em'];
+    $filtered = Xss::filter($text, $allowed);
+    return $filtered;
   }
 
 }

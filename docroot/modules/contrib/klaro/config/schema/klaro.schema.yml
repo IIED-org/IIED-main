@@ -44,6 +44,12 @@ klaro.klaro_app.*:
     only_once:
       type: boolean
       label: 'Only once'
+    contextual_consent_only:
+      type: boolean
+      label: 'Contextual Consent Only'
+    contextual_consent_text:
+      type: string
+      label: 'Contextual Consent Text'
     info_url:
       type: uri
       label: 'Info url'
@@ -154,6 +160,9 @@ klaro.settings:
     process_descriptions:
       type: boolean
       label: 'Process descriptions'
+    override_css:
+      type: boolean
+      label: 'Override Klaro CSS'
     library:
       type: mapping
       label: 'Library settings'
@@ -194,6 +203,9 @@ klaro.settings:
         html_texts:
           type: boolean
           label: 'Allow HTML in texts. (Does not work for button texts)'
+        auto_focus:
+          type: boolean
+          label: 'Enable autofocus for Klaro element'
 
 klaro.texts:
   type: config_object

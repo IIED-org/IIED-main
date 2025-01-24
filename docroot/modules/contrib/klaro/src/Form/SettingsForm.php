@@ -171,6 +171,13 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('show_toggle_button'),
     ];
 
+    $form['general_settings']['dialog']['enable_autofocus'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Autofocus Klaro! Dialog', [], ['context' => 'klaro']),
+      '#description' => $this->t('If activated, the open Klaro! dialog is automatically focused after loading.', ['context' => 'klaro']),
+      '#default_value' => $config->get('library.auto_focus'),
+    ];
+
     $form['general_settings']['apps'] = [
       '#type' => 'fieldgroup',
       '#title' => $this->t('Services', [], ['context' => 'klaro']),
@@ -438,6 +445,13 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('library.html_texts'),
     ];
 
+    $form['styling']['override_css'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Adjust the UI to Drupal themes', [], ['context' => 'klaro']),
+      '#description' => $this->t('Use a Drupal-like appearance for Klaro! UI elements. This module provides customized CSS styles for <em>Olivero</em>, <em>Claro</em> and <em>Gin</em>.', [], ['context' => 'klaro']),
+      '#default_value' => $config->get('override_css'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -481,6 +495,7 @@ class SettingsForm extends ConfigFormBase {
         'buttons',
         'learn_more_as_button',
       ]))
+      ->set('library.auto_focus', $form_state->getValue('enable_autofocus'))
       ->set('show_toggle_button', $form_state->getValue('show_toggle_button'))
       ->set('show_close_button', $form_state->getValue([
         'buttons',
@@ -499,6 +514,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('exclude_urls', array_filter($exclude_urls))
       ->set('disable_urls', array_filter($disable_urls))
       ->set('styles', $styles)
+      ->set('override_css', $form_state->getValue('override_css'))
       ->set('process_descriptions', $form_state->getValue([
         'apps',
         'process_descriptions',

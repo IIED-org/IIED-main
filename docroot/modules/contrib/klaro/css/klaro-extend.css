@@ -1,4 +1,14 @@
 .klaro {
+  a,
+  label.cm-list-label {
+    display: inline-block;
+    min-height: 24px;
+    cursor: pointer;
+  }
+  input:disabled + label.cm-list-label {
+    cursor: not-allowed;
+  }
+
   a:focus {
     outline: revert;
   }
@@ -34,6 +44,7 @@
   .cookie-notice:not(.cookie-modal-notice)
   a.cm-link.cn-learn-more {
   flex-grow: unset;
+  min-height: 24px;
   margin-right: auto;
   padding: 0.4em;
   cursor: pointer;
@@ -48,27 +59,13 @@
   line-height: 1.125rem;
 }
 
-.klaro {
-  --green1: var(--color--primary-40, rgb(27, 154, 228));
-  --green2: var(--color--primary-60, rgb(82, 179, 235));
-  --green3: var(--color--primary-80, rgb(221, 240, 251));
-  /*
-  --button-text-color: #fff;
-  --dark1: #fafafa;
-  --dark2: #777;
-  --dark3: #555;
-  --light1: #444;
-  --light2: #666;
-  --light3: #111;
-  */
-}
-
 .klaro-close {
   position: absolute;
   top: 0;
   right: 0;
   width: 30px;
   height: 25px;
+  padding: 0;
   cursor: pointer;
   color: var(--light1, #fafafa);
   border: none;
@@ -81,4 +78,49 @@
 
 .klaro.klaro-close-enabled p#id-cookie-notice {
   margin-right: 1em;
+}
+
+.klaro .cookie-modal .cm-modal .hide {
+  min-height: 24px;
+}
+.klaro .cookie-modal .cm-modal .hide:active,
+.klaro .cookie-modal .cm-modal .hide:focus {
+  outline: auto;
+}
+
+.klaro .cookie-modal .cm-list-input:focus + .cm-list-label .slider,
+.klaro .context-notice .cm-list-input:focus + .cm-list-label .slider,
+.klaro .cookie-notice .cm-list-input:focus + .cm-list-label .slider {
+  outline: auto;
+}
+
+@media (prefers-contrast: more) {
+  .klaro {
+    --klaro-button-focus-outline: 2px dotted #fff !important;
+    --klaro-button-focus-outline-offset: 2px !important;
+
+    .cookie-modal,
+    .cm-modal,
+    .context-notice,
+    .cookie-notice {
+      border: 1px solid #fff;
+      .cm-list-label .slider {
+        border: 2px solid #fff;
+        &::before {
+          box-sizing: border-box;
+          border: 4px solid #fff;
+        }
+      }
+      a:focus,
+      button:focus {
+        outline: 1px dotted #fff;
+      }
+    }
+    .cookie-modal .cm-modal .hide svg {
+      stroke: #fff;
+    }
+  }
+  .klaro_toggle_dialog {
+    background-image: url(../icons/privacy-white.svg);
+  }
 }

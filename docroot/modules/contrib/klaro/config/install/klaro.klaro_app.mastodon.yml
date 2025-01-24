@@ -17,6 +17,6 @@ javascripts:
   - social.bund.de
 callback_code: ''
 wrapper_identifier:
-  - mastodon-embed
+  - .mastodon-embed
 attachments: {  }
 weight: 0

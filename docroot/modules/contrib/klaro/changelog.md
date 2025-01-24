@@ -1,3 +1,53 @@
+**V.3.0.0**
+
+Includes:
+  - Issue #3491520: Add Input Filter for Klaro!
+  - Issue #3497609: Remove unused klaro.admin.css.
+  - Issue #3495342: Add active theme as class to klaro-element and provide Option "Adjust the UI to Drupal themes" (manual update required).
+  - Issue #3498415: Set default expiration time for Klaro! cookie to 180 days (manual update required).
+  - Issue #3495565: Config for Drupal module Google Tag 2.x (manual update required).
+  - Issue #3493235: Config "Autofocus" should be configurable.
+  - Issue #3492808: Add placeholder example for Callback.
+  - Issue #3492815: Add placeholder example for Service Attachments textarea.
+
+**V.3.0.0-rc16**
+
+Includes:
+  - Issue #3495295: Missing some translations.
+
+**V.3.0.0-rc15**
+
+Includes:
+  - Issue #3493822: Defer loading of library.
+  - Issue #3491706: Allow blocking reCaptcha
+  - Issue #3494891: Update Klaro JS and use smaller JS file.
+  - Issue #3494556: Add Klaro! services for AI features
+  - Issue #3494891: Changed composer constraint.
+  - Issue #3491681: Use klaro-no-translations-no-css.js and new library path.
+  - Issue #3484568: Contextual Consent: Add optional textfield and option contextualConsentOnly
+  - Issue #3491906: Move decoration of custom elements from HTML-Helper to JS
+  - Issue #3493374: Ampersand in module name gets not escaped.
+  - Issue #3493540: Only load Klaro! library if required
+  - Issue #3492092: Support Video Embed Field
+
+**V.3.0.0-rc14**
+
+Includes:
+  - Issue #3492492: Bugfix for Leaflet Service
+  - Issue #3491622: Renamed services for Klaro and CMS and service category CMS (only for new installations).
+  - Issue #3491508: Renamed project to "Klaro Cookie & Consent Manager"
+  - Issue #3491521: Added tugboat config
+
+**V.3.0.0-rc13**
+
+Includes:
+  - Fixed typos in KlaroAppForm.php
+  - Introduced: Use Klaro with custom code and ID
+  - Issue #3491559: Translating "Accept once" changes translation for "Yes" on whole system
+  - Issue #3490656: Fixed Bug: Wrong attribute "aria-role"
+  - Issue #3491325: Add service to handle Leaflet (maps)
+  - Issue #3489475: Fixed Bug: A string context for threads is required
+
 **V.3.0.0-rc12**
 
   - Revised texts.
