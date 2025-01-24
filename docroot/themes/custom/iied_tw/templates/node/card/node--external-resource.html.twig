@@ -11,11 +11,11 @@ For external resource card display
               <div
                 class="flex justify-between px-4 pt-2 pb-5 text-gray-500"
               >
-               {{ node.resource_type.0.value|lower|capitalize }}
+               {{ node.source.0.value }}
 
                 <div>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
                   </svg>
                 </div>
               </div>
@@ -29,7 +29,7 @@ For external resource card display
                 <p class="text-gray-700">{{ node.field_tagline.0.value }}</p>
               </div>
               
-              <p class="text-gray-500">{{ node.source.0.value }}</p>
+              <p class="text-gray-500"> {{ node.resource_type.0.value|lower|capitalize }}</p>
              
             </div>
 
