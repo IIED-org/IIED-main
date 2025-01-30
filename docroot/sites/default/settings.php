@@ -852,10 +852,11 @@ $config['image.settings']['suppress_itok_output'] = TRUE;
  *
  * Keep this code block at the end of this file to take full effect.
  */
+if (getenv('LANDO_INFO') !== FALSE && file_exists($app_root . '/' . $site_path . '/settings.lando.php')) {
+  include $app_root . '/' . $site_path . '/settings.lando.php';
+}
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
   include $app_root . '/' . $site_path . '/settings.local.php';
-} elseif (getenv('LANDO_INFO') !== FALSE && file_exists($app_root . '/' . $site_path . '/settings.lando.php')) {
-  include $app_root . '/' . $site_path . '/settings.lando.php';
 }
 
 // Automatically generated include for settings managed by ddev.

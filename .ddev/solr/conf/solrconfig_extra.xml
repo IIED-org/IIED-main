@@ -1,8 +1,67 @@
-<!-- #ddev-generated -->
 <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
+    <lst name="spellchecker">
+      <str name="name">ar</str>
+      <str name="field">spellcheck_ar</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
+    <lst name="spellchecker">
+      <str name="name">hr</str>
+      <str name="field">spellcheck_hr</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
     <lst name="spellchecker">
       <str name="name">en</str>
       <str name="field">spellcheck_en</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
+    <lst name="spellchecker">
+      <str name="name">fr</str>
+      <str name="field">spellcheck_fr</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
+    <lst name="spellchecker">
+      <str name="name">id</str>
+      <str name="field">spellcheck_id</str>
       <str name="classname">solr.DirectSolrSpellChecker</str>
       <str name="distanceMeasure">internal</str>
       <str name="accuracy">0.5</str>
@@ -29,8 +88,135 @@
       <str name="thresholdTokenFrequency">.01</str>
       <str name="onlyMorePopular">true</str>
     </lst>
+  
+    <lst name="spellchecker">
+      <str name="name">pl</str>
+      <str name="field">spellcheck_pl</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
+    <lst name="spellchecker">
+      <str name="name">pt_br</str>
+      <str name="field">spellcheck_pt_br</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
+    <lst name="spellchecker">
+      <str name="name">pt_pt</str>
+      <str name="field">spellcheck_pt_pt</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
+    <lst name="spellchecker">
+      <str name="name">ru</str>
+      <str name="field">spellcheck_ru</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
+    <lst name="spellchecker">
+      <str name="name">zh_hans</str>
+      <str name="field">spellcheck_zh_hans</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">1</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">1</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
+    <lst name="spellchecker">
+      <str name="name">es</str>
+      <str name="field">spellcheck_es</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
+    <lst name="spellchecker">
+      <str name="name">zh_hant</str>
+      <str name="field">spellcheck_zh_hant</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">1</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">1</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
   </searchComponent>
 <searchComponent name="suggest" class="solr.SuggestComponent">
+    <lst name="suggester">
+      <str name="name">ar</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_ar</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+      <str name="indexPath">./ar</str>
+    </lst>
+  
+    <lst name="suggester">
+      <str name="name">hr</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_hr</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+      <str name="indexPath">./hr</str>
+    </lst>
+  
     <lst name="suggester">
       <str name="name">en</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
@@ -38,8 +224,33 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_en</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./en</str>
+    </lst>
+  
+    <lst name="suggester">
+      <str name="name">fr</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_fr</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+      <str name="indexPath">./fr</str>
+    </lst>
+  
+    <lst name="suggester">
+      <str name="name">id</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_id</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+      <str name="indexPath">./id</str>
     </lst>
   
     <lst name="suggester">
@@ -49,8 +260,69 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_und</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
+      <str name="indexPath">./und</str>
+    </lst>
+  
+    <lst name="suggester">
+      <str name="name">pl</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_pl</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+      <str name="indexPath">./pl</str>
+    </lst>
+  
+    <lst name="suggester">
+      <str name="name">pt_br</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_pt_br</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+      <str name="indexPath">./pt_br</str>
+    </lst>
+  
+    <lst name="suggester">
+      <str name="name">pt_pt</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_pt_pt</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+      <str name="indexPath">./pt_pt</str>
+    </lst>
+  
+    <lst name="suggester">
+      <str name="name">ru</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_ru</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+      <str name="indexPath">./ru</str>
+    </lst>
+  
+    <lst name="suggester">
+      <str name="name">es</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_es</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+      <str name="indexPath">./es</str>
     </lst>
   </searchComponent>
 <!--
@@ -153,7 +425,7 @@
   <lst name="defaults">
     <str name="suggest">true</str>
     <str name="suggest.dictionary">und</str>
-    <str name="suggest.dictionary">10</str>
+    <str name="suggest.count">10</str>
   </lst>
   <arr name="components">
     <str>suggest</str>
