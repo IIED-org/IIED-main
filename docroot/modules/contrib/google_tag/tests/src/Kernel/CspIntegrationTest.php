@@ -20,7 +20,7 @@ final class CspIntegrationTest extends KernelTestBase {
   protected static $modules = ['google_tag'];
 
   /**
-   * Tests container definition without csp module..
+   * Tests container definition without csp module.
    */
   public function testWithoutCsp(): void {
     self::assertFalse(

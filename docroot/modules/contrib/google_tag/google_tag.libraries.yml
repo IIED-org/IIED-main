@@ -11,7 +11,6 @@ gtag:
   dependencies:
     - core/drupalSettings
 gtag.ajax:
-  header: true
   js:
     js/gtag.ajax.js: { }
   dependencies:

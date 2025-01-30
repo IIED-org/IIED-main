@@ -1,7 +1,8 @@
-const dl = drupalSettings.gtm.settings.data_layer || 'dataLayer';
+const dl = drupalSettings.gtm ? drupalSettings.gtm.settings.data_layer : 'dataLayer';
 window[dl] = window[dl] || [];
 
 (function (drupalSettings) {
+  if (!drupalSettings.gtm) {return;}
   const config = drupalSettings.gtm;
 
   window[dl].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
