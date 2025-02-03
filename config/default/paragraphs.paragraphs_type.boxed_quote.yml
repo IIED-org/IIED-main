@@ -1,0 +1,10 @@
+uuid: 362b0ae4-6e2b-49f9-8374-5e2104eecedf
+langcode: en
+status: true
+dependencies: {  }
+id: boxed_quote
+label: 'Boxed quote'
+icon_uuid: null
+icon_default: null
+description: 'Add a quote and cite. Quotation marks will be added. Box will be added. Use within standard content not aside. '
+behavior_plugins: {  }

@@ -184,3 +184,4 @@ modification+manager+user+user: user.user.default
 modification+administrator+user+user: user.user.default
 'use  The form mode default linked to  block_content entity( heading )': block_content.heading.default
 'use  The form mode dashboard_add_author linked to  taxonomy_term entity( tags )': taxonomy_term.tags.dashboard_add_author
+'use  The form mode default linked to  paragraph entity( boxed_quote )': paragraph.boxed_quote.default
