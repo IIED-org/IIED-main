@@ -1,0 +1,43 @@
+{# As 2 col with custom header #}
+{%
+  set classes = [
+    dom_id ? 'js-view-dom-id-' ~ dom_id,
+        'container mb-12',
+  ]
+%}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title }}
+  {{ title_suffix }}
+
+
+  
+  {% if header %}
+    <header class="grid items-center gap-6 mb-6 xl:gap-10 lg:grid-cols-2 xl:grid-cols-4">
+      {{ header }}
+    <div class="xl:col-start-4">{{ exposed }}</div>
+    </header>
+  {% endif %}
+
+  {{ attachment_before }}
+  <div class="grid grid-flow-row-dense gap-6 mb-12 xl:gap-10 lg:grid-cols-2">
+  {% if rows -%}
+    {{ rows }}
+  {% elseif empty -%}
+    {{ empty }}
+  {% endif %}
+  </div>
+  {{ pager }}
+
+  {{ attachment_after }}
+  {{ more }}
+
+  {% if footer %}
+    <footer>
+      {{ footer }}
+    </footer>
+  {% endif %}
+
+  {{ feed_icons }}
+</div>

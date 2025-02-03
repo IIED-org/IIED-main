@@ -41,8 +41,6 @@
 {%
   set classes = [
     'paragraph',
-    'prose', 
-    'md:prose-lg',
     'mb-12',
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
@@ -54,13 +52,23 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    <blockquote class="pl-0 text-2xl prose-blockquote font-headline text-iiedpink-700">
-      {{ content.field_quote_text }}
+
+
+
+    <blockquote class="p-4 text-xl border border-gray-300 font-headline text-iiedpink-700 rounded-xl">
+
+      <div class="mb-6">{{ content.field_quote_text }}</div>
         {% if content.field_quote_citation is not empty %}
           {% set cite %}
             {{ content.field_quote_citation }}
           {% endset %}
-        <cite class="flex font-sans text-base not-italic font-normal text-gray-700 not-prose">{{ cite }}</cite>
+
+        <cite class="flex items-center space-x-2 font-sans text-base not-italic font-normal text-gray-700">
+          {% if content.quote_author is not empty %}
+          {{ content.quote_author }}
+          {% endif %} 
+        {{ cite }}
+        </cite>
       {% endif %}
       </blockquote>
     {% endblock %}

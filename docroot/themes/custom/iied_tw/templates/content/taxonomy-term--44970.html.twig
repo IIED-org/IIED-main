@@ -1,0 +1,123 @@
+
+
+{#
+/**
+ For Gender-climate-environment hub, taxonomy-term--44970
+ */
+#}
+
+{%
+  set classes = [
+    'taxonomy-term',
+    'mb-12',
+    'vocabulary-' ~ term.bundle|clean_class,
+  ]
+%}
+
+<div{{ attributes.setAttribute('id', 'taxonomy-term-' ~ term.id).addClass(classes) }}>
+  
+  <div class="bg-iiedbg-10">
+
+    {% block nav %}
+      <div class="container pt-6 pb-2">
+          <nav aria-label="themes">
+          <div class="flex flex-wrap justify-between">
+            <div class="flex flex-wrap items-center mb-4 space-x-3">
+              {% for key, item in term.field_theme %}
+                {% if key is not empty %}
+                  <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.tid.value}) }}">
+                  {{ item.entity.label }}</a>
+                  {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-gray-300"></div>' }}
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="mb-4">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
+          </div>
+        </nav>
+      </div>
+    {% endblock %}
+
+    {# custom header  #}
+    {% block header %}
+      <div class="container mb-12 overflow-hidden xl:grid xl:gap-x-6 xl:grid-cols-12">
+        <div class="prose xl:col-span-8 xl:prose-lg max-w-none">
+          {{ title_prefix }}
+          <h1>{{ name }}</h1>
+          {{ title_suffix }}
+              <div class="mb-12">
+              {% if term.subheading.0.value is not empty %}
+              <h2 class="mb-6">{{ term.subheading.0.value }}</h2>
+              {% endif %}
+              <p class="prose prose-lg lg:prose-xl">
+              {{ term.description.0.value|striptags }}
+              </p>
+            </div>
+        </div>
+        <div class="xl:col-span-4">
+        
+          {% if term.field_term_image.0 %} 
+          <img src="{{ file_url(term.field_term_image.0.entity.uri.value) }}" alt="{{ term.field_term_image.0.alt }}" />
+          {% endif %}
+
+        </div>
+      </div>
+    {% endblock %}
+
+   </div>
+
+  <div class="mb-12">
+    {{ content|without('field_overview', 'field_tags', 'field_theme') }}
+  </div>
+
+   {{ attach_library('iied_tw/alpine') }}
+
+  {% block main %}
+    <div class="pb-12 mb-12 border-b border-gray-300">
+      <div class="tab-wrapper" 
+        x-data="{ tab: window.location.hash ? window.location.hash.substring(1) : 'inthiscollection' }"
+        x-init="$refs[tab].focus()"
+        id="tab_wrapper"
+        >
+        <nav class="border-b border-gray-300">
+          <div class="container flex flex-row">
+            <a x-ref="inthiscollection" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'inthiscollection' }" @click.prevent="tab = 'inthiscollection'; window.location.hash = 'inthiscollection'" href="#">All content</a>
+            <a x-ref="map" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'map' }" @click.prevent="tab = 'map'; window.location.hash = 'map'" href="#">Map</a>
+            <a x-ref="summaries" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'summaries' }" @click.prevent="tab = 'summaries'; window.location.hash = 'summaries'" href="#">Summaries</a>
+          </div>  
+        </nav>
+          <div class="pt-6 tab-panel" x-show="tab === 'inthiscollection'" x-transition:enter.duration.750ms>
+            <div class="content">
+             {{ drupal_view('gender_hub', 'block_1') }}
+            </div>
+          </div>
+
+          <div class="pt-6 tab-panel" x-show="tab === 'map'" x-transition:enter.duration.750ms>
+            <div class="container content lg:grid lg:gap-x-6 lg:grid-cols-12">
+                <div class="mb-12 prose md:prose-lg lg:col-span-8 lg:col-start-5">
+                Map
+                </div>
+            </div>
+          </div>
+
+          <div class="pt-6 tab-panel" x-show="tab === 'summaries'" x-transition:enter.duration.750ms>
+            <div class="container content lg:grid lg:gap-x-6 lg:grid-cols-12">
+                <div class="mb-12 prose md:prose-lg lg:col-span-8 lg:col-start-5">
+                Summaries
+                </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+  
+  <div class="container mb-12">
+   {{ drupal_view('node_slider', 'gender_block') }}
+  </div>
+
+</div>
+  
+
+
+
