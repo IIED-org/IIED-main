@@ -18,10 +18,18 @@ cookies:
 required: true
 opt_out: false
 only_once: false
+contextual_consent_only: false
+contextual_consent_text: ''
 info_url: 'https://www.drupal.org'
 privacy_policy_url: ''
-javascripts: {  }
+javascripts:
+  - themes/custom/iied_tw/dist/js
+  - 'https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js'
+  - 'https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js'
+  - 'https://www.paypalobjects.com/donate/sdk/donate-sdk.js'
+  - 'https://cdn-eu.clickdimensions.com/web/v10/CDWidget.js'
 callback_code: ''
 wrapper_identifier: {  }
-attachments: {  }
+attachments:
+  - Alpine
 weight: -9
