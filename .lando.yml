@@ -3,19 +3,22 @@ recipe: drupal10
 config:
   php: '8.3'
   webroot: docroot
-  xdebug: debug
+  xdebug: 'develop,debug'
 env_file:
   - .env
 services:
   appserver:
+    xdebug: debug
     config:
-      php: .vscode/php.ini
+      php: .lando.php.ini
     overrides:
       environment:
         DRUSH_OPTIONS_ROOT: '/app/docroot'
         DRUSH_OPTIONS_URI: 'https://iied-main.lndo.site'
         # Support debugging Drush with XDEBUG. Use lando drush to debug.
-        PHP_IDE_CONFIG: "serverName=localhost"
+        PHP_IDE_CONFIG: "serverName=appserver"
+        LANDO_HOST_IP: "host.docker.internal"
+        XDEBUG_CONFIG: "remote_enable=1 remote_host=host.docker.internal"
     build_as_root:
       - apt update && apt install libgmp-dev -y && docker-php-ext-install gmp
       - /app/scripts/imagick.sh
