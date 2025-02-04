@@ -26,10 +26,9 @@
 <!DOCTYPE html>
 <html{{html_attributes}}>
 	<head>
-		<!-- Google Tag Manager -->
+		<!-- Define dataLayer and the gtag function  -->
 		<script>
-			// Define dataLayer and the gtag function.
-window.dataLayer = window.dataLayer || [];
+			window.dataLayer = window.dataLayer || [];
 function gtag() {
 dataLayer.push(arguments);
 }
@@ -80,9 +79,9 @@ f.parentNode.insertBefore(j, f);
 					<!-- End Google Tag Manager (noscript) -->
 					<div>
 						{#
-																								      Keyboard navigation/accessibility link to main content section in
-																								      page.html.twig.
-																								    #}
+						              Keyboard navigation/accessibility link to main content section in
+						              page.html.twig.
+						            #}
 						<a href="#main-content" class="visually-hidden focusable">
 							{{ 'Skip to main content'|t }}
 						</a>
