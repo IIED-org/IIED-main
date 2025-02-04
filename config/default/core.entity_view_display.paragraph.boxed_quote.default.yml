@@ -1,0 +1,41 @@
+uuid: e8155256-896a-47b4-ab82-249cf728b3d7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.boxed_quote.field_quote_citation
+    - field.field.paragraph.boxed_quote.field_quote_text
+    - field.field.paragraph.boxed_quote.quote_author
+    - paragraphs.paragraphs_type.boxed_quote
+  module:
+    - text
+id: paragraph.boxed_quote.default
+targetEntityType: paragraph
+bundle: boxed_quote
+mode: default
+content:
+  field_quote_citation:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_quote_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  quote_author:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: avatar
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

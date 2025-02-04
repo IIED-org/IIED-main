@@ -8,6 +8,7 @@ dependencies:
     - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
+    - paragraphs.paragraphs_type.boxed_quote
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.form
     - paragraphs.paragraphs_type.gallery
@@ -54,6 +55,7 @@ settings:
       logo_block: logo_block
       stories_cta: stories_cta
       form: form
+      boxed_quote: boxed_quote
       related_publication_inline: related_publication_inline
     negate: 0
     target_bundles_drag_drop:
@@ -71,6 +73,9 @@ settings:
         enabled: true
       box:
         weight: -65
+        enabled: true
+      boxed_quote:
+        weight: 50
         enabled: true
       file_upload:
         weight: -68
@@ -179,6 +184,9 @@ settings:
         enabled: false
       timeline:
         weight: -36
+        enabled: false
+      unstyled:
+        weight: 87
         enabled: false
       video_embed:
         weight: -59

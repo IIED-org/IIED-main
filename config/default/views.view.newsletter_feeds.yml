@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.rss
     - field.storage.node.body
     - field.storage.node.field_content
     - field.storage.node.field_standfirst
@@ -328,7 +329,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "{{ field_standfirst }}\r\n{{ field_content }}\r\n{{ body }}"
+            text: "{% autoescape false %} <![CDATA[\r\n{{ field_standfirst }}\r\n{{ field_content }}\r\n{{ body }}\r\n]]>\r\n{% endautoescape %}"
             make_link: false
             path: ''
             absolute: false
@@ -360,7 +361,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -1159,6 +1160,214 @@ display:
       display_description: ''
       display_extenders: {  }
       path: feeds/nature
+      sitename_title: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.body'
+        - 'config:field.storage.node.field_content'
+        - 'config:field.storage.node.field_standfirst'
+  feed_6:
+    id: feed_6
+    display_title: 'Cities feed'
+    display_plugin: feed
+    position: 1
+    display_options:
+      title: 'Cities and people'
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 25
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+        field_theme_s__target_id:
+          id: field_theme_s__target_id
+          table: node__field_theme_s_
+          field: field_theme_s__target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value:
+            - 4536
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          vid: theme
+          type: textfield
+          hierarchy: false
+          limit: true
+          error_message: true
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: rss
+        options:
+          grouping: {  }
+          description: 'IIED newsletter feed: Cities and people'
+      row:
+        type: node_rss
+        options:
+          relationship: none
+          view_mode: rss
+      defaults:
+        title: false
+        filters: false
+        filter_groups: false
+        sitename_title: false
+      display_description: ''
+      display_extenders: {  }
+      path: feeds/cities-content-rss
+      sitename_title: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.body'
+        - 'config:field.storage.node.field_content'
+        - 'config:field.storage.node.field_standfirst'
+  feed_7:
+    id: feed_7
+    display_title: 'Cities feed'
+    display_plugin: feed
+    position: 1
+    display_options:
+      title: 'Cities and people'
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 25
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+        field_theme_s__target_id:
+          id: field_theme_s__target_id
+          table: node__field_theme_s_
+          field: field_theme_s__target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value:
+            - 4536
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          vid: theme
+          type: textfield
+          hierarchy: false
+          limit: true
+          error_message: true
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: rss
+        options:
+          grouping: {  }
+          description: 'IIED newsletter feed: Cities and people'
+      row:
+        type: node_rss
+        options:
+          relationship: none
+          view_mode: default
+      defaults:
+        title: false
+        filters: false
+        filter_groups: false
+        sitename_title: false
+      display_description: ''
+      display_extenders: {  }
+      path: feeds/cities-content-rss-default
       sitename_title: false
     cache_metadata:
       max-age: -1

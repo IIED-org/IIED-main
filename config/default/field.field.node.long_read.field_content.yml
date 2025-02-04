@@ -9,6 +9,7 @@ dependencies:
     - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
+    - paragraphs.paragraphs_type.boxed_quote
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.form
     - paragraphs.paragraphs_type.gallery
@@ -76,6 +77,7 @@ settings:
       highchart: highchart
       related_publication_inline: related_publication_inline
       form: form
+      boxed_quote: boxed_quote
       related_content_no_image: related_content_no_image
     negate: 0
     target_bundles_drag_drop:
@@ -93,6 +95,9 @@ settings:
         enabled: true
       box:
         weight: -76
+        enabled: true
+      boxed_quote:
+        weight: 50
         enabled: true
       file_upload:
         weight: -64
@@ -202,6 +207,9 @@ settings:
       timeline:
         weight: -54
         enabled: true
+      unstyled:
+        weight: 87
+        enabled: false
       video_embed:
         weight: -69
         enabled: true

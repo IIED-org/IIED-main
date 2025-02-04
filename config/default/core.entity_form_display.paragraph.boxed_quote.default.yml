@@ -1,0 +1,45 @@
+uuid: 3c26b36e-47a1-4d35-a9af-ab40126e3269
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.boxed_quote.field_quote_citation
+    - field.field.paragraph.boxed_quote.field_quote_text
+    - field.field.paragraph.boxed_quote.quote_author
+    - paragraphs.paragraphs_type.boxed_quote
+  module:
+    - text
+id: paragraph.boxed_quote.default
+targetEntityType: paragraph
+bundle: boxed_quote
+mode: default
+content:
+  field_quote_citation:
+    type: text_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_quote_text:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  quote_author:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
