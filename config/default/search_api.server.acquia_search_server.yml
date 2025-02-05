@@ -57,6 +57,11 @@ backend_config:
   environment: default
   connector: solr_acquia_connector
   connector_config:
+    identifier: AGHX-142716
+    api_key: 6b524e42da671f7a44a16f19ffa00c38
+    uuid: a70da4cc-a976-4f36-999d-94e46d72df37
+    api_host: 'https://api.sr-prod02.acquia.com'
+    skip_schema_check: true
     scheme: http
     host: s7020-eu-west-1.sr-prod02.acquia.com
     port: 8983
@@ -66,17 +71,12 @@ backend_config:
     index_timeout: 5
     optimize_timeout: 10
     finalize_timeout: 30
-    skip_schema_check: true
     solr_version: ''
     http_method: AUTO
     commit_within: 1000
     jmx: false
     jts: false
     solr_install_dir: ''
-    identifier: AGHX-142716
-    api_key: 6b524e42da671f7a44a16f19ffa00c38
-    uuid: a70da4cc-a976-4f36-999d-94e46d72df37
-    api_host: 'https://api.sr-prod02.acquia.com'
     key: search_api_solr
     overridden_by_acquia_search: 1
   optimize: false

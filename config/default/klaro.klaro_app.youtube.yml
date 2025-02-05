@@ -1,6 +1,6 @@
 uuid: f91f07d2-4fa8-4c5a-af74-cfe4c73a418d
 langcode: en
-status: true
+status: false
 dependencies: {  }
 _core:
   default_config_hash: ETjeewYXUBo_zLRzIlijtavOYTyqTUkqyMsUM2x3FYo
@@ -10,19 +10,7 @@ description: 'YouTube is an online video sharing platform owned by Google.'
 default: false
 purposes:
   - external_content
-cookies:
-  -
-    regex: '.*'
-    path: ''
-    domain: google.com
-  -
-    regex: '.*'
-    path: ''
-    domain: youtube.com
-  -
-    regex: '.*'
-    path: ''
-    domain: doubleclick.net
+cookies: {  }
 required: false
 opt_out: false
 only_once: false
@@ -32,10 +20,10 @@ info_url: 'https://www.youtube.com/'
 privacy_policy_url: 'https://www.youtube.com/howyoutubeworks/our-commitments/protecting-user-data/'
 javascripts:
   - youtube.com
-  - www.youtube.com
   - youtu.be
   - youtube-nocookie.com
   - ytimg.com
+  - doubleclick.net
 callback_code: ''
 wrapper_identifier: {  }
 attachments: {  }

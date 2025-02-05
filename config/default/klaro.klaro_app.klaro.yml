@@ -18,8 +18,6 @@ cookies:
 required: true
 opt_out: false
 only_once: false
-contextual_consent_only: false
-contextual_consent_text: ''
 info_url: 'https://github.com/klaro-org/klaro-js/blob/master/README.md'
 privacy_policy_url: 'internal:/privacy-policy'
 javascripts: {  }

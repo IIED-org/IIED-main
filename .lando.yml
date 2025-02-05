@@ -8,6 +8,7 @@ env_file:
   - .env
 services:
   appserver:
+    webroot: docroot
     xdebug: debug
     config:
       php: .lando.php.ini
@@ -79,10 +80,14 @@ tooling:
   xdebug-on:
     service: appserver
     description: Enable xdebug for apache.
-    cmd: "docker-php-ext-enable xdebug && /etc/init.d/apache2 reload"
+    cmd: 
+      - docker-php-ext-enable xdebug && /etc/init.d/apache2 reload
+      - tput setaf 2 && echo "Xdebug On" && tput sgr 0 && echo
     user: root
   xdebug-off:
     service: appserver
     description: Disable xdebug for apache.
-    cmd: "rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload"
+    cmd:
+      - rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload
+      - tput setaf 2 && echo "Xdebug Off" && tput sgr 0 && echo
     user: root
