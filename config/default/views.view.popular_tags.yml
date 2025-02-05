@@ -753,7 +753,7 @@ display:
       relationships: {  }
       group_by: false
       display_extenders: {  }
-      path: admin/popular-tags
+      path: tags/popular-tags
       displays:
         page_1: page_1
         page_2: page_2
@@ -1397,6 +1397,7 @@ display:
           query_tags: {  }
       defaults:
         query: false
+        css_class: false
         pager: false
         style: false
         row: false
@@ -1404,9 +1405,10 @@ display:
         sorts: false
         filters: false
         filter_groups: false
+      css_class: 'container my-12'
       display_description: ''
       display_extenders: {  }
-      path: admin/all-tags/popular-tags
+      path: tags/all-tags/popular-tags
       menu:
         type: tab
         title: 'Popular tags'
@@ -1435,6 +1437,56 @@ display:
     display_options:
       title: 'All tags'
       fields:
+        counter:
+          id: counter
+          table: views
+          field: counter
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: counter
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          counter_start: 1
         name:
           id: name
           table: taxonomy_term_field_data
@@ -1445,7 +1497,7 @@ display:
           entity_type: taxonomy_term
           entity_field: name
           plugin_id: term_name
-          label: ''
+          label: 'All IIED tags'
           exclude: false
           alter:
             alter_text: false
@@ -1615,7 +1667,7 @@ display:
       group_by: false
       display_description: ''
       display_extenders: {  }
-      path: admin/all-tags
+      path: tags/all-tags
       menu:
         type: 'default tab'
         title: 'IIED tags'
@@ -1741,14 +1793,14 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 0
+            max_length: 40
             word_boundary: true
             ellipsis: true
             more_link: false
             more_link_text: ''
             more_link_path: ''
-            strip_tags: true
-            trim: false
+            strip_tags: false
+            trim: true
             preserve_tags: ''
             html: false
           element_type: ''
@@ -1764,9 +1816,8 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: text_trimmed
-          settings:
-            trim_length: 40
+          type: text_default
+          settings: {  }
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1938,6 +1989,7 @@ display:
       defaults:
         query: false
         title: false
+        css_class: false
         pager: false
         group_by: false
         style: false
@@ -1958,10 +2010,11 @@ display:
           entity_type: taxonomy_term
           plugin_id: entity_reverse
           required: false
+      css_class: 'container my-12'
       group_by: true
       display_description: ''
       display_extenders: {  }
-      path: admin/all-tags/tag-count
+      path: tags/all-tags/tag-count
       menu:
         type: tab
         title: 'Tags count'

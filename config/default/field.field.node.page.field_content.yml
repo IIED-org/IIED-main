@@ -8,6 +8,7 @@ dependencies:
     - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
+    - paragraphs.paragraphs_type.boxed_quote
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.form
     - paragraphs.paragraphs_type.gallery
@@ -73,6 +74,7 @@ settings:
       logo_block: logo_block
       highchart: highchart
       form: form
+      boxed_quote: boxed_quote
       related_content: related_content
       related_project: related_project
       related_content_no_image: related_content_no_image
@@ -95,6 +97,9 @@ settings:
         enabled: true
       box:
         weight: -56
+        enabled: true
+      boxed_quote:
+        weight: 50
         enabled: true
       file_upload:
         weight: -53

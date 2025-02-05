@@ -8,6 +8,7 @@ dependencies:
     - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
+    - paragraphs.paragraphs_type.boxed_quote
     - paragraphs.paragraphs_type.file_upload
     - paragraphs.paragraphs_type.form
     - paragraphs.paragraphs_type.gallery
@@ -79,6 +80,7 @@ settings:
       timeline: timeline
       video_embed: video_embed
       form: form
+      boxed_quote: boxed_quote
       key_figure: key_figure
       related_content_no_image: related_content_no_image
       related_card: related_card
@@ -99,6 +101,9 @@ settings:
         enabled: true
       box:
         weight: -73
+        enabled: true
+      boxed_quote:
+        weight: 50
         enabled: true
       file_upload:
         weight: -50
@@ -208,6 +213,9 @@ settings:
       timeline:
         weight: -40
         enabled: true
+      unstyled:
+        weight: 87
+        enabled: false
       video_embed:
         weight: -39
         enabled: true

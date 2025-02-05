@@ -1,0 +1,29 @@
+uuid: 5f085a99-e7c4-49e3-8c5c-384f32f67e4f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.quote_author
+    - paragraphs.paragraphs_type.boxed_quote
+    - taxonomy.vocabulary.person
+id: paragraph.boxed_quote.quote_author
+field_name: quote_author
+entity_type: paragraph
+bundle: boxed_quote
+label: 'Quote author'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      person: person
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
