@@ -5,7 +5,7 @@ dependencies: {  }
 _core:
   default_config_hash: G69bzC2UtPzHnWn071soAmE3OY9w9-W7apsiwv8c-CA
 id: cms
-label: Drupal
+label: Functional
 description: 'Store data (e.g. cookies) in browser for using this website.'
 default: true
 purposes:
@@ -18,8 +18,10 @@ cookies:
 required: true
 opt_out: false
 only_once: false
-info_url: 'https://www.drupal.org'
-privacy_policy_url: ''
+contextual_consent_only: false
+contextual_consent_text: ''
+info_url: 'internal:/website-terms-conditions'
+privacy_policy_url: 'internal:/privacy-policy'
 javascripts: {  }
 callback_code: ''
 wrapper_identifier: {  }

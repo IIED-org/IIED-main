@@ -21,6 +21,9 @@ vocabs:
   collection: '0'
   document_type: '0'
   global: '0'
+  hh_audience: '0'
+  hh_impact: '0'
+  hh_problem_type: '0'
   list: '0'
   news_type: '0'
   organisation: '0'
@@ -29,11 +32,15 @@ vocabs:
   series: '0'
   tags: '0'
   theme: '0'
+  un_geoscheme_regional_groupings: '0'
 expose_user_details: ''
 expose_user_details_roles:
   authenticated: '0'
   viewer: '0'
+  hh_contributor: '0'
+  hh_reviewer: '0'
   publications_editor: '0'
+  publications_manager: '0'
   editor: '0'
   manager: '0'
   administrator: '0'
@@ -53,5 +60,4 @@ group_label: groupLabel
 drupal_language: drupalLanguage
 drupal_country: drupalCountry
 site_name: siteName
-key_replacements:
-  - ''
+key_replacements: {  }

@@ -6,6 +6,7 @@ gtag('js', new Date());
 gtag('set', 'developer_id.dMDhkMT', true);
 
 (function (drupalSettings) {
+  if (!drupalSettings.gtag) {return;}
   const config = drupalSettings.gtag;
 
   if (config.consentMode === true) {

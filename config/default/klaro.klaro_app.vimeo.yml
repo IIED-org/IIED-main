@@ -1,6 +1,6 @@
 uuid: 8231eabf-7a11-4799-aa69-44995b752ea7
 langcode: en
-status: true
+status: false
 dependencies: {  }
 _core:
   default_config_hash: U6qalwZKD1yRnEEimqvgovefpsmYuoXB7zSWZ_n-57U
@@ -14,6 +14,8 @@ cookies: {  }
 required: false
 opt_out: false
 only_once: false
+contextual_consent_only: false
+contextual_consent_text: ''
 info_url: 'https://vimeo.com/'
 privacy_policy_url: 'https://vimeo.com/privacy'
 javascripts:

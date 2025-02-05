@@ -1,6 +1,6 @@
 uuid: f91f07d2-4fa8-4c5a-af74-cfe4c73a418d
 langcode: en
-status: true
+status: false
 dependencies: {  }
 _core:
   default_config_hash: ETjeewYXUBo_zLRzIlijtavOYTyqTUkqyMsUM2x3FYo
@@ -14,6 +14,8 @@ cookies: {  }
 required: false
 opt_out: false
 only_once: false
+contextual_consent_only: false
+contextual_consent_text: ''
 info_url: 'https://www.youtube.com/'
 privacy_policy_url: 'https://www.youtube.com/howyoutubeworks/our-commitments/protecting-user-data/'
 javascripts:
@@ -21,6 +23,7 @@ javascripts:
   - youtu.be
   - youtube-nocookie.com
   - ytimg.com
+  - doubleclick.net
 callback_code: ''
 wrapper_identifier: {  }
 attachments: {  }

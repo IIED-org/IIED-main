@@ -1,6 +1,6 @@
 uuid: 38ffe07b-c196-4087-95d5-962e6acbe38e
 langcode: en
-status: true
+status: false
 dependencies: {  }
 _core:
   default_config_hash: oBKcTp2MpCMobRZsykDSm_B6k0E0O5TV48MlL40he3k
@@ -14,8 +14,8 @@ cookies: {  }
 required: false
 opt_out: false
 only_once: false
-contextual_consent_only: null
-contextual_consent_text: null
+contextual_consent_only: false
+contextual_consent_text: ''
 info_url: 'https://x.com/'
 privacy_policy_url: 'https://x.com/en/privacy'
 javascripts:
