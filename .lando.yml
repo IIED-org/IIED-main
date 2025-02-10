@@ -22,6 +22,7 @@ services:
         XDEBUG_CONFIG: "remote_enable=1 remote_host=host.docker.internal"
     build_as_root:
       - apt update && apt install libgmp-dev -y && docker-php-ext-install gmp
+      - apt install libmagickwand-dev libmagickcore-dev -y
       - /app/scripts/imagick.sh
   database:
     type: mariadb:10.11
