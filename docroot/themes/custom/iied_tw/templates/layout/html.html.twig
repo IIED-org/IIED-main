@@ -26,14 +26,13 @@
 <!DOCTYPE html>
 <html{{html_attributes}}>
 	<head>
-	<script type="text/javascript">
-	//  Define dataLayer and the gtag function
+	<!-- Define dataLayer and the gtag function -->
+	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag() {
 			dataLayer.push(arguments);
 		}
 		// Set default consent to 'denied' as a placeholder
-		// Determine actual values based on your own requirements
 		gtag("consent", "default", {
 			ad_storage: "denied",
 			ad_user_data: "denied",
@@ -42,19 +41,13 @@
 			wait_for_update: 500,
 		});
 		</script>
-		{{ attach_library('iied_tw/gtag') }}
-		{{ attach_library('iied_tw/datalayer-init') }}
+		<!-- End define dataLayer and the gtag function -->
 		<head-placeholder token="{{ placeholder_token }}">
 			<title>{{ head_title|safe_join(' | ') }}</title>
 			<css-placeholder token="{{ placeholder_token }}">
 				<js-placeholder token="{{ placeholder_token }}"></head>
 				<body
 					id="page" {{ attributes }}>
-					<!-- Google Tag Manager (noscript) -->
-					<noscript>
-						<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5QNCJ5" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-					</noscript>
-					<!-- End Google Tag Manager (noscript) -->
 					<div>
 						{#
 						              Keyboard navigation/accessibility link to main content section in

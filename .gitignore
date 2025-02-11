@@ -33,3 +33,6 @@ node_modules
 
 # Dev mode: don't include tailwind.css 
 tailwind.css
+
+# Remove flexslider pending review
+docroot/libraries/flexslider
