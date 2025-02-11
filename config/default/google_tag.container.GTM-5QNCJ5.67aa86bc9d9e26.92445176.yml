@@ -1,0 +1,33 @@
+uuid: c4ccdf5f-5f04-46a1-8388-4f3e1f3d601b
+langcode: en
+status: true
+dependencies: {  }
+id: GTM-5QNCJ5.67aa86bc9d9e26.92445176
+label: GTM-5QNCJ5
+weight: 0
+tag_container_ids:
+  - GTM-5QNCJ5
+advanced_settings:
+  consent_mode: false
+  gtm:
+    GTM-5QNCJ5:
+      data_layer: dataLayer
+      include_classes: false
+      allowlist_classes: ''
+      blocklist_classes: ''
+      include_environment: false
+      environment_id: ''
+      environment_token: ''
+dimensions_metrics: {  }
+conditions: {  }
+events:
+  generate_lead:
+    value: ''
+    currency: ''
+  search: {  }
+  webform_purchase: {  }
+  custom: {  }
+  login:
+    method: CMS
+  sign_up:
+    method: CMS

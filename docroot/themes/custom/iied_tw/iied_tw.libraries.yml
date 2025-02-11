@@ -38,11 +38,3 @@ scroll-nav:
 clickdimensions:
   js:
     https://cdn-eu.clickdimensions.com/web/v10/CDWidget.js: { type: external, attributes: { defer: true } }
-gtag:
-  header: true
-  js:
-    https://www.googletagmanager.com/gtag/js?id=GTM-5QNCJ5: { type: external }
-datalayer-init:
-  header: true
-  js:
-    dist/js/datalayer-init.js: { async: true }
