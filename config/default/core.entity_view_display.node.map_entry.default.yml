@@ -1,0 +1,57 @@
+uuid: 53a86ba9-bd2b-403c-8cd4-b4d8fe39cbab
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.map_entry.body
+    - field.field.node.map_entry.field_alternative_label
+    - field.field.node.map_entry.field_tags
+    - field.field.node.map_entry.geolocation
+    - node.type.map_entry
+  module:
+    - geolocation
+    - text
+    - user
+id: node.map_entry.default
+targetEntityType: node
+bundle: map_entry
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_alternative_label:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 127
+    region: content
+  field_tags:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  geolocation:
+    type: geolocation_latlng
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

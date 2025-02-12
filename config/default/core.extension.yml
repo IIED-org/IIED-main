@@ -64,6 +64,7 @@ module:
   form_mode_control: 0
   format_bytes: 0
   geolocation: 0
+  geolocation_leaflet: 0
   gin_lb: 0
   gin_toolbar: 0
   google_tag: 0
