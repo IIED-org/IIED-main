@@ -107,6 +107,7 @@
     "drupal/form_mode_control": "^2.0@RC",
     "drupal/format_bytes": "^2.0",
     "drupal/formdazzle": "^3.0",
+    "drupal/geofield": "^1.64",
     "drupal/geolocation": "^3.2",
     "drupal/gin": "^3.0@RC",
     "drupal/gin_lb": "^1.0@beta",
