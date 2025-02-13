@@ -1,0 +1,6 @@
+services:
+  clamav.commands:
+    class: \Drupal\clamav\Drush\Commands\ClamavCommand
+    arguments: ['@entity_type.manager', '@clamav', '@file_system']
+    tags:
+      - { name: drush.command }

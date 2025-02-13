@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the clamav module.
+ */
+
+use Drupal\clamav\Config;
+use Drupal\clamav\Scanner\DaemonTCPIP;
+use Drupal\clamav\Scanner\DaemonUnixSocket;
+use Drupal\clamav\Scanner\Executable;
+
+/**
+ * Implements hook_requirements().
+ */
+function clamav_requirements($phase) {
+  $requirements = [];
+  // Report Drupal version.
+  if ($phase == 'runtime') {
+    $config = new Config();
+    $scanner = NULL;
+
+    switch ($config->scan_mode()) {
+      case Config::MODE_DAEMON:
+        $scanner = new DaemonTCPIP($config);
+        break;
+
+      case Config::MODE_EXECUTABLE:
+        $scanner = new Executable($config);
+        break;
+
+      case Config::MODE_UNIX_SOCKET:
+        $scanner = new DaemonUnixSocket($config);
+        break;
+    }
+
+    if (!is_null($scanner)) {
+      if ($version = $scanner->version()) {
+        $requirements['clamav'] = [
+          'title' => t('ClamAV version'),
+          'value' => $version,
+          'severity' => REQUIREMENT_INFO,
+        ];
+      }
+      elseif (!$config->enabled()) {
+        $requirements['clamav'] = [
+          'title' => t('ClamAV'),
+          'value' => t('ClamAV is not enabled.'),
+          'severity' => REQUIREMENT_INFO,
+        ];
+      }
+      else {
+        $requirements['clamav'] = [
+          'title' => t('ClamAV'),
+          'value' => t('Unable to connect to ClamAV service.'),
+          'severity' => REQUIREMENT_ERROR,
+        ];
+      }
+    }
+  }
+
+  return $requirements;
+}

@@ -1,0 +1,11 @@
+{
+    "name": "drupal/clamav",
+    "description": "Integration with the ClamAV anti-virus scanner.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/clamav",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/clamav",
+        "source": "https://git.drupalcode.org/project/clamav"
+    }
+}

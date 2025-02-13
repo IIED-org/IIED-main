@@ -1,0 +1,11 @@
+name: ClamAV Anti-Virus
+type: module
+description: 'Integration with the ClamAV anti-virus scanner.'
+package: Anti-virus
+core_version_requirement: ^10.3 || ^11.0
+configure: clamav.admin_display
+
+# Information added by Drupal.org packaging script on 2025-01-25
+version: '2.1.0'
+project: 'clamav'
+datestamp: 1737780018

@@ -1,0 +1,18 @@
+services:
+  clamav:
+    class: Drupal\clamav\Scanner
+    arguments:
+      - '@clamav_config'
+  clamav_config:
+    class: Drupal\clamav\Config
+
+  logger.channel.clamav:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: ['clamav']
+
+  clamav.file_validation_subscriber:
+    class: Drupal\clamav\EventSubscriber\FileValidationSubscriber
+    arguments: ['@clamav', '@logger.channel.clamav']
+    tags:
+      - { name: event_subscriber }
