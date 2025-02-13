@@ -1,0 +1,17 @@
+uuid: 3455ea6c-37f2-4c63-b7eb-e14611699cbd
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Map entry'
+type: map_entry
+description: 'Node to be shown on a map'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

@@ -92,10 +92,8 @@
           </div>
 
           <div class="pt-6 tab-panel" x-show="tab === 'map'" x-transition:enter.duration.750ms>
-            <div class="container content lg:grid lg:gap-x-6 lg:grid-cols-12">
-                <div class="mb-12 prose md:prose-lg lg:col-span-8 lg:col-start-5">
-                Map
-                </div>
+            <div class="container content min-h-96">
+              {{ drupal_view('maps', 'block_1') }}
             </div>
           </div>
 

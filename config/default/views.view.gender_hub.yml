@@ -403,7 +403,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: 'Explore @total resources'
+          content: '<p class="mb-4">Explore @total resources</p>'
       footer: {  }
       display_extenders: {  }
     cache_metadata:

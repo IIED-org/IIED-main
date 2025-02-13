@@ -1,0 +1,19 @@
+uuid: d20ee3fc-9b66-4162-be03-3b105a1c9717
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_alternative_label
+    - node.type.map_entry
+id: node.map_entry.field_alternative_label
+field_name: field_alternative_label
+entity_type: node
+bundle: map_entry
+label: Label
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

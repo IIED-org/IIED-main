@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8d8eb2879cb6b0eba2cb020f9adc246d12ed403f',
+        'reference' => '2416c1be0d5bf81512c2897d6c499aff4324cf4e',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1093,6 +1093,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/geofield' => array(
+            'pretty_version' => '1.64.0',
+            'version' => '1.64.0.0',
+            'reference' => '8.x-1.64',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/geofield',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/geolocation' => array(
             'pretty_version' => '3.13.0',
             'version' => '3.13.0.0',
@@ -1600,7 +1609,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8d8eb2879cb6b0eba2cb020f9adc246d12ed403f',
+            'reference' => '2416c1be0d5bf81512c2897d6c499aff4324cf4e',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -2150,6 +2159,15 @@
             'replaced' => array(
                 0 => '1.4.16',
             ),
+        ),
+        'itamair/geophp' => array(
+            'pretty_version' => '1.6',
+            'version' => '1.6.0.0',
+            'reference' => 'f210e37ab3d4706b7e8cfe3183fec2f5be8a85e6',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../itamair/geophp',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'justinrainbow/json-schema' => array(
             'pretty_version' => '5.3.0',
