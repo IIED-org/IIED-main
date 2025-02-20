@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\imagemagick;
 
 use Drupal\Component\Utility\Timer;
@@ -8,6 +10,7 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Process\Process;
 
 /**
@@ -16,16 +19,6 @@ use Symfony\Component\Process\Process;
 class ImagemagickExecManager implements ImagemagickExecManagerInterface {
 
   use StringTranslationTrait;
-
-  /**
-   * Replacement for percentage while escaping.
-   *
-   * @deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0.
-   *   There is no need to escape arguments any more.
-   *
-   * @see https://www.drupal.org/node/3414601
-   */
-  const PERCENTAGE_REPLACE = '1357902468IMAGEMAGICKPERCENTSIGNPATTERN8642097531';
 
   /**
    * Whether we are running on Windows OS.
@@ -54,8 +47,10 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
    *   The messenger service.
    */
   public function __construct(
+    #[Autowire(service: 'logger.channel.image')]
     protected readonly LoggerInterface $logger,
     protected readonly ConfigFactoryInterface $configFactory,
+    #[Autowire(param: 'app.root')]
     protected readonly string $appRoot,
     protected readonly AccountProxyInterface $currentUser,
     protected readonly ImagemagickFormatMapperInterface $formatMapper,
@@ -74,7 +69,7 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function setTimeout(int $timeout): ImagemagickExecManagerInterface {
+  public function setTimeout(int $timeout): static {
     $this->timeout = $timeout;
     return $this;
   }
@@ -82,7 +77,7 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPackageSuite(string $package = NULL): PackageSuite {
+  public function getPackageSuite(?string $package = NULL): PackageSuite {
     if ($package === NULL) {
       $package = $this->configFactory->get('imagemagick.settings')->get('binaries');
     }
@@ -92,44 +87,31 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPackage(string $package = NULL): string {
-    @trigger_error(__METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Use ::getPackageSuite() instead. See https://www.drupal.org/node/3409315', E_USER_DEPRECATED);
-    if ($package === NULL) {
-      $package = $this->configFactory->get('imagemagick.settings')->get('binaries');
-    }
-    return $package;
+  public function getPackageSuiteVersion(?PackageSuite $packageSuite = NULL): string {
+    $packageSuite = $packageSuite ?: $this->getPackageSuite();
+    return match ($packageSuite) {
+      PackageSuite::Imagemagick => $this->configFactory->get('imagemagick.settings')->get('imagemagick_version') ?? 'v6',
+      PackageSuite::Graphicsmagick => 'v1',
+    };
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getPackageLabel(string $package = NULL): string {
-    @trigger_error(__METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Use PackageSuite::label() instead. See https://www.drupal.org/node/3409315', E_USER_DEPRECATED);
-    if ($package === NULL) {
-      $package = $this->configFactory->get('imagemagick.settings')->get('binaries');
-    }
-    $packageSuite = PackageSuite::tryFrom($package);
-    return $packageSuite ? $packageSuite->label() : $package;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function checkPath(string $path, string|PackageSuite|null $packageSuite = NULL): array {
-    if (is_string($packageSuite)) {
-      @trigger_error('Passing a string value for $packageSuite in ' . __METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Use PackageSuite instead. See https://www.drupal.org/node/3409315', E_USER_DEPRECATED);
-      $packageSuite = PackageSuite::from($packageSuite);
-    }
-
+  public function checkPath(string $path, ?PackageSuite $packageSuite = NULL, ?string $packageSuiteVersion = NULL): array {
     $status = [
       'output' => '',
       'errors' => [],
     ];
 
-    // Execute gm or convert based on settings.
-    $packageSuite = $packageSuite ?: $this->getPackageSuite();
+    // Execute gm, convert or magick based on settings.
+    $packageSuite ??= $this->getPackageSuite();
+    $packageSuiteVersion ??= $this->getPackageSuiteVersion($packageSuite);
     $binary = match ($packageSuite) {
-      PackageSuite::Imagemagick => 'convert',
+      PackageSuite::Imagemagick => match ($packageSuiteVersion) {
+        'v7' => 'magick',
+        default => 'convert',
+      },
       PackageSuite::Graphicsmagick => 'gm',
     };
     $executable = $this->getExecutable($binary, $path);
@@ -164,8 +146,11 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
 
     // Unless we had errors so far, try to invoke convert.
     if (!$status['errors']) {
-      $error = NULL;
-      $this->runProcess([$executable, '-version'], $packageSuite->value, $status['output'], $error);
+      $error = '';
+      $returnCode = $this->runProcess([$executable, '-version'], $packageSuite->value, $status['output'], $error);
+      if (empty($error) && $returnCode === 127) {
+        $error = $executable . ': command not found.';
+      }
       if ($error !== '') {
         $status['errors'][] = $error;
       }
@@ -177,17 +162,16 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function execute(string|PackageCommand $command, ImagemagickExecArguments $arguments, string &$output = NULL, string &$error = NULL, string $path = NULL): bool {
-    if (is_string($command)) {
-      @trigger_error('Passing a string value for $command in ' . __METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Use PackageCommand instead. See https://www.drupal.org/node/3409315', E_USER_DEPRECATED);
-      $command = PackageCommand::tryFrom($command);
-    }
+  public function execute(PackageCommand $command, ImagemagickExecArguments $arguments, string &$output, string &$error, ?string $path = NULL): bool {
     $packageSuite = $this->getPackageSuite();
 
     $cmdline = [];
 
     $binary = match ($packageSuite) {
-      PackageSuite::Imagemagick => $command->value,
+      PackageSuite::Imagemagick => match ($this->getPackageSuiteVersion(PackageSuite::Imagemagick)) {
+        'v7' => 'magick',
+        default => $command->value,
+      },
       PackageSuite::Graphicsmagick => 'gm',
     };
 
@@ -210,9 +194,10 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
     }
 
     if ($command === PackageCommand::Identify) {
-      // ImageMagick syntax: identify [arguments] source.
+      // ImageMagick v6 syntax: identify [arguments] source.
+      // ImageMagick v7 syntax: magick identify [arguments] source.
       // GraphicsMagick syntax: gm identify [arguments] source.
-      if ($packageSuite === PackageSuite::Graphicsmagick) {
+      if ($binary !== 'identify') {
         $cmdline[] = 'identify';
       }
       array_push($cmdline, ...$arguments->toArray(ArgumentMode::PreSource));
@@ -267,7 +252,8 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
   /**
    * Builds a convert command for Imagemagick.
    *
-   * ImageMagick syntax: convert input [arguments] output.
+   * ImageMagick v6 syntax: convert input [arguments] output.
+   * ImageMagick v7 syntax: magick convert input [arguments] output.
    *
    * @param \Drupal\imagemagick\ImagemagickExecArguments $arguments
    *   An ImageMagick execution arguments object.
@@ -282,7 +268,10 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
    * @see http://www.imagemagick.org/Usage/basics/#cmdline
    */
   private function buildImagemagickConvertCommand(ImagemagickExecArguments $arguments, string $sourcePath, string $destinationPath): array {
-    $cmdline = [];
+    $cmdline = match ($this->getPackageSuiteVersion(PackageSuite::Imagemagick)) {
+      'v7' => ['convert'],
+      default => [],
+    };
     if (($pre = $arguments->toArray(ArgumentMode::PreSource)) !== []) {
       array_push($cmdline, ...$pre);
     }
@@ -327,57 +316,7 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function runOsShell(string $command, string $arguments, string $id, string &$output = NULL, string &$error = NULL): int {
-    @trigger_error(__METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Use ::runProcess() instead. See https://www.drupal.org/node/3414601', E_USER_DEPRECATED);
-    $command_line = $command . ' ' . $arguments;
-    $output = '';
-    $error = '';
-
-    Timer::start('imagemagick:runOsShell');
-    $process = Process::fromShellCommandline($command_line, $this->appRoot);
-    $process->setTimeout($this->timeout);
-    try {
-      $process->run();
-      $output = $process->getOutput();
-      $error = $process->getErrorOutput();
-      $return_code = $process->getExitCode();
-    }
-    catch (\Exception $e) {
-      $error = $e->getMessage();
-      $return_code = $process->getExitCode() ? $process->getExitCode() : 1;
-    }
-    $execution_time = Timer::stop('imagemagick:runOsShell')['time'];
-
-    // Process debugging information if required.
-    $packageSuite = PackageSuite::tryFrom($id);
-    if ($this->configFactory->get('imagemagick.settings')->get('debug')) {
-      $this->debugMessage('@suite command: <pre>@raw</pre> executed in @execution_timems', [
-        '@suite' => $packageSuite ? $packageSuite->label() : $id,
-        '@raw' => print_r($command_line, TRUE),
-        '@execution_time' => $execution_time,
-      ]);
-      if ($output !== '') {
-        $this->debugMessage('@suite output: <pre>@raw</pre>', [
-          '@suite' => $packageSuite ? $packageSuite->label() : $id,
-          '@raw' => print_r($output, TRUE),
-        ]);
-      }
-      if ($error !== '') {
-        $this->debugMessage('@suite error @return_code: <pre>@raw</pre>', [
-          '@suite' => $packageSuite ? $packageSuite->label() : $id,
-          '@return_code' => $return_code,
-          '@raw' => print_r($error, TRUE),
-        ]);
-      }
-    }
-
-    return $return_code;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function runProcess(array $command, string $id, string &$output = NULL, string &$error = NULL): int {
+  public function runProcess(array $command, string $id, string &$output, string &$error): int|bool {
     $command_line = '[' . implode('] [', $command) . ']';
     $output = '';
     $error = '';
@@ -428,50 +367,25 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
    *
    * @param string $message
    *   The debug message.
-   * @param string[] $context
+   * @param array{'@suite': string|\Drupal\Core\StringTranslation\TranslatableMarkup, '@raw': string, '@return_code'?: int, '@execution_time'?: array} $context
    *   Context information.
    */
-  public function debugMessage(string $message, array $context) {
+  public function debugMessage(string $message, array $context): void {
     $this->logger->debug($message, $context);
     if ($this->currentUser->hasPermission('administer site configuration')) {
       // Strips raw text longer than 10 lines to optimize displaying.
-      if (isset($context['@raw'])) {
-        $raw = explode("\n", $context['@raw']);
-        if (count($raw) > 10) {
-          $tmp = [];
-          for ($i = 0; $i < 9; $i++) {
-            $tmp[] = $raw[$i];
-          }
-          $tmp[] = (string) $this->t('[Further text stripped. The watchdog log has the full text.]');
-          $context['@raw'] = implode("\n", $tmp);
+      $raw = explode("\n", $context['@raw']);
+      if (count($raw) > 10) {
+        $tmp = [];
+        for ($i = 0; $i < 9; $i++) {
+          $tmp[] = $raw[$i];
         }
+        $tmp[] = (string) $this->t('[Further text stripped. The watchdog log has the full text.]');
+        $context['@raw'] = implode("\n", $tmp);
       }
       // @codingStandardsIgnoreLine
       $this->messenger->addMessage($this->t($message, $context), 'status', TRUE);
     }
-  }
-
-  /**
-   * Gets the list of locales installed on the server.
-   *
-   * @return string
-   *   The string resulting from the execution of 'locale -a' in *nix systems.
-   *
-   * @deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0.
-   *   There is no replacement.
-   *
-   * @see https://www.drupal.org/node/3415326
-   */
-  public function getInstalledLocales(): string {
-    @trigger_error(__METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. There is no replacement. See https://www.drupal.org/node/3415326', E_USER_DEPRECATED);
-    $output = '';
-    if ($this->isWindows === FALSE) {
-      $this->runProcess(['locale', '-a'], 'locale', $output);
-    }
-    else {
-      $output = (string) $this->t("List not available on Windows servers.");
-    }
-    return $output;
   }
 
   /**
@@ -486,7 +400,7 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
    * @return string
    *   The full path to the executable.
    */
-  protected function getExecutable(string $binary, string $path = NULL): string {
+  protected function getExecutable(string $binary, ?string $path = NULL): string {
     // $path is only passed from the validation of the image toolkit form, on
     // which the path to convert is configured. @see ::checkPath()
     if (!isset($path)) {
@@ -499,43 +413,6 @@ class ImagemagickExecManager implements ImagemagickExecManagerInterface {
     }
 
     return $path . $executable;
-  }
-
-  /**
-   * Escapes a string.
-   *
-   * PHP escapeshellarg() drops non-ascii characters, this is a replacement.
-   *
-   * Code below is copied from Symfony Process' escapeArgument() method.
-   *
-   * @param string $argument
-   *   The string to escape.
-   *
-   * @return string
-   *   An escaped string for use in the ::execute method.
-   *
-   * @deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0.
-   *   There is no need to escape arguments any more.
-   *
-   * @see https://www.drupal.org/node/3414601
-   */
-  public function escapeShellArg(string $argument): string {
-    @trigger_error(__METHOD__ . '() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. There is no need to escape arguments any more. See https://www.drupal.org/node/3414601', E_USER_DEPRECATED);
-    if ('' === $argument) {
-      return '""';
-    }
-    if ('\\' !== \DIRECTORY_SEPARATOR) {
-      return "'" . str_replace("'", "'\\''", $argument) . "'";
-    }
-    if (str_contains($argument, "\0")) {
-      $argument = str_replace("\0", '?', $argument);
-    }
-    if (!preg_match('/[\/()%!^"<>&|\s]/', $argument)) {
-      return $argument;
-    }
-    $argument = preg_replace('/(\\\\+)$/', '$1$1', $argument);
-
-    return '"' . str_replace(['"', '^', '%', '!', "\n"], ['""', '"^^"', '"^%"', '"^!"', '!LF!'], $argument) . '"';
   }
 
 }

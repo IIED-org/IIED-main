@@ -3302,18 +3302,18 @@
         },
         {
             "name": "drupal/acquia_connector",
-            "version": "4.0.9",
-            "version_normalized": "4.0.9.0",
+            "version": "4.1.0",
+            "version_normalized": "4.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_connector.git",
-                "reference": "4.0.9"
+                "reference": "4.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_connector-4.0.9.zip",
-                "reference": "4.0.9",
-                "shasum": "4b215c4f4a5259807d9b0c6e96001e87b13c01a9"
+                "url": "https://ftp.drupal.org/files/projects/acquia_connector-4.1.0.zip",
+                "reference": "4.1.0",
+                "shasum": "9850906100943eae5f18cf90df57536adefc21f6"
             },
             "require": {
                 "drupal/core": "^9.5 || ^10 || ^11",
@@ -3325,8 +3325,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.0.9",
-                    "datestamp": "1726071850",
+                    "version": "4.1.0",
+                    "datestamp": "1734321322",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3368,7 +3368,7 @@
                     "homepage": "https://www.drupal.org/user/822402"
                 },
                 {
-                    "name": "Mark Trapp",
+                    "name": "mark trapp",
                     "homepage": "https://www.drupal.org/user/212019"
                 },
                 {
@@ -4836,18 +4836,18 @@
         },
         {
             "name": "drupal/config_split",
-            "version": "1.9.0",
-            "version_normalized": "1.9.0.0",
+            "version": "1.10.0",
+            "version_normalized": "1.10.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/config_split.git",
-                "reference": "8.x-1.9"
+                "reference": "8.x-1.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/config_split-8.x-1.9.zip",
-                "reference": "8.x-1.9",
-                "shasum": "cb2a17f590ae057ff8a1864f57e2e114b2395a86"
+                "url": "https://ftp.drupal.org/files/projects/config_split-8.x-1.10.zip",
+                "reference": "8.x-1.10",
+                "shasum": "634b04afb920100ff7022066554253635e30dd77"
             },
             "require": {
                 "drupal/config_filter": "^1",
@@ -4856,6 +4856,9 @@
             "conflict": {
                 "drupal/console": "<1.3.2"
             },
+            "require-dev": {
+                "drush/drush": "*"
+            },
             "suggest": {
                 "drupal/chosen": "Chosen uses the Chosen jQuery plugin to make the <select> elements more user-friendly.",
                 "drupal/select2_all": "Applies the Select2 library to all select fields on the site similar to the Chosen module."
@@ -4863,8 +4866,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.9",
-                    "datestamp": "1656976425",
+                    "version": "8.x-1.10",
+                    "datestamp": "1739381813",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7855,29 +7858,29 @@
         },
         {
             "name": "drupal/imagemagick",
-            "version": "3.7.0",
-            "version_normalized": "3.7.0.0",
+            "version": "4.0.2",
+            "version_normalized": "4.0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/imagemagick.git",
-                "reference": "8.x-3.7"
+                "reference": "4.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/imagemagick-8.x-3.7.zip",
-                "reference": "8.x-3.7",
-                "shasum": "2698db0ccc4a76d44ebbbfcabe9e70d25ae3db9b"
+                "url": "https://ftp.drupal.org/files/projects/imagemagick-4.0.2.zip",
+                "reference": "4.0.2",
+                "shasum": "758bdf632dd8f2eeb97d198b692d20a59cdbdc13"
             },
             "require": {
-                "drupal/core": "^10.1",
-                "drupal/file_mdm": "^3",
-                "drupal/sophron": "^2.0.2"
+                "drupal/core": "^10.3 | ^11",
+                "drupal/file_mdm": "^3.1",
+                "drupal/sophron": "^2.1"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.7",
-                    "datestamp": "1706096705",
+                    "version": "4.0.2",
+                    "datestamp": "1724827811",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9961,43 +9964,47 @@
         },
         {
             "name": "drupal/metatag",
-            "version": "1.26.0",
-            "version_normalized": "1.26.0.0",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/metatag.git",
-                "reference": "8.x-1.26"
+                "reference": "2.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.26.zip",
-                "reference": "8.x-1.26",
-                "shasum": "afa4a37422748baa2f0c35b13961438668ef3be8"
+                "url": "https://ftp.drupal.org/files/projects/metatag-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "c28fe2fdac68a9370a6af6cbafff4425dd5148f3"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10",
-                "drupal/token": "^1.0"
+                "drupal/core": "^9.4 || ^10 || ^11",
+                "drupal/token": "^1.0",
+                "php": ">=8.0"
             },
             "require-dev": {
-                "drupal/devel": "^4.0 || ^5.0",
-                "drupal/hal": "^9 || ^1 || ^2",
+                "drupal/forum": "*",
+                "drupal/hal": "^1 || ^2 || ^9",
                 "drupal/metatag_dc": "*",
                 "drupal/metatag_open_graph": "*",
                 "drupal/page_manager": "^4.0",
-                "drupal/panelizer": "^4.0",
                 "drupal/redirect": "^1.0",
-                "drupal/webprofiler": "^9 || ^10",
+                "ergebnis/composer-normalize": "*",
                 "mpyw/phpunit-patch-serializable-comparison": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.26",
-                    "datestamp": "1687856123",
+                    "version": "2.1.0",
+                    "datestamp": "1731004042",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "composer-normalize": {
+                    "indent-size": 2,
+                    "indent-style": "space"
                 }
             },
             "installation-source": "dist",
@@ -12621,27 +12628,28 @@
         },
         {
             "name": "drupal/textfield_counter",
-            "version": "2.3.0",
-            "version_normalized": "2.3.0.0",
+            "version": "2.4.0",
+            "version_normalized": "2.4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/textfield_counter.git",
-                "reference": "2.3.0"
+                "reference": "2.4.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/textfield_counter-2.3.0.zip",
-                "reference": "2.3.0",
-                "shasum": "f8dd70d164122af714454c0cd3fd231cdfc2bfd5"
+                "url": "https://ftp.drupal.org/files/projects/textfield_counter-2.4.0.zip",
+                "reference": "2.4.0",
+                "shasum": "0abca4ec71b4b46499c823acf60d37a09d0e2f91"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^9 || ^10 || ^11",
+                "php": ">=8.1.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.3.0",
-                    "datestamp": "1689777593",
+                    "version": "2.4.0",
+                    "datestamp": "1735316359",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12655,18 +12663,19 @@
             ],
             "authors": [
                 {
-                    "name": "edmund.dunn",
-                    "homepage": "https://www.drupal.org/user/3534438"
+                    "name": "Jay Friendly (jaypan)",
+                    "homepage": "https://www.drupal.org/u/jaypan"
                 },
                 {
-                    "name": "Jaypan",
+                    "name": "jaypan",
                     "homepage": "https://www.drupal.org/user/324696"
                 }
             ],
             "description": "Creates field formatters with character counts for text fields and text areas.",
             "homepage": "https://www.drupal.org/project/textfield_counter",
             "support": {
-                "source": "https://git.drupalcode.org/project/textfield_counter"
+                "source": "https://git.drupalcode.org/project/textfield_counter",
+                "issues": "https://www.drupal.org/project/issues/textfield_counter"
             },
             "install-path": "../../docroot/modules/contrib/textfield_counter"
         },
@@ -13016,21 +13025,21 @@
         },
         {
             "name": "drupal/varnish_purge",
-            "version": "2.2.0",
-            "version_normalized": "2.2.0.0",
+            "version": "2.3.0",
+            "version_normalized": "2.3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varnish_purge.git",
-                "reference": "8.x-2.2"
+                "reference": "8.x-2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/varnish_purge-8.x-2.2.zip",
-                "reference": "8.x-2.2",
-                "shasum": "9fbddb71417113d58345d2fbe9d0a1aa9c5d5c36"
+                "url": "https://ftp.drupal.org/files/projects/varnish_purge-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "e4a8b45ab81923ec8f250b385dd71f1178fa1ca9"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^9.1 || ^10 || ^11"
             },
             "require-dev": {
                 "drupal/purge": "*",
@@ -13040,8 +13049,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.2",
-                    "datestamp": "1681218333",
+                    "version": "8.x-2.3",
+                    "datestamp": "1739875635",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -13059,6 +13068,10 @@
                     "homepage": "https://www.drupal.org/user/93644"
                 },
                 {
+                    "name": "dieterholvoet",
+                    "homepage": "https://www.drupal.org/user/3567222"
+                },
+                {
                     "name": "javivf",
                     "homepage": "https://www.drupal.org/user/2789335"
                 },
@@ -13067,7 +13080,7 @@
                     "homepage": "https://www.drupal.org/user/2479724"
                 },
                 {
-                    "name": "MiSc",
+                    "name": "misc",
                     "homepage": "https://www.drupal.org/user/382892"
                 }
             ],
@@ -13403,42 +13416,39 @@
         },
         {
             "name": "drupal/views_bulk_operations",
-            "version": "4.2.7",
-            "version_normalized": "4.2.7.0",
+            "version": "4.3.3",
+            "version_normalized": "4.3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_bulk_operations.git",
-                "reference": "4.2.7"
+                "reference": "4.3.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-4.2.7.zip",
-                "reference": "4.2.7",
-                "shasum": "25c9fa531ac49664a361fdd2202eec0a6e53bc61"
+                "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-4.3.3.zip",
+                "reference": "4.3.3",
+                "shasum": "60d83a18ef31fd1e85fb30137fd03a55cad275f3"
             },
             "require": {
-                "drupal/core": "^9.4 || ^10 || ^11",
-                "php": ">=7.4.0"
+                "drupal/core": "^10.3 || ^11"
+            },
+            "conflict": {
+                "drush/drush": "<12.5.1"
             },
             "require-dev": {
-                "drush/drush": "^12"
+                "drush/drush": "^12 || ^13"
             },
             "suggest": {
-                "drush/drush": "^11 || ^12"
+                "drush/drush": "^12 || ^13"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.2.7",
-                    "datestamp": "1717665214",
+                    "version": "4.3.3",
+                    "datestamp": "1739278730",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^10 || ^11"
                     }
                 }
             },
@@ -13453,7 +13463,7 @@
                     "homepage": "https://www.drupal.org/u/graber"
                 },
                 {
-                    "name": "Graber",
+                    "name": "graber",
                     "homepage": "https://www.drupal.org/user/1599440"
                 },
                 {
@@ -13464,9 +13474,9 @@
             "description": "Adds an ability to perform bulk operations on selected entities from view results. Provides an API to create such operations.",
             "homepage": "https://www.drupal.org/project/views_bulk_operations",
             "support": {
-                "source": "https://git.drupalcode.org/project/views_bulk_operations/-/tree/8.x-3.x",
-                "issues": "https://www.drupal.org/project/issues/views_bulk_operations?version=8.x",
-                "docs": "https://www.drupal.org/docs/8/modules/views-bulk-operations-vbo"
+                "source": "https://git.drupalcode.org/project/views_bulk_operations",
+                "issues": "https://www.drupal.org/project/issues/views_bulk_operations?version=any_4.",
+                "docs": "https://www.drupal.org/docs/contributed-modules/views-bulk-operations-vbo"
             },
             "install-path": "../../docroot/modules/contrib/views_bulk_operations"
         },

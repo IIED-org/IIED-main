@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @file
  * ImageMagick installation scripts.
@@ -47,7 +49,7 @@ function imagemagick_requirements($phase) {
           'value' => t("There are <a href=':image_styles'>Image Styles</a> using Drupal standard's Rotate effect.", [
             ':image_styles' => Url::fromRoute('entity.image_style.collection')->toString(),
           ]),
-          'description' => t("The ImageMagick module will stop supporting it in its next major release. Use the Rotate effect provided by the <a href=':image_effects'>Image Effects</a> module instead. Check your <a href=':migration_options'>migration options</a>.", [
+          'description' => t("The ImageMagick module does not support it. Use the Rotate effect provided by the <a href=':image_effects'>Image Effects</a> module instead. Check your <a href=':migration_options'>migration options</a>.", [
             ':image_effects' => 'https://www.drupal.org/project/image_effects',
             ':migration_options' => 'https://www.drupal.org/project/image_effects/releases/8.x-3.2#introduce-rotate',
           ]),
@@ -110,5 +112,15 @@ function imagemagick_update_8305() {
   $config_factory = \Drupal::configFactory();
   $config_factory->getEditable('imagemagick.settings')
     ->clear('locale')
+    ->save(TRUE);
+}
+
+/**
+ * Adds the 'imagemagick_version' config setting.
+ */
+function imagemagick_update_8306() {
+  $config_factory = \Drupal::configFactory();
+  $config_factory->getEditable('imagemagick.settings')
+    ->set('imagemagick_version', 'v6')
     ->save(TRUE);
 }

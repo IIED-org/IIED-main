@@ -2,7 +2,6 @@
 
 namespace Drupal\views_bulk_operations\Service;
 
-use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResultReasonInterface;
 use Drupal\Core\Action\ActionInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -26,26 +25,6 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
    * Maximum number of labels fetched for informational purposes.
    */
   public const MAX_LIST_COUNT = 50;
-
-  /**
-   * View data provider service.
-   */
-  protected ViewsbulkOperationsViewDataInterface $viewDataService;
-
-  /**
-   * VBO action manager.
-   */
-  protected ViewsBulkOperationsActionManager $actionManager;
-
-  /**
-   * Current user object.
-   */
-  protected AccountProxyInterface $currentUser;
-
-  /**
-   * Module handler service.
-   */
-  protected ModuleHandlerInterface $moduleHandler;
 
   /**
    * Is the object initialized?
@@ -92,16 +71,11 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
    *   Module handler service.
    */
   public function __construct(
-    ViewsbulkOperationsViewDataInterface $viewDataService,
-    ViewsBulkOperationsActionManager $actionManager,
-    AccountProxyInterface $currentUser,
-    ModuleHandlerInterface $moduleHandler
-  ) {
-    $this->viewDataService = $viewDataService;
-    $this->actionManager = $actionManager;
-    $this->currentUser = $currentUser;
-    $this->moduleHandler = $moduleHandler;
-  }
+    protected readonly ViewsBulkOperationsViewDataInterface $viewDataService,
+    protected readonly ViewsBulkOperationsActionManager $actionManager,
+    protected readonly AccountProxyInterface $currentUser,
+    protected readonly ModuleHandlerInterface $moduleHandler
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -470,33 +444,20 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     }
 
     // Process queue.
-    $results = $this->action->executeMultiple($this->queue);
+    $results = $this->action->executeMultiple($this->queue) ?? [];
+
+    // Set completion messages.
+    $message_override = $this->bulkFormData['preconfiguration']['message_override'] ?? '';
 
     if ($this->action instanceof ViewsBulkOperationsActionInterface) {
-      // Prepare for the next major change: type hinting.
-      $deprecated = FALSE;
-      if (!\is_array($results)) {
-        $deprecated = TRUE;
-        $results = [];
-      }
-      else {
-        foreach ($results as $result) {
-          if (!\is_array($result) && !$result instanceof MarkupInterface) {
-            $deprecated = TRUE;
-            break;
-          }
-          if (\is_array($result) && \array_key_exists('message', $result) && !($result['message'] instanceof MarkupInterface)) {
-            $deprecated = TRUE;
-            break;
-          }
-        }
-      }
-      if ($deprecated) {
-        @\trigger_error(\sprintf('The executeMultiple method of the %s class must return either an array of \Drupal\Component\Render\MarkupInterface or an array of arrays containing "message" (\Drupal\Component\Render\MarkupInterface) and "type" (string), other return types are deprecated.', \E_USER_DEPRECATED));
-      }
-
-      // @todo Don't delete the following when removing deprecated code.
       foreach ($results as &$result) {
+        if ($message_override !== '') {
+          $result = [
+            'message' => $message_override,
+          ];
+          continue;
+        }
+
         if (!\is_array($result)) {
           $result = [
             'message' => (string) $result,
@@ -514,7 +475,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $count = \count($this->queue);
       for ($i = 0; $i < $count; $i++) {
         $output[] = [
-          'message' => $this->bulkFormData['action_label'],
+          'message' => $message_override === '' ? $this->bulkFormData['action_label'] : $message_override,
         ];
       }
       return $output;
@@ -530,10 +491,6 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     if (!\array_key_exists('operations', $output)) {
       $output['operations'] = [];
     }
-
-    // Set the API version.
-    $action_definition = $this->action->getPluginDefinition();
-    $output['api_version'] = \array_key_exists('api_version', $action_definition) ? $action_definition['api_version'] : '1';
 
     foreach ($results as $result) {
       if (!\array_key_exists('type', $result)) {

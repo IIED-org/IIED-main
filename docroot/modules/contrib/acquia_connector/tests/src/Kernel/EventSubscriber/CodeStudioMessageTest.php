@@ -66,7 +66,7 @@ final class CodeStudioMessageTest extends AcquiaConnectorTestBase {
     }
     else {
       $actual_msg = $messenger->all()['status'];
-      self::assertSame(['status' => $expected_message], ['status' => (string)array_shift($actual_msg)]);
+      self::assertSame(['status' => $expected_message], ['status' => (string) array_shift($actual_msg)]);
     }
   }
 

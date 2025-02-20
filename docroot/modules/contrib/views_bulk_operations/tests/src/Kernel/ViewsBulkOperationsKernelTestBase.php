@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\views_bulk_operations\Kernel;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\NodeType;
@@ -57,6 +58,11 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
   protected ?ViewsBulkOperationsViewDataInterface $vboDataService;
 
   /**
+   * Time service.
+   */
+  protected TimeInterface $time;
+
+  /**
    * Messages static for testing purposes.
    *
    * @var array
@@ -80,7 +86,6 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
     'filter',
     'language',
     'text',
-    'action',
     'system',
   ];
 
@@ -93,7 +98,6 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');
     $this->installSchema('node', 'node_access');
-    $this->installSchema('system', 'sequences');
 
     $user = User::create();
     $user->setPassword('password');

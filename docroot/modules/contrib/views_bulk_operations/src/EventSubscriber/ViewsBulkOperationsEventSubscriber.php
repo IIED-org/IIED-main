@@ -18,19 +18,14 @@ class ViewsBulkOperationsEventSubscriber implements EventSubscriberInterface {
   private const PRIORITY = 999;
 
   /**
-   * Object that gets the current view data.
-   */
-  protected ViewsbulkOperationsViewDataInterface $viewData;
-
-  /**
    * Object constructor.
    *
    * @param \Drupal\views_bulk_operations\Service\ViewsBulkOperationsViewDataInterface $viewData
    *   The VBO View Data provider service.
    */
-  public function __construct(ViewsBulkOperationsViewDataInterface $viewData) {
-    $this->viewData = $viewData;
-  }
+  public function __construct(
+    protected readonly ViewsBulkOperationsViewDataInterface $viewData
+  ) {}
 
   /**
    * {@inheritdoc}

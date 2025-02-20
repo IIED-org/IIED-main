@@ -46,7 +46,7 @@ abstract class VarnishPurgerFormTestBase extends PurgerConfigFormTestBase {
   }
 
   /**
-   * Tests \Drupal\varnish_purger\Form\VarnishPurgerFormBase::buildFormTokensHelp().
+   * Tests the buildFormTokensHelp method of VarnishPurgerFormBase.
    */
   public function testTokensHelp() {
     $this->drupalLogin($this->admin_user);

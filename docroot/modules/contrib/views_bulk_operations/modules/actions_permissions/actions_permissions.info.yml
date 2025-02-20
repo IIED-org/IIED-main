@@ -6,7 +6,7 @@ core_version_requirement: ^9 || ^10 || ^11
 dependencies:
   - drupal:views_bulk_operations
 
-# Information added by Drupal.org packaging script on 2024-06-06
-version: '4.2.7'
+# Information added by Drupal.org packaging script on 2025-02-11
+version: '4.3.3'
 project: 'views_bulk_operations'
-datestamp: 1717665216
+datestamp: 1739278735

@@ -51,7 +51,7 @@ class ActionMessagesTest extends ViewsBulkOperationsKernelTestBase {
         'views_bulk_operations_simple_test_action',
         [
           [
-            'message' => 'Action processing results: Test (3).',
+            'message' => 'Test (3)',
             'type' => 'status',
           ],
         ],

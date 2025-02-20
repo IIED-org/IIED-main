@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\imagemagick\Functional;
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\file_mdm\FileMetadataInterface;
 use Drupal\file_mdm\FileMetadataManagerInterface;
 use Drupal\imagemagick\ArgumentMode;
@@ -31,10 +34,8 @@ class EventSubscriberTest extends BrowserTestBase {
 
   /**
    * Provides a list of available modules.
-   *
-   * @var \Drupal\Core\Extension\ModuleExtensionList
    */
-  protected $moduleList;
+  protected ModuleExtensionList $moduleList;
 
   /**
    * {@inheritdoc}

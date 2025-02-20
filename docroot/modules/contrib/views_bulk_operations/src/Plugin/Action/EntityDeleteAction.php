@@ -2,20 +2,20 @@
 
 namespace Drupal\views_bulk_operations\Plugin\Action;
 
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
 
 /**
- * Delete entity action with default confirmation form.
- *
- * @Action(
- *   id = "views_bulk_operations_delete_entity",
- *   label = @Translation("Delete selected entities / translations"),
- *   type = "",
- *   confirm = TRUE,
- * )
+ * Delete entity action.
  */
+#[Action(
+  id: 'views_bulk_operations_delete_entity',
+  label: new TranslatableMarkup('Delete selected entities / translations'),
+  type: ''
+)]
 class EntityDeleteAction extends ViewsBulkOperationsActionBase {
 
   /**

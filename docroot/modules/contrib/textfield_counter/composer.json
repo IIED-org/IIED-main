@@ -1,0 +1,22 @@
+{
+  "name": "drupal/textfield_counter",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "description": "Creates field formatters with character counts for text fields and text areas.",
+  "homepage": "https://www.drupal.org/project/textfield_counter",
+  "authors": [
+    {
+      "name": "Jay Friendly (jaypan)",
+      "homepage": "https://www.drupal.org/u/jaypan"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/textfield_counter",
+    "source": "https://git.drupalcode.org/project/textfield_counter"
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "drupal/core": "^9 || ^10 || ^11",
+    "php": ">=8.1.0"
+  }
+}

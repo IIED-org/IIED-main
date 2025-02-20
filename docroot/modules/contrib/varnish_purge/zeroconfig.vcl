@@ -90,7 +90,7 @@ sub vcl_recv {
       # for a cache tag.
       set req.http.Cache-Tags = regsuball(req.http.Cache-Tags, "\|", "\\|");
 
-      # Switch spaces to a regular expresson "or".
+      # Switch spaces to a regular expression "or".
       set req.http.Cache-Tags = regsuball(req.http.Cache-Tags, " ", "\|");
 
       ban("obj.http.Cache-Tags ~ " + req.http.Cache-Tags);

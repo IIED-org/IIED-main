@@ -1,4 +1,7 @@
 services:
+  _defaults:
+    autowire: true
+
   actions_permissions.views_bulk_operations_actions:
     class: Drupal\actions_permissions\EventSubscriber\ActionsPermissionsEventSubscriber
     tags:

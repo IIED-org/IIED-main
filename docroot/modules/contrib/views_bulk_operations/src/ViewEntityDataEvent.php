@@ -13,27 +13,6 @@ class ViewEntityDataEvent extends Event {
   public const NAME = 'views_bulk_operations.view_entity_data';
 
   /**
-   * The provider of the current view.
-   *
-   * @var string
-   */
-  protected $provider;
-
-  /**
-   * The views data of the current view.
-   *
-   * @var array
-   */
-  protected $viewData;
-
-  /**
-   * The current view object.
-   *
-   * @var \Drupal\views\ViewExecutable
-   */
-  protected $view;
-
-  /**
    * Entity data array - bulk form keys and labels keyed by row index.
    *
    * @var array<string, string>
@@ -50,11 +29,11 @@ class ViewEntityDataEvent extends Event {
    * @param \Drupal\views\ViewExecutable $view
    *   The current view.
    */
-  public function __construct($provider, array $viewData, ViewExecutable $view) {
-    $this->provider = $provider;
-    $this->viewData = $viewData;
-    $this->view = $view;
-  }
+  public function __construct(
+    protected string $provider,
+    protected array $viewData,
+    protected ViewExecutable $view
+  ) {}
 
   /**
    * Get view provider.

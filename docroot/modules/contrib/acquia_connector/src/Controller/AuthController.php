@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Drupal\acquia_connector\Controller;
 
 use Drupal\acquia_connector\AuthService;
+use Drupal\acquia_connector\Form\ApiKeyCredentialForm;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\Form\FormBuilder;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
@@ -68,6 +70,13 @@ final class AuthController implements ContainerInjectionInterface {
   private ModuleExtensionList $moduleList;
 
   /**
+   * Form builder to return API credentials form.
+   *
+   * @var \Drupal\Core\Form\FormBuilder
+   */
+  private FormBuilder $formBuilder;
+
+  /**
    * Construct a new AuthController object.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
@@ -82,14 +91,17 @@ final class AuthController implements ContainerInjectionInterface {
    *   The logger.
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_list
    *   Module Extension List.
+   * @param \Drupal\Core\Form\FormBuilder $form_builder
+   *   The form builder service.
    */
-  public function __construct(RendererInterface $renderer, RequestStack $request_stack, AuthService $auth_service, MessengerInterface $messenger, LoggerInterface $logger, ModuleExtensionList $module_list) {
+  public function __construct(RendererInterface $renderer, RequestStack $request_stack, AuthService $auth_service, MessengerInterface $messenger, LoggerInterface $logger, ModuleExtensionList $module_list, FormBuilder $form_builder) {
     $this->renderer = $renderer;
     $this->requestStack = $request_stack;
     $this->authService = $auth_service;
     $this->messenger = $messenger;
     $this->logger = $logger;
     $this->moduleList = $module_list;
+    $this->formBuilder = $form_builder;
   }
 
   /**
@@ -102,7 +114,8 @@ final class AuthController implements ContainerInjectionInterface {
       $container->get('acquia_connector.auth_service'),
       $container->get('messenger'),
       $container->get('acquia_connector.logger_channel'),
-      $container->get('extension.list.module')
+      $container->get('extension.list.module'),
+      $container->get('form_builder')
     );
     $instance->setStringTranslation($container->get('string_translation'));
     return $instance;
@@ -115,6 +128,11 @@ final class AuthController implements ContainerInjectionInterface {
    *   The build array.
    */
   public function setup(): array {
+    // Redirect to API Creds form if client id is invalid.
+    if (!$this->authService->authorizeClientId()) {
+      return $this->formBuilder->getForm(ApiKeyCredentialForm::class);
+    }
+
     return [
       '#theme' => 'acquia_connector_banner',
       '#attached' => [
@@ -158,7 +176,7 @@ final class AuthController implements ContainerInjectionInterface {
   }
 
   /**
-   * Begins the OAuth authorization process.
+   * Begins the API authorization process.
    *
    * @return \Drupal\Core\Routing\TrustedRedirectResponse
    *   The redirect response.

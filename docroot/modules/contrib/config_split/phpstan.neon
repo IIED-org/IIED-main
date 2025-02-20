@@ -1,0 +1,13 @@
+parameters:
+  level: 1
+  customRulesetUsed: true
+  reportUnmatchedIgnoredErrors: false
+  ignoreErrors:
+    # One day we might get rid of this drupal pattern
+    - '#Unsafe usage of new static\(\)\.#'
+  paths:
+    - src
+    - tests
+  excludePaths:
+    # Exclude console commands
+    - src/Command/*

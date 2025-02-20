@@ -2,10 +2,12 @@
 
 namespace Drupal\views_bulk_operations_example\Plugin\Action;
 
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsPreconfigurationInterface;
 
@@ -18,15 +20,12 @@ use Drupal\views_bulk_operations\Action\ViewsBulkOperationsPreconfigurationInter
  * The api_version annotation parameter specifies the behaviour of displayed
  * messages: anything other than "1" displays counts of exactly what's returned
  * by the action execute() and executeMultiple() method.
- *
- * @Action(
- *   id = "views_bulk_operations_example",
- *   label = @Translation("VBO example action"),
- *   type = "",
- *   confirm = TRUE,
- *   api_version = "1",
- * )
  */
+#[Action(
+  id: 'views_bulk_operations_example',
+  label: new TranslatableMarkup('VBO example action'),
+  type: ''
+)]
 class ViewsBulkOperationExampleAction extends ViewsBulkOperationsActionBase implements ViewsBulkOperationsPreconfigurationInterface, PluginFormInterface {
 
   /**

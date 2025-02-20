@@ -1,19 +1,18 @@
 <?php
 
-use GuzzleHttp\Pool;
 /**
  * @file
  * Contains varnish_image_purge.module.
  */
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\file\Entity\File;
-use Drupal\image\Entity\ImageStyle;
-use Drupal\Core\Entity\EntityInterface;
-use GuzzleHttp\Client;
-use Drupal\Core\Link;
 use Drupal\file\FileInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\varnish_purger\Plugin\Purge\Purger\VarnishPurger;
+use GuzzleHttp\Pool;
 
 /**
  * Implements hook_help().
@@ -36,7 +35,7 @@ function varnish_image_purge_help($route_name, RouteMatchInterface $route_match)
       $output .= '  # Throw a synthetic page so the request won\'t go to the backend.<br />';
       $output .= '  return (synth(200, "Ban added."));<br />';
       $output .= '}</code></pre>';
-      $output .= '<h2>' . t('Adminster') . '</h2>';
+      $output .= '<h2>' . t('Configuration') . '</h2>';
       $output .= '<p>' . t('By default every image belonging to any entity is purged.');
       $output .= t('To specify which entities that should have image purged on edit, go to @output_admin_link', ['@output_admin_link' => $output_admin_link]);
       $output .= '</p>';
@@ -76,14 +75,13 @@ function varnish_image_purge_entity_update(EntityInterface $entity) {
     return;
   }
 
-  // TODO: Does this exist? It's not using the purgers in ANY way.
+  // @todo Does this exist? It's not using the purgers in ANY way.
   foreach ($varnish_purgers as $key => $value) {
     $config_purge = \Drupal::config($key);
     $purgers[$key]['hostname'] = $config_purge->get('hostname');
     $purgers[$key]['port'] = $config_purge->get('port');
   }
 
-  //
   $class = \Drupal::entityTypeManager()
     ->getDefinition($entity_type)
     ->getOriginalClass();
@@ -101,22 +99,22 @@ function varnish_image_purge_entity_update(EntityInterface $entity) {
 
   $field_images = [];
   foreach ($field_definitions as $field_definition) {
-    /* @var $field_definition Drupal\field\Entity\FieldConfig; */
+    /** @var Drupal\field\Entity\FieldConfig; $field_definition */
     if ($field_definition->getType() == 'image') {
       $field_images[] = $field_definition->getName();
     }
   }
   if (empty($field_images)) {
-    // No image fields on the entity
+    // No image fields on the entity.
     return;
   }
 
   // Do the actual purging...
-  /* @var $client Client */
+  /** @var Client $client */
   $client = \Drupal::service('http_client');
 
   // Generator for purge requests to be sent out.
-  $requests = function() use ($client, $entity, $field_images) {
+  $requests = function () use ($client, $entity, $field_images) {
     $styles = ImageStyle::loadMultiple();
 
     foreach ($field_images as $field_image) {
@@ -124,21 +122,21 @@ function varnish_image_purge_entity_update(EntityInterface $entity) {
         continue;
       }
 
-      foreach($entity->$field_image as $delta => $image_field) {
+      foreach ($entity->$field_image as $image_field) {
         $file = File::load($image_field->target_id);
         if (!$file instanceof FileInterface) {
           continue;
         }
 
-        /* @var $style Drupal\image\Entity\ImageStyle; */
+        /** @var Drupal\image\Entity\ImageStyle; $style */
         foreach ($styles as $style) {
           $url = $style->buildUrl($file->getFileUri());
 
           yield function () use ($client, $url) {
             return $client->requestAsync('URIBAN', $url)->then(
-              function() {
+              function () {
               },
-              function($reason) use ($url) {
+              function ($reason) use ($url) {
                 $message = $reason instanceof \Exception ? $reason->getMessage() : (string) $reason;
 
                 $logger = \Drupal::logger('varnish_image_purge');
@@ -152,7 +150,7 @@ function varnish_image_purge_entity_update(EntityInterface $entity) {
   };
 
   // Prepare a POOL that will make the requests with a given concurrency.
-  // TODO: Have the concurrency exposed as configuration somewhere.
+  // @todo Have the concurrency exposed as configuration somewhere.
   $concurrency = VarnishPurger::VARNISH_PURGE_CONCURRENCY;
   (new Pool($client, $requests(), ['concurrency' => $concurrency]))
     ->promise()

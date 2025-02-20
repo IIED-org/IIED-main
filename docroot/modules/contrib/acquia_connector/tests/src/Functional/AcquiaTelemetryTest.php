@@ -132,10 +132,10 @@ final class AcquiaTelemetryTest extends BrowserTestBase {
     $this->assertArrayHasKey('acquia_connector', $data['event_properties']['extensions']);
     $this->assertEquals('enabled', $data['event_properties']['extensions']['acquia_connector']['status']);
 
-    // Check there are core modules
+    // Check there are core modules.
     $this->assertNotEmpty($data['event_properties']['drupal']['core_enabled']);
 
-    // Check there are profiles
+    // Check there are profiles.
     $this->assertNotEmpty($data['event_properties']['profiles']);
   }
 

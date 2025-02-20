@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\actions_permissions\EventSubscriber;
 
 use Drupal\Component\EventDispatcher\Event;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -11,11 +14,18 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * Alters actions to make use of permissions created by the module.
  */
-class ActionsPermissionsEventSubscriber implements EventSubscriberInterface {
+final class ActionsPermissionsEventSubscriber implements EventSubscriberInterface {
 
   // Subscribe to the VBO event with low priority
   // to let other modules alter requirements first.
   private const PRIORITY = -999;
+
+  /**
+   * Constructor.
+   */
+  public function __construct(
+    private readonly AccountInterface $currentUser,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -53,8 +63,9 @@ class ActionsPermissionsEventSubscriber implements EventSubscriberInterface {
         else {
           $permission_id .= ' ' . $definition['type'];
         }
-        $definition['requirements']['_permission'] = $permission_id;
-        $event->definitions[$action_id] = $definition;
+        if (!$this->currentUser->hasPermission($permission_id)) {
+          unset($event->definitions[$action_id]);
+        }
       }
     }
   }

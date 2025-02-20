@@ -8,7 +8,8 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\views_bulk_operations\ActionAlterDefinitionsEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Defines Views Bulk Operations action manager.
@@ -19,16 +20,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ViewsBulkOperationsActionManager extends ActionManager {
 
   public const ALTER_ACTIONS_EVENT = 'views_bulk_operations.action_definitions';
-
-  /**
-   * Event dispatcher service.
-   */
-  protected EventDispatcherInterface $eventDispatcher;
-
-  /**
-   * The entity type manager.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * Additional parameters passed to alter event.
@@ -53,16 +44,15 @@ class ViewsBulkOperationsActionManager extends ActionManager {
    *   Entity type manager.
    */
   public function __construct(
+    #[Autowire(service: 'container.namespaces')]
     \Traversable $namespaces,
+    #[Autowire(service: 'cache.discovery')]
     CacheBackendInterface $cacheBackend,
     ModuleHandlerInterface $moduleHandler,
-    EventDispatcherInterface $eventDispatcher,
-    EntityTypeManagerInterface $entityTypeManager
+    protected readonly EventDispatcherInterface $eventDispatcher,
+    protected readonly EntityTypeManagerInterface $entityTypeManager
   ) {
     parent::__construct($namespaces, $cacheBackend, $moduleHandler);
-
-    $this->eventDispatcher = $eventDispatcher;
-    $this->entityTypeManager = $entityTypeManager;
 
     $this->setCacheBackend($cacheBackend, 'views_bulk_operations_action_info');
   }
@@ -106,7 +96,6 @@ class ViewsBulkOperationsActionManager extends ActionManager {
 
       $this->processDefinition($definition, $plugin_id);
     }
-    $this->alterDefinitions($definitions);
     foreach ($definitions as $plugin_id => $plugin_definition) {
       // If the plugin definition is an object, attempt to convert it to an
       // array, if that is not possible, skip further processing.
@@ -137,11 +126,15 @@ class ViewsBulkOperationsActionManager extends ActionManager {
       $definitions = $this->getCachedDefinitions();
     }
     if (!isset($definitions)) {
-      $this->alterParameters = $parameters;
       $definitions = $this->findDefinitions($parameters);
 
       $this->setCachedDefinitions($definitions);
     }
+
+    // Alter definitions after retrieving all from the cache for maximum
+    // flexibility.
+    $this->alterParameters = $parameters;
+    $this->alterDefinitions($definitions);
 
     return $definitions;
   }
@@ -175,32 +168,6 @@ class ViewsBulkOperationsActionManager extends ActionManager {
     }
 
     throw new PluginNotFoundException($plugin_id, \sprintf('The "%s" plugin does not exist.', $plugin_id));
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function processDefinition(&$definition, $plugin_id) {
-    // Only arrays can be operated on.
-    if (!\is_array($definition)) {
-      return;
-    }
-
-    if (!empty($this->defaults) && \is_array($this->defaults)) {
-      $definition = NestedArray::mergeDeep($this->defaults, $definition);
-    }
-
-    // Merge in defaults.
-    $definition += [
-      'confirm' => FALSE,
-    ];
-
-    // Add default confirmation form if confirm set to TRUE
-    // and not explicitly set.
-    if ($definition['confirm'] && empty($definition['confirm_form_route_name'])) {
-      $definition['confirm_form_route_name'] = 'views_bulk_operations.confirm';
-    }
-
   }
 
   /**

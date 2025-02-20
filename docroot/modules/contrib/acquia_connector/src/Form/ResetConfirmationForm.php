@@ -17,7 +17,7 @@ class ResetConfirmationForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to reset your credentials to default values?');
+    return $this->t('Are you sure you want to reset your credentials?');
   }
 
   /**

@@ -61,7 +61,7 @@ final class CredentialFormTest extends AcquiaConnectorTestBase {
     $actual_msg = $this->container->get('messenger')->all()['status'];
     self::assertSame(
       ['status' => '<h3>Connection successful!</h3>You are now connected to Acquia Cloud. Please enter a name for your site to begin sending profile data.'],
-      ['status' => (string)array_shift($actual_msg)]
+      ['status' => (string) array_shift($actual_msg)]
     );
   }
 

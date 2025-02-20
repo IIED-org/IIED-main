@@ -2,28 +2,24 @@
 
 namespace Drupal\views_bulk_operations_test\Plugin\Action;
 
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\views\ViewExecutable;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsPreconfigurationInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Action for test purposes only.
- *
- * @Action(
- *   id = "views_bulk_operations_advanced_test_action",
- *   label = @Translation("VBO advanced test action"),
- *   type = "",
- *   confirm = TRUE,
- *   requirements = {
- *     "_permission" = "execute advanced test action",
- *   },
- * )
  */
+#[Action(
+  id: 'views_bulk_operations_advanced_test_action',
+  label: new TranslatableMarkup('VBO example action'),
+  type: ''
+)]
 class ViewsBulkOperationsAdvancedTestAction extends ViewsBulkOperationsActionBase implements ViewsBulkOperationsPreconfigurationInterface, PluginFormInterface {
   use MessengerTrait;
 
@@ -96,23 +92,6 @@ class ViewsBulkOperationsAdvancedTestAction extends ViewsBulkOperationsActionBas
    */
   public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     return $object->access('update', $account, $return_as_object);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function finished($success, array $results, array $operations): ?RedirectResponse {
-    // Let's return a bit different message. We don't except faliures
-    // in tests as well so no need to check for a success.
-    $details = [];
-    foreach ($results['operations'] as $operation) {
-      $details[] = $operation['message'] . ' (' . $operation['count'] . ')';
-    }
-    $message = static::translate('Custom processing message: @operations.', [
-      '@operations' => \implode(', ', $details),
-    ]);
-    static::message($message);
-    return NULL;
   }
 
 }

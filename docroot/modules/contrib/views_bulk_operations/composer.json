@@ -10,27 +10,22 @@
     }
   ],
   "support": {
-    "issues": "https://www.drupal.org/project/issues/views_bulk_operations?version=8.x",
-    "docs": "https://www.drupal.org/docs/8/modules/views-bulk-operations-vbo",
-    "source": "https://git.drupalcode.org/project/views_bulk_operations/-/tree/8.x-3.x"
+    "issues": "https://www.drupal.org/project/issues/views_bulk_operations?version=any_4.",
+    "docs": "https://www.drupal.org/docs/contributed-modules/views-bulk-operations-vbo",
+    "source": "https://git.drupalcode.org/project/views_bulk_operations"
   },
   "license": "GPL-2.0-or-later",
   "minimum-stability": "dev",
   "require": {
-    "drupal/core": "^9.4 || ^10 || ^11",
-    "php": ">=7.4.0"
+    "drupal/core": "^10.3 || ^11"
   },
   "require-dev": {
-    "drush/drush": "^12"
+    "drush/drush": "^12 || ^13"
   },
   "suggest": {
-    "drush/drush": "^11 || ^12"
+    "drush/drush": "^12 || ^13"
   },
-  "extra": {
-    "drush": {
-      "services": {
-        "drush.services.yml": "^10 || ^11"
-      }
-    }
+  "conflict": {
+    "drush/drush": "<12.5.1"
   }
 }

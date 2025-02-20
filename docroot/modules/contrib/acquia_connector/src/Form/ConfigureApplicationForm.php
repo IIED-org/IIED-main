@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\acquia_connector\Form;
 
+use Drupal\acquia_connector\AuthService;
 use Drupal\acquia_connector\Client\ClientFactory;
 use Drupal\acquia_connector\SiteProfile\SiteProfile;
 use Drupal\acquia_connector\Subscription;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormBuilder;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
@@ -58,6 +60,28 @@ final class ConfigureApplicationForm extends FormBase {
   protected LoggerInterface $logger;
 
   /**
+   * Acquia Connector Auth Service.
+   *
+   * @var \Drupal\acquia_connector\AuthService
+   */
+  protected AuthService $authService;
+
+
+  /**
+   * Form builder to return API credentials form.
+   *
+   * @var \Drupal\Core\Form\FormBuilder
+   */
+  protected FormBuilder $formBuilder;
+
+  /**
+   * Reset Credentials Data.
+   *
+   * @var array
+   */
+  protected $resetData;
+
+  /**
    * Constructs a new ConfigureApplicationForm object.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -70,13 +94,19 @@ final class ConfigureApplicationForm extends FormBase {
    *   The subscription.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger.
+   * @param \Drupal\acquia_connector\AuthService $auth_service
+   *   Acquia Connector Auth Service.
+   * @param \Drupal\Core\Form\FormBuilder $form_builder
+   *   The form builder service.
    */
-  public function __construct(StateInterface $state, SiteProfile $site_profile, ClientFactory $client_factory, Subscription $subscription, LoggerInterface $logger) {
+  public function __construct(StateInterface $state, SiteProfile $site_profile, ClientFactory $client_factory, Subscription $subscription, LoggerInterface $logger, AuthService $auth_service, FormBuilder $form_builder) {
     $this->state = $state;
     $this->siteProfile = $site_profile;
     $this->clientFactory = $client_factory;
     $this->subscription = $subscription;
     $this->logger = $logger;
+    $this->authService = $auth_service;
+    $this->formBuilder = $form_builder;
   }
 
   /**
@@ -88,7 +118,9 @@ final class ConfigureApplicationForm extends FormBase {
       $container->get('acquia_connector.site_profile'),
       $container->get('acquia_connector.client.factory'),
       $container->get('acquia_connector.subscription'),
-      $container->get('acquia_connector.logger_channel')
+      $container->get('acquia_connector.logger_channel'),
+      $container->get('acquia_connector.auth_service'),
+      $container->get('form_builder')
     );
     $instance->setStringTranslation($container->get('string_translation'));
     return $instance;
@@ -105,6 +137,11 @@ final class ConfigureApplicationForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    // Redirect to confirmation form when resetting network ID.
+    if ($this->resetData) {
+      return $this->formBuilder->getForm(ResetConfirmationForm::class);
+    }
+
     try {
       $response = $this->clientFactory->getCloudApiClient()->get('/api/applications');
       $data = Json::decode((string) $response->getBody());
@@ -125,6 +162,24 @@ final class ConfigureApplicationForm extends FormBase {
         }
       }
       asort($applications);
+
+      // We have a token, but API keys are missing, create them.
+      // Note, this code will become redundant once idp oauth is removed.
+      if (empty($this->state->get('acquia_connector.credentials', ''))) {
+        $response = $this->clientFactory->getCloudApiClient()->post('/api/account/tokens', [
+          'body' => Json::encode([
+            'label' => 'Connector (' . $this->getRequest()->getHost() . ') - Do Not Remove',
+          ]),
+          'headers' => [
+            'Content-Type' => 'application/json, version=2',
+            'Accept' => 'application/json',
+          ],
+        ]);
+        if ($response->getStatusCode() == 201) {
+          $credentials = Json::decode((string) $response->getBody());
+          $this->state->set('acquia_connector.credentials', Json::encode($credentials));
+        }
+      }
     }
     catch (\Throwable $e) {
       $this->messenger()->addError($this->t('We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href=":url">this link</a>.', [
@@ -174,15 +229,36 @@ final class ConfigureApplicationForm extends FormBase {
         '#button_type' => 'primary',
         '#value' => $this->t('Set application'),
       ],
+      'reauthenticate' => [
+        '#type' => 'submit',
+        '#button_type' => 'danger',
+        '#value' => $this->t('Re-authenticate'),
+        '#submit' => [[$this, 'submitReset']],
+      ]
     ];
 
     return $form;
   }
 
   /**
+   * Submit handler for the Reset Defaults button.
+   */
+  public function submitReset(array &$form, FormStateInterface $form_state) {
+    $form_state->setRebuild();
+    $this->resetData = $form_state->getValues();
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
+    // Reset Authentication Creds.
+    if ($form_state->getValue('confirm')) {
+      $this->authService->resetCredentials();
+      $form_state->setRedirect('acquia_connector.setup_oauth');
+      return;
+    }
+
     $values = $form_state->getValues();
     $application_uuid = $values['application'];
     $client = $this->clientFactory->getCloudApiClient();

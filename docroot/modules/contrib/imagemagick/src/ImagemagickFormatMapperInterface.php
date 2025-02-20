@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\imagemagick;
 
 /**
@@ -88,7 +90,7 @@ interface ImagemagickFormatMapperInterface {
    *   The MIME type of the specified format if the format is enabled in the
    *   toolkit, NULL otherwise.
    */
-  public function getMimeTypeFromFormat(string $format);
+  public function getMimeTypeFromFormat(string $format): ?string;
 
   /**
    * Gets the image format, given the image file extension.
@@ -102,6 +104,6 @@ interface ImagemagickFormatMapperInterface {
    *   specified extension, if the format is enabled in the toolkit. NULL
    *   otherwise.
    */
-  public function getFormatFromExtension(string $extension);
+  public function getFormatFromExtension(string $extension): ?string;
 
 }

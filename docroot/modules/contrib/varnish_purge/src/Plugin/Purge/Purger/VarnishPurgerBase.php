@@ -2,12 +2,12 @@
 
 namespace Drupal\varnish_purger\Plugin\Purge\Purger;
 
-use GuzzleHttp\ClientInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\purge\Plugin\Purge\Purger\PurgerBase;
 use Drupal\purge\Plugin\Purge\Purger\PurgerInterface;
 use Drupal\varnish_purger\Entity\VarnishPurgerSettings;
+use GuzzleHttp\ClientInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Abstract base class for HTTP based configurable purgers.
@@ -15,6 +15,8 @@ use Drupal\varnish_purger\Entity\VarnishPurgerSettings;
 abstract class VarnishPurgerBase extends PurgerBase implements PurgerInterface {
 
   /**
+   * The HTTP client.
+   *
    * @var \GuzzleHttp\Client
    */
   protected $client;
@@ -97,7 +99,7 @@ abstract class VarnishPurgerBase extends PurgerBase implements PurgerInterface {
    * @return string[]
    *   Associative array with header values and field names in the key.
    */
-  protected function getHeaders($token_data) {
+  protected function getHeaders(array $token_data) {
     $headers = [];
     $headers['user-agent'] = 'varnish_purger module for Drupal 8.';
     foreach ($this->settings->headers as $header) {
@@ -133,7 +135,7 @@ abstract class VarnishPurgerBase extends PurgerBase implements PurgerInterface {
    * @return mixed[]
    *   Associative array with option/value pairs.
    */
-  protected function getOptions($token_data) {
+  protected function getOptions(array $token_data) {
     $opt = [
       'http_errors' => $this->settings->http_errors,
       'connect_timeout' => $this->settings->connect_timeout,
@@ -177,7 +179,7 @@ abstract class VarnishPurgerBase extends PurgerBase implements PurgerInterface {
    * @return string
    *   URL string representation.
    */
-  protected function getUri($token_data) {
+  protected function getUri(array $token_data) {
     return sprintf(
       '%s://%s:%s%s',
       $this->settings->scheme,

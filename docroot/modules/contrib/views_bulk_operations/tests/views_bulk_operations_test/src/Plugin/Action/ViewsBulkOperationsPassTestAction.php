@@ -2,19 +2,20 @@
 
 namespace Drupal\views_bulk_operations_test\Plugin\Action;
 
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
 
 /**
  * Action for test purposes only.
- *
- * @Action(
- *   id = "views_bulk_operations_passing_test_action",
- *   label = @Translation("VBO parameters passing test action"),
- *   type = "node",
- * )
  */
+#[Action(
+  id: 'views_bulk_operations_passing_test_action',
+  label: new TranslatableMarkup('VBO parameters passing test action'),
+  type: 'node'
+)]
 class ViewsBulkOperationsPassTestAction extends ViewsBulkOperationsActionBase {
   use MessengerTrait;
 

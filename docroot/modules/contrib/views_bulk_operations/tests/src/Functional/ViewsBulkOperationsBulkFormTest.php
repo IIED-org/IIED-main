@@ -56,7 +56,7 @@ class ViewsBulkOperationsBulkFormTest extends ViewsBulkOperationsFunctionalTestB
     $data = ['select_all' => 1];
     $this->executeAction(NULL, 'Simple test action', $selected, $data);
 
-    $assertSession->pageTextContains(\sprintf('Action processing results: Test (%d).', self::TEST_NODE_COUNT));
+    $assertSession->pageTextContains(\sprintf('Test (%d)', self::TEST_NODE_COUNT));
 
   }
 
@@ -73,7 +73,6 @@ class ViewsBulkOperationsBulkFormTest extends ViewsBulkOperationsFunctionalTestB
     // to have access to perform the test operation.
     $admin_user = $this->drupalCreateUser([
       'edit any page content',
-      'execute advanced test action',
     ]);
     $this->drupalLogin($admin_user);
 
@@ -83,7 +82,7 @@ class ViewsBulkOperationsBulkFormTest extends ViewsBulkOperationsFunctionalTestB
     $data = ['action' => 0];
     $this->executeAction('views-bulk-operations-test-advanced', 'Apply to selected items', $selected, $data);
 
-    $assertSession->pageTextContains(\sprintf('Action processing results: Test (%d).', \count($selected)));
+    $assertSession->pageTextContains(\sprintf('Test (%d)', \count($selected)));
 
     // Execute the advanced test action.
     $selected = [0, 1, 3];
@@ -143,7 +142,7 @@ class ViewsBulkOperationsBulkFormTest extends ViewsBulkOperationsFunctionalTestB
     // Again, take offset into account (-1), also take 2 excluded
     // rows into account (-2).
     // Also, check if the custom completed message appears.
-    $assertSession->pageTextContains(\sprintf('Custom processing message: Test (%d).', \count($this->testNodes) - 3));
+    $assertSession->pageTextContains(\sprintf('Overridden message (%s)', \count($this->testNodes) - 3));
 
     $this->assertNotEmpty((\count($this->cssSelect('table.vbo-table tbody tr')) === 2), "The view shows only excluded results.");
   }

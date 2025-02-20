@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\imagemagick\Functional;
 
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\imagemagick\ImagemagickExecManagerInterface;
+use Drupal\imagemagick\PackageSuite;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
 
@@ -15,9 +20,7 @@ use Drupal\user\Entity\Role;
 class ToolkitImagemagickFormTest extends BrowserTestBase {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
+   * {@inheritdoc}
    */
   protected static $modules = ['system', 'imagemagick', 'file_mdm'];
 
@@ -33,10 +36,8 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
 
   /**
    * Provides a list of available modules.
-   *
-   * @var \Drupal\Core\Extension\ModuleExtensionList
    */
-  protected $moduleList;
+  protected ModuleExtensionList $moduleList;
 
   /**
    * {@inheritdoc}
@@ -83,6 +84,16 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
     ];
     $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->fieldValueEquals('image_toolkit', 'imagemagick');
+
+    // Test Imagemagick 7 is recognized if available and selected.
+    $status = \Drupal::service(ImagemagickExecManagerInterface::class)->checkPath('', PackageSuite::Imagemagick, 'v7');
+    if (empty($status['errors'])) {
+      $edit = [
+        'imagemagick[suite][imagemagick_version]' => 'v7',
+      ];
+      $this->submitForm($edit, 'Save configuration');
+      $this->assertSession()->elementTextContains('css', 'details[data-drupal-selector="edit-imagemagick-suite-version"]', 'ImageMagick 7.');
+    }
 
     // Test default supported image extensions.
     $this->assertSession()->responseNotContains('Image format errors');
@@ -145,8 +156,6 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
 
   /**
    * Test status report.
-   *
-   * @group legacy
    */
   public function testStatusReport(): void {
     $statusReportPath = 'admin/reports/status';
@@ -173,7 +182,6 @@ class ToolkitImagemagickFormTest extends BrowserTestBase {
       ->save();
 
     // Create a test image style with Rotate effect.
-    $this->expectDeprecation('\\Drupal\\imagemagick\\Plugin\\ImageToolkit\\Operation\\imagemagick\\Rotate is deprecated in imagemagick:8.x-3.3 and is removed from imagemagick:4.0.0. Use the rotate operation provided by the Image Effects module instead. See https://www.drupal.org/project/imagemagick/issues/3251438');
     $testImageStyle = ImageStyle::create([
       'name' => 'test_rotate',
       'label' => 'Test image style with Rotate effect',

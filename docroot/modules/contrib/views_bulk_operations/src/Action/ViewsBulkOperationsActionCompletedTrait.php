@@ -42,18 +42,13 @@ trait ViewsBulkOperationsActionCompletedTrait {
   public static function finished($success, array $results, array $operations): ?RedirectResponse {
     if ($success) {
       foreach ($results['operations'] as $item) {
-        // Default fallback to maintain backwards compatibility:
-        // if api version equals to "1" and type equals to "status",
-        // previous message is displayed, otherwise we display exactly what's
-        // specified in the action.
-        if ($item['type'] === 'status' && $results['api_version'] === '1') {
-          $message = static::translate('Action processing results: @operation (@count).', [
-            '@operation' => $item['message'],
+        if (\strpos($item['message'], '@count') !== FALSE) {
+          $message = new FormattableMarkup($item['message'], [
             '@count' => $item['count'],
           ]);
         }
         else {
-          $message = new FormattableMarkup('@message (@count)', [
+          $message = new TranslatableMarkup('@message (@count)', [
             '@message' => $item['message'],
             '@count' => $item['count'],
           ]);
