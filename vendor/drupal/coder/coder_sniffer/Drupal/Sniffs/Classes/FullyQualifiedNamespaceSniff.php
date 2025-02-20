@@ -60,9 +60,14 @@ class FullyQualifiedNamespaceSniff implements Sniff
         }
 
         // We are only interested in a backslash embedded between strings, which
-        // means this is a class reference with more than once namespace part.
+        // means this is a class reference with more than one namespace part.
         if ($tokens[($stackPtr - 1)]['code'] !== T_STRING || $tokens[($stackPtr + 1)]['code'] !== T_STRING) {
             return;
+        }
+
+        // Skip names in PHP attributes, no standards defined yet.
+        if (isset($tokens[$stackPtr]['attribute_closer']) === true) {
+            return $tokens[$stackPtr]['attribute_closer'];
         }
 
         // Check if this is a use statement and ignore those.
@@ -76,7 +81,10 @@ class FullyQualifiedNamespaceSniff implements Sniff
         // If this is a namespaced function call then ignore this because use
         // statements for functions are not possible in PHP 5.5 and lower.
         $after = $phpcsFile->findNext([T_STRING, T_NS_SEPARATOR, T_WHITESPACE], $stackPtr, null, true);
-        if ($tokens[$after]['code'] === T_OPEN_PARENTHESIS && $tokens[$before]['code'] !== T_NEW) {
+        if ($tokens[$after]['code'] === T_OPEN_PARENTHESIS
+            && $tokens[$before]['code'] !== T_NEW
+            && $tokens[$before]['code'] !== T_ATTRIBUTE
+        ) {
             return ($after + 1);
         }
 
@@ -187,14 +195,20 @@ class FullyQualifiedNamespaceSniff implements Sniff
                 if ($useStatement !== false && empty($tokens[$useStatement]['conditions']) === true) {
                     $phpcsFile->fixer->addContentBefore($useStatement, "$use\n");
                 } else {
-                    // Check if there is an @file comment.
-                    $beginning   = 0;
-                    $fileComment = $phpcsFile->findNext(T_WHITESPACE, ($beginning + 1), null, true);
-                    if ($tokens[$fileComment]['code'] === T_DOC_COMMENT_OPEN_TAG) {
-                        $beginning = $tokens[$fileComment]['comment_closer'];
+                    // Check if there is a namespace declaration and add it there.
+                    $namespace = $phpcsFile->findNext(T_NAMESPACE, 0);
+                    if ($namespace !== false) {
+                        $beginning = $phpcsFile->findEndOfStatement($namespace);
                         $phpcsFile->fixer->addContent($beginning, "\n\n$use\n");
                     } else {
-                        $phpcsFile->fixer->addContent($beginning, "$use\n");
+                        // Check if there is an @file comment.
+                        $fileComment = $phpcsFile->findNext(T_WHITESPACE, 1, null, true);
+                        if ($tokens[$fileComment]['code'] === T_DOC_COMMENT_OPEN_TAG) {
+                            $beginning = $tokens[$fileComment]['comment_closer'];
+                            $phpcsFile->fixer->addContent($beginning, "\n\n$use\n");
+                        } else {
+                            $phpcsFile->fixer->addContent(0, "\n\n$use\n");
+                        }
                     }
                 }
             }//end if

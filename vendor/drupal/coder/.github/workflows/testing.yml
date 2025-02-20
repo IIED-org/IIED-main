@@ -7,12 +7,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2']
+        php-versions: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
         extra-tests: ['0']
-        # We only need to run PHPStan and Druapl core regression tests once on
+        # We only need to run PHPStan and Drupal core regression tests once on
         # the latest PHP version.
         include:
-          - php-versions: '8.3'
+          - php-versions: '8.4'
             extra-tests: '1'
     steps:
       - name: Checkout Coder
@@ -80,6 +80,8 @@ jobs:
         if: ${{ matrix.extra-tests == '1' }}
         # In case Drupal core files have known problems that should be
         # ignored temporarily, add them with the --ignore option.
+        # @todo Remove ignore option once Coder 8.3.27 is released and Drupal
+        # core is updated to that version.
         run: |
           cd drupal/core
-          ../../vendor/bin/phpcs -p
+          ../../vendor/bin/phpcs -p -s --ignore=lib/Drupal/Core/Entity/EntityType.php,lib/Drupal/Core/Recipe/RecipeInputFormTrait.php,lib/Drupal/Core/Form/FormState.php,modules/migrate/src/Plugin/Migration.php,modules/views/src/ViewExecutable.php,modules/views/src/Plugin/views/style/StylePluginBase.php,core/lib/Drupal/Core/FileTransfer/FTP.php,core/lib/Drupal/Core/FileTransfer/SSH.php

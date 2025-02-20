@@ -7,7 +7,7 @@ dependencies:
   - drupal:rest
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2024-07-17
-version: '2.0.3'
+# Information added by Drupal.org packaging script on 2025-02-02
+version: '2.0.4'
 project: 'hal'
-datestamp: 1721252596
+datestamp: 1738532066
