@@ -224,7 +224,7 @@
 
         $(this).find('input[type="checkbox"]').each(function () {
           let value = $(this).val();
-          if (this.id !== 'edit-select-all' && value !== 'on') {
+          if (!$(this).hasClass('vbo-select-all') && value !== 'on') {
             vboSelection.list[index].push(value);
             vboSelection.bindEventHandlers($(this), 'vbo_checkbox');
           }

@@ -5,7 +5,7 @@ package: Acquia
 core_version_requirement: '^9.5 || ^10 || ^11'
 configure: acquia_connector.settings
 
-# Information added by Drupal.org packaging script on 2024-09-11
-version: '4.0.9'
+# Information added by Drupal.org packaging script on 2024-12-16
+version: '4.1.0'
 project: 'acquia_connector'
-datestamp: 1726071852
+datestamp: 1734321325

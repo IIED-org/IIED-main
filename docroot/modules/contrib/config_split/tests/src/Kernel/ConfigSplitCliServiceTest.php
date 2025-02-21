@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\config_split\Kernel;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Drupal\config\Controller\ConfigController;
 use Drupal\config_filter\Config\FilteredStorage;
 use Drupal\Core\Archiver\Tar;
@@ -21,6 +22,7 @@ use org\bovigo\vfs\vfsStreamWrapper;
  */
 class ConfigSplitCliServiceTest extends KernelTestBase {
 
+  use ProphecyTrait;
   /**
    * Modules to enable.
    *

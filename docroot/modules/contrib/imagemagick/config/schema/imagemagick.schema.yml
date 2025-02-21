@@ -11,6 +11,9 @@ imagemagick.settings:
     binaries:
       type: string
       label: 'Graphics package - ImageMagick/GraphicsMagick'
+    imagemagick_version:
+      type: string
+      label: 'ImageMagick version'
     path_to_binaries:
       type: string
       label: 'Path to the binaries'

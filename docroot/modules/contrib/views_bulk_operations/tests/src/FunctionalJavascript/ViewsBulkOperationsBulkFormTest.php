@@ -94,7 +94,6 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
         'edit any page content',
         'create page content',
         'delete any page content',
-        'execute advanced test action',
       ]);
     $this->drupalLogin($admin_user);
 
@@ -218,7 +217,7 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
         $this->assertSession->pageTextNotContains(\sprintf('Test action (label: %s)', $node->label()));
       }
     }
-    $this->assertSession->pageTextContains(\sprintf('Action processing results: Test (%s)', \count($selected_ids)));
+    $this->assertSession->pageTextContains(\sprintf('Test (%s)', \count($selected_ids)));
   }
 
   /**
@@ -250,7 +249,7 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
       $node = $this->testNodes[$index];
       $this->assertSession->pageTextContains(\sprintf('Test action (label: %s)', $node->label()));
     }
-    $this->assertSession->pageTextContains(\sprintf('Action processing results: Test (%s)', \count($selected_indexes)));
+    $this->assertSession->pageTextContains(\sprintf('Test (%s)', \count($selected_indexes)));
 
     // Check that the view now actually contains the new nodes in place of the
     // previously displayed ones.

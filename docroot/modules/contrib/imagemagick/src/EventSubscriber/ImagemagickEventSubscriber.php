@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\imagemagick\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\File\Exception\FileException;
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\file_mdm\FileMetadataManagerInterface;
@@ -13,6 +16,7 @@ use Drupal\imagemagick\Event\ImagemagickExecutionEvent;
 use Drupal\imagemagick\ImagemagickExecArguments;
 use Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -40,6 +44,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
    *   The file metadata manager service.
    */
   public function __construct(
+    #[Autowire(service: 'logger.channel.image')]
     protected readonly LoggerInterface $logger,
     protected readonly ConfigFactoryInterface $configFactory,
     protected readonly FileSystemInterface $fileSystem,
@@ -52,7 +57,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       ImagemagickExecutionEvent::ENSURE_SOURCE_LOCAL_PATH => 'ensureSourceLocalPath',
       ImagemagickExecutionEvent::POST_SAVE => 'postSave',
@@ -67,7 +72,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\imagemagick\ImagemagickExecArguments $arguments
    *   The ImageMagick/GraphicsMagick execution arguments object.
    */
-  protected function doEnsureSourceLocalPath(ImagemagickExecArguments $arguments) {
+  protected function doEnsureSourceLocalPath(ImagemagickExecArguments $arguments): void {
     // Early return if already set.
     if (!empty($arguments->getSourceLocalPath())) {
       return;
@@ -92,7 +97,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
           $temp_path = $this->fileSystem->tempnam('temporary://', 'imagemagick_');
           $this->fileSystem->unlink($temp_path);
           $temp_path .= '.' . pathinfo($source, PATHINFO_EXTENSION);
-          $path = $this->fileSystem->copy($arguments->getSource(), $temp_path, FileSystemInterface::EXISTS_ERROR);
+          $path = $this->fileSystem->copy($arguments->getSource(), $temp_path, FileExists::Error);
           $arguments->setSourceLocalPath($this->fileSystem->realpath($path));
           drupal_register_shutdown_function(
             [static::class, 'removeTemporaryRemoteCopy'],
@@ -112,7 +117,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\imagemagick\ImagemagickExecArguments $arguments
    *   The ImageMagick/GraphicsMagick execution arguments object.
    */
-  protected function doEnsureDestinationLocalPath(ImagemagickExecArguments $arguments) {
+  protected function doEnsureDestinationLocalPath(ImagemagickExecArguments $arguments): void {
     $local_path = $arguments->getDestinationLocalPath();
 
     // Early return if already set.
@@ -153,7 +158,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\imagemagick\ImagemagickExecArguments $arguments
    *   The ImageMagick/GraphicsMagick execution arguments object.
    */
-  protected function prependArguments(ImagemagickExecArguments $arguments) {
+  protected function prependArguments(ImagemagickExecArguments $arguments): void {
     // Add prepended arguments if needed.
     if ($prepend = $this->imagemagickSettings->get('prepend')) {
       // Split the prepend string in multiple space-separated tokens. Quotes,
@@ -191,7 +196,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
    * @see \Drupal\imagemagick\ImagemagickExecArguments::setSourceLocalPath()
    * @see \Drupal\imagemagick\ImagemagickExecArguments::getSourceLocalPath()
    */
-  public function ensureSourceLocalPath(ImagemagickExecutionEvent $event) {
+  public function ensureSourceLocalPath(ImagemagickExecutionEvent $event): void {
     $arguments = $event->getExecArguments();
     $this->doEnsureSourceLocalPath($arguments);
   }
@@ -212,14 +217,14 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
    * @see \Drupal\imagemagick\ImagemagickExecArguments::getDestination()
    * @see \Drupal\imagemagick\ImagemagickExecArguments::getDestinationLocalPath()
    */
-  public function postSave(ImagemagickExecutionEvent $event) {
+  public function postSave(ImagemagickExecutionEvent $event): void {
     $arguments = $event->getExecArguments();
     $destination = $arguments->getDestination();
     if (!$this->fileSystem->realpath($destination)) {
       // We are working with a remote file, so move the temp file to the final
       // destination, replacing any existing file with the same name.
       try {
-        $this->fileSystem->move($arguments->getDestinationLocalPath(), $arguments->getDestination(), FileSystemInterface::EXISTS_REPLACE);
+        $this->fileSystem->move($arguments->getDestinationLocalPath(), $arguments->getDestination(), FileExists::Replace);
       }
       catch (FileException $e) {
         $this->logger->error($e->getMessage());
@@ -248,7 +253,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
    * @see \Drupal\imagemagick\ImagemagickExecArguments
    * @see \Drupal\imagemagick\Plugin\FileMetadata\ImagemagickIdentify::identify()
    */
-  public function preIdentifyExecute(ImagemagickExecutionEvent $event) {
+  public function preIdentifyExecute(ImagemagickExecutionEvent $event): void {
     $arguments = $event->getExecArguments();
     $this->prependArguments($arguments);
   }
@@ -286,7 +291,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
    * @see \Drupal\imagemagick\ImagemagickExecArguments
    * @see \Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit::convert()
    */
-  public function preConvertExecute(ImagemagickExecutionEvent $event) {
+  public function preConvertExecute(ImagemagickExecutionEvent $event): void {
     $arguments = $event->getExecArguments();
     $this->prependArguments($arguments);
     $this->doEnsureDestinationLocalPath($arguments);
@@ -303,7 +308,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
     }
 
     // Change output image resolution to 72 ppi, if specified in settings.
-    if (empty($arguments->find('/^\-density/')) && $density = (int) $this->imagemagickSettings->get('advanced.density')) {
+    if (empty($arguments->find('/^\-density/')) && $density = (string) $this->imagemagickSettings->get('advanced.density')) {
       $arguments->add(["-density", $density, "-units", "PixelsPerInch"]);
     }
 
@@ -335,7 +340,7 @@ class ImagemagickEventSubscriber implements EventSubscriberInterface {
    * @param string $path
    *   The temporary file realpath.
    */
-  public static function removeTemporaryRemoteCopy($path) {
+  public static function removeTemporaryRemoteCopy(string $path): void {
     if (file_exists($path)) {
       \Drupal::service('file_system')->delete($path);
     }

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\imagemagick\Kernel;
 
 use Drupal\imagemagick\ArgumentMode;
-use Drupal\imagemagick\ImagemagickExecArguments;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
@@ -56,33 +57,6 @@ class ToolkitOperationsTest extends KernelTestBase {
     $this->assertSame([0, 1, 2], array_keys($toolkit->arguments()->find('/^./', NULL, ['image_toolkit_operation_plugin_id' => 'imagemagick_create_new'])));
     $this->assertSame(['-size', '100x200', 'xc:transparent'], $toolkit->arguments()->toArray(ArgumentMode::PostSource));
     $this->assertSame("[-size] [100x200] [xc:transparent]", $toolkit->arguments()->toDebugString(ArgumentMode::PostSource));
-  }
-
-  /**
-   * Create a new image and inspect the arguments.
-   *
-   * @param string $toolkit_id
-   *   The id of the toolkit to set up.
-   * @param string $toolkit_config
-   *   The config object of the toolkit to set up.
-   * @param array $toolkit_settings
-   *   The settings of the toolkit to set up.
-   *
-   * @group legacy
-   *
-   * @dataProvider providerToolkitConfiguration
-   */
-  public function testCreateNewImageArgumentsLegacy(string $toolkit_id, string $toolkit_config, array $toolkit_settings): void {
-    $this->expectDeprecation('Passing an integer value for $mode in Drupal\\imagemagick\\ImagemagickExecArguments::toString() is deprecated in imagemagick:8.x-3.7 and is removed from imagemagick:4.0.0. Use ArgumentMode instead. See https://www.drupal.org/node/3409254');
-    $this->setUpToolkit($toolkit_id, $toolkit_config, $toolkit_settings);
-    $image = $this->imageFactory->get();
-    /** @var \Drupal\imagemagick\Plugin\ImageToolkit\ImagemagickToolkit $toolkit */
-    $toolkit = $image->getToolkit();
-    $image->createNew(100, 200);
-    $this->assertSame([0, 1, 2], array_keys($toolkit->arguments()->find('/^./', NULL, ['image_toolkit_operation' => 'create_new'])));
-    $this->assertSame([0, 1, 2], array_keys($toolkit->arguments()->find('/^./', NULL, ['image_toolkit_operation_plugin_id' => 'imagemagick_create_new'])));
-    $this->assertSame(['-size', '100x200', 'xc:transparent'], $toolkit->arguments()->toArray(ArgumentMode::PostSource));
-    $this->assertSame("-size 100x200 xc:transparent", $toolkit->arguments()->toString(ImagemagickExecArguments::POST_SOURCE));
   }
 
   /**

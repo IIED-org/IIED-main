@@ -2,6 +2,7 @@
 
 namespace Drupal\config_split\Tests;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Drupal\config_filter\Tests\ReadonlyStorageTest;
 use Drupal\config_split\Config\GhostStorage;
 use Drupal\Core\Config\StorageInterface;
@@ -14,6 +15,7 @@ use Prophecy\Argument;
  */
 class GhostStorageTest extends ReadonlyStorageTest {
 
+  use ProphecyTrait;
   /**
    * Override the storage decorating.
    *

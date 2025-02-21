@@ -2,8 +2,8 @@
 
 namespace Drupal\varnish_purger\Plugin\Purge\Purger;
 
-use Drupal\purge\Plugin\Purge\Purger\PurgerInterface;
 use Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface;
+use Drupal\purge\Plugin\Purge\Purger\PurgerInterface;
 use GuzzleHttp\Pool;
 
 /**
@@ -30,18 +30,18 @@ class VarnishPurger extends VarnishPurgerBase implements PurgerInterface {
     // Prepare a generator for the requests that we will be sending out. Use a
     // generator, as the pool implementation will request new item to pass
     // thorough the wire once any of the concurrency slots is free.
-    $requests = function() use ($invalidations) {
+    $requests = function () use ($invalidations) {
       $client = $this->client;
       $method = $this->settings->request_method;
       $logger = $this->logger();
 
-      /* @var $invalidation \Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface */
+      /** @var \Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface $invalidation */
       foreach ($invalidations as $invalidation) {
         $token_data = ['invalidation' => $invalidation];
         $uri = $this->getUri($token_data);
         $options = $this->getOptions($token_data);
 
-        yield function() use ($client, $uri, $method, $options, $invalidation, $logger) {
+        yield function () use ($client, $uri, $method, $options, $invalidation, $logger) {
           return $client->requestAsync($method, $uri, $options)->then(
             // Handle the positive case.
             function ($response) use ($invalidation) {
@@ -63,7 +63,7 @@ class VarnishPurger extends VarnishPurgerBase implements PurgerInterface {
                 'guzzle_opt' => $options,
                 'headers' => $headers,
               ]);
-              $logger->emergency("item failed due @e, details (JSON): @debug", [
+              $logger->error("item failed due @e, details (JSON): @debug", [
                 '@e' => is_object($reason) ? get_class($reason) : (string) $reason,
                 '@debug' => $debug,
               ]);

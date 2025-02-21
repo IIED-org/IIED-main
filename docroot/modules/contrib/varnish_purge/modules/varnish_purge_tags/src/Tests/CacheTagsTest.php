@@ -2,8 +2,8 @@
 
 namespace Drupal\varnish_purge_tags\Tests;
 
-use Symfony\Component\HttpFoundation\Request;
 use Drupal\purge\Tests\KernelTestBase;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Tests \Drupal\varnish_purge_tags\Plugin\Purge\Tags\CacheTags.
@@ -11,6 +11,12 @@ use Drupal\purge\Tests\KernelTestBase;
  * @group varnish_purge_tags
  */
 class CacheTagsTest extends KernelTestBase {
+
+  /**
+   * List of modules to enable for this test.
+   *
+   * @var array
+   */
   protected static $modules = ['system', 'varnish_purge_tags'];
 
   /**

@@ -3,14 +3,14 @@
 namespace Drupal\varnish_purger\Plugin\Purge\Purger;
 
 use Drupal\Core\Site\Settings;
+use Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface;
+use Drupal\purge\Plugin\Purge\Purger\PurgerBase;
+use Drupal\purge\Plugin\Purge\Purger\PurgerInterface;
 use Drupal\varnish_purger\DebugCallGraphTrait;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\purge\Plugin\Purge\Purger\PurgerBase;
-use Drupal\purge\Plugin\Purge\Purger\PurgerInterface;
-use Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface;
 
 /**
  * A purger with minimal configuration required.
@@ -34,6 +34,7 @@ use Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface;
  * )
  */
 class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
+
   use DebugCallGraphTrait;
 
   /**
@@ -42,6 +43,8 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
   const CONCURRENCY = 6;
 
   /**
+   * Defines the connection timeout duration.
+   *
    * Float describing the number of seconds to wait while trying to connect to
    * a server.
    */
@@ -53,6 +56,8 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
   const TIMEOUT = 3.0;
 
   /**
+   * Defines the grouping size for cache tags.
+   *
    * Batches of cache tags are split up into multiple requests to prevent HTTP
    * request headers from growing too large or Varnish refusing to process them.
    */
@@ -75,7 +80,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
   /**
    * The port the reverse proxies are available on.
    *
-   * @var ?int
+   * @var int|null
    */
   private $proxyPort;
 
@@ -135,6 +140,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
    *   Associative array of options to merge onto the standard ones.
    *
    * @return array
+   *   An associative array of options used for all purge requests.
    */
   protected function getGlobalOptions(array $extra = []) {
     $opt = [
@@ -169,7 +175,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
    *   containing an array of booleans representing if each request succeeded or
    *   failed.
    */
-  protected function getResultsConcurrently($caller, $requests) {
+  protected function getResultsConcurrently($caller, \Closure $requests) {
     $this->debug(__METHOD__);
     $results = [];
 
@@ -177,7 +183,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
     $pool = new Pool($this->client, $requests(), [
       'options' => $this->getGlobalOptions(),
       'concurrency' => self::CONCURRENCY,
-      'fulfilled' => function($response, $result_id) use (&$results) {
+      'fulfilled' => function ($response, $result_id) use (&$results) {
         /** @var \Drupal\purge\Logger\LoggerChannelPartInterface|null $logger */
         $logger = $this->logger();
         if ($logger->isDebuggingEnabled()) {
@@ -186,7 +192,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
         }
         $results[$result_id][] = TRUE;
       },
-      'rejected' => function($reason, $result_id) use (&$results, $caller) {
+      'rejected' => function ($reason, $result_id) use (&$results, $caller) {
         $this->debug(__METHOD__ . '::rejected');
         $this->logFailedRequest($caller, $reason);
         $results[$result_id][] = FALSE;
@@ -208,9 +214,10 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
    */
   public function getIdealConditionsLimit() {
     // The max amount of outgoing HTTP requests that can be made during script
-    // execution time. Although always respected as outer limit, it will be lower
-    // in practice as PHP resource limits (max execution time) bring it further
-    // down. However, the maximum amount of requests will be higher on the CLI.
+    // execution time. Although always respected as outer limit, it will be
+    // lower in practice as PHP resource limits (max execution time) bring it
+    // further down. However, the maximum amount of requests will be higher on
+    // the CLI.
     $proxies = count($this->getReverseProxies());
     if ($proxies) {
       return intval(ceil(200 / $proxies));
@@ -246,9 +253,9 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
       'tag'         => 'invalidateTags',
       'url'         => 'invalidateUrls',
       'wildcardurl' => 'invalidateWildcardUrls',
-      'everything'  => 'invalidateEverything'
+      'everything'  => 'invalidateEverything',
     ];
-    return isset($methods[$type]) ? $methods[$type] : 'invalidate';
+    return $methods[$type] ?? 'invalidate';
   }
 
   /**
@@ -302,16 +309,16 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
 
     // Now create requests for all groups of tags.
     $ipv4_addresses = $this->getReverseProxies();
-    $requests = function() use ($groups, $ipv4_addresses) {
+    $requests = function () use ($groups, $ipv4_addresses) {
       foreach ($groups as $group_id => $group) {
         $tags = implode(' ', $group['tags']);
         foreach ($ipv4_addresses as $ipv4) {
-          yield $group_id => function($poolopt) use ($tags, $ipv4) {
+          yield $group_id => function ($poolopt) use ($tags, $ipv4) {
             $opt = [
               'headers' => [
                 'Cache-Tags' => $tags,
                 'Accept-Encoding' => 'gzip',
-              ]
+              ],
             ];
             if (is_array($poolopt) && count($poolopt)) {
               $opt = array_merge($poolopt, $opt);
@@ -355,6 +362,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
    * Invalidate a set of URL invalidations.
    *
    * @param \Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface[] $invalidations
+   *   An associative array of URL.
    *
    * @see \Drupal\purge\Plugin\Purge\Purger\PurgerInterface::invalidate()
    * @see \Drupal\purge\Plugin\Purge\Purger\PurgerInterface::routeTypeToMethod()
@@ -369,10 +377,10 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
 
     // Generate request objects for each balancer/invalidation combination.
     $ipv4_addresses = $this->getReverseProxies();
-    $requests = function() use ($invalidations, $ipv4_addresses) {
+    $requests = function () use ($invalidations, $ipv4_addresses) {
       foreach ($invalidations as $inv) {
         foreach ($ipv4_addresses as $ipv4) {
-          yield $inv->getId() => function($poolopt) use ($inv, $ipv4) {
+          yield $inv->getId() => function ($poolopt) use ($inv, $ipv4) {
             $expression = new Uri($inv->getExpression());
             $host = $expression->getHost();
             if ($port = $expression->getPort()) {
@@ -384,7 +392,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
               'headers' => [
                 'Accept-Encoding' => 'gzip',
                 'Host' => $host,
-              ]
+              ],
             ];
             if (is_array($poolopt) && count($poolopt)) {
               $opt = array_merge($poolopt, $opt);
@@ -408,6 +416,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
    * Invalidate URLs that contain the wildcard character "*".
    *
    * @param \Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface[] $invalidations
+   *   An associative array of URL.
    *
    * @see \Drupal\purge\Plugin\Purge\Purger\PurgerInterface::routeTypeToMethod()
    * @see \Drupal\purge\Plugin\Purge\Purger\PurgerInterface::invalidate()
@@ -422,10 +431,10 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
 
     // Generate request objects for each balancer/invalidation combination.
     $ipv4_addresses = $this->getReverseProxies();
-    $requests = function() use ($invalidations, $ipv4_addresses) {
+    $requests = function () use ($invalidations, $ipv4_addresses) {
       foreach ($invalidations as $inv) {
         foreach ($ipv4_addresses as $ipv4) {
-          yield $inv->getId() => function($poolopt) use ($inv, $ipv4) {
+          yield $inv->getId() => function ($poolopt) use ($inv, $ipv4) {
             $uri = (new Uri($inv->getExpression()))
               ->withScheme('http');
             $host = $uri->getHost();
@@ -434,7 +443,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
               'headers' => [
                 'Accept-Encoding' => 'gzip',
                 'Host' => $host,
-              ]
+              ],
             ];
             if (is_array($poolopt) && count($poolopt)) {
               $opt = array_merge($poolopt, $opt);
@@ -486,7 +495,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
           'headers' => [
             'Host' => \Drupal::request()->getHost(),
             'Accept-Encoding' => 'gzip',
-          ]
+          ],
         ];
         $this->client->request('BAN', $uri, $this->getGlobalOptions($options));
       }
@@ -513,6 +522,7 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
    * Return the available reverse proxies.
    *
    * @return string[]
+   *   Reverse proxies.
    */
   protected function getReverseProxies(): array {
     return $this->reverseProxies;
@@ -522,8 +532,10 @@ class ZeroConfigPurger extends PurgerBase implements PurgerInterface {
    * Create a URI with the configured proxy port.
    *
    * @param string $ip_address
+   *   IP address.
    *
    * @return \GuzzleHttp\Psr7\Uri
+   *   URI with the configured proxy port.
    */
   private function baseUri(string $ip_address) {
     $uri = new Uri('http://' . $ip_address);

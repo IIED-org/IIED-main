@@ -54,7 +54,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface|null $entity_type_manager
    *   The entity type manager.
    */
-  public function __construct(LinkManagerInterface $link_manager, EntityResolverInterface $entity_Resolver, EntityTypeManagerInterface $entity_type_manager = NULL) {
+  public function __construct(LinkManagerInterface $link_manager, EntityResolverInterface $entity_Resolver, ?EntityTypeManagerInterface $entity_type_manager = NULL) {
     $this->linkManager = $link_manager;
     $this->entityResolver = $entity_Resolver;
     $this->entityTypeManager = $entity_type_manager ?: \Drupal::service('entity_type.manager');

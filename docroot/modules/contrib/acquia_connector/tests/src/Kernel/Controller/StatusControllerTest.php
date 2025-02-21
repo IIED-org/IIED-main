@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  */
 final class StatusControllerTest extends AcquiaConnectorTestBase {
 
-  //protected $runTestInSeparateProcess = FALSE;
   /**
    * Tests the refresh route.
    */

@@ -1,27 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\imagemagick\Plugin\ImageToolkit\Operation\imagemagick;
 
 use Drupal\Component\Utility\Color;
+use Drupal\Core\ImageToolkit\Attribute\ImageToolkitOperation;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\imagemagick\PackageSuite;
 
 /**
  * Defines imagemagick CreateNew operation.
- *
- * @ImageToolkitOperation(
- *   id = "imagemagick_create_new",
- *   toolkit = "imagemagick",
- *   operation = "create_new",
- *   label = @Translation("Set a new image"),
- *   description = @Translation("Creates a new transparent resource and sets it for the image.")
- * )
  */
+#[ImageToolkitOperation(
+  id: "imagemagick_create_new",
+  toolkit: "imagemagick",
+  operation: "create_new",
+  label: new TranslatableMarkup("Set a new image"),
+  description: new TranslatableMarkup("Creates a new transparent image.")
+)]
 class CreateNew extends ImagemagickImageToolkitOperationBase {
 
   /**
    * {@inheritdoc}
    */
-  protected function arguments() {
+  protected function arguments(): array {
     return [
       'width' => [
         'description' => 'The width of the image, in pixels',
@@ -45,7 +48,7 @@ class CreateNew extends ImagemagickImageToolkitOperationBase {
   /**
    * {@inheritdoc}
    */
-  protected function validateArguments(array $arguments) {
+  protected function validateArguments(array $arguments): array {
     // Assure extension is supported.
     if (!in_array($arguments['extension'], $this->getToolkit()->getSupportedExtensions())) {
       throw new \InvalidArgumentException("Invalid extension ('{$arguments['extension']}') specified for the image 'create_new' operation");
@@ -74,7 +77,7 @@ class CreateNew extends ImagemagickImageToolkitOperationBase {
   /**
    * {@inheritdoc}
    */
-  protected function execute(array $arguments) {
+  protected function execute(array $arguments): bool {
     // Reset the image properties and any processing argument.
     $format = $this->getToolkit()->getExecManager()->getFormatMapper()->getFormatFromExtension($arguments['extension']) ?: '';
     $this->getToolkit()->reset($arguments['width'], $arguments['height'], $format);

@@ -5,6 +5,8 @@ namespace Drupal\varnish_purger\Entity;
 use Drupal\purge\Plugin\Purge\Purger\PurgerSettingsBase;
 use Drupal\purge\Plugin\Purge\Purger\PurgerSettingsInterface;
 
+// phpcs:disable Drupal.NamingConventions.ValidVariableName.LowerCamelName
+
 /**
  * Defines the HTTP purger settings entity.
  *
@@ -96,9 +98,9 @@ class VarnishPurgerSettings extends PurgerSettingsBase implements PurgerSettings
   /**
    * Whether to verify SSL certificates or not.
    *
-   * @see http://docs.guzzlephp.org/en/latest/request-options.html#verify
-   *
    * @var bool
+   *
+   * @see http://docs.guzzlephp.org/en/latest/request-options.html#verify
    */
   public $verify = TRUE;
 
@@ -113,8 +115,9 @@ class VarnishPurgerSettings extends PurgerSettingsBase implements PurgerSettings
   public $headers = [];
 
   /**
-   * When FALSE, dynamic capacity calculation will be disabled and based upon
-   * the connect_timeout and timeout settings.
+   * When FALSE, dynamic capacity calculation will be disabled.
+   *
+   * Based upon the connect_timeout and timeout settings.
    *
    * @var bool
    */
@@ -135,17 +138,20 @@ class VarnishPurgerSettings extends PurgerSettingsBase implements PurgerSettings
   public $connect_timeout = 1.0;
 
   /**
-   * Number of seconds to wait after one or more invalidations took place (so
-   * that other purgers get fresh content).'.
+   * Number of seconds to wait after one or more invalidations took place.
+   *
+   * (so that other purgers get fresh content).
    *
    * @var float
    */
   public $cooldown_time = 0.0;
 
   /**
-   * Maximum number of HTTP requests that can be made during Drupal's execution
-   * lifetime. Usually PHP resource restraints lower this value dynamically, but
-   * can be met at the CLI.
+   * Defines the maximum number of HTTP requests.
+   *
+   * The maximum number of HTTP requests that can be made during Drupal's
+   * execution lifetime. Usually, PHP resource restraints lower this
+   * value dynamically, but it can be met at the CLI.
    *
    * @var int
    */
@@ -157,9 +163,9 @@ class VarnishPurgerSettings extends PurgerSettingsBase implements PurgerSettings
   /**
    * Whether 4xx and 5xx responses need to be treated as failures or not.
    *
-   * @see http://docs.guzzlephp.org/en/latest/request-options.html#http-errors
-   *
    * @var bool
+   *
+   * @see http://docs.guzzlephp.org/en/latest/request-options.html#http-errors
    */
   public $http_errors = TRUE;
 

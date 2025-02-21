@@ -6,8 +6,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityType;
 use Drupal\Core\Entity\EntityTypeBundleInfo;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -42,7 +42,7 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
   public function __construct(
     ConfigFactoryInterface $config_factory,
     EntityTypeManagerInterface $entityTypeManager,
-    EntityTypeBundleInfo $entityTypeBundleInfo
+    EntityTypeBundleInfo $entityTypeBundleInfo,
   ) {
     parent::__construct($config_factory);
     $this->entityTypeManager = $entityTypeManager;
@@ -83,7 +83,7 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
 
     $content_entity_types = [];
     $entity_type_definitions = $this->entityTypeManager->getDefinitions();
-    /* @var $definition \Drupal\Core\Entity\EntityTypeInterface */
+    /** @var \Drupal\Core\Entity\EntityTypeInterface $definition */
     foreach ($entity_type_definitions as $definition) {
       if ($definition instanceof ContentEntityType) {
         $content_entity_types[] = $definition;
@@ -98,7 +98,7 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
     foreach ($content_entity_types as $content_entity_type) {
 
       $form['intro'] = [
-        '#markup' => $this->t('Configure bundles of entity types that Varnish image purge should be used for, if none selected, all bundles form all entity types will be used. Just the fields of type image will be purge.'),
+        '#markup' => $this->t('Configure bundles of entity types that Varnish image purge should be used for, if none selected, all bundles from all entity types will be used. Just the fields of type image will be purged.'),
       ];
 
       $default_value = [];
@@ -122,8 +122,7 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    // @todo
-    // Validations.
+    // @todo Validations.
   }
 
   /**
@@ -154,7 +153,7 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
    *   The entity to get the bundles from.
    *
    * @return array
-   *   Fortmatted options.
+   *   Formatted options.
    */
   private function getOptionsFromEntity(ContentEntityType $content_entity_type) {
     $bundles = $this->entityTypeBundleInfo->getBundleInfo($content_entity_type->id());

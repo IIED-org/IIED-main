@@ -53,7 +53,7 @@ class FileEntityNormalizer extends ContentEntityNormalizer {
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
    *   The entity field manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LinkManagerInterface $link_manager, ModuleHandlerInterface $module_handler, ConfigFactoryInterface $config_factory, EntityTypeRepositoryInterface $entity_type_repository = NULL, EntityFieldManagerInterface $entity_field_manager = NULL) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LinkManagerInterface $link_manager, ModuleHandlerInterface $module_handler, ConfigFactoryInterface $config_factory, EntityTypeRepositoryInterface $entity_type_repository, EntityFieldManagerInterface $entity_field_manager) {
     parent::__construct($link_manager, $entity_type_manager, $module_handler, $entity_type_repository, $entity_field_manager);
 
     $this->halSettings = $config_factory->get('hal.settings');

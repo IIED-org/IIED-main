@@ -18,16 +18,11 @@ class ViewsBulkOperationsAccess implements AccessInterface {
   use ViewsBulkOperationsFormTrait;
 
   /**
-   * The tempstore service.
-   */
-  protected PrivateTempStoreFactory $tempStoreFactory;
-
-  /**
    * Object constructor.
    */
-  public function __construct(PrivateTempStoreFactory $tempStoreFactory) {
-    $this->tempStoreFactory = $tempStoreFactory;
-  }
+  public function __construct(
+    protected readonly PrivateTempStoreFactory $tempStoreFactory
+  ) {}
 
   /**
    * A custom access check.

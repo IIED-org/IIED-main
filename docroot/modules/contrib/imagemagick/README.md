@@ -27,7 +27,8 @@ these requirements.
   This will download both the ImageMagick module and any dependent package.
 
 * Enable the module. Navigate to _Manage > Extend_. Check the box next to the
-  ImageMagick module and then click the 'Install' button at the bottom. If any dependent module is not already installed, the system will prompt you
+  ImageMagick module and then click the 'Install' button at the bottom. If any
+  dependent module is not already installed, the system will prompt you
   to confirm installing it too. Just confirm and proceed.
 
 # Configuration
@@ -37,6 +38,8 @@ these requirements.
 
 * Select the graphics package (ImageMagick or GraphicsMagick) you want to use
   with the toolkit.
+
+* For ImageMagick, select which version of the suite is installed, 6 or 7.
 
 * If the convert binary cannot be found in the default shell path, you must
   enter the path to the executables, including the trailing slash/backslash.

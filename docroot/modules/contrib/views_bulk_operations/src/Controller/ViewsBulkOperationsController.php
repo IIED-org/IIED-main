@@ -22,21 +22,6 @@ class ViewsBulkOperationsController extends ControllerBase implements ContainerI
   use ViewsBulkOperationsFormTrait;
 
   /**
-   * The tempstore service.
-   */
-  protected PrivateTempStoreFactory $tempStoreFactory;
-
-  /**
-   * Views Bulk Operations action processor.
-   */
-  protected ViewsBulkOperationsActionProcessorInterface $actionProcessor;
-
-  /**
-   * The Renderer service object.
-   */
-  protected RendererInterface $renderer;
-
-  /**
    * Constructs a new controller object.
    *
    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
@@ -47,14 +32,10 @@ class ViewsBulkOperationsController extends ControllerBase implements ContainerI
    *   The Renderer service object.
    */
   public function __construct(
-    PrivateTempStoreFactory $tempStoreFactory,
-    ViewsBulkOperationsActionProcessorInterface $actionProcessor,
-    RendererInterface $renderer
-  ) {
-    $this->tempStoreFactory = $tempStoreFactory;
-    $this->actionProcessor = $actionProcessor;
-    $this->renderer = $renderer;
-  }
+    protected readonly PrivateTempStoreFactory $tempStoreFactory,
+    protected readonly ViewsBulkOperationsActionProcessorInterface $actionProcessor,
+    protected readonly RendererInterface $renderer
+  ) {}
 
   /**
    * {@inheritdoc}

@@ -103,6 +103,10 @@ class HTML extends Generator
      */
     public function generate()
     {
+        if (empty($this->docFiles) === true) {
+            return;
+        }
+
         ob_start();
         $this->printHeader();
         $this->printToc();
@@ -152,6 +156,11 @@ class HTML extends Generator
      */
     protected function printToc()
     {
+        // Only show a TOC when there are two or more docs to display.
+        if (count($this->docFiles) < 2) {
+            return;
+        }
+
         echo '  <h2>Table of Contents</h2>'.PHP_EOL;
         echo '  <ul class="toc">'.PHP_EOL;
 
@@ -226,16 +235,37 @@ class HTML extends Generator
     protected function printTextBlock(DOMNode $node)
     {
         $content = trim($node->nodeValue);
-        $content = htmlspecialchars($content);
+        $content = htmlspecialchars($content, (ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401));
 
-        // Use the correct line endings based on the OS.
-        $content = str_replace("\n", PHP_EOL, $content);
-
-        // Allow em tags only.
+        // Allow only em tags.
         $content = str_replace('&lt;em&gt;', '<em>', $content);
         $content = str_replace('&lt;/em&gt;', '</em>', $content);
 
-        echo "  <p class=\"text\">$content</p>".PHP_EOL;
+        $nodeLines = explode("\n", $content);
+        $lineCount = count($nodeLines);
+        $lines     = [];
+
+        for ($i = 0; $i < $lineCount; $i++) {
+            $currentLine = trim($nodeLines[$i]);
+
+            if (isset($nodeLines[($i + 1)]) === false) {
+                // We're at the end of the text, just add the line.
+                $lines[] = $currentLine;
+            } else {
+                $nextLine = trim($nodeLines[($i + 1)]);
+                if ($nextLine === '') {
+                    // Next line is a blank line, end the paragraph and start a new one.
+                    // Also skip over the blank line.
+                    $lines[] = $currentLine.'</p>'.PHP_EOL.'  <p class="text">';
+                    ++$i;
+                } else {
+                    // Next line is not blank, so just add a line break.
+                    $lines[] = $currentLine.'<br/>'.PHP_EOL;
+                }
+            }
+        }
+
+        echo '  <p class="text">'.implode('', $lines).'</p>'.PHP_EOL;
 
     }//end printTextBlock()
 
@@ -251,7 +281,8 @@ class HTML extends Generator
     {
         $codeBlocks = $node->getElementsByTagName('code');
 
-        $firstTitle = $codeBlocks->item(0)->getAttribute('title');
+        $firstTitle = trim($codeBlocks->item(0)->getAttribute('title'));
+        $firstTitle = str_replace('  ', '&nbsp;&nbsp;', $firstTitle);
         $first      = trim($codeBlocks->item(0)->nodeValue);
         $first      = str_replace('<?php', '&lt;?php', $first);
         $first      = str_replace("\n", '</br>', $first);
@@ -259,7 +290,8 @@ class HTML extends Generator
         $first      = str_replace('<em>', '<span class="code-comparison-highlight">', $first);
         $first      = str_replace('</em>', '</span>', $first);
 
-        $secondTitle = $codeBlocks->item(1)->getAttribute('title');
+        $secondTitle = trim($codeBlocks->item(1)->getAttribute('title'));
+        $secondTitle = str_replace('  ', '&nbsp;&nbsp;', $secondTitle);
         $second      = trim($codeBlocks->item(1)->nodeValue);
         $second      = str_replace('<?php', '&lt;?php', $second);
         $second      = str_replace("\n", '</br>', $second);

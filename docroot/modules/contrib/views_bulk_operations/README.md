@@ -63,20 +63,9 @@ Available annotation parameters:
   - label: Action label (required),
   - type: Entity type for the action, if left empty, action will be
     applicable to all entity types (required),
-  - confirm: If set to TRUE and the next parameter is empty,
-    the module default confirmation form will be used (default: FALSE),
   - confirm_form_route_name: Route name of the action confirmation form.
     If left empty and the previous parameter is empty, there will be
     no confirmation step (default: empty string).
-  - requirements: an array of requirements an action must meet
-    to be displayed on the action selection form. At the moment
-    two possible requirements are supported:
-    - '_permission', if the current user has that permission, the action
-      execution will be possible.
-    - '_custom_access', checks if the output of `customAccess` method from
-      the action class is TRUE (default implementation included in
-      ViewsBulkOperationsActionBase).
-
 
 ## Additional notes
 

@@ -2,8 +2,8 @@
 
 namespace Drupal\varnish_purger\Plugin\Purge\Purger;
 
-use Drupal\purge\Plugin\Purge\Purger\PurgerInterface;
 use Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface;
+use Drupal\purge\Plugin\Purge\Purger\PurgerInterface;
 
 /**
  * Varnish Bundled Purger.
@@ -54,7 +54,7 @@ class VarnishBundledPurger extends VarnishPurgerBase implements PurgerInterface 
         'guzzle_opt' => $opt,
         'headers' => $headers,
       ]);
-      $this->logger()->emergency("item failed due @e, details (JSON): @debug",
+      $this->logger()->error("item failed due @e, details (JSON): @debug",
         ['@e' => get_class($e), '@debug' => $debug]);
     }
   }

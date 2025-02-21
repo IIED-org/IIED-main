@@ -27,6 +27,10 @@ class Markdown extends Generator
      */
     public function generate()
     {
+        if (empty($this->docFiles) === true) {
+            return;
+        }
+
         ob_start();
         $this->printHeader();
 
@@ -69,9 +73,10 @@ class Markdown extends Generator
     {
         // Turn off errors so we don't get timezone warnings if people
         // don't have their timezone set.
-        error_reporting(0);
-        echo 'Documentation generated on '.date('r');
+        $errorLevel = error_reporting(0);
+        echo PHP_EOL.'Documentation generated on '.date('r');
         echo ' by [PHP_CodeSniffer '.Config::VERSION.'](https://github.com/PHPCSStandards/PHP_CodeSniffer)'.PHP_EOL;
+        error_reporting($errorLevel);
 
     }//end printFooter()
 
@@ -88,7 +93,7 @@ class Markdown extends Generator
     protected function processSniff(DOMNode $doc)
     {
         $title = $this->getTitle($doc);
-        echo PHP_EOL."## $title".PHP_EOL;
+        echo PHP_EOL."## $title".PHP_EOL.PHP_EOL;
 
         foreach ($doc->childNodes as $node) {
             if ($node->nodeName === 'standard') {
@@ -111,15 +116,35 @@ class Markdown extends Generator
     protected function printTextBlock(DOMNode $node)
     {
         $content = trim($node->nodeValue);
-        $content = htmlspecialchars($content);
-
-        // Use the correct line endings based on the OS.
-        $content = str_replace("\n", PHP_EOL, $content);
-
+        $content = htmlspecialchars($content, (ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401));
         $content = str_replace('&lt;em&gt;', '*', $content);
         $content = str_replace('&lt;/em&gt;', '*', $content);
 
-        echo $content.PHP_EOL;
+        $nodeLines = explode("\n", $content);
+        $lineCount = count($nodeLines);
+        $lines     = [];
+
+        for ($i = 0; $i < $lineCount; $i++) {
+            $currentLine = trim($nodeLines[$i]);
+            if ($currentLine === '') {
+                // The text contained a blank line. Respect this.
+                $lines[] = '';
+                continue;
+            }
+
+            // Check if the _next_ line is blank.
+            if (isset($nodeLines[($i + 1)]) === false
+                || trim($nodeLines[($i + 1)]) === ''
+            ) {
+                // Next line is blank, just add the line.
+                $lines[] = $currentLine;
+            } else {
+                // Ensure that line breaks are respected in markdown.
+                $lines[] = $currentLine.'  ';
+            }
+        }
+
+        echo implode(PHP_EOL, $lines).PHP_EOL;
 
     }//end printTextBlock()
 
@@ -135,13 +160,15 @@ class Markdown extends Generator
     {
         $codeBlocks = $node->getElementsByTagName('code');
 
-        $firstTitle = $codeBlocks->item(0)->getAttribute('title');
+        $firstTitle = trim($codeBlocks->item(0)->getAttribute('title'));
+        $firstTitle = str_replace('  ', '&nbsp;&nbsp;', $firstTitle);
         $first      = trim($codeBlocks->item(0)->nodeValue);
         $first      = str_replace("\n", PHP_EOL.'    ', $first);
         $first      = str_replace('<em>', '', $first);
         $first      = str_replace('</em>', '', $first);
 
-        $secondTitle = $codeBlocks->item(1)->getAttribute('title');
+        $secondTitle = trim($codeBlocks->item(1)->getAttribute('title'));
+        $secondTitle = str_replace('  ', '&nbsp;&nbsp;', $secondTitle);
         $second      = trim($codeBlocks->item(1)->nodeValue);
         $second      = str_replace("\n", PHP_EOL.'    ', $second);
         $second      = str_replace('<em>', '', $second);

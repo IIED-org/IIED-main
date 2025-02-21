@@ -1,24 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\imagemagick\Plugin\ImageToolkit\Operation\imagemagick;
+
+use Drupal\Core\ImageToolkit\Attribute\ImageToolkitOperation;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Defines imagemagick Crop operation.
- *
- * @ImageToolkitOperation(
- *   id = "imagemagick_crop",
- *   toolkit = "imagemagick",
- *   operation = "crop",
- *   label = @Translation("Crop"),
- *   description = @Translation("Crops an image to a rectangle specified by the given dimensions.")
- * )
  */
+#[ImageToolkitOperation(
+  id: "imagemagick_crop",
+  toolkit: "imagemagick",
+  operation: "crop",
+  label: new TranslatableMarkup("Crop"),
+  description: new TranslatableMarkup("Crops an image to a rectangle specified by the given dimensions.")
+)]
 class Crop extends ImagemagickImageToolkitOperationBase {
 
   /**
    * {@inheritdoc}
    */
-  protected function arguments() {
+  protected function arguments(): array {
     return [
       'x' => [
         'description' => 'The starting x offset at which to start the crop, in pixels',
@@ -42,7 +46,7 @@ class Crop extends ImagemagickImageToolkitOperationBase {
   /**
    * {@inheritdoc}
    */
-  protected function validateArguments(array $arguments) {
+  protected function validateArguments(array $arguments): array {
     // Fail if no dimensions available for current image.
     if (is_null($this->getToolkit()->getWidth()) || is_null($this->getToolkit()->getHeight())) {
       throw new \RuntimeException("No image dimensions available for the image '{$this->getPluginDefinition()['operation']}' operation");
@@ -77,7 +81,7 @@ class Crop extends ImagemagickImageToolkitOperationBase {
   /**
    * {@inheritdoc}
    */
-  protected function execute(array $arguments) {
+  protected function execute(array $arguments): bool {
     // Even though the crop effect in Drupal core does not allow for negative
     // offsets, ImageMagick supports them. Also note: if $x and $y are set to
     // NULL then crop will create tiled images so we convert these to ints.

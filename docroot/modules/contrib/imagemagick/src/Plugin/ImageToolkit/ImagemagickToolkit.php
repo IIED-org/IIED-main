@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\imagemagick\Plugin\ImageToolkit;
 
 use Drupal\Component\Render\FormattableMarkup;
@@ -8,9 +10,11 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\ImageToolkit\Attribute\ImageToolkit;
 use Drupal\Core\ImageToolkit\ImageToolkitBase;
 use Drupal\Core\ImageToolkit\ImageToolkitOperationManagerInterface;
 use Drupal\Core\Link;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\file_mdm\FileMetadataManagerInterface;
 use Drupal\imagemagick\ArgumentMode;
@@ -22,16 +26,15 @@ use Drupal\imagemagick\PackageCommand;
 use Drupal\imagemagick\PackageSuite;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provides ImageMagick integration toolkit for image manipulation.
- *
- * @ImageToolkit(
- *   id = "imagemagick",
- *   title = @Translation("ImageMagick image toolkit")
- * )
  */
+#[ImageToolkit(
+  id: "imagemagick",
+  title: new TranslatableMarkup("ImageMagick image toolkit"),
+)]
 class ImagemagickToolkit extends ImageToolkitBase {
 
   /**
@@ -81,15 +84,15 @@ class ImagemagickToolkit extends ImageToolkitBase {
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
+   * @param string $pluginId
    *   The plugin_id for the plugin instance.
-   * @param array $plugin_definition
+   * @param array $pluginDefinition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\ImageToolkit\ImageToolkitOperationManagerInterface $operation_manager
+   * @param \Drupal\Core\ImageToolkit\ImageToolkitOperationManagerInterface $operationManager
    *   The toolkit operation manager.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory.
    * @param \Drupal\imagemagick\ImagemagickFormatMapperInterface $formatMapper
    *   The format mapper service.
@@ -102,42 +105,42 @@ class ImagemagickToolkit extends ImageToolkitBase {
    */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    array $plugin_definition,
-    ImageToolkitOperationManagerInterface $operation_manager,
+    string $pluginId,
+    array $pluginDefinition,
+    ImageToolkitOperationManagerInterface $operationManager,
     LoggerInterface $logger,
-    ConfigFactoryInterface $config_factory,
+    ConfigFactoryInterface $configFactory,
     protected readonly ImagemagickFormatMapperInterface $formatMapper,
     protected readonly FileMetadataManagerInterface $fileMetadataManager,
     protected readonly ImagemagickExecManagerInterface $execManager,
     protected readonly EventDispatcherInterface $eventDispatcher,
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $operation_manager, $logger, $config_factory);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $operationManager, $logger, $configFactory);
     $this->arguments = new ImagemagickExecArguments($this->execManager);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('image.toolkit.operation.manager'),
+      $container->get(ImageToolkitOperationManagerInterface::class),
       $container->get('logger.channel.image'),
-      $container->get('config.factory'),
+      $container->get(ConfigFactoryInterface::class),
       $container->get(ImagemagickFormatMapperInterface::class),
       $container->get(FileMetadataManagerInterface::class),
       $container->get(ImagemagickExecManagerInterface::class),
-      $container->get('event_dispatcher')
+      $container->get(EventDispatcherInterface::class),
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $config = $this->configFactory->getEditable('imagemagick.settings');
 
     $form['imagemagick'] = [
@@ -178,6 +181,22 @@ class ImagemagickToolkit extends ImageToolkitBase {
       '#required' => TRUE,
       '#description' => $this->t("Select the graphics package to use."),
     ];
+    $form['suite']['imagemagick_version'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('ImageMagick version'),
+      '#default_value' => $config->get('imagemagick_version'),
+      '#options' => [
+        'v6' => $this->t('Version 6'),
+        'v7' => $this->t('Version 7'),
+      ],
+      '#required' => TRUE,
+      '#description' => $this->t("ImageMagick version 6 and version 7 have different command line syntax. Select the one installed."),
+      '#states' => [
+        'visible' => [
+          ':radio[name="imagemagick[suite][binaries]"]' => ['value' => PackageSuite::Imagemagick->value],
+        ],
+      ],
+    ];
     // Path to binaries.
     $form['suite']['path_to_binaries'] = [
       '#type' => 'textfield',
@@ -187,7 +206,9 @@ class ImagemagickToolkit extends ImageToolkitBase {
       '#description' => $this->t('If needed, the path to the package executables (<kbd>convert</kbd>, <kbd>identify</kbd>, <kbd>gm</kbd>, etc.), <b>including</b> the trailing slash/backslash. For example: <kbd>/usr/bin/</kbd> or <kbd>C:\Program Files\ImageMagick-6.3.4-Q16\</kbd>.'),
     ];
     // Version information.
-    $status = $this->getExecManager()->checkPath($this->configFactory->get('imagemagick.settings')->get('path_to_binaries'));
+    $status = $this->getExecManager()->checkPath(
+      $this->configFactory->get('imagemagick.settings')->get('path_to_binaries'),
+    );
     if (empty($status['errors'])) {
       $version_info = explode("\n", preg_replace('/\r/', '', Html::escape($status['output'])));
     }
@@ -234,8 +255,9 @@ class ImagemagickToolkit extends ImageToolkitBase {
     // Image formats supported by the package.
     if (empty($status['errors'])) {
       $this->arguments()->add(['-list', 'format'], ArgumentMode::PreSource);
-      $output = NULL;
-      $this->getExecManager()->execute(PackageCommand::Convert, $this->arguments(), $output);
+      $output = '';
+      $error = '';
+      $this->getExecManager()->execute(PackageCommand::Convert, $this->arguments(), $output, $error);
       $this->arguments()->reset();
       $formats_info = implode('<br />', explode("\n", preg_replace('/\r/', '', Html::escape($output))));
       $form['formats']['list'] = [
@@ -366,7 +388,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
     try {
       // Check that the format map contains valid YAML.
       $image_formats = Yaml::decode($form_state->getValue([
@@ -386,9 +408,12 @@ class ImagemagickToolkit extends ImageToolkitBase {
     // it will prevent the entire image toolkit selection form from being
     // submitted.
     if ($form_state->getValue(['image_toolkit']) === 'imagemagick') {
-      $status = $this->getExecManager()->checkPath($form_state->getValue([
-        'imagemagick', 'suite', 'path_to_binaries',
-      ]), PackageSuite::from($form_state->getValue(['imagemagick', 'suite', 'binaries'])));
+      $suite = PackageSuite::from($form_state->getValue(['imagemagick', 'suite', 'binaries']));
+      $version = $suite === PackageSuite::Imagemagick ? $form_state->getValue(
+        ['imagemagick', 'suite', 'imagemagick_version'],
+      ) : NULL;
+      $path = $form_state->getValue(['imagemagick', 'suite', 'path_to_binaries']);
+      $status = $this->getExecManager()->checkPath($path, $suite, $version);
       if ($status['errors']) {
         $form_state->setErrorByName('imagemagick][suite][path_to_binaries', new FormattableMarkup(implode('<br />', $status['errors']), []));
       }
@@ -398,7 +423,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     $config = $this->configFactory->getEditable('imagemagick.settings');
     $config
       ->set('quality', (int) $form_state->getValue([
@@ -406,6 +431,9 @@ class ImagemagickToolkit extends ImageToolkitBase {
       ]))
       ->set('binaries', (string) $form_state->getValue([
         'imagemagick', 'suite', 'binaries',
+      ]))
+      ->set('imagemagick_version', (string) $form_state->getValue([
+        'imagemagick', 'suite', 'imagemagick_version',
       ]))
       ->set('path_to_binaries', (string) $form_state->getValue([
         'imagemagick', 'suite', 'path_to_binaries',
@@ -440,7 +468,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public function isValid() {
+  public function isValid(): bool {
     return ((bool) $this->getMimeType());
   }
 
@@ -458,7 +486,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
    *
    * @see \Drupal\imagemagick\Plugin\ImageToolkit\Operation\imagemagick\CreateNew
    */
-  public function reset(int $width, int $height, string $format): ImagemagickToolkit {
+  public function reset(int $width, int $height, string $format): static {
     $this
       ->setWidth($width)
       ->setHeight($height)
@@ -476,7 +504,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public function setSource($source) {
+  public function setSource($source): static {
     parent::setSource($source);
     $this->arguments()->setSource($source);
     return $this;
@@ -485,7 +513,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public function getSource() {
+  public function getSource(): string {
     return $this->arguments()->getSource();
   }
 
@@ -512,7 +540,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
    * @return int|null
    *   The source EXIF orientation.
    */
-  public function getExifOrientation() {
+  public function getExifOrientation(): ?int {
     return $this->exifOrientation ?? NULL;
   }
 
@@ -524,8 +552,8 @@ class ImagemagickToolkit extends ImageToolkitBase {
    *
    * @return $this
    */
-  public function setExifOrientation($exif_orientation): ImagemagickToolkit {
-    $this->exifOrientation = $exif_orientation ? (int) $exif_orientation : NULL;
+  public function setExifOrientation(?int $exif_orientation): static {
+    $this->exifOrientation = $exif_orientation;
     return $this;
   }
 
@@ -535,7 +563,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
    * @return string|null
    *   The source colorspace.
    */
-  public function getColorspace() {
+  public function getColorspace(): ?string {
     return $this->colorspace ?? NULL;
   }
 
@@ -547,7 +575,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
    *
    * @return $this
    */
-  public function setColorspace($colorspace): ImagemagickToolkit {
+  public function setColorspace(?string $colorspace): static {
     $this->colorspace = mb_strtoupper($colorspace ?? '');
     return $this;
   }
@@ -570,7 +598,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
    *
    * @return $this
    */
-  public function setProfiles(array $profiles): ImagemagickToolkit {
+  public function setProfiles(array $profiles): static {
     $this->profiles = $profiles;
     return $this;
   }
@@ -581,7 +609,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
    * @return int|null
    *   The number of frames of the image.
    */
-  public function getFrames() {
+  public function getFrames(): ?int {
     return $this->frames ?? NULL;
   }
 
@@ -593,7 +621,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
    *
    * @return $this
    */
-  public function setFrames($frames): ImagemagickToolkit {
+  public function setFrames(?int $frames): static {
     $this->frames = $frames;
     return $this;
   }
@@ -601,7 +629,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public function getWidth() {
+  public function getWidth(): ?int {
     return $this->width ?? NULL;
   }
 
@@ -613,7 +641,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
    *
    * @return $this
    */
-  public function setWidth($width): ImagemagickToolkit {
+  public function setWidth(?int $width): static {
     $this->width = $width;
     return $this;
   }
@@ -621,7 +649,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public function getHeight() {
+  public function getHeight(): ?int {
     return $this->height ?? NULL;
   }
 
@@ -633,7 +661,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
    *
    * @return $this
    */
-  public function setHeight($height): ImagemagickToolkit {
+  public function setHeight(?int $height): static {
     $this->height = $height;
     return $this;
   }
@@ -641,8 +669,8 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public function getMimeType() {
-    return $this->formatMapper->getMimeTypeFromFormat($this->arguments()->getSourceFormat());
+  public function getMimeType(): string {
+    return $this->formatMapper->getMimeTypeFromFormat($this->arguments()->getSourceFormat()) ?? '';
   }
 
   /**
@@ -658,7 +686,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public function save($destination) {
+  public function save($destination): bool {
     $this->arguments()->setDestination($destination);
     if ($ret = $this->convert()) {
       // Allow modules to alter the destination file.
@@ -672,7 +700,7 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public function parseFile() {
+  public function parseFile(): bool {
     // Get 'imagemagick_identify' metadata for this image. The file metadata
     // plugin will fetch it from the file via the ::identify() method if data
     // is not already available.
@@ -696,9 +724,11 @@ class ImagemagickToolkit extends ImageToolkitBase {
     if ($this->formatMapper->isFormatEnabled($format)) {
       $this
         ->setWidth((int) $file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'width'))
-        ->setHeight((int) $file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'height'))
-        ->setExifOrientation($file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'exif_orientation'))
-        ->setFrames($file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'frames_count'));
+        ->setHeight((int) $file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'height'));
+      $exifOrientation = $file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'exif_orientation');
+      $this->setExifOrientation($exifOrientation ? (int) $exifOrientation : NULL);
+      $frames = $file_md->getMetadata(static::FILE_METADATA_PLUGIN_ID, 'frames_count');
+      $this->setFrames($frames ? (int) $frames : NULL);
       $this->arguments()
         ->setSourceFormat($format);
       // Only Imagemagick allows to get colorspace and profiles information
@@ -741,13 +771,15 @@ class ImagemagickToolkit extends ImageToolkitBase {
     }
 
     // Execute the command and return.
-    return $this->getExecManager()->execute(PackageCommand::Convert, $this->arguments) && file_exists($this->arguments()->getDestinationLocalPath());
+    $output = '';
+    $error = '';
+    return $this->getExecManager()->execute(PackageCommand::Convert, $this->arguments, $output, $error) && file_exists($this->arguments()->getDestinationLocalPath());
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getRequirements() {
+  public function getRequirements(): array {
     $reported_info = [];
     if (stripos(ini_get('disable_functions'), 'proc_open') !== FALSE) {
       // proc_open() is disabled.
@@ -758,7 +790,9 @@ class ImagemagickToolkit extends ImageToolkitBase {
       ]);
     }
     else {
-      $status = $this->getExecManager()->checkPath($this->configFactory->get('imagemagick.settings')->get('path_to_binaries'));
+      $status = $this->getExecManager()->checkPath(
+        $this->configFactory->get('imagemagick.settings')->get('path_to_binaries'),
+      );
       if (!empty($status['errors'])) {
         // Can not execute 'convert'.
         $severity = REQUIREMENT_ERROR;
@@ -807,14 +841,14 @@ class ImagemagickToolkit extends ImageToolkitBase {
   /**
    * {@inheritdoc}
    */
-  public static function isAvailable() {
+  public static function isAvailable(): bool {
     return TRUE;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function getSupportedExtensions() {
+  public static function getSupportedExtensions(): array {
     return \Drupal::service(ImagemagickFormatMapperInterface::class)->getEnabledExtensions();
   }
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\views_bulk_operations\Form;
 
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
@@ -17,20 +18,10 @@ class ConfigureAction extends FormBase {
 
   use ViewsBulkOperationsFormTrait;
 
-  /**
-   * The tempstore service.
-   */
-  protected PrivateTempStoreFactory $tempStoreFactory;
-
-  /**
-   * Views Bulk Operations action manager.
-   */
-  protected ViewsBulkOperationsActionManager $actionManager;
-
-  /**
-   * Views Bulk Operations action processor.
-   */
-  protected ViewsBulkOperationsActionProcessorInterface $actionProcessor;
+  // We need this if we want to keep the readonly in constructor property
+  // promotion and not have errors in plugins that use AJAX in their
+  // buildConfigurationForm() method.
+  use DependencySerializationTrait;
 
   /**
    * Constructor.
@@ -43,14 +34,10 @@ class ConfigureAction extends FormBase {
    *   Views Bulk Operations action processor.
    */
   public function __construct(
-    PrivateTempStoreFactory $tempStoreFactory,
-    ViewsBulkOperationsActionManager $actionManager,
-    ViewsBulkOperationsActionProcessorInterface $actionProcessor
-  ) {
-    $this->tempStoreFactory = $tempStoreFactory;
-    $this->actionManager = $actionManager;
-    $this->actionProcessor = $actionProcessor;
-  }
+    protected readonly PrivateTempStoreFactory $tempStoreFactory,
+    protected readonly ViewsBulkOperationsActionManager $actionManager,
+    protected readonly ViewsBulkOperationsActionProcessorInterface $actionProcessor
+  ) {}
 
   /**
    * {@inheritdoc}

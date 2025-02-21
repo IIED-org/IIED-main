@@ -1,24 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\imagemagick\Plugin\ImageToolkit\Operation\imagemagick;
+
+use Drupal\Core\ImageToolkit\Attribute\ImageToolkitOperation;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Defines imagemagick Scale and crop operation.
- *
- * @ImageToolkitOperation(
- *   id = "imagemagick_scale_and_crop",
- *   toolkit = "imagemagick",
- *   operation = "scale_and_crop",
- *   label = @Translation("Scale and crop"),
- *   description = @Translation("Scales an image to the exact width and height given. This plugin achieves the target aspect ratio by cropping the original image equally on both sides, or equally on the top and bottom. This function is useful to create uniform sized avatars from larger images.")
- * )
  */
+#[ImageToolkitOperation(
+  id: "imagemagick_scale_and_crop",
+  toolkit: "imagemagick",
+  operation: "scale_and_crop",
+  label: new TranslatableMarkup("Scale and crop"),
+  description: new TranslatableMarkup("Scales an image to the exact width and height given. This plugin achieves the target aspect ratio by cropping the original image equally on both sides, or equally on the top and bottom. This function is useful to create uniform sized avatars from larger images.")
+)]
 class ScaleAndCrop extends ImagemagickImageToolkitOperationBase {
 
   /**
    * {@inheritdoc}
    */
-  protected function arguments() {
+  protected function arguments(): array {
     return [
       'x' => [
         'description' => 'The horizontal offset for the start of the crop, in pixels',
@@ -47,7 +51,7 @@ class ScaleAndCrop extends ImagemagickImageToolkitOperationBase {
   /**
    * {@inheritdoc}
    */
-  protected function validateArguments(array $arguments) {
+  protected function validateArguments(array $arguments): array {
     // Fail if no dimensions available for current image.
     if (is_null($this->getToolkit()->getWidth()) || is_null($this->getToolkit()->getHeight())) {
       throw new \RuntimeException("No image dimensions available for the image '{$this->getPluginDefinition()['operation']}' operation");
@@ -84,7 +88,7 @@ class ScaleAndCrop extends ImagemagickImageToolkitOperationBase {
   /**
    * {@inheritdoc}
    */
-  protected function execute(array $arguments = []) {
+  protected function execute(array $arguments = []): bool {
     return $this->getToolkit()->apply('resize', $arguments['resize'])
         && $this->getToolkit()->apply('crop', $arguments);
   }

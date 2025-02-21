@@ -22,10 +22,16 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 final class AuthService {
 
-  private const CLIENT_ID = '38357830-bacd-4b4d-a356-f508c6ddecf8';
   private const CSRF_TOKEN_KEY = 'acquia_connector_oauth_state';
   private const PKCE_KEY = 'acquia_connector_pkce_code';
 
+  /**
+   * Acquia Connector Client ID. Note, only valid for accounts.acquia.com
+   * 
+   * @var string
+   */
+  private $client_id = '38357830-bacd-4b4d-a356-f508c6ddecf8';
+  
   /**
    * The CSRF token generator.
    *
@@ -102,7 +108,7 @@ final class AuthService {
   public function getAuthUrl(): Url {
     $params = [
       'response_type' => 'code',
-      'client_id' => self::CLIENT_ID,
+      'client_id' => $this->client_id,
       'redirect_uri' => Url::fromRoute('acquia_connector.auth.return')->setAbsolute()->toString(),
       'state' => $this->getStateToken(),
       'code_challenge' => Crypt::hashBase64($this->getPkceCode()),
@@ -115,6 +121,37 @@ final class AuthService {
     return Url::fromUri(
       (string) Uri::withQueryValues($uri, $params)
     );
+  }
+
+  /**
+   * Verify Client ID Authorization works.
+   *
+   * @return boolean
+   *   The status of the client id against Acquia's IDP.
+   */
+  public function authorizeClientId(): bool {
+    $client = $this->clientFactory->fromOptions([
+      'base_uri' => (new Uri())
+        ->withScheme('https')
+        ->withHost(self::getIdpHost())
+    ]);
+    try {
+      $response = $client->get('/api/auth/oauth/authorize', [
+        'query' => [
+          'response_type' => 'code',
+          'client_id' => $this->client_id,
+          'redirect_uri' => Url::fromRoute('acquia_connector.auth.return')->setAbsolute()->toString(),
+          'state' => $this->getStateToken(),
+          'code_challenge' => Crypt::hashBase64($this->getPkceCode()),
+          'code_challenge_method' => 'S256',
+        ]
+      ]);
+      $code = $response->getStatusCode();
+      return $code == 200;
+    }
+    catch (RequestException $e) {
+      return FALSE;
+    }
   }
 
   /**
@@ -138,7 +175,7 @@ final class AuthService {
       'json' => [
         'grant_type' => 'authorization_code',
         'code' => $code,
-        'client_id' => self::CLIENT_ID,
+        'client_id' => $this->client_id,
         'redirect_uri' => Url::fromRoute('acquia_connector.auth.return')->setAbsolute()->toString(),
         'code_verifier' => $this->getPkceCode(),
       ],
@@ -149,6 +186,44 @@ final class AuthService {
       5400
     );
     $this->session->remove(self::PKCE_KEY);
+  }
+
+  /**
+   * Authenticates with the Acquia Cloud using API key & secret.
+   */
+  public function authenticateWithApi(string $api_key, string $api_secret): array {
+    $result = ["success" => TRUE, "message" => ""];
+    $client = $this->clientFactory->fromOptions([
+      'base_uri' => (new Uri())
+        ->withScheme('https')
+        ->withHost(self::getIdpHost()),
+    ]);
+    try {
+      $response = $client->post('/api/auth/oauth/token', [
+        'body' => json_encode([
+          'grant_type' => 'client_credentials',
+          'client_id' => $api_key,
+          'client_secret' => $api_secret,
+        ]),
+        'headers' => [
+          'Content-Type' => 'application/json, version=2',
+          'Accept' => 'application/json',
+        ],
+      ]);
+      $access_data = Json::decode((string) $response->getBody());
+      $this->keyValueExpirableFactory->get('acquia_connector')->setWithExpire(
+        'oauth',
+        $access_data,
+        $access_data['expires_in']
+      );
+    }
+    catch (RequestException $exception) {
+      $response = $exception->getResponse();
+      $result["success"] = FALSE;
+      $result["message"] = $exception->getMessage();
+    }
+    $result['response'] = $response;
+    return $result;
   }
 
   /**
@@ -165,14 +240,14 @@ final class AuthService {
       'json' => [
         'grant_type' => 'refresh_token',
         'refresh_token' => $access_data['refresh_token'] ?? '',
-        'client_id' => self::CLIENT_ID,
+        'client_id' => $this->client_id,
       ],
     ]);
     $access_data = Json::decode((string) $response->getBody());
     $this->keyValueExpirableFactory->get('acquia_connector')->setWithExpire(
       'oauth',
       $access_data,
-      5400
+      $access_data['expires_in'] ?? 300
     );
   }
 
@@ -185,7 +260,18 @@ final class AuthService {
    *   The access token data, or NULL if not set.
    */
   public function getAccessToken(): ?array {
-    return $this->keyValueExpirableFactory->get('acquia_connector')->get('oauth');
+    $token = $this->keyValueExpirableFactory->get('acquia_connector')->get('oauth');
+    if (!$token) {
+      // If the access token is missing, attempt to re-authenticate
+      $api_credentials = Json::decode($this->state->get('acquia_connector.credentials', ''));
+      if (!empty($api_credentials)) {
+        $result = $this->authenticateWithApi($api_credentials['api_key'], $api_credentials['api_secret']);
+        if ($result["success"] === TRUE) {
+          return $this->keyValueExpirableFactory->get('acquia_connector')->get('oauth');
+        }
+      }
+    }
+    return $token;
   }
 
   /**
@@ -235,6 +321,16 @@ final class AuthService {
    */
   private static function getIdpHost(): string {
     return CoreSettings::get('acquia_connector.idp_host', 'accounts.acquia.com');
+  }
+
+  /**
+   * Resets both oauth and api/secret credentials.
+   */
+  public function resetCredentials(): void {
+    $this->session->remove(self::PKCE_KEY);
+    $this->keyValueExpirableFactory->get('acquia_connector')->delete('oauth');
+    $this->state->delete('acquia_connector.credentials');
+    $this->state->delete('acquia_connector.oauth_refresh.timestamp');
   }
 
 }

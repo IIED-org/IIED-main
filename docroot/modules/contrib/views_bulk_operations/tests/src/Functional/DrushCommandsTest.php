@@ -20,6 +20,13 @@ class DrushCommandsTest extends BrowserTestBase {
   protected $defaultTheme = 'stable9';
 
   /**
+   * Array of node objects used for testing.
+   *
+   * @var \Drupal\node\NodeInterface[]
+   */
+  protected array $testNodes = [];
+
+  /**
    * Modules to install.
    *
    * @var array

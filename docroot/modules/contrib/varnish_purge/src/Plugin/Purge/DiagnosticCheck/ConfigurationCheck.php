@@ -2,11 +2,11 @@
 
 namespace Drupal\varnish_purger\Plugin\Purge\DiagnosticCheck;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\purge\Plugin\Purge\Purger\PurgersServiceInterface;
-use Drupal\purge\Plugin\Purge\DiagnosticCheck\DiagnosticCheckInterface;
 use Drupal\purge\Plugin\Purge\DiagnosticCheck\DiagnosticCheckBase;
+use Drupal\purge\Plugin\Purge\DiagnosticCheck\DiagnosticCheckInterface;
+use Drupal\purge\Plugin\Purge\Purger\PurgersServiceInterface;
 use Drupal\varnish_purger\Entity\VarnishPurgerSettings;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Verifies that only fully configured Varnish purgers load.
@@ -22,12 +22,14 @@ use Drupal\varnish_purger\Entity\VarnishPurgerSettings;
 class ConfigurationCheck extends DiagnosticCheckBase implements DiagnosticCheckInterface {
 
   /**
+   * The purge service.
+   *
    * @var \Drupal\purge\Plugin\Purge\Purger\PurgersServiceInterface
    */
   protected $purgePurgers;
 
   /**
-   * Constructs a \Drupal\purge\Plugin\Purge\DiagnosticCheck\PurgerAvailableCheck object.
+   * Constructs the PurgerAvailableCheck object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -75,21 +77,21 @@ class ConfigurationCheck extends DiagnosticCheckBase implements DiagnosticCheckI
       foreach (['name', 'hostname', 'port', 'request_method', 'scheme'] as $f) {
         if (empty($settings->$f)) {
           $this->recommendation = $this->t("@purger not configured.", $t);
-          return SELF::SEVERITY_ERROR;
+          return self::SEVERITY_ERROR;
         }
       }
       if (($settings->scheme === 'https') && ($settings->port != 443)) {
         $this->recommendation = $this->t("@purger uses https:// but its port is not 443!", $t);
-        return SELF::SEVERITY_WARNING;
+        return self::SEVERITY_WARNING;
       }
       if (($settings->scheme === 'http') && ($settings->port == 443)) {
         $this->recommendation = $this->t("@purger uses http:// but its port is 443!", $t);
-        return SELF::SEVERITY_WARNING;
+        return self::SEVERITY_WARNING;
       }
     }
 
     $this->recommendation = $this->t("All purgers configured.");
-    return SELF::SEVERITY_OK;
+    return self::SEVERITY_OK;
   }
 
 }

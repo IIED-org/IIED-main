@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\imagemagick\Kernel;
 
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Image\ImageFactory;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\TestFileCreationTrait;
 
@@ -15,24 +18,18 @@ trait ToolkitSetupTrait {
 
   /**
    * The file system service.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
    */
-  protected $fileSystem;
+  protected FileSystemInterface $fileSystem;
 
   /**
    * The image factory service.
-   *
-   * @var \Drupal\Core\Image\ImageFactory
    */
-  protected $imageFactory;
+  protected ImageFactory $imageFactory;
 
   /**
    * A directory for image test file results.
-   *
-   * @var string
    */
-  protected $testDirectory;
+  protected string $testDirectory;
 
   /**
    * Sets up the image toolkit.
@@ -83,11 +80,22 @@ trait ToolkitSetupTrait {
    */
   public static function providerToolkitConfiguration(): array {
     return [
-      'ImageMagick-imagemagick' => [
+      'ImageMagick-imagemagick-v6' => [
         'toolkit_id' => 'imagemagick',
         'toolkit_config' => 'imagemagick.settings',
         'toolkit_settings' => [
           'binaries' => 'imagemagick',
+          'imagemagick_version' => 'v6',
+          'quality' => 100,
+          'debug' => TRUE,
+        ],
+      ],
+      'ImageMagick-imagemagick-v7' => [
+        'toolkit_id' => 'imagemagick',
+        'toolkit_config' => 'imagemagick.settings',
+        'toolkit_settings' => [
+          'binaries' => 'imagemagick',
+          'imagemagick_version' => 'v7',
           'quality' => 100,
           'debug' => TRUE,
         ],

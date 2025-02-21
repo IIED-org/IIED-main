@@ -86,7 +86,7 @@ class SplitMergeTest extends KernelTestBase {
           unset($data['module']['config_test']);
         }
 
-        if (strpos($name, 'config_test') !== FALSE || in_array($name, ['system.menu.exclude_test', 'system.menu.indirect_exclude_test'])) {
+        if (strpos($name, 'config_test') !== FALSE || in_array($name, ['system.menu.exclude-test', 'system.menu.indirect-exclude-test'])) {
           // Expect config that depends on config_test directly and indirectly
           // to be split off.
           $expectedSplit->write($name, $data);
@@ -232,7 +232,7 @@ class SplitMergeTest extends KernelTestBase {
             $expectedExport->write($name, $data);
           }
         }
-        elseif (strpos($name, 'config_test') !== FALSE || in_array($name, ['system.menu.exclude_test', 'system.menu.indirect_exclude_test'])) {
+        elseif (strpos($name, 'config_test') !== FALSE || in_array($name, ['system.menu.exclude-test', 'system.menu.indirect-exclude-test'])) {
           // Expect config that depends on config_test directly and indirectly
           // to be split off.
           $expectedSplit->write($name, $data);
@@ -257,7 +257,7 @@ class SplitMergeTest extends KernelTestBase {
    */
   public function testIncludeDependency() {
     $config = $this->createSplitConfig('test_split', [
-      'graylist' => ['system.menu.exclude_test'],
+      'graylist' => ['system.menu.exclude-test'],
       'graylist_dependents' => TRUE,
       'graylist_skip_equal' => TRUE,
     ]);
@@ -267,8 +267,8 @@ class SplitMergeTest extends KernelTestBase {
     $this->copyConfig($active, $this->getSyncFileStorage());
 
     // Change only the indirectly dependent config.
-    $originalSystem = $this->config('system.menu.indirect_exclude_test')->getRawData();
-    $this->config('system.menu.indirect_exclude_test')->set('label', 'Split Test')->save();
+    $originalSystem = $this->config('system.menu.indirect-exclude-test')->getRawData();
+    $this->config('system.menu.indirect-exclude-test')->set('label', 'Split Test')->save();
 
     $expectedExport = new MemoryStorage();
     $expectedSplit = new MemoryStorage();
@@ -281,7 +281,7 @@ class SplitMergeTest extends KernelTestBase {
       foreach ($active->listAll() as $name) {
         $data = $active->read($name);
 
-        if ($name === 'system.menu.indirect_exclude_test') {
+        if ($name === 'system.menu.indirect-exclude-test') {
           // We only changed the config in the default collection.
           if ($collection === StorageInterface::DEFAULT_COLLECTION) {
             // The unchanged value is in export, the changed value is split.

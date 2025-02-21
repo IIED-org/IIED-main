@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\imagemagick\Plugin\FileMetadata;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file_mdm\FileMetadataException;
+use Drupal\file_mdm\Plugin\Attribute\FileMetadata;
 use Drupal\file_mdm\Plugin\FileMetadata\FileMetadataPluginBase;
 use Drupal\imagemagick\ArgumentMode;
 use Drupal\imagemagick\Event\ImagemagickExecutionEvent;
@@ -15,13 +19,12 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * FileMetadata plugin for ImageMagick's identify results.
- *
- * @FileMetadata(
- *   id = "imagemagick_identify",
- *   title = @Translation("ImageMagick identify"),
- *   help = @Translation("File metadata plugin for ImageMagick identify results."),
- * )
  */
+#[FileMetadata(
+  id: 'imagemagick_identify',
+  title: new TranslatableMarkup('ImageMagick identify'),
+  help: new TranslatableMarkup('File metadata plugin for ImageMagick identify results.')
+)]
 class ImagemagickIdentify extends FileMetadataPluginBase {
 
   /**
@@ -76,16 +79,18 @@ class ImagemagickIdentify extends FileMetadataPluginBase {
   /**
    * Validates a file metadata key.
    *
+   * @param string $key
+   *   A key to determine the metadata element to be returned.
+   * @param string $method
+   *   The caller method.
+   *
    * @return bool
    *   TRUE if the key is valid.
    *
    * @throws \Drupal\file_mdm\FileMetadataException
    *   In case the key is invalid.
    */
-  protected function validateKey($key, $method) {
-    if (!is_string($key)) {
-      throw new FileMetadataException("Invalid metadata key specified", $this->getPluginId(), $method);
-    }
+  protected function validateKey(string $key, string $method): bool {
     if (!in_array($key, $this->getSupportedKeys(), TRUE)) {
       throw new FileMetadataException("Invalid metadata key '{$key}' specified", $this->getPluginId(), $method);
     }
@@ -188,8 +193,9 @@ class ImagemagickIdentify extends FileMetadataPluginBase {
     $this->eventDispatcher->dispatch(new ImagemagickExecutionEvent($arguments), ImagemagickExecutionEvent::PRE_IDENTIFY_EXECUTE);
 
     // Execute the 'identify' command.
-    $output = NULL;
-    $ret = $this->execManager->execute(PackageCommand::Identify, $arguments, $output);
+    $output = '';
+    $error = '';
+    $ret = $this->execManager->execute(PackageCommand::Identify, $arguments, $output, $error);
 
     // Process results.
     $data = [];

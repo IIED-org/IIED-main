@@ -3,6 +3,7 @@
 namespace Drupal\acquia_connector_test;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\State\StateInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Response;
@@ -38,7 +39,53 @@ class AcquiaConnectorMiddleware {
       return function (RequestInterface $request, array $options) use ($handler) {
         $uri = $request->getUri();
         if ($uri->getHost() === 'accounts.acquia.com') {
+          // Test valid/invalid ID
+          if ($uri->getPath() === '/api/auth/oauth/authorize') {
+            $query = UrlHelper::parse($request->getRequestTarget());
+            return ($query['query']['client_id'] === '38357830-bacd-4b4d-a356-f508c6ddecf8') ? new FulfilledPromise(new Response(200)) : new FulfilledPromise(new Response(403));
+          }
           $oauth_content = Json::decode((string) $request->getBody());
+          // API Key / Secret Response.
+          if ($oauth_content['grant_type'] === 'client_credentials' && $oauth_content['client_id'] === 'VALID_KEY' && $oauth_content['client_secret'] === 'VALID_SECRET') {
+            return new FulfilledPromise(
+              new Response(
+                200,
+                [],
+                Json::encode([
+                  'access_token' => 'ACCESS_TOKEN',
+                  'token_type' => 'bearer',
+                  'expires_in' => 300,
+                ])
+              )
+            );
+          }
+          // Client Credential Error response.
+          if ($oauth_content['grant_type'] === 'client_credentials' && $oauth_content['client_id'] === 'BAD_KEY' && $oauth_content['client_secret'] === 'BAD_SECRET') {
+            return new FulfilledPromise(
+              new Response(
+                400,
+                [],
+                json_encode([
+                  'error' => 'invalid_client',
+                  'error_description' => 'The client credentials are invalid',
+                ])
+              )
+            );
+          }
+          // Client Credential missing keys error response.
+          if ($oauth_content['grant_type'] === 'client_credentials') {
+            return new FulfilledPromise(
+              new Response(
+                400,
+                [],
+                json_encode([
+                  'error' => 'invalid_client',
+                  'error_description' => 'client credentials are required',
+                ])
+              )
+            );
+          }
+          // Oauth successful return response.
           if ($oauth_content['grant_type'] === 'authorization_code' && $oauth_content['code'] === 'AUTHORIZATION_SUCCESSFUL') {
             return new FulfilledPromise(
               new Response(
@@ -51,6 +98,7 @@ class AcquiaConnectorMiddleware {
               )
             );
           }
+          // Authorization Error response.
           if ($oauth_content['grant_type'] === 'authorization_code' && $oauth_content['code'] === 'AUTHORIZATION_ERROR') {
             return new FulfilledPromise(
               new Response(
@@ -63,6 +111,7 @@ class AcquiaConnectorMiddleware {
               )
             );
           }
+          // New refresh token response.
           if ($oauth_content['grant_type'] === 'refresh_token') {
             return new FulfilledPromise(
               new Response(
@@ -85,6 +134,31 @@ class AcquiaConnectorMiddleware {
                 403,
                 [],
                 ''
+              )
+            );
+          }
+          if ($uri->getPath() === '/api/account/tokens') {
+            return new FulfilledPromise(
+              new Response(
+                201,
+                [],
+                Json::encode([
+                  "api_key" => "VALID_KEY",
+                  "api_secret" => "VALID_SECRET",
+                  "client_id" => "137bd484-dcc8-4950-a784-1f01de7f6378",
+                  "client_secret" => "4DmbUmGiUkafdjcZk2yV6u17jPmmunwt8/47mKdAQIc=",
+                  "_links" => [
+                    "self" => [
+                      "href" => "https://cloud.acquia.com/api/account/tokens",
+                    ],
+                    "parent" => [
+                      "href" => "https://cloud.acquia.com/api/account",
+                    ],
+                    "notification" => [
+                      "href" => "https://cloud.acquia.com/api/notifications/ab142771-826e-42b0-a53c-e112b70448d2",
+                    ],
+                  ],
+                ])
               )
             );
           }

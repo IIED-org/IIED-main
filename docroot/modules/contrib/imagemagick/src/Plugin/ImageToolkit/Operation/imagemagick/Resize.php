@@ -1,24 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\imagemagick\Plugin\ImageToolkit\Operation\imagemagick;
+
+use Drupal\Core\ImageToolkit\Attribute\ImageToolkitOperation;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Defines imagemagick resize operation.
- *
- * @ImageToolkitOperation(
- *   id = "imagemagick_resize",
- *   toolkit = "imagemagick",
- *   operation = "resize",
- *   label = @Translation("Resize"),
- *   description = @Translation("Resizes an image to the given dimensions (ignoring aspect ratio).")
- * )
  */
+#[ImageToolkitOperation(
+  id: "imagemagick_resize",
+  toolkit: "imagemagick",
+  operation: "resize",
+  label: new TranslatableMarkup("Resize"),
+  description: new TranslatableMarkup("Resizes an image to the given dimensions (ignoring aspect ratio).")
+)]
 class Resize extends ImagemagickImageToolkitOperationBase {
 
   /**
    * {@inheritdoc}
    */
-  protected function arguments() {
+  protected function arguments(): array {
     return [
       'width' => [
         'description' => 'The new width of the resized image, in pixels',
@@ -37,7 +41,7 @@ class Resize extends ImagemagickImageToolkitOperationBase {
   /**
    * {@inheritdoc}
    */
-  protected function validateArguments(array $arguments) {
+  protected function validateArguments(array $arguments): array {
     // Assure integers for all arguments.
     $arguments['width'] = (int) round($arguments['width']);
     $arguments['height'] = (int) round($arguments['height']);
@@ -56,7 +60,7 @@ class Resize extends ImagemagickImageToolkitOperationBase {
   /**
    * {@inheritdoc}
    */
-  protected function execute(array $arguments = []) {
+  protected function execute(array $arguments = []): bool {
     if (!empty($arguments['filter'])) {
       $this->addArguments(['-filter', $arguments['filter']]);
     }

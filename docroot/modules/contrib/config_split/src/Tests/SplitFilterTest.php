@@ -2,6 +2,7 @@
 
 namespace Drupal\config_split\Tests;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Drupal\config_split\Plugin\ConfigFilter\SplitFilter;
 use Drupal\Core\Config\DatabaseStorage;
 use Drupal\Core\Config\FileStorage;
@@ -19,6 +20,7 @@ use Prophecy\Argument;
  */
 class SplitFilterTest extends UnitTestCase {
 
+  use ProphecyTrait;
   /**
    * Test that the blacklist is correctly calculated.
    */
