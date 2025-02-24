@@ -580,6 +580,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/clamav' => array(
+            'pretty_version' => '2.1.0',
+            'version' => '2.1.0.0',
+            'reference' => '2.1.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/clamav',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/coder' => array(
             'pretty_version' => '8.3.28',
             'version' => '8.3.28.0',

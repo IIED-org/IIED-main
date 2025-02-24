@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Controls behavior of anti-virus integration with ClamAV.
+ */
+
+/**
+ * Implements hook_entity_create().
+ *
+ * Attach a scanner to all entities that implement Drupal\file\FileInterface.
+ */
+function clamav_entity_create($entity) {
+  if (is_a($entity, 'Drupal\file\FileInterface')) {
+    $entity->clamav_attemptScan = TRUE;
+  }
+}

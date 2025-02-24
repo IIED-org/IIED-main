@@ -78,6 +78,7 @@
     "drupal/block_class": "^3.0",
     "drupal/charts": "^5.0",
     "drupal/chosen": "^3.0",
+    "drupal/clamav": "^2.1",
     "drupal/color_field": "^3.0",
     "drupal/colorbox": "^2.0",
     "drupal/colorbox_load": "^1.3",
