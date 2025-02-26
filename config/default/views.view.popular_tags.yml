@@ -1408,9 +1408,9 @@ display:
       css_class: 'container my-12'
       display_description: ''
       display_extenders: {  }
-      path: tags/all-tags/popular-tags
+      path: iiedtags/all-tags/popular-tags
       menu:
-        type: tab
+        type: none
         title: 'Popular tags'
         description: ''
         weight: 3
@@ -1557,6 +1557,10 @@ display:
         type: none
         options:
           offset: 0
+      access:
+        type: perm
+        options:
+          perm: 'access content'
       sorts:
         name:
           id: name
@@ -1651,6 +1655,7 @@ display:
           separator: ''
           hide_empty: false
       defaults:
+        access: false
         title: false
         css_class: false
         pager: false
@@ -1667,9 +1672,9 @@ display:
       group_by: false
       display_description: ''
       display_extenders: {  }
-      path: tags/all-tags
+      path: iiedtags/all-tags
       menu:
-        type: 'default tab'
+        type: none
         title: 'IIED tags'
         description: ''
         weight: 0
@@ -2014,9 +2019,9 @@ display:
       group_by: true
       display_description: ''
       display_extenders: {  }
-      path: tags/all-tags/tag-count
+      path: iiedtags/all-tags/tag-count
       menu:
-        type: tab
+        type: none
         title: 'Tags count'
         description: ''
         weight: 2
