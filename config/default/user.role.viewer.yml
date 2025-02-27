@@ -5,6 +5,7 @@ dependencies:
   module:
     - file
     - paragraphs
+    - rabbit_hole
     - view_unpublished
 id: viewer
 label: Viewer
@@ -12,5 +13,7 @@ weight: -8
 is_admin: null
 permissions:
   - 'delete own files'
+  - 'rabbit hole bypass node'
+  - 'rabbit hole bypass taxonomy_term'
   - 'view any unpublished content'
   - 'view unpublished paragraphs'

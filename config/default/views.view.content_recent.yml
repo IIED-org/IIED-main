@@ -25,6 +25,8 @@ dependencies:
     - user.role.hh_reviewer
     - user.role.manager
     - user.role.publications_editor
+    - user.role.publications_manager
+    - user.role.viewer
   module:
     - better_exposed_filters
     - computed_field
@@ -7017,6 +7019,9 @@ display:
         type: role
         options:
           role:
+            viewer: viewer
+            publications_editor: publications_editor
+            publications_manager: publications_manager
             editor: editor
             manager: manager
             administrator: administrator

@@ -10,6 +10,33 @@
   {% endif %}
   {{ title_suffix }}
   {% block content %}
+
+      {# {% if form_type == 'mailchimp' %}
+        {{ attach_library('iied_tw/mailchimp') }}
+        <div class="signup {{ form_type }}">
+          <div id="mc_embed_shell">
+            {{ content.body }}
+            <script type="text/javascript">
+              (function ($) {
+                window.fnames = new Array();
+                window.ftypes = new Array();
+                fnames[0] = "EMAIL";
+                ftypes[0] = "email";
+                fnames[1] = "FNAME";
+                ftypes[1] = "text";
+                fnames[2] = "LNAME";
+                ftypes[2] = "text";
+                fnames[4] = "ORG1";
+                ftypes[4] = "text";
+                fnames[5] = "JTITLE";
+                ftypes[5] = "text";
+                fnames[3] = "MMERGE3";
+                ftypes[3] = "text";
+              })(jQuery);
+              var $mcj = jQuery.noConflict(true);
+            </script>
+          </div>
+        </div> ...elseif #}
       {% if form_type == 'clickdimensions' %}
         {{ attach_library('iied_tw/clickdimensions') }}
         <div id="clickdimform" class="signup {{ form_type }}">
@@ -21,5 +48,6 @@
         {{ content.body }}
         </div>  
       {% endif %}
+      
   {% endblock %}
 </div>
