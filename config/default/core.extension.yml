@@ -126,6 +126,10 @@ module:
   optional_end_date: 0
   options: 0
   page_cache: 0
+  password_policy_character_types: 0
+  password_policy_history: 0
+  password_policy_length: 0
+  password_policy_username: 0
   path: 0
   path_alias: 0
   phpass: 0
@@ -157,6 +161,7 @@ module:
   search_api_sorts_widget: 0
   serial: 0
   serialization: 0
+  session_limit: 0
   shortcut: 0
   shs: 0
   sophron: 0

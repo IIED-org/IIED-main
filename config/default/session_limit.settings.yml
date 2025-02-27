@@ -1,0 +1,19 @@
+_core:
+  default_config_hash: AYzO3As74ToqCVUg-p2E0OfkOkc76I7OPR0-JK_e4hs
+session_limit_max: 1
+session_limit_masquerade_ignore: true
+session_limit_behaviour: 0
+session_limit_logged_out_message_severity: warning
+session_limit_admin_inclusion: 0
+session_limit_roles:
+  authenticated: 0
+  viewer: 0
+  hh_contributor: 0
+  hh_reviewer: 0
+  publications_editor: 0
+  publications_manager: 0
+  editor: 0
+  manager: 0
+  administrator: -1
+session_limit_logged_out_display_message: 'You have been automatically logged out. Someone else has logged in with your username and password and the maximum number of @number simultaneous session(s) was exceeded. This may indicate that your account has been compromised or that account sharing is not allowed on this site. Please contact the site administrator if you suspect your account has been compromised.'
+session_limit_log_events: true
