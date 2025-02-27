@@ -109,7 +109,6 @@ permissions:
   - 'administer redirects'
   - 'administer scn configuration'
   - 'administer url aliases'
-  - 'administer users'
   - 'administer webform submission'
   - 'configure any layout'
   - 'create and edit custom blocks'
