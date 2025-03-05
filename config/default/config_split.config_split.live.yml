@@ -11,6 +11,7 @@ module: {  }
 theme: {  }
 blacklist: {  }
 graylist:
+  - password_policy.password_policy.password_expiry
   - system.performance
 graylist_dependents: true
 graylist_skip_equal: true
