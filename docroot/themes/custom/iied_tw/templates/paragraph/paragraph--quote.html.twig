@@ -54,7 +54,7 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    <blockquote class="pl-0 text-2xl prose-blockquote font-headline text-iiedpink-700">
+    <blockquote class="pl-0 text-xl md:text-2xl prose-blockquote font-headline text-iiedpink-700">
       {{ content.field_quote_text }}
         {% if content.field_quote_citation is not empty %}
           {% set cite %}

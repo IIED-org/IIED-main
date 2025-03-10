@@ -44,13 +44,13 @@
           {{ title_prefix }}
           <h1>{{ name }}</h1>
           {{ title_suffix }}
-              <div class="mb-12">
-              {% if term.subheading.0.value is not empty %}
-              <h2 class="mb-6">{{ term.subheading.0.value }}</h2>
-              {% endif %}
-              <p class="prose prose-lg lg:prose-xl">
-              {{ term.description.0.value|striptags }}
-              </p>
+              <div class="pb-12">
+                {% if term.subheading.0.value is not empty %}
+                <h2 class="mb-6">{{ term.subheading.0.value }}</h2>
+                {% endif %}
+                <p class="prose prose-lg lg:prose-xl">
+                {{ term.description.0.value|striptags }}
+                </p>
             </div>
         </div>
         <div class="xl:col-span-4">
@@ -69,8 +69,8 @@
     {{ content|without('field_overview', 'field_tags', 'field_theme') }}
   </div>
 
-   {{ attach_library('iied_tw/alpine') }}
 
+   {# {{ attach_library('iied_tw/alpine') }}
   {% block main %}
     <div class="pb-12 mb-12 border-b border-gray-300">
       <div class="tab-wrapper" 
@@ -108,11 +108,11 @@
         </div>
       </div>
     </div>
-  {% endblock %}
+  {% endblock %} #}
   
-  <div class="container mb-12">
+  {# <div class="container mb-12">
    {{ drupal_view('node_slider', 'gender_block') }}
-  </div>
+  </div> #}
 
 </div>
   
