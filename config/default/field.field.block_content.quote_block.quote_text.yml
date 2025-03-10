@@ -1,0 +1,24 @@
+uuid: 0c0149ec-d963-49d3-b959-67146d366329
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.quote_block
+    - field.storage.block_content.quote_text
+    - filter.format.plain_text
+  module:
+    - text
+id: block_content.quote_block.quote_text
+field_name: quote_text
+entity_type: block_content
+bundle: quote_block
+label: 'Quote text'
+description: 'Quote marks will be added'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - plain_text
+field_type: text_long

@@ -1,0 +1,17 @@
+uuid: d146e1dd-7328-4458-8ca5-e6bc3a28ea2c
+langcode: en
+status: true
+dependencies: {  }
+id: grey_divider_below
+label: 'Grey divider below'
+classes: 'mb-6 border-b border-gray-300'
+type: section
+group: default
+block_restrictions: {  }
+layout_restrictions:
+  - tw-1-2-col-grid
+  - tw-1-2-4-col-grid
+  - tw-container
+  - tw-fluid
+  - tw-1-2-col-thirds
+weight: 0

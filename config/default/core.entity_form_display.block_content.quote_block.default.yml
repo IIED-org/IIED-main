@@ -1,0 +1,47 @@
+uuid: c28d2bb7-3dac-4554-bbd0-50a5286daf71
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.quote_block
+    - field.field.block_content.quote_block.quote_citation
+    - field.field.block_content.quote_block.quote_text
+  module:
+    - text
+id: block_content.quote_block.default
+targetEntityType: block_content
+bundle: quote_block
+mode: default
+content:
+  info:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 3
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  quote_citation:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  quote_text:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }
