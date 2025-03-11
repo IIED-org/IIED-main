@@ -1,0 +1,32 @@
+uuid: d1bd91e5-a801-4b95-bfe9-74b96e934e60
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.quote_block
+    - field.field.block_content.quote_block.quote_citation
+    - field.field.block_content.quote_block.quote_text
+  module:
+    - text
+id: block_content.quote_block.default
+targetEntityType: block_content
+bundle: quote_block
+mode: default
+content:
+  quote_citation:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  quote_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true
