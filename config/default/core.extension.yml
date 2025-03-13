@@ -37,6 +37,7 @@ module:
   contact: 0
   contact_block: 0
   content_translation_redirect: 0
+  context: 0
   contextual: 0
   csv_serialization: 0
   ctools: 0
@@ -108,6 +109,7 @@ module:
   media_revisions_ui: 0
   memcache: 0
   menu_link_content: 0
+  menu_ui: 0
   metatag: 0
   metatag_dc: 0
   metatag_facebook: 0
@@ -175,6 +177,7 @@ module:
   tfa: 0
   token: 0
   toolbar: 0
+  tour: 0
   twig_field_value: 0
   twig_tweak: 0
   update: 0

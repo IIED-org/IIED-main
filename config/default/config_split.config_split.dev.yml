@@ -8,7 +8,6 @@ description: 'Hosting provider dev environment'
 weight: 0
 folder: ../config/splits/dev
 module:
-  menu_ui: 0
   webform_ui: 0
   field_ui: 0
   stage_file_proxy: 0

@@ -8,7 +8,6 @@ description: 'Local development (e.g. lando)'
 weight: 0
 folder: ../config/splits/local
 module:
-  menu_ui: 0
   webform_ui: 0
   dblog: 0
   devel: 0
