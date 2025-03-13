@@ -1,0 +1,26 @@
+uuid: dec0c5f5-8c70-4a4f-a406-564f870355c0
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.quote_block
+    - field.storage.block_content.quote_citation
+    - filter.format.basic_html
+    - filter.format.full_html
+  module:
+    - text
+id: block_content.quote_block.quote_citation
+field_name: quote_citation
+entity_type: block_content
+bundle: quote_block
+label: 'Quote citation'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - basic_html
+    - full_html
+field_type: text_long

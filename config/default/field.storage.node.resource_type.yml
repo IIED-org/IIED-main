@@ -20,6 +20,9 @@ settings:
     -
       value: video
       label: Video
+    -
+      value: database
+      label: Database
   allowed_values_function: ''
 module: options
 locked: false

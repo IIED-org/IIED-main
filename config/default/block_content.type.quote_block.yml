@@ -1,0 +1,8 @@
+uuid: c76138a7-5639-4af1-bf14-81e10524937e
+langcode: en
+status: true
+dependencies: {  }
+id: quote_block
+label: 'Quote block'
+revision: false
+description: null

@@ -1025,7 +1025,7 @@ display:
         filter_groups: false
       display_description: ''
       display_extenders: {  }
-      block_description: 'gender block'
+      block_description: 'gender related block'
     cache_metadata:
       max-age: -1
       contexts:
