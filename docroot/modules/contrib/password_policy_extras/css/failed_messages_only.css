@@ -1,0 +1,9 @@
+.password-not-empty #password-policy-status .password-policy-constraint-failed {
+  background-color: lavenderblush;
+}
+#password-policy-status > div {
+  margin-top: 0;
+}
+#password-policy-status table tr td {
+  height: initial;
+}

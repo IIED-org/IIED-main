@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'af78976b5a73c4814577770579ba444b5a2f68c5',
+        'reference' => '43efd1470f12c782081881b95e0792b51dd1bcd4',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1534,6 +1534,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/password_policy_extras' => array(
+            'pretty_version' => '4.0.0',
+            'version' => '4.0.0.0',
+            'reference' => '4.0.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/password_policy_extras',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/pathauto' => array(
             'pretty_version' => '1.13.0',
             'version' => '1.13.0.0',
@@ -1618,7 +1627,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'af78976b5a73c4814577770579ba444b5a2f68c5',
+            'reference' => '43efd1470f12c782081881b95e0792b51dd1bcd4',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
