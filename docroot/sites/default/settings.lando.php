@@ -168,19 +168,20 @@ $databases['default']['default'] = array(
   'collation' => 'utf8mb4_general_ci',
 );
 
-/**
- * Use "local" config split
- */
-$config['config_split.config_split.local']['status'] = TRUE;
-$config['config_split.config_split.live']['status'] = FALSE;
-$config['config_split.config_split.dev']['status'] = FALSE;
-
 /*
  * PHP Error reporting
  */
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
+
+/**
+ * Use "local" config split for development
+ */
+$config['config_split.config_split.local']['status'] = TRUE;
+$config['config_split.config_split.dev']['status'] = FALSE;
+$config['config_split.config_split.stage']['status'] = FALSE;
+$config['config_split.config_split.prod']['status'] = FALSE;
 
 // Config for sstage file proxy remote files.
 $config['stage_file_proxy.settings']['origin']  = 'https://www.iied.org';
