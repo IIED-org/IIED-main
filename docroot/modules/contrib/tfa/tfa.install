@@ -7,6 +7,7 @@
 
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\Entity\Role;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * Implements hook_requirements().
@@ -47,8 +48,100 @@ function tfa_requirements($phase) {
       $requirements['tfa_libraries']['value'] = t('Third-party libraries');
       $requirements['tfa_libraries']['description'] = t("Please install the 'christian-riesen/otp' library via composer. See the module README for instructions.");
     }
+
+    $route_validation_report = _tfa_route_validation();
+    if (!empty($route_validation_report)) {
+      $requirements += $route_validation_report;
+    }
+
   }
   return $requirements;
+}
+
+/**
+ * Validates routes are correct for TFA operations.
+ */
+function _tfa_route_validation(): array {
+
+  $route_status = [];
+  try {
+    $route_provider = \Drupal::service('router.route_provider');
+    $route_user_login = $route_provider->getRouteByName('user.login');
+    $route_user_login_http = $route_provider->getRouteByName('user.login.http');
+    $route_user_reset_login = $route_provider->getRouteByName('user.reset.login');
+    $route_user_reset = $route_provider->getRouteByName('user.reset');
+  }
+  catch (RouteNotFoundException $e) {
+    return [
+      'tfa.route.missing' => [
+        'title' => t('TFA route missing'),
+        'value' => $e->getMessage(),
+        'description' => t('An expected route utilized by TFA was not found'),
+        'severity' => REQUIREMENT_ERROR,
+      ],
+    ];
+  }
+
+  if ($route_user_login->getDefault('_form') !== '\Drupal\tfa\Form\TfaLoginForm') {
+    $route_status['tfa.route.user.login'] = [
+      'title' => t("Route 'user.login' not TFA protected"),
+      'value' => t(
+        "Route is served by '@controller'",
+        [
+          '@controller' => $route_user_login->getDefault('_form'),
+        ]
+      ),
+      'description' => t('For the TFA module to properly function it must process login routes.'),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+  }
+
+  if (
+    $route_user_reset_login->getDefault('_controller') !== '\Drupal\tfa\Controller\TfaUserController::resetPassLogin'
+    && $route_user_reset_login->getDefault('_controller') !== '\Drupal\tfa\Controller\TfaUserControllerDeprecated::resetPassLogin'
+  ) {
+    $route_status['tfa.route.user.reset.login'] = [
+      'title' => t("Route 'user.reset.login' not TFA protected"),
+      'value' => t(
+        "Route is served by '@controller'",
+        [
+          '@controller' => $route_user_reset_login->getDefault('_controller'),
+        ]
+      ),
+      'description' => t('For the TFA module to properly function it must process login routes.'),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+  }
+
+  if ($route_user_login_http->getDefault('_controller') !== '\Drupal\tfa\Controller\TfaUserAuthenticationController::login') {
+    $route_status['tfa.route.user.login.http'] = [
+      'title' => t("Route 'user.login.http' not TFA protected"),
+      'value' => t(
+        "Route is served by '@controller'",
+        [
+          '@controller' => $route_user_login_http->getDefault('_controller'),
+        ]
+      ),
+      'description' => t('For the TFA module to properly function it must process login routes.'),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+  }
+
+  if ($route_user_reset->getDefault('_controller') !== '\Drupal\user\Controller\UserController::resetPass') {
+    $route_status['tfa.route.user.reset'] = [
+      'title' => t("Route 'user.reset' not TFA protected"),
+      'value' => t(
+        "Route is served by '@controller'",
+        [
+          '@controller' => $route_user_login_http->getDefault('_controller'),
+        ]
+      ),
+      'description' => t('For the TFA module to properly function it must process login routes.'),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+  }
+
+  return $route_status;
 }
 
 /**

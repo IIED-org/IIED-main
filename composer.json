@@ -171,7 +171,7 @@
     "drupal/term_merge": "^2.0@beta",
     "drupal/term_reference_tree": "^2.0",
     "drupal/textfield_counter": "^2.4",
-    "drupal/tfa": "^1.9",
+    "drupal/tfa": "^1.10",
     "drupal/token": "^1.10",
     "drupal/twig_field_value": "^2.0",
     "drupal/twig_tweak": "^3.2",
