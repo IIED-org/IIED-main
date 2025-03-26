@@ -13,3 +13,9 @@ function tfa_post_update_add_redirect_to_users_without_tfa(array &$sandbox): voi
   $config->set('users_without_tfa_redirect', FALSE);
   $config->save();
 }
+
+/**
+ * Empty update to rebuild core routes.
+ */
+function tfa_post_update_route_rebuild(array &$sandbox): void {
+}

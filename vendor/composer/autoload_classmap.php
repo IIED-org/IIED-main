@@ -19,6 +19,7 @@ return array(
     'DateMalformedStringException' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateMalformedStringException.php',
     'DateObjectError' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateObjectError.php',
     'DateRangeError' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateRangeError.php',
+    'Deprecated' => $vendorDir . '/symfony/polyfill-php84/Resources/stubs/Deprecated.php',
     'Drupal' => $baseDir . '/docroot/core/lib/Drupal.php',
     'Drupal\\Component\\Datetime\\Time' => $baseDir . '/docroot/core/lib/Drupal/Component/Datetime/Time.php',
     'Drupal\\Component\\DependencyInjection\\Container' => $baseDir . '/docroot/core/lib/Drupal/Component/DependencyInjection/Container.php',
