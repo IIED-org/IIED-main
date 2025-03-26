@@ -113,8 +113,9 @@ class MediaPdfThumbnailImagickManager {
    */
   protected function generate(string $pdfFilePath, string $target, string $imageFormat, string | int $page): bool {
     $pdf = new Pdf($pdfFilePath, $page);
-    $pdf->setLayerMethod(NULL);
+    $pdf->setLayerMethod(-1);
     $pdf->setOutputFormat($imageFormat);
+    $pdf->setColorspace(\Imagick::COLORSPACE_RGB);
     if (file_exists($target)) {
       $this->fileSystem->delete($target);
     }
@@ -173,9 +174,10 @@ class MediaPdfThumbnailImagickManager {
       $tempStreamWrapper->stream_close();
     }
 
+    $realPath = $tempStreamWrapper->realpath();
     return [
-      'path' => $tempPdfPath,
-      'delete' => TRUE,
+      'path' => !empty($realPath) ? $realPath : $tempPdfPath,
+      'delete' => FALSE,
     ];
   }
 

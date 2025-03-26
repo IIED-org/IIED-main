@@ -1,5 +1,5 @@
 media_pdf_thumbnail.settings:
-  title: PDF image entites
+  title: PDF image entities
   route_name: view.pdf_image_entity.list
   base_route: view.pdf_image_entity.list
 

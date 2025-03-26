@@ -2,9 +2,9 @@
 
 namespace Drupal\media_pdf_thumbnail\Form;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\media_pdf_thumbnail\Manager\PdfImageEntityPurgeManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -19,75 +19,17 @@ class PdfImageEntityPurgeForm extends FormBase {
   /**
    * Entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\media_pdf_thumbnail\Manager\PdfImageEntityPurgeManager
    */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * Messenger.
-   *
-   * @var \Drupal\Core\Messenger\Messenger
-   */
-  protected $messenger;
-
-  /**
-   * ConfigFactory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactory
-   */
-  protected $configFactory;
+  protected PdfImageEntityPurgeManager $pdfImageEntityPurgeManager;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): PdfImageEntityPurgeForm | static {
     $instance = parent::create($container);
-    $instance->entityTypeManager = $container->get('entity_type.manager');
-    $instance->messenger = $container->get('messenger');
-    $instance->configFactory = $container->get('config.factory');
+    $instance->pdfImageEntityPurgeManager = $container->get('media_pdf_thumbnail.pdf_image_entity.purge.manager');
     return $instance;
-  }
-
-  /**
-   * Purge callback.
-   *
-   * @param string|int $id
-   *   ID.
-   * @param array $context
-   *   Context.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException|\Drupal\Core\Entity\EntityStorageException
-   */
-  public static function execute(string | int $id, array &$context): void {
-    $entity = \Drupal::entityTypeManager()
-      ->getStorage('pdf_image_entity')
-      ->load($id);
-    $context['message'] = 'Processing - ' . $entity->id();
-    $context['results'][] = $entity->id();
-    $entity->delete();
-  }
-
-  /**
-   * Finish callback.
-   *
-   * @param mixed $success
-   *   Success.
-   * @param mixed $results
-   *   Results.
-   * @param mixed $operations
-   *   Operations.
-   */
-  public static function finishedCallback(mixed $success, mixed $results, mixed $operations): void {
-    if ($success) {
-      $message = \Drupal::translation()->formatPlural(count($results),
-        'One task processed.',
-        '@count tasks processed.');
-      \Drupal::messenger()->addMessage($message);
-    }
-    else {
-      \Drupal::messenger()->addError(t('Finished with an error.'));
-    }
   }
 
   /**
@@ -114,31 +56,12 @@ class PdfImageEntityPurgeForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $operations = [];
-
-    $ids = $this->entityTypeManager
-      ->getStorage('pdf_image_entity')
-      ->getQuery()
-      ->accessCheck(FALSE)
-      ->execute();
-
-    foreach ($ids as $id) {
-      $operations[] = [
-        'Drupal\media_pdf_thumbnail\Form\PdfImageEntityPurgeForm::execute',
-        [$id],
-      ];
+    try {
+      $this->pdfImageEntityPurgeManager->purgePdfImageEntities();
     }
-
-    $batch = [
-      'title' => t('Delete PDF image'),
-      'operations' => $operations,
-      'init_message' => t('Task creating process is starting.'),
-      'progress_message' => t('Processed @current out of @total. Estimated time: @estimate.'),
-      'error_message' => t('An error occurred during processing'),
-      'finished' => '\Drupal\media_pdf_thumbnail\Form\PdfImageEntityPurgeForm::finishedCallback',
-    ];
-
-    batch_set($batch);
+    catch (\Exception $e) {
+      $this->messenger()->addError($e->getMessage());
+    }
   }
 
 }

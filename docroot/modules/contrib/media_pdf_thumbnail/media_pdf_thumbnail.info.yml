@@ -7,7 +7,7 @@ configure: view.pdf_image_entity.list
 dependencies:
   - drupal:media
 
-# Information added by Drupal.org packaging script on 2024-08-28
-version: '6.1.1'
+# Information added by Drupal.org packaging script on 2025-02-10
+version: '6.1.5'
 project: 'media_pdf_thumbnail'
-datestamp: 1724857282
+datestamp: 1739212243

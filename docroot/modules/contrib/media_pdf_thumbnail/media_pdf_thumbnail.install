@@ -1,8 +1,46 @@
 <?php
 
+/**
+ * @file
+ * Contains media_pdf_thumbnail.install.
+ */
+
 use Drupal\Core\Config\FileStorage;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+use Drupal\media_pdf_thumbnail\Pdf;
+
+/**
+ * Implements hook_requirements().
+ */
+function media_pdf_thumbnail_requirements($phase) {
+  $requirements = [];
+
+  if ($phase === 'runtime') {
+    $imagick = new Imagick();
+    $version = $imagick->getVersion();
+
+    if (!isset($version['versionNumber']) || version_compare($version['versionNumber'], '6.3.7', '<')) {
+      $requirements['imagick_version'] = [
+        'title' => t('ImageMagick version'),
+        'value' => $version['versionString'],
+        'severity' => REQUIREMENT_ERROR,
+        'description' => t('Your ImageMagick version is too old. Media PDF Thumbnail requires at least ImageMagick 6.3.7.'),
+      ];
+    }
+
+    $version = Pdf::getVersion();
+    if (!isset($version) || version_compare($version, '2.1.0', '<')) {
+      $requirements['pdf_to_image_version'] = [
+        'title' => t('spatie/pdf-to-image'),
+        'value' => $version,
+        'severity' => REQUIREMENT_ERROR,
+        'description' => t('Your PDF to Image version is too old. Media PDF Thumbnail requires at least spatie/pdf-to-image 2.1.0.'),
+      ];
+    }
+  }
+  return $requirements;
+}
 
 /**
  * Install Pdf Image entity.
@@ -48,19 +86,19 @@ function media_pdf_thumbnail_update_8006(&$sandbox) {
 }
 
 /**
- * Update view configs
+ * Update view configs.
  */
 function media_pdf_thumbnail_update_8007(&$sandbox) {
   \Drupal::service('config.installer')->installDefaultConfig('module', 'media_pdf_thumbnail');
 }
 
 /**
- * Update default image format
+ * Update default image format.
  */
 function media_pdf_thumbnail_update_8008(&$sandbox) {
 
   if (!isset($sandbox['progress'])) {
-    $ids = \Drupal::entityTypeManager()->getStorage('pdf_image_entity')->getQuery()->accessCheck(false)->execute();
+    $ids = \Drupal::entityTypeManager()->getStorage('pdf_image_entity')->getQuery()->accessCheck(FALSE)->execute();
 
     if (empty($ids)) {
       return;

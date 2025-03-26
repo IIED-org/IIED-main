@@ -18,7 +18,7 @@ function media_pdf_thumbnail_token_info() {
     'description' => t('Media PDF Thumbnail tokens.'),
   ];
 
-  foreach (_media_pdf_thumbnail_getFieldsList() as $list) {
+  foreach (_media_pdf_thumbnail_get_fields_list() as $list) {
 
     if (!empty($list['fields'])) {
 

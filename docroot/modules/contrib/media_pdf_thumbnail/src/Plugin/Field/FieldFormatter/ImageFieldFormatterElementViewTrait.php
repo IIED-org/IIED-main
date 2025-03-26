@@ -3,6 +3,7 @@
 namespace Drupal\media_pdf_thumbnail\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\file\Entity\File;
 
 /**
  * Trait ImageFieldFormatterElementViewTrait.
@@ -80,9 +81,45 @@ trait ImageFieldFormatterElementViewTrait {
     $value = $imageItem->getValue();
     $value['target_id'] = $imageId;
     $value['alt'] = $entity->name->value;
+    $this->handleDerivative($imageId, $value);
     $imageItem->setValue($value);
     $element[0]['#item'] = $imageItem;
     return $element;
+  }
+
+  /**
+   * Handle derivative.
+   *
+   * @param string|int $imageId
+   *   Image id.
+   * @param array $value
+   *   Value.
+   */
+  protected function handleDerivative(string | int $imageId, array &$value): void {
+    unset($value['width']);
+    unset($value['height']);
+    $file = File::load($imageId);
+    $uri = !empty($file) ? $file->getFileUri() : NULL;
+    $imageStyleSetting = $this->getSetting('image_style');
+    $imageStyle = !empty($imageStyleSetting) ? $this->imageStyleStorage->load($this->getSetting('image_style')) : NULL;
+    $derivativeUri = !empty($imageStyle) ? $imageStyle->buildUri($uri) : NULL;
+    // If no derivative uri, get the original image size.
+    if (empty($derivativeUri)) {
+      $imageSize = getimagesize($uri);
+      $value['width'] = $imageSize[0];
+      $value['height'] = $imageSize[1];
+    }
+    // If derivative uri exists, get the derivative image size or create it.
+    else {
+      if (!file_exists($derivativeUri)) {
+        $derivativeUri = $imageStyle->createDerivative($uri, $derivativeUri) ? $derivativeUri : NULL;
+      }
+      $imageSize = !empty($derivativeUri) ? getimagesize($derivativeUri) : getimagesize($uri);
+      if (!empty($imageSize)) {
+        $value['width'] = $imageSize[0];
+        $value['height'] = $imageSize[1];
+      }
+    }
   }
 
   /**

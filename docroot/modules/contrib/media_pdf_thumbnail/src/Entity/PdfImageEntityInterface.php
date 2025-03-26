@@ -20,10 +20,10 @@ interface PdfImageEntityInterface extends ContentEntityInterface, EntityChangedI
   /**
    * Gets the Pdf image entity name.
    *
-   * @return string
+   * @return string|null
    *   Name of the Pdf image entity.
    */
-  public function getName(): string;
+  public function getName(): ?string;
 
   /**
    * Sets the Pdf image entity name.

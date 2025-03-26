@@ -50,7 +50,6 @@ USAGE
   Prerequisite :
   imagick PHP extension.
   spatie/pdf-to-image library: composer require spatie/pdf-to-image.
-  If you get pages overlapped in one image (issue from the third library spatie/pdf-to-image, please install patch from : https://www.drupal.org/project/media_pdf_thumbnail/issues/3221786
 
   Instructions :
   Install spatie/pdf-to-image: composer require spatie/pdf-to-image
@@ -58,7 +57,7 @@ USAGE
 
   Usage :
   Choose the "Media PDF Thumbnail Image" field formatter in the Media entity view mode for thumbnail field and set desired options.
-  When rendering the thumbnail field, the image from the file field (the one choosen in the field formatter's options) will be created and stored in a storage entity.
+  When rendering the thumbnail field, the image from the file field (the one chosen in the field formatters options) will be created and stored in a storage entity.
   The storage system is similar to the Redirect module.
   When the thumbnail field is rendered, the image file will be fetched from the storage entity. The original image of the thumbnail field is never modified, it is just replaced on display.
   Don't forget to clear caches after any changes for rebuilding the field render.
