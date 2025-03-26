@@ -16,6 +16,18 @@ TFA module can be installed like other Drupal modules by placing this directory
 in the Drupal file system (for example, under modules/) and enabling on
 the Drupal modules page.
 
+### Compatibility and Security concerns
+To enforce security the following routes must not be overridden by other
+modules:
+
+* `user.login`
+* `user.login.http`
+* `user.reset.login`
+* `user.reset`
+
+TFA will provide a warning on the site status report if these routes deviate
+from the expected controllers.
+
 ### Configuration
 
 TFA can be configured on your Drupal site at Administration - Configuration -

@@ -3,6 +3,7 @@
 namespace Drupal\tfa\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
+use Drupal\Core\Routing\RoutingEvents;
 use Drupal\user\Controller\UserController;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -42,6 +43,18 @@ class TfaRouteSubscriber extends RouteSubscriberBase {
         $route->setDefault('_controller', '\Drupal\tfa\Controller\TfaUserController::resetPassLogin');
       }
     }
+    if ($route = $collection->get('user.reset')) {
+      $route->setDefault('_controller', '\Drupal\user\Controller\UserController::resetPass');
+    }
+  }
+
+  /**
+   * Attempt to be the last subscriber to allow our routes to take priority.
+   */
+  public static function getSubscribedEvents(): array {
+    return [
+      RoutingEvents::ALTER => ['onAlterRoutes', PHP_INT_MIN],
+    ];
   }
 
 }
