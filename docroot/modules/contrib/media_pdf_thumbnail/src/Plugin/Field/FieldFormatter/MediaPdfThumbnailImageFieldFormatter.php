@@ -213,7 +213,6 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
     $fileEntity = $this->mediaPdfThumbnailImageManager->getFileEntityFromField($entity, $settings[static::PDF_FILE_FIELD_SETTING]);
     $handlePdfGeneration = $fileEntity instanceof FileInterface && $fileEntity->getMimeType() == 'application/pdf';
 
-
     if ($handlePdfGeneration) {
       // Getting thumbnail info.
       if (!empty($settings[static::IMAGE_USE_CRON])) {
@@ -231,22 +230,12 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
         return $element;
       }
     }
-  
-    // If pdf is not available.
-    else {
-      if (is_null($fileEntity)) { 
-        $fieldInfos = [
-          'image_id' => $this->mediaPdfThumbnailImageManager->getGenericThumbnail(),
-          'pdf_uri' => null,
-        ];
-      }
     // If pdf is not handled.
-      else { 
-        $fieldInfos = [
-          'image_id' => $this->mediaPdfThumbnailImageManager->getGenericThumbnail(),
-          'pdf_uri' => $fileEntity->getFileUri(),
-        ];
-      }
+    else {
+      $fieldInfos = [
+        'image_id' => $this->mediaPdfThumbnailImageManager->getGenericThumbnail(),
+        'pdf_uri' => !empty($fileEntity) ? $fileEntity->getFileUri() : NULL,
+      ];
     }
 
     // Rendering image.
@@ -273,7 +262,7 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
         break;
 
       case 'file':
-        if (!empty($fieldInfos['pdf_uri'])) {
+        if (!empty($fieldInfos['pdf_uri']) && !empty($fieldInfos['image_uri'])) {
           $stream = $this->streamWrapperManager->getViaUri($fieldInfos['image_uri'])
             ->getExternalUrl();
           $element[0]['#url'] = Url::fromUri($stream, $options);
@@ -286,6 +275,8 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
       'fieldInfo' => $fieldInfos,
       'mediaEntity' => $entity,
       'pdfEntity' => !empty($fieldInfos['image_uri']) ? $this->mediaPdfThumbnailImageManager->getPdfEntityByPdfFileUri($fieldInfos['image_uri']) : NULL,
+      'settings' => $settings,
+      'third_party_settings' => $this->getThirdPartySettings(),
     ];
 
     $this->moduleHandler->alter('media_pdf_thumbnail_image_render', $element, $infos);

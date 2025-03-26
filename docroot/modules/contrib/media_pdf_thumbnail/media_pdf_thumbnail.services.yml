@@ -1,7 +1,17 @@
 services:
   media_pdf_thumbnail.image.manager:
     class: Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImageManager
-    arguments: [ '@media_pdf_thumbnail.imagick.manager', '@entity_type.manager', '@file_system', '@config.factory', '@database', '@cache_tags.invalidator', '@logger.factory', '@module_handler' ]
+    arguments:
+      [
+        '@media_pdf_thumbnail.imagick.manager',
+        '@entity_type.manager',
+        '@file_system',
+        '@config.factory',
+        '@database',
+        '@cache_tags.invalidator',
+        '@logger.factory',
+        '@module_handler',
+      ]
 
   media_pdf_thumbnail.imagick.manager:
     class: Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImagickManager
@@ -9,4 +19,19 @@ services:
 
   media_pdf_thumbnail.pdf_image_entity.queue.manager:
     class: Drupal\media_pdf_thumbnail\Manager\PdfImageEntityQueueManager
-    arguments: [ '@queue', '@plugin.manager.queue_worker', '@media_pdf_thumbnail.image.manager', '@state', '@logger.factory', '@database' ]
+    arguments:
+      [
+        '@queue',
+        '@plugin.manager.queue_worker',
+        '@media_pdf_thumbnail.image.manager',
+        '@state',
+        '@logger.factory',
+        '@database',
+      ]
+  media_pdf_thumbnail.pdf_image_entity.purge.manager:
+    class: Drupal\media_pdf_thumbnail\Manager\PdfImageEntityPurgeManager
+    arguments:
+      [
+        '@entity_type.manager',
+        '@logger.factory',
+      ]

@@ -78,7 +78,7 @@ display:
             thousand_separator: ''
             prefix_suffix: true
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -140,9 +140,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: string
-          settings: {  }
+          settings: {}
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -204,9 +204,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: string
-          settings: {  }
+          settings: {}
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -268,9 +268,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: string
-          settings: {  }
+          settings: {}
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -332,9 +332,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: string
-          settings: {  }
+          settings: {}
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -396,9 +396,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: string
-          settings: {  }
+          settings: {}
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -463,7 +463,7 @@ display:
           settings:
             link_to_entity: false
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -525,9 +525,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: string
-          settings: {  }
+          settings: {}
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -589,9 +589,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: string
-          settings: {  }
+          settings: {}
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -656,7 +656,7 @@ display:
           settings:
             link_to_entity: false
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -718,9 +718,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: string
-          settings: {  }
+          settings: {}
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -782,9 +782,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: string
-          settings: {  }
+          settings: {}
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -849,7 +849,7 @@ display:
           settings:
             link_to_entity: false
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -916,7 +916,7 @@ display:
             custom_date_format: ''
             timezone: ''
           group_column: value
-          group_columns: {  }
+          group_columns: {}
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -1013,10 +1013,10 @@ display:
           perm: 'administer pdf image entity entities'
       cache:
         type: tag
-        options: {  }
-      empty: {  }
-      sorts: {  }
-      arguments: {  }
+        options: {}
+      empty: {}
+      sorts: {}
+      arguments: {}
       filters:
         status:
           id: status
@@ -1030,7 +1030,7 @@ display:
           expose:
             operator: ''
             operator_limit_selection: false
-            operator_list: {  }
+            operator_list: {}
         referenced_entity_type:
           id: referenced_entity_type
           table: pdf_image_entity
@@ -1052,7 +1052,7 @@ display:
             use_operator: false
             operator: referenced_entity_type_op
             operator_limit_selection: false
-            operator_list: {  }
+            operator_list: {}
             identifier: referenced_entity_type
             required: false
             remember: false
@@ -1072,8 +1072,8 @@ display:
             multiple: false
             remember: false
             default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
+            default_group_multiple: {}
+            group_items: {}
         referenced_entity_bundle:
           id: referenced_entity_bundle
           table: pdf_image_entity
@@ -1095,7 +1095,7 @@ display:
             use_operator: false
             operator: referenced_entity_bundle_op
             operator_limit_selection: false
-            operator_list: {  }
+            operator_list: {}
             identifier: referenced_entity_bundle
             required: false
             remember: false
@@ -1115,8 +1115,8 @@ display:
             multiple: false
             remember: false
             default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
+            default_group_multiple: {}
+            group_items: {}
         referenced_entity_lang:
           id: referenced_entity_lang
           table: pdf_image_entity
@@ -1138,7 +1138,7 @@ display:
             use_operator: false
             operator: referenced_entity_lang_op
             operator_limit_selection: false
-            operator_list: {  }
+            operator_list: {}
             identifier: referenced_entity_lang
             required: false
             remember: false
@@ -1158,8 +1158,8 @@ display:
             multiple: false
             remember: false
             default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
+            default_group_multiple: {}
+            group_items: {}
         referenced_entity_id:
           id: referenced_entity_id
           table: pdf_image_entity
@@ -1181,7 +1181,7 @@ display:
             use_operator: false
             operator: referenced_entity_id_op
             operator_limit_selection: false
-            operator_list: {  }
+            operator_list: {}
             identifier: referenced_entity_id
             required: false
             remember: false
@@ -1201,8 +1201,8 @@ display:
             multiple: false
             remember: false
             default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
+            default_group_multiple: {}
+            group_items: {}
         changed_2:
           id: changed_2
           table: pdf_image_entity
@@ -1228,7 +1228,7 @@ display:
             use_operator: false
             operator: changed_2_op
             operator_limit_selection: false
-            operator_list: {  }
+            operator_list: {}
             identifier: changed_2
             required: false
             remember: false
@@ -1250,8 +1250,8 @@ display:
             multiple: false
             remember: false
             default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
+            default_group_multiple: {}
+            group_items: {}
       filter_groups:
         operator: AND
         groups:
@@ -1259,7 +1259,7 @@ display:
       style:
         type: table
         options:
-          grouping: {  }
+          grouping: {}
           row_class: ''
           default_row_class: true
           columns:
@@ -1398,11 +1398,11 @@ display:
           disable_sql_rewrite: false
           distinct: false
           replica: false
-          query_tags: {  }
-      relationships: {  }
-      header: {  }
-      footer: {  }
-      display_extenders: {  }
+          query_tags: {}
+      relationships: {}
+      header: {}
+      footer: {}
+      display_extenders: {}
     cache_metadata:
       max-age: -1
       contexts:
@@ -1411,14 +1411,14 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags: {}
   list:
     id: list
     display_title: Page
     display_plugin: page
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders: {}
       path: admin/media-pdf-thumbnail/settings/list
       menu:
         type: tab
@@ -1437,4 +1437,4 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags: {}

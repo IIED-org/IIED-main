@@ -18,6 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PdfImageEntityQueueForm extends FormBase {
 
+
   /**
    * Entity type manager.
    *
@@ -154,11 +155,11 @@ class PdfImageEntityQueueForm extends FormBase {
     $this->pdfImageEntityQueueManager->clearQueue();
 
     $batch = [
-      'title' => t('Generate PDF images'),
+      'title' => $this->t('Generate PDF images'),
       'operations' => $operations,
-      'init_message' => t('Task creating process is starting.'),
-      'progress_message' => t('Processed @current out of @total. Estimated time: @estimate.'),
-      'error_message' => t('An error occurred during processing'),
+      'init_message' => $this->t('Task creating process is starting.'),
+      'progress_message' => $this->t('Processed @current out of @total. Estimated time: @estimate.'),
+      'error_message' => $this->t('An error occurred during processing'),
       'finished' => '\Drupal\media_pdf_thumbnail\Form\PdfImageEntityQueueForm::finishedCallback',
     ];
 
@@ -175,7 +176,7 @@ class PdfImageEntityQueueForm extends FormBase {
    */
   public function clear(array &$form, FormStateInterface $form_state): void {
     $this->pdfImageEntityQueueManager->clearQueue();
-    $this->messenger->addStatus(t('Queue cleared'));
+    $this->messenger->addStatus($this->t('Queue cleared'));
   }
 
   /**

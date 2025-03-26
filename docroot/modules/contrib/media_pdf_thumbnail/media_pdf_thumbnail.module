@@ -12,11 +12,9 @@ use Drupal\media_pdf_thumbnail\Plugin\Field\FieldFormatter\MediaPdfThumbnailImag
 
 /**
  * Implements hook_help().
- *
  */
 function media_pdf_thumbnail_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
-    // Main module help for the adimeo_pdf_thumbnail module.
     case 'help.page.media_pdf_thumbnail':
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
@@ -32,7 +30,8 @@ function media_pdf_thumbnail_help($route_name, RouteMatchInterface $route_match)
  */
 function media_pdf_thumbnail_file_download($uri) {
   if (strpos($uri, 'private://') !== FALSE) {
-    $pdfEntity = Drupal::service('media_pdf_thumbnail.image.manager')->getPdfEntityByPdfFileUri($uri);
+    $pdfEntity = Drupal::service('media_pdf_thumbnail.image.manager')
+      ->getPdfEntityByPdfFileUri($uri);
     if (!empty($pdfEntity)) {
       if (Drupal::currentUser()->hasPermission('view private pdf thumbnails')) {
         return 1;
@@ -56,18 +55,22 @@ function media_pdf_thumbnail_form_views_ui_config_item_form_alter(&$form, FormSt
     array_unshift($form['actions']['submit']['#submit'], '_media_pdf_thumbnail_form_views_ui_edit_display_submit');
   }
   if ($mediaPdfFormatter) {
-    $form = _media_pdf_thumbnail_buildForm($form, $form_state);
+    $form = _media_pdf_thumbnail_build_form($form, $form_state);
   }
 }
 
 /**
- * @param $form
+ * Form submit callback.
+ *
+ * @param array $form
+ *   Form.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state.
  *
  * @return void
+ *   Void.
  */
-function _media_pdf_thumbnail_form_views_ui_edit_display_submit($form, FormStateInterface $form_state) {
-
+function _media_pdf_thumbnail_form_views_ui_edit_display_submit(array $form, FormStateInterface $form_state) {
   /** @var \Drupal\views\Entity\View $view */
   $view = $form_state->getStorage()['view'];
   $display = $view->getExecutable()->getDisplay();
@@ -75,9 +78,9 @@ function _media_pdf_thumbnail_form_views_ui_edit_display_submit($form, FormState
   $type = $values['options']['type'];
 
   if ($type == 'media_pdf_thumbnail_image_field_formatter') {
-
-    foreach (_get_setting_values($form_state) as $field => $value) {
-      // As those fields are in fieldsets, values are not saved in settings storage.
+    foreach (_media_pdf_thumbnail_get_setting_values($form_state) as $field => $value) {
+      // As those fields are in fieldsets,
+      // values are not saved in settings storage.
       // Needing to put theme in first level of settings array.
       $values['options']['settings'][$field] = $value;
     }
@@ -87,21 +90,25 @@ function _media_pdf_thumbnail_form_views_ui_edit_display_submit($form, FormState
 }
 
 /**
- * @param $form
+ * Form builder.
+ *
+ * @param array $form
+ *   Form.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state.
  *
  * @return array
+ *   Form.
  */
-function _media_pdf_thumbnail_buildForm($form, FormStateInterface $form_state) {
+function _media_pdf_thumbnail_build_form(array $form, FormStateInterface $form_state) {
+  $values = _media_pdf_thumbnail_get_setting_values($form_state);
 
-  $values = _get_setting_values($form_state);
-
-  // Bundle options
-  foreach (_media_pdf_thumbnail_getFieldsList() as $bundleId => $infos) {
+  // Bundle options.
+  foreach (_media_pdf_thumbnail_get_fields_list() as $bundleId => $infos) {
     if (!empty($infos['fields'])) {
       $form['options']['settings'][$bundleId] = [
         '#type' => 'fieldset',
-        '#title' => t($infos['label']),
+        '#title' => t('@label', ['@label' => $infos['label']]),
         '#collapsible' => FALSE,
         '#collapsed' => FALSE,
       ];
@@ -159,7 +166,7 @@ function _media_pdf_thumbnail_buildForm($form, FormStateInterface $form_state) {
 
       $form['options']['settings'][$bundleId][$bundleId . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_ATTRIBUTES_TARGET] = [
         '#type' => 'textfield',
-        '#title' => t('target') . ' :',
+        '#title' => t('target @colon', ['@colon' => ':']),
         '#description' => 'Ex: _self, _blank, _parent, _top',
         '#weight' => 0,
         '#size' => 5,
@@ -169,7 +176,7 @@ function _media_pdf_thumbnail_buildForm($form, FormStateInterface $form_state) {
       $form['options']['settings'][$bundleId][$bundleId . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_ATTRIBUTES_REL] = [
         '#suffix' => '</div></div></div>',
         '#type' => 'textfield',
-        '#title' => t('rel') . ' :',
+        '#title' => t('rel @colon', ['@colon' => ':']),
         '#description' => 'Ex: alternate, author, bookmark, icon, nofollow, etc..',
         '#size' => 5,
         '#weight' => 0,
@@ -207,14 +214,18 @@ function _media_pdf_thumbnail_buildForm($form, FormStateInterface $form_state) {
 }
 
 /**
+ * Get list of fields to display.
+ *
  * @return array
+ *   Array of fields.
  */
-function _media_pdf_thumbnail_getFieldsList() {
+function _media_pdf_thumbnail_get_fields_list() {
   $bundles = Drupal::service('entity_type.bundle.info')->getBundleInfo('media');
   $output = [];
   foreach ($bundles as $id => $bundle) {
     $output[$id]['label'] = $bundle['label'];
-    foreach (Drupal::service('entity_field.manager')->getFieldDefinitions('media', $id) as $fieldDefinition) {
+    foreach (Drupal::service('entity_field.manager')
+      ->getFieldDefinitions('media', $id) as $fieldDefinition) {
       if ($fieldDefinition->getType() == 'file') {
         $output[$id]['fields'][$fieldDefinition->getName()] = $fieldDefinition->getName();
       }
@@ -224,12 +235,15 @@ function _media_pdf_thumbnail_getFieldsList() {
 }
 
 /**
- * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * Get setting values.
  *
- * @return []|array
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state.
+ *
+ * @return array
+ *   Array of settings.
  */
-function _get_setting_values(FormStateInterface $form_state) {
-
+function _media_pdf_thumbnail_get_setting_values(FormStateInterface $form_state) {
   /** @var \Drupal\views\Entity\View $view */
   $view = $form_state->getStorage()['view'];
   $display = $view->getExecutable()->getDisplay();
@@ -238,8 +252,7 @@ function _get_setting_values(FormStateInterface $form_state) {
 
   $output = [];
 
-  foreach (_media_pdf_thumbnail_getFieldsList() as $bundleId => $infos) {
-
+  foreach (_media_pdf_thumbnail_get_fields_list() as $bundleId => $infos) {
     // Prepare fields names.
     $mediaBundleField = $bundleId . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_FIELD;
     $mediaBundlePage = $bundleId . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_PAGE;
@@ -252,7 +265,7 @@ function _get_setting_values(FormStateInterface $form_state) {
     $mediaBundleUseCron = $bundleId . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_USE_CRON;
     $mediaBundleEnable = $bundleId . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_ENABLE;
 
-    // Determine values
+    // Determine values.
     $output = array_merge($output, [
       $mediaBundleField => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleField] ?? NULL : $displayOptions[$mediaBundleField],
       $mediaBundlePage => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundlePage] ?? NULL : $displayOptions[$mediaBundlePage],
@@ -268,7 +281,6 @@ function _get_setting_values(FormStateInterface $form_state) {
   }
 
   return $output;
-
 }
 
 /**

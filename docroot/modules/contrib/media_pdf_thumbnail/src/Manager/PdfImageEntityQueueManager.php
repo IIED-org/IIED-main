@@ -291,6 +291,8 @@ class PdfImageEntityQueueManager {
    *
    * @return bool
    *   Return true if item is in queue.
+   *
+   * @throws \Exception
    */
   public function isItemInQueue(string | int $itemId): bool {
     $query = $this->database
@@ -298,11 +300,14 @@ class PdfImageEntityQueueManager {
       ->fields('q', ['data'])
       ->condition('name', PdfImageEntityGenerateQueue::NAME)
       ->execute();
+
     while ($result = $query->fetchObject()) {
       if (!empty($result->data)) {
-        $item = unserialize($result->data);
-        if ($item->id == $itemId) {
-          return TRUE;
+        if (str_contains($result->data, $itemId)) {
+          $item = unserialize($result->data, ['allowed_classes' => ['PdfImageEntityQueueManager', 'stdClass']]);
+          if ($item->id == $itemId) {
+            return TRUE;
+          }
         }
       }
     }
