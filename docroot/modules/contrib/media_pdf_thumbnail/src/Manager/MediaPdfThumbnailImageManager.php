@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\File\FileSystem;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -48,9 +47,9 @@ class MediaPdfThumbnailImageManager {
   /**
    * FileSystem.
    *
-   * @var \Drupal\Core\File\FileSystem
+   * @var \Drupal\Core\File\FileSystemInterface
    */
-  protected FileSystem $fileSystem;
+  protected FileSystemInterface $fileSystem;
 
   /**
    * ConfigFactory.
@@ -151,12 +150,15 @@ class MediaPdfThumbnailImageManager {
     }
 
     $pdfImage = $this->getImageIfExists($entity, $fileEntity, $fileFieldName, $imageFormat, $page);
-
-    if (empty($pdfImage)) {
-      $pdfImage = $this->createPdfImageEntity($entity, $fileFieldName, $fileEntity, $page, $this->createThumbnailFileEntity($this->generatePdfImage($fileEntity, $imageFormat, $page)));
+    // If exists return pdf image details.
+    if (!empty($pdfImage)) {
+      return $pdfImage;
     }
 
-    return $pdfImage;
+    $pdf = $this->generatePdfImage($fileEntity, $imageFormat, $page);
+    $fileInfos = !empty($pdf) ? $this->createThumbnailFileEntity($pdf) : NULL;
+
+    return !empty($fileInfos) ? $this->createPdfImageEntity($entity, $fileFieldName, $fileEntity, $page, $fileInfos) : NULL;
   }
 
   /**
@@ -283,13 +285,13 @@ class MediaPdfThumbnailImageManager {
    *   File entity.
    * @param string|int $page
    *   Page.
-   * @param array $imageFileInfo
+   * @param array|null $imageFileInfo
    *   Image file info.
    *
    * @return array|null
    *   Pdf image entity infos.
    */
-  protected function createPdfImageEntity(EntityInterface $entity, string $fieldName, EntityInterface $fileEntity, string | int $page, array $imageFileInfo): ?array {
+  protected function createPdfImageEntity(EntityInterface $entity, string $fieldName, EntityInterface $fileEntity, string | int $page, ?array $imageFileInfo): ?array {
     if (!empty($imageFileInfo['fid']) && !empty($imageFileInfo['uri'])) {
       try {
         $newPdfImageFile = $this->entityTypeManager->getStorage('pdf_image_entity')
@@ -329,19 +331,19 @@ class MediaPdfThumbnailImageManager {
   /**
    * Create thumbnail file entity.
    *
-   * @param string $fileUri
+   * @param string|null $fileUri
    *   File URI.
    *
-   * @return array|void|null
+   * @return array|null
    *   File infos.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function createThumbnailFileEntity(string $fileUri) {
+  protected function createThumbnailFileEntity(?string $fileUri): ?array {
     if (empty($fileUri)) {
-      return;
+      return NULL;
     }
 
     $infos = pathinfo($fileUri);

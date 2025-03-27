@@ -2,6 +2,7 @@
 
 namespace Drupal\media_pdf_thumbnail;
 
+use Composer\InstalledVersions;
 use Spatie\PdfToImage\Exceptions\PdfDoesNotExist;
 use Spatie\PdfToImage\Pdf as SpatiePdfAlias;
 
@@ -55,6 +56,16 @@ class Pdf extends SpatiePdfAlias {
    */
   protected function getFileName(string $pdfFile, string | int $page): string {
     return $pdfFile . sprintf('[%s]', $page);
+  }
+
+  /**
+   * Get the version.
+   *
+   * @return string
+   *   The version.
+   */
+  public static function getVersion(): string {
+    return InstalledVersions::getVersion('spatie/pdf-to-image');
   }
 
 }

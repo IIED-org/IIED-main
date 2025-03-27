@@ -1,0 +1,14 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "spatie",
+    "Spatie",
+    "quickedit",
+    "sgostanyan",
+    "Unstar"
+  ],
+  "ignorePaths": [
+    "node_modules/**"
+  ]
+}

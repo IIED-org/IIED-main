@@ -62,7 +62,7 @@ trait ImageFieldFormatterSettingsFormTrait {
       $element[static::IMAGE_LINK_ATTRIBUTE_TARGET_SETTING] = [
         '#type' => 'textfield',
         '#title' => $this->t('target :'),
-        '#description' => 'Ex: _self, _blank, _parent, _top',
+        '#description' => t('Ex: _self, _blank, _parent, _top'),
         '#weight' => 0,
         '#size' => 5,
         '#default_value' => $this->getSetting(static::IMAGE_LINK_ATTRIBUTE_TARGET_SETTING),
@@ -72,7 +72,7 @@ trait ImageFieldFormatterSettingsFormTrait {
         '#suffix' => '</div></div></div>',
         '#type' => 'textfield',
         '#title' => $this->t('rel :'),
-        '#description' => 'Ex: alternate, author, bookmark, icon, nofollow, etc..',
+        '#description' => t('Ex: alternate, author, bookmark, icon, nofollow, etc..'),
         '#size' => 5,
         '#weight' => 0,
         '#default_value' => $this->getSetting(static::IMAGE_LINK_ATTRIBUTE_REL_SETTING),
@@ -82,9 +82,9 @@ trait ImageFieldFormatterSettingsFormTrait {
         '#type' => 'checkbox',
         '#title' => 'Use cron',
         '#weight' => 100,
-        '#description' => 'Generates image in queue worker instead of on the fly.
+        '#description' => t('Generates image in queue worker instead of on the fly.
         The first time the field is displayed, a default image will be shown while queueing image generation</br>
-        You can wait for the cron run or you can execute the queue worker in config page <a href="' . Url::fromRoute('media_pdf_thumbnail.settings.queue')->toString() . '">queue</a>',
+        You can wait for the cron run or you can execute the queue worker in config page <a href="@url">queue</a>', ['@url' => Url::fromRoute('media_pdf_thumbnail.settings.queue')->toString()]),
         '#default_value' => $this->getSetting(static::IMAGE_USE_CRON),
       ];
     }
@@ -109,7 +109,7 @@ trait ImageFieldFormatterSettingsFormTrait {
       static::IMAGE_FORMAT_SETTINGS => static::DEFAULT_IMAGE_FORMAT_SETTING,
     ];
 
-    foreach (_media_pdf_thumbnail_getFieldsList() as $bundleId => $infos) {
+    foreach (_media_pdf_thumbnail_get_fields_list() as $bundleId => $infos) {
       $settings[$bundleId . static::MEDIA_BUNDLE_PAGE] = '';
       $settings[$bundleId . static::MEDIA_BUNDLE_FIELD] = '';
       $settings[$bundleId . static::MEDIA_BUNDLE_ENABLE] = '';

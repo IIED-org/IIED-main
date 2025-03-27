@@ -1,0 +1,29 @@
+################
+# GitLabCI template for Drupal projects.
+#
+# ...
+################
+
+include:
+  - project: $_GITLAB_TEMPLATES_REPO
+    ref: $_GITLAB_TEMPLATES_REF
+    file:
+      - "/includes/include.drupalci.main.yml"
+      - "/includes/include.drupalci.variables.yml"
+      - "/includes/include.drupalci.workflows.yml"
+
+# Ajout des étapes pour installer l'extension Imagick
+before_script:
+  - apt-get update && apt-get install -y libmagickwand-dev build-essential wget
+  - apt-get install -y gcc
+  - pecl install imagick
+  - docker-php-ext-enable imagick
+
+################
+# Overrides des variables ou ajouts supplémentaires peuvent être placés ici
+################
+#variables:
+#  SKIP_COMPOSER_LINT: '1'
+#   SKIP_ESLINT: '1'
+#   OPT_IN_TEST_NEXT_MAJOR: '1'
+#   _CURL_TEMPLATES_REF: 'main'
