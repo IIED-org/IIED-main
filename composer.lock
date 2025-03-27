@@ -8452,6 +8452,70 @@
             }
         },
         {
+            "name": "drupal/password_policy_extras",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/password_policy_extras.git",
+                "reference": "4.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/password_policy_extras-4.0.0.zip",
+                "reference": "4.0.0",
+                "shasum": "fa821ee2a84292ef67fa6f9f17a4ab9fa4e11c86"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11",
+                "drupal/password_policy": "^4.0"
+            },
+            "require-dev": {
+                "drupal/change_pwd_page": "*",
+                "drupal/prlp": "^1.11",
+                "drupal/user_registrationpassword": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "4.0.0",
+                    "datestamp": "1730927116",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "mably",
+                    "homepage": "https://www.drupal.org/u/mably",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://www.drupal.org/node/3440720/committers",
+                    "role": "Contributors"
+                },
+                {
+                    "name": "pitop",
+                    "homepage": "https://www.drupal.org/user/3478383"
+                }
+            ],
+            "description": "Various additions and enhancements to the Password Policy module.",
+            "homepage": "https://www.drupal.org/project/password_policy_extras",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/password_policy_extras",
+                "issues": "https://www.drupal.org/project/issues/password_policy_extras"
+            }
+        },
+        {
             "name": "drupal/pathauto",
             "version": "1.13.0",
             "source": {

@@ -1,0 +1,33 @@
+{
+    "name": "drupal/password_policy_extras",
+    "type": "drupal-module",
+    "description": "Various additions and enhancements to the Password Policy module.",
+    "keywords": [
+        "Drupal"
+    ],
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/password_policy_extras",
+    "authors": [
+        {
+            "name": "mably",
+            "homepage": "https://www.drupal.org/u/mably",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://www.drupal.org/node/3440720/committers",
+            "role": "Contributors"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/password_policy_extras",
+        "source": "https://git.drupalcode.org/project/password_policy_extras"
+    },
+    "require": {
+        "drupal/core": "^10 || ^11",
+        "drupal/password_policy": "^4.0"
+    },
+    "require-dev": {
+        "drupal/prlp": "^1.11"
+    }
+}

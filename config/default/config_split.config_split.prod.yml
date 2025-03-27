@@ -2,15 +2,15 @@ uuid: 94795776-fe57-4130-8292-535344099db9
 langcode: en
 status: true
 dependencies: {  }
-id: live
-label: Live
+id: prod
+label: Prod
 description: 'Production site configuration'
 weight: 0
-folder: ../config/splits/live
+folder: ../config/splits/prod
 module: {  }
 theme: {  }
-blacklist: {  }
-graylist:
-  - system.performance
+blacklist:
+  - password_policy.password_policy.password_expiry
+graylist: {  }
 graylist_dependents: true
 graylist_skip_equal: true

@@ -38,7 +38,6 @@ module:
   contact_block: 0
   content_translation_redirect: 0
   context: 0
-  context_ui: 0
   contextual: 0
   csv_serialization: 0
   ctools: 0
@@ -206,7 +205,6 @@ module:
   webform_shs: 0
   webform_submission_export_import: 0
   webform_submission_log: 0
-  webform_ui: 0
   webform_views: 0
   ds: 1
   pathauto: 1
@@ -216,6 +214,7 @@ module:
   password_policy: 10
   views: 10
   paragraphs: 11
+  password_policy_extras: 20
   login_redirect_per_role: 1000
   standard: 1000
   readonlymode: 9999
