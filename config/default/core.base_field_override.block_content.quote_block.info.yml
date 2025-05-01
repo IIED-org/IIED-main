@@ -1,0 +1,18 @@
+uuid: 5e2fc129-06d7-41a1-a02c-3b252cb39aa2
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.quote_block
+id: block_content.quote_block.info
+field_name: info
+entity_type: block_content
+bundle: quote_block
+label: 'Block description'
+description: 'A brief description of your block.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

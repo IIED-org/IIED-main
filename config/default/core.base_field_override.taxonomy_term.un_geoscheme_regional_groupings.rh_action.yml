@@ -1,0 +1,18 @@
+uuid: 65c891e5-24af-4a5b-8d11-9813ba9bdae1
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.un_geoscheme_regional_groupings
+id: taxonomy_term.un_geoscheme_regional_groupings.rh_action
+field_name: rh_action
+entity_type: taxonomy_term
+bundle: un_geoscheme_regional_groupings
+label: 'Rabbit Hole action'
+description: 'Specifies which action that Rabbit Hole should take.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

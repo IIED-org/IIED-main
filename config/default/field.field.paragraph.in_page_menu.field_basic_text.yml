@@ -14,8 +14,9 @@ bundle: in_page_menu
 label: 'Basic text'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
-settings: {  }
+settings:
+  allowed_formats: {  }
 field_type: text_long

@@ -1,0 +1,18 @@
+uuid: 89ad6663-f962-4b14-998d-859a785fbd98
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_handbrake
+id: node.hidden_handbrake.rh_action
+field_name: rh_action
+entity_type: node
+bundle: hidden_handbrake
+label: 'Rabbit Hole action'
+description: 'Specifies which action that Rabbit Hole should take.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
