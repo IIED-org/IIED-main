@@ -9,6 +9,7 @@ dependencies:
     - file
     - form_mode_control
     - media
+    - tfa
 id: publications_manager
 label: 'Publications manager'
 weight: -4
@@ -22,6 +23,7 @@ permissions:
   - 'delete any image media'
   - 'edit any document media'
   - 'edit any image media'
+  - 'setup own tfa'
   - 'use  The form mode default linked to  media entity( document )'
   - 'use  The form mode default linked to  media entity( image )'
   - 'use  The form mode default linked to  media entity( remote_video )'
