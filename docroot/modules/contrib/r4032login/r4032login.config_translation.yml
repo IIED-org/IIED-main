@@ -1,0 +1,5 @@
+r4032login.settings.form:
+  title: 'r4032login settings'
+  base_route_name: r4032login.settings.form
+  names:
+    - r4032login.settings

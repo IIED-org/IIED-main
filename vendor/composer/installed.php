@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '19f7cc9a0e8accbf423f65713ed2c33eeb3eec97',
+        'reference' => 'c445af5eb0919af89f89788eed9a8d0ef19bf35b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1588,6 +1588,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/r4032login' => array(
+            'pretty_version' => '2.2.3',
+            'version' => '2.2.3.0',
+            'reference' => '2.2.3',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/r4032login',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/rabbit_hole' => array(
             'pretty_version' => '1.0.0',
             'version' => '1.0.0.0',
@@ -1627,7 +1636,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '19f7cc9a0e8accbf423f65713ed2c33eeb3eec97',
+            'reference' => 'c445af5eb0919af89f89788eed9a8d0ef19bf35b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
