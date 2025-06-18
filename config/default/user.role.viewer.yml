@@ -6,12 +6,16 @@ dependencies:
     - file
     - paragraphs
     - rabbit_hole
+    - shortcut
+    - toolbar
     - view_unpublished
 id: viewer
 label: Viewer
 weight: -8
 is_admin: null
 permissions:
+  - 'access shortcuts'
+  - 'access toolbar'
   - 'delete own files'
   - 'rabbit hole bypass node'
   - 'rabbit hole bypass taxonomy_term'

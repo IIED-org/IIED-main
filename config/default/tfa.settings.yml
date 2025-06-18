@@ -3,14 +3,15 @@ _core:
 langcode: en
 enabled: true
 required_roles:
+  hh_reviewer: hh_reviewer
   publications_editor: publications_editor
+  publications_manager: publications_manager
   editor: editor
   manager: manager
+  administrator: administrator
   authenticated: '0'
   viewer: '0'
   hh_contributor: '0'
-  hh_reviewer: '0'
-  administrator: '0'
 send_plugins: {  }
 login_plugins:
   tfa_trusted_browser: tfa_trusted_browser
@@ -36,13 +37,13 @@ validation_plugin_settings:
     name_prefix: TFA
     issuer: Drupal
 validation_skip: 1
-users_without_tfa_redirect: false
-reset_pass_skip_enabled: false
+users_without_tfa_redirect: true
+reset_pass_skip_enabled: true
 encryption: tfa_encryption
 tfa_flood_uid_only: 1
 tfa_flood_window: 300
 tfa_flood_threshold: 6
-help_text: 'Contact support to reset your access'
+help_text: 'Please contact the the web team to reset your TFA access'
 mail:
   tfa_enabled_configuration:
     subject: 'Your [site:name] account now has two-factor authentication'
