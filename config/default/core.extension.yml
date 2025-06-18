@@ -140,6 +140,7 @@ module:
   purge_queuer_coretags: 0
   purge_tokens: 0
   purge_ui: 0
+  r4032login: 0
   rabbit_hole: 0
   readmore_js: 0
   real_aes: 0
