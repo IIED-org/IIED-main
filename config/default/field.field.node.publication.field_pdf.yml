@@ -6,14 +6,7 @@ dependencies:
     - field.storage.node.field_pdf
     - node.type.publication
   module:
-    - content_translation
     - file
-third_party_settings:
-  content_translation:
-    translation_sync:
-      target_id: target_id
-      display: display
-      description: description
 id: node.publication.field_pdf
 field_name: field_pdf
 entity_type: node

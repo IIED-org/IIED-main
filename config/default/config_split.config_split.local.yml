@@ -4,11 +4,10 @@ status: true
 dependencies: {  }
 id: local
 label: Local
-description: 'Local development (e.g. lando)'
+description: 'Settings for local development (e.g. lando)'
 weight: 0
 folder: ../config/splits/local
 module:
-  webform_ui: 0
   dblog: 0
   devel: 0
   devel_generate: 0
