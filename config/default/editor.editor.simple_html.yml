@@ -21,5 +21,8 @@ settings:
         reversed: false
         startIndex: false
       multiBlock: true
+    ckeditor5_plugin_pack_word_count__word_count:
+      word_count_enabled: true
+      word_count_mode: words_chars
 image_upload:
   status: false

@@ -1,0 +1,18 @@
+uuid: a2952370-70b6-4643-ac1d-17ef00223375
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.remote_video
+id: media.remote_video.rh_redirect
+field_name: rh_redirect
+entity_type: media
+bundle: remote_video
+label: 'Rabbit Hole redirect path.'
+description: 'The path to where the user should get redirected to.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

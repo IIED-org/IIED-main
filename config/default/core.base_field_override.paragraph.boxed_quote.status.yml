@@ -1,0 +1,22 @@
+uuid: 13b5aaed-6b1e-4e07-a92c-5ecc48e0202f
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.boxed_quote
+id: paragraph.boxed_quote.status
+field_name: status
+entity_type: paragraph
+bundle: boxed_quote
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

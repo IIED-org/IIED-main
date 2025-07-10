@@ -1,0 +1,22 @@
+uuid: cb57abc6-528f-42b5-aa7d-fa6a960121e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hidden_handbrake
+id: node.hidden_handbrake.rh_redirect_response
+field_name: rh_redirect_response
+entity_type: node
+bundle: hidden_handbrake
+label: 'Rabbit Hole redirect response code'
+description: 'Specifies the HTTP response code that should be used when perform a redirect.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

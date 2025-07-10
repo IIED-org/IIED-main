@@ -43,7 +43,7 @@ filters:
     status: false
     weight: -44
     settings:
-      allowed_html: '<h3 class="mt-0"> <h2 class="mt-0"> <p class="mb-6"> <img class="rounded-full"> <div class="float-right ml-6 mb-6 not-prose float-left mr-6 caption aspect-w-16 aspect-h-9">'
+      allowed_html: '<h3 class="mt-0"> <h2 class="mt-0"> <p class="mb-6"> <div class="float-right mb-6 ml-6 not-prose float-left mr-6 caption aspect-w-16 aspect-h-9">'
       filter_html_help: true
       filter_html_nofollow: false
   filter_html_escape:
