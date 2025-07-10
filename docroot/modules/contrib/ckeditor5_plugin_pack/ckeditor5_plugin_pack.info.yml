@@ -1,0 +1,14 @@
+name: CKEditor 5 Plugin Pack
+type: module
+description: "Provides common functions for other modules in the Plugin Pack."
+package: CKEditor 5 Plugin Pack
+configure: ckeditor5_plugin_pack.settings
+core_version_requirement: ^9.4 || ^10.0 || ^11
+dependencies:
+  - drupal:editor
+  - drupal:ckeditor5
+
+# Information added by Drupal.org packaging script on 2025-07-02
+version: '1.4.0'
+project: 'ckeditor5_plugin_pack'
+datestamp: 1751452592

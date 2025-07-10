@@ -1,0 +1,11 @@
+admin.todo_document_list:
+  version: 20240212
+  css:
+    theme:
+      css/todo-document-list.admin.css: { }
+
+style.todo_document_list:
+  version: 20250210
+  css:
+    theme:
+      css/todo-list.css: { }

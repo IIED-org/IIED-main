@@ -178,9 +178,9 @@ ini_set('display_startup_errors', TRUE);
 /**
  * Use "local" config split for development
  */
-$config['config_split.config_split.local']['status'] = TRUE;
+$config['config_split.config_split.local']['status'] = FALSE;
 $config['config_split.config_split.dev']['status'] = FALSE;
-$config['config_split.config_split.stage']['status'] = FALSE;
+$config['config_split.config_split.stage']['status'] = TRUE;
 $config['config_split.config_split.prod']['status'] = FALSE;
 
 // Config for sstage file proxy remote files.

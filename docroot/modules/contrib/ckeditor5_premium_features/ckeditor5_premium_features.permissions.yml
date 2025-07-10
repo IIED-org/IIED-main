@@ -1,0 +1,3 @@
+use ckeditor5 access token:
+  title: 'Use premium features access token'
+  description: 'Give this permission to roles that will use cloud services or on-premises server functionalities such as real-time collaboration or export to Word/PDF'

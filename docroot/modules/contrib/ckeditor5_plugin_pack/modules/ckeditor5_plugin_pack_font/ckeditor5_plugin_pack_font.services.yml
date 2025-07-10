@@ -1,0 +1,4 @@
+services:
+  plugin.manager.font_colors:
+    class: Drupal\ckeditor5_font\FontColorsManager
+    parent: default_plugin_manager

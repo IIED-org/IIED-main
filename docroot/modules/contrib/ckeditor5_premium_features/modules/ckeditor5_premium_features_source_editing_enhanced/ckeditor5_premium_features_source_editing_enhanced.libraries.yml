@@ -1,0 +1,4 @@
+admin.source-editing-enhanced:
+  css:
+    theme:
+      css/source-editing-enhanced.admin.css: {} 

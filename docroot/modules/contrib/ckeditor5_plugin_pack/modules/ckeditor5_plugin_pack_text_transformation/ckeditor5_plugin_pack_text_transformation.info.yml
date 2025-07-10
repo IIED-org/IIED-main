@@ -1,0 +1,12 @@
+name: CKEditor 5 Text Transformation
+type: module
+description: "Provides the CKEditor 5 Text Transformation plugin."
+package: CKEditor 5 Plugin Pack
+core_version_requirement: ^9.4 || ^10 || ^11
+dependencies:
+  - ckeditor5_plugin_pack:ckeditor5_plugin_pack
+
+# Information added by Drupal.org packaging script on 2025-07-02
+version: '1.4.0'
+project: 'ckeditor5_plugin_pack'
+datestamp: 1751452592

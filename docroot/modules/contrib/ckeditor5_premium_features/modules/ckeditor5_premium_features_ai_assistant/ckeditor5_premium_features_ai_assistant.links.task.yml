@@ -1,0 +1,7 @@
+ckeditor5_premium_features_ai_assistant.form.settings:
+  title: AI Assistant
+  route_name: ckeditor5_premium_features_ai_assistant.form.settings
+  base_route: ckeditor5_premium_features.form.settings
+  description: 'AI Assistant Configuration Form'
+  weight: 30
+

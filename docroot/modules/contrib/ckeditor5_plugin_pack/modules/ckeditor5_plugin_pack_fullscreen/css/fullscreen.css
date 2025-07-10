@@ -1,0 +1,17 @@
+/*
+ * Copyright (c) 2003-2025, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+.ck-fullscreen__main-wrapper .ck-fullscreen__editable {
+  width: 100%;
+  margin-top: 0;
+}
+
+.ck-fullscreen__main-wrapper .ck-fullscreen__editable .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+  width: 100%!important;
+}
+
+.ck.ck-balloon-panel {
+  z-index: 100000!important;
+}

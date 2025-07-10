@@ -1,0 +1,124 @@
+<?php
+
+/*
+ * Copyright (c) 2003-2025, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+/**
+ * @file
+ * Contains CKEditor 5 Premium Features Realtime module install functions.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Url;
+use Drupal\ckeditor5_premium_features\Entity\CollaborationStorageSchema;
+use Drupal\ckeditor5_premium_features_realtime_collaboration\Entity\ChannelInterface;
+
+/**
+ * Implements hook_requirements().
+ */
+function ckeditor5_premium_features_realtime_collaboration_requirements($phase): array {
+  $requirements = [];
+
+  if (($phase === 'install')) {
+    // phpcs:ignore
+    if (\Drupal::moduleHandler()->moduleExists('ckeditor5_premium_features_collaboration') || defined('COLLABORATION_INSTALLING')) {
+      $requirements[] = [
+        'description' => t('You cannot install CKEditor 5 Realtime Collaboration and CKEditor 5 Non-realtime Collaboration modules at the same time.'),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+    else {
+      // phpcs:ignore
+      define('COLLABORATION_INSTALLING', TRUE);
+    }
+  }
+
+  if ($phase == 'runtime') {
+    /** @var \Drupal\ckeditor5_premium_features\Config\SettingsConfigHandlerInterface $config_handler */
+    $config_handler = \Drupal::service('ckeditor5_premium_features.config_handler.settings');
+    if (empty($config_handler->getWebSocketUrl())) {
+      $requirements[] = [
+        'title' => t('CKEditor Premium'),
+        'description' => t('You have to define the Websocket URL in the <a href=":url">CKEditor Premium Settings</a>. Otherwise, the WYSIWYG editor may appear broken.', [
+          ':url' => Url::fromRoute('ckeditor5_premium_features.form.settings_general')->setAbsolute()->toString(),
+        ]),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+
+    if (empty($config_handler->getTokenUrl())) {
+      $requirements[] = [
+        'title' => t('CKEditor Premium'),
+        'description' => t('You have to define the Authorization Type in the <a href=":url">CKEditor Premium Settings</a>. Otherwise, the WYSIWYG editor may appear broken.', [
+          ':url' => Url::fromRoute('ckeditor5_premium_features.form.settings_general')->setAbsolute()->toString(),
+        ]),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+  }
+
+  return $requirements;
+}
+
+/*
+ * Implements hook_install().
+ */
+function ckeditor5_premium_features_realtime_collaboration_install(): void {
+  ckeditor5_premium_features_display_dependency_general_info_message();
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function ckeditor5_premium_features_realtime_collaboration_update_10000():void {
+  $storageDefinition = BaseFieldDefinition::create('string')
+    ->setLabel(t('Field Key ID'));
+
+  $entityDefinition = \Drupal::entityDefinitionUpdateManager();
+  $rtChannel = $entityDefinition->getEntityType('ckeditor5_channel');
+
+  if ($rtChannel && !$rtChannel->hasKey('key_id')) {
+    $entityDefinition->installFieldStorageDefinition(
+      'key_id',
+      'ckeditor5_channel',
+      'ckeditor5_channel',
+      $storageDefinition
+    );
+  }
+}
+
+/**
+ * Implements hook_update().
+ */
+function ckeditor5_premium_features_realtime_collaboration_update_10001():void {
+  $entityDefinition = \Drupal::entityDefinitionUpdateManager();
+
+  $channelEntity = $entityDefinition->getEntityType(ChannelInterface::ENTITY_TYPE_ID);
+  $channelEntity->setHandlerClass('storage_schema', CollaborationStorageSchema::class);
+
+  $entityDefinition->updateEntityType($channelEntity);
+}
+
+/**
+ * Adds langcode field to the ckeditor5_channel entity.
+ */
+function ckeditor5_premium_features_realtime_collaboration_update_10002(): void {
+  $entityDefinition = \Drupal::entityDefinitionUpdateManager();
+  $defaultLanguage = \Drupal::languageManager()->getDefaultLanguage()->getId();
+
+  $fieldStorageDefinition = BaseFieldDefinition::create('language')
+    ->setDefaultValue('x-default')
+    ->setLabel(t('Language code'))
+    ->setDescription(t('The language code.'))
+    ->setInitialValue($defaultLanguage);
+
+  $entityDefinition->installFieldStorageDefinition(
+    'langcode',
+    'ckeditor5_channel',
+    'ckeditor5_channel',
+    $fieldStorageDefinition
+  );
+
+}

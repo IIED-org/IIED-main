@@ -1,0 +1,15 @@
+<?php
+
+/*
+ * Copyright (c) 2003-2025, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_install().
+ */
+function ckeditor5_plugin_pack_auto_image_install($is_syncing): void {
+  ckeditor5_plugin_pack_display_trial_info_message();
+}

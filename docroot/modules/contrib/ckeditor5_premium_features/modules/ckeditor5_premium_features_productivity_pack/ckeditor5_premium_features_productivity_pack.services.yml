@@ -1,0 +1,5 @@
+services:
+  ckeditor5_premium_features_productivity_pack.element.text_format:
+    class: Drupal\ckeditor5_premium_features_productivity_pack\Element\TextFormat
+    arguments:
+      - '@ckeditor5_premium_features.storage_handler.editor'
