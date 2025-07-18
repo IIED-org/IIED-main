@@ -4,7 +4,7 @@
     "dev": "npx tailwindcss -i src/tailwind.pcss -o dist/styles.css",
     "prod": "npx tailwindcss -i src/tailwind.pcss -o dist/styles.css --minify",
     "watch": "npx tailwindcss -i src/tailwind.pcss -o dist/styles.css --watch",
-    "browser-sync": "browser-sync start --proxy 'iied-main.lndo.site' --files 'src/*.css' --no-open --host 'bs.iied-main.lndo.site'",
+    "browser-sync": "browser-sync start --proxy 'iied-main.lndo.site' --files 'dist/*.css' --no-open --host 'bs.iied-main.lndo.site'",
     "sync": "concurrently \"npm run watch\" \"npm run browser-sync\""
   },
   "dependencies": {
