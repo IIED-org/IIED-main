@@ -76,7 +76,7 @@ class TestTracker extends TrackerPluginBase implements PluginFormInterface {
   /**
    * {@inheritdoc}
    */
-  public function trackItemsDeleted(array $ids = NULL) {
+  public function trackItemsDeleted(?array $ids = NULL) {
     $this->logMethodCall(__FUNCTION__, func_get_args());
   }
 

@@ -56,7 +56,7 @@ class TableValueFieldTest extends BrowserTestBase {
     $edit['field_table[0][tablefield][table][2][1]'] = 'Row 2-2';
     $edit['field_table[0][tablefield][table][2][2]'] = 'Row 2-3';
 
-    $this->submitForm($edit, t('Save'));
+    $this->submitForm($edit, 'Save');
     $assert_session = $this->assertSession();
     $assert_session->pageTextContains('Article Llamas are cool has been created.');
 

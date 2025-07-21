@@ -220,12 +220,13 @@ abstract class BackendPluginBase extends ConfigurablePluginBase implements Backe
    * {@inheritdoc}
    */
   public function preDelete() {
+    $server = $this->getServer();
     try {
-      $this->getServer()->deleteAllItems();
+      $server->deleteAllItems();
     }
     catch (SearchApiException $e) {
       $vars = [
-        '%server' => $this->getServer()->label(),
+        '%server' => $server->label() ?? $server->id(),
       ];
       $this->logException($e, '%type while deleting items from server %server: @message in %function (line %line of %file).', $vars);
       $this->getMessenger()->addError($this->t('Deleting some of the items on the server failed. Check the logs for details. The server was still removed.'));
@@ -280,7 +281,7 @@ abstract class BackendPluginBase extends ConfigurablePluginBase implements Backe
    * @return \Drupal\search_api\Item\FieldInterface[]
    *   An array of field objects for all "magic" fields, keyed by field IDs.
    */
-  protected function getSpecialFields(IndexInterface $index, ItemInterface $item = NULL) {
+  protected function getSpecialFields(IndexInterface $index, ?ItemInterface $item = NULL) {
     $field_info = [
       'type' => 'string',
       'original type' => 'string',

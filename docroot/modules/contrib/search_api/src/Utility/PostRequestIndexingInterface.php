@@ -27,4 +27,13 @@ interface PostRequestIndexingInterface {
    */
   public function removeFromIndexing(string $index_id, array $item_ids): void;
 
+  /**
+   * Determines whether a post-request indexing operation is currently running.
+   *
+   * @return bool
+   *   TRUE if a post-request indexing operation is currently happening, FALSE
+   *   otherwise.
+   */
+  public function isIndexingActive(): bool;
+
 }

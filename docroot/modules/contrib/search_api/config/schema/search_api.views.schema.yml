@@ -75,6 +75,9 @@ views.cache.search_api_tag:
       type: mapping
       label: 'Cache options'
 
+views.cache.search_api_time_tag:
+  type: views.cache.search_api_time
+  label: 'Time and tag-based caching (Search API)'
 
 views.argument.search_api:
   type: views.argument.numeric
@@ -252,6 +255,14 @@ views.field.search_api_rendered_item:
         sequence:
           type: string
           label: 'View mode for the specific bundle'
+
+views.field.search_api_text:
+  type: views.field.search_api
+  label: 'Search API text'
+  mapping:
+    filter_type:
+      type: string
+      label: 'Output filter/sanitization to apply'
 
 views.filter.search_api_boolean:
   type: views.filter.boolean

@@ -306,7 +306,7 @@ class ContentEntityDatasourceTest extends KernelTestBase {
    *
    * @see \Drupal\search_api\Plugin\search_api\datasource\ContentEntity::getPartialItemIds()
    */
-  protected function getItemIds(array $bundles = NULL, array $languages = NULL) {
+  protected function getItemIds(?array $bundles = NULL, ?array $languages = NULL) {
     $discovered_ids = [];
     for ($page = 0;; ++$page) {
       $new_ids = $this->datasource->getPartialItemIds($page, $bundles, $languages);

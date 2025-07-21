@@ -99,7 +99,7 @@ class TextValue implements TextValueInterface {
   /**
    * {@inheritdoc}
    */
-  public function setTokens(array $tokens = NULL) {
+  public function setTokens(?array $tokens = NULL) {
     $this->tokens = $tokens;
     return $this;
   }

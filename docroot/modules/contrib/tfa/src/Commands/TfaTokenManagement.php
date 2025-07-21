@@ -132,7 +132,7 @@ final class TfaTokenManagement {
       ]
     );
 
-    // E-mail account to inform user that it has been disabled.
+    // Email account to inform user that it has been disabled.
     $params = ['account' => $account];
     if (!empty($email)) {
       $this->mailManager->mail('tfa', 'tfa_disabled_configuration', $email, $account->getPreferredLangcode(), $params);

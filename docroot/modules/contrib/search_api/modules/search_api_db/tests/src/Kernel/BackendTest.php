@@ -331,6 +331,27 @@ class BackendTest extends BackendTestBase {
       $this->assertEquals($this->getItemIds([1, 2, 4, 5]), $result_ids);
     }
     $this->assertNotEquals($first_result, $second_result);
+
+    // Run only for MySQL and Postgres because SQLite does not support seeds
+    // right now.
+    // Run the query 3 times and compare the results.
+    if (in_array(\Drupal::database()->driver(), ['mysql', 'pgsql'])) {
+      $seed = rand(10000, 100000);
+      $results = [];
+      for ($i = 1; $i <= 3; $i++) {
+        $query = $this->buildSearch('foo', [], NULL, FALSE)
+          ->sort('search_api_random')
+          ->sort('id');
+
+        $query->setOption('search_api_random_sort', ['seed' => $seed]);
+        $results[$i] = $query->execute()->getResultItems();
+        $this->assertCount(4, $results[$i]);
+      }
+
+      // Check if results are the same
+      $this->assertEquals($results[1], $results[2]);
+      $this->assertEquals($results[2], $results[3]);
+    }
   }
 
   /**
@@ -487,7 +508,7 @@ class BackendTest extends BackendTestBase {
     $results = $this->buildSearch("\"$long_token_1 $long_token_2 su baz\"")->execute();
     $this->assertResults([], $results);
 
-    // '0' should be searchable.  See also testCleanNumericString().
+    // '0' should be searchable. See also testCleanNumericString().
     $results = $this->buildSearch("\"baz 0\"")->execute();
     $this->assertResults([6], $results);
 
@@ -893,21 +914,23 @@ class BackendTest extends BackendTestBase {
    * Tests whether keywords with special characters work correctly.
    *
    * @see https://www.drupal.org/node/2873023
+   * @see https://www.drupal.org/node/3505734
    */
   protected function regressionTest2873023() {
-    $keyword = 'regression@test@2873023';
+    $keyword1 = 'regression@test@2873023';
+    $keyword2 = 'FOO-03505734';
 
     $entity_id = count($this->entities) + 1;
     $entity = $this->addTestEntity($entity_id, [
-      'name' => $keyword,
+      'name' => "$keyword1 $keyword2",
       'type' => 'article',
     ]);
 
     $index = $this->getIndex();
     $this->assertFalse($index->isValidProcessor('tokenizer'));
     $this->indexItems($this->indexId);
-    $results = $this->buildSearch($keyword, [], ['name'])->execute();
-    $this->assertResults([$entity_id], $results, 'Keywords with special characters (Tokenizer disabled)');
+    $this->assertResults([$entity_id], $this->buildSearch($keyword1, [], ['name'])->execute());
+    $this->assertResults([$entity_id], $this->buildSearch($keyword2, [], ['name'])->execute());
 
     $processor = \Drupal::getContainer()->get('search_api.plugin_helper')
       ->createProcessorPlugin($index, 'tokenizer');
@@ -915,16 +938,16 @@ class BackendTest extends BackendTestBase {
     $index->save();
     $this->assertTrue($index->isValidProcessor('tokenizer'));
     $this->indexItems($this->indexId);
-    $results = $this->buildSearch($keyword, [], ['name'])->execute();
-    $this->assertResults([$entity_id], $results, 'Keywords with special characters (Tokenizer enabled)');
+    $this->assertResults([$entity_id], $this->buildSearch($keyword1, [], ['name'])->execute());
+    $this->assertResults([$entity_id], $this->buildSearch($keyword2, [], ['name'])->execute());
 
     $index->getProcessor('tokenizer')->setConfiguration([
       'spaces' => '\s',
     ]);
     $index->save();
     $this->indexItems($this->indexId);
-    $results = $this->buildSearch($keyword, [], ['name'])->execute();
-    $this->assertResults([$entity_id], $results, 'Keywords with special characters (Tokenizer with special config)');
+    $this->assertResults([$entity_id], $this->buildSearch($keyword1, [], ['name'])->execute());
+    $this->assertResults([$entity_id], $this->buildSearch($keyword2, [], ['name'])->execute());
 
     $index->removeProcessor('tokenizer');
     $index->save();
@@ -932,6 +955,7 @@ class BackendTest extends BackendTestBase {
 
     $entity->delete();
     unset($this->entities[$entity_id]);
+    $this->indexItems($this->indexId);
   }
 
   /**

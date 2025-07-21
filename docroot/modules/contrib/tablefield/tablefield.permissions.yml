@@ -5,10 +5,13 @@ rebuild tablefield:
   title: 'Rebuild any tablefield'
 
 import tablefield:
-    title: 'Import into any tablefield'
+  title: 'Import into any tablefield'
+
+paste tablefield:
+  title: 'Paste into any tablefield'
 
 configure tablefield:
   title: 'Allow changes in the global tablefield module configuration'
 
 addrow tablefield:
-    title: 'To change row in tablefield'
+  title: 'To change row in tablefield'

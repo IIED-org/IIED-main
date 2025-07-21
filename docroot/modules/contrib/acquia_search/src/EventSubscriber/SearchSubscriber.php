@@ -137,7 +137,7 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
       $message = $this->t('Flood protection has blocked this Solr request. See more at <a href="@url">The Acquia Search flood control mechanism has blocked a Solr query due to API usage limits</a>', [
         '@url' => Flood::FLOOD_LIMIT_ARTICLE_URL,
       ]);
-      \Drupal::messenger()->addError($message);
+      \Drupal::logger('acquia_search')->error($message);
 
       // Build a static response which avoids a network request to Solr.
       $response = new Response((string) $message, ['HTTP/1.1 429 Too Many Requests']);

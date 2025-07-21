@@ -5,8 +5,8 @@
  * Contains module hooks for tablefield_required.
  */
 
-use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -32,7 +32,7 @@ function tablefield_required_form_field_config_edit_form_alter(array &$form, For
     $form['tablefield_required']['required_rows'] = [
       '#type' => 'textfield',
       '#title' => t('Required rows.'),
-      '#default_value' => isset($tps['required_rows']) ? $tps['required_rows'] : '',
+      '#default_value' => $tps['required_rows'] ?? '',
       '#description' => t('Enter the comma-separated list of required row indexes, starting 
         from "0" for first row, "1" for second and so on. For example, entering "0,2" will make 
         required all inputs for first and third rows. Keep in mind if this field is marked as 
@@ -41,7 +41,7 @@ function tablefield_required_form_field_config_edit_form_alter(array &$form, For
     $form['tablefield_required']['required_cols'] = [
       '#type' => 'textfield',
       '#title' => t('Required columns.'),
-      '#default_value' => isset($tps['required_cols']) ? $tps['required_cols'] : '',
+      '#default_value' => $tps['required_cols'] ?? '',
       '#description' => t('Enter the comma-separated list of required column indexes, starting 
         from "0" for first column, "1" for second and so on. For example, entering "0,2" will make 
         required all inputs for first and third columns. Keep in mind if this field is marked as 
@@ -50,7 +50,7 @@ function tablefield_required_form_field_config_edit_form_alter(array &$form, For
     $form['tablefield_required']['multivalue_inherit'] = [
       '#type' => 'checkbox',
       '#title' => t('Inherit mandatory property for multi-value tables.'),
-      '#default_value' => isset($tps['multivalue_inherit']) ? $tps['multivalue_inherit'] : FALSE,
+      '#default_value' => $tps['multivalue_inherit'] ?? FALSE,
       '#description' => t('If this option is checked, multi-value tables will inherit same restriction.'),
     ];
     $form['#entity_builders'][] = 'tablefield_required_form_builder';
@@ -120,7 +120,7 @@ function tablefield_required_process_tablefield($element, $form_state, $complete
     // Let's prepare our needed variables.
     $rows = isset($config['required_rows']) && $config['required_rows'] ? explode(',', preg_replace('/\s+/', '', $config['required_rows'])) : [];
     $cols = isset($config['required_cols']) && $config['required_cols'] ? explode(',', preg_replace('/\s+/', '', $config['required_cols'])) : [];
-    $inherit = isset($config['multivalue_inherit']) ? $config['multivalue_inherit'] : FALSE;
+    $inherit = $config['multivalue_inherit'] ?? FALSE;
 
     // Our array of settings to pass to the validation function.
     $settings = [

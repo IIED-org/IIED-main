@@ -118,7 +118,7 @@ final class TfaTokenManagementTest extends UnitTestCase {
   }
 
   /**
-   * Generator for the tesetResetUserTfaData().
+   * Generator for testResetUserTfaData().
    */
   public static function providerTestResetUserTfaData(): \Generator {
     yield 'Successful reset by username' => [

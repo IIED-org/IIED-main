@@ -81,6 +81,14 @@ class KlaroPurposeForm extends EntityForm {
       '#required' => TRUE,
     ];
 
+    $form['description'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Description', [], ['context' => 'klaro']),
+      '#default_value' => $purpose->description(),
+      '#description' => $this->t('An optional description for the Klaro! purpose. The description will appear on the <em>Klaro! consent manager</em> modal.', [], ['context' => 'klaro']),
+      '#required' => FALSE,
+    ];
+
     $form['weight'] = [
       '#type' => 'number',
       '#min' => -99,

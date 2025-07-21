@@ -4,21 +4,11 @@ namespace Drupal\tablefield\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Implements table configuration form.
  */
 class TablefieldConfigForm extends ConfigFormBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory')
-    );
-  }
 
   /**
    * {@inheritdoc}

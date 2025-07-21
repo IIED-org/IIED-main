@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\sophron\Functional;
 
-use Drupal\sophron\MimeMapManagerInterface;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\sophron\MimeMapManagerInterface;
 use FileEye\MimeMap\MappingException;
 use PHPUnit\Framework\Attributes\Group;
 

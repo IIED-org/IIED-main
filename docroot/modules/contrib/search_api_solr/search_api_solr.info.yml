@@ -7,7 +7,7 @@ dependencies:
   - drupal:language
   - search_api:search_api
 
-# Information added by Drupal.org packaging script on 2024-07-30
-version: '4.3.5'
+# Information added by Drupal.org packaging script on 2025-04-23
+version: '4.3.10'
 project: 'search_api_solr'
-datestamp: 1722332552
+datestamp: 1745426381

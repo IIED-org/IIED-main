@@ -33,7 +33,7 @@ class SearchApiBulkForm extends BulkForm {
   /**
    * {@inheritdoc}
    */
-  public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
+  public function init(ViewExecutable $view, DisplayPluginBase $display, ?array &$options = NULL) {
     parent::init($view, $display, $options);
 
     $entity_type_ids = array_values($this->getIndex()->getEntityTypes());

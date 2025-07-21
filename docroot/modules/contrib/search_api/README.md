@@ -88,6 +88,25 @@ are available in _[Getting started]_. There, you can also find answers to
 [common pitfalls]: https://www.drupal.org/docs/8/modules/search-api/getting-started/common-pitfalls
 
 
+### Hidden configuration
+
+There are some options available for advanced users that are not available via
+the user interface, but have to be changed directly in the site configuration.
+
+These currently include:
+
+- All settings inside the `search_api.settings` config object. See
+  [`search_api.schema.yml`] for details.
+- Search indexes have an `options.delete_on_fail` setting which defaults to
+  TRUE. When active, any time loading fails for some items on this index, they
+  will be removed from the index and search server, assumed to have been removed
+  from the database (or other datasource). Consider setting this option to FALSE
+  in case you have an unreliable database connection and want to avoid items
+  being incorrectly removed from the search index.
+
+[`search_api.schema.yml`]: config/schema/search_api.schema.yml
+
+
 ## Information for developers
 
 The Search API provides a lot of ways for developers to extend or customize the

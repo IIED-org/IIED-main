@@ -23,12 +23,15 @@ class KlaroJsCollectionRenderer extends JsCollectionRenderer implements AssetCol
 
     return array_map(function ($js_asset, $element) {
       if (isset($js_asset['klaro']) && !empty($js_asset['klaro'])) {
-        $element['#attributes']['data-type'] = 'text/javascript';
+        if (!isset($element['#attributes']['data-type'])) {
+          $element['#attributes']['data-type'] = $element['#attributes']['type'] ?? 'text/javascript';
+        }
+        $element['#attributes']['type'] = 'text/plain';
         $element['#attributes']['data-name'] = $js_asset['klaro'];
         if (!empty($element['#attributes']['src'])) {
           $element['#attributes']['data-src'] = $element['#attributes']['src'];
           // @phpstan-ignore-next-line
-          $modulePath = '/' . \Drupal::service('extension.list.module')->getPath('klaro');
+          $modulePath = base_path() . \Drupal::service('extension.list.module')->getPath('klaro');
           // To support attached libraries via add_js ajax command,
           // we need to fake the load event, so that behaviors get reattached,
           // therefore load an empty js - noop.js.

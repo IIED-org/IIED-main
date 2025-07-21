@@ -40,29 +40,10 @@ parameters:
       count: 1
       path: src/Plugin/search_api/datasource/ContentEntity.php
 
-    - # The method was renamed (with the old one deprecated) in Drupal 10.3.
-      message: "/^Call to deprecated method renderPlain\\(\\) of class Drupal\\\\Core\\\\Render\\\\Renderer(Interface)?:/"
-      paths:
-        - src/Plugin/search_api/processor/RenderedItem.php
-        - tests/src/Functional/IntegrationTest.php
-      # Will only be reported for Drupal 10.3+, so don't report if this error
-      # doesn't occur.
-      # @todo Remove once we depend on Drupal 10.3.
-      reportUnmatched: false
-
-    - # Method newly added in Drupal 10.3, but will not be called in earlier
-      # versions of Drupal.
-      # @todo Remove once we depend on Drupal 10.3.
-      message: "/^Call to an undefined method Drupal\\\\search_api\\\\Plugin\\\\views\\\\field\\\\SearchApiBulkForm::isWorkspaceSafeEntityType\\(\\)\\.$/"
-      path: src/Plugin/views/field/SearchApiBulkForm.php
-      # Will only be reported for Drupal 10.2 and lower, so don't report if this error
-      # doesn't occur.
-      reportUnmatched: false
-
     - # Method will never be called in the context of that class.
       message: "#^Call to an undefined method Drupal\\\\search_api\\\\Plugin\\\\views\\\\filter\\\\SearchApiBoolean::operatorValues\\(\\).$#"
-      count: 1
       path: src/Plugin/views/filter/SearchApiFilterTrait.php
+      reportUnmatched: false
 
     - # Method will never be called in the context of that class.
       message: "#^Call to an undefined static method Drupal\\\\views\\\\Plugin\\\\views\\\\filter\\\\BooleanOperator::opSimple\\(\\).$#"
@@ -99,11 +80,13 @@ parameters:
       count: 1
       path: src/SearchApiPluginManager.php
 
-    - # This is the base class for other plugin managers, so not really possible
-      # (nor reasonable) to add the cache backend information there.
-      message: "#^Plugin definitions cannot be altered\\.$#"
-      count: 1
-      path: src/SearchApiPluginManager.php
+    - # The class was newly introduced in Drupal 11.2.
+      # @todo Remove once default pipelines run against Drupal 11.2+.
+      message: "#^Call to static method createBundle\\(\\) on an unknown class Drupal\\\\entity_test\\\\EntityTestHelper\\.#"
+      paths:
+        - tests/src/Functional/ExampleContentTrait.php
+        - tests/src/Kernel/Index/IndexChangesTest.php
+      reportUnmatched: false
 
     - # The class was renamed (with alias, but seems PHPStan cannot find that)
       # but we cannot use the new name until we depend on Drupal 10.3.
@@ -113,34 +96,10 @@ parameters:
         - tests/src/Kernel/ConfigEntity/DefaultConfigEntityInstallationTest.php
         - tests/src/Kernel/Views/ViewsQueryTypeTest.php
         - tests/src/Kernel/Views/ViewsQueryTypeUpdateTest.php
-      # Will only be reported for Drupal 10.3+, so don't report if this error
-      # doesn't occur.
-      # @todo Remove once we depend on Drupal 10.3.
-      reportUnmatched: false
-
-    - # The constructor was newly added in Drupal 10.3.
-      message: "/^Access to an undefined property Drupal\\\\Tests\\\\search_api\\\\Kernel\\\\Views\\\\TestMemoryBackend::\\$time\\./"
-      path: tests/src/Kernel/Views/TestMemoryBackend.php
-      # Will only be reported for Drupal 11.0+, so don't report if this error
-      # doesn't occur.
-      # @todo Remove once we depend on Drupal 10.3.
-      reportUnmatched: false
-
-    - # The constructor was newly added in Drupal 10.3.
-      message: "/^Call to an undefined static method Drupal\\\\Core\\\\Cache\\\\MemoryBackend::__construct\\(\\)\\./"
-      path: tests/src/Kernel/Views/TestMemoryBackend.php
-      # Will only be reported for Drupal 11.0+, so don't report if this error
-      # doesn't occur.
-      # @todo Remove once we depend on Drupal 10.3.
-      reportUnmatched: false
 
     - # The parent method was deprecated in Drupal 10.3 and removed in 11.0.
       message: "/^Call to an undefined static method Drupal\\\\Core\\\\Cache\\\\MemoryBackend::getRequestTime\\(\\)\\./"
       path: tests/src/Kernel/Views/TestMemoryBackend.php
-      # Will only be reported for Drupal 11.0+, so don't report if this error
-      # doesn't occur.
-      # @todo Remove once we depend on Drupal 10.3.
-      reportUnmatched: false
 
     - # No idea what's happening there, why it can't find the trait it is
       # currently checking?
@@ -151,3 +110,15 @@ parameters:
       # currently checking?
       message: "#^Call to method \\w+\\(\\) on an unknown class#"
       path: tests/src/Unit/Processor/TestItemsTrait.php
+
+    - # This undefined method is part of the backwardsCompatibleCall.
+      message: "#^Call to an undefined method Drupal\\\\search_api\\\\Entity\\\\Index\\:\\:getOriginal\\(\\)\\.$#"
+      count: 1
+      path: src/Entity/Index.php
+      reportUnmatched: false
+
+    - # This undefined method is part of the backwardsCompatibleCall.
+      message: "#^Call to an undefined method Drupal\\\\search_api\\\\Entity\\\\Server\\:\\:getOriginal\\(\\)\\.$#"
+      count: 1
+      path: src/Entity/Server.php
+      reportUnmatched: false

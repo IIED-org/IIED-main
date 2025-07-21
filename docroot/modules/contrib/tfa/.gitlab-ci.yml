@@ -26,13 +26,14 @@ include:
 # Docs at https://git.drupalcode.org/project/gitlab_templates/-/blob/1.0.x/includes/include.drupalci.variables.yml
 ################
 variables:
-  _TARGET_CORE:
-    value: "$CORE_STABLE"
   _TARGET_PHP:
     value: "$CORE_PHP_MAX"
   # Collect code coverage data.
   _PHPUNIT_EXTRA:
-    value: --coverage-cobertura $CI_PROJECT_DIR/coverage.xml --coverage-filter $CI_PROJECT_DIR/$_WEB_ROOT/modules/custom/ --coverage-text --colors=never
+    value: --coverage-cobertura $CI_PROJECT_DIR/coverage.xml --coverage-filter $CI_PROJECT_DIR/$_WEB_ROOT/modules/custom/ --coverage-text --colors=never --no-configuration
+  # Disable PHPCS rules
+  _PHPCS_EXTRA:
+    value: --exclude=SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue
   # Generate a new phpstan baseline.
   GENERATE_PHPSTAN_BASELINE:
     value: "0"
@@ -59,6 +60,8 @@ variables:
 
 composer:
   extends: .composer-local
+  variables:
+    DRUPAL_CORE: "$CORE_STABLE"
 
 ################
 # Add PHPStan validation.

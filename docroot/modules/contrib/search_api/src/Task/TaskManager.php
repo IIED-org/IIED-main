@@ -133,7 +133,7 @@ class TaskManager implements TaskManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function addTask($type, ServerInterface $server = NULL, IndexInterface $index = NULL, $data = NULL) {
+  public function addTask($type, ?ServerInterface $server = NULL, ?IndexInterface $index = NULL, $data = NULL) {
     $server_id = $server?->id();
     $index_id = $index?->id();
     if (isset($data)) {
@@ -317,7 +317,7 @@ class TaskManager implements TaskManagerInterface {
       // Drush performs batch processing in a separate PHP request. When the
       // last batch is processed the batch list is cleared, but this only takes
       // effect in the other request. Take the same action here to ensure that
-      // we are not requeueing stale batches when there are multiple tasks being
+      // we are not requeuing stale batches when there are multiple tasks being
       // handled in a single request.
       // (Drush 9.6 changed the structure of $result, so check for both variants
       // as long as we support earlier Drush versions, too.)

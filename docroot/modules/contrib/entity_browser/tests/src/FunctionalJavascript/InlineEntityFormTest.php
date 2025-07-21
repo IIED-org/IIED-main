@@ -95,7 +95,6 @@ class InlineEntityFormTest extends EntityBrowserWebDriverTestBase {
     $list_selector = '[data-drupal-selector="edit-ief-media-field-form-inline-entity-form-entities-0-form-ief-media-type-file-field-current"]';
     $item_selector = "$list_selector .item-container";
     $this->sortableAfter("$item_selector:first-child", "$item_selector:last-child", $list_selector);
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $page->pressButton('Update Test File Media');
     $this->assertSession()->assertWaitOnAjaxRequest();

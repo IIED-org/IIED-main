@@ -157,6 +157,7 @@ class TfaHotpTest extends UnitTestCase {
 
     // Fake some codes for user 3.
     $otp_generator = new Otp();
+    // cSpell:disable-next-line
     $seed = 'AR5BPJL24MYUHGBU';
     $last_accepted_counter = 10;
 
@@ -249,6 +250,7 @@ class TfaHotpTest extends UnitTestCase {
 
     // Fake some codes for user 3.
     $otp_generator = new Otp();
+    // cSpell:disable-next-line
     $seed = 'AR5BPJL24MYUHGBU';
     $next_expected_counter = 10;
 

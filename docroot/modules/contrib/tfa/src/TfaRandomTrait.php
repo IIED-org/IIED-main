@@ -6,6 +6,8 @@ namespace Drupal\tfa;
  * Trait TfaRandomTrait for generating cryptographically secure random data.
  *
  * @package Drupal\tfa
+ *
+ * cSpell:ignore abcdefghijkmnopqrstuvwxyz ABCDEFGHJKLMNPQRSTUVWXYZ
  */
 trait TfaRandomTrait {
 

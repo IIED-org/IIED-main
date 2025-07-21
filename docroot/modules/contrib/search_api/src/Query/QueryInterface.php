@@ -148,7 +148,7 @@ interface QueryInterface extends ConditionSetInterface {
    *
    * @return $this
    */
-  public function setLanguages(array $languages = NULL);
+  public function setLanguages(?array $languages = NULL);
 
   /**
    * Creates a new condition group to use with this query object.
@@ -201,7 +201,7 @@ interface QueryInterface extends ConditionSetInterface {
    *
    * @return $this
    */
-  public function setFulltextFields(array $fields = NULL);
+  public function setFulltextFields(?array $fields = NULL);
 
   /**
    * Adds a sort directive to this search query.

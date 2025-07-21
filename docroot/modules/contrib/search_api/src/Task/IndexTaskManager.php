@@ -54,7 +54,7 @@ class IndexTaskManager implements IndexTaskManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events['search_api.task.' . self::TRACK_ITEMS_TASK_TYPE][] = ['trackItems'];
 
     return $events;
@@ -166,7 +166,7 @@ class IndexTaskManager implements IndexTaskManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function startTracking(IndexInterface $index, array $datasource_ids = NULL) {
+  public function startTracking(IndexInterface $index, ?array $datasource_ids = NULL) {
     foreach ($datasource_ids ?? $index->getDatasourceIds() as $datasource_id) {
       $data = [
         'datasource' => $datasource_id,
@@ -216,7 +216,7 @@ class IndexTaskManager implements IndexTaskManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function stopTracking(IndexInterface $index, array $datasource_ids = NULL) {
+  public function stopTracking(IndexInterface $index, ?array $datasource_ids = NULL) {
     $valid_tracker = $index->hasValidTracker();
     if (!isset($datasource_ids)) {
       $this->taskManager->deleteTasks($this->getTaskConditions($index));

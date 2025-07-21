@@ -25,6 +25,8 @@ trait LoggerTrait {
    *   The logger.
    */
   public function getLogger() {
+    // @todo Make the channel name a constant to improve reusability once we
+    //   depend on PHP 8.2+ (Drupal 11.0+).
     return $this->logger ?: \Drupal::service('logger.channel.search_api');
   }
 

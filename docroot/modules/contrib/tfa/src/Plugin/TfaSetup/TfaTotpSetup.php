@@ -3,6 +3,7 @@
 namespace Drupal\tfa\Plugin\TfaSetup;
 
 use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -27,7 +28,7 @@ use ParagonIE\ConstantTime\Encoding;
  *    "Google Authenticator (Android)" = "https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2",
  *    "Google Authenticator (iOS)" = "https://apps.apple.com/us/app/google-authenticator/id388497605",
  *    "Microsoft Authenticator (Android/iOS)" = "https://www.microsoft.com/en-us/security/mobile-authenticator-app",
- *    "Twilio Authy (Android/iOS/Desktop)" = "https://authy.com",
+ *    "Twilio Authy (Android/iOS)" = "https://authy.com",
  *    "FreeOTP (Android/iOS)" = "https://freeotp.github.io",
  *    "GAuth Authenticator (Desktop)" = "https://github.com/gbraadnl/gauth"
  *   },
@@ -98,6 +99,7 @@ class TfaTotpSetup extends TfaTotpValidation implements TfaSetupInterface {
         '#tag' => 'style',
         '#value' => ".tfa-qr-code { width:200px }",
       ],
+      // cSpell:disable-next-line qrcode
       'qrcode-css',
     ];
 
@@ -144,13 +146,16 @@ class TfaTotpSetup extends TfaTotpValidation implements TfaSetupInterface {
   }
 
   /**
-   * Get a base64 qrcode image uri of seed.
+   * Get a base64 QR code image uri of seed.
    *
    * @return string
    *   QR-code uri.
    */
   protected function getQrCodeUri() {
-    return (new QRCode)->render('otpauth://totp/' . $this->accountName() . '?secret=' . $this->seed . '&issuer=' . urlencode($this->issuer));
+    $qr_options = new QROptions();
+    $qr_options->imageTransparent = FALSE;
+    // cSpell:disable-next-line otpauth
+    return (new QRCode($qr_options))->render('otpauth://totp/' . $this->accountName() . '?secret=' . $this->seed . '&issuer=' . urlencode($this->issuer));
   }
 
   /**

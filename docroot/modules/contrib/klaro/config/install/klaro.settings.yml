@@ -9,6 +9,7 @@ show_toggle_button: false
 show_close_button: false
 process_descriptions: false
 override_css: true
+show_notice_title: false
 auto_decorate_js_alter: true
 auto_decorate_page_attachments: true
 auto_decorate_preprocess_field: true
@@ -32,3 +33,4 @@ library:
   additional_class: ''
   html_texts: false
   auto_focus: true
+  disable_powered_by: false

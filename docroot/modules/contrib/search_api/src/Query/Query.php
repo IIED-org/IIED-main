@@ -406,7 +406,7 @@ class Query implements QueryInterface, RefinableCacheableDependencyInterface {
   /**
    * {@inheritdoc}
    */
-  public function setLanguages(array $languages = NULL) {
+  public function setLanguages(?array $languages = NULL) {
     $this->languages = $languages !== NULL ? array_values($languages) : NULL;
     return $this;
   }
@@ -444,7 +444,7 @@ class Query implements QueryInterface, RefinableCacheableDependencyInterface {
   /**
    * {@inheritdoc}
    */
-  public function setFulltextFields(array $fields = NULL) {
+  public function setFulltextFields(?array $fields = NULL) {
     $this->fields = $fields;
     return $this;
   }

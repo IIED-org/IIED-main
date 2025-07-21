@@ -4,6 +4,7 @@ namespace Drupal\search_api;
 
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
@@ -201,7 +202,7 @@ class IndexListBuilder extends ConfigEntityListBuilder {
 
     $description = $entity->get('description');
     if ($description) {
-      $row['data']['title']['data']['#suffix'] = '<div class="description">' . $description . '</div>';
+      $row['data']['title']['data']['#suffix'] = '<div class="description">' . Xss::filterAdmin($description) . '</div>';
     }
 
     if ($status

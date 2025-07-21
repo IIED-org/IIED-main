@@ -1,0 +1,22 @@
+--- modules/video_embed_wysiwyg/src/Plugin/Filter/VideoEmbedWysiwyg.php
++++ modules/video_embed_wysiwyg/src/Plugin/Filter/VideoEmbedWysiwyg.php
+@@ -19,7 +19,7 @@ use Drupal\Core\Render\RendererInterface;
+  *   title = @Translation("Video Embed WYSIWYG"),
+  *   id = "video_embed_wysiwyg",
+  *   description = @Translation("Enables the use of video_embed_wysiwyg."),
+- *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE
++ *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE
+  * )
+  */
+ class VideoEmbedWysiwyg extends FilterBase implements ContainerFactoryPluginInterface {
+--- modules/video_embed_wysiwyg/src/Plugin/Filter/VideoEmbedWysiwyg.php
++++ modules/video_embed_wysiwyg/src/Plugin/Filter/VideoEmbedWysiwyg.php
+@@ -130,7 +130,7 @@ class VideoEmbedWysiwyg extends FilterBase implements ContainerFactoryPluginInte
+    */
+   protected function getValidMatches($text) {
+     // Use a look ahead to match the capture groups in any order.
+-    if (!preg_match_all('/(<p>)?(?<json>{(?=.*preview_thumbnail\b)(?=.*settings\b)(?=.*video_url\b)(?=.*settings_summary)(.*)})(<\/p>)?/', $text, $matches)) {
++      if (!preg_match_all('/(<p>)?(?<json>{(?=.*preview_thumbnail\b)(?=.*settings\b)(?=.*video_url\b)(?=.*settings_summary)(.*)})(<\/p>)/U', $text, $matches)) {
+       return [];
+     }
+     $valid_matches = [];

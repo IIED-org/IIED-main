@@ -10,7 +10,7 @@ dependencies:
 lifecycle: deprecated
 lifecycle_link: https://www.drupal.org/node/3395756
 
-# Information added by Drupal.org packaging script on 2025-03-05
-version: '8.x-1.10'
+# Information added by Drupal.org packaging script on 2025-07-18
+version: '8.x-1.12'
 project: 'tfa'
-datestamp: 1741193371
+datestamp: 1752807549

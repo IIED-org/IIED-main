@@ -122,7 +122,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
         }
         catch (SearchApiException $e) {
           $vars = [
-            '%index' => $this->index->label(),
+            '%index' => $this->index->label() ?? $this->index->id(),
           ];
           $this->logException($e, '%type while trying to retrieve a list of hierarchical fields on index %index: @message in %function (line %line of %file).', $vars);
           continue;
@@ -289,8 +289,8 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
             }
             catch (InvalidPluginDefinitionException | PluginNotFoundException $e) {
               $vars = [
-                '%index' => $this->index->label(),
-                '%field' => $field->getLabel(),
+                '%index' => $this->index->label() ?? $this->index->id(),
+                '%field' => $field->getLabel() ?? $field->getFieldIdentifier(),
                 '%field_id' => $field->getFieldIdentifier(),
               ];
               $this->logException($e, '%type while trying to add hierarchy values to field %field (%field_id) on index %index: @message in %function (line %line of %file).', $vars);

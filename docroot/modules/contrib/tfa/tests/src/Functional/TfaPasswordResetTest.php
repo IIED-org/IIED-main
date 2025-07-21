@@ -3,6 +3,7 @@
 namespace Drupal\Tests\tfa\Functional;
 
 use Drupal\Core\Test\AssertMailTrait;
+use Drupal\tfa\TfaUserDataTrait;
 use Drupal\user\Entity\User;
 
 /**
@@ -15,6 +16,7 @@ class TfaPasswordResetTest extends TfaTestBase {
   use AssertMailTrait {
     getMails as drupalGetMails;
   }
+  use TfaUserDataTrait;
 
   /**
    * User doing the TFA Validation.
@@ -66,6 +68,7 @@ class TfaPasswordResetTest extends TfaTestBase {
 
     // Enable TFA for all authenticated user roles.
     $this->drupalLogin($this->adminUser);
+    $cookies = $this->getSessionCookies();
     $edit = [
       'tfa_required_roles[authenticated]' => TRUE,
     ];
@@ -119,6 +122,52 @@ class TfaPasswordResetTest extends TfaTestBase {
   }
 
   /**
+   * Test session is migrated after visiting reset link.
+   */
+  public function testSessionFixationPrevention(): void {
+    $assert_session = $this->assertSession();
+
+    // Enable TFA for all authenticated user roles.
+    $this->drupalLogin($this->adminUser);
+    $edit = [
+      'tfa_required_roles[authenticated]' => TRUE,
+    ];
+    $this->drupalGet('admin/config/people/tfa');
+    $this->submitForm($edit, 'Save configuration');
+    $assert_session->statusCodeEquals(200);
+    $assert_session->pageTextContains('The configuration options have been saved.');
+    $this->drupalLogout();
+
+    $seed_data = [
+      'seed' => base64_encode('foo'),
+      'created' => '12345',
+    ];
+
+    $this->setUserData('tfa', ['tfa_totp_seed' => $seed_data], (int) $this->adminUser->id(), \Drupal::service('user.data'));
+
+    $this->drupalGet('user/password');
+    $edit = ['name' => $this->adminUser->getAccountName()];
+    $this->submitForm($edit, 'Submit');
+    // Get the one time reset URL form the email.
+    $resetURL = $this->getResetURL() . '/login';
+
+    // Reset any session data and set a fixated session id.
+    $this->getSession()->restart();
+    $this->getSession()->setCookie($this->getSessionName(), '1');
+
+    $this->drupalGet($resetURL);
+    // Ensure this is tfa\Form\EntryForm.
+    $assert_session->statusCodeEquals(200);
+    $assert_session->pageTextContains('Application verification code');
+
+    // Note: drupalGet() followed the 302 redirect. We are testing after
+    // redirect followed, ideally we would test the redirect response.
+    $this->assertNotNull($this->getSessionCookies()->getCookieByName($this->sessionName));
+    $after_reset_page_session_value = $this->getSessionCookies()->getCookieByName($this->sessionName)->getValue();
+    $this->assertNotEquals('1', $after_reset_page_session_value, "Ensure session migrated");
+  }
+
+  /**
    * Retrieves password reset email and extracts the login link.
    */
   public function getResetUrl() {
@@ -156,7 +205,7 @@ class TfaPasswordResetTest extends TfaTestBase {
    * @param mixed $assert_session
    *   Web assert object.
    * @param bool $logout
-   *   If ture, logout the user at the end.
+   *   If true, logout the user at the end.
    */
   public function changePassword($assert_session, $logout = TRUE) {
     $assert_session->statusCodeEquals(200);

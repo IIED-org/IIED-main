@@ -242,10 +242,14 @@ class ViewsDisplayCachingTest extends KernelTestBase {
       // When using 'time' based caching, pretend to be more than 1 hour in the
       // future.
       case 'time':
+      case 'time_tag':
         // @todo Only the second call is needed once we depend on Drupal 10.3.
         $this->cache->setRequestTime($this->cache->getRequestTime() + 3700);
         $this->time->advanceTime(3700);
         break;
+
+      default:
+        assert(FALSE);
     }
   }
 
@@ -272,8 +276,9 @@ class ViewsDisplayCachingTest extends KernelTestBase {
   protected function getView($id, $display_id) {
     /** @var \Drupal\views\ViewEntityInterface $view */
     $view = $this->entityTypeManager->getStorage('view')->load($id);
+    /** @var \Drupal\views\ViewExecutable $executable */
     $executable = $this->viewExecutableFactory->get($view);
-    $executable->setDisplay($display_id);
+    $this->assertTrue($executable->setDisplay($display_id));
     $executable->setExposedInput(['search_api_fulltext' => 'Glaive']);
     return $executable;
   }
@@ -394,6 +399,32 @@ class ViewsDisplayCachingTest extends KernelTestBase {
           // modified.
           'config:search_api.index.database_search_index',
           'config:views.view.search_api_test_cache',
+        ],
+        // No specific cache contexts are expected to be present.
+        [],
+        // It is expected that the cache max-age is set to 1 hour.
+        3600,
+        // It is expected that views results can be cached.
+        TRUE,
+      ],
+
+      // Test case using time and tag based caching. This should provide
+      // relevant cache tags so that the results can be cached, but be
+      // invalidated whenever relevant changes occur or after a predefined
+      // time period.
+      [
+        'time_tag',
+        [
+          // The cache should be invalidated when either index or view are
+          // modified.
+          'config:search_api.index.database_search_index',
+          'config:views.view.search_api_test_cache',
+          // The view shows an entity, so it should be invalidated when that
+          // entity changes.
+          'entity_test_mulrev_changed:1',
+          // Caches should also be invalidated if any items on the index are
+          // indexed or deleted.
+          'search_api_list:database_search_index',
         ],
         // No specific cache contexts are expected to be present.
         [],

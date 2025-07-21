@@ -51,7 +51,7 @@ function tablefield_cellspan_preprocess_table(&$variables) {
         }
 
         preg_match("/(?:#rowspan#)/", $cell['content'], $match);
-        // Is #rowpsan# in the data.
+        // Is #rowspan# in the data.
         if (!empty($match)) {
 
           if ($previous_row !== FALSE) {

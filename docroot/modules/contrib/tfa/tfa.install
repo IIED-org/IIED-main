@@ -3,6 +3,9 @@
 /**
  * @file
  * Installation related functions for TFA module.
+ *
+ * phpcs:ignore
+ * cSpell:ignore riesen
  */
 
 use Drupal\Core\Session\AccountInterface;

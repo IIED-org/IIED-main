@@ -82,7 +82,7 @@ class IndexStatusForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, IndexInterface $index = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?IndexInterface $index = NULL) {
     if (!isset($index)) {
       return [];
     }

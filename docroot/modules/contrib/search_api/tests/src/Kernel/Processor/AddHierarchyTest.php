@@ -11,12 +11,6 @@ use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\Tests\search_api\Kernel\ResultsTrait;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
-// Workaround to support tests against both Drupal 10.1 and Drupal 11.0.
-// @todo Remove once we depend on Drupal 10.2.
-if (!trait_exists(EntityReferenceFieldCreationTrait::class)) {
-  class_alias('\Drupal\Tests\field\Traits\EntityReferenceTestTrait', EntityReferenceFieldCreationTrait::class);
-}
-
 /**
  * Tests the "Hierarchy" processor.
  *

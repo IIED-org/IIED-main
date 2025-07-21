@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\video_embed_field\Functional;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -36,25 +37,27 @@ class FieldConfigurationTest extends BrowserTestBase {
     $this->createContentType(['type' => 'page', 'name' => 'Page']);
     drupal_flush_all_caches();
     $this->drupalGet('admin/structure/types/manage/page/fields/add-field');
-    $this->submitForm([
+    $selected_group = [
       'new_storage_type' => 'video_embed_field',
+    ];
+    $submit = DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '10.3', fn() => "Continue", fn() => "Change field group");
+    $this->submitForm($selected_group, $submit);
+    $edit = [
       'label' => 'Video Embed',
       'field_name' => 'video_embed',
-    ], t('Save and continue'));
-    $this->submitForm([], t('Save field settings'));
-    $this->submitForm([
-      'label' => 'Video Embed',
-      'description' => 'Some help.',
-      'required' => '1',
-      'default_value_input[field_video_embed][0][value]' => 'http://example.com',
-      'settings[allowed_providers][vimeo]' => 'vimeo',
-      'settings[allowed_providers][youtube]' => 'youtube',
-      'settings[allowed_providers][youtube_playlist]' => 'youtube_playlist',
-    ], t('Save settings'));
+    ];
+    $this->submitForm($edit, 'Continue');
+    $page = $this->getSession()->getPage();
+    $page->fillField('Required field', TRUE);
+    $page->fillField('Vimeo', TRUE);
+    $page->fillField('YouTube', TRUE);
+    $page->fillField('YouTube Playlist', TRUE);
+    $page->fillField('Set default value', TRUE);
+    $page->fillField('Video Embed', 'http://example.com');
+    $page->pressButton('Save settings');
     $this->assertSession()->pageTextContains('Could not find a video provider to handle the given URL.');
-    $this->submitForm([
-      'default_value_input[field_video_embed][0][value]' => 'https://www.youtube.com/watch?v=XgYu7-DQjDQ',
-    ], t('Save settings'));
+    $page->fillField('Video Embed', 'https://www.youtube.com/watch?v=XgYu7-DQjDQ');
+    $page->pressButton('Save settings');
     $this->assertSession()->pageTextContains('Saved Video Embed configuration.');
   }
 

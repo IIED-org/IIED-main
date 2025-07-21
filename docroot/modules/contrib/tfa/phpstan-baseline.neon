@@ -6,7 +6,15 @@ parameters:
 			path: src/Commands/TfaCommands.php
 
 		-
-			message: "#^Method Drupal\\\\tfa\\\\Commands\\\\TfaCommands\\:\\:messages\\(\\) should return array\\<string\\> but return statement is missing\\.$#"
+			message: """
+				#^Class Drupal\\\\tfa\\\\Commands\\\\TfaCommands implements deprecated interface Drush\\\\Drupal\\\\Commands\\\\sql\\\\SanitizePluginInterface\\:
+				use \\\\Drush\\\\Commands\\\\sql\\\\sanitize\\\\SanitizePluginInterface instead\\.$#
+			"""
+			count: 1
+			path: src/Commands/TfaCommands.php
+
+		-
+			message: "#^Method Drupal\\\\tfa\\\\Commands\\\\TfaCommands\\:\\:messages\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Commands/TfaCommands.php
 
@@ -21,47 +29,7 @@ parameters:
 			path: src/Commands/TfaCommands.php
 
 		-
-			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 1
-			path: src/Commands/TfaTokenManagement.php
-
-		-
-			message: "#^Cannot access offset 'saved' on mixed\\.$#"
-			count: 1
-			path: src/Commands/TfaTokenManagement.php
-
-		-
-			message: "#^Cannot access offset 'status' on mixed\\.$#"
-			count: 1
-			path: src/Commands/TfaTokenManagement.php
-
-		-
-			message: "#^Cannot access offset 'validation_skipped' on mixed\\.$#"
-			count: 1
-			path: src/Commands/TfaTokenManagement.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Commands\\\\TfaTokenManagement\\:\\:deleteUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Commands/TfaTokenManagement.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Commands\\\\TfaTokenManagement\\:\\:setUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Commands/TfaTokenManagement.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Commands\\\\TfaTokenManagement\\:\\:tfaSaveTfaData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Commands/TfaTokenManagement.php
-
-		-
 			message: "#^Parameter \\#2 \\$key of method Drupal\\\\tfa\\\\Commands\\\\TfaTokenManagement\\:\\:deleteUserData\\(\\) expects string, null given\\.$#"
-			count: 1
-			path: src/Commands/TfaTokenManagement.php
-
-		-
-			message: "#^Parameter \\#3 \\$name of method Drupal\\\\user\\\\UserDataInterface\\:\\:set\\(\\) expects string, int\\|string\\|null given\\.$#"
 			count: 1
 			path: src/Commands/TfaTokenManagement.php
 
@@ -101,7 +69,7 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 2
+			count: 1
 			path: src/Controller/TfaUserAuthenticationController.php
 
 		-
@@ -111,26 +79,6 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'plugins' on mixed\\.$#"
-			count: 1
-			path: src/Controller/TfaUserAuthenticationController.php
-
-		-
-			message: "#^Cannot access offset 'saved' on mixed\\.$#"
-			count: 1
-			path: src/Controller/TfaUserAuthenticationController.php
-
-		-
-			message: "#^Cannot access offset 'status' on mixed\\.$#"
-			count: 1
-			path: src/Controller/TfaUserAuthenticationController.php
-
-		-
-			message: "#^Cannot access offset 'validation_skipped' on mixed\\.$#"
-			count: 1
-			path: src/Controller/TfaUserAuthenticationController.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Controller\\\\TfaUserAuthenticationController\\:\\:deleteUserData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Controller/TfaUserAuthenticationController.php
 
@@ -155,17 +103,7 @@ parameters:
 			path: src/Controller/TfaUserAuthenticationController.php
 
 		-
-			message: "#^Method Drupal\\\\tfa\\\\Controller\\\\TfaUserAuthenticationController\\:\\:setUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Controller/TfaUserAuthenticationController.php
-
-		-
 			message: "#^Method Drupal\\\\tfa\\\\Controller\\\\TfaUserAuthenticationController\\:\\:tempStoreUid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Controller/TfaUserAuthenticationController.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Controller\\\\TfaUserAuthenticationController\\:\\:tfaSaveTfaData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Controller/TfaUserAuthenticationController.php
 
@@ -215,11 +153,6 @@ parameters:
 			path: src/Controller/TfaUserAuthenticationController.php
 
 		-
-			message: "#^Parameter \\#3 \\$name of method Drupal\\\\user\\\\UserDataInterface\\:\\:set\\(\\) expects string, int\\|string\\|null given\\.$#"
-			count: 1
-			path: src/Controller/TfaUserAuthenticationController.php
-
-		-
 			message: "#^Parameter \\#7 \\$serializer_formats of class Drupal\\\\tfa\\\\Controller\\\\TfaUserAuthenticationController constructor expects array, array\\|bool\\|float\\|int\\|string\\|UnitEnum\\|null given\\.$#"
 			count: 1
 			path: src/Controller/TfaUserAuthenticationController.php
@@ -255,31 +188,11 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 2
+			count: 1
 			path: src/Controller/TfaUserControllerBase.php
 
 		-
 			message: "#^Cannot access offset 'plugins' on mixed\\.$#"
-			count: 1
-			path: src/Controller/TfaUserControllerBase.php
-
-		-
-			message: "#^Cannot access offset 'saved' on mixed\\.$#"
-			count: 1
-			path: src/Controller/TfaUserControllerBase.php
-
-		-
-			message: "#^Cannot access offset 'status' on mixed\\.$#"
-			count: 1
-			path: src/Controller/TfaUserControllerBase.php
-
-		-
-			message: "#^Cannot access offset 'validation_skipped' on mixed\\.$#"
-			count: 1
-			path: src/Controller/TfaUserControllerBase.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Controller\\\\TfaUserControllerBase\\:\\:deleteUserData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Controller/TfaUserControllerBase.php
 
@@ -304,17 +217,7 @@ parameters:
 			path: src/Controller/TfaUserControllerBase.php
 
 		-
-			message: "#^Method Drupal\\\\tfa\\\\Controller\\\\TfaUserControllerBase\\:\\:setUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Controller/TfaUserControllerBase.php
-
-		-
 			message: "#^Method Drupal\\\\tfa\\\\Controller\\\\TfaUserControllerBase\\:\\:tempStoreUid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Controller/TfaUserControllerBase.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Controller\\\\TfaUserControllerBase\\:\\:tfaSaveTfaData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Controller/TfaUserControllerBase.php
 
@@ -370,11 +273,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$uid of method Drupal\\\\user\\\\UserDataInterface\\:\\:get\\(\\) expects int\\|null, int\\|string\\|null given\\.$#"
-			count: 1
-			path: src/Controller/TfaUserControllerBase.php
-
-		-
-			message: "#^Parameter \\#3 \\$name of method Drupal\\\\user\\\\UserDataInterface\\:\\:set\\(\\) expects string, int\\|string\\|null given\\.$#"
 			count: 1
 			path: src/Controller/TfaUserControllerBase.php
 
@@ -590,7 +488,7 @@ parameters:
 			path: src/Form/SettingsForm.php
 
 		-
-			message: "#^Cannot access offset 'title' on 'fieldset'\\|array\\{\\#type\\: 'container', \\#states\\: array\\{visible\\: array\\{non\\-empty\\-array\\<non\\-falsy\\-string, array\\{checked\\: true\\}\\>, array\\{'select\\[name\\=\"tfa_validate\"\\]'\\: array\\{value\\: int\\|string\\}\\}\\}\\}, title\\: array\\{\\#type\\: 'html_tag', \\#tag\\: 'h3', \\#value\\: mixed\\}, form\\: mixed\\}\\|array\\{\\#type\\: 'container', \\#states\\: array\\{visible\\: array\\{non\\-empty\\-array\\<non\\-falsy\\-string, array\\{checked\\: true\\}\\>, array\\{'select\\[name\\=\"tfa_validate\"\\]'\\: array\\{value\\: int\\|string\\}\\}\\}\\}\\}\\|array\\{visible\\: array\\{'\\:input\\[name\\=\"tfa_enabled\"\\]'\\: array\\{checked\\: true\\}\\}, title\\: array\\{\\#type\\: 'html_tag', \\#tag\\: 'h3', \\#value\\: mixed\\}, form\\: mixed\\}\\|array\\{visible\\: array\\{'\\:input\\[name\\=\"tfa_enabled\"\\]'\\: array\\{checked\\: true\\}\\}\\}\\|Drupal\\\\Core\\\\StringTranslation\\\\TranslatableMarkup\\|true\\.$#"
+			message: "#^Cannot access offset 'title' on 'fieldset'\\|array\\{\\#type\\: 'container', \\#states\\: array\\{visible\\: array\\{non\\-empty\\-array\\<non\\-falsy\\-string, array\\{checked\\: true\\}\\>, array\\{'select\\[name\\=\"tfa_validate\"\\]'\\: array\\{value\\: \\(int\\|string\\)\\}\\}\\}\\}, title\\: array\\{\\#type\\: 'html_tag', \\#tag\\: 'h3', \\#value\\: mixed\\}, form\\: mixed\\}\\|array\\{\\#type\\: 'container', \\#states\\: array\\{visible\\: array\\{non\\-empty\\-array\\<non\\-falsy\\-string, array\\{checked\\: true\\}\\>, array\\{'select\\[name\\=\"tfa_validate\"\\]'\\: array\\{value\\: \\(int\\|string\\)\\}\\}\\}\\}\\}\\|array\\{visible\\: array\\{'\\:input\\[name\\=\"tfa_enabled\"\\]'\\: array\\{checked\\: true\\}\\}, title\\: array\\{\\#type\\: 'html_tag', \\#tag\\: 'h3', \\#value\\: mixed\\}, form\\: mixed\\}\\|array\\{visible\\: array\\{'\\:input\\[name\\=\"tfa_enabled\"\\]'\\: array\\{checked\\: true\\}\\}\\}\\|Drupal\\\\Core\\\\StringTranslation\\\\TranslatableMarkup\\|true\\.$#"
 			count: 1
 			path: src/Form/SettingsForm.php
 
@@ -625,36 +523,6 @@ parameters:
 			path: src/Form/SettingsForm.php
 
 		-
-			message: "#^Parameter \\#1 \\$plugin_id of method Drupal\\\\tfa\\\\TfaLoginPluginManager\\:\\:createInstance\\(\\) expects string, int\\|string given\\.$#"
-			count: 1
-			path: src/Form/SettingsForm.php
-
-		-
-			message: "#^Parameter \\#1 \\$plugin_id of method Drupal\\\\tfa\\\\TfaValidationPluginManager\\:\\:createInstance\\(\\) expects string, int\\|string given\\.$#"
-			count: 1
-			path: src/Form/SettingsForm.php
-
-		-
-			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaDisableForm.php
-
-		-
-			message: "#^Cannot access offset 'saved' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaDisableForm.php
-
-		-
-			message: "#^Cannot access offset 'status' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaDisableForm.php
-
-		-
-			message: "#^Cannot access offset 'validation_skipped' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaDisableForm.php
-
-		-
 			message: "#^Cannot call method getDisplayName\\(\\) on Drupal\\\\user\\\\Entity\\\\User\\|null\\.$#"
 			count: 2
 			path: src/Form/TfaDisableForm.php
@@ -675,6 +543,11 @@ parameters:
 			path: src/Form/TfaDisableForm.php
 
 		-
+			message: "#^Deprecated in PHP 8\\.4\\: Parameter \\#3 \\$user \\(Drupal\\\\user\\\\Entity\\\\User\\) is implicitly nullable via default value null\\.$#"
+			count: 1
+			path: src/Form/TfaDisableForm.php
+
+		-
 			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaDisableForm\\:\\:cancelForm\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Form/TfaDisableForm.php
@@ -685,22 +558,7 @@ parameters:
 			path: src/Form/TfaDisableForm.php
 
 		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaDisableForm\\:\\:deleteUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaDisableForm.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaDisableForm\\:\\:setUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaDisableForm.php
-
-		-
 			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaDisableForm\\:\\:submitForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaDisableForm.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaDisableForm\\:\\:tfaSaveTfaData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Form/TfaDisableForm.php
 
@@ -720,11 +578,6 @@ parameters:
 			path: src/Form/TfaDisableForm.php
 
 		-
-			message: "#^Parameter \\#3 \\$name of method Drupal\\\\user\\\\UserDataInterface\\:\\:set\\(\\) expects string, int\\|string\\|null given\\.$#"
-			count: 1
-			path: src/Form/TfaDisableForm.php
-
-		-
 			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: src/Form/TfaLoginForm.php
@@ -740,26 +593,11 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 2
+			count: 1
 			path: src/Form/TfaLoginForm.php
 
 		-
 			message: "#^Cannot access offset 'plugins' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaLoginForm.php
-
-		-
-			message: "#^Cannot access offset 'saved' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaLoginForm.php
-
-		-
-			message: "#^Cannot access offset 'status' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaLoginForm.php
-
-		-
-			message: "#^Cannot access offset 'validation_skipped' on mixed\\.$#"
 			count: 1
 			path: src/Form/TfaLoginForm.php
 
@@ -770,11 +608,6 @@ parameters:
 
 		-
 			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaLoginForm\\:\\:create\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaLoginForm.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaLoginForm\\:\\:deleteUserData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Form/TfaLoginForm.php
 
@@ -804,11 +637,6 @@ parameters:
 			path: src/Form/TfaLoginForm.php
 
 		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaLoginForm\\:\\:setUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaLoginForm.php
-
-		-
 			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaLoginForm\\:\\:submitForm\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Form/TfaLoginForm.php
@@ -820,11 +648,6 @@ parameters:
 
 		-
 			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaLoginForm\\:\\:tfaLoginFormRedirect\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaLoginForm.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaLoginForm\\:\\:tfaSaveTfaData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Form/TfaLoginForm.php
 
@@ -879,11 +702,6 @@ parameters:
 			path: src/Form/TfaLoginForm.php
 
 		-
-			message: "#^Parameter \\#3 \\$name of method Drupal\\\\user\\\\UserDataInterface\\:\\:set\\(\\) expects string, int\\|string\\|null given\\.$#"
-			count: 1
-			path: src/Form/TfaLoginForm.php
-
-		-
 			message: "#^Variable \\$login_plugins in PHPDoc tag @var does not exist\\.$#"
 			count: 1
 			path: src/Form/TfaLoginForm.php
@@ -931,26 +749,6 @@ parameters:
 			path: src/Form/TfaOverviewForm.php
 
 		-
-			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaOverviewForm.php
-
-		-
-			message: "#^Cannot access offset 'saved' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaOverviewForm.php
-
-		-
-			message: "#^Cannot access offset 'status' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaOverviewForm.php
-
-		-
-			message: "#^Cannot access offset 'validation_skipped' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaOverviewForm.php
-
-		-
 			message: "#^Cannot access offset \\(int\\|string\\) on mixed\\.$#"
 			count: 3
 			path: src/Form/TfaOverviewForm.php
@@ -976,12 +774,12 @@ parameters:
 			path: src/Form/TfaOverviewForm.php
 
 		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaOverviewForm\\:\\:create\\(\\) has no return type specified\\.$#"
+			message: "#^Deprecated in PHP 8\\.4\\: Parameter \\#3 \\$user \\(Drupal\\\\user\\\\UserInterface\\) is implicitly nullable via default value null\\.$#"
 			count: 1
 			path: src/Form/TfaOverviewForm.php
 
 		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaOverviewForm\\:\\:deleteUserData\\(\\) has no return type specified\\.$#"
+			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaOverviewForm\\:\\:create\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Form/TfaOverviewForm.php
 
@@ -991,17 +789,7 @@ parameters:
 			path: src/Form/TfaOverviewForm.php
 
 		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaOverviewForm\\:\\:setUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaOverviewForm.php
-
-		-
 			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaOverviewForm\\:\\:submitForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaOverviewForm.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaOverviewForm\\:\\:tfaSaveTfaData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Form/TfaOverviewForm.php
 
@@ -1028,11 +816,6 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$account of method Drupal\\\\tfa\\\\Form\\\\TfaOverviewForm\\:\\:tfaPluginSetupFormOverview\\(\\) expects object, Drupal\\\\user\\\\UserInterface\\|null given\\.$#"
 			count: 3
-			path: src/Form/TfaOverviewForm.php
-
-		-
-			message: "#^Parameter \\#3 \\$name of method Drupal\\\\user\\\\UserDataInterface\\:\\:set\\(\\) expects string, int\\|string\\|null given\\.$#"
-			count: 1
 			path: src/Form/TfaOverviewForm.php
 
 		-
@@ -1078,26 +861,6 @@ parameters:
 			path: src/Form/TfaSetupForm.php
 
 		-
-			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaSetupForm.php
-
-		-
-			message: "#^Cannot access offset 'saved' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaSetupForm.php
-
-		-
-			message: "#^Cannot access offset 'status' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaSetupForm.php
-
-		-
-			message: "#^Cannot access offset 'validation_skipped' on mixed\\.$#"
-			count: 1
-			path: src/Form/TfaSetupForm.php
-
-		-
 			message: "#^Cannot call method getAccountName\\(\\) on Drupal\\\\user\\\\Entity\\\\User\\|null\\.$#"
 			count: 1
 			path: src/Form/TfaSetupForm.php
@@ -1105,6 +868,11 @@ parameters:
 		-
 			message: "#^Cannot call method id\\(\\) on Drupal\\\\user\\\\Entity\\\\User\\|null\\.$#"
 			count: 3
+			path: src/Form/TfaSetupForm.php
+
+		-
+			message: "#^Deprecated in PHP 8\\.4\\: Parameter \\#3 \\$user \\(Drupal\\\\user\\\\Entity\\\\User\\) is implicitly nullable via default value null\\.$#"
+			count: 1
 			path: src/Form/TfaSetupForm.php
 
 		-
@@ -1128,17 +896,7 @@ parameters:
 			path: src/Form/TfaSetupForm.php
 
 		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaSetupForm\\:\\:deleteUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaSetupForm.php
-
-		-
 			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaSetupForm\\:\\:findPlugin\\(\\) should return array\\|null but returns mixed\\.$#"
-			count: 1
-			path: src/Form/TfaSetupForm.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaSetupForm\\:\\:setUserData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Form/TfaSetupForm.php
 
@@ -1158,17 +916,7 @@ parameters:
 			path: src/Form/TfaSetupForm.php
 
 		-
-			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaSetupForm\\:\\:tfaSaveTfaData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaSetupForm.php
-
-		-
 			message: "#^Method Drupal\\\\tfa\\\\Form\\\\TfaSetupForm\\:\\:validateForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Form/TfaSetupForm.php
-
-		-
-			message: "#^Offset 'label' does not exist on array\\|null\\.$#"
 			count: 1
 			path: src/Form/TfaSetupForm.php
 
@@ -1194,11 +942,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$uid of method Drupal\\\\tfa\\\\Form\\\\TfaSetupForm\\:\\:tfaGetTfaData\\(\\) expects int, int\\|string\\|null given\\.$#"
-			count: 1
-			path: src/Form/TfaSetupForm.php
-
-		-
-			message: "#^Parameter \\#3 \\$name of method Drupal\\\\user\\\\UserDataInterface\\:\\:set\\(\\) expects string, int\\|string\\|null given\\.$#"
 			count: 1
 			path: src/Form/TfaSetupForm.php
 
@@ -1288,42 +1031,12 @@ parameters:
 			path: src/Plugin/EncryptionMethod/McryptAES128Encryption.php
 
 		-
-			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 1
-			path: src/Plugin/TfaBasePlugin.php
-
-		-
-			message: "#^Cannot access offset 'saved' on mixed\\.$#"
-			count: 1
-			path: src/Plugin/TfaBasePlugin.php
-
-		-
-			message: "#^Cannot access offset 'status' on mixed\\.$#"
-			count: 1
-			path: src/Plugin/TfaBasePlugin.php
-
-		-
-			message: "#^Cannot access offset 'validation_skipped' on mixed\\.$#"
-			count: 1
-			path: src/Plugin/TfaBasePlugin.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Plugin\\\\TfaBasePlugin\\:\\:deleteUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Plugin/TfaBasePlugin.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Plugin\\\\TfaBasePlugin\\:\\:setUserData\\(\\) has no return type specified\\.$#"
+			message: "#^Cannot access offset 'label' on array\\|Drupal\\\\Component\\\\Plugin\\\\Definition\\\\PluginDefinitionInterface\\.$#"
 			count: 1
 			path: src/Plugin/TfaBasePlugin.php
 
 		-
 			message: "#^Method Drupal\\\\tfa\\\\Plugin\\\\TfaBasePlugin\\:\\:storeAcceptedCode\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Plugin/TfaBasePlugin.php
-
-		-
-			message: "#^Method Drupal\\\\tfa\\\\Plugin\\\\TfaBasePlugin\\:\\:tfaSaveTfaData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Plugin/TfaBasePlugin.php
 
@@ -1338,27 +1051,7 @@ parameters:
 			path: src/Plugin/TfaBasePlugin.php
 
 		-
-			message: "#^Parameter \\#2 \\$encryption_profile of method Drupal\\\\encrypt\\\\EncryptService\\:\\:decrypt\\(\\) expects Drupal\\\\encrypt\\\\EncryptionProfileInterface, Drupal\\\\encrypt\\\\EncryptionProfileManagerInterface given\\.$#"
-			count: 1
-			path: src/Plugin/TfaBasePlugin.php
-
-		-
-			message: "#^Parameter \\#2 \\$encryption_profile of method Drupal\\\\encrypt\\\\EncryptService\\:\\:encrypt\\(\\) expects Drupal\\\\encrypt\\\\EncryptionProfileInterface, Drupal\\\\encrypt\\\\EncryptionProfileManagerInterface given\\.$#"
-			count: 1
-			path: src/Plugin/TfaBasePlugin.php
-
-		-
-			message: "#^Parameter \\#3 \\$name of method Drupal\\\\user\\\\UserDataInterface\\:\\:set\\(\\) expects string, int\\|string\\|null given\\.$#"
-			count: 1
-			path: src/Plugin/TfaBasePlugin.php
-
-		-
 			message: "#^Property Drupal\\\\tfa\\\\Plugin\\\\TfaBasePlugin\\:\\:\\$encryptService \\(Drupal\\\\encrypt\\\\EncryptService\\) does not accept Drupal\\\\encrypt\\\\EncryptServiceInterface\\.$#"
-			count: 1
-			path: src/Plugin/TfaBasePlugin.php
-
-		-
-			message: "#^Property Drupal\\\\tfa\\\\Plugin\\\\TfaBasePlugin\\:\\:\\$encryptionProfile \\(Drupal\\\\encrypt\\\\EncryptionProfileManagerInterface\\) does not accept Drupal\\\\encrypt\\\\EncryptionProfileInterface\\.$#"
 			count: 1
 			path: src/Plugin/TfaBasePlugin.php
 
@@ -1468,6 +1161,16 @@ parameters:
 			path: src/Plugin/TfaSetup/TfaHotpSetup.php
 
 		-
+			message: "#^Cannot access offset 'helpLinks' on array\\|Drupal\\\\Component\\\\Plugin\\\\Definition\\\\PluginDefinitionInterface\\.$#"
+			count: 1
+			path: src/Plugin/TfaSetup/TfaHotpSetup.php
+
+		-
+			message: "#^Cannot access offset 'setupMessages' on array\\|Drupal\\\\Component\\\\Plugin\\\\Definition\\\\PluginDefinitionInterface\\.$#"
+			count: 1
+			path: src/Plugin/TfaSetup/TfaHotpSetup.php
+
+		-
 			message: "#^Method Drupal\\\\tfa\\\\Plugin\\\\TfaSetup\\\\TfaHotpSetup\\:\\:getQrCodeUri\\(\\) should return string but returns mixed\\.$#"
 			count: 1
 			path: src/Plugin/TfaSetup/TfaHotpSetup.php
@@ -1498,6 +1201,11 @@ parameters:
 			path: src/Plugin/TfaSetup/TfaHotpSetup.php
 
 		-
+			message: "#^Cannot access offset 'setupMessages' on array\\|Drupal\\\\Component\\\\Plugin\\\\Definition\\\\PluginDefinitionInterface\\.$#"
+			count: 1
+			path: src/Plugin/TfaSetup/TfaRecoveryCodeSetup.php
+
+		-
 			message: "#^Parameter \\#1 \\$codes of method Drupal\\\\tfa\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCode\\:\\:storeCodes\\(\\) expects array, mixed given\\.$#"
 			count: 1
 			path: src/Plugin/TfaSetup/TfaRecoveryCodeSetup.php
@@ -1509,6 +1217,16 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property object\\:\\:\\$otp\\.$#"
+			count: 1
+			path: src/Plugin/TfaSetup/TfaTotpSetup.php
+
+		-
+			message: "#^Cannot access offset 'helpLinks' on array\\|Drupal\\\\Component\\\\Plugin\\\\Definition\\\\PluginDefinitionInterface\\.$#"
+			count: 1
+			path: src/Plugin/TfaSetup/TfaTotpSetup.php
+
+		-
+			message: "#^Cannot access offset 'setupMessages' on array\\|Drupal\\\\Component\\\\Plugin\\\\Definition\\\\PluginDefinitionInterface\\.$#"
 			count: 1
 			path: src/Plugin/TfaSetup/TfaTotpSetup.php
 
@@ -1541,6 +1259,16 @@ parameters:
 			message: "#^\\\\Drupal calls should be avoided in classes, use dependency injection instead$#"
 			count: 1
 			path: src/Plugin/TfaSetup/TfaTotpSetup.php
+
+		-
+			message: "#^Cannot access offset 'helpLinks' on array\\|Drupal\\\\Component\\\\Plugin\\\\Definition\\\\PluginDefinitionInterface\\.$#"
+			count: 1
+			path: src/Plugin/TfaSetup/TfaTrustedBrowserSetup.php
+
+		-
+			message: "#^Cannot access offset 'setupMessages' on array\\|Drupal\\\\Component\\\\Plugin\\\\Definition\\\\PluginDefinitionInterface\\.$#"
+			count: 1
+			path: src/Plugin/TfaSetup/TfaTrustedBrowserSetup.php
 
 		-
 			message: "#^Method Drupal\\\\tfa\\\\Plugin\\\\TfaSetup\\\\TfaTrustedBrowserSetup\\:\\:getTrustedBrowsers\\(\\) should return array but returns mixed\\.$#"
@@ -1773,6 +1501,11 @@ parameters:
 			path: src/Plugin/views/field/TfaEnabledField.php
 
 		-
+			message: "#^Parameter \\#2 \\$uid of method Drupal\\\\user\\\\UserDataInterface\\:\\:get\\(\\) expects int\\|null, mixed given\\.$#"
+			count: 1
+			path: src/Plugin/views/field/TfaEnabledField.php
+
+		-
 			message: "#^Method Drupal\\\\tfa\\\\Routing\\\\TfaRouteSubscriber\\:\\:alterRoutes\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Routing/TfaRouteSubscriber.php
@@ -1908,6 +1641,11 @@ parameters:
 		-
 			message: "#^Cannot access offset 'expected_field' on mixed\\.$#"
 			count: 1
+			path: tests/modules/tfa_test_plugins/src/Plugin/TfaSetup/TfaTestValidationPluginSetupPlugin.php
+
+		-
+			message: "#^Cannot access offset 'id' on array\\|Drupal\\\\Component\\\\Plugin\\\\Definition\\\\PluginDefinitionInterface\\.$#"
+			count: 2
 			path: tests/modules/tfa_test_plugins/src/Plugin/TfaSetup/TfaTestValidationPluginSetupPlugin.php
 
 		-
@@ -2086,32 +1824,7 @@ parameters:
 			path: tests/src/Functional/TfaHttpLoginTest.php
 
 		-
-			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 1
-			path: tests/src/Functional/TfaLoginTest.php
-
-		-
-			message: "#^Cannot access offset 'saved' on mixed\\.$#"
-			count: 1
-			path: tests/src/Functional/TfaLoginTest.php
-
-		-
-			message: "#^Cannot access offset 'status' on mixed\\.$#"
-			count: 1
-			path: tests/src/Functional/TfaLoginTest.php
-
-		-
-			message: "#^Cannot access offset 'validation_skipped' on mixed\\.$#"
-			count: 1
-			path: tests/src/Functional/TfaLoginTest.php
-
-		-
-			message: "#^Method Drupal\\\\Tests\\\\tfa\\\\Functional\\\\TfaLoginTest\\:\\:deleteUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/src/Functional/TfaLoginTest.php
-
-		-
-			message: "#^Method Drupal\\\\Tests\\\\tfa\\\\Functional\\\\TfaLoginTest\\:\\:setUserData\\(\\) has no return type specified\\.$#"
+			message: "#^Access to an undefined property Drupal\\\\user\\\\UserInterface\\:\\:\\$passRaw\\.$#"
 			count: 1
 			path: tests/src/Functional/TfaLoginTest.php
 
@@ -2126,17 +1839,7 @@ parameters:
 			path: tests/src/Functional/TfaLoginTest.php
 
 		-
-			message: "#^Method Drupal\\\\Tests\\\\tfa\\\\Functional\\\\TfaLoginTest\\:\\:tfaSaveTfaData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/src/Functional/TfaLoginTest.php
-
-		-
 			message: "#^Method PHPUnit\\\\Framework\\\\Assert\\:\\:matchesRegularExpression\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: tests/src/Functional/TfaLoginTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$name of method Drupal\\\\user\\\\UserDataInterface\\:\\:set\\(\\) expects string, int\\|string\\|null given\\.$#"
 			count: 1
 			path: tests/src/Functional/TfaLoginTest.php
 
@@ -2186,6 +1889,11 @@ parameters:
 			path: tests/src/Functional/TfaPasswordResetTest.php
 
 		-
+			message: "#^Offset 0 does not exist on array\\{0\\?\\: string\\}\\.$#"
+			count: 1
+			path: tests/src/Functional/TfaPasswordResetTest.php
+
+		-
 			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, string\\|false\\|null given\\.$#"
 			count: 1
 			path: tests/src/Functional/TfaPasswordResetTest.php
@@ -2214,6 +1922,11 @@ parameters:
 			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Functional\\\\TfaPasswordResetTest\\:\\:\\$webUser \\(Drupal\\\\user\\\\Entity\\\\User\\) does not accept Drupal\\\\user\\\\Entity\\\\User\\|false\\.$#"
 			count: 1
 			path: tests/src/Functional/TfaPasswordResetTest.php
+
+		-
+			message: "#^Access to an undefined property Drupal\\\\user\\\\UserInterface\\:\\:\\$passRaw\\.$#"
+			count: 4
+			path: tests/src/Functional/TfaRecoveryCodePluginTest.php
 
 		-
 			message: "#^Method Drupal\\\\Tests\\\\tfa\\\\Functional\\\\TfaRecoveryCodePluginTest\\:\\:testEnableValidationPlugin\\(\\) has no return type specified\\.$#"
@@ -2371,193 +2084,13 @@ parameters:
 			path: tests/src/Functional/TfaTotpValidationPluginTest.php
 
 		-
-			message: "#^Call to an undefined method Drupal\\\\Core\\\\Config\\\\ConfigFactoryInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:get\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\Core\\\\Config\\\\ConfigFactoryInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:reveal\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\Core\\\\Config\\\\ImmutableConfig\\:\\:willReturn\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\Core\\\\Config\\\\ImmutableConfig\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:get\\(\\)\\.$#"
-			count: 3
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\Core\\\\Config\\\\ImmutableConfig\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:reveal\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\Core\\\\Session\\\\AccountProxyInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:reveal\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\encrypt\\\\EncryptServiceInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:decrypt\\(\\)\\.$#"
-			count: 2
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\encrypt\\\\EncryptServiceInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:encrypt\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\encrypt\\\\EncryptServiceInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:reveal\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\encrypt\\\\EncryptionProfileInterface\\:\\:willReturn\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\encrypt\\\\EncryptionProfileInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:reveal\\(\\)\\.$#"
-			count: 4
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\encrypt\\\\EncryptionProfileManagerInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:getEncryptionProfile\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\encrypt\\\\EncryptionProfileManagerInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:reveal\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\user\\\\UserDataInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:delete\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\user\\\\UserDataInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:get\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\user\\\\UserDataInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:reveal\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Call to an undefined method Drupal\\\\user\\\\UserDataInterface\\|Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:set\\(\\)\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Cannot call method willReturn\\(\\) on mixed\\.$#"
-			count: 4
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Cannot call method willReturn\\(\\) on string\\.$#"
-			count: 3
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
 			message: "#^Method Drupal\\\\Tests\\\\tfa\\\\Unit\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCodeTest\\:\\:testReadyCodesValidate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Parameter \\#4 \\$user_data of class Drupal\\\\tfa\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCode constructor expects Drupal\\\\user\\\\UserDataInterface, object given\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Parameter \\#5 \\$encryption_profile_manager of class Drupal\\\\tfa\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCode constructor expects Drupal\\\\encrypt\\\\EncryptionProfileManagerInterface, object given\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Parameter \\#6 \\$encrypt_service of class Drupal\\\\tfa\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCode constructor expects Drupal\\\\encrypt\\\\EncryptServiceInterface, object given\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Parameter \\#8 \\$current_user of class Drupal\\\\tfa\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCode constructor expects Drupal\\\\Core\\\\Session\\\\AccountProxyInterface, object given\\.$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCodeTest\\:\\:\\$configFactory with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCodeTest\\:\\:\\$currentUser with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCodeTest\\:\\:\\$encryptionProfile with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCodeTest\\:\\:\\$encryptionProfileManager with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCodeTest\\:\\:\\$encryptionService with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCodeTest\\:\\:\\$tfaSettings with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\Plugin\\\\TfaValidation\\\\TfaRecoveryCodeTest\\:\\:\\$userData with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/src/Unit/Plugin/TfaValidation/TfaRecoveryCodeTest.php
 
 		-
 			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
 			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Call to an undefined method Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:createInstance\\(\\)\\.$#"
-			count: 2
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Call to an undefined method Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:get\\(\\)\\.$#"
-			count: 24
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Call to an undefined method Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:getRoles\\(\\)\\.$#"
-			count: 2
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Call to an undefined method Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:id\\(\\)\\.$#"
-			count: 3
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Call to an undefined method Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:load\\(\\)\\.$#"
-			count: 2
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Call to an undefined method Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:ready\\(\\)\\.$#"
-			count: 2
 			path: tests/src/Unit/TfaContextTest.php
 
 		-
@@ -2606,26 +2139,11 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 2
+			count: 1
 			path: tests/src/Unit/TfaContextTest.php
 
 		-
 			message: "#^Cannot access offset 'plugins' on mixed\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Cannot access offset 'saved' on mixed\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Cannot access offset 'status' on mixed\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Cannot access offset 'validation_skipped' on mixed\\.$#"
 			count: 1
 			path: tests/src/Unit/TfaContextTest.php
 
@@ -2650,11 +2168,6 @@ parameters:
 			path: tests/src/Unit/TfaContextTest.php
 
 		-
-			message: "#^Method class@anonymous/tests/src/Unit/TfaContextTest\\.php\\:108\\:\\:deleteUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
 			message: "#^Method class@anonymous/tests/src/Unit/TfaContextTest\\.php\\:108\\:\\:doUserLogin\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/src/Unit/TfaContextTest.php
@@ -2675,17 +2188,7 @@ parameters:
 			path: tests/src/Unit/TfaContextTest.php
 
 		-
-			message: "#^Method class@anonymous/tests/src/Unit/TfaContextTest\\.php\\:108\\:\\:setUserData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
 			message: "#^Method class@anonymous/tests/src/Unit/TfaContextTest\\.php\\:108\\:\\:tempStoreUid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Method class@anonymous/tests/src/Unit/TfaContextTest\\.php\\:108\\:\\:tfaSaveTfaData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/src/Unit/TfaContextTest.php
 
@@ -2725,61 +2228,6 @@ parameters:
 			path: tests/src/Unit/TfaContextTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$name of method Drupal\\\\user\\\\UserDataInterface\\:\\:set\\(\\) expects string, int\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\TfaContextTest\\:\\:\\$configFactory \\(Drupal\\\\Core\\\\Config\\\\ConfigFactoryInterface\\) does not accept Prophecy\\\\Prophecy\\\\ObjectProphecy\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\TfaContextTest\\:\\:\\$configFactory \\(Drupal\\\\Core\\\\Config\\\\ConfigFactoryInterface\\) does not accept object\\.$#"
-			count: 7
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\TfaContextTest\\:\\:\\$tfaLoginManager \\(Drupal\\\\tfa\\\\TfaLoginPluginManager\\) does not accept object\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\TfaContextTest\\:\\:\\$tfaSettings \\(Drupal\\\\Core\\\\Config\\\\ImmutableConfig\\) does not accept object\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\TfaContextTest\\:\\:\\$tfaValidationManager \\(Drupal\\\\tfa\\\\TfaValidationPluginManager\\) does not accept object\\.$#"
-			count: 3
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\TfaContextTest\\:\\:\\$user \\(Drupal\\\\user\\\\UserInterface\\) does not accept Prophecy\\\\Prophecy\\\\ObjectProphecy\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\TfaContextTest\\:\\:\\$user \\(Drupal\\\\user\\\\UserInterface\\) does not accept object\\.$#"
-			count: 3
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\TfaContextTest\\:\\:\\$userData \\(Drupal\\\\user\\\\UserDataInterface\\) does not accept object\\.$#"
-			count: 6
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\TfaContextTest\\:\\:\\$userStorage \\(Drupal\\\\user\\\\UserStorageInterface\\) does not accept Prophecy\\\\Prophecy\\\\ObjectProphecy\\.$#"
-			count: 1
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
-			message: "#^Property Drupal\\\\Tests\\\\tfa\\\\Unit\\\\TfaContextTest\\:\\:\\$userStorage \\(Drupal\\\\user\\\\UserStorageInterface\\) does not accept object\\.$#"
-			count: 2
-			path: tests/src/Unit/TfaContextTest.php
-
-		-
 			message: "#^Variable \\$login_plugins in PHPDoc tag @var does not exist\\.$#"
 			count: 1
 			path: tests/src/Unit/TfaContextTest.php
@@ -2791,17 +2239,17 @@ parameters:
 
 		-
 			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
-			count: 4
+			count: 5
 			path: tfa.install
 
 		-
 			message: "#^Cannot access offset 'data' on mixed\\.$#"
-			count: 1
+			count: 3
 			path: tfa.install
 
 		-
 			message: "#^Cannot access offset 'plugins' on mixed\\.$#"
-			count: 1
+			count: 3
 			path: tfa.install
 
 		-
@@ -2921,7 +2369,7 @@ parameters:
 
 		-
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, mixed given\\.$#"
-			count: 3
+			count: 4
 			path: tfa.install
 
 		-

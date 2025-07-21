@@ -127,4 +127,11 @@ class SophronApiTest extends KernelTestBase {
     $this->assertCount(4, $manager->getMappingErrors(DefaultMap::class));
   }
 
+  /**
+   * Tests no mapping errors for DrupalMap vs core.
+   */
+  public function testZeroMappingErrorsForDrupalMap(): void {
+    $this->assertSame([], \Drupal::service(MimeMapManagerInterface::class)->determineMapGaps(DrupalMap::class));
+  }
+
 }
