@@ -143,11 +143,9 @@
         {% endif %}
 
         {#-- body --#}
-        <div class="pb-6 prose md:prose-lg">
-          <div {{ content_attributes.addClass('node-content') }}> 
-          {{ content.body }} 
-          {{ content.field_paragraphs }}
-          </div>
+        <div {{ content_attributes.addClass('node-content prose md:prose-lg') }}> 
+        {{ content.body }} 
+        {{ content.field_paragraphs }}
         </div>
 
       </div>
