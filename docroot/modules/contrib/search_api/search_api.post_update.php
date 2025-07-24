@@ -20,6 +20,17 @@ function search_api_post_update_fix_index_dependencies(&$sandbox = NULL) {
 }
 
 /**
+ * Re-save Search API index configurations to fix dependencies order.
+ */
+function search_api_post_update_fix_index_dependencies_orders(&$sandbox = NULL) {
+  \Drupal::classResolver(ConfigEntityUpdater::class)
+    ->update($sandbox, 'search_api_index', function () {
+      // Re-save all search API indexes.
+      return TRUE;
+    });
+}
+
+/**
  * Update Search API views to use the correct query type.
  *
  * In some cases, Views creates Search API views with the default "views_query"

@@ -878,7 +878,7 @@ class ViewsTest extends SearchApiBrowserTestBase {
    * @param string $arguments
    *   (optional) A string to append to the search path.
    */
-  protected function checkResults(array $query, array $expected_results = NULL, string $label = 'Search', string $arguments = '', string $path = 'search-api-test'): void {
+  protected function checkResults(array $query, ?array $expected_results = NULL, string $label = 'Search', string $arguments = '', string $path = 'search-api-test'): void {
     $this->drupalGet($path . '/' . $arguments, ['query' => $query]);
 
     if (isset($expected_results)) {

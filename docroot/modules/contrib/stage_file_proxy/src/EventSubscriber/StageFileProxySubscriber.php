@@ -4,6 +4,7 @@ namespace Drupal\stage_file_proxy\EventSubscriber;
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\Core\Url;
@@ -11,12 +12,12 @@ use Drupal\image\Controller\ImageStyleDownloadController;
 use Drupal\stage_file_proxy\DownloadManagerInterface;
 use Drupal\stage_file_proxy\EventDispatcher\AlterExcludedPathsEvent;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Stage file proxy subscriber for controller requests.
@@ -36,6 +37,8 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
    *   The config factory.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack.
+   * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $pageCacheKillSwitch
+   *   The page cache kill switch.
    */
   public function __construct(
     protected DownloadManagerInterface $manager,
@@ -43,20 +46,26 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
     protected EventDispatcherInterface $eventDispatcher,
     protected ConfigFactoryInterface $configFactory,
     protected RequestStack $requestStack,
+    protected KillSwitch $pageCacheKillSwitch,
   ) {
   }
 
   /**
    * Fetch the file from its origin.
    *
-   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
    *   The event to process.
    */
-  public function checkFileOrigin(RequestEvent $event) {
+  public function checkFileOrigin(RequestEvent $event): void {
     $config = $this->configFactory->get('stage_file_proxy.settings');
 
     // Get the origin server.
     $server = $config->get('origin');
+
+    if (str_ends_with($server, '/')) {
+      $this->logger->error('Origin cannot end in /.');
+      $server = rtrim($server, '/ ');
+    }
 
     // Quit if no origin given.
     if (!$server) {
@@ -73,7 +82,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
 
     $request_path = mb_substr($request_path, 1);
 
-    if (!str_starts_with($request_path, '' . $file_dir)) {
+    if (!str_starts_with($request_path, $file_dir)) {
       return;
     }
 
@@ -95,7 +104,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
     $this->eventDispatcher->dispatch($alter_excluded_paths_event, 'stage_file_proxy.alter_excluded_paths');
     $excluded_paths = $alter_excluded_paths_event->getExcludedPaths();
     foreach ($excluded_paths as $excluded_path) {
-      if (strpos($request_path, $excluded_path) !== FALSE) {
+      if (str_contains($request_path, $excluded_path)) {
         return;
       }
     }
@@ -141,7 +150,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
 
       // Is this imagecache? Request the root file and let imagecache resize.
       // We check this first so locally added files have precedence.
-      $original_path = $this->manager->styleOriginalPath($relative_path, TRUE);
+      $original_path = $this->manager->styleOriginalPath($relative_path);
       if ($original_path) {
         if (file_exists($original_path)) {
           // Imagecache can generate it without our help.
@@ -162,6 +171,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
       ];
 
       if ($config->get('hotlink')) {
+        $relative_path = UrlHelper::encodePath($relative_path);
         $location = Url::fromUri("$server/$remote_file_dir/$relative_path", [
           'query' => $query_parameters,
           'absolute' => TRUE,
@@ -176,6 +186,10 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
           'query' => $query_parameters,
           'absolute' => TRUE,
         ])->toString();
+
+        // Ensure the redirect isn't cached by page_cache module.
+        $this->pageCacheKillSwitch->trigger();
+
         // Use default cache control: must-revalidate, no-cache, private.
         $event->setResponse(new RedirectResponse($location));
       }

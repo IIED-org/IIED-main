@@ -65,9 +65,9 @@ class SolrCommandHelper extends CommandHelper {
    *
    * @param string $server_id
    *   The ID of the server.
-   * @param string $file_name
+   * @param string|null $file_name
    *   The file name of the config zip that should be created.
-   * @param string $solr_version
+   * @param string|null $solr_version
    *   The targeted Solr version.
    *
    * @throws \Drupal\search_api\SearchApiException
@@ -75,7 +75,7 @@ class SolrCommandHelper extends CommandHelper {
    * @throws \ZipStream\Exception\FileNotReadableException
    * @throws \ZipStream\Exception\OverflowException
    */
-  public function getServerConfigCommand($server_id, $file_name = NULL, $solr_version = NULL) {
+  public function getServerConfigCommand($server_id, ?string $file_name = NULL, ?string $solr_version = NULL) {
     $server = $this->getServer($server_id);
 
     if ($solr_version) {
@@ -123,7 +123,7 @@ class SolrCommandHelper extends CommandHelper {
    * @throws \Drupal\search_api\SearchApiException
    * @throws \Drupal\search_api_solr\SearchApiSolrException
    */
-  public function finalizeIndexCommand(array $indexIds = NULL, $force = FALSE) {
+  public function finalizeIndexCommand(?array $indexIds = NULL, $force = FALSE) {
     $servers = search_api_solr_get_servers();
 
     if ($force) {
@@ -208,7 +208,7 @@ class SolrCommandHelper extends CommandHelper {
    * @throws \Drupal\search_api\SearchApiException
    *   Thrown if one of the affected indexes had an invalid tracker set.
    */
-  public function indexParallelCommand(array $indexIds = NULL, $threads = 2, $batchSize = NULL): array {
+  public function indexParallelCommand(?array $indexIds = NULL, $threads = 2, $batchSize = NULL): array {
     $indexes = $this->loadIndexes($indexIds);
     if (!$indexes) {
       return [];
@@ -218,7 +218,7 @@ class SolrCommandHelper extends CommandHelper {
 
     /** @var \Drupal\search_api_solr\Entity\Index $index */
     foreach ($indexes as $index) {
-      if (!$index->status() || $index->isReadOnly()) {
+      if (!$index->status() || $index->isReadOnly() || !($index->getServerInstance()->getBackend() instanceof SolrBackendInterface)) {
         continue;
       }
       $tracker = $index->getTrackerInstance();

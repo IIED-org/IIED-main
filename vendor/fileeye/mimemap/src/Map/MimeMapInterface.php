@@ -6,6 +6,8 @@ use FileEye\MimeMap\MappingException;
 
 /**
  * Interface for MimeMap maps.
+ *
+ * @extends MapInterface<MimeMap>
  */
 interface MimeMapInterface extends MapInterface
 {
@@ -35,7 +37,7 @@ interface MimeMapInterface extends MapInterface
      *
      * @param string $match (Optional) a match wildcard to limit the list.
      *
-     * @return array<int, int|string>
+     * @return list<string>
      */
     public function listTypes(?string $match = null): array;
 
@@ -44,7 +46,7 @@ interface MimeMapInterface extends MapInterface
      *
      * @param string $match (Optional) a match wildcard to limit the list.
      *
-     * @return array<int, int|string>
+     * @return list<string>
      */
     public function listAliases(?string $match = null): array;
 
@@ -53,7 +55,7 @@ interface MimeMapInterface extends MapInterface
      *
      * @param string $match (Optional) a match wildcard to limit the list.
      *
-     * @return array<int, int|string>
+     * @return list<string>
      */
     public function listExtensions(?string $match = null): array;
 
@@ -66,8 +68,6 @@ interface MimeMapInterface extends MapInterface
      *   The description of the MIME type.
      *
      * @throws MappingException if $type is an alias.
-     *
-     * @return $this
      */
     public function addTypeDescription(string $type, string $description): MimeMapInterface;
 
@@ -80,8 +80,6 @@ interface MimeMapInterface extends MapInterface
      *   An alias of $type.
      *
      * @throws MappingException if no $type is found.
-     *
-     * @return $this
      */
     public function addTypeAlias(string $type, string $alias): MimeMapInterface;
 
@@ -94,8 +92,6 @@ interface MimeMapInterface extends MapInterface
      *   A file extension.
      *
      * @throws MappingException if $type is an alias.
-     *
-     * @return $this
      */
     public function addTypeExtensionMapping(string $type, string $extension): MimeMapInterface;
 
@@ -104,7 +100,7 @@ interface MimeMapInterface extends MapInterface
      *
      * @param string $type The type to be found.
      *
-     * @return string[] The mapped descriptions.
+     * @return list<string> The mapped descriptions.
      */
     public function getTypeDescriptions(string $type): array;
 
@@ -113,7 +109,7 @@ interface MimeMapInterface extends MapInterface
      *
      * @param string $type The type to be found.
      *
-     * @return string[] The mapped aliases.
+     * @return list<string> The mapped aliases.
      */
     public function getTypeAliases(string $type): array;
 
@@ -122,7 +118,7 @@ interface MimeMapInterface extends MapInterface
      *
      * @param string $type The type to be found.
      *
-     * @return string[] The mapped file extensions.
+     * @return list<string> The mapped file extensions.
      */
     public function getTypeExtensions(string $type): array;
 
@@ -135,8 +131,6 @@ interface MimeMapInterface extends MapInterface
      *   A file extension.
      *
      * @throws MappingException if no mapping found.
-     *
-     * @return $this
      */
     public function setTypeDefaultExtension(string $type, string $extension): MimeMapInterface;
 
@@ -184,7 +178,7 @@ interface MimeMapInterface extends MapInterface
      *
      * @param string $alias The alias to be found.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getAliasTypes(string $alias): array;
 
@@ -193,7 +187,7 @@ interface MimeMapInterface extends MapInterface
      *
      * @param string $extension The extension to be found.
      *
-     * @return string[] The mapped MIME types.
+     * @return list<string> The mapped MIME types.
      */
     public function getExtensionTypes(string $extension): array;
 
@@ -208,8 +202,6 @@ interface MimeMapInterface extends MapInterface
      *   A MIME type.
      *
      * @throws MappingException if no mapping found.
-     *
-     * @return $this
      */
     public function setExtensionDefaultType(string $extension, string $type): MimeMapInterface;
 }

@@ -2,7 +2,7 @@ name: Stories
 description: 'Provides default Paragraph Types to jumpstart site building.'
 package: Authoring
 type: module
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^8 || ^9 || ^10 || ^11
 dependencies:
   - block_field:block_field
   - drupal:field
@@ -17,7 +17,7 @@ dependencies:
   - tablefield:tablefield
   - viewsreference:viewsreference
 
-# Information added by Drupal.org packaging script on 2023-06-02
-version: '3.0.0-alpha1'
+# Information added by Drupal.org packaging script on 2025-05-01
+version: '3.0.0-alpha3'
 project: 'stories'
-datestamp: 1685742678
+datestamp: 1746110869

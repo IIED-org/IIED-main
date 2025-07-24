@@ -126,7 +126,12 @@ class AcquiaSearchApiClient {
     $cid = 'acquia_search.indexes.' . $id;
     $now = $this->time->getRequestTime();
 
-    if ($cache = $this->cache->get($cid)) {
+    $cache = $this->cache->get($cid);
+    if ($cache !== FALSE) {
+      // Invalid data was cached, return the cached result.
+      if (isset($cache->data['invalid'])) {
+        return FALSE;
+      }
       return $cache->data;
     }
 
@@ -135,19 +140,26 @@ class AcquiaSearchApiClient {
     $result = [];
 
     $lock = 'acquia_search_get_search_indexes';
+
+    // If we can't acquire the lock, it means that another process already
+    // has it.  There's no way we can speed this up, so let's exit early
+    // and let search degrade until the other process completes normally.
     if (!$this->lock->acquire($lock)) {
-      $this->lock->wait($lock);
-      // Throw an exception after X amount of seconds.
-      if (!$this->lock->acquire($lock)) {
-        throw new \Exception("Couldn't acquire lock for $lock in less than 30 seconds.");
-      }
+      return FALSE;
     }
 
-    $indexes = $this->searchRequest($path, $query_string);
-    $this->lock->release($lock);
-    if (empty($indexes) && !is_array($indexes)) {
+    // The current process owns the lock, so try to make the blocking calls.
+    try {
+      $indexes = $this->searchRequest($path, $query_string);
+    }
+    finally {
+      // Be sure to release the lock when we're finished.
+      $this->lock->release($lock);
+    }
+
+    if (empty($indexes) || !is_array($indexes)) {
       // When API is not reachable, cache it for 1 minute.
-      $this->cache->set($cid, FALSE, $now + 60, ['acquia_search_indexes']);
+      $this->cache->set($cid, ['invalid' => TRUE], $now + 60, ['acquia_search_indexes']);
       return FALSE;
     }
 

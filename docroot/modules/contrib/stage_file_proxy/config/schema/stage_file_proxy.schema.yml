@@ -8,6 +8,10 @@ stage_file_proxy.settings:
     origin:
       type: string
       label: "Origin"
+      constraints:
+        Regex:
+          pattern: '/\/$/'
+          message: 'Origin cannot end in /'
     origin_dir:
       type: string
       label: "Origin dir"

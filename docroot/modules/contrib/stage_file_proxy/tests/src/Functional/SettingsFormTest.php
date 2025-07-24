@@ -47,7 +47,7 @@ class SettingsFormTest extends BrowserTestBase {
    *
    * @throws \Behat\Mink\Exception\ResponseTextException
    */
-  public function testOriginTrailingslashIsRemoved() {
+  public function testOriginTrailingSlashIsRemoved() {
     $settings_path = Url::fromRoute('stage_file_proxy.admin_form');
 
     $this->drupalLogin($this->adminUser);

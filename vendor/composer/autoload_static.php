@@ -31,6 +31,7 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         'c7b4a5d8b94d270f0f9a84f81e1dd63d' => __DIR__ . '/..' . '/open-telemetry/api/Trace/functions.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
+        'ace6d88241f812b4accb2d847454aef6' => __DIR__ . '/..' . '/halaxa/json-machine/src/functions.php',
         '9e4824c5afbdc1482b6025ce3d4dfde8' => __DIR__ . '/..' . '/league/csv/src/functions_include.php',
         'c695cb998ba36e4bafc3d028efc7d113' => __DIR__ . '/..' . '/open-telemetry/sdk/Common/Util/functions.php',
         'd991bdbfe253499825156f17c4a721db' => __DIR__ . '/..' . '/open-telemetry/sdk/Logs/Exporter/_register.php',
@@ -239,6 +240,7 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         array (
             'Drush\\' => 6,
             'Drupal\\sophron\\' => 15,
+            'Drupal\\rat\\' => 11,
             'Drupal\\facets_pretty_paths\\' => 27,
             'Drupal\\Core\\' => 12,
             'Drupal\\Composer\\Plugin\\VendorHardening\\' => 39,
@@ -777,6 +779,10 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         'Drupal\\sophron\\' => 
         array (
             0 => __DIR__ . '/../..' . '/docroot/modules/contrib/sophron/src',
+        ),
+        'Drupal\\rat\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/drupal/rat/src',
         ),
         'Drupal\\facets_pretty_paths\\' => 
         array (

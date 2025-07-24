@@ -10,11 +10,12 @@ use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\Core\Utility\Error;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Download manager.
@@ -27,11 +28,12 @@ final class DownloadManager implements DownloadManagerInterface {
    * Construct the DownloadManager.
    */
   public function __construct(
-    protected Client $client,
+    protected ClientInterface $client,
     protected FileSystemInterface $fileSystem,
     protected LoggerInterface $logger,
     protected ConfigFactoryInterface $configFactory,
     protected LockBackendInterface $lock,
+    protected RequestStack $requestStack,
   ) {
   }
 
@@ -138,7 +140,11 @@ final class DownloadManager implements DownloadManagerInterface {
    * {@inheritdoc}
    */
   public function filePublicPath(): string {
-    return PublicStream::basePath();
+    $request = $this->requestStack->getCurrentRequest();
+    $filesDir = PublicStream::baseUrl();
+    $host = $request->getSchemeAndHttpHost();
+    $basePath = $request->getBasePath();
+    return str_replace($host . $basePath . '/', '', $filesDir);
   }
 
   /**

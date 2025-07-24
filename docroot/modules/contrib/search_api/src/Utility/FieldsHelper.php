@@ -454,19 +454,25 @@ class FieldsHelper implements FieldsHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function createItem(IndexInterface $index, $id, DatasourceInterface $datasource = NULL) {
+  public function createItem(IndexInterface $index, $id, ?DatasourceInterface $datasource = NULL) {
     return new Item($index, $id, $datasource);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function createItemFromObject(IndexInterface $index, ComplexDataInterface $originalObject, $id = NULL, DatasourceInterface $datasource = NULL) {
+  public function createItemFromObject(IndexInterface $index, ComplexDataInterface $originalObject, $id = NULL, ?DatasourceInterface $datasource = NULL) {
     if (!isset($id)) {
       if (!isset($datasource)) {
         throw new \InvalidArgumentException('Need either an item ID or the datasource to create a search item from an object.');
       }
-      $id = Utility::createCombinedId($datasource->getPluginId(), $datasource->getItemId($originalObject));
+
+      $item_id = $datasource->getItemId($originalObject);
+      if (!$item_id) {
+        throw new \InvalidArgumentException('Object does not belong to the datasource.');
+      }
+
+      $id = Utility::createCombinedId($datasource->getPluginId(), $item_id);
     }
     $item = $this->createItem($index, $id, $datasource);
     $item->setOriginalObject($originalObject);

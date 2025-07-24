@@ -11,7 +11,8 @@ video_embed_wysiwyg_video_embed:
       videoEmbed:
         label: Video embed
     elements:
-      - <p>
+      - <iframe>
+      - <iframe width height frameborder allowfullscreen title loading src>
     conditions:
       filter: video_embed_wysiwyg
     class: Drupal\video_embed_wysiwyg\Plugin\CKEditor5Plugin\VideoEmbedWysiwyg

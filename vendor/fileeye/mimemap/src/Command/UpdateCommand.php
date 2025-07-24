@@ -34,26 +34,26 @@ class UpdateCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'File name of the script containing the sequence of commands to execute to build the default map.',
-                MapUpdater::getDefaultMapBuildFile()
+                MapUpdater::getDefaultMapBuildFile(),
             )
             ->addOption(
                 'class',
                 null,
                 InputOption::VALUE_REQUIRED,
                 'The fully qualified class name of the PHP class storing the map.',
-                MapHandler::DEFAULT_MAP_CLASS
+                MapHandler::DEFAULT_MAP_CLASS,
             )
             ->addOption(
                 'diff',
                 null,
                 InputOption::VALUE_NONE,
-                'Report updates.'
+                'Report updates.',
             )
             ->addOption(
                 'fail-on-diff',
                 null,
                 InputOption::VALUE_NONE,
-                'Exit with an error when a difference is found. Map will not be updated.'
+                'Exit with an error when a difference is found. Map will not be updated.',
             )
         ;
     }
@@ -98,6 +98,7 @@ class UpdateCommand extends Command
             return (2);
         }
 
+        /** @var list<array{0: string, 1: string, 2: array<mixed>}> $commands */
         foreach ($commands as $command) {
             $output->writeln("<info>{$command[0]} ...</info>");
             try {
@@ -105,6 +106,7 @@ class UpdateCommand extends Command
                 assert(is_callable($callable));
                 $errors = call_user_func_array($callable, $command[2]);
                 if (is_array($errors) && !empty($errors)) {
+                    /** @var list<string> $errors */
                     foreach ($errors as $error) {
                         $output->writeln("<comment>$error.</comment>");
                     }
@@ -116,6 +118,7 @@ class UpdateCommand extends Command
         }
 
         // Load the map to be changed.
+        /** @var class-string<MimeMapInterface> $mapClass */
         MapHandler::setDefaultMapClass($mapClass);
         $current_map = MapHandler::map();
 

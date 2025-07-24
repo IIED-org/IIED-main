@@ -42,7 +42,7 @@ class EventListener implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       SearchApiEvents::DETERMINING_SERVER_FEATURES => 'serverFeaturesAlter',
       SearchApiEvents::GATHERING_BACKENDS => 'backendInfoAlter',

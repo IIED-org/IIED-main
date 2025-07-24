@@ -33,15 +33,15 @@ class StageFileProxyCommands extends DrushCommands {
    *   The config factory service.
    * @param \Drupal\Core\Database\Connection $database
    *   The database service.
-   * @param \Drupal\stage_file_proxy\DownloadManagerInterface $fetchManager
-   *   The stage_file_proxy.fetch_manager service.
+   * @param \Drupal\stage_file_proxy\DownloadManagerInterface $downloadManager
+   *   The stage_file_proxy.download_manager service.
    * @param string $root
    *   The app root.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
     protected Connection $database,
-    protected DownloadManagerInterface $fetchManager,
+    protected DownloadManagerInterface $downloadManager,
     protected string $root,
   ) {
     parent::__construct();
@@ -56,7 +56,7 @@ class StageFileProxyCommands extends DrushCommands {
     return new static(
       $container->get('config.factory'),
       $container->get('database'),
-      $container->get('stage_file_proxy.fetch_manager'),
+      $container->get('stage_file_proxy.download_manager'),
       '%app.root%',
     );
   }
@@ -93,7 +93,7 @@ class StageFileProxyCommands extends DrushCommands {
     $results = $query->execute()
       ->fetchCol();
 
-    $fileDir = $this->fetchManager->filePublicPath();
+    $fileDir = $this->downloadManager->filePublicPath();
     $remoteFileDir = trim($this->moduleConfig->get('origin_dir'));
     if (!$remoteFileDir) {
       $remoteFileDir = $fileDir;
@@ -131,7 +131,7 @@ class StageFileProxyCommands extends DrushCommands {
       }
 
       try {
-        if ($this->fetchManager->fetch($server, $remoteFileDir, $relativePath, $options)) {
+        if ($this->downloadManager->fetch($server, $remoteFileDir, $relativePath, $options)) {
           $gotFilesNumber++;
         }
         else {

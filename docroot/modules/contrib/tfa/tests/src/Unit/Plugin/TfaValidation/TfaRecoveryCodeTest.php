@@ -7,6 +7,8 @@ use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Lock\LockBackendInterface;
+use Drupal\Core\Routing\RouteMatch;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\encrypt\EncryptionProfileInterface;
 use Drupal\encrypt\EncryptionProfileManagerInterface;
@@ -15,6 +17,7 @@ use Drupal\Tests\UnitTestCase;
 use Drupal\tfa\Plugin\TfaValidation\TfaRecoveryCode;
 use Drupal\user\UserDataInterface;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Symfony\Component\Routing\Route;
 
 /**
  * @coversDefaultClass \Drupal\tfa\Plugin\TfaValidation\TfaRecoveryCode
@@ -174,6 +177,78 @@ class TfaRecoveryCodeTest extends UnitTestCase {
     $form_state->setValues(['code' => 'foo_decrypted']);
     $this->assertTrue($fixture->validateForm([], $form_state));
     $this->assertEmpty($fixture->getErrorMessages());
+  }
+
+  /**
+   * Tests AllowUserSetupAccess().
+   *
+   * @covers ::allowUserSetupAccess
+   * @dataProvider providerAllowUserSetupAccess
+   */
+  public function testAllowUserSetupAccess(int $current_user_uid, string $route_name, array $route_params, bool $expected_result): void {
+    $route_object = new Route('/', ['reset' => "0"]);
+    $route_matcher = new RouteMatch($route_name, $route_object, $route_params);
+    $account = $this->createMock(AccountInterface::class);
+    $account->method('id')->willReturn($current_user_uid);
+    $fixture = $this->getFixture();
+
+    $this->assertSame($expected_result, $fixture->allowUserSetupAccess($route_matcher, $account));
+  }
+
+  /**
+   * Provider for testAllowUserSetupAccess().
+   */
+  public static function providerAllowUserSetupAccess(): \Generator {
+    yield 'User access own token recovery code view' => [
+      3,
+      'tfa.validation.setup',
+      [],
+      TRUE,
+    ];
+
+    yield 'User access own token recovery code view via reset route' => [
+      3,
+      'tfa.plugin.reset',
+      [
+        'reset' => '0',
+      ],
+      TRUE,
+    ];
+
+    yield 'User access own token recovery code generate' => [
+      3,
+      'tfa.plugin.reset',
+      [
+        'reset' => '1',
+      ],
+      TRUE,
+    ];
+
+    yield 'Admin access user token recovery code view' => [
+      1,
+      'tfa.validation.setup',
+      [],
+      FALSE,
+    ];
+
+    yield 'Admin access user token recovery code view via reset route' => [
+      1,
+      'tfa.plugin.reset',
+      [
+        'reset' => '0',
+      ],
+      FALSE,
+    ];
+
+    yield 'Admin access user token recovery code generate' => [
+      1,
+      'tfa.plugin.reset',
+      [
+        'reset' => '1',
+      ],
+      TRUE,
+    ];
+
   }
 
 }

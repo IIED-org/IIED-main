@@ -8,7 +8,7 @@ dependencies:
   - drupal:file
   - drupal:image
 
-# Information added by Drupal.org packaging script on 2022-03-21
-version: '8.x-2.5'
+# Information added by Drupal.org packaging script on 2024-10-30
+version: '8.x-2.6'
 project: 'media_entity_slideshow'
-datestamp: 1647851727
+datestamp: 1730291588

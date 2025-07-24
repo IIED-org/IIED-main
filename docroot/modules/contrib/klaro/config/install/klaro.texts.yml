@@ -9,6 +9,7 @@ consentModal:
       To learn more, please read our {privacyPolicy}.
     url: 'internal:/<front>'
 consentNotice:
+  title: Use of personal data and cookies
   changeDescription: There were changes since your last visit, please update your consent.
   description: >
     We use cookies and process personal data for the following purposes: {purposes}.

@@ -90,6 +90,9 @@ klaro.klaro_purpose.*:
     label:
       type: label
       label: 'Label'
+    description:
+      type: text
+      label: 'Description'
     weight:
       type: integer
       label: 'weight'
@@ -163,6 +166,9 @@ klaro.settings:
     override_css:
       type: boolean
       label: 'Override Klaro CSS'
+    show_notice_title:
+      type: boolean
+      label: 'Show title of notice dialog'
     library:
       type: mapping
       label: 'Library settings'
@@ -200,6 +206,9 @@ klaro.settings:
         additional_class:
           type: string
           label: 'Additional css classes'
+        disable_powered_by:
+          type: boolean
+          label: 'Hide "powered by Klaro!"'
         html_texts:
           type: boolean
           label: 'Allow HTML in texts. (Does not work for button texts)'
@@ -238,6 +247,9 @@ klaro.texts:
       type: mapping
       label: 'Consent notice'
       mapping:
+        title:
+          type: label
+          label: 'Title'
         changeDescription:
           type: label
           label: 'Change description'

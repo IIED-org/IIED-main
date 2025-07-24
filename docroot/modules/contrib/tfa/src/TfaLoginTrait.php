@@ -3,6 +3,7 @@
 namespace Drupal\tfa;
 
 use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Site\Settings;
 use Drupal\user\UserInterface;
 
 /**
@@ -27,7 +28,8 @@ trait TfaLoginTrait {
       $account->getPassword(),
       $account->getLastLoginTime(),
     ]);
-    return Crypt::hashBase64($data);
+    $key = \Drupal::service('private_key')->get() . Settings::get('hash_salt');
+    return Crypt::hmacBase64($data, $key);
   }
 
 }

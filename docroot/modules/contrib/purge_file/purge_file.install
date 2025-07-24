@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Report purge file works correctly.
+ */
+
+/**
  * Implements hook_requirements().
  */
 function purge_file_requirements($phase) {
@@ -10,23 +15,36 @@ function purge_file_requirements($phase) {
 
   $requirements = [];
 
-  $purgers = \Drupal::service('purge.purgers');
-
-  $purge_purgers_severity = in_array('url', $purgers->getTypes()) ? REQUIREMENT_OK : REQUIREMENT_ERROR;
+  $url_purger_types = purge_file_supported_url_purgers();
+  $url_purger_types_enabled = purge_file_supported_url_purgers_enabled();
+  $purge_purgers_severity = !empty($url_purger_types_enabled) ? REQUIREMENT_OK : REQUIREMENT_ERROR;
   $requirements['purge_purgers_available'] = [
-    'title' => t('Purge file: Purgers are enabled'),
-    'description' => t('There must exists at least one purger that supports URLs.'),
+    'title' => t('Purge file: URL Purgers enabled'),
+    'value' => $url_purger_types_enabled ? implode(', ', $url_purger_types_enabled) : t('None'),
+    'description' => t('There must exists at least one purger that supports URLs. Supported purgers: @purgers_supported', [
+      '@purgers_supported' => implode(', ', $url_purger_types),
+    ]),
     'severity' => $purge_purgers_severity,
   ];
 
-  $purgers = \Drupal::service('purge.processors');
-
-  $purge_processors_severity = !empty($purgers->getPluginsEnabled()) ? REQUIREMENT_OK : REQUIREMENT_ERROR;
-  $requirements['purge_processors_available'] = [
-    'title' => t('Purge file: Processors are available'),
-    'description' => t('There must exists at one purge processor available.'),
-    'severity' => $purge_processors_severity,
-  ];
-
   return $requirements;
+}
+
+/**
+ * Convert to new workflow configuration.
+ */
+function purge_file_update_10001() {
+  $config = \Drupal::configFactory()->getEditable('purge_file.settings');
+  if ($config && !$config->get('workflow')) {
+    $processor = $config->get('processor');
+    $config->clear('processor');
+    if ($processor === 'cron' || $processor === 'drush_purge_queue_work') {
+      $config->set('workflow', 'queue');
+    }
+    else {
+      $config->set('workflow', 'immediate');
+    }
+
+    $config->save();
+  }
 }

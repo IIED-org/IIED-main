@@ -10,24 +10,33 @@ use FileEye\MimeMap\TypeParser;
  * Abstract class for mapping file extensions to MIME types.
  *
  * This class cannot be instantiated; extend from it to implement a map.
+ *
+ * @extends BaseMap<MimeMap>
  */
 abstract class AbstractMap extends BaseMap implements MimeMapInterface
 {
+    public static function getInstance(): MimeMapInterface
+    {
+        $instance = parent::getInstance();
+        assert($instance instanceof MimeMapInterface);
+        return $instance;
+    }
+
     /**
      * Normalizes a mime-type string to Media/Subtype.
      *
-     * @param string $type_string
+     * @param string $typeString
      *   MIME type string to parse.
      *
-     * @throws MalformedTypeException when $type_string is malformed.
+     * @throws MalformedTypeException when $typeString is malformed.
      *
      * @return string
      *   A MIME type string in the 'Media/Subtype' format.
      */
-    protected function normalizeType(string $type_string): string
+    protected function normalizeType(string $typeString): string
     {
         // Media and SubType are separated by a slash '/'.
-        $media = TypeParser::parseStringPart($type_string, 0, '/');
+        $media = TypeParser::parseStringPart($typeString, 0, '/');
 
         if (!$media['string']) {
             throw new MalformedTypeException('Media type not found');
@@ -37,7 +46,7 @@ abstract class AbstractMap extends BaseMap implements MimeMapInterface
         }
 
         // SubType and Parameters are separated by semicolons ';'.
-        $sub = TypeParser::parseStringPart($type_string, $media['end_offset'] + 1, ';');
+        $sub = TypeParser::parseStringPart($typeString, $media['end_offset'] + 1, ';');
 
         if (!$sub['string']) {
             throw new MalformedTypeException('Media subtype not found');
@@ -66,17 +75,17 @@ abstract class AbstractMap extends BaseMap implements MimeMapInterface
 
     public function listTypes(?string $match = null): array
     {
-        return $this->listEntries('t', $match);
+        return array_map('strval', $this->listEntries('t', $match));
     }
 
     public function listAliases(?string $match = null): array
     {
-        return $this->listEntries('a', $match);
+        return array_map('strval', $this->listEntries('a', $match));
     }
 
     public function listExtensions(?string $match = null): array
     {
-        return $this->listEntries('e', $match);
+        return array_map('strval', $this->listEntries('e', $match));
     }
 
     public function addTypeDescription(string $type, string $description): MimeMapInterface
@@ -138,20 +147,20 @@ abstract class AbstractMap extends BaseMap implements MimeMapInterface
 
     public function getTypeDescriptions(string $type): array
     {
-        $type = $this->normalizeType($type);
-        return $this->getMapSubEntry('t', $type, 'desc') ?: [];
+        $descriptions = $this->getMapSubEntry('t', $this->normalizeType($type), 'desc') ?: [];
+        return array_values($descriptions);
     }
 
     public function getTypeAliases(string $type): array
     {
-        $type = $this->normalizeType($type);
-        return $this->getMapSubEntry('t', $type, 'a') ?: [];
+        $aliases = $this->getMapSubEntry('t', $this->normalizeType($type), 'a') ?: [];
+        return array_values($aliases);
     }
 
     public function getTypeExtensions(string $type): array
     {
-        $type = $this->normalizeType($type);
-        return $this->getMapSubEntry('t', $type, 'e') ?: [];
+        $extensions = $this->getMapSubEntry('t', $this->normalizeType($type), 'e') ?: [];
+        return array_values($extensions);
     }
 
     public function setTypeDefaultExtension(string $type, string $extension): MimeMapInterface
@@ -244,14 +253,14 @@ abstract class AbstractMap extends BaseMap implements MimeMapInterface
 
     public function getAliasTypes(string $alias): array
     {
-        $alias = $this->normalizeType($alias);
-        return $this->getMapSubEntry('a', $alias, 't') ?: [];
+        $types = $this->getMapSubEntry('a', $this->normalizeType($alias), 't') ?: [];
+        return array_values($types);
     }
 
     public function getExtensionTypes(string $extension): array
     {
-        $extension = strtolower($extension);
-        return $this->getMapSubEntry('e', $extension, 't') ?: [];
+        $types = $this->getMapSubEntry('e', strtolower($extension), 't') ?: [];
+        return array_values($types);
     }
 
     public function setExtensionDefaultType(string $extension, string $type): MimeMapInterface
@@ -274,5 +283,11 @@ abstract class AbstractMap extends BaseMap implements MimeMapInterface
         } else {
             return $this->setValueAsDefault('e', $extension, 't', $type);
         }
+    }
+
+    protected function setValueAsDefault(string $entry, string $entryKey, string $subEntry, string $value): MimeMapInterface
+    {
+        parent::setValueAsDefault($entry, $entryKey, $subEntry, $value);
+        return $this;
     }
 }

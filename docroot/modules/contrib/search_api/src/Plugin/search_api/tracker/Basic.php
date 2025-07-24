@@ -250,7 +250,7 @@ class Basic extends TrackerPluginBase implements PluginFormInterface {
   /**
    * {@inheritdoc}
    */
-  public function trackItemsUpdated(array $ids = NULL) {
+  public function trackItemsUpdated(?array $ids = NULL) {
     try {
       // Process the IDs in chunks so we don't create an overly large UPDATE
       // statement.
@@ -321,7 +321,7 @@ class Basic extends TrackerPluginBase implements PluginFormInterface {
   /**
    * {@inheritdoc}
    */
-  public function trackItemsDeleted(array $ids = NULL) {
+  public function trackItemsDeleted(?array $ids = NULL) {
     try {
       // Process the IDs in chunks so we don't create an overly large DELETE
       // statement.

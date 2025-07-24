@@ -120,11 +120,12 @@ class TfaOverviewForm extends FormBase {
 
     if (!empty($user_tfa)) {
       if ($enabled && !empty($user_tfa['data']['plugins'])) {
-        if ($this->currentUser()->hasPermission('disable own tfa') || $this->currentUser()->hasPermission('administer tfa for other users')) {
+        $disable_url = Url::fromRoute('tfa.disable', ['user' => $user->id()]);
+        if ($disable_url->access()) {
           $status_text = $this->t('Status: <strong>TFA enabled</strong>, set
           @time. <a href=":url">Disable TFA</a>', [
             '@time' => $this->dateFormatter->format($user_tfa['saved']),
-            ':url' => Url::fromRoute('tfa.disable', ['user' => $user->id()])->toString(),
+            ':url' => $disable_url->toString(),
           ]);
         }
         else {

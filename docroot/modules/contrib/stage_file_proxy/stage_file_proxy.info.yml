@@ -4,8 +4,9 @@ description: 'Proxies files from production server so you do not have to transfe
 package: Development
 configure: stage_file_proxy.admin_form
 core_version_requirement: ^10.3 || ^11
-
-# Information added by Drupal.org packaging script on 2024-08-18
-version: '3.1.2'
+dependencies:
+  - drupal:image
+# Information added by Drupal.org packaging script on 2025-04-15
+version: '3.1.5'
 project: 'stage_file_proxy'
-datestamp: 1724012937
+datestamp: 1744733609

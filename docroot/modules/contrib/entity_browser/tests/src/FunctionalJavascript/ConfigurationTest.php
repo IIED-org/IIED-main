@@ -201,7 +201,6 @@ class ConfigurationTest extends WebDriverTestBase {
     $entity_type = $this->assertSession()->selectExists('selection_display_configuration[entity_type]')->selectOption('taxonomy_term');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->optionExists('selection_display_configuration[display_settings][view_mode]', 'default');
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->optionExists('selection_display_configuration[display_settings][view_mode]', 'full');
 
     // Test view selection display.

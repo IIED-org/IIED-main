@@ -36,11 +36,13 @@ use Drupal\klaro\KlaroPurposeInterface;
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
+ *     "description" = "description",
  *     "weight" = "weight",
  *   },
  *   config_export = {
  *     "id",
  *     "label",
+ *     "description",
  *     "weight",
  *   },
  * )
@@ -60,6 +62,13 @@ class KlaroPurpose extends ConfigEntityBase implements KlaroPurposeInterface {
    * @var string
    */
   protected $label;
+
+  /**
+   * The description of the purpose.
+   *
+   * @var string
+   */
+  protected $description = '';
 
   /**
    * The weight of the purpose.
@@ -94,6 +103,20 @@ class KlaroPurpose extends ConfigEntityBase implements KlaroPurposeInterface {
    */
   public function setLabel(string $label): KlaroPurposeInterface {
     return $this->set('label', $label);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function description(): ?string {
+    return $this->get('description');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setDescription(string $description): KlaroPurposeInterface {
+    return $this->set('description', $description);
   }
 
   /**

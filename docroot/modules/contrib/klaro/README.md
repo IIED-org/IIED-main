@@ -63,7 +63,7 @@ For installing the Drupal module via composer use:
 `composer require drupal/klaro`
 
 The package `drupal/klaro_js` is required by drupal/klaro and will install the
-javascript library. (You may have to whitelist `drupal/klaro_js` in your
+javascript library. (You may have to allow `drupal/klaro_js` in your
 definition of `repo.packagist.org` in your project's composer.json.)
 
 The original library is [klaro-org/klaro-js](https://github.com/klaro-org/klaro-js/).
@@ -158,6 +158,8 @@ See also [Issue #3484827](https://www.drupal.org/project/klaro/issues/3484827).
 
 - [Leaflet](https://www.drupal.org/project/leaflet)
 - [Recaptcha](https://www.drupal.org/project/recaptcha)
+- [Simple Google Maps](https://www.drupal.org/project/simple_gmap)
+- [Umami Analytics](https://www.drupal.org/project/umami_analytics)
 
 ### Backend / UI
 
@@ -234,6 +236,7 @@ The preprocess_field handles at this time following fields:
 * "video_embed_field_video" field formatter - see [Video Embed Field](https://www.drupal.org/project/video_embed_field)
 * "iframe" field type - see [Iframe](https://www.drupal.org/project/iframe)
 * "html" field formatter - see [HTML Field Formatter](https://www.drupal.org/project/html_field_formatter)
+* "simple_gmap" field formatter - see [Simple Google Maps](https://www.drupal.org/project/simple_gmap)
 
 If you need further field type, please open a feature request and (optionally)
 open a merge request (see below).
@@ -277,6 +280,7 @@ or "final HTML".
 * oembed with field formatter "oembed" (Core) or "video_embed_field_video" ([Video Embed Field](https://www.drupal.org/project/video_embed_field))
 * html with field formatter "html" ([HTML Field Formatter](https://www.drupal.org/project/html_field_formatter))
 * [Leaflet](https://www.drupal.org/project/leaflet) Maps
+* [Simple Google Maps](https://www.drupal.org/project/simple_gmap)
 
 ### What will be blocked automatically with "Process final HTML":
 

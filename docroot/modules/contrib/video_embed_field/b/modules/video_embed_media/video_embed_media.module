@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for the media_library module.
+ */
+
+use Drupal\video_embed_media\Form\VideoEmbedFieldForm;
+
+/**
+* Implements hook_media_source_info_alter().
+*/
+function video_embed_media_media_source_info_alter(array &$sources) {
+  if (empty($sources['video_embed_field']['forms']['media_library_add'])) {
+    $sources['video_embed_field']['forms']['media_library_add'] = VideoEmbedFieldForm::class;
+  }
+}

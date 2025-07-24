@@ -1,0 +1,45 @@
+--- modules/video_embed_wysiwyg/config/schema/video_embed_wysiwyg.schema.yml
++++ modules/video_embed_wysiwyg/config/schema/video_embed_wysiwyg.schema.yml
+@@ -22,3 +22,28 @@ ckeditor.plugin.video_embed:
+             height:
+               label: 'Height'
+               type: string
++
++ckeditor5.plugin.video_embed_wysiwyg_video_embed:
++  label: 'Video Embed'
++  type: mapping
++  mapping:
++      defaults:
++        label: 'Defaults'
++        type: mapping
++        mapping:
++          children:
++            label: 'Children'
++            type: mapping
++            mapping:
++              autoplay:
++                label: 'Autoplay'
++                type: boolean
++              responsive:
++                label: 'Responsive'
++                type: boolean
++              width:
++                label: 'Width'
++                type: string
++              height:
++                label: 'Height'
++                type: string--- modules/video_embed_wysiwyg/config/schema/video_embed_wysiwyg.schema.yml
++++ modules/video_embed_wysiwyg/config/schema/video_embed_wysiwyg.schema.yml
+@@ -1,3 +1,4 @@
++# CKE4
+ ckeditor.plugin.video_embed:
+   label: 'Video Embed'
+   type: mapping
+@@ -23,6 +24,7 @@ ckeditor.plugin.video_embed:
+               label: 'Height'
+               type: string
+ 
++# CKE5
+ ckeditor5.plugin.video_embed_wysiwyg_video_embed:
+   label: 'Video Embed'
+   type: mapping

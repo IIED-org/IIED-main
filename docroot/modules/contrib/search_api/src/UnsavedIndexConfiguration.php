@@ -4,6 +4,7 @@ namespace Drupal\search_api;
 
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -103,6 +104,20 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
    */
   public function setCurrentUserId($current_user_id) {
     $this->currentUserId = $current_user_id;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOriginal(): ?static {
+    return $this->entity->getOriginal();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setOriginal(?EntityInterface $original): static {
+    return $this->entity->setOriginal($original);
   }
 
   /**
@@ -350,7 +365,7 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
   /**
    * {@inheritdoc}
    */
-  public function setServer(ServerInterface $server = NULL) {
+  public function setServer(?ServerInterface $server = NULL) {
     $this->entity->setServer($server);
     return $this;
   }
@@ -529,6 +544,13 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
    */
   public function loadItemsMultiple(array $item_ids) {
     return $this->entity->loadItemsMultiple($item_ids);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function registerUnreliableItemIds(array $item_ids): void {
+    $this->entity->registerUnreliableItemIds($item_ids);
   }
 
   /**
@@ -859,7 +881,7 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
   /**
    * {@inheritdoc}
    */
-  public static function loadMultiple(array $ids = NULL) {
+  public static function loadMultiple(?array $ids = NULL) {
     return Index::loadMultiple($ids);
   }
 
@@ -1022,7 +1044,7 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
   /**
    * {@inheritdoc}
    */
-  public function access($operation, AccountInterface $account = NULL, $return_as_object = FALSE) {
+  public function access($operation, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     return $this->entity->access($operation, $account, $return_as_object);
   }
 

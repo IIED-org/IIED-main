@@ -41,7 +41,7 @@
     }
   ],
   "require": {
-    "drupal/core": "^9 || ^10 || ^11"
+    "drupal/core": "^10 || ^11"
   },
   "suggest": {
     "jackmoore/colorbox": "The Colorbox library is required to use the drupal/colorbox module."
@@ -49,7 +49,7 @@
   "extra": {
     "drush": {
       "services": {
-        "drush.services.yml": "^9 || ^10 || ^11"
+        "drush.services.yml": "^10 || ^11"
       }
     }
   }

@@ -67,6 +67,7 @@ abstract class TfaTestBase extends BrowserTestBase {
       'key_type' => 'encryption',
       'key_type_settings' => ['key_size' => '128'],
       'key_provider' => 'config',
+      // cSpell:disable-next-line mustbesixteenbit
       'key_provider_settings' => ['key_value' => 'mustbesixteenbit'],
     ]);
     $key->save();

@@ -7,7 +7,7 @@ dependencies:
   - entity_browser_test:entity_browser_test
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2024-08-11
-version: '8.x-2.11'
+# Information added by Drupal.org packaging script on 2025-02-16
+version: '8.x-2.13'
 project: 'entity_browser'
-datestamp: 1723378141
+datestamp: 1739701404

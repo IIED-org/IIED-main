@@ -2,6 +2,7 @@
 
 namespace Drupal\search_api_solr\EventSubscriber;
 
+use Drupal\search_api\Event\MappingFieldTypesEvent;
 use Drupal\search_api\Event\MappingViewsFieldHandlersEvent;
 use Drupal\search_api\Event\MappingViewsHandlersEvent;
 use Drupal\search_api\Event\SearchApiEvents;
@@ -11,6 +12,18 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Search API events subscriber.
  */
 class SearchApiSubscriber implements EventSubscriberInterface {
+
+  /**
+   * Adds the mapping how to treat some Solr special fields in views.
+   *
+   * @param \Drupal\search_api\Event\MappingViewsFieldHandlersEvent $event
+   *   The Search API event.
+   */
+  public function onMappingFieldTypes(MappingFieldTypesEvent $event) {
+    $mapping = & $event->getFieldTypeMapping();
+
+    $mapping['solr_date'] = 'date';
+  }
 
   /**
    * Adds the mapping how to treat some Solr special fields in views.
@@ -59,6 +72,7 @@ class SearchApiSubscriber implements EventSubscriberInterface {
     }
 
     return [
+      SearchApiEvents::MAPPING_FIELD_TYPES => 'onMappingFieldTypes',
       SearchApiEvents::MAPPING_VIEWS_FIELD_HANDLERS => 'onMappingViewsFieldHandlers',
       SearchApiEvents::MAPPING_VIEWS_HANDLERS =>  'onMappingViewsHandlers',
     ];

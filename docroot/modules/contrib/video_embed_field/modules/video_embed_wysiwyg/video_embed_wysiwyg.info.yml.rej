@@ -1,0 +1,19 @@
+--- modules/video_embed_wysiwyg/video_embed_wysiwyg.info.yml
++++ modules/video_embed_wysiwyg/video_embed_wysiwyg.info.yml
+@@ -5,5 +5,5 @@ package: Video Embed Field
+ core_version_requirement: ^9.2 || ^10
+ dependencies:
+   - drupal:field
+-  - drupal:ckeditor
++  - drupal:editor
+   - video_embed_field:video_embed_field
+--- modules/video_embed_wysiwyg/video_embed_wysiwyg.info.yml
++++ modules/video_embed_wysiwyg/video_embed_wysiwyg.info.yml
+@@ -4,6 +4,7 @@ description: 'Integrates video_embed_field directly into ckeditor. Useful for we
+ package: Video Embed Field
+ core_version_requirement: ^9.2 || ^10
+ dependencies:
++  - drupal:ckeditor5
+   - drupal:field
+   - drupal:editor
+   - video_embed_field:video_embed_field

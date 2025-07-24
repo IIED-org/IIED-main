@@ -6,7 +6,7 @@ core_version_requirement: '^9.5 || ^10 || ^11'
 dependencies:
   - acquia_search:acquia_search
 
-# Information added by Drupal.org packaging script on 2024-07-08
-version: '3.1.13'
+# Information added by Drupal.org packaging script on 2024-09-20
+version: '3.1.14'
 project: 'acquia_search'
-datestamp: 1720457116
+datestamp: 1726874863

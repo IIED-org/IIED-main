@@ -8,11 +8,10 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-// Use Drupal\tablefield\Utility\Tablefield;.
 /**
  * Plugin implementation of the default Tablefield formatter.
  *
@@ -27,34 +26,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class TablefieldFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Drupal\Core\Session\AccountProxy definition.
-   *
-   * @var \Drupal\Core\Session\AccountProxy
-   */
-  protected $currentUser;
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * {@inheritdoc}
    */
-  public function __construct($plugin_id,
-                              $plugin_definition,
-                              FieldDefinitionInterface $field_definition,
-                              array $settings,
-                              $label,
-                              $view_mode,
-                              array $third_party_settings,
-                              AccountProxy $currentUser,
-                              ModuleHandlerInterface $moduleHandler) {
+  public function __construct(
+    $plugin_id,
+    $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    $label,
+    $view_mode,
+    array $third_party_settings,
+    protected AccountInterface $currentUser,
+    protected ModuleHandlerInterface $moduleHandler,
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
-    $this->currentUser = $currentUser;
-    $this->ModuleHandler = $moduleHandler;
   }
 
   /**
@@ -147,7 +132,7 @@ class TablefieldFormatter extends FormatterBase implements ContainerFactoryPlugi
       if (!empty($table->value)) {
         // Tablefield::rationalizeTable($table->value);.
         $tabledata = $table->value;
-        $caption = $tabledata['caption'];
+        $caption = $tabledata['caption'] ?? NULL;
         unset($tabledata['caption']);
 
         // Run the table through input filters.
@@ -239,7 +224,7 @@ class TablefieldFormatter extends FormatterBase implements ContainerFactoryPlugi
         ];
 
         // Extend render array if responsive_tables_filter module is enabled.
-        if ($this->ModuleHandler->moduleExists('responsive_tables_filter')) {
+        if ($this->moduleHandler->moduleExists('responsive_tables_filter')) {
           array_push($render_array['tablefield']['#attributes']['class'], 'tablesaw', 'tablesaw-stack');
           $render_array['tablefield']['#attributes']['data-tablesaw-mode'] = 'stack';
           $render_array['tablefield']['#attached'] = [

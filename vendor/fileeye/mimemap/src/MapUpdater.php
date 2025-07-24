@@ -17,10 +17,8 @@ class MapUpdater
 
     /**
      * The map object to update.
-     *
-     * @var MimeMapInterface
      */
-    protected $map;
+    protected MimeMapInterface $map;
 
     /**
      * Returns the default file with override commands to be executed.
@@ -28,8 +26,6 @@ class MapUpdater
      * The YAML file provides an array of calls to MapHandler methods to be
      * executed sequentially. Each entry indicates the method to be invoked and
      * the arguments to be passed in.
-     *
-     * @return string
      */
     public static function getDefaultMapBuildFile(): string
     {
@@ -49,14 +45,12 @@ class MapUpdater
     /**
      * Sets the map object to update.
      *
-     * @param string $map_class
+     * @param class-string<MimeMapInterface> $mapClass
      *   The FQCN of the map to be updated.
-     *
-     * @return $this
      */
-    public function selectBaseMap(string $map_class): MapUpdater
+    public function selectBaseMap(string $mapClass): MapUpdater
     {
-        $this->map = MapHandler::map($map_class);
+        $this->map = MapHandler::map($mapClass);
         $this->map->backup();
         return $this;
     }
@@ -69,11 +63,11 @@ class MapUpdater
      *   source code repository file where MIME types and file extensions are
      *   associated.
      *
-     * @return string[]
-     *   An array of error messages.
+     * @return list<string>
+     *   A list of error messages.
      *
-     * @throws \RuntimeException
-     *   If it was not possible to access the file.
+     * @throws SourceUpdateException
+     *   If it was not possible to access the source file.
      */
     public function loadMapFromApacheFile(string $source_file): array
     {
@@ -81,8 +75,7 @@ class MapUpdater
 
         $lines = @file($source_file);
         if ($lines == false) {
-            $errors[] = "Failed accessing {$source_file}";
-            return $errors;
+            throw new SourceUpdateException("Failed accessing {$source_file}");
         }
         $i = 1;
         foreach ($lines as $line) {
@@ -114,8 +107,11 @@ class MapUpdater
      *   The source file. The file must conform to the format in the
      *   Freedesktop.org database.
      *
-     * @return string[]
-     *   An array of error messages.
+     * @return list<string>
+     *   A list of error messages.
+     *
+     * @throws SourceUpdateException
+     *   If it was not possible to access the source file.
      */
     public function loadMapFromFreedesktopFile(string $source_file): array
     {
@@ -123,8 +119,7 @@ class MapUpdater
 
         $contents = @file_get_contents($source_file);
         if ($contents == false) {
-            $errors[] = 'Failed loading file ' . $source_file;
-            return $errors;
+            throw new SourceUpdateException('Failed loading file ' . $source_file);
         }
 
         $xml = @simplexml_load_string($contents);
@@ -156,8 +151,10 @@ class MapUpdater
             }
             if (isset($node->acronym)) {
                 $acronym = (string) $node->acronym;
-                if (isset($node->{'expanded-acronym'})) {
-                    $acronym .= ': ' . (string) $node->{'expanded-acronym'};
+                /** @var ?string $expandedAcronym */
+                $expandedAcronym = $node->{'expanded-acronym'} ?? null;
+                if (isset($expandedAcronym)) {
+                    $acronym .= ': ' . $expandedAcronym;
                 }
                 $this->map->addTypeDescription($type, $acronym);
             }
@@ -196,8 +193,8 @@ class MapUpdater
      * @param array<int,array{0: string, 1: array<string>}> $overrides
      *   The overrides to be applied.
      *
-     * @return string[]
-     *   An array of error messages.
+     * @return list<string>
+     *   A list of error messages.
      */
     public function applyOverrides(array $overrides): array
     {
@@ -219,14 +216,12 @@ class MapUpdater
 
     /**
      * Updates the map at a destination PHP file.
-     *
-     * @return $this
      */
-    public function writeMapToPhpClassFile(string $file): MapUpdater
+    public function writeMapToPhpClassFile(string $destinationFile): MapUpdater
     {
-        $content = @file_get_contents($file);
+        $content = @file_get_contents($destinationFile);
         if ($content == false) {
-            throw new \RuntimeException('Failed loading file ' . $file);
+            throw new \RuntimeException('Failed loading file ' . $destinationFile);
         }
 
         $newContent = preg_replace(
@@ -234,7 +229,7 @@ class MapUpdater
             "protected static \$map = " . preg_replace('/\s+$/m', '', var_export($this->map->getMapArray(), true)) . ";",
             $content
         );
-        file_put_contents($file, $newContent);
+        file_put_contents($destinationFile, $newContent);
 
         return $this;
     }

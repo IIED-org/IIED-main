@@ -373,7 +373,7 @@ class Highlight extends ProcessorPluginBase implements PluginFormInterface {
    *   Field values extracted from the result items' fulltext fields, keyed by
    *   item ID, field ID and then numeric indices.
    */
-  protected function getFulltextFields(array $result_items, array $fulltext_fields = NULL, $load = TRUE) {
+  protected function getFulltextFields(array $result_items, ?array $fulltext_fields = NULL, $load = TRUE) {
     // All the index's fulltext fields, grouped by datasource.
     $fields_by_datasource = [];
     foreach ($this->index->getFields() as $field_id => $field) {

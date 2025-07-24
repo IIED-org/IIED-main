@@ -4,6 +4,7 @@ namespace Drupal\search_api_db\Plugin\search_api\backend;
 
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Component\Utility\Crypt;
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -651,11 +652,17 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
    * {@inheritdoc}
    */
   public function postUpdate() {
-    if (empty($this->server->original)) {
+    $original = DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '11.2',
+      fn () => $this->server->getOriginal(),
+      fn () => $this->server->original,
+    );
+    if (!$original) {
       // When in doubt, opt for the safer route and reindex.
       return TRUE;
     }
-    $original_config = $this->server->original->getBackendConfig();
+    $original_config = $original->getBackendConfig();
     $original_config += $this->defaultConfiguration();
     return $this->configuration['min_chars'] != $original_config['min_chars']
       || $this->configuration['phrase'] != $original_config['phrase'];
@@ -851,13 +858,17 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
           ],
         ],
       ];
-      // For the denormalized index table, add a primary key right away. For
-      // newly created field tables we first need to add the "value" column.
+      // For the denormalized index table, create the table right away. For
+      // newly created field tables we need to first determine what column to
+      // add, as this will be part of the primary key. (Creating a table without
+      // primary key, or later changing the primary key, leads to errors on
+      // specific setups, so it's easier to just do it this way.)
       if ($type === 'index') {
         $table['primary key'] = ['item_id'];
+        $this->database->schema()->createTable($db['table'], $table);
+        $this->dbmsCompatibility->alterNewTable($db['table'], $type);
+        unset($table);
       }
-      $this->database->schema()->createTable($db['table'], $table);
-      $this->dbmsCompatibility->alterNewTable($db['table'], $type);
     }
 
     // Stop here if we want to create a table with just the 'item_id' column.
@@ -870,10 +881,20 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
     $db_field += [
       'description' => "The field's value for this item",
     ];
-    if ($new_table || $type === 'field') {
+    if ($type === 'field') {
       $db_field['not null'] = TRUE;
     }
-    $this->database->schema()->addField($db['table'], $column, $db_field);
+    // If this is a new field table, we create it now, already complete with
+    // the value column. Otherwise, we just add the new column.
+    if (!empty($table)) {
+      $table['fields'][$column] = $db_field;
+      $table['primary key'] = ['item_id', $column];
+      $this->database->schema()->createTable($db['table'], $table);
+      $this->dbmsCompatibility->alterNewTable($db['table'], $type);
+    }
+    else {
+      $this->database->schema()->addField($db['table'], $column, $db_field);
+    }
     if ($db_field['type'] === 'varchar') {
       $index_spec = [[$column, 10]];
     }
@@ -916,11 +937,6 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
       $variables['%column'] = $column;
       $variables['%table'] = $db['table'];
       $this->logException($e, '%type while trying to add a database index for column %column to table %table: @message in %function (line %line of %file).', $variables, RfcLogLevel::WARNING);
-    }
-
-    // Add a covering index for field tables.
-    if ($new_table && $type == 'field') {
-      $this->database->schema()->addPrimaryKey($db['table'], ['item_id', $column]);
     }
   }
 
@@ -1635,7 +1651,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
                 $this->getLogger()->warning('An overlong word (more than @token_length_max characters) was encountered while indexing: %word.<br />Since database search servers currently cannot index words of more than @token_length_max characters, the word was truncated for indexing. If this should not be a single word, make sure the "Tokenizer" processor is enabled and configured correctly for index %index.', [
                   '@token_length_max' => static::TOKEN_LENGTH_MAX,
                   '%word' => $word,
-                  '%index' => $index->label(),
+                  '%index' => $index->label() ?? $index->id(),
                 ]);
                 $word = mb_substr($word, 0, static::TOKEN_LENGTH_MAX);
               }
@@ -1656,7 +1672,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
                     $this->getLogger()->warning('An overlong word (more than @token_length_max characters) was encountered while indexing: %word.<br />Since database search servers currently cannot index words of more than @token_length_max characters, the word was truncated for indexing. If this should not be a single word, make sure the "Tokenizer" processor is enabled and configured correctly for index %index.', [
                       '@token_length_max' => static::TOKEN_LENGTH_MAX,
                       '%word' => $word,
-                      '%index' => $index->label(),
+                      '%index' => $index->label() ?? $index->id(),
                     ]);
                     $word = mb_substr($word, 0, static::TOKEN_LENGTH_MAX);
                   }
@@ -2099,12 +2115,21 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
         $words = static::splitIntoWords($processed_keys);
         if ($this->configuration['min_chars'] > 1) {
           $words = array_filter($words, function (string $word): bool {
-            return mb_strlen($word) >= $this->configuration['min_chars'];
+            return is_numeric($word)
+              || mb_strlen($word) >= $this->configuration['min_chars'];
           });
         }
       }
+
+      // Apply special handling of numeric tokens that is also applied at
+      // indexing time.
+      $words = array_map(
+        static fn ($word) => is_numeric($word) ? static::cleanNumericString($word) : $word,
+        $words,
+      );
+
       if (count($words) <= 1) {
-        return mb_substr($processed_keys, 0, static::TOKEN_LENGTH_MAX);
+        return $words ? mb_substr(reset($words), 0, static::TOKEN_LENGTH_MAX) : NULL;
       }
 
       if ($this->configuration['phrase'] === 'disabled') {
@@ -2660,6 +2685,10 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
         }
 
         if ($field_name == 'search_api_random') {
+          $option = $query->getOption('search_api_random_sort');
+          if (isset($option['seed'])) {
+            $db_query->addMetaData('search_api_random_sort_seed', $option['seed']);
+          }
           $this->dbmsCompatibility->orderByRandom($db_query);
           continue;
         }
@@ -2761,13 +2790,8 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
         // For OR facets, we need to build a different base query that excludes
         // the facet filters applied to the facet.
         $or_query = clone $query;
-        $conditions = &$or_query->getConditionGroup()->getConditions();
         $tag = 'facet:' . $facet['field'];
-        foreach ($conditions as $i => $condition) {
-          if ($condition instanceof ConditionGroupInterface && $condition->hasTag($tag)) {
-            unset($conditions[$i]);
-          }
-        }
+        $this->removeTagFromConditionGroup($or_query->getConditionGroup(), $tag);
         try {
           $or_db_query = $this->createDbQuery($or_query, $fields);
         }
@@ -2901,6 +2925,32 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
       return FALSE;
     }
     return $result;
+  }
+
+  /**
+   * Removes all nested condition groups with the given tag.
+   *
+   * @param \Drupal\search_api\Query\ConditionGroupInterface $condition_group
+   *   The condition group to process.
+   * @param string $tag
+   *   The tag to look for.
+   */
+  protected static function removeTagFromConditionGroup(ConditionGroupInterface $condition_group, string $tag): void {
+    $conditions = &$condition_group->getConditions();
+    foreach ($conditions as $i => $nested) {
+      if (!$nested instanceof ConditionGroupInterface) {
+        continue;
+      }
+      if ($nested->hasTag($tag)) {
+        unset($conditions[$i]);
+      }
+      else {
+        static::removeTagFromConditionGroup($nested, $tag);
+      }
+    }
+    // To be on the safe side, make sure the array is still sequentially
+    // indexed.
+    $conditions = array_values($conditions);
   }
 
   /**
@@ -3061,7 +3111,7 @@ class Database extends BackendPluginBase implements AutocompleteBackendInterface
   /**
    * {@inheritdoc}
    */
-  protected function getSpecialFields(IndexInterface $index, ItemInterface $item = NULL) {
+  protected function getSpecialFields(IndexInterface $index, ?ItemInterface $item = NULL) {
     $fields = parent::getSpecialFields($index, $item);
     unset($fields['search_api_id']);
     return $fields;

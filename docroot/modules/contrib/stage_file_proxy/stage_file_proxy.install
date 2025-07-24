@@ -29,3 +29,15 @@ function stage_file_proxy_update_8003() {
   $config = \Drupal::configFactory()->getEditable('stage_file_proxy.settings');
   $config->set('proxy_headers', '')->save();
 }
+
+/**
+ * Remove trailing slash on origin if exists.
+ */
+function stage_file_proxy_update_31001(): void {
+  $config = \Drupal::configFactory()->getEditable('stage_file_proxy.settings');
+  $origin = $config->get('origin_dir');
+  if (str_ends_with($origin, '/')) {
+    $origin = substr($origin, 0, -1);
+  }
+  $config->set('origin_dir', $origin)->save();
+}

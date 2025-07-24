@@ -13,12 +13,6 @@ use Drupal\search_api\Item\Field;
 use Drupal\search_api\Processor\ProcessorInterface;
 use Drupal\search_api_test\PluginTestTrait;
 
-// Workaround to support tests against both Drupal 10.1 and Drupal 11.0.
-// @todo Remove once we depend on Drupal 10.2.
-if (!trait_exists(EntityReferenceFieldCreationTrait::class)) {
-  class_alias('\Drupal\Tests\field\Traits\EntityReferenceTestTrait', EntityReferenceFieldCreationTrait::class);
-}
-
 /**
  * Tests the admin UI for processors.
  *
@@ -801,7 +795,7 @@ TAGS
    *   (optional) If TRUE, the "fields" property will be removed from the
    *   actual configuration prior to comparing with the given configuration.
    */
-  protected function editSettingsForm(array $configuration, $processor_id, array $form_values = NULL, $enable = TRUE, $unset_fields = TRUE) {
+  protected function editSettingsForm(array $configuration, $processor_id, ?array $form_values = NULL, $enable = TRUE, $unset_fields = TRUE) {
     $this->loadProcessorsTab();
 
     $edit = $this->getFormValues($form_values ?? $configuration, "processors[$processor_id][settings]");

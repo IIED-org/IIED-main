@@ -2,7 +2,9 @@
 
 namespace Drupal\Tests\search_api\Kernel\Index;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\entity_test\Entity\EntityTestMulRevChanged;
+use Drupal\entity_test\EntityTestHelper;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\KernelTests\KernelTestBase;
@@ -354,8 +356,18 @@ class IndexChangesTest extends KernelTestBase {
    * Tests correct reaction when a bundle containing a property is removed.
    */
   public function testPropertyBundleRemoved() {
-    entity_test_create_bundle('bundle1', NULL, 'entity_test_mulrev_changed');
-    entity_test_create_bundle('bundle2', NULL, 'entity_test_mulrev_changed');
+    DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '11.2.0',
+      fn () => EntityTestHelper::createBundle('bundle1', NULL, 'entity_test_mulrev_changed'),
+      fn () => entity_test_create_bundle('bundle1', NULL, 'entity_test_mulrev_changed'),
+    );
+    DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '11.2.0',
+      fn () => EntityTestHelper::createBundle('bundle2', NULL, 'entity_test_mulrev_changed'),
+      fn () => entity_test_create_bundle('bundle2', NULL, 'entity_test_mulrev_changed'),
+    );
 
     $this->enableModules(['field', 'text']);
     $this->installEntitySchema('field_storage_config');

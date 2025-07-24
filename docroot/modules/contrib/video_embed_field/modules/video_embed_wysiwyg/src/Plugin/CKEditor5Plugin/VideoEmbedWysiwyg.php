@@ -41,10 +41,12 @@ class VideoEmbedWysiwyg extends CKEditor5PluginDefault implements CKEditor5Plugi
     return [
       'defaults' => [
         'children' => [
-          'autoplay' => FALSE,
-          'responsive' => FALSE,
-          'width' => '42',
-          'height' => '42',
+          'responsive' => TRUE,
+          'width' => '854',
+          'height' => '480',
+          'autoplay' => TRUE,
+          'title_format' => '@provider | @title',
+          'title_fallback' => TRUE,
         ],
       ],
     ];

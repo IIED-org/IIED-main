@@ -45,7 +45,7 @@ class SearchApiEntityField extends EntityField {
   /**
    * {@inheritdoc}
    */
-  public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
+  public function init(ViewExecutable $view, DisplayPluginBase $display, ?array &$options = NULL) {
     // Prepare our fallback handler.
     $fallback_handler_id = $this->definition['fallback_handler'] ?? 'search_api';
     $this->fallbackHandler = Views::handlerManager('field')

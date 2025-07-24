@@ -19,7 +19,7 @@ class Tabs extends WidgetSelectorBase {
   /**
    * {@inheritdoc}
    */
-  public function getForm(array &$form = [], FormStateInterface &$form_state = NULL) {
+  public function getForm(array &$form = [], ?FormStateInterface &$form_state = NULL) {
     $element = [];
     /** @var \Drupal\entity_browser\EntityBrowserInterface $browser */
     $browser = $form_state->getFormObject()->getEntityBrowser();

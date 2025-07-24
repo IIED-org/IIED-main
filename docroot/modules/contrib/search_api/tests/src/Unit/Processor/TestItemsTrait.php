@@ -53,7 +53,7 @@ trait TestItemsTrait {
    * @return \Drupal\search_api\Item\ItemInterface[]
    *   An array containing a single item with the specified field.
    */
-  public function createSingleFieldItem(IndexInterface $index, $fieldType, $fieldValue, FieldInterface &$field = NULL, $fieldId = 'field_test') {
+  public function createSingleFieldItem(IndexInterface $index, $fieldType, $fieldValue, ?FieldInterface &$field = NULL, $fieldId = 'field_test') {
     $this->itemIds[0] = $itemId = Utility::createCombinedId('entity:node', '1:en');
     $item = new Item($index, $itemId);
     $field = new Field($index, $fieldId);
@@ -84,7 +84,7 @@ trait TestItemsTrait {
    * @return \Drupal\search_api\Item\ItemInterface[]
    *   An array containing the requested test items.
    */
-  public function createItems(IndexInterface $index, $count, array $fields, ComplexDataInterface $object = NULL, array $datasource_ids = ['entity:node']) {
+  public function createItems(IndexInterface $index, $count, array $fields, ?ComplexDataInterface $object = NULL, array $datasource_ids = ['entity:node']) {
     $datasource_count = count($datasource_ids);
     $items = [];
     for ($i = 0; $i < $count; ++$i) {

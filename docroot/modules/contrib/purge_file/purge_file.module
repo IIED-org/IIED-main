@@ -8,6 +8,31 @@
 use Drupal\file\FileInterface;
 
 /**
+ * Defines the supported URL purgers / invalidation plugins.
+ *
+ * @return string[]
+ *   A list of invalidation plugin IDs.
+ */
+function purge_file_supported_url_purgers() {
+  return ['url', 'wildcardurl'];
+}
+
+/**
+ * Gets the supported URL purgers / invalidation plugins that are enabled.
+ *
+ * @return string[]
+ *   A list of invalidation plugin IDs.
+ */
+function purge_file_supported_url_purgers_enabled() {
+  $purger_types_enabled = \Drupal::service('purge.purgers')->getTypes();
+  if (empty($purger_types_enabled)) {
+    return [];
+  }
+
+  return array_intersect(array_values($purger_types_enabled), purge_file_supported_url_purgers());
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function purge_file_file_insert(FileInterface $file) {
@@ -18,11 +43,20 @@ function purge_file_file_insert(FileInterface $file) {
  * Implements hook_ENTITY_TYPE_update().
  */
 function purge_file_file_update(FileInterface $file) {
-  if ($file->original instanceof FileInterface
-    && ($file->getFileUri() != $file->original->getFileUri() || $file->getSize() != $file->original->getSize())) {
+  $original_file = NULL;
+  if (method_exists($file, 'getOriginal')) {
+    // Drupal 11.2+.
+    $original_file = $file->getOriginal();
+  }
+  elseif (isset($file->original)) {
+    $original_file = $file->original;
+  }
+
+  if ($original_file instanceof FileInterface
+    && ($file->getFileUri() != $original_file->getFileUri() || $file->getSize() != $original_file->getSize())) {
     purge_file_purge($file);
-    if ($file->original->createFileUrl(FALSE) != $file->createFileUrl(FALSE)) {
-      purge_file_purge($file->original);
+    if ($original_file->createFileUrl(FALSE) != $file->createFileUrl(FALSE)) {
+      purge_file_purge($original_file);
     }
   }
 }
@@ -35,67 +69,101 @@ function purge_file_file_delete(FileInterface $file) {
 }
 
 /**
- * Purge a file using the late runtime processor.
+ * Purge a file using the purge API.
+ *
+ * @return bool
+ *   TRUE if the file was processed.
  */
 function purge_file_purge(FileInterface $file) {
-  // TODO: replace strpos() with str_starts_with() when we no longer need
+  // @todo Replace strpos() with str_starts_with() when we no longer need
   // backwards compatibility with PHP 7.
-  if (strpos($file->getFileUri(),'temporary://') === 0) {
+  if (strpos($file->getFileUri(), 'temporary://') === 0) {
     // Skip files that appear only in the temporary file stream.
     // (Not all temporary files will be in the temporary file stream!)
     return FALSE;
   }
 
-  /** @var \Drupal\purge\Plugin\Purge\Invalidation\InvalidationsServiceInterface $invalidator */
-  $purge_file_config = \Drupal::config('purge_file.settings');
-  $processor = $purge_file_config->get('processor');
-  if (!empty($processor)) {
-    try {
-      $invalidator_factory = \Drupal::service('purge.invalidation.factory');
-      $purgeProcessors = \Drupal::service('purge.processors');
-      $purgePurgers = \Drupal::service('purge.purgers');
-
-      $base_urls = $purge_file_config->get('base_urls');
-      $wildcard = $purge_file_config->get('wildcard');
-      $invalidator = 'url';
-      $urls = [];
-      if (!empty($base_urls)) {
-        $base_urls = explode(',', $base_urls);
-        foreach ($base_urls as $base_url) {
-          $urls[] = $base_url . $file->createFileUrl();
-        }
-      }
-      else {
-        $urls[] = $file->createFileUrl(FALSE);
-      }
-
-      $invalidations = [];
-      if ($purge_file_config->get('debug')) {
-        $wildcard_text = ($wildcard) ? ' (with wildcard "*")' : '';
-        \Drupal::logger('purge_file')->info(sprintf('Purging file with the following URL(s): %s%s', implode(',', $urls), $wildcard_text));
-      }
-      foreach ($urls as $url) {
-        if ($wildcard) {
-          // Config expects wildcard URL, which requires special invalidator.
-          $invalidator = 'wildcardurl';
-          $url .= "*";
-        }
-        $invalidations[] = $invalidator_factory->get($invalidator, $url);
-      }
-
-      $processor = $purgeProcessors->get($processor);
-      $purgePurgers->invalidate($processor, $invalidations);
-    }
-    catch (Exception $exception) {
-      \Drupal::logger('purge_file')
-        ->error(sprintf(
-            '%s exception during file invalidation. File id: %d . File url: %s. Error: %s',
-            get_class($exception),
-            $file->id(),
-            $file->getFileUri(),
-            $exception->getMessage(),
-          )
-        );
-    }
+  $url_purgers_enabled = purge_file_supported_url_purgers_enabled();
+  if (empty($url_purgers_enabled)) {
+    return FALSE;
   }
+
+  $purge_file_config = \Drupal::config('purge_file.settings');
+  $workflow = $purge_file_config->get('workflow');
+  if (empty($workflow)) {
+    return FALSE;
+  }
+
+  $base_urls_input = $purge_file_config->get('base_urls');
+  $use_wildcard = $purge_file_config->get('wildcard') && in_array('wildcardurl', $url_purgers_enabled);
+  $invalidator = $use_wildcard ? 'wildcardurl' : 'url';
+  if (!in_array($invalidator, $url_purgers_enabled)) {
+    return FALSE;
+  }
+
+  try {
+    $invalidator_factory = \Drupal::service('purge.invalidation.factory');
+
+    $base_urls = [];
+    if (!empty($base_urls_input)) {
+      $base_urls = array_filter(array_map('trim', explode(',', $base_urls_input)));
+    }
+    else {
+      $base_urls[] = \Drupal::request()->getSchemeAndHttpHost() . base_path();
+    }
+
+    // Allow others to dynamically alter the base urls to purge.
+    \Drupal::moduleHandler()->alter('purge_file_base_urls', $base_urls, $file);
+
+    // Build urls to purge.
+    $urls = [];
+
+    foreach ($base_urls as $base_url) {
+      $urls[] = rtrim($base_url, '/') . $file->createFileUrl();
+    }
+
+    $invalidations = [];
+    if ($purge_file_config->get('debug')) {
+      $wildcard_text = ($use_wildcard) ? ' (with wildcard "*")' : '';
+      \Drupal::logger('purge_file')->info(sprintf('Purging file with the following URL(s): %s%s', implode(',', $urls), $wildcard_text));
+    }
+
+    foreach ($urls as $url) {
+      if ($use_wildcard) {
+        $url .= "*";
+      }
+
+      $invalidations[] = $invalidator_factory->get($invalidator, $url);
+    }
+
+    if ($workflow === 'queue') {
+      // Queue invalidation for any queue processor to process.
+      // Example: The purge_processor_cron module.
+      $queuer = \Drupal::service('purge.queuers')->get('purge_file_queuer');
+      if ($queuer) {
+        \Drupal::service('purge.queue')->add($queuer, $invalidations);
+      }
+    }
+    else {
+      // Immediate invalidation.
+      $processor = \Drupal::service('purge.processors')->get('purge_file_immediate_processor');
+      if ($processor) {
+        \Drupal::service('purge.purgers')->invalidate($processor, $invalidations);
+      }
+    }
+
+    return TRUE;
+  }
+  catch (\Throwable $exception) {
+    \Drupal::logger('purge_file')
+      ->error('@class exception during file invalidation via workflow "@workflow", File id: @file_id, File @file_uri: Error: @error', [
+        '@class' => get_class($exception),
+        '@workflow' => $workflow,
+        '@file_id' => $file->id(),
+        '@file_uri' => $file->getFileUri(),
+        '@error' => $exception->getMessage(),
+      ]);
+  }
+
+  return FALSE;
 }

@@ -2,7 +2,7 @@ parameters:
 	level: 9
 	ignoreErrors:
 		- '#Unsafe usage of new static\(\)#'
-	checkMissingIterableValueType: false
+		- identifier: missingType.iterableValue
 	excludePaths:
 		- services_tfa/*
 		- src/Controller/TfaUserControllerDeprecated.php

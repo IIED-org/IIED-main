@@ -166,6 +166,7 @@ class TfaTotpTest extends UnitTestCase {
 
     // Fake some codes for user 3.
     $otp_generator = new Otp();
+    // cSpell:disable-next-line
     $seed = 'AR5BPJL24MYUHGBU';
     $last_accepted_window = 1;
 

@@ -280,7 +280,7 @@ interface IndexInterface extends ConfigEntityInterface {
    *
    * @return $this
    */
-  public function setServer(ServerInterface $server = NULL);
+  public function setServer(?ServerInterface $server = NULL);
 
   /**
    * Retrieves this index's processors.
@@ -574,6 +574,19 @@ interface IndexInterface extends ConfigEntityInterface {
    *   The loaded items, keyed by their internal item IDs.
    */
   public function loadItemsMultiple(array $item_ids);
+
+  /**
+   * Registers unreliable item IDs that were generated in this request.
+   *
+   * In some instances, plugins in part of the framework will queue item IDs for
+   * indexing that are not known to actually belong to existing items. To avoid
+   * triggering a warning for each of those, these unreliable item IDs can be
+   * registered in advance using this method.
+   *
+   * @param string[] $item_ids
+   *   The unreliable item IDs.
+   */
+  public function registerUnreliableItemIds(array $item_ids): void;
 
   /**
    * Indexes a set amount of items.

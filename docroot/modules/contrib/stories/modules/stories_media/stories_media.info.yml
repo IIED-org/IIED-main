@@ -2,7 +2,7 @@ name: 'Stories Media'
 description: 'Enables Image, Video, and Slideshow media entities and enables corresponding paragraph types.'
 package: Authoring
 type: module
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^8 || ^9 || ^10 || ^11
 dependencies:
   - dropzonejs:dropzonejs_eb_widget (>=8.x-2.x)
   - entity_browser:entity_browser (>=8.x-2.x)
@@ -23,7 +23,7 @@ dependencies:
   - video_embed_field:video_embed_field
   - video_embed_field:video_embed_media
 
-# Information added by Drupal.org packaging script on 2023-06-02
-version: '3.0.0-alpha1'
+# Information added by Drupal.org packaging script on 2025-05-01
+version: '3.0.0-alpha3'
 project: 'stories'
-datestamp: 1685742678
+datestamp: 1746110869

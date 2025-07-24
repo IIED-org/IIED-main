@@ -81,7 +81,7 @@ abstract class TfaUserControllerBase extends UserController {
       $tfa_ready = $this->isReady();
       // Check for authentication plugin.
       if ($tfa_ready && $this->pluginAllowsLogin()) {
-        // A trused browser or at least one plugin allows authentication.
+        // A trusted browser or at least one plugin allows authentication.
         $this->messenger()->addStatus($this->t('You have logged in on a trusted browser.'));
         // Let the Drupal core to validate the one time login.
         if ($request) {
@@ -188,7 +188,7 @@ abstract class TfaUserControllerBase extends UserController {
    *   The current timestamp.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
-   *   Recirect response to user eidt form.
+   *   Redirect response to user edit form.
    */
   protected function redirectToUserForm(UserInterface $user, $request, $timestamp) {
     user_login_finalize($user);

@@ -2,6 +2,8 @@
 
 namespace Drupal\search_api\Form;
 
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -82,6 +84,24 @@ class IndexForm extends EntityForm {
   }
 
   /**
+   * Retrieves all available search servers.
+   *
+   * @return \Drupal\search_api\ServerInterface[]
+   *   The available servers.
+   */
+  protected function getServers(): array {
+    try {
+      return $this->entityTypeManager
+        ->getStorage('search_api_server')
+        ->loadMultiple();
+    }
+    catch (InvalidPluginDefinitionException | PluginNotFoundException) {
+      // This should never happen.
+      return [];
+    }
+  }
+
+  /**
    * Retrieves all available servers as an options list.
    *
    * @return string[]
@@ -89,11 +109,7 @@ class IndexForm extends EntityForm {
    */
   protected function getServerOptions() {
     $options = [];
-    /** @var \Drupal\search_api\ServerInterface[] $servers */
-    $servers = $this->entityTypeManager
-      ->getStorage('search_api_server')
-      ->loadMultiple();
-    foreach ($servers as $server_id => $server) {
+    foreach ($this->getServers() as $server_id => $server) {
       // @todo Special formatting for disabled servers.
       $options[$server_id] = Utility::escapeHtml($server->label());
     }
@@ -266,30 +282,36 @@ class IndexForm extends EntityForm {
 
     $this->buildTrackerConfigForm($form, $form_state, $index);
 
+    $server_options = $this->getServerOptions();
     $form['server'] = [
       '#type' => 'radios',
       '#title' => $this->t('Server'),
       '#description' => $this->t('Select the server this index should use. Indexes cannot be enabled without a connection to a valid, enabled server.'),
-      '#options' => ['' => '<em>' . $this->t('- No server -') . '</em>'] + $this->getServerOptions(),
+      '#options' => ['' => '<em>' . $this->t('- No server -') . '</em>'] + $server_options,
       '#default_value' => $index->hasValidServer() ? $index->getServerId() : '',
     ];
 
     $form['status'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enabled'),
-      '#description' => $this->t('Only enabled indexes can be used for indexing and searching. This setting will only take effect if the selected server is also enabled.'),
+      '#description' => $this->t('Only enabled indexes can be used for indexing and searching.'),
       '#default_value' => $index->status(),
-      // Can't enable an index lying on a disabled server or no server at all.
-      '#disabled' => !$index->status() && (!$index->hasValidServer() || !$index->getServerInstance()->status()),
-      // @todo This doesn't seem to work and should also hide for disabled
-      //   servers. If that works, we can probably remove the last sentence of
-      //   the description.
       '#states' => [
-        'invisible' => [
-          ':input[name="server"]' => ['value' => ''],
+        'visible' => [
+          'xor',
         ],
       ],
     ];
+    // Only show the status checkbox if the server is enabled.
+    foreach ($this->getServers() as $server_id => $server) {
+      if ($server->status()) {
+        $form['status']['#states']['visible'][] = [
+          ':input[name="server"]' => [
+            'value' => $server_id,
+          ],
+        ];
+      }
+    }
 
     $form['description'] = [
       '#type' => 'textarea',
@@ -372,10 +394,15 @@ class IndexForm extends EntityForm {
         $datasource_form_state = SubformState::createForSubform($datasource_form, $form, $form_state);
         $form['datasource_configs'][$datasource_id] = $datasource->buildConfigurationForm($datasource_form, $datasource_form_state);
 
-        $show_message = TRUE;
-        $form['datasource_configs'][$datasource_id]['#type'] = 'details';
-        $form['datasource_configs'][$datasource_id]['#title'] = $this->t('Configure the %datasource datasource', ['%datasource' => $datasource->label()]);
-        $form['datasource_configs'][$datasource_id]['#open'] = $index->isNew();
+        // Only show the details and configuration message if there is something
+        // to configure. The "File" datasource for example has no options by
+        // default.
+        if (!empty($form['datasource_configs'][$datasource_id])) {
+          $show_message = TRUE;
+          $form['datasource_configs'][$datasource_id]['#type'] = 'details';
+          $form['datasource_configs'][$datasource_id]['#title'] = $this->t('Configure the %datasource datasource', ['%datasource' => $datasource->label()]);
+          $form['datasource_configs'][$datasource_id]['#open'] = $index->isNew();
+        }
       }
     }
 

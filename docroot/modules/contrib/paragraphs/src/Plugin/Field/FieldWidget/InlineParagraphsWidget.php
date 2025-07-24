@@ -6,6 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldFilteredMarkup;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -13,6 +14,7 @@ use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\field_group\FormatterHelper;
 use Drupal\paragraphs\ParagraphInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
@@ -33,6 +35,12 @@ use Drupal\paragraphs\Plugin\EntityReferenceSelection\ParagraphSelection;
  *   }
  * )
  */
+#[FieldWidget(
+  id: 'entity_reference_paragraphs',
+  label: new TranslatableMarkup('Paragraphs Legacy'),
+  description: new TranslatableMarkup('The legacy paragraphs inline form widget.'),
+  field_types: ['entity_reference_revisions']
+ )]
 class InlineParagraphsWidget extends WidgetBase {
 
   /**

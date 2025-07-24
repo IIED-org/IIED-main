@@ -12,12 +12,6 @@ use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api_test\PluginTestTrait;
 
-// Workaround to support tests against both Drupal 10.1 and Drupal 11.0.
-// @todo Remove once we depend on Drupal 10.2.
-if (!trait_exists(EntityReferenceFieldCreationTrait::class)) {
-  class_alias('\Drupal\Tests\field\Traits\EntityReferenceTestTrait', EntityReferenceFieldCreationTrait::class);
-}
-
 /**
  * Tests what happens when an index's or a server's dependencies are removed.
  *

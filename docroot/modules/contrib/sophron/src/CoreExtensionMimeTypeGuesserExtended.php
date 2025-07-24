@@ -16,6 +16,13 @@ use Drupal\Core\File\MimeType\ExtensionMimeTypeGuesser;
 class CoreExtensionMimeTypeGuesserExtended extends ExtensionMimeTypeGuesser {
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a new CoreExtensionMimeTypeGuesserExtended.
    */
   public function __construct() {

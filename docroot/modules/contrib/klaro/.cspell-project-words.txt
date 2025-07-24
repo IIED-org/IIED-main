@@ -8,6 +8,7 @@ deepchat
 Deepchat
 Dont
 dont
+gmap
 gtag
 jurgenhaas
 Jürgen
@@ -32,5 +33,7 @@ Sascha
 sascha
 screenreaders
 tiktok
+umami
+Umami
 youtu
 ytimg

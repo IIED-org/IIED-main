@@ -3,8 +3,8 @@
 namespace Drupal\Tests\video_embed_media\Kernel;
 
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\media\Entity\Media;
 use Drupal\Tests\media\Kernel\MediaKernelTestBase;
+use Drupal\media\Entity\Media;
 
 /**
  * Test the provided fields.
@@ -23,7 +23,7 @@ class ProvidedFieldsTest extends MediaKernelTestBase {
   /**
    * The created media type.
    *
-   * @var \Drupal\media\Entity\MediaType;
+   * @var \Drupal\media\Entity\MediaType
    */
   protected $entityType;
 
@@ -40,7 +40,7 @@ class ProvidedFieldsTest extends MediaKernelTestBase {
   /**
    * Test cases for ::testProvidedFields().
    */
-  public function providedFieldsTestCases() {
+  public static function providedFieldsTestCases() {
     return [
       'Video ID (YouTube)' => [
         'https://www.youtube.com/watch?v=gnERPdAiuSo',

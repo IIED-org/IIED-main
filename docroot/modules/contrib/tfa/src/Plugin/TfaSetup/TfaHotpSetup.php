@@ -3,6 +3,7 @@
 namespace Drupal\tfa\Plugin\TfaSetup;
 
 use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -96,6 +97,7 @@ class TfaHotpSetup extends TfaHotpValidation implements TfaSetupInterface {
         '#tag' => 'style',
         '#value' => ".tfa-qr-code { width:200px }",
       ],
+      // cSpell:disable-next-line qrcode
       'qrcode-css',
     ];
 
@@ -143,13 +145,16 @@ class TfaHotpSetup extends TfaHotpValidation implements TfaSetupInterface {
   }
 
   /**
-   * Get a base64 qrcode image uri of seed.
+   * Get a base64 QR code image uri of seed.
    *
    * @return string
    *   QR-code uri.
    */
   protected function getQrCodeUri() {
-    return (new QRCode)->render('otpauth://hotp/' . $this->accountName() . '?secret=' . $this->seed . '&counter=1&issuer=' . urlencode($this->issuer));
+    $qr_options = new QROptions();
+    $qr_options->imageTransparent = FALSE;
+    // cSpell:disable-next-line otpauth
+    return (new QRCode($qr_options))->render('otpauth://hotp/' . $this->accountName() . '?secret=' . $this->seed . '&counter=1&issuer=' . urlencode($this->issuer));
   }
 
   /**

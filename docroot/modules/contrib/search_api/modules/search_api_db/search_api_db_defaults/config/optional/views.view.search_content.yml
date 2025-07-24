@@ -69,8 +69,7 @@ display:
         options:
           view_modes:
             'entity:node':
-              article: search_result
-              page: search_result
+              ':default': search_result
       filters:
         search_api_fulltext:
           id: search_api_fulltext
