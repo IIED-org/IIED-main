@@ -6374,6 +6374,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 100
           total_pages: null
           id: 1
@@ -6391,7 +6392,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       filters:
         status:
           id: status
@@ -8775,6 +8775,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 1000
           total_pages: null
           id: 0
@@ -8792,7 +8793,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       sorts: {  }
       filters:
         status:
@@ -10226,7 +10226,7 @@ display:
       display_extenders: {  }
       path: admin/manage/publications-quarterly
       menu:
-        type: tab
+        type: none
         title: 'Q reports'
         description: ''
         weight: 5
@@ -11251,6 +11251,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 100
           total_pages: null
           id: 0
@@ -11268,7 +11269,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       sorts: {  }
       filters:
         status:

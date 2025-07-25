@@ -52,5 +52,9 @@
     <a class="flex items-center mb-2 space-x-1 border-b-0 hover:border-b-0" href="{{ paragraph.field_link.get(0).getUrl().toString() }}">
     {% include '@iied_tw/layout/icons/Google_Scholar.svg' %}
     {{ content.field_profile_type }}</a>
+{% elseif paragraph.field_profile_type.value == '4' %}
+    <a class="flex items-center mb-2 space-x-1 border-b-0 hover:border-b-0" href="{{ paragraph.field_link.get(0).getUrl().toString() }}">
+    {% include '@iied_tw/layout/icons/linkedin.svg' %}
+    {{ content.field_profile_type }}</a>    
 {% endif %}
 </div>
