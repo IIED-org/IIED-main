@@ -4816,6 +4816,14 @@ button.cn-decline.klaro-close {
   left: 50%;
 }
 
+.left-1\/4{
+  left: 25%;
+}
+
+.left-3\/4{
+  left: 75%;
+}
+
 .right-0{
   right: 0px;
 }
@@ -5378,10 +5386,6 @@ button.cn-decline.klaro-close {
   min-height: 12rem;
 }
 
-.min-h-screen{
-  min-height: 100vh;
-}
-
 .w-0{
   width: 0px;
 }
@@ -5641,8 +5645,18 @@ button.cn-decline.klaro-close {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.-translate-x-1\/4{
+  --tw-translate-x: -25%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 .-translate-x-2\/4{
   --tw-translate-x: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.-translate-x-3\/4{
+  --tw-translate-x: -75%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -6389,6 +6403,14 @@ button.cn-decline.klaro-close {
   background-image: url('/themes/custom/iied_tw/images/hh-main-bg.svg');
 }
 
+.bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/toc-bg1\.png\'\)\]{
+  background-image: url('/themes/custom/iied_tw/images/toc-bg1.png');
+}
+
+.bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/toc-bg2\.png\'\)\]{
+  background-image: url('/themes/custom/iied_tw/images/toc-bg2.png');
+}
+
 .bg-\[url\(\'\/themes\/custom\/iied_tw\/templates\/layout\/icons\/line-pattern\.svg\'\)\]{
   background-image: url('/themes/custom/iied_tw/templates/layout/icons/line-pattern.svg');
 }
@@ -6403,14 +6425,6 @@ button.cn-decline.klaro-close {
 
 .bg-gradient-to-t{
   background-image: linear-gradient(to top, var(--tw-gradient-stops));
-}
-
-.bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/toc-bg1\.png\'\)\]{
-  background-image: url('/themes/custom/iied_tw/images/toc-bg1.png');
-}
-
-.bg-\[url\(\'\/themes\/custom\/iied_tw\/images\/toc-bg2\.png\'\)\]{
-  background-image: url('/themes/custom/iied_tw/images/toc-bg2.png');
 }
 
 .from-black{
@@ -6459,24 +6473,24 @@ button.cn-decline.klaro-close {
   --tw-gradient-to: transparent var(--tw-gradient-to-position);
 }
 
-.bg-cover{
-  background-size: cover;
-}
-
 .bg-contain{
   background-size: contain;
+}
+
+.bg-cover{
+  background-size: cover;
 }
 
 .bg-bottom{
   background-position: bottom;
 }
 
-.bg-right-bottom{
-  background-position: right bottom;
-}
-
 .bg-center{
   background-position: center;
+}
+
+.bg-right-bottom{
+  background-position: right bottom;
 }
 
 .bg-no-repeat{
@@ -6883,10 +6897,6 @@ button.cn-decline.klaro-close {
   line-height: 1.25;
 }
 
-.tracking-wide{
-  letter-spacing: 0.025em;
-}
-
 .text-gray-100{
   --tw-text-opacity: 1;
   color: rgb(243 244 246 / var(--tw-text-opacity));
@@ -6980,16 +6990,6 @@ button.cn-decline.klaro-close {
 .text-secondary-green-dark{
   --tw-text-opacity: 1;
   color: rgb(4 135 94 / var(--tw-text-opacity));
-}
-
-.text-slate-700{
-  --tw-text-opacity: 1;
-  color: rgb(51 65 85 / var(--tw-text-opacity));
-}
-
-.text-slate-800{
-  --tw-text-opacity: 1;
-  color: rgb(30 41 59 / var(--tw-text-opacity));
 }
 
 .text-white{
@@ -9199,6 +9199,10 @@ button.cn-decline.klaro-close {
     position: sticky;
   }
 
+  .md\:left-1\/2{
+    left: 50%;
+  }
+
   .md\:order-1{
     order: 1;
   }
@@ -9291,6 +9295,11 @@ button.cn-decline.klaro-close {
     max-width: 48rem;
   }
 
+  .md\:-translate-x-1\/2{
+    --tw-translate-x: -50%;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
   .md\:grid-flow-row-dense{
     grid-auto-flow: row dense;
   }
@@ -9337,10 +9346,6 @@ button.cn-decline.klaro-close {
     border-radius: 1.5rem;
   }
 
-  .md\:p-8{
-    padding: 2rem;
-  }
-
   .md\:text-center{
     text-align: center;
   }
@@ -9353,11 +9358,6 @@ button.cn-decline.klaro-close {
   .md\:text-4xl{
     font-size: 2.25rem;
     line-height: 2.5rem;
-  }
-
-  .md\:text-6xl{
-    font-size: 3.75rem;
-    line-height: 1;
   }
 
   .md\:text-lg{
