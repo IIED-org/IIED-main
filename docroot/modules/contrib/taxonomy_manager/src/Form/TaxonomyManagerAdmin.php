@@ -2,10 +2,10 @@
 
 namespace Drupal\taxonomy_manager\Form;
 
-use Drupal\content_translation\ContentTranslationManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\content_translation\ContentTranslationManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -27,7 +27,6 @@ class TaxonomyManagerAdmin extends ConfigFormBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    // @phpstan-ignore ternary.alwaysTrue (False positive)
     $content_translation_manager = $container->has('content_translation.manager') ? $container->get('content_translation.manager') : NULL;
     $instance = parent::create($container);
     $instance->moduleHandler = $container->get('module_handler');
@@ -87,7 +86,7 @@ class TaxonomyManagerAdmin extends ConfigFormBase {
         '#default_value' => $config->get('taxonomy_manager_translations'),
         '#description' => $this->t('Translatable term fields will display values side by side for each enabled language. Make sure to configure content translation first.'),
         '#attributes' => [
-          'disabled' => $this->contentTranslationManager->isEnabled('taxonomy_term'),
+          'disabled' => !$this->contentTranslationManager->isEnabled('taxonomy_term'),
         ],
       ];
     }

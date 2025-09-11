@@ -8,6 +8,8 @@
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\Entity\User;
 
 /**
@@ -68,4 +70,148 @@ function linkchecker_update_8002() {
     ->fields(['last_check' => NULL])
     ->condition('last_check', 0)
     ->execute();
+}
+
+/**
+ * Add a field for linkcheckerlink uuid.
+ */
+function linkchecker_update_8003(): void {
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition(
+    'uuid',
+    'linkcheckerlink',
+    'linkchecker',
+    BaseFieldDefinition::create('uuid')
+      ->setLabel(new TranslatableMarkup('UUID'))
+      ->setDescription(new TranslatableMarkup('The entity UUID.'))
+      ->setReadOnly(TRUE)
+  );
+}
+
+/**
+ * Generate uuids for new uuid field.
+ */
+function linkchecker_update_8004(&$sandbox) {
+  $storage_handler = \Drupal::entityTypeManager()->getStorage('linkcheckerlink');
+  $uuid_service = \Drupal::service('uuid');
+
+  $items_per_batch = 10;
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+    // All the entities should be updated.
+    $sandbox['max'] = $storage_handler
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->notExists('uuid')
+      ->count()
+      ->execute();
+  }
+
+  $ids = $storage_handler
+    ->getQuery()
+    ->accessCheck(FALSE)
+    ->notExists('uuid')
+    ->range(0, $items_per_batch)
+    ->sort('lid')
+    ->execute();
+
+  if (!empty($ids)) {
+    foreach ($storage_handler->loadMultiple($ids) as $linkcheckerlink) {
+      $linkcheckerlink->set('uuid', $uuid_service->generate());
+      $linkcheckerlink->save();
+      $sandbox['progress']++;
+    }
+  }
+  $sandbox['#finished'] = ($sandbox['progress'] >= $sandbox['max']) ? TRUE : ($sandbox['progress'] / $sandbox['max']);
+  if ($sandbox['#finished']) {
+    return t('Entities are updating: finished @progress of @total.', [
+      '@progress' => $sandbox['progress'],
+      '@total' => $sandbox['max'],
+    ]);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add parent_entity_type_id and parent_entity_id
+ * base fields to store a link to the entity.
+ */
+function linkchecker_update_8005() {
+  // Entity type id related to the link.
+  $entity_type_id_definition = BaseFieldDefinition::create('string')
+    ->setLabel(new TranslatableMarkup('Entity Type id'))
+    ->setDescription(new TranslatableMarkup('The entity type id string of the entity in which link was found.'))
+    ->setRequired(TRUE);
+
+  // Entity id related to the link.
+  $entity_id_definition = BaseFieldDefinition::create('integer')
+    ->setLabel(new TranslatableMarkup('Entity ID'))
+    ->setDescription(new TranslatableMarkup('The entity id integer of the entity in which link was found.'))
+    ->setRequired(TRUE);
+
+  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+  $entity_definition_update_manager->installFieldStorageDefinition('parent_entity_type_id', 'linkcheckerlink', 'linkcheckerlink', $entity_type_id_definition);
+  $entity_definition_update_manager->installFieldStorageDefinition('parent_entity_id', 'linkcheckerlink', 'linkcheckerlink', $entity_id_definition);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Convert existing entity_id to new fields values.
+ */
+function linkchecker_update_8006(&$sandbox) {
+  $linkchecker_storage = \Drupal::entityTypeManager()->getStorage('linkcheckerlink');
+  // Firstly - initialize batch variables.
+  $items_per_batch = 20;
+  if (!isset($sandbox['progress'])) {
+    $sandbox['max'] = $linkchecker_storage->getQuery()
+      ->accessCheck(FALSE)
+      ->exists('entity_id')
+      ->notExists('parent_entity_type_id')
+      ->notExists('parent_entity_id')
+      ->count()
+      ->execute();
+    $sandbox['progress'] = 0;
+  }
+  $linkchecker_ids = $linkchecker_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->exists('entity_id')
+    ->notExists('parent_entity_type_id')
+    ->notExists('parent_entity_id')
+    ->range(0, $items_per_batch)
+    ->sort('lid')
+    ->execute();
+  if (!empty($linkchecker_ids)) {
+    foreach ($linkchecker_storage->loadMultiple($linkchecker_ids) as $linkchecker_link) {
+      // Access field value via property cuz we already removed entity_id
+      // base field definition.
+      $entity_id_val = reset($linkchecker_link->entity_id);
+      $linkchecker_link->set('parent_entity_type_id', $entity_id_val['target_type']);
+      $linkchecker_link->set('parent_entity_id', $entity_id_val['target_id']);
+      $linkchecker_link->save();
+      $sandbox['progress']++;
+    }
+  }
+  $sandbox['#finished'] = ($sandbox['progress'] >= $sandbox['max']) ? TRUE : ($sandbox['progress'] / $sandbox['max']);
+  // Show the progress until we finish updating all the entities.
+  if ($sandbox['#finished']) {
+    return t('Linkchecker links are updating: finished @progress of @total.', [
+      '@progress' => $sandbox['progress'],
+      '@total' => $sandbox['max'],
+    ]);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Uninstall entity_id storage definition.
+ */
+function linkchecker_update_8007(&$sandbox) {
+  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+  $definition = $entity_definition_update_manager->getFieldStorageDefinition('entity_id', 'linkcheckerlink');
+  if ($definition !== NULL) {
+    $entity_definition_update_manager->uninstallFieldStorageDefinition($definition);
+    return t('The entity_id field storage definition successfully uninstalled.');
+  }
 }

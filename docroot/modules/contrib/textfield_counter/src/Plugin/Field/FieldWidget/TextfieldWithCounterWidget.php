@@ -79,8 +79,8 @@ class TextfieldWithCounterWidget extends TextfieldWidget {
     $maxlength = $this->getSetting('use_field_maxlength') ? $this->getFieldSetting('max_length') : $this->getSetting('maxlength');
     if ($maxlength) {
       $entity = $items->getEntity();
-      $field_defintion = $items->getFieldDefinition();
-      $this->fieldFormElement($element, $entity, $field_defintion, $delta);
+      $field_definition = $items->getFieldDefinition();
+      $this->fieldFormElement($element, $entity, $field_definition, $delta);
       $count_html_characters = $this->getSetting('count_html_characters');
       if (isset($element['value'])) {
         $element['value']['#textfield-maxlength'] = $maxlength;

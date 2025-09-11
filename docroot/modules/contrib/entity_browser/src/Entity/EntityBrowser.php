@@ -319,7 +319,7 @@ class EntityBrowser extends ConfigEntityBase implements EntityBrowserInterface, 
    * {@inheritdoc}
    */
   public function addAdditionalWidgetParameters(array $parameters) {
-    // TODO - this doesn't make much sense. Refactor.
+    // @todo this doesn't make much sense. Refactor.
     $this->additional_widget_parameters += $parameters;
     return $this;
   }
@@ -328,7 +328,7 @@ class EntityBrowser extends ConfigEntityBase implements EntityBrowserInterface, 
    * {@inheritdoc}
    */
   public function getAdditionalWidgetParameters() {
-    // TODO - this doesn't make much sense. Refactor.
+    // @todo this doesn't make much sense. Refactor.
     return $this->get('additional_widget_parameters');
   }
 
@@ -382,7 +382,7 @@ class EntityBrowser extends ConfigEntityBase implements EntityBrowserInterface, 
    * {@inheritdoc}
    */
   public function route() {
-    // TODO: Allow displays to define more than just path.
+    // @todo Allow displays to define more than just path.
     // See: https://www.drupal.org/node/2364193
     $display = $this->getDisplay();
     if ($display instanceof DisplayRouterInterface) {

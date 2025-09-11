@@ -3,12 +3,12 @@
 namespace Drupal\Tests\linkchecker\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\linkchecker\Entity\LinkCheckerLink;
 use Drupal\node\Entity\NodeType;
-use Drupal\Tests\node\Traits\NodeCreationTrait;
 
 /**
- * Test for making sure queuing links gets us the number we expect.
+ * Test for making sure queueing links gets us the number we expect.
  *
  * @group linkchecker
  */
@@ -26,7 +26,6 @@ class QueueLinksTest extends KernelTestBase {
     'field',
     'filter',
     'text',
-    'dynamic_entity_reference',
     'linkchecker',
     'path_alias',
   ];
@@ -79,10 +78,8 @@ class QueueLinksTest extends KernelTestBase {
   public function testUnpublishedLink() {
     $link = LinkCheckerLink::create([
       'url' => 'https://do-not-test.com',
-      'entity_id' => [
-        'target_id' => 1,
-        'target_type' => 'dummy_type',
-      ],
+      'parent_entity_type_id' => 'dummy_type',
+      'parent_entity_id' => 1,
       'entity_field' => 'dummy_field',
       'entity_langcode' => 'en',
     ]);

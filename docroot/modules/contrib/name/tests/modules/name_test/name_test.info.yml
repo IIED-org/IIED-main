@@ -1,0 +1,12 @@
+name: Name test
+type: module
+description: 'Provides configuration for testing the Name module.'
+package: Testing
+dependencies:
+  - drupal:views
+  - name:name
+
+# Information added by Drupal.org packaging script on 2024-11-28
+version: '8.x-1.0'
+project: 'name'
+datestamp: 1732821198

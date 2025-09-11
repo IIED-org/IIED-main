@@ -23,7 +23,7 @@ class ChartData extends RenderElementBase {
       '#show_in_legend' => TRUE,
       // Show inline labels next to the data.
       '#show_labels' => FALSE,
-      // If building multicharts. The chart type, e.g. pie.
+      // If building multiple charts. The chart type, e.g. pie.
       '#chart_type' => NULL,
       // Line chart only.
       '#line_width' => 1,

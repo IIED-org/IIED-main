@@ -25,6 +25,9 @@ class File extends WidgetValidationBase {
    */
   protected FileValidatorInterface $fileValidator;
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $plugin = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $plugin->fileValidator = $container->get('file.validator');

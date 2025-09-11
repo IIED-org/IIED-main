@@ -8,13 +8,6 @@ alpine:
 alpine-collapse:
   js:
     https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js: { type: external, minified: true }
-priority-nav:
-  header: true
-  css:
-    theme:
-      dist/priority-nav/priority-nav-core.css: {}
-  js:
-    dist/priority-nav/priority-nav.js: { async: true }
 copyprint:
    js:
     dist/js/copyprint.js: { async: true }

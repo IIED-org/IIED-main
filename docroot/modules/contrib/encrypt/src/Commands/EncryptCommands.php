@@ -2,12 +2,12 @@
 
 namespace Drupal\encrypt\Commands;
 
-use Drush\Commands\DrushCommands;
-use Drupal\encrypt\Entity\EncryptionProfile;
 use Drupal\encrypt\EncryptService;
+use Drupal\encrypt\Entity\EncryptionProfile;
+use Drush\Commands\DrushCommands;
 
 /**
- * Class EncryptCommands.
+ * Provides additional Drush commands for the Encrypt module.
  *
  * @package Drupal\encrypt\Commands
  */
@@ -111,8 +111,8 @@ class EncryptCommands extends DrushCommands {
    *   Validates the given encryption profile.
    * @aliases evp
    *
-   * @return array
-   *   A list of errors.
+   * @return array|null
+   *   A list of errors, if there are any errors.
    *
    * @throws \Exception
    */

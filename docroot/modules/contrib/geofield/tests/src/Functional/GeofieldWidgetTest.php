@@ -234,6 +234,7 @@ class GeofieldWidgetTest extends FieldTestBase {
 
     // Check basic data.
     $this->drupalGet('entity_test/manage/' . $entity->id() . '/edit');
+    $this->assertSession->statusCodeEquals(200);
     $this->assertSession->pageTextContains('geofield_field');
     $this->assertSession->pageTextContains('Top');
     $this->assertSession->pageTextContains('Right');

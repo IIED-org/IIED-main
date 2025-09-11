@@ -6,7 +6,7 @@ dependencies:
   - login_redirect_per_role:login_redirect_per_role
   - token:token
 
-# Information added by Drupal.org packaging script on 2024-09-13
-version: '8.x-1.10'
+# Information added by Drupal.org packaging script on 2025-06-25
+version: '8.x-1.11'
 project: 'login_redirect_per_role'
-datestamp: 1726232153
+datestamp: 1750889220

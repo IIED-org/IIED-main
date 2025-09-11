@@ -10,13 +10,8 @@ dependencies:
 id: pubs_summary
 name: 'Search summary (pubs)'
 facet_source_id: 'search_api:views_page__search__page_1'
-search_filter_identifier: k
+only_visible_when_facet_source_is_visible: true
 processor_configs:
-  hide_when_not_rendered:
-    processor_id: hide_when_not_rendered
-    weights:
-      build: '45'
-    settings: {  }
   show_count:
     processor_id: show_count
     weights:

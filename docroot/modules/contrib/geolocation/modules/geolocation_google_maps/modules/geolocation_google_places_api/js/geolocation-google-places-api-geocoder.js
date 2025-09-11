@@ -44,6 +44,9 @@
         var componentRestrictions = {};
         if (typeof drupalSettings.geolocation.geocoder.google_places_api.componentRestrictions !== 'undefined') {
           componentRestrictions = drupalSettings.geolocation.geocoder.google_places_api.componentRestrictions;
+          if (componentRestrictions.country !== undefined && !$.isArray(componentRestrictions.country)) {
+            componentRestrictions.country = componentRestrictions.country.split(',');
+          }
         }
 
         Drupal.geolocation.geocoder.googlePlacesAPI.autocompleteService.getPlacePredictions(

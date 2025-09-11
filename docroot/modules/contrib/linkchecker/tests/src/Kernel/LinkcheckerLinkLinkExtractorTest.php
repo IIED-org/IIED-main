@@ -3,12 +3,12 @@
 namespace Drupal\Tests\linkchecker\Kernel;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\link\LinkItemInterface;
 use Drupal\node\Entity\NodeType;
-use Drupal\Tests\node\Traits\NodeCreationTrait;
 
 /**
  * Test html link extractor.
@@ -29,7 +29,6 @@ class LinkcheckerLinkLinkExtractorTest extends KernelTestBase {
     'system',
     'field',
     'text',
-    'dynamic_entity_reference',
     'link',
     'linkchecker',
   ];

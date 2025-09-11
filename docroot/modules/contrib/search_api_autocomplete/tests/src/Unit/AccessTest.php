@@ -6,7 +6,6 @@ use Drupal\Core\Access\AccessResultReasonInterface;
 use Drupal\Core\Cache\CacheableDependencyInterface;
 use Drupal\Core\Cache\Context\CacheContextsManager;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api_autocomplete\SearchInterface;
@@ -42,8 +41,7 @@ class AccessTest extends UnitTestCase {
   protected function setUp(): void {
     parent::setUp();
 
-    $element_info = $this->createMock(ElementInfoManagerInterface::class);
-    $this->autocompleteHelper = new AutocompleteHelper($element_info);
+    $this->autocompleteHelper = new AutocompleteHelper();
     $this->search = $this->createMock(SearchInterface::class);
     $this->search->method('id')->willReturn('test');
     $this->search->method('getCacheContexts')->willReturn(['test']);
@@ -131,7 +129,7 @@ class AccessTest extends UnitTestCase {
    *
    * @see \Drupal\Tests\search_api_autocomplete\Unit\AccessTest::testAccess
    */
-  public function accessTestDataProvider() {
+  public static function accessTestDataProvider(): array {
     return [
       'search disabled' => [
         ['status' => FALSE],

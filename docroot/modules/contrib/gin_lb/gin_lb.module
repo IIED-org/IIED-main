@@ -17,7 +17,7 @@ use Drupal\gin_lb\HookHandler\FormMediaLibraryAddFormAlter;
 use Drupal\gin_lb\HookHandler\FormMediaLibraryAddFormOembedAlter;
 use Drupal\gin_lb\HookHandler\FormMediaLibraryAddFormUploadAlter;
 use Drupal\gin_lb\HookHandler\Help;
-use Drupal\gin_lb\HookHandler\ModuleImplementsAlter;
+use Drupal\gin_lb\HookHandler\LibraryInfoAlter;
 use Drupal\gin_lb\HookHandler\PageAttachments;
 use Drupal\gin_lb\HookHandler\Preprocess;
 use Drupal\gin_lb\HookHandler\Theme;
@@ -81,12 +81,34 @@ function gin_lb_help(string $route_name, RouteMatchInterface $route_match): arra
 }
 
 /**
+ * Implements hook_library_info_alter().
+ */
+function gin_lb_library_info_alter(array &$libraries, string $extension): void {
+  if ($extension !== 'gin_lb') {
+    return;
+  }
+  /** @var \Drupal\gin_lb\HookHandler\LibraryInfoAlter $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(LibraryInfoAlter::class);
+  $instance->alter($libraries);
+}
+
+/**
  * Implements hook_module_implements_alter().
  */
 function gin_lb_module_implements_alter(array &$implementations, string $hook): void {
-  /** @var \Drupal\gin_lb\HookHandler\ModuleImplementsAlter $instance */
-  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(ModuleImplementsAlter::class);
-  $instance->alter($implementations, $hook);
+  if (!isset($implementations['gin_lb'])) {
+    return;
+  }
+
+  switch ($hook) {
+    case 'suggestions_alter':
+    case 'form_alter':
+    case 'preprocess':
+      $group = $implementations['gin_lb'];
+      unset($implementations['gin_lb']);
+      $implementations['gin_lb'] = $group;
+      break;
+  }
 }
 
 /**

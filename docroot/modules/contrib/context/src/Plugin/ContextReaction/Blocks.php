@@ -506,7 +506,7 @@ class Blocks extends ContextReactionPluginBase implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state, ContextInterface $context = NULL) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state, ?ContextInterface $context = NULL) {
     $form['#attached']['library'][] = 'block/drupal.block';
 
     $themes = $this->themeHandler->listInfo();

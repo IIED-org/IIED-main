@@ -2,6 +2,9 @@
   "name": "drupal/encrypt",
   "description": "Provides an API for two-way encryption.",
   "type": "drupal-module",
+  "require": {
+    "drupal/key": "^1"
+  },
   "extra": {
     "drush": {
       "services": {

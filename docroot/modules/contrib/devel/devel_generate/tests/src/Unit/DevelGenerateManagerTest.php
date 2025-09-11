@@ -12,9 +12,9 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Tests\UnitTestCase;
 use Drupal\devel_generate\DevelGeneratePluginManager;
 use Drupal\devel_generate_example\Plugin\DevelGenerate\ExampleDevelGenerate;
-use Drupal\Tests\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**

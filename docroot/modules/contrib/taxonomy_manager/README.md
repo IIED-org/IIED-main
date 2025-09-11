@@ -141,9 +141,13 @@ lines describe all operations and some terminology.
   1. content_translation module should be enabled
   2. At least 1 additional language should be enabled
   3. Translation options for taxonomy terms should be set
-  4. A corresponding option should be enabled at /admin/config/user-interface/taxonomy-manager-settings
+  4. A corresponding option should be enabled at
+     /admin/config/user-interface/taxonomy-manager-settings
 
-  After all the above steps are done a fieldset of translatable fields `Translatable fields` for each language appears at the bottom of the taxonomy manager's term edit form. By default, it has original values like term name and description fulfilled.
+  After all the above steps are done a fieldset of translatable fields
+  `Translatable fields` for each language appears at the bottom of the taxonomy
+  manager's term edit form. By default, it has original values like term name
+  and description fulfilled.
 
   NOTE: At the moment, the Taxonomy Manager only cares about the term-node
   association inserted

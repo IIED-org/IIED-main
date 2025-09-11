@@ -65,6 +65,8 @@ constants, properties, static properties, methods, all public methods, all prote
 <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
 	<properties>
 		<property name="methodGroups" type="array">
+			<element key="inject method" value="inject"/>
+			<element key="inject methods" value="inject*"/>
 			<element key="phpunit before" value="setUp, @before, #PHPUnit\Framework\Attributes\Before"/>
 		</property>
 
@@ -80,13 +82,21 @@ constants, properties, static properties, methods, all public methods, all prote
 			<!-- You don't care about the order among the properties. The same can be done with "properties" shortcut -->
 			<element value="public properties, protected properties, private properties"/>
 
-			<!-- Constructor is first, then all public methods, then protected/private methods and magic methods are last -->
+			<!-- Constructor is first -->
 			<element value="constructor"/>
 
-			<!-- PHPUnit's before hooks are placed before all other public methods using a custom method group regardless their visibility -->
+			<!-- Then inject method followed by all other inject methods based on their prefix using a custom method group regardless their visibility -->
+			<element value="inject method"/>
+			<element value="inject methods"/>
+
+			<!-- PHPUnit's before hooks are placed before all other public methods using a custom method group -->
 			<element value="phpunit before"/>
+
+			<!-- Then all public methods, followed by protected/private methods -->
 			<element value="all public methods"/>
 			<element value="methods"/>
+
+			<!-- Magic methods are last -->
 			<element value="magic methods"/>
 		</property>
 	</properties>
@@ -103,6 +113,8 @@ Sniff provides the following settings:
 * `maxLinesCountBeforeWithComment`: maximum number of lines before constant with a documentation comment or attribute
 * `minLinesCountBeforeWithoutComment`: minimum number of lines before constant without a documentation comment or attribute
 * `maxLinesCountBeforeWithoutComment`: maximum number of lines before constant without a documentation comment or attribute
+* `minLinesCountBeforeMultiline` (default: `null`): minimum number of lines before multiline constant
+* `maxLinesCountBeforeMultiline` (default: `null`): maximum number of lines before multiline constant
 
 #### SlevomatCodingStandard.Classes.DisallowConstructorPropertyPromotion
 
@@ -152,6 +164,7 @@ This sniff provides the following setting:
 
 * `checkPromoted` (default: `false`): will check promoted properties too.
 * `allowReadonly` (default: `false`): will allow readonly properties.
+* `allowNonPublicSet` (default: `true`): will allow properties with `protected(set)` or `private(set)`.
 
 #### SlevomatCodingStandard.Classes.MethodSpacing 🔧
 
@@ -205,6 +218,8 @@ Sniff provides the following settings:
 * `maxLinesCountBeforeWithComment`: maximum number of lines before property with a documentation comment or attribute
 * `minLinesCountBeforeWithoutComment`: minimum number of lines before property without a documentation comment or attribute
 * `maxLinesCountBeforeWithoutComment`: maximum number of lines before property without a documentation comment or attribute
+* `minLinesCountBeforeMultiline` (default: `null`): minimum number of lines before multiline property
+* `maxLinesCountBeforeMultiline` (default: `null`): maximum number of lines before multiline property
 
 #### SlevomatCodingStandard.Classes.RequireAbstractOrFinal 🔧
 
@@ -230,6 +245,8 @@ Sniff provides the following settings:
 * `includedMethodPatterns`: allows to configure which methods are included in sniff detection. This is an array of regular expressions (PCRE) with delimiters. You should not use this with `excludedMethodPatterns`, as it will not work properly.
 
 * `excludedMethodPatterns`: allows to configure which methods are excluded from sniff detection. This is an array of regular expressions (PCRE) with delimiters. You should not use this with `includedMethodPatterns`, as it will not work properly.
+
+* `withPromotedProperties`: always require multiline signatures for methods with promoted properties.
 
 #### SlevomatCodingStandard.Classes.RequireSelfReference 🔧
 

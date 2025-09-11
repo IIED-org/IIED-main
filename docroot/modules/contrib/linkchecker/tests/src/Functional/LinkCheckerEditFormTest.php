@@ -3,8 +3,8 @@
 namespace Drupal\Tests\linkchecker\Functional;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\node\Entity\NodeType;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Test Link checker module edit form.
@@ -83,10 +83,8 @@ class LinkCheckerEditFormTest extends BrowserTestBase {
     /** @var \Drupal\linkchecker\Entity\LinkCheckerLink $link */
     $link = $entity_type_manager->getStorage('linkcheckerlink')
       ->create([
-        'entity_id' => [
-          'target_id' => $entity->id(),
-          'target_type' => $entity->getEntityTypeId(),
-        ],
+        'parent_entity_type_id' => $entity->getEntityTypeId(),
+        'parent_entity_id' => $entity->id(),
         'entity_field' => $field_item_list->getFieldDefinition()->getName(),
         'entity_langcode' => $field_item_list->getLangcode(),
       ]);

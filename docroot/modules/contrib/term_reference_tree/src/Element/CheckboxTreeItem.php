@@ -2,14 +2,14 @@
 
 namespace Drupal\term_reference_tree\Element;
 
-use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Element\FormElementBase;
 
 /**
  * Provides a form element for term reference tree.
  *
  * @FormElement("checkbox_tree_item")
  */
-class CheckboxTreeItem extends FormElement {
+class CheckboxTreeItem extends FormElementBase {
 
   /**
    * {@inheritdoc}

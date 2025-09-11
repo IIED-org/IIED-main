@@ -10,7 +10,6 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Form\FormBuilder;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -21,7 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Authorization controller for Acquia Cloud OAuth.
+ * Authorization controller for Acquia Cloud.
  */
 final class AuthController implements ContainerInjectionInterface {
 
@@ -128,51 +127,8 @@ final class AuthController implements ContainerInjectionInterface {
    *   The build array.
    */
   public function setup(): array {
-    // Redirect to API Creds form if client id is invalid.
-    if (!$this->authService->authorizeClientId()) {
-      return $this->formBuilder->getForm(ApiKeyCredentialForm::class);
-    }
-
-    return [
-      '#theme' => 'acquia_connector_banner',
-      '#attached' => [
-        'library' => [
-          'acquia_connector/acquia_connector.form',
-        ],
-      ],
-      '#attributes' => [
-        'path' => $this->moduleList->getPath('acquia_connector'),
-      ],
-      'actions' => [
-        '#type' => 'actions',
-        '#weight' => 0,
-        'continue' => [
-          '#type' => 'link',
-          '#title' => $this->t('Authenticate with Acquia Cloud'),
-          '#url' => Url::fromRoute('acquia_connector.auth.begin'),
-          '#cache' => [
-            'max-age' => 0,
-          ],
-          '#attributes' => [
-            'class' => ['button', 'button--primary'],
-            'id' => 'acquia-connector-oauth',
-          ],
-        ],
-        'manual' => [
-          '#type' => 'link',
-          '#title' => $this->t('Configure manually'),
-          '#url' => Url::fromRoute('acquia_connector.setup_manual'),
-          '#attributes' => [
-            'class' => ['button'],
-          ],
-        ],
-      ],
-      'signup' => [
-        '#markup' => $this->t('Need a subscription? <a href=":url">Get one</a>.', [
-          ':url' => Url::fromUri('https://www.acquia.com/acquia-cloud-free')->getUri(),
-        ]),
-      ],
-    ];
+    // Redirect to API Creds form.
+    return $this->formBuilder->getForm(ApiKeyCredentialForm::class);
   }
 
   /**
@@ -180,24 +136,14 @@ final class AuthController implements ContainerInjectionInterface {
    *
    * @return \Drupal\Core\Routing\TrustedRedirectResponse
    *   The redirect response.
+   *
+   * @deprecated in acquia_connector:4.1.1 and is removed from
+   * acquia_connector:5.0.0. This is an internal route, do not extend!
+   *
+   * @internal
    */
   public function begin(): TrustedRedirectResponse {
-    $context = new RenderContext();
-    $response = $this->renderer->executeInRenderContext($context, function (): TrustedRedirectResponse {
-      $url = $this->authService->getAuthUrl();
-      $generated = $url->toString(TRUE);
-      $response = new TrustedRedirectResponse($generated->getGeneratedUrl());
-      $response
-        ->getCacheableMetadata()
-        ->setCacheMaxAge(0);
-      $response->addCacheableDependency($generated);
-      return $response;
-    });
-    assert($response instanceof TrustedRedirectResponse);
-    if (!$context->isEmpty()) {
-      $response->addCacheableDependency($context->pop());
-    }
-    return $response;
+    return new TrustedRedirectResponse(Url::fromRoute('acquia_connector.setup_oauth')->toString());
   }
 
   /**
@@ -205,30 +151,18 @@ final class AuthController implements ContainerInjectionInterface {
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   The redirect response.
+   *
+   * @deprecated in acquia_connector:4.1.1 and is removed from
+   * acquia_connector:5.0.0. This is an internal route, do not extend!
+   *
+   * @internal
+   *
    */
   public function return(): RedirectResponse {
-    $request = $this->requestStack->getCurrentRequest();
-    assert($request !== NULL);
-    $code = $request->query->get('code', '');
-    $state = $request->query->get('state', '');
-
-    try {
-      $this->authService->finalize($code, $state);
-      return new RedirectResponse(
-        Url::fromRoute('acquia_connector.setup_configure')->toString()
-      );
-    }
-    catch (\Throwable $e) {
-      $this->messenger->addError($this->t('We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href=":url">this link</a>.', [
-        ':url' => Url::fromUri('https://docs.acquia.com/cloud-platform/known-issues/#unable-to-log-in-through-acquia-connector')->getUri(),
-      ]));
-      $this->logger->error('Unable to finalize OAuth handshake with Acquia Cloud: @error', [
-        '@error' => trim($e->getMessage()),
-      ]);
-    }
-    return new RedirectResponse(
-      Url::fromRoute('acquia_connector.setup_oauth')->toString()
-    );
+    $this->messenger->addError($this->t('We could not retrieve account data, please re-authorize with your Acquia Cloud account. For more information check <a target="_blank" href=":url">this link</a>.', [
+      ':url' => Url::fromUri('https://docs.acquia.com/cloud-platform/known-issues/#unable-to-log-in-through-acquia-connector')->getUri(),
+    ]));
+    return new TrustedRedirectResponse(Url::fromRoute('acquia_connector.setup_oauth')->toString());
   }
 
 }

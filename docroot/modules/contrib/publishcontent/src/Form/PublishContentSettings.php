@@ -4,6 +4,7 @@ namespace Drupal\publishcontent\Form;
 
 use Drupal\Core\Cache\CacheTagsInvalidator;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,6 +27,7 @@ class PublishContentSettings extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get('cache_tags.invalidator')
     );
 
@@ -34,8 +36,8 @@ class PublishContentSettings extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactoryInterface $config_factory, CacheTagsInvalidator $cache_invalidator) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typed_config_manager, CacheTagsInvalidator $cache_invalidator) {
+    parent::__construct($config_factory, $typed_config_manager);
     $this->cacheInvalidator = $cache_invalidator;
   }
 

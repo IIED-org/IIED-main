@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\ng_lightbox\Functional;
 
-
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -25,7 +24,14 @@ class NgLightboxWebTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['ng_lightbox', 'views', 'node', 'filter', 'path_alias', 'path'];
+  protected static $modules = [
+    'ng_lightbox',
+    'views',
+    'node',
+    'filter',
+    'path_alias',
+    'path',
+  ];
 
   /**
    * {@inheritdoc}

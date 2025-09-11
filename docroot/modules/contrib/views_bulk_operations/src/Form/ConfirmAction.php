@@ -2,6 +2,7 @@
 
 namespace Drupal\views_bulk_operations\Form;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -67,6 +68,17 @@ class ConfirmAction extends FormBase {
     // @todo Display an error msg, redirect back.
     if (!isset($form_data['action_id'])) {
       return;
+    }
+
+    if (
+      \array_key_exists('confirm_help_text', $form_data['preconfiguration']) &&
+      $form_data['preconfiguration']['confirm_help_text'] !== ''
+    ) {
+      $form['confirm_help_text'] = [];
+      $form['confirm_help_text']['#markup'] = new FormattableMarkup($form_data['preconfiguration']['confirm_help_text'], [
+        '%action' => $form_data['action_label'],
+        '%count' => $form_data['selected_count'],
+      ]);
     }
 
     $form['list'] = $this->getListRenderable($form_data);

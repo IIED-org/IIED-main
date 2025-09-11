@@ -4,9 +4,12 @@ namespace Drupal\context\Reaction\Blocks\Form;
 
 use Drupal\block\BlockRepositoryInterface;
 use Drupal\block\Entity\Block;
+use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\Component\Utility\Html;
+use Drupal\context\Form\AjaxFormTrait;
+use Drupal\context\ContextInterface;
 use Drupal\context\ContextManager;
 use Drupal\context\ContextReactionManager;
-use Drupal\context\Form\AjaxFormTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Ajax\RemoveCommand;
@@ -15,11 +18,9 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
-use Drupal\context\ContextInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
-use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Plugin\Context\ContextRepositoryInterface;
 use Drupal\Core\Plugin\ContextAwarePluginInterface;
 use Drupal\Core\Render\Element\StatusMessages;
@@ -203,7 +204,7 @@ abstract class BlockFormBase extends FormBase {
    * @return array
    *   The form structure.
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ContextInterface $context = NULL, $reaction_id = NULL, $block_id = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?ContextInterface $context = NULL, $reaction_id = NULL, $block_id = NULL) {
     $this->context = $context;
 
     $this->reaction = $this->context->getReaction($reaction_id);
@@ -289,6 +290,8 @@ abstract class BlockFormBase extends FormBase {
     // changing the block_form will also be called here for e.g. adding
     // third party settings.
     $dummy_form_id = 'block_form';
+    $form['#form_id'] = $this->getFormId();
+    $form['#id'] = Html::getUniqueId($form['#form_id']);
     $this->moduleHandler->alter(['form', 'form_block_form'], $form, $form_state, $dummy_form_id);
 
     return $form;

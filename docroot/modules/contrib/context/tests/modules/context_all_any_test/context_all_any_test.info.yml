@@ -5,7 +5,7 @@ core_version_requirement: ^8.8 || ^9
 package: Testing
 # version: VERSION
 
-# Information added by Drupal.org packaging script on 2023-02-22
-version: '5.0.0-rc1'
+# Information added by Drupal.org packaging script on 2025-03-06
+version: '5.0.0-rc2'
 project: 'context'
-datestamp: 1677054771
+datestamp: 1741253307

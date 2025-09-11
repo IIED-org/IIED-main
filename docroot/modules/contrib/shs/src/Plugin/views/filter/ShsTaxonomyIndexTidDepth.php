@@ -2,9 +2,9 @@
 
 namespace Drupal\shs\Plugin\views\filter;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Query\Condition;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\taxonomy\TermStorageInterface;
 use Drupal\taxonomy\VocabularyStorageInterface;
@@ -47,7 +47,7 @@ class ShsTaxonomyIndexTidDepth extends ShsTaxonomyIndexTid {
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VocabularyStorageInterface $vocabulary_storage, TermStorageInterface $term_storage, Connection $database, AccountInterface $current_user = NULL) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, VocabularyStorageInterface $vocabulary_storage, TermStorageInterface $term_storage, Connection $database, ?AccountInterface $current_user = NULL) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $vocabulary_storage, $term_storage, $current_user);
 
     $this->database = $database;
@@ -131,7 +131,7 @@ class ShsTaxonomyIndexTidDepth extends ShsTaxonomyIndexTid {
       $this->tableAlias = $this->relationship;
     }
     // If no relationship, then use the alias of the base table.
-    else if (method_exists($this->query, 'ensureTable')) {
+    elseif (method_exists($this->query, 'ensureTable')) {
       $this->tableAlias = $this->query->ensureTable($this->view->storage->get('base_table'));
     }
     else {

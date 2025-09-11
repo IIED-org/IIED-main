@@ -56,7 +56,26 @@ final class DocCommentAlignmentUnitTest extends AbstractSniffUnitTest
             $errors[91] = 1;
             $errors[95] = 1;
             $errors[96] = 1;
-        }
+
+            $errors[106] = 1;
+            $errors[107] = 1;
+            $errors[111] = 2;
+            $errors[112] = 1;
+            $errors[113] = 1;
+            $errors[114] = 1;
+
+            $errors[120] = 1;
+            $errors[121] = 1;
+            $errors[125] = 1;
+            $errors[126] = 1;
+
+            $errors[136] = 1;
+            $errors[137] = 1;
+            $errors[141] = 2;
+            $errors[142] = 1;
+            $errors[143] = 1;
+            $errors[144] = 1;
+        }//end if
 
         return $errors;
 

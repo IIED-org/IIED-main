@@ -9,7 +9,7 @@ use Drupal\ds_test\Plugin\Block\DsTestBlock;
 /**
  * Tests for managing custom code, and block fields.
  *
- * @group ds_single
+ * @group ds
  */
 class BlockFieldPluginTest extends TestBase {
 

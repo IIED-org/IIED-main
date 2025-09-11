@@ -25,4 +25,4 @@ encryption_method.config.*:
   type: sequence
   label: 'Encryption method config'
   sequence:
-    - type: string
+    type: string

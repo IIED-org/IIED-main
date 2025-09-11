@@ -158,6 +158,15 @@ abstract class GeofieldProximitySourceBase extends PluginBase implements Geofiel
       throw new ProximityUnavailableException(sprintf('%s not able to calculate valid Proximity value', get_class($this)));
     }
 
+    // Check if proximity is NAN
+    // (https://www.php.net/manual/en/function.is-nan.php)
+    // NAN is returned from mathematical operations that are undefined,
+    // This could happen for example in case of nearly identical locations.
+    // @see: https://www.drupal.org/project/geofield/issues/3540091
+    if (is_nan($proximity)) {
+      return 0;
+    }
+
     return $proximity;
 
   }

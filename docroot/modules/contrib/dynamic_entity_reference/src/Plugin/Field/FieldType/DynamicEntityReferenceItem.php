@@ -150,7 +150,7 @@ class DynamicEntityReferenceItem extends EntityReferenceItem {
    *
    * @see \Drupal\dynamic_entity_reference\Plugin\Field\FieldWidget\DynamicEntityReferenceOptionsTrait::massageFormValues()
    */
-  public function getSettableOptions(AccountInterface $account = NULL) {
+  public function getSettableOptions(?AccountInterface $account = NULL) {
     $field_definition = $this->getFieldDefinition();
     $entity_type_manager = \Drupal::entityTypeManager();
     $entity_type_bundles_info = \Drupal::service('entity_type.bundle.info');

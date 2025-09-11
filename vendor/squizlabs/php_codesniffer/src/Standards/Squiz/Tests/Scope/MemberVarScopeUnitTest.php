@@ -39,6 +39,11 @@ final class MemberVarScopeUnitTest extends AbstractSniffUnitTest
             41 => 1,
             66 => 2,
             67 => 1,
+            75 => 1,
+            80 => 1,
+            81 => 1,
+            82 => 1,
+            90 => 1,
         ];
 
     }//end getErrorList()

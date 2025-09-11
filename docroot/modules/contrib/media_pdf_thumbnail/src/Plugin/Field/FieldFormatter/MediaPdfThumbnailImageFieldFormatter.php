@@ -205,8 +205,10 @@ class MediaPdfThumbnailImageFieldFormatter extends ImageFormatter {
     // Get settings.
     $settings = $this->getElementSettings($entity);
 
-    if (empty($settings)) {
-      return $element;
+    if (empty($settings) || !empty($settings['is_default_bundle'])) {
+      $this->setSetting('image_style', $settings[static::IMAGE_STYLE_SETTINGS]);
+      $this->setSetting('image_link', $settings[static::IMAGE_LINK_SETTINGS]);
+      return parent::viewElements($items, $langcode);
     }
 
     // If file is not a PDF, don't try to generate.

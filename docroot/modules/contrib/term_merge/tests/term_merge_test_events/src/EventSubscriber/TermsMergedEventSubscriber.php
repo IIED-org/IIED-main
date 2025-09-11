@@ -24,7 +24,7 @@ class TermsMergedEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[TermMergeEventNames::TERMS_MERGED][] = ['onTermMerge'];
     return $events;
   }

@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\admin_toolbar_search\FunctionalJavascript;
 
-use Drupal\media\Entity\MediaType;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
+use Drupal\media\Entity\MediaType;
 
 /**
  * Test the functionality of admin toolbar search.
@@ -105,6 +105,9 @@ class AdminToolbarToolsSearchTest extends AdminToolbarSearchTestBase {
 
   /**
    * Tests search functionality with admin_toolbar_tools enabled.
+   *
+   * @return void
+   *   Nothing to return.
    */
   public function testToolbarSearch() {
     $search_tab = '#admin-toolbar-search-tab';
@@ -112,6 +115,7 @@ class AdminToolbarToolsSearchTest extends AdminToolbarSearchTestBase {
     $search_tray = '#toolbar-item-administration-search-tray';
 
     $this->drupalLogin($this->adminUser);
+    /** @var \Drupal\FunctionalJavascriptTests\JSWebAssert $assert_session */
     $assert_session = $this->assertSession();
     $assert_session->responseContains('admin.toolbar_search.css');
     $assert_session->responseContains('admin_toolbar_search.js');
@@ -210,7 +214,7 @@ class AdminToolbarToolsSearchTest extends AdminToolbarSearchTestBase {
 
     $this->getSession()->reload();
     $assert_session->waitForElementVisible('css', $search_tray);
-    $this->assertSuggestionNotContains('zora', $zora);
+    $this->assertSuggestionNotContains('zora', $zora_url);
   }
 
 }

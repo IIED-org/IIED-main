@@ -8,6 +8,7 @@ docroot/sites/default/settings.local.php
 # Ignore IDE files
 .idea/
 .vscode/
+.ddev/
 *.code-workspace
 
 # Ignore xdebug log file genearted by lando

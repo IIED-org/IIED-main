@@ -22,6 +22,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\AttributeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
@@ -35,7 +36,7 @@ use function array_filter;
 use function array_key_exists;
 use function array_keys;
 use function array_map;
-use function array_merge;
+use function array_push;
 use function array_unique;
 use function array_values;
 use function count;
@@ -209,6 +210,10 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
+			if (AttributeHelper::hasAttribute($phpcsFile, $functionPointer, '\Override')) {
+				continue;
+			}
+
 			$parameterTypeNode = $parametersAnnotations[$parameterName]->getValue()->type;
 
 			if (
@@ -307,9 +312,9 @@ class ParameterTypeHintSniff implements Sniff
 			foreach ($typeHints as $typeHint) {
 				if ($this->enableUnionTypeHint && TypeHintHelper::isUnofficialUnionTypeHint($typeHint)) {
 					$canTryUnionTypeHint = true;
-					$typeHintsWithConvertedUnion = array_merge(
+					array_push(
 						$typeHintsWithConvertedUnion,
-						TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint),
+						...TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint),
 					);
 				} else {
 					$typeHintsWithConvertedUnion[] = $typeHint;
@@ -421,7 +426,8 @@ class ParameterTypeHintSniff implements Sniff
 			} while (true);
 
 			$phpcsFile->fixer->beginChangeset();
-			$phpcsFile->fixer->addContentBefore(
+			FixerHelper::addBefore(
+				$phpcsFile,
 				$beforeParameterPointer,
 				sprintf('%s ', $parameterTypeHint),
 			);
@@ -668,14 +674,12 @@ class ParameterTypeHintSniff implements Sniff
 	 */
 	private function getTraversableTypeHints(): array
 	{
-		if ($this->normalizedTraversableTypeHints === null) {
-			$this->normalizedTraversableTypeHints = array_map(
-				static fn (string $typeHint): string => NamespaceHelper::isFullyQualifiedName($typeHint)
-						? $typeHint
-						: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint),
-				SniffSettingsHelper::normalizeArray($this->traversableTypeHints),
-			);
-		}
+		$this->normalizedTraversableTypeHints ??= array_map(
+			static fn (string $typeHint): string => NamespaceHelper::isFullyQualifiedName($typeHint)
+					? $typeHint
+					: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint),
+			SniffSettingsHelper::normalizeArray($this->traversableTypeHints),
+		);
 		return $this->normalizedTraversableTypeHints;
 	}
 

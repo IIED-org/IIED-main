@@ -242,13 +242,13 @@ class ContextEditForm extends ContextFormBase {
     $element['submit'] = [
       '#type' => 'submit',
       '#dropbutton' => 'save',
-      '#value' => t('Save and continue'),
+      '#value' => $this->t('Save and continue'),
       '#submit' => ['::submitForm', '::save'],
     ];
     $element['submit_exit'] = [
       '#type' => 'submit',
       '#dropbutton' => 'save',
-      '#value' => t('Save and exit'),
+      '#value' => $this->t('Save and exit'),
       '#submit' => ['::submitForm', '::save', '::collection'],
     ];
 

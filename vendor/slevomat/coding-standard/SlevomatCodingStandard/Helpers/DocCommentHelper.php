@@ -7,7 +7,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use function array_merge;
 use function count;
 use function in_array;
 use function preg_match;
@@ -131,11 +130,17 @@ class DocCommentHelper
 		}
 
 		foreach ($parsedDocComment->getNode()->children as $child) {
-			if ($child instanceof PhpDocTextNode && stripos($child->text, '{@inheritdoc}') !== false) {
-				return true;
+			if ($child instanceof PhpDocTagNode) {
+				if (strtolower($child->name) === '@inheritdoc') {
+					return true;
+				}
+
+				if (stripos((string) $child->value, '{@inheritdoc}') !== false) {
+					return true;
+				}
 			}
 
-			if ($child instanceof PhpDocTagNode && strtolower($child->name) === '@inheritdoc') {
+			if ($child instanceof PhpDocTextNode && stripos($child->text, '{@inheritdoc}') !== false) {
 				return true;
 			}
 		}
@@ -202,7 +207,7 @@ class DocCommentHelper
 
 			if (in_array(
 				$tokens[$i]['code'],
-				array_merge([T_FUNCTION, T_VARIABLE, T_CONST], TokenHelper::$typeKeywordTokenCodes),
+				[T_FUNCTION, T_VARIABLE, T_CONST, ...TokenHelper::CLASS_TYPE_TOKEN_CODES],
 				true,
 			)) {
 				$docCommentOwnerPointer = $i;
@@ -224,7 +229,7 @@ class DocCommentHelper
 			$nextPointer !== null
 			&& in_array(
 				$tokens[$nextPointer]['code'],
-				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM],
+				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM, T_ATTRIBUTE],
 				true,
 			)
 		) {

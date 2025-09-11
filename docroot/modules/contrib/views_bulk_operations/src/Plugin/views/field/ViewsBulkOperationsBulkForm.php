@@ -162,6 +162,7 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
     $this->tempStoreData = $this->getTempstoreData($this->view->id(), $this->view->current_display);
 
     // Parameters subject to change (either by an admin or user action).
+    $this->viewData->init($this->view, $this->displayHandler, $this->options['relationship']);
     $variable = [
       'batch' => $this->options['batch'],
       'batch_size' => $this->options['batch'] ? $this->options['batch_size'] : 0,
@@ -323,13 +324,6 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
    */
   public function getCacheTags() {
     return [];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getEntity(ResultRow $row) {
-    return $this->viewData->getEntity($row);
   }
 
   /**
@@ -551,6 +545,20 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
           '#title' => $this->t('Add confirmation step'),
           '#default_value' => $selected_actions_data[$id]['preconfiguration']['add_confirmation'] ?? FALSE,
         ];
+        $table[$delta]['container']['preconfiguration']['confirm_help_text'] = [
+          '#type' => 'textarea',
+          '#rows' => 2,
+          '#title' => $this->t('Confirmation step help text'),
+          '#default_value' => $selected_actions_data[$id]['preconfiguration']['confirm_help_text'] ?? FALSE,
+          '#description' => $this->t('Available placeholders: @placeholders.', [
+            '@placeholders' => implode(', ', ['%action', '%count']),
+          ]),
+          '#states' => [
+            'visible' => [
+              ':input[name="options[selected_actions][table][' . $delta . '][container][preconfiguration][add_confirmation]"]' => ['checked' => TRUE],
+            ],
+          ],
+        ];
       }
 
       // Load preconfiguration form if available.
@@ -661,201 +669,200 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
       $form['#attached']['drupalSettings']['vbo']['ajax_loader'] = TRUE;
     }
 
-    // Only add the bulk form options and buttons if
-    // there are results and any actions are available.
+    // Only add the bulk form options and buttons if there are results and
+    // any actions are available. Remove the default actions build array
+    // otherwise.
     $action_options = $this->getBulkOptions();
-    if (!empty($this->view->result) && !empty($action_options)) {
+    if (empty($this->view->result) || empty($action_options)) {
+      unset($form['actions']);
+      return;
+    }
 
-      // Get bulk form keys and entity labels for all rows.
-      $entity_data = $this->viewData->getViewEntityData();
+    // Get bulk form keys and entity labels for all rows.
+    $this->viewData->init($this->view, $this->displayHandler, $this->options['relationship']);
+    $entity_data = $this->viewData->getViewEntityData();
 
-      // Update and fetch tempstore data to be available from this point
-      // as it's needed for proper functioning of further logic.
-      // Update tempstore data with bulk form keys only when the form is
-      // displayed, but not when the form is being built before submission
-      // (data is subject to change - new entities added or deleted after
-      // the form display). TODO: consider using $form_state->set() instead.
-      if (empty($form_state->getUserInput()['op'])) {
-        $this->updateTempstoreData($entity_data);
-      }
-      else {
-        $this->updateTempstoreData();
-      }
-
-      $form[$this->options['id']]['#tree'] = TRUE;
-
-      // Get pager data if available.
-      if (!empty($this->view->pager) && \method_exists($this->view->pager, 'hasMoreRecords')) {
-        $pagerData = [
-          'current' => $this->view->pager->getCurrentPage(),
-          'more' => $this->view->pager->hasMoreRecords(),
-        ];
-      }
-
-      // Render checkboxes for all rows.
-      $page_selected = [];
-      foreach ($entity_data as $row_index => $entity_data_item) {
-        [$bulk_form_key, $entity_label] = $entity_data_item;
-        $checked = isset($this->tempStoreData['list'][$bulk_form_key]);
-        if (!empty($this->tempStoreData['exclude_mode'])) {
-          $checked = !$checked;
-        }
-
-        if ($checked) {
-          $page_selected[] = $bulk_form_key;
-        }
-        $form[$this->options['id']][$row_index] = [
-          '#type' => 'checkbox',
-          '#title' => $entity_label,
-          '#title_display' => 'invisible',
-          '#default_value' => $checked,
-          '#return_value' => $bulk_form_key,
-          '#attributes' => ['class' => ['js-vbo-checkbox']],
-        ];
-
-        // We should use #value instead of #default_value to always apply
-        // the plugin's own saved checkbox state (data being changed after form
-        // submission results in wrong values applied by the FAPI),
-        // however - automated tests fail if it's done this way.
-        // We have to apply values conditionally for tests to pass.
-        if (isset($element['#value']) && $element['#value'] != $checked) {
-          $element['#value'] = $checked;
-        }
-      }
-
-      // Ensure a consistent container for filters/operations
-      // in the view header.
-      $form['header'] = [
-        '#type' => 'container',
-        '#weight' => -100,
-      ];
-
-      // Build the bulk operations action widget for the header.
-      // Allow themes to apply .container-inline on this separate container.
-      $form['header'][$this->options['id']] = [
-        '#type' => 'container',
-        '#attributes' => [
-          'id' => 'vbo-action-form-wrapper',
-        ],
-      ];
-
-      // Display actions buttons or selector.
-      if ($this->options['buttons']) {
-        unset($form['actions']['submit']);
-        foreach ($action_options as $id => $label) {
-          $form['actions'][$id] = [
-            '#type' => 'submit',
-            '#value' => $label,
-            '#attributes' => [
-              'data-vbo' => 'vbo-action',
-            ],
-          ];
-        }
-      }
-      else {
-        // Replace the form submit button label.
-        $form['actions']['submit']['#value'] = $this->t('Apply to selected items');
-        $form['actions']['submit']['#attributes']['data-vbo'] = 'vbo-action';
-
-        $form['header'][$this->options['id']]['action'] = [
-          '#type' => 'select',
-          '#title' => $this->options['action_title'],
-          '#options' => ['' => $this->t('-- Select action --')] + $action_options,
-        ];
-      }
-
-      // Add AJAX functionality if actions are configurable through this form.
-      if (empty($this->options['form_step'])) {
-        $form['header'][$this->options['id']]['action']['#ajax'] = [
-          'callback' => [self::class, 'viewsFormAjax'],
-          'wrapper' => 'vbo-action-configuration-wrapper',
-        ];
-        $form['header'][$this->options['id']]['configuration'] = [
-          '#type' => 'container',
-          '#attributes' => ['id' => 'vbo-action-configuration-wrapper'],
-        ];
-
-        $action_id = $form_state->getValue('action');
-        if (!empty($action_id)) {
-          $action = $this->actions[$action_id];
-          if ($this->isActionConfigurable($action)) {
-            $actionObject = $this->actionManager->createInstance($action_id);
-            $form['header'][$this->options['id']]['configuration'] += $actionObject->buildConfigurationForm($form['header'][$this->options['id']]['configuration'], $form_state);
-            $form['header'][$this->options['id']]['configuration']['#config_included'] = TRUE;
-          }
-        }
-      }
-
-      // Selection info: displayed if exposed filters are set and selection
-      // is not cleared when they change or "select all" element display
-      // conditions are met. Also displayed by default if VBO field has such
-      // configuration set.
-      if ($this->options['force_selection_info']) {
-        $display_select_all = TRUE;
-      }
-      else {
-        $display_select_all = (
-          !$this->options['clear_on_exposed'] &&
-          !empty($this->view->getExposedInput())
-        ) ||
-        (
-          isset($pagerData) &&
-          (
-            $pagerData['more'] ||
-            $pagerData['current'] > 0
-          )
-        );
-      }
-
-      if ($display_select_all) {
-        $count = empty($this->tempStoreData['exclude_mode']) ? \count($this->tempStoreData['list']) : $this->tempStoreData['total_results'] - \count($this->tempStoreData['list']);
-        $form['header'][$this->options['id']]['multipage'] = [
-          '#type' => 'details',
-          '#open' => FALSE,
-          '#title' => $this->formatPlural($count,
-            'Selected 1 item',
-            'Selected @count items'
-          ),
-          '#attributes' => [
-            // Add view_id and display_id to be available for
-            // js multipage selector functionality.
-            'data-view-id' => $this->tempStoreData['view_id'],
-            'data-display-id' => $this->tempStoreData['display_id'],
-            'class' => ['vbo-multipage-selector'],
-          ],
-        ];
-        $form['#attached']['drupalSettings']['vbo_selected_count'][$this->tempStoreData['view_id']][$this->tempStoreData['display_id']] = $count;
-
-        // Get selection info elements.
-        $form['header'][$this->options['id']]['multipage']['list'] = $this->getMultipageList($this->tempStoreData);
-        $form['header'][$this->options['id']]['multipage']['clear'] = [
-          '#type' => 'submit',
-          '#value' => $this->t('Clear selection'),
-          '#submit' => [[$this, 'clearSelection']],
-          '#limit_validation_errors' => [],
-        ];
-      }
-
-      // Select all results checkbox. Always display on non-table displays.
-      if ($display_select_all || !($this->view->style_plugin instanceof Table)) {
-        $form['header'][$this->options['id']]['select_all'] = [
-          '#type' => 'checkbox',
-          '#title' => $this->t('Select / deselect all results (all pages, @count total)', [
-            '@count' => $this->tempStoreData['total_results'],
-          ]),
-          '#attributes' => ['class' => ['vbo-select-all']],
-          '#default_value' => !empty($this->tempStoreData['exclude_mode']),
-        ];
-      }
-
-      // Duplicate the form actions into the action container in the header.
-      $form['header'][$this->options['id']]['actions'] = $form['actions'];
+    // Update and fetch tempstore data to be available from this point
+    // as it's needed for proper functioning of further logic.
+    // Update tempstore data with bulk form keys only when the form is
+    // displayed, but not when the form is being built before submission
+    // (data is subject to change - new entities added or deleted after
+    // the form display). TODO: consider using $form_state->set() instead.
+    if (empty($form_state->getUserInput()['op'])) {
+      $this->updateTempstoreData($entity_data);
     }
     else {
-      // Remove the default actions build array.
-      unset($form['actions']);
+      $this->updateTempstoreData();
     }
 
+    $form[$this->options['id']]['#tree'] = TRUE;
+
+    // Get pager data if available.
+    if (!empty($this->view->pager) && \method_exists($this->view->pager, 'hasMoreRecords')) {
+      $pagerData = [
+        'current' => $this->view->pager->getCurrentPage(),
+        'more' => $this->view->pager->hasMoreRecords(),
+      ];
+    }
+
+    // Render checkboxes for all rows.
+    $page_selected = [];
+    foreach ($entity_data as $row_index => $entity_data_item) {
+      [$bulk_form_key, $entity_label] = $entity_data_item;
+      $checked = isset($this->tempStoreData['list'][$bulk_form_key]);
+      if (!empty($this->tempStoreData['exclude_mode'])) {
+        $checked = !$checked;
+      }
+
+      if ($checked) {
+        $page_selected[] = $bulk_form_key;
+      }
+      $form[$this->options['id']][$row_index] = [
+        '#type' => 'checkbox',
+        '#title' => $entity_label,
+        '#title_display' => 'invisible',
+        '#default_value' => $checked,
+        '#return_value' => $bulk_form_key,
+        '#attributes' => ['class' => ['js-vbo-checkbox']],
+      ];
+
+      // We should use #value instead of #default_value to always apply
+      // the plugin's own saved checkbox state (data being changed after form
+      // submission results in wrong values applied by the FAPI),
+      // however - automated tests fail if it's done this way.
+      // We have to apply values conditionally for tests to pass.
+      if (isset($element['#value']) && $element['#value'] != $checked) {
+        $element['#value'] = $checked;
+      }
+    }
+
+    // Ensure a consistent container for filters/operations
+    // in the view header.
+    $form['header'] = [
+      '#type' => 'container',
+      '#weight' => -100,
+    ];
+
+    // Build the bulk operations action widget for the header.
+    // Allow themes to apply .container-inline on this separate container.
+    $form['header'][$this->options['id']] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'id' => 'vbo-action-form-wrapper',
+      ],
+    ];
+
+    // Display actions buttons or selector.
+    if ($this->options['buttons']) {
+      unset($form['actions']['submit']);
+      foreach ($action_options as $id => $label) {
+        $form['actions'][$id] = [
+          '#type' => 'submit',
+          '#value' => $label,
+          '#attributes' => [
+            'data-vbo' => 'vbo-action',
+          ],
+        ];
+      }
+    }
+    else {
+      // Replace the form submit button label.
+      $form['actions']['submit']['#value'] = $this->t('Apply to selected items');
+      $form['actions']['submit']['#attributes']['data-vbo'] = 'vbo-action';
+
+      $form['header'][$this->options['id']]['action'] = [
+        '#type' => 'select',
+        '#title' => $this->options['action_title'],
+        '#options' => ['' => $this->t('-- Select action --')] + $action_options,
+      ];
+    }
+
+    // Add AJAX functionality if actions are configurable through this form.
+    if (empty($this->options['form_step'])) {
+      $form['header'][$this->options['id']]['action']['#ajax'] = [
+        'callback' => [self::class, 'viewsFormAjax'],
+        'wrapper' => 'vbo-action-configuration-wrapper',
+      ];
+      $form['header'][$this->options['id']]['configuration'] = [
+        '#type' => 'container',
+        '#attributes' => ['id' => 'vbo-action-configuration-wrapper'],
+      ];
+
+      $action_id = $form_state->getValue('action');
+      if (!empty($action_id)) {
+        $action = $this->actions[$action_id];
+        if ($this->isActionConfigurable($action)) {
+          $actionObject = $this->actionManager->createInstance($action_id);
+          $form['header'][$this->options['id']]['configuration'] += $actionObject->buildConfigurationForm($form['header'][$this->options['id']]['configuration'], $form_state);
+          $form['header'][$this->options['id']]['configuration']['#config_included'] = TRUE;
+        }
+      }
+    }
+
+    // Selection info: displayed if exposed filters are set and selection
+    // is not cleared when they change or "select all" element display
+    // conditions are met. Also displayed by default if VBO field has such
+    // configuration set.
+    if ($this->options['force_selection_info']) {
+      $display_select_all = TRUE;
+    }
+    else {
+      $display_select_all = (
+        !$this->options['clear_on_exposed'] &&
+        !empty($this->view->getExposedInput())
+      ) ||
+      (
+        isset($pagerData) &&
+        (
+          $pagerData['more'] ||
+          $pagerData['current'] > 0
+        )
+      );
+    }
+
+    if ($display_select_all) {
+      $count = empty($this->tempStoreData['exclude_mode']) ? \count($this->tempStoreData['list']) : $this->tempStoreData['total_results'] - \count($this->tempStoreData['list']);
+      $form['header'][$this->options['id']]['multipage'] = [
+        '#type' => 'details',
+        '#open' => FALSE,
+        '#title' => $this->formatPlural($count,
+          'Selected 1 item',
+          'Selected @count items'
+        ),
+        '#attributes' => [
+          // Add view_id and display_id to be available for
+          // js multipage selector functionality.
+          'data-view-id' => $this->tempStoreData['view_id'],
+          'data-display-id' => $this->tempStoreData['display_id'],
+          'class' => ['vbo-multipage-selector'],
+        ],
+      ];
+      $form['#attached']['drupalSettings']['vbo_selected_count'][$this->tempStoreData['view_id']][$this->tempStoreData['display_id']] = $count;
+
+      // Get selection info elements.
+      $form['header'][$this->options['id']]['multipage']['list'] = $this->getMultipageList($this->tempStoreData);
+      $form['header'][$this->options['id']]['multipage']['clear'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Clear selection'),
+        '#submit' => [[$this, 'clearSelection']],
+        '#limit_validation_errors' => [],
+      ];
+    }
+
+    // Select all results checkbox. Always display on non-table displays.
+    if ($display_select_all || !($this->view->style_plugin instanceof Table)) {
+      $form['header'][$this->options['id']]['select_all'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Select / deselect all results (all pages, @count total)', [
+          '@count' => $this->tempStoreData['total_results'],
+        ]),
+        '#attributes' => ['class' => ['vbo-select-all']],
+        '#default_value' => !empty($this->tempStoreData['exclude_mode']),
+      ];
+    }
+
+    // Duplicate the form actions into the action container in the header.
+    $form['header'][$this->options['id']]['actions'] = $form['actions'];
   }
 
   /**

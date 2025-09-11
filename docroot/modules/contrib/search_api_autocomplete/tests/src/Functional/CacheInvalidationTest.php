@@ -44,12 +44,10 @@ class CacheInvalidationTest extends BrowserTestBase {
     // Enable the exposed form block.
     $this->placeBlock("views_exposed_filter_block:$view_id-page");
 
-    // @todo The Search API Pages part of this test have been commented out
-    //   until #2924389 is resolved.
     // Enable the search page block.
-    // $this->placeBlock('search_api_page_form_block', [
-    //   'search_api_page' => 'test_search',
-    // ]);
+    $this->placeBlock('search_api_page_form_block', [
+      'search_api_page' => 'test_search',
+    ]);
 
     // Enable the "Custom scripts" suggester.
     \Drupal::configFactory()
@@ -82,9 +80,9 @@ class CacheInvalidationTest extends BrowserTestBase {
     $attribute = 'data-search-api-autocomplete-search';
     $this->assertFalse($element->hasAttribute($attribute));
 
-    // $page_selector = ".search-api-page-block-form $input_selector";
-    // $element = $assert_session->elementExists('css', $page_selector);
-    // $this->assertFalse($element->hasAttribute($attribute));
+    $page_selector = ".search-api-page-block-form $input_selector";
+    $element = $assert_session->elementExists('css', $page_selector);
+    $this->assertFalse($element->hasAttribute($attribute));
 
     // Then, add autocomplete settings for both searches.
     $views_search = Search::create([
@@ -103,21 +101,21 @@ class CacheInvalidationTest extends BrowserTestBase {
     ]);
     $views_search->save();
 
-    // $page_search = Search::create([
-    //   'id' => 'test_search',
-    //   'label' => 'Test search page',
-    //   'status' => TRUE,
-    //   'index_id' => 'autocomplete_search_index',
-    //   'suggester_settings' => [
-    //     'custom_script' => [
-    //       'path' => '/bar',
-    //     ],
-    //   ],
-    //   'search_settings' => [
-    //     'page:test_search' => [],
-    //   ],
-    // ]);
-    // $page_search->save();
+    $page_search = Search::create([
+      'id' => 'test_search',
+      'label' => 'Test search page',
+      'status' => TRUE,
+      'index_id' => 'autocomplete_search_index',
+      'suggester_settings' => [
+        'custom_script' => [
+          'path' => '/bar',
+        ],
+      ],
+      'search_settings' => [
+        'page:test_search' => [],
+      ],
+    ]);
+    $page_search->save();
 
     // View the page again and verify that autocomplete was now added for both
     // forms.
@@ -126,8 +124,8 @@ class CacheInvalidationTest extends BrowserTestBase {
     $assert_session->elementAttributeContains('css', $views_selector, 'data-search-api-autocomplete-search', $views_search->id());
     $assert_session->elementAttributeContains('css', $views_selector, 'data-autocomplete-path', '/foo');
 
-    // $assert_session->elementAttributeContains('css', $page_selector, 'data-search-api-autocomplete-search', $page_search->id());
-    // $assert_session->elementAttributeContains('css', $page_selector, 'data-autocomplete-path', '/bar');
+    $assert_session->elementAttributeContains('css', $page_selector, 'data-search-api-autocomplete-search', $page_search->id());
+    $assert_session->elementAttributeContains('css', $page_selector, 'data-autocomplete-path', '/bar');
 
     // Change the autocomplete search settings.
     $views_search->getSuggester('custom_script')->setConfiguration([
@@ -135,10 +133,10 @@ class CacheInvalidationTest extends BrowserTestBase {
     ]);
     $views_search->save();
 
-    // $page_search->getSuggester('custom_script')->setConfiguration([
-    //   'path' => '/foo/bar',
-    // ]);
-    // $page_search->save();
+    $page_search->getSuggester('custom_script')->setConfiguration([
+      'path' => '/foo/bar',
+    ]);
+    $page_search->save();
 
     // Verify the changes are correctly applied when reloading the page.
     $this->drupalGet('');
@@ -146,8 +144,8 @@ class CacheInvalidationTest extends BrowserTestBase {
     $assert_session->elementAttributeContains('css', $views_selector, 'data-search-api-autocomplete-search', $views_search->id());
     $assert_session->elementAttributeContains('css', $views_selector, 'data-autocomplete-path', '/foobar');
 
-    // $assert_session->elementAttributeContains('css', $page_selector, 'data-search-api-autocomplete-search', $page_search->id());
-    // $assert_session->elementAttributeContains('css', $page_selector, 'data-autocomplete-path', '/foo/bar');
+    $assert_session->elementAttributeContains('css', $page_selector, 'data-search-api-autocomplete-search', $page_search->id());
+    $assert_session->elementAttributeContains('css', $page_selector, 'data-autocomplete-path', '/foo/bar');
   }
 
 }

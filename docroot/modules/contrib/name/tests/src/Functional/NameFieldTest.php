@@ -45,17 +45,17 @@ class NameFieldTest extends NameTestBase {
   public function testFieldEntry() {
     $this->drupalLogin($this->adminUser);
 
+    $this->drupalGet('admin/structure/types/manage/page/fields/add-field');
+    $this->getSession()->getPage()->fillField('new_storage_type', 'name');
+    $this->getSession()->getPage()->pressButton('Continue');
+
     $new_name_field = [
       'label' => 'Test name',
       'field_name' => 'name_test',
-      'new_storage_type' => 'name',
     ];
-    $this->drupalGet('admin/structure/types/manage/page/fields/add-field');
+    $this->submitForm($new_name_field, 'Continue');
 
-    $this->submitForm($new_name_field, t('Save and continue'));
-    $storage_settings = [];
-    $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test/storage');
-    $this->submitForm($storage_settings, t('Save field settings'));
+    $this->submitForm([], 'Save settings');
     $this->resetAll();
 
     // Required test.
@@ -68,7 +68,7 @@ class NameFieldTest extends NameTestBase {
     }
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
 
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
 
     $n = _name_translations();
     $required_messages = [
@@ -88,9 +88,9 @@ class NameFieldTest extends NameTestBase {
       t('@field options are required.', ['@field' => $n['title']]),
       t('@field options are required.', ['@field' => $n['generational']]),
 
-      t('@field field is required.', ['@field' => t('Components')]),
+      t('@field field is required.', ['@field' => 'Components']),
       t('@field must have one of the following components: @components', [
-        '@field' => t('Minimum components'),
+        '@field' => 'Minimum components',
         '@components' => Html::escape(implode(', ', [$n['given'], $n['family']])),
       ]),
     ];
@@ -124,7 +124,7 @@ class NameFieldTest extends NameTestBase {
     ];
     $this->resetAll();
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
 
     $required_messages = [
       t('@field must be higher than or equal to 1.', ['@field' => $n['title']]),
@@ -134,7 +134,7 @@ class NameFieldTest extends NameTestBase {
       t('@field is not a valid number.', ['@field' => $n['generational']]),
       t('@field must be a number.', ['@field' => $n['credentials']]),
       t('@field must have one of the following components: @components', [
-        '@field' => t('Minimum components'),
+        '@field' => 'Minimum components',
         '@components' => Html::escape(implode(', ', [$n['given'], $n['family']])),
       ]),
       t("The vocabulary 'machine' in @field could not be found.", [
@@ -157,7 +157,7 @@ class NameFieldTest extends NameTestBase {
     ];
     $this->resetAll();
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
     $required_messages = [
       t('The following options exceed the maximum allowed @field length: Aaaaa., Bbbbbbbb, Ccccc.', [
         '@field' => t('@title options', ['@title' => $n['title']]),
@@ -178,7 +178,7 @@ class NameFieldTest extends NameTestBase {
     ];
     $this->resetAll();
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
     $required_messages = [
       t('@field are required.', ['@field' => t('@title options', ['@title' => $n['title']])]),
       t('@field are required.', ['@field' => t('@generational options', ['@generational' => $n['generational']])]),
@@ -194,7 +194,7 @@ class NameFieldTest extends NameTestBase {
     ];
     $this->resetAll();
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
     $required_messages = [
       t('@field can only have one blank value assigned to it.', [
         '@field' => t('@title options', [
@@ -214,7 +214,7 @@ class NameFieldTest extends NameTestBase {
     // Save the field again with the default values.
     $this->resetAll();
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
-    $this->submitForm($this->nameGetFieldStorageSettings(), t('Save settings'));
+    $this->submitForm($this->nameGetFieldStorageSettings(), 'Save settings');
 
     $this->assertSession()->pageTextContains(t('Saved Test name configuration.'));
 
@@ -247,7 +247,7 @@ class NameFieldTest extends NameTestBase {
     ];
     $this->resetAll();
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
 
     $required_messages = [
       t('Maximum length for @field must be higher than or equal to 1.', ['@field' => $n['title']]),
@@ -257,7 +257,7 @@ class NameFieldTest extends NameTestBase {
       t('Maximum length for @field is not a valid number.', ['@field' => $n['generational']]),
       t('Maximum length for @field must be a number.', ['@field' => $n['credentials']]),
       t('@field must have one of the following components: @components', [
-        '@field' => t('Minimum components'),
+        '@field' => 'Minimum components',
         '@components' => Html::escape(implode(', ', [$n['given'], $n['family']])),
       ]),
       t("The vocabulary 'machine' in @field could not be found.", [
@@ -302,30 +302,7 @@ class NameFieldTest extends NameTestBase {
     $edit = [
       'description' => 'This is a description.',
     ];
-    $this->submitForm($edit, t('Save settings'));
-    $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test/storage');
-    $edit = [
-      'cardinality' => 'number',
-      'cardinality_number' => 1,
-    ];
-    $this->submitForm($edit, t('Save field settings'));
-    $this->drupalGet('node/add/page');
-    $this->assertSession()->pageTextContainsOnce('This is a description.');
-
-    $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test/storage');
-    $edit = [
-      'cardinality' => 'number',
-      'cardinality_number' => 3,
-    ];
-    $this->submitForm($edit, t('Save field settings'));
-    $this->drupalGet('node/add/page');
-    $this->assertSession()->pageTextContainsOnce('This is a description.');
-
-    $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test/storage');
-    $edit = [
-      'cardinality' => '-1',
-    ];
-    $this->submitForm($edit, t('Save field settings'));
+    $this->submitForm($edit, 'Save settings');
     $this->drupalGet('node/add/page');
     $this->assertSession()->pageTextContainsOnce('This is a description.');
   }
@@ -359,12 +336,12 @@ class NameFieldTest extends NameTestBase {
       'settings[max_length][generational]' => 15,
       'settings[max_length][credentials]' => 255,
 
-      'settings[labels][title]' => t('Title'),
-      'settings[labels][given]' => t('Given'),
-      'settings[labels][middle]' => t('Middle name(s)'),
-      'settings[labels][family]' => t('Family'),
-      'settings[labels][generational]' => t('Generational'),
-      'settings[labels][credentials]' => t('Credentials'),
+      'settings[labels][title]' => 'Title',
+      'settings[labels][given]' => 'Given',
+      'settings[labels][middle]' => 'Middle name(s)',
+      'settings[labels][family]' => 'Family',
+      'settings[labels][generational]' => 'Generational',
+      'settings[labels][credentials]' => 'Credentials',
 
       'settings[sort_options][title]' => TRUE,
       'settings[sort_options][generational]' => FALSE,

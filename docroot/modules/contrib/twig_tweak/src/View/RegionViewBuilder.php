@@ -70,7 +70,7 @@ class RegionViewBuilder {
    * @return array
    *   A render array to display the region content.
    */
-  public function build(string $region, string $theme = NULL): array {
+  public function build(string $region, ?string $theme = NULL): array {
 
     $blocks = $this->entityTypeManager->getStorage('block')->loadByProperties([
       'region' => $region,

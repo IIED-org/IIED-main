@@ -54,7 +54,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?Request $request = NULL): array {
     $current_url = Url::createFromRequest($request);
 
     $form['page_alter'] = [

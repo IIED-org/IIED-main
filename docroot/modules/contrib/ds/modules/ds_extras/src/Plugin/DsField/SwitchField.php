@@ -6,20 +6,21 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\ds\Attribute\DsField;
 use Drupal\ds\Plugin\DsField\DsFieldBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Link;
 
 /**
  * Plugin that generates a link to switch view mode with via ajax.
- *
- * @DsField(
- *   id = "switch_field",
- *   title = @Translation("Switch field"),
- *   entity_type = "node"
- * )
  */
+#[DsField(
+  id: 'switch_field',
+  title: new TranslatableMarkup('Switch field'),
+  entity_type: 'node'
+)]
 class SwitchField extends DsFieldBase {
 
   /**

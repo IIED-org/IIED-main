@@ -31,11 +31,11 @@ class EncryptionMethod extends Plugin {
   /**
    * The description shown to users.
    *
-   * @var \Drupal\Core\Annotation\Translation
+   * @var \Drupal\Core\Annotation\Translation|null
    *
    * @ingroup plugin_translatable
    */
-  public $description = '';
+  public $description = NULL;
 
   /**
    * Define key type(s) this encryption method should be restricted to.

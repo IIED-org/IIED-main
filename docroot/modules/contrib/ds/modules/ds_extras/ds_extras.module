@@ -31,30 +31,6 @@ function ds_extras_layout_alter(&$definitions) {
 }
 
 /**
- * Implements hook_module_implements_alter().
- */
-function ds_extras_module_implements_alter(&$implementations, $hook) {
-  // Because it's possible to turn on/off features for DS extras,
-  // we'll unset hooks here if necessary which otherwise do nothing at all.
-  // Region to block.
-  $region_hooks = [
-    'ds_layout_region_alter',
-    'entity_view_alter',
-  ];
-  if (!\Drupal::config('ds_extras.settings')->get('region_to_block') && in_array($hook, $region_hooks)) {
-    unset($implementations['ds_extras']);
-  }
-
-  // Extra fields.
-  $extra_fields_hooks = [
-    'field_extra_fields',
-  ];
-  if (!\Drupal::config('ds_extras.settings')->get('fields_extra') && in_array($hook, $extra_fields_hooks)) {
-    unset($implementations['ds_extras']);
-  }
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function ds_extras_form_entity_view_display_edit_form_alter(&$form, FormStateInterface $form_state) {

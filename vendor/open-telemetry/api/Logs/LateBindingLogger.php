@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OpenTelemetry\API\Logs;
 
 use Closure;
+use OpenTelemetry\Context\ContextInterface;
 
 class LateBindingLogger implements LoggerInterface
 {
@@ -16,12 +17,14 @@ class LateBindingLogger implements LoggerInterface
     ) {
     }
 
+    #[\Override]
     public function emit(LogRecord $logRecord): void
     {
         ($this->logger ??= ($this->factory)())->emit($logRecord);
     }
 
-    public function isEnabled(): bool
+    #[\Override]
+    public function isEnabled(?ContextInterface $context = null, ?int $severityNumber = null, ?string $eventName = null): bool
     {
         return true;
     }

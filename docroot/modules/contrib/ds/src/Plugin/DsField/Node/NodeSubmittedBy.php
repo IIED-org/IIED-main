@@ -4,22 +4,22 @@ namespace Drupal\ds\Plugin\DsField\Node;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
-use Drupal\Core\Url;
-use Drupal\ds\Plugin\DsField\Date;
-use Drupal\Core\Render\Renderer;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Render\Renderer;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\ds\Attribute\DsField;
+use Drupal\ds\Plugin\DsField\Date;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin that renders the submitted by field.
- *
- * @DsField(
- *   id = "node_submitted_by",
- *   title = @Translation("Submitted by"),
- *   entity_type = "node",
- *   provider = "node"
- * )
  */
+#[DsField(
+  id: 'node_submitted_by',
+  title: new TranslatableMarkup('Submitted by'),
+  entity_type: 'node',
+  provider: 'node'
+)]
 class NodeSubmittedBy extends Date {
 
   /**

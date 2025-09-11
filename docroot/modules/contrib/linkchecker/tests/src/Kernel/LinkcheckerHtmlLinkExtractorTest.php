@@ -4,8 +4,8 @@ namespace Drupal\Tests\linkchecker\Kernel;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\node\Entity\NodeType;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Test html link extractor.
@@ -26,7 +26,6 @@ class LinkcheckerHtmlLinkExtractorTest extends KernelTestBase {
     'system',
     'field',
     'text',
-    'dynamic_entity_reference',
     'linkchecker',
   ];
 
@@ -183,7 +182,7 @@ class LinkcheckerHtmlLinkExtractorTest extends KernelTestBase {
       Flash plugin can be found at <a href="http://www.adobe.com/">Adobe</a>.
 </object>
 
-<!-- object tag: Embed Quicktime Movies on HTML pages -->
+<!-- object tag: Embed Quick time Movies on HTML pages -->
 <object width="420" height="282"
   classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B"
   codebase="http://www.apple.com/qtactivex/qtplugin.cab">
@@ -208,7 +207,7 @@ class LinkcheckerHtmlLinkExtractorTest extends KernelTestBase {
   <a href="http://example.org/video/foo3.mp4">/video/foo3.mp4</a>
 </object>
 
-<!-- object tag: Play MP4 videos with Quicktime -->
+<!-- object tag: Play MP4 videos with Quick time -->
 <object width="420" height="282" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
   <param name="src" value="http://example.org/video/foo4.mp4" />
   <param name="href" value="http://example.org/video/foo5.mp4" />
@@ -230,7 +229,7 @@ class LinkcheckerHtmlLinkExtractorTest extends KernelTestBase {
     <param name="flashvars" value="file=http://example.org/video/foo1.flv&width=420&height=270" />
 </object>
 
-<!-- Embed ActiveX control as objekt -->
+<!-- Embed ActiveX control as object -->
 <object width="267" height="175" classid="CLSID:05589FA1-C356-11CE-BF01-00AA0055595A">
   <param name="filename" value="ritmo.mid">
 </object>

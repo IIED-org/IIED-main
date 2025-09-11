@@ -66,6 +66,7 @@ taxonomy_manager.admin_vocabulary.export:
       taxonomy_vocabulary:
         type: entity:taxonomy_vocabulary
 
+# cspell:ignore exportlist
 taxonomy_manager.admin_vocabulary.exportlist:
   path: '/admin/structure/taxonomy_manager/voc/{taxonomy_vocabulary}/export/list'
   defaults:
@@ -87,5 +88,13 @@ taxonomy_manager.taxonomy_term.edit:
   defaults:
     _entity_form: taxonomy_term.taxonomy_manager
     _title: 'Edit taxonomy term'
+  requirements:
+    _taxonomy_manager_access_check: 'TRUE'
+
+taxonomy_manager.term_form:
+  path: '/ajax/taxonomy_manager/term/{tid}/edit'
+  defaults:
+    _controller: '\Drupal\taxonomy_manager\Form\TaxonomyManagerForm::termDataCallback'
+    _title: 'AJAX term form'
   requirements:
     _taxonomy_manager_access_check: 'TRUE'

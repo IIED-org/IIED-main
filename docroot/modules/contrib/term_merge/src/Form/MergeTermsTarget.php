@@ -88,7 +88,7 @@ class MergeTermsTarget extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?VocabularyInterface $taxonomy_vocabulary = NULL) {
     $this->vocabulary = $taxonomy_vocabulary;
 
     $form['description']['#markup'] = $this->t('Please enter a new term or select an existing term to merge into.');

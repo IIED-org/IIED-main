@@ -3,8 +3,8 @@
 namespace Drupal\Tests\devel\Unit;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\devel\Element\ClientSideFilterTable;
 use Drupal\Tests\UnitTestCase;
+use Drupal\devel\Element\ClientSideFilterTable;
 
 /**
  * Tests ClientSideFilterTable element.

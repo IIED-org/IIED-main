@@ -2,12 +2,13 @@
 
 namespace Drupal\term_merge\Form;
 
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\synonyms\SynonymsService\ProviderService;
 use Drupal\taxonomy\TermInterface;
-use Drupal\taxonomy\TermStorageInterface;
 use Drupal\taxonomy\VocabularyInterface;
 use Drupal\term_merge\TermMergerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -18,35 +19,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class MergeTermsConfirm extends FormBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
    * The term storage handler.
    *
-   * @var \Drupal\taxonomy\TermStorageInterface
+   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
-  protected TermStorageInterface $termStorage;
+  protected EntityStorageInterface $termStorage;
 
   /**
-   * The private temporary storage factory.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
-   */
-  protected PrivateTempStoreFactory $tempStoreFactory;
-
-  /**
-   * The term merger.
-   *
-   * @var \Drupal\term_merge\TermMergerInterface
-   */
-  protected TermMergerInterface $termMerger;
-
-  /**
-   * The vocabulary.
+   * The current vocabulary.
    *
    * @var \Drupal\taxonomy\VocabularyInterface
    */
@@ -61,22 +41,34 @@ class MergeTermsConfirm extends FormBase {
    *   The private temporary storage factory.
    * @param \Drupal\term_merge\TermMergerInterface $termMerger
    *   The term merger service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
+   * @param \Drupal\synonyms\SynonymsService\ProviderService|null $synonymProvider
+   *   The synonym provider service, or NULL if Synonyms module is not present.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, PrivateTempStoreFactory $tempStoreFactory, TermMergerInterface $termMerger) {
-    $this->entityTypeManager = $entityTypeManager;
+
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected PrivateTempStoreFactory $tempStoreFactory,
+    protected TermMergerInterface $termMerger,
+    protected ?ProviderService  $synonymProvider,
+  ) {
     $this->termStorage = $entityTypeManager->getStorage('taxonomy_term');
-    $this->tempStoreFactory = $tempStoreFactory;
-    $this->termMerger = $termMerger;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
+    $synonym_provider = $container->has('synonyms.provider_service') ?  $container->get('synonyms.provider_service') : NULL;
     return new static(
       $container->get('entity_type.manager'),
       $container->get('tempstore.private'),
-      $container->get('term_merge.term_merger')
+      $container->get('term_merge.term_merger'),
+      $synonym_provider,
     );
   }
 
@@ -93,7 +85,7 @@ class MergeTermsConfirm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?VocabularyInterface $taxonomy_vocabulary = NULL) {
     $this->vocabulary = $taxonomy_vocabulary;
     $selected_term_ids = $this->getSelectedTermIds();
 
@@ -154,8 +146,39 @@ class MergeTermsConfirm extends FormBase {
     else {
       $target_label = $target->label();
       $this->termMerger->mergeIntoTerm($selected_terms, $target);
+      $term_destination = $target;
       $form_state->set('destination_tid', $target->id());
     }
+    if (isset($this->synonymProvider) && $this->tempStoreFactory->get('term_merge')->get('terms_to_synonym')) {
+      // Merge synonyms to target term.
+      $vocabulary_synonym_provider_plugin = NULL;
+      // Get enabled field providers for this vocabulary.
+      foreach ($this->synonymProvider->getSynonymConfigEntities('taxonomy_term', 'keywords') as $synonym_config) {
+        $synonym_provider_plugin = $synonym_config->getProviderPluginInstance();
+        if ($synonym_provider_plugin->getBaseId() == 'field') {
+          $vocabulary_synonym_provider_plugin = $synonym_provider_plugin;
+        }
+      }
+
+      if ($vocabulary_synonym_provider_plugin) {
+        $synonyms_to_merge = [];
+        foreach ($selected_terms as $selected_term) {
+          $synonyms_to_merge[] = $selected_term->label();
+          $synonyms_to_merge = array_merge($synonyms_to_merge, $vocabulary_synonym_provider_plugin->getSynonyms($selected_term));
+        }
+
+        $field_name = $vocabulary_synonym_provider_plugin->getPluginDefinition()['field'];
+        if ($term_destination->hasField($field_name)) {
+          $synonym_values = array_column($term_destination->get($field_name)->getValue(), 'value');
+          $synonym_values = array_merge($synonym_values, $synonyms_to_merge);
+          $synonym_values = array_unique($synonym_values);
+
+          $term_destination->get($field_name)->setValue(array_map(fn($v) => ['value' => $v], $synonym_values));
+          $term_destination->save();
+        }
+      }
+    }
+
     $this->setSuccessfullyMergedMessage(count($selected_terms), $target_label);
     $this->redirectToTermMergeForm($form_state);
   }
@@ -168,9 +191,7 @@ class MergeTermsConfirm extends FormBase {
    */
   public function titleCallback() {
     $term_count = count($this->getSelectedTermIds());
-
-    $arguments = ['%termCount' => $term_count];
-    return $this->t("Are you sure you wish to merge %termCount terms?", $arguments);
+    return $this->formatPlural($term_count, 'Are you sure you wish to merge one term?', 'Are you sure you wish to merge @count terms?');
   }
 
   /**

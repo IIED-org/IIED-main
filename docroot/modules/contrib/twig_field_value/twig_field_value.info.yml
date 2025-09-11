@@ -3,7 +3,7 @@ type: module
 description: Twig filters for value(s) and label.
 core_version_requirement: ^9 || ^10 || ^11
 
-# Information added by Drupal.org packaging script on 2024-08-30
-version: '2.0.4'
+# Information added by Drupal.org packaging script on 2024-10-08
+version: '2.0.5'
 project: 'twig_field_value'
-datestamp: 1725019154
+datestamp: 1728385528

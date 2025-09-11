@@ -183,7 +183,7 @@ class DependencyRemovalTest extends KernelTestBase {
    *
    * @see \Drupal\Tests\search_api_autocomplete\Kernel\DependencyRemovalTest::testSearchPluginDependency()
    */
-  public function searchPluginDependencyDataProvider() {
+  public static function searchPluginDependencyDataProvider(): array {
     return [
       'soft dependency' => [TRUE],
       'hard dependency' => [FALSE],
@@ -253,7 +253,7 @@ class DependencyRemovalTest extends KernelTestBase {
    *
    * @see \Drupal\Tests\search_api_autocomplete\Kernel\DependencyRemovalTest::testSuggesterDependency()
    */
-  public function suggesterDependencyDataProvider() {
+  public static function suggesterDependencyDataProvider(): array {
     return [
       'soft dependency, one suggester' => [TRUE, FALSE],
       'hard dependency, one suggester' => [FALSE, FALSE],

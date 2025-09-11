@@ -2,9 +2,9 @@
 
 namespace Drupal\publishcontent;
 
-use Drupal\node\Entity\NodeType;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Handles permissions.

@@ -13,8 +13,8 @@ interface EncryptionProfileInterface extends ConfigEntityInterface {
   /**
    * Gets the encryption method configuration plugin.
    *
-   * @return \Drupal\encrypt\EncryptionMethodInterface
-   *   The used EncryptionMethod plugin.
+   * @return \Drupal\encrypt\EncryptionMethodInterface|null
+   *   The used EncryptionMethod plugin, if available.
    */
   public function getEncryptionMethod();
 

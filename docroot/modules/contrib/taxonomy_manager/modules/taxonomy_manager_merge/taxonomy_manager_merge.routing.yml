@@ -1,4 +1,5 @@
 taxonomy_manager_merge.admin_vocabulary.merge_terms:
+  # cspell:ignore mergeterms
   path: '/admin/structure/taxonomy_manager/voc/{taxonomy_vocabulary}/mergeterms'
   defaults:
     _form: '\Drupal\taxonomy_manager_merge\Form\MergeTermsForm'

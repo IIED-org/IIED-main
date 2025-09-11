@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Url;
 use Drupal\linkchecker\Entity\LinkCheckerLink;
 use Drupal\linkchecker\Plugin\LinkExtractorManager;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -164,10 +165,8 @@ class LinkExtractorService {
     foreach ($urls as $link) {
       $linkCheckerLinks[$this->pos] = LinkCheckerLink::create([
         'url' => $link,
-        'entity_id' => [
-          'target_id' => $entity->id(),
-          'target_type' => $entity->getEntityTypeId(),
-        ],
+        'parent_entity_id' => $entity->id(),
+        'parent_entity_type_id' => $entity->getEntityTypeId(),
         'entity_field' => $fieldItemList->getFieldDefinition()->getName(),
         'entity_langcode' => $fieldItemList->getLangcode(),
       ]);
@@ -211,6 +210,20 @@ class LinkExtractorService {
       // entities are already decoded.
       // @todo Try to find a way to get the raw value.
       $urlDecoded = $url;
+      // Try to create an internal URL from it.
+      $url_obj = NULL;
+      try {
+        $url_obj = Url::fromUri($url);
+        // Since it's only for internal links, there might be unrouted ones (so
+        // invalid links) that should be tracked too. Check if it
+        // is external but ignore if it is routed.
+        if (!$url_obj->isExternal()) {
+          $urlDecoded = $url = $url_obj->setAbsolute()->toString();
+        }
+      }
+      catch (\Throwable $e) {
+        // No worries. We only use this for internal links.
+      }
 
       // Prefix protocol relative urls with a protocol to allow link checking.
       if (preg_match('!^//!', $urlDecoded)) {
@@ -357,12 +370,11 @@ class LinkExtractorService {
   public function saveLink(LinkCheckerLinkInterface $link) {
     $storage = $this->entityTypeManager->getStorage($link->getEntityTypeId());
 
-    $query = $storage->getQuery();
-    $query->accessCheck()
+    $parent_entity = $link->getParentEntity();
+    $query = $storage->getQuery()->accessCheck(FALSE)
       ->condition('urlhash', LinkCheckerLink::generateHash($link->getUrl()))
-      ->condition('entity_id.target_id', $link->getParentEntity()->id())
-      ->condition('entity_id.target_type', $link->getParentEntity()
-        ->getEntityTypeId())
+      ->condition('parent_entity_type_id', $parent_entity->getEntityTypeId())
+      ->condition('parent_entity_id', $parent_entity->id())
       ->condition('entity_field', $link->getParentEntityFieldName())
       ->condition('entity_langcode', $link->getParentEntityLangcode());
     $ids = $query->execute();

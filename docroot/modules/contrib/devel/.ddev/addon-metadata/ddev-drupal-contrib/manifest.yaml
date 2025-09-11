@@ -1,7 +1,9 @@
 name: ddev-drupal-contrib
 repository: ddev/ddev-drupal-contrib
-version: 1.0.0-rc20
-install_date: "2024-08-08T09:22:22-04:00"
+version: 1.0.1
+dependencies:
+    - ddev/ddev-selenium-standalone-chrome
+install_date: "2025-07-07T14:50:14-04:00"
 project_files:
     - commands/web/eslint
     - commands/web/expand-composer-json

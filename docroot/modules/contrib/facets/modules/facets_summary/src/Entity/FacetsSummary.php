@@ -3,6 +3,7 @@
 namespace Drupal\facets_summary\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\facets\Entity\Facet;
 use Drupal\facets_summary\FacetsSummaryInterface;
 
 /**
@@ -34,7 +35,7 @@ use Drupal\facets_summary\FacetsSummaryInterface;
  *     "name",
  *     "facets",
  *     "facet_source_id",
- *     "search_filter_identifier",
+ *     "only_visible_when_facet_source_is_visible",
  *     "processor_configs",
  *   },
  *   links = {
@@ -67,13 +68,6 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
    * @var string
    */
   protected $facet_source_id;
-
-  /**
-   * The search filter identifier.
-   *
-   * @var string
-   */
-  protected $search_filter_identifier;
 
   /**
    * The facet source belonging to this facet summary.
@@ -116,6 +110,16 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
   protected $weight;
 
   /**
+   * Is the facet only visible when the facet source is only visible.
+   *
+   * A boolean that defines if the facet summary is only visible when the facet
+   * source is visible.
+   *
+   * @var bool
+   */
+  protected $only_visible_when_facet_source_is_visible = FALSE;
+
+  /**
    * {@inheritdoc}
    */
   public function getName() {
@@ -137,24 +141,6 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
    */
   public function setFacetSourceId($facet_source_id) {
     $this->facet_source_id = $facet_source_id;
-    return $this;
-  }
-
-  /**
-   * Returns the search filter identifier.
-   *
-   * @return string
-   *   The search filter identifier.
-   */
-  public function getSearchFilterIdentifier() {
-    return $this->search_filter_identifier;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setSearchFilterIdentifier($search_filter_identifier) {
-    $this->search_filter_identifier = $search_filter_identifier;
     return $this;
   }
 
@@ -285,6 +271,20 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
   /**
    * {@inheritdoc}
    */
+  public function setOnlyVisibleWhenFacetSourceIsVisible($only_visible_when_facet_source_is_visible) {
+    $this->only_visible_when_facet_source_is_visible = $only_visible_when_facet_source_is_visible;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOnlyVisibleWhenFacetSourceIsVisible() {
+    return $this->only_visible_when_facet_source_is_visible;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function addProcessor(array $processor) {
     $this->processor_configs[$processor['processor_id']] = [
       'processor_id' => $processor['processor_id'],
@@ -315,6 +315,11 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
     $facet_source_dependencies = $this->getFacetSource()->calculateDependencies();
     if (!empty($facet_source_dependencies)) {
       $this->addDependencies($facet_source_dependencies);
+    }
+
+    foreach (array_keys($this->getFacets() ?? []) as $facet_id) {
+      $facet = Facet::load($facet_id);
+      $this->addDependency('config', $facet->getConfigDependencyName());
     }
 
     return $this;

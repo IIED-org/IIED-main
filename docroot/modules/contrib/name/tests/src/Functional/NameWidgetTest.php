@@ -4,7 +4,6 @@ namespace Drupal\Tests\name\Functional;
 
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
-use Drupal\Component\Utility\Html;
 use Drupal\node\Entity\NodeType;
 
 /**
@@ -47,17 +46,17 @@ class NameWidgetTest extends NameTestBase {
   public function testFieldEntry() {
     $this->drupalLogin($this->adminUser);
 
+    $this->drupalGet('admin/structure/types/manage/page/fields/add-field');
+    $this->getSession()->getPage()->fillField('new_storage_type', 'name');
+    $this->getSession()->getPage()->pressButton('Continue');
+
     $new_name_field = [
       'label' => 'Test name',
       'field_name' => 'name_test',
-      'new_storage_type' => 'name',
     ];
-    $this->drupalGet('admin/structure/types/manage/page/fields/add-field');
+    $this->submitForm($new_name_field, 'Continue');
 
-    $this->submitForm($new_name_field, t('Save and continue'));
-    $storage_settings = [];
-    $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test/storage');
-    $this->submitForm($storage_settings, t('Save field settings'));
+    $this->submitForm([], 'Save settings');
     $this->resetAll();
 
     // Set up a field of each label display and test it shows.
@@ -78,12 +77,12 @@ class NameWidgetTest extends NameTestBase {
 
       'settings[show_component_required_marker]' => TRUE,
 
-      'settings[labels][title]' => t('Title'),
-      'settings[labels][given]' => t('Given'),
-      'settings[labels][middle]' => t('Middle name(s)'),
-      'settings[labels][family]' => t('Family'),
-      'settings[labels][generational]' => t('Generational'),
-      'settings[labels][credentials]' => t('Credentials'),
+      'settings[labels][title]' => 'Title',
+      'settings[labels][given]' => 'Given',
+      'settings[labels][middle]' => 'Middle name(s)',
+      'settings[labels][family]' => 'Family',
+      'settings[labels][generational]' => 'Generational',
+      'settings[labels][credentials]' => 'Credentials',
 
       'settings[title_display][title]' => 'title',
       'settings[title_display][given]' => 'title',
@@ -125,7 +124,7 @@ class NameWidgetTest extends NameTestBase {
     ];
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
 
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
 
     $this->drupalGet('node/add/page');
 
@@ -144,28 +143,24 @@ class NameWidgetTest extends NameTestBase {
     $this->assertFieldSettings($field_settings);
 
     // Test the language layouts.
-    dump('Testing asian');
     $field_settings['settings[component_layout]'] = 'asian';
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
     $this->drupalGet('node/add/page');
     $this->assertFieldSettings($field_settings);
 
-    dump('Testing eastern');
     $field_settings['settings[component_layout]'] = 'eastern';
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
     $this->drupalGet('node/add/page');
     $this->assertFieldSettings($field_settings);
 
-    dump('Testing german');
     $field_settings['settings[component_layout]'] = 'german';
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
     $this->drupalGet('node/add/page');
     $this->assertFieldSettings($field_settings);
 
-    dump('Testing show_component_required_marker unchecked.');
     $field_settings = [
       'settings[show_component_required_marker]' => FALSE,
       'settings[component_layout]' => 'default',
@@ -173,7 +168,7 @@ class NameWidgetTest extends NameTestBase {
       // 'settings[component_layout]' => 'default',
     ] + $field_settings;
     $this->drupalGet('admin/structure/types/manage/page/fields/node.page.field_name_test');
-    $this->submitForm($field_settings, t('Save settings'));
+    $this->submitForm($field_settings, 'Save settings');
     $this->drupalGet('node/add/page');
     foreach (_name_component_keys() as $component) {
       $this->assertComponentSettings($component, $field_settings);
@@ -197,8 +192,6 @@ class NameWidgetTest extends NameTestBase {
       $content .= str_replace(["\n", "\r"], " ", $element->getHtml());
     }
 
-    dump(Html::escape($content));
-    dump($settings["settings[component_layout]"]);
     switch ($settings["settings[component_layout]"]) {
       case 'asian':
         $regexp = '/name-family-wrapper.*name-middle-wrapper.*name-given-wrapper.*name-title-wrapper.*name-credentials-wrapper.*/';
@@ -336,7 +329,7 @@ class NameWidgetTest extends NameTestBase {
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When the element doesn't exist.
    */
-  public function inputFieldExists($name, TraversableElement $container = NULL) {
+  public function inputFieldExists($name, ?TraversableElement $container = NULL) {
     $container = $container ?: $this->getSession()->getPage();
     $node = $container->find('named', [
       'field',

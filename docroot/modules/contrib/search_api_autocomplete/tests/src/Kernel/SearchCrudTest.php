@@ -7,6 +7,7 @@ use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api_autocomplete\Entity\Search;
 use Drupal\search_api_autocomplete\SearchInterface;
+use Drupal\search_api_test\MethodOverrides;
 use Drupal\search_api_test\PluginTestTrait;
 use Drupal\user\Entity\Role;
 
@@ -27,6 +28,7 @@ class SearchCrudTest extends KernelTestBase {
     'search_api_autocomplete_test',
     'search_api',
     'search_api_db',
+    'search_api_test',
     'user',
     'system',
   ];
@@ -80,12 +82,11 @@ class SearchCrudTest extends KernelTestBase {
    * Tests whether saving a new search entity works correctly.
    */
   public function testCreate() {
-    $this->setMethodOverride('search', 'calculateDependencies', function () {
-      return [
-        'config' => ['search_api.server.server'],
-        'module' => ['user'],
-      ];
-    });
+    MethodOverrides::$returnValue = [
+      'config' => ['search_api.server.server'],
+      'module' => ['user'],
+    ];
+    $this->setMethodOverride('search', 'calculateDependencies', [MethodOverrides::class, 'genericMethod']);
 
     $values = $this->getSearchTestValues();
     /** @var \Drupal\search_api_autocomplete\SearchInterface $search */
@@ -116,7 +117,6 @@ class SearchCrudTest extends KernelTestBase {
         'search_api.server.server',
       ],
       'module' => [
-        'search_api_autocomplete',
         'search_api_autocomplete_test',
         'user',
       ],

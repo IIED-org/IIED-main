@@ -8,10 +8,14 @@ use OpenTelemetry\SDK\Common\Attribute\Attributes;
 use OpenTelemetry\SDK\Resource\ResourceDetectorInterface;
 use OpenTelemetry\SDK\Resource\ResourceInfo;
 use OpenTelemetry\SemConv\ResourceAttributes;
+use const PHP_OS;
+use const PHP_OS_FAMILY;
 use function php_uname;
+use function strtolower;
 
 /**
  * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.8.0/specification/resource/semantic_conventions/host.md#host
+ * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.8.0/specification/resource/semantic_conventions/os.md
  */
 final class Host implements ResourceDetectorInterface
 {
@@ -25,12 +29,17 @@ final class Host implements ResourceDetectorInterface
     ) {
     }
 
+    #[\Override]
     public function getResource(): ResourceInfo
     {
         $attributes = [
             ResourceAttributes::HOST_NAME => php_uname('n'),
             ResourceAttributes::HOST_ARCH => php_uname('m'),
             ResourceAttributes::HOST_ID => $this->getMachineId(),
+            ResourceAttributes::OS_TYPE => strtolower(PHP_OS_FAMILY),
+            ResourceAttributes::OS_DESCRIPTION => php_uname('r'),
+            ResourceAttributes::OS_NAME => PHP_OS,
+            ResourceAttributes::OS_VERSION => php_uname('v'),
         ];
 
         return ResourceInfo::create(Attributes::create($attributes), ResourceAttributes::SCHEMA_URL);

@@ -3,7 +3,7 @@
 namespace Drupal\name\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Element\FormElementBase;
 use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\Template\Attribute;
 
@@ -12,7 +12,7 @@ use Drupal\Core\Template\Attribute;
  *
  * @RenderElement("name")
  */
-class Name extends FormElement implements TrustedCallbackInterface {
+class Name extends FormElementBase implements TrustedCallbackInterface {
 
   /**
    * {@inheritdoc}
@@ -42,6 +42,7 @@ class Name extends FormElement implements TrustedCallbackInterface {
       '#element_validate' => ['name_element_validate'],
       '#theme_wrappers' => ['form_element'],
       '#show_component_required_marker' => 0,
+      '#flag_required_input' => TRUE,
       '#default_value' => [
         'title' => '',
         'given' => '',

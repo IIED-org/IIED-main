@@ -1,12 +1,17 @@
 [[_TOC_]]
 
+#### Updates
+
+- July 2025: Use Kint module if you prefer Kint to the built-in Symfony Var-Dumper. Kint
+support has moved to that module.
+
 #### Introduction
 
 Devel module contains helper functions and pages for Drupal developers and
 inquisitive admins:
 
- - A block and toolbar for quickly accessing devel pages
- - A menu tab added to entities to give access to internal entity properties
+ - A block and toolbar for quickly accessing devel pages. Install drupal/navigation_extra_tools for core navigation module integration.
+ - A local task tab added to entities to view their properties
  - Urls created to view the internal entity properties even when there is no menu tab, for example /devel/paragraph/n
  - Debug functions for inspecting a variable such as `dpm($variable)`
  - Debug a SQL query `dpq($query` or print a backtrace `ddebug_backtrace()`
@@ -34,7 +39,7 @@ local development, test running, etc.
 #### Version Compatibility
 | Devel version | Drupal core | PHP  | Drush |
 |---------------|-------------|------|-------|
-| 5.2+          | 10          | 8.1+ | 12+   |
+| 5.2+          | 10+         | 8.1+ | 12+   |
 | 5.0, 5.1      | 9,10        | 8.1+ | 11+   |
 | 4.x           | 8.9+,9      | 7.2+ | 9+    |
 | 8.x-2.x       | 8.x         | 7.0+ | 8+    |

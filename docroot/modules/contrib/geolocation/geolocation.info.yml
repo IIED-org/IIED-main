@@ -1,4 +1,4 @@
-core_version_requirement: ^9.3 || ^10
+core_version_requirement: ^10.3 || ^11
 type: module
 name: Geolocation
 description: 'Provides a simple geolocation field type to store and display location data (lat, lng).'
@@ -19,7 +19,8 @@ test_dependencies:
   - geolocation:geolocation_google_maps_demo
   - geolocation:geolocation_leaflet
   - geolocation:geolocation_leaflet_demo
-# Information added by Drupal.org packaging script on 2024-04-29
-version: '8.x-3.13'
+
+# Information added by Drupal.org packaging script on 2024-10-20
+version: '8.x-3.14'
 project: 'geolocation'
-datestamp: 1714403542
+datestamp: 1729420967

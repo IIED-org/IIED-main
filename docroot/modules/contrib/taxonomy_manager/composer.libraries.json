@@ -1,0 +1,19 @@
+{
+  "repositories": {
+    "fancytree/fancytree": {
+      "type": "package",
+      "package": {
+        "name": "fancytree/fancytree",
+        "version": "2.38.3",
+        "type": "drupal-library",
+        "extra": {
+          "installer-name": "jquery.fancytree"
+        },
+        "dist": {
+          "url": "https://github.com/mar10/fancytree/archive/refs/tags/v2.38.3.zip",
+          "type": "zip"
+        }
+      }
+    }
+  }
+}

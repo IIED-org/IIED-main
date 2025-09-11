@@ -2,18 +2,19 @@
 
 namespace Drupal\ds\Plugin\DsField\User;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\ds\Attribute\DsField;
 use Drupal\ds\Plugin\DsField\Markup;
 
 /**
  * Plugin that renders the user signature.
- *
- * @DsField(
- *   id = "user_signature",
- *   title = @Translation("User signature"),
- *   entity_type = "user",
- *   provider = "user"
- * )
  */
+#[DsField(
+  id: 'user_signature',
+  title: new TranslatableMarkup('User signature'),
+  entity_type: 'user',
+  provider: 'user'
+)]
 class UserSignature extends Markup {
 
   /**

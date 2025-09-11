@@ -62,7 +62,7 @@ interface PluginHelperInterface {
    *   The created suggester plugin objects, keyed by plugin ID. If a plugin
    *   could not be created, it will be missing in the return array.
    */
-  public function createSuggesterPlugins(SearchInterface $search, array $plugin_ids = NULL, array $configurations = []);
+  public function createSuggesterPlugins(SearchInterface $search, ?array $plugin_ids = NULL, array $configurations = []);
 
   /**
    * Creates objects for all search plugins associated with the given index.

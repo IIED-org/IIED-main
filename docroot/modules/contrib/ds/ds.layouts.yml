@@ -209,7 +209,7 @@ ds_reset:
   category: Display Suite
   class: '\Drupal\ds\Plugin\DsLayout'
   template: templates/ds-reset
-  image: images/ds-reset.png
+  icon: images/ds-reset.png
   regions:
     ds_content:
       label: Content

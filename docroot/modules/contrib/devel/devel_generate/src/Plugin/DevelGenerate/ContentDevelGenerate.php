@@ -151,7 +151,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
 
     if (empty($types)) {
       $create_url = $this->urlGenerator->generateFromRoute('node.type_add');
-      $this->setMessage($this->t('You do not have any content types that can be generated. <a href=":create-type">Go create a new content type</a>', [':create-type' => $create_url]), 'error');
+      $this->messenger()->addMessage($this->t('You do not have any content types that can be generated. <a href=":create-type">Go create a new content type</a>', [':create-type' => $create_url]), 'error');
       return [];
     }
 
@@ -411,9 +411,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       }
     }
 
-    $this->setMessage($this->formatPlural($values['num'], 'Created 1 node', 'Created @count nodes'));
+    $this->messenger()->addMessage($this->formatPlural($values['num'], 'Created 1 node', 'Created @count nodes'));
     if ($values['num_translations'] > 0) {
-      $this->setMessage($this->formatPlural($values['num_translations'], 'Created 1 node translation', 'Created @count node translations'));
+      $this->messenger()->addMessage($this->formatPlural($values['num_translations'], 'Created 1 node translation', 'Created @count node translations'));
     }
   }
 
@@ -529,8 +529,8 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $values['skip_fields'] = is_null($options['skip-fields']) ? [] : self::csvToArray($options['skip-fields']);
     $values['base_fields'] = is_null($options['base-fields']) ? [] : self::csvToArray($options['base-fields']);
     $values['title_length'] = 6;
-    $values['num'] = array_shift($args);
-    $values['max_comments'] = array_shift($args);
+    $values['num'] = (int) trim(array_shift($args));
+    $values['max_comments'] = (int) array_shift($args);
     // Do not use csvToArray for 'authors' because it removes '0' values.
     $values['authors'] = is_null($options['authors']) ? [] : explode(',', $options['authors']);
     $values['roles'] = self::csvToArray($options['roles']);
@@ -555,7 +555,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       throw new \Exception(dt('One or more content types have been entered that don\'t exist on this site'));
     }
 
-    if ($this->isBatch($values['num'], $values['max_comments'])) {
+    if ($this->isBatch((int) $values['num'], (int) $values['max_comments'])) {
       $this->drushBatch = TRUE;
       $this->develGenerateContentPreNode($values);
     }
@@ -585,7 +585,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     if (!empty($nids)) {
       $nodes = $this->nodeStorage->loadMultiple($nids);
       $this->nodeStorage->delete($nodes);
-      $this->setMessage($this->t('Deleted @count nodes.', ['@count' => count($nids)]));
+      $this->messenger()->addMessage($this->t('Deleted @count nodes.', ['@count' => count($nids)]));
     }
   }
 
@@ -787,7 +787,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       }
     }
 
-    if ($results['add_statistics']) {
+    if (!empty($results['add_statistics'])) {
       $this->addNodeStatistics($node);
     }
   }

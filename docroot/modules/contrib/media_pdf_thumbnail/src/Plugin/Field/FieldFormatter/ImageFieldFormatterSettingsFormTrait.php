@@ -109,6 +109,10 @@ trait ImageFieldFormatterSettingsFormTrait {
       static::IMAGE_FORMAT_SETTINGS => static::DEFAULT_IMAGE_FORMAT_SETTING,
     ];
 
+    // Default settings for all bundles.
+    $settings['default_bundle' . static::MEDIA_BUNDLE_IMAGE_STYLE] = '';
+    $settings['default_bundle' . static::MEDIA_BUNDLE_LINK] = '';
+
     foreach (_media_pdf_thumbnail_get_fields_list() as $bundleId => $infos) {
       $settings[$bundleId . static::MEDIA_BUNDLE_PAGE] = '';
       $settings[$bundleId . static::MEDIA_BUNDLE_FIELD] = '';

@@ -7,7 +7,7 @@ dependencies:
   - layout_paragraphs:layout_paragraphs
   - paragraphs:paragraphs_library
 
-# Information added by Drupal.org packaging script on 2024-08-28
-version: '2.1.0'
+# Information added by Drupal.org packaging script on 2024-11-27
+version: '2.1.1'
 project: 'layout_paragraphs'
-datestamp: 1724879056
+datestamp: 1732724680

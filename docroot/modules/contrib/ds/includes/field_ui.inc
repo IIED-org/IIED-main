@@ -5,7 +5,6 @@
  * Field UI functions for Display Suite.
  */
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
@@ -159,6 +158,9 @@ function ds_field_ui_regions(array $form, FormStateInterface $form_state) {
   // values are the region they are rendered in.
   $field_regions = [];
 
+  // Add machine name column or not.
+  $add_machine_name_column_in_header = (int) Drupal::VERSION >= 11;
+
   // Change UI to add Region column if we have a layout.
   if ($layout) {
     foreach ($layout['regions'] as $region_name => $field_names) {
@@ -171,16 +173,12 @@ function ds_field_ui_regions(array $form, FormStateInterface $form_state) {
 
     $table['#header'] = [
       t('Field'),
+      ...($add_machine_name_column_in_header ? [$table['#header'][1]] : []),
       t('Weight'),
       t('Parent'),
       t('Region'),
       t('Label'),
-      t('Formatter'),
-      t('Widget'),
-      [
-        'data' => t('Operations'),
-        'colspan' => 2,
-      ],
+      ['data' => t('Format'), 'colspan' => 3],
     ];
 
     $table['#regions'] = [];
@@ -247,7 +245,7 @@ function ds_field_ui_regions(array $form, FormStateInterface $form_state) {
       // Add region.
       // Core added regions to Field UI, which default to 'content'
       if (!isset($row['region'])) {
-        $split = 7;
+        $split = $add_machine_name_column_in_header ? 8 : 7;
         $default = (isset($field_regions[$name]) && isset($region_options[$field_regions[$name]])) ? $field_regions[$name] : 'hidden';
         $second = array_splice($row, $split);
         $row['region'] = $region;
@@ -291,6 +289,11 @@ function ds_field_ui_row_region(array $row) {
 function ds_field_ui_after_build($form, FormStateInterface $form_state) {
   $table = &$form['fields'];
   $values = $form_state->getValue('fields');
+
+  if (!$table) {
+    return $form;
+  }
+
   foreach (Element::children($table) as $name) {
     $row = &$table[$name];
 
@@ -895,6 +898,11 @@ function _ds_field_ui_table_layouts($entity_type, $bundle, $view_mode, array &$f
       $entity_type_info = \Drupal::entityTypeManager()->getDefinition($entity_type);
       foreach ($entity_displays as $name) {
         $row = \Drupal::config($name)->get();
+
+        if (empty($row) || empty($row['mode']) || empty($row['targetEntityType']) || empty($row['bundle'])) {
+          continue;
+        }
+
         if ($row['mode'] === $view_mode) {
           continue;
         }
@@ -1194,6 +1202,9 @@ function _ds_field_ui_fields($entity_type, $bundle, $view_mode, array &$form, Fo
   $field_settings = $form['#ds_layout']['fields'];
   $form['#field_settings'] = $field_settings;
 
+  // Add machine name column or not.
+  $add_machine_name_column = (int) Drupal::VERSION >= 11;
+
   if (empty($form['fields'])) {
     // EntityDisplayFormBase doesn't add the fields table and field_ui library
     // when there are no fields.  Since DS needs those, we add them.
@@ -1203,6 +1214,10 @@ function _ds_field_ui_fields($entity_type, $bundle, $view_mode, array &$form, Fo
       '#weight' => -101,
       '#header' => [
         t('Field'),
+        ...($add_machine_name_column ? [
+          'data' => t('Machine name'),
+          'class' => [RESPONSIVE_PRIORITY_MEDIUM, 'machine-name'],
+        ] : []),
         t('Weight'),
         t('Parent'),
         t('Region'),
@@ -1362,6 +1377,11 @@ function _ds_field_ui_fields($entity_type, $bundle, $view_mode, array &$form, Fo
       'human_name' => [
         '#plain_text' => $field['title'],
       ],
+      ...($add_machine_name_column ? [
+        'machine_name' => [
+          '#markup' => $key,
+          '#attributes' => ['class' => ['machine-name']]]
+        ] : []),
       'weight' => [
         '#type' => 'textfield',
         '#default_value' => isset($field_settings[$key]['weight']) ? $field_settings[$key]['weight'] : 0,

@@ -3,9 +3,9 @@
 namespace Drupal\Tests\message_notify\Functional;
 
 use Drupal\Core\Test\AssertMailTrait;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\message\Entity\Message;
 use Drupal\message\Entity\MessageTemplate;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * Test the email notifier plugin.

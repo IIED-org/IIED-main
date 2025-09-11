@@ -15,6 +15,7 @@ use function array_key_exists;
 use function sprintf;
 use function str_repeat;
 use const T_ATTRIBUTE;
+use const T_ATTRIBUTE_END;
 use const T_FUNCTION;
 use const T_SEMICOLON;
 
@@ -76,6 +77,23 @@ class MethodSpacingSniff implements Sniff
 				$nextMethodPointer - 1,
 				$methodEndPointer,
 			);
+
+			if ($nextMethodAttributeStartPointer !== null) {
+				do {
+					$pointerBefore = TokenHelper::findPreviousNonWhitespace(
+						$phpcsFile,
+						$nextMethodAttributeStartPointer - 1,
+						$methodEndPointer,
+					);
+
+					if ($tokens[$pointerBefore]['code'] === T_ATTRIBUTE_END) {
+						$nextMethodAttributeStartPointer = $tokens[$pointerBefore]['attribute_opener'];
+						continue;
+					}
+
+					break;
+				} while (true);
+			}
 		}
 
 		$nextMethodFirstLinePointer = $tokens[$nextMethodPointer]['line'] === $tokens[$methodEndPointer]['line']
@@ -118,7 +136,8 @@ class MethodSpacingSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($linesBetween === null) {
-			$phpcsFile->fixer->addContent(
+			FixerHelper::add(
+				$phpcsFile,
 				$methodEndPointer,
 				$phpcsFile->eolChar . str_repeat($phpcsFile->eolChar, $this->minLinesCount) . IndentationHelper::getIndentation(
 					$phpcsFile,
@@ -129,13 +148,21 @@ class MethodSpacingSniff implements Sniff
 			FixerHelper::removeBetween($phpcsFile, $methodEndPointer, $nextMethodFirstLinePointer);
 
 		} elseif ($linesBetween > $this->maxLinesCount) {
-			$phpcsFile->fixer->addContent($methodEndPointer, str_repeat($phpcsFile->eolChar, $this->maxLinesCount + 1));
+			FixerHelper::add(
+				$phpcsFile,
+				$methodEndPointer,
+				str_repeat($phpcsFile->eolChar, $this->maxLinesCount + 1),
+			);
 
 			$firstPointerOnNextMethodLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $nextMethodFirstLinePointer);
 
 			FixerHelper::removeBetween($phpcsFile, $methodEndPointer, $firstPointerOnNextMethodLine);
 		} else {
-			$phpcsFile->fixer->addContent($methodEndPointer, str_repeat($phpcsFile->eolChar, $this->minLinesCount - $linesBetween));
+			FixerHelper::add(
+				$phpcsFile,
+				$methodEndPointer,
+				str_repeat($phpcsFile->eolChar, $this->minLinesCount - $linesBetween),
+			);
 		}
 
 		$phpcsFile->fixer->endChangeset();

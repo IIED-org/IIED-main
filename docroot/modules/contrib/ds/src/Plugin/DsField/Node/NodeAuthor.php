@@ -3,18 +3,19 @@
 namespace Drupal\ds\Plugin\DsField\Node;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\ds\Attribute\DsField;
 use Drupal\ds\Plugin\DsField\DsFieldBase;
 
 /**
  * Plugin that renders the author of a node.
- *
- * @DsField(
- *   id = "node_author",
- *   title = @Translation("Author"),
- *   entity_type = "node",
- *   provider = "node"
- * )
  */
+#[DsField(
+  id: 'node_author',
+  title: new TranslatableMarkup('Author'),
+  entity_type: 'node',
+  provider: 'node'
+)]
 class NodeAuthor extends DsFieldBase {
 
   /**

@@ -3,8 +3,8 @@
 namespace Drupal\Tests\devel\Kernel;
 
 use Drupal\Core\Mail\Plugin\Mail\TestMailCollector;
-use Drupal\devel\Plugin\Mail\DevelMailLog;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\devel\Plugin\Mail\DevelMailLog;
 
 /**
  * Tests sending mails with debug interface.

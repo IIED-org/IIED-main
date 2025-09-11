@@ -11,20 +11,17 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityDisplayInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Field\FieldConfigInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Field\FormatterInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\ds\Ds;
 use Drupal\ds\DsAttribute;
 use Drupal\ds\Plugin\DsLayout;
-use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_help().
@@ -502,7 +499,16 @@ function ds_preprocess_ds_layout(&$variables) {
   // If the layout has wrapper class lets add it.
   if (!empty($layout_settings['classes']['layout_class'])) {
     foreach ($layout_settings['classes']['layout_class'] as $layout_class) {
-      $variables['attributes']['class'][] = $layout_class;
+      $layout_attribute = $layout_class;
+      $replaced_attribute = $layout_attribute;
+      if (isset($entity_type_id)) {
+        $replaced_attribute = \Drupal::service('token')->replace(
+          $layout_attribute,
+          [$variables['content']['#entity_type'] => $variables['content']['#' . $entity_type_id]],
+          ['clear' => TRUE]
+        );
+      }
+      $variables['attributes']['class'][] = $replaced_attribute;
     }
   }
 
@@ -513,6 +519,10 @@ function ds_preprocess_ds_layout(&$variables) {
       $classes = !empty($layout_settings['classes'][$region_name]) ? $layout_settings['classes'][$region_name] : [];
       if (!empty($classes)) {
         $variables[$region_name . '_attributes'] = new Attribute(['class' => $classes]);
+        // Add the classes to the core region attributes as well
+        if (!empty($variables['region_attributes'][$region_name])) {
+          $variables['region_attributes'][$region_name]->addClass($classes);
+        }
       }
       else {
         $variables[$region_name . '_attributes'] = new Attribute();
@@ -535,8 +545,8 @@ function ds_preprocess_ds_layout(&$variables) {
     $layout_attributes = explode(',', $layout_settings['attributes']);
     foreach ($layout_attributes as $layout_attribute) {
       $replaced_attribute = $layout_attribute;
-      if (strpos($layout_attribute, '|') !== FALSE) {
-        if (isset($entity_type_id) && isset($variables['content']['#entity_type'])) {
+      if (str_contains($layout_attribute, '|')) {
+        if (isset($entity_type_id)) {
           $replaced_attribute = \Drupal::service('token')->replace(
             $layout_attribute,
             [$variables['content']['#entity_type'] => $variables['content']['#' . $entity_type_id]],
@@ -979,7 +989,6 @@ function ds_field_template_settings_form(array &$form, FormStateInterface &$form
     '#type' => 'select',
     '#options' => $functions,
     '#default_value' => $field_function,
-    '#submit' => ['ds_field_ui_display_overview_multistep_submit'],
   ];
 
   // Support layout builder field blocks
@@ -1032,13 +1041,6 @@ function ds_field_ui_display_overview_multistep_js($form, &$form_state) {
  */
 function ds_layout_builder_multistep_js($form, &$form_state) {
   return $form['settings']['formatter']['settings_wrapper'];
-}
-
-/**
- * Submission handler for condition changes in field_ui_display_overview_form().
- */
-function ds_field_ui_display_overview_multistep_submit($form, &$form_state) {
-  $form_state['rebuild'] = TRUE;
 }
 
 /**
@@ -1141,7 +1143,10 @@ function ds_field_formatter_settings_summary_alter(&$summary, $context) {
     if (!isset($functions[$field_function])) {
       $field_function = $default_field_function;
     }
-    $summary[] = 'Field template: ' . Html::escape($field_function);
+
+    if (!empty($field_function)) {
+      $summary[] = 'Field template: ' . Html::escape($field_function);
+    }
   }
 }
 
@@ -1199,7 +1204,7 @@ function template_preprocess_field__ds_field_expert(&$variables) {
     if (!empty($variables['settings'][$key . '-at'])) {
       $attributes = explode(' ', $variables['settings'][$key . '-at']);
       foreach ($attributes as $key => $attribute) {
-        if (strpos($attribute, '=') !== FALSE) {
+        if (str_contains($attribute, '=')) {
           $attribute_parts = explode('=', $attribute, 2);
           $var_attributes[$attribute_parts[0]] = trim($attribute_parts[1], '\"');
         }
@@ -1209,10 +1214,12 @@ function template_preprocess_field__ds_field_expert(&$variables) {
     $variables[$variable_name] = new DsAttribute($var_attributes);
   }
 
-  // In order to allow HTML we need to filter XSS the output of the
-  // prefix/suffix.
-  $variables['settings']['prefix'] = Xss::filterAdmin($variables['settings']['prefix'] ?? '');
-  $variables['settings']['suffix'] = Xss::filterAdmin($variables['settings']['suffix'] ?? '');
+  // Process the prefix and suffix.
+  foreach (['prefix', 'suffix'] as $wrapper_element_name) {
+    // In order to allow HTML we need to filter XSS the output of the
+    // prefix and suffix.
+    $variables['settings'][$wrapper_element_name] = !empty($variables['settings'][$wrapper_element_name]) ? Xss::filterAdmin($variables['settings'][$wrapper_element_name]) : '';
+  }
 }
 
 /**

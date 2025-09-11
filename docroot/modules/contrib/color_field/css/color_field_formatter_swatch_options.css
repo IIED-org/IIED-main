@@ -1,9 +1,9 @@
-div.color_field__swatch input[type=checkbox],
-div.color_field__swatch input[type=radio] {
+div.color_field__swatch input[type="checkbox"],
+div.color_field__swatch input[type="radio"] {
   display: none;
 }
-div.color_field__swatch input[type=checkbox]:checked + label span,
-div.color_field__swatch input[type=radio]:checked + label span {
+div.color_field__swatch input[type="checkbox"]:checked + label span,
+div.color_field__swatch input[type="radio"]:checked + label span {
   transform: scale(1.25);
   border: 1px solid #373737;
 }

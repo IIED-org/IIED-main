@@ -213,7 +213,7 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   protected function generateElements(array $values): void {
-    if ($this->isBatch($values['num'])) {
+    if ($this->isBatch((int) $values['num'])) {
       $this->generateBatchMedia($values);
     }
     else {
@@ -386,7 +386,7 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
     $values['kill'] = $options['kill'];
     $values['feedback'] = $options['feedback'];
     $values['name_length'] = 6;
-    $values['num'] = array_shift($args);
+    $values['num'] = (int) array_shift($args);
 
     $values['skip_fields'] = is_null($options['skip-fields']) ? [] : self::csvToArray($options['skip-fields']);
     $values['base_fields'] = is_null($options['base-fields']) ? [] : self::csvToArray($options['base-fields']);

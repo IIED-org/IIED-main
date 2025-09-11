@@ -9,6 +9,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
 use Drupal\gin\GinNavigation;
 use Drupal\gin\GinSettings;
 use Drupal\gin\GinUserPicture;
@@ -268,11 +269,18 @@ function gin_toolbar_preprocess_toolbar(&$variables) {
 
   if (preg_match('#entity\.(?<entity_type_id>.+)\.(canonical|latest_version)#', $variables['route_name'], $matches)) {
     $entity = \Drupal::request()->attributes->get($matches['entity_type_id']);
-
     if ($entity instanceof EntityInterface && $entity->hasLinkTemplate('edit-form')) {
-      $variables['entity_title'] = $entity->label();
-      $variables['entity_edit_url'] = $entity->toUrl('edit-form');
+      $url = $entity->toUrl('edit-form');
+      if ($url->access()) {
+        $variables['entity_title'] = $entity->label();
+        $variables['entity_edit_url'] = $url;
+      }
     }
+  }
+
+  $contentUrl = Url::fromRoute('system.admin_content');
+  if ($contentUrl->access()) {
+    $variables['admin_content_url'] = $contentUrl;
   }
 }
 
@@ -280,7 +288,7 @@ function gin_toolbar_preprocess_toolbar(&$variables) {
  * Implements hook_preprocess_menu().
  */
 function gin_toolbar_preprocess_menu(&$variables) {
-  if (isset($variables['theme_hook_original']) && $variables['theme_hook_original'] == 'menu__toolbar__admin') {
+  if (isset($variables['theme_hook_original']) && strpos($variables['theme_hook_original'], 'menu__toolbar__') === 0) {
     // Check if the admin_toolbar module is installed.
     foreach ($variables['items'] as $key => $item) {
       $gin_id = str_replace('.', '-', $key);
@@ -604,4 +612,13 @@ function _gin_toolbar_module_is_active($module) {
   }
 
   return FALSE;
+}
+
+/**
+ * Implements hook_requirements_alter().
+ */
+function gin_toolbar_requirements_alter(array &$requirements) {
+  if (isset($requirements['toolbar'])) {
+    unset($requirements['toolbar']);
+  }
 }

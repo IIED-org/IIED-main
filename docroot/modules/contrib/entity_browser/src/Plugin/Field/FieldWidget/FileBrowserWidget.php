@@ -3,6 +3,7 @@
 namespace Drupal\entity_browser\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\Bytes;
+use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Environment;
 use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -319,7 +320,7 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
             'wrapper' => $details_id,
           ],
           '#submit' => [[get_class($this), 'removeItemSubmit']],
-          '#name' => $field_machine_name . '_replace_' . $entity_id . '_' . md5(json_encode($field_parents)),
+          '#name' => $field_machine_name . '_replace_' . $entity_id . '_' . Crypt::hashBase64(json_encode($field_parents)),
           '#limit_validation_errors' => [array_merge($field_parents, [$field_machine_name, 'target_id'])],
           '#attributes' => [
             'data-entity-id' => $entity->getEntityTypeId() . ':' . $entity->id(),
@@ -336,7 +337,7 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
             'wrapper' => $details_id,
           ],
           '#submit' => [[get_class($this), 'removeItemSubmit']],
-          '#name' => $field_machine_name . '_remove_' . $entity_id . '_' . md5(json_encode($field_parents)),
+          '#name' => $field_machine_name . '_remove_' . $entity_id . '_' . Crypt::hashBase64(json_encode($field_parents)),
           '#limit_validation_errors' => [array_merge($field_parents, [$field_machine_name, 'target_id'])],
           '#attributes' => [
             'data-entity-id' => $entity->getEntityTypeId() . ':' . $entity->id(),
@@ -436,7 +437,7 @@ class FileBrowserWidget extends EntityReferenceBrowserWidget {
     if ($this->fieldDefinition->getType() == 'image') {
       // If not using custom extension validation, ensure this is an image.
       $supported_extensions = ['png', 'gif', 'jpg', 'jpeg'];
-      $extensions = isset($settings['file_extensions']) ? $settings['file_extensions'] : implode(' ', $supported_extensions);
+      $extensions = $settings['file_extensions'] ?? implode(' ', $supported_extensions);
       $extensions = array_intersect(explode(' ', $extensions), $supported_extensions);
       $validators['FileExtension'] = ['extensions' => implode(' ', $extensions)];
 

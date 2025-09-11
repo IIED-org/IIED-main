@@ -59,6 +59,17 @@ This module requires no modules outside of Drupal core.
        and count down the remaining characters available in the field.
 
 
+## DEVELOPMENT
+
+### Building the `css` and `css.map` files
+
+#### Install Sass globally if needed
+`npm install -g sass`
+
+#### Compile the SCSS file to CSS
+`sass textfield_counter.scss textfield_counter.css`
+
+
 ## MAINTAINERS
 
 

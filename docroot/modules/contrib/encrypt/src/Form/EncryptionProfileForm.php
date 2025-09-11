@@ -84,7 +84,7 @@ class EncryptionProfileForm extends EntityForm {
     }
     elseif ($this->operation == "edit") {
       // Only when the form is first built.
-      /* @var $encryption_profile \Drupal\encrypt\Entity\EncryptionProfile */
+      /** @var \Drupal\encrypt\Entity\EncryptionProfile $encryption_profile */
       $encryption_profile = $this->entity;
       $this->originalProfile = clone $encryption_profile;
     }
@@ -98,7 +98,7 @@ class EncryptionProfileForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    /* @var $encryption_profile \Drupal\encrypt\Entity\EncryptionProfile */
+    /** @var \Drupal\encrypt\Entity\EncryptionProfile $encryption_profile */
     $encryption_profile = $this->entity;
 
     // If the profile is being edited and editing has not been confirmed yet,
@@ -265,10 +265,10 @@ class EncryptionProfileForm extends EntityForm {
    *   The current state of the form.
    */
   protected function updateEncryptionMethod(FormStateInterface $form_state) {
-    /* @var $encryption_profile \Drupal\encrypt\Entity\EncryptionProfile */
+    /** @var \Drupal\encrypt\Entity\EncryptionProfile $encryption_profile */
     $encryption_profile = $this->entity;
 
-    /* @var $plugin \Drupal\encrypt\EncryptionMethodInterface */
+    /** @var \Drupal\encrypt\EncryptionMethodInterface $plugin */
     $plugin = $encryption_profile->getEncryptionMethod();
 
     $encryption_profile->setEncryptionMethod($plugin);
@@ -373,6 +373,10 @@ class EncryptionProfileForm extends EntityForm {
       ]));
     }
     $form_state->setRedirectUrl($encryption_profile->toUrl('collection'));
+    if ($this->entity->id()) {
+      return SAVED_NEW;
+    }
+    return SAVED_UPDATED;
   }
 
   /**
