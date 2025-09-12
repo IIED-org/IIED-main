@@ -37,7 +37,7 @@ git clone git@github.com:IIED-org/IIED-main.git IIED-main
 cd IIED-main
 ```
 
-2. Run `ddev start` to build the docker containers. Note that if you have any Lando containers running you will need to stop them.
+2. Start Docker Desktop and run `ddev start` to build the docker containers. Note that if you have any Lando containers running you will need to stop them.
 
 3. Download a copy of last night's production database via Jenkins and save it to the project root. Import it using the following command:
 
@@ -46,10 +46,11 @@ ddev import-db -f iied-prod-yyyymmdd.sql.gz
 ddev drush cr
 ```
 
-4. To modify the theme, including tailwind.pcss and twig templates, move into the theme directory and run the watch command:
+4. To modify the theme, including tailwind.pcss and twig templates, move into the theme directory, install the necessary node modules, and run the watch command:
 
 ```
 cd docroot/themes/custom/iied_tw
+ddev npm install
 ddev npm run watch
 ```
 

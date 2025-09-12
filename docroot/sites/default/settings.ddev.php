@@ -196,5 +196,11 @@ $config['config_split.config_split.dev']['status'] = FALSE;
 $config['config_split.config_split.stage']['status'] = FALSE;
 $config['config_split.config_split.prod']['status'] = FALSE;
 
-// Config for sstage file proxy remote files.
+// Config for stage file proxy remote files.
 $config['stage_file_proxy.settings']['origin']  = 'https://www.iied.org';
+
+// Disable render, page and dynamic_page_cache caches.
+// Useful for development, but remember to test with them enabled too.
+$settings['cache']['bins']['render'] = 'cache.backend.null';
+$settings['cache']['bins']['page'] = 'cache.backend.null';
+$settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';

@@ -21,11 +21,12 @@
 <div class='pt-2'>
     <label class='relative text-gray-500'>
     <input{{ attributes.addClass('px-3 w-52 text-sm srp-text bg-white border border-gray-300 rounded-full srp-w h-10 srp-h focus:outline-none') }} 
-        type="text" 
-        x-ref="searchInput" 
-        @keydown.escape="showSearch = false"
+        type="text"
+        x-data="{ showSearch: $store.showSearch }"
+        x-trap="showSearch"
+        @keydown.escape="$store.showSearch = !$store.showSearch"
         aria-label="Search input">
-    <button type="submit" class="absolute inset-y-0 flex items-center end-0 pe-3">
+    <button type="submit" class="end-0 pe-3 absolute inset-y-0 flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-800">
         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
         </svg>

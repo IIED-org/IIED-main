@@ -46,11 +46,12 @@
  */
 #}
 
+{{ attach_library('iied_tw/alpine-focus') }}
 {{ attach_library('iied_tw/alpine-collapse') }}
 {{ attach_library('iied_tw/alpine') }}
 {{ attach_library('iied_tw/scroll-nav') }}
 
-<header role="banner" x-data="{ showSearch: false }" x-cloak>
+<header role="banner" x-data="{ showSearch: $store.showSearch }" x-cloak>
 	<nav x-data="{ isOpen: false }" @click.away="isOpen = false" @keydown.escape.window="isOpen = false" role="navigation" aria-label="Main navigation">
 
 		<div>
@@ -86,8 +87,28 @@
 
 			</div>
 		</div>
+		{# Expanded search box  #}
+		{# {% include '@iied_tw/partials/_search_expand.html.twig' %} #}
+	<div x-cloak x-show="showSearch" x-collapse @click.away="$store.showSearch = !$store.showSearch, $store.searchHeader = !$store.showSearch" @keydown.escape.window="$store.showSearch = !$store.showSearch, $store.searchHeader = !$store.showSearch"
+    id="searchbox"
+    class="nav-search transition-all duration-300 ease-in-out transform" x-ref="searchBox">
 
-		{% include '@iied_tw/partials/_search_expand.html.twig' %}
+    <!-- Search box -->
+    <div class="py-8 bg-gray-100">
+        <div class="container">
+            <div class="lg:flex lg:space-x-12 items-center">
+                <div class="lg:w-1/4">
+                    <h1 class="xl:text-3xl my-4 text-2xl">Search IIED</h1> 
+                </div>
+                <div class="search-page lg:w-3/4">
+                    <div class="pt-2">
+                        {{ drupal_block('views_exposed_filter_block:search-page_2', {wrapper: false}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
 		{% include '@iied_tw/partials/_off-canvas-menu.html.twig' %}
 	</nav>
 </header>
@@ -103,6 +124,7 @@
 		<a id="main-content" tabindex="-1"></a>
 		{# link is in html.html.twig #}
 
+	<div x-data="{ searchHeader: $store.searchHeader }" x-show="searchHeader" x-cloak>
 		<div class="lg:flex lg:space-x-12">
 			<div class="lg:w-1/4">
 				<h1 class="xl:text-3xl mb-4 text-2xl">Search results</h1>
@@ -116,7 +138,7 @@
 				{{ drupal_block('facets_summary_block:pubs_summary') }}
 			</div>
 		</div>
-
+</div>
 
 		<div
 			class="lg:flex lg:space-x-12">
@@ -176,16 +198,10 @@
 			</div>
 			{# /.layout-content #}
 
-
-			{#
-									        {% if page.sidebar_second %}
-									        <aside class="md:w-1/4" role="complementary">
-									          {{ page.sidebar_second }}
-									        </aside>
-									      {% endif %}
-									#}
-
 		</div>
+		</div>
+		</div>
+		{# /.layout-content #}
 	</main>
 </div>
 {# /.layout-container #}

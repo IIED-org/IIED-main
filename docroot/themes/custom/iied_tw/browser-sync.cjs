@@ -14,6 +14,7 @@ module.exports = {
     "app",
     "resources/views/**/*.php",
     "**/*.{html,php,svg,css,js,ts,jsx,tsx}",
+    "templates/**/*.twig"
   ],
   ignore: ["node_modules", filesdir, "vendor"],
   open: false,

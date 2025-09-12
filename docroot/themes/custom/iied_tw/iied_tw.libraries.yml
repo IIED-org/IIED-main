@@ -8,6 +8,9 @@ alpine:
 alpine-collapse:
   js:
     https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js: { type: external, minified: true }
+alpine-focus:
+  js:
+    https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js: { type: external, minified: true }
 copyprint:
    js:
     dist/js/copyprint.js: { async: true }
@@ -17,6 +20,9 @@ copycite:
 counter:
    js:
     dist/js/counter.js: {}
+init:
+   js:
+    dist/js/init.js: {}
 paypal:
   header: true
   js: 

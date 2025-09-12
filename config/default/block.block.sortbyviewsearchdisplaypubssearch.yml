@@ -3,13 +3,14 @@ langcode: en
 status: true
 dependencies:
   module:
+    - block_class
     - search_api_sorts
     - system
   theme:
     - iied_tw
 id: sortbyviewsearchdisplaypubssearch
 theme: iied_tw
-region: sidebar
+region: preface
 weight: -12
 provider: null
 plugin: 'search_api_sorts_block:views_page:search__page_1'
