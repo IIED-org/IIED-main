@@ -49,13 +49,14 @@
 
   {{ exposed }}
   {{ attachment_before }}
-  <div class="-mb-px overflow-hidden border border-gray-300 rounded-xl">
   {% if rows -%}
+  <div class="rounded-xl py-2 -mb-px overflow-hidden border border-gray-300">
     {{ rows }}
+  </div>
   {% elseif empty -%}
     {{ empty }}
   {% endif %}
-  </div>
+
   {{ pager }}
 
   {{ attachment_after }}

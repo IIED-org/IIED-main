@@ -1,8 +1,8 @@
-<div
+<div x-data="{ showSearch: $store.showSearch }" 
 	class="flex items-center my-2" >
 
 	<!-- search button -->
-	<button @click.prevent="showSearch = !showSearch, $store.searchHeader = !$store.showSearch" :aria-expanded="showSearch.toString()" aria-controls="searchbox" class="focus:outline-none">
+	<button @click.prevent="$store.showSearch = !$store.showSearch" :aria-expanded="$store.showSearch.toString()" aria-controls="searchbox" class="focus:outline-none">
 		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mx-2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
 		</svg>
@@ -10,8 +10,8 @@
 
 	<!-- donate -->
 	{# <button class="hover:shadow-none bg-iiedblue-500 hover:bg-iiedblue-600 focus:shadow-outline h-10 px-4 mx-2 transition-colors duration-150 rounded-full shadow-sm">
-						        <a class="visited:text-gray-900 hover:no-underline text-gray-900" id="topnav-donate" href="/donate" title="Donate">Donate</a>
-						    </button> #}
+			<a class="visited:text-gray-900 hover:no-underline text-gray-900" id="topnav-donate" href="/donate" title="Donate">Donate</a>
+	</button> #}
 
 	<!-- menu toggle button -->
 		<div class="flex items-center"> <button @click="isOpen = !isOpen" type="button" class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-iiedblue-300 p-2" :aria-expanded="isOpen ? 'true' : 'false'" aria-controls="menu" aria-label="Toggle menu">
