@@ -12,14 +12,14 @@ third_party_settings:
   facets_pretty_paths:
     coder: default_coder
 id: pubs_content_type
-name: 'Content type'
+name: 'Publication type'
 weight: -1
 min_count: 1
 missing: false
 missing_label: others
-url_alias: content_type
+url_alias: pub_type
 facet_source_id: 'search_api:views_page__search__page_1'
-field_identifier: type
+field_identifier: field_document_type
 query_operator: and
 hard_limit: 0
 exclude: false
@@ -53,35 +53,6 @@ processor_configs:
       sort: 20
     settings:
       sort: DESC
-  combine_processor:
-    processor_id: combine_processor
-    weights:
-      build: 5
-    settings:
-      content_type:
-        combine: false
-        mode: null
-      country:
-        combine: false
-        mode: null
-      pubs_country:
-        combine: false
-        mode: null
-      pubs_document_type:
-        combine: false
-        mode: null
-      pubs_theme:
-        combine: false
-        mode: null
-      theme:
-        combine: false
-        mode: null
-      type:
-        combine: false
-        mode: null
-      vocabulary:
-        combine: false
-        mode: union
   count_widget_order:
     processor_id: count_widget_order
     weights:
@@ -94,6 +65,14 @@ processor_configs:
       sort: 40
     settings:
       sort: ASC
+  exclude_specified_items:
+    processor_id: exclude_specified_items
+    weights:
+      build: 50
+    settings:
+      exclude: '20,30,40,50,60,80'
+      regex: false
+      invert: true
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:

@@ -16,7 +16,7 @@ provider: null
 plugin: 'facet_block:pubs_theme'
 settings:
   id: 'facet_block:pubs_theme'
-  label: 'Filter by theme'
+  label: Theme
   label_display: visible
   provider: facets
   context_mapping: {  }

@@ -248,7 +248,7 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: '<a class="p-4" href="javascript:history.back();">Go back to previous page</a>'
+            value: '<a class="h-10 px-3 py-2 mb-4 transition bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500" href="javascript:history.back();">Go back to previous page</a>'
             format: full_html
           tokenize: false
       sorts: {  }

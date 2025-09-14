@@ -5,14 +5,13 @@ dependencies:
   config:
     - facets.facet.theme
   module:
-    - block_class
     - facets
   theme:
     - iied_tw
 id: iied_tw_theme_2
 theme: iied_tw
 region: sidebar
-weight: -16
+weight: -15
 provider: null
 plugin: 'facet_block:theme'
 settings:

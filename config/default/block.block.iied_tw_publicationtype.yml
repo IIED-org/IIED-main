@@ -1,31 +1,30 @@
-uuid: 4fa04701-6505-4730-9bf9-bb853dc64cb4
+uuid: c9b4f3a6-d8c5-4c34-aae6-76d8f1aaa3fd
 langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.content_type
+    - facets.facet.pubs_content_type
   module:
     - context
     - facets
   theme:
     - iied_tw
-id: contenttype
+id: iied_tw_publicationtype
 theme: iied_tw
 region: sidebar
-weight: -14
+weight: -9
 provider: null
-plugin: 'facet_block:content_type'
+plugin: 'facet_block:pubs_content_type'
 settings:
-  id: 'facet_block:content_type'
-  label: Type
+  id: 'facet_block:pubs_content_type'
+  label: 'Publication type'
   label_display: visible
   provider: facets
   context_mapping: {  }
-  block_id: contenttype
+  block_id: iied_tw_publicationtype
 visibility:
   view_inclusion:
     id: view_inclusion
     negate: false
     view_inclusion:
       view-search-page_1: view-search-page_1
-      view-search-page_2: view-search-page_2
