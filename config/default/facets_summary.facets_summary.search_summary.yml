@@ -21,6 +21,11 @@ processor_configs:
     weights:
       build: '0'
     settings: {  }
+  show_summary:
+    processor_id: show_summary
+    weights:
+      build: '-10'
+    settings: {  }
 facets:
   theme:
     checked: true

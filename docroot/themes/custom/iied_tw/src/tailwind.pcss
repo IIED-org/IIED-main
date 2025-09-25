@@ -439,13 +439,16 @@
     transform: none;
   }
   /*-- search --*/
+  .search-header .search-button {
+    @apply cursor-not-allowed pointer-events-none;
+  }
   .ui-widget.search-api-autocomplete-search { 
     @apply bg-white text-base; 
   } 
   .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper {
     @apply p-0 bg-none;
   }
-  
+ 
  .js input.form-autocomplete.ui-autocomplete-loading {
     @apply bg-throbber;
     background-position: right 2.2em center;   
@@ -459,9 +462,37 @@
   .search-page .srp-text {
     @apply text-base;
   }  
-  .item-list__checkbox { 
-    @apply my-3;
+  .item-list__checkbox, .form-checkboxes { 
+    @apply mb-3;
    } 
+
+ .bef--secondary fieldset {
+    @apply flex justify-between w-full rounded-t-xl;
+}
+
+details {
+    @apply lg:block rounded-xl hidden p-4 my-1 border border-gray-300 bg-gray-100;
+    summary {
+      @apply text-xl font-serif text-iiedpink-900;;
+    }
+}
+
+details details {
+    @apply -mx-1 mt-4 border-none bg-white lg:block rounded-xl hidden p-3 text-gray-700;
+        summary {
+      @apply text-base text-gray-500 font-sans;
+    }
+}
+summary::after {
+    content: url(/themes/custom/iied_tw/templates/layout/icons/chevron-right.svg);
+    @apply w-6 h-6;
+   }
+
+details[open] > summary::after {
+    content: url(/themes/custom/iied_tw/templates/layout/icons/chevron-down.svg);
+    @apply mb-2;
+   }
+
    .facets-widget-checkbox .facets-checkbox {
     @apply mr-0.5 border border-gray-300 rounded shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-200 focus:ring-opacity-50;
    } 

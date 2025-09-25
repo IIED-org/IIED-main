@@ -1,6 +1,6 @@
 uuid: 2ded90dd-76e2-4b2b-a6d7-fa09f6848dae
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - facets.facet.pubs_theme

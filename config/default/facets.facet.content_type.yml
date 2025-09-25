@@ -53,32 +53,6 @@ processor_configs:
       sort: 20
     settings:
       sort: DESC
-  combine_processor:
-    processor_id: combine_processor
-    weights:
-      build: 5
-    settings:
-      country:
-        combine: false
-        mode: null
-      pubs_content_type:
-        combine: false
-        mode: null
-      pubs_country:
-        combine: false
-        mode: null
-      pubs_theme:
-        combine: false
-        mode: null
-      theme:
-        combine: false
-        mode: null
-      type:
-        combine: false
-        mode: null
-      vocabulary:
-        combine: true
-        mode: union
   count_widget_order:
     processor_id: count_widget_order
     weights:

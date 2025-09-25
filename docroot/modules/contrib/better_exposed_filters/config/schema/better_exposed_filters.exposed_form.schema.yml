@@ -42,12 +42,24 @@ better_exposed_filters.general:
     autosubmit:
       type: boolean
       label: 'Auto-submit'
+    auto_submit_sort_only:
+      type: boolean
+      label: 'Auto-submit sort only'
+    autosubmit_breakpoint:
+      type: string
+      label: 'Autosubmit breakpoint'
     autosubmit_exclude_textfield:
       type: boolean
       label: 'Exclude Textfield'
     autosubmit_textfield_delay:
       type: integer
       label: 'Delay for textfield autosubmit'
+    autosubmit_textfield_minimum_length:
+      type: integer
+      label: 'Textfield autosubmit minimum length'
+      constraints:
+        Range:
+          min: 1
     autosubmit_hide:
       type: boolean
       label: 'Hide submit button'

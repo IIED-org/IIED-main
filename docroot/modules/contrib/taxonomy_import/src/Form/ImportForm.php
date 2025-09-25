@@ -97,13 +97,22 @@ class ImportForm extends FormBase {
       ],
       '#description' => $this->t('Select vocabulary!'),
     ];
+    $form['import_behavior'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Force new terms for every record of Source Data'),
+      '#options' => [
+        0 => $this->t('No, allow updating of existing records in term name matches'),
+        1 => $this->t('Yes, create a new term for every record; do not update existing'),
+      ],
+      '#description' => $this->t('Select desired import behavior!'),
+    ];
     $form['taxonomy_file'] = [
       '#type' => 'managed_file',
       '#title' => $this->t('Import file'),
       '#required' => TRUE,
       '#upload_validators'  => [
-        'file_validate_extensions' => [$this->config->get('file_extensions') ?? ImportFormSettings::DEFAULT_FILE_EXTENSION],
-        'file_validate_size' => [$this->config->get('file_max_size') ?? ImportFormSettings::DEFAULT_FILE_SIZE],
+        'FileExtension' => ['extensions' => $this->config->get('file_extensions') ?? ImportFormSettings::DEFAULT_FILE_EXTENSION],
+        'FileSizeLimit' => ['fileLimit' => $this->config->get('file_max_size') ?? ImportFormSettings::DEFAULT_FILE_SIZE],
       ],
       '#upload_location' => 'public://taxonomy_files/',
       '#description' => $this->t('Upload a file to Import taxonomy!') . $this->config->get('file_max_size'),
@@ -125,10 +134,17 @@ class ImportForm extends FormBase {
 
     $vid = $form_state->getValue('field_vocabulary_name');
     $ary = $form_state->getValue('taxonomy_file');
+    $importBehavior = $form_state->getValue('import_behavior');
     $fid = !empty($ary[0]) ? $ary[0] : NULL;
 
     if (!$vid) {
       $form_state->setErrorByName('field_vocabulary_name', $this->t('Vocabulary name was not provided.'));
+
+      return;
+    }
+
+    if (!isset($importBehavior)) {
+      $form_state->setErrorByName('import_behavior', $this->t('Import behavior was not provided.'));
 
       return;
     }
@@ -156,6 +172,7 @@ class ImportForm extends FormBase {
     }
 
     $form_state->set('vid', $vid);
+    $form_state->set('import_behavior', $importBehavior);
     $form_state->set('filepath', $filepath);
     $form_state->set('is_csv', in_array($mimetype, self::CSV_MIME_TYPES));
   }
@@ -166,6 +183,7 @@ class ImportForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $vid = $form_state->get('vid');
     $filepath = $form_state->get('filepath');
+    $importBehavior = $form_state->getValue('import_behavior');
 
     if ($form_state->get('is_csv')) {
       $rows = $this->readCsv($vid, $filepath);
@@ -178,7 +196,9 @@ class ImportForm extends FormBase {
       throw new \Exception($this->t('File @filepath contained no rows, please check the file.', ['@filepath' => $filepath]));
     }
 
-    $this->taxonomyUtils->saveTerms($vid, $rows);
+    /* @todo: move field verification here, and then pass to saveTerms */
+
+    $this->taxonomyUtils->saveTerms($vid, $rows, $importBehavior);
 
     $url = $this->t('admin/structure/taxonomy/manage/:vid/overview', [':vid' => $vid]);
 
@@ -199,6 +219,7 @@ class ImportForm extends FormBase {
    * @return array
    *   This is an array of arrays, each with keys 'name', 'parent', and
    *   'description'.
+   * @throws \Exception
    */
   protected function readCsv($vid, $filepath) {
     // Code for fetch and save csv file.

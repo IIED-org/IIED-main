@@ -2,22 +2,23 @@
 
 namespace Drupal\better_exposed_filters\Plugin\better_exposed_filters\sort;
 
+use Drupal\better_exposed_filters\Attribute\SortWidget;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Radio Buttons sort widget implementation.
- *
- * @BetterExposedFiltersSortWidget(
- *   id = "bef_links",
- *   label = @Translation("Links"),
- * )
  */
+#[SortWidget(
+  id: 'bef_links',
+  title: new TranslatableMarkup('Links'),
+)]
 class Links extends SortWidgetBase {
 
   /**
    * {@inheritdoc}
    */
-  public function exposedFormAlter(array &$form, FormStateInterface $form_state) {
+  public function exposedFormAlter(array &$form, FormStateInterface $form_state): void {
     $view = $form_state->get('view');
     parent::exposedFormAlter($form, $form_state);
 

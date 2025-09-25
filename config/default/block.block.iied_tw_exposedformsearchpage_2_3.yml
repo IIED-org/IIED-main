@@ -1,0 +1,38 @@
+uuid: 0e8134c7-0e2d-4729-87d8-655f3e5c2c50
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.search
+  module:
+    - block_class
+    - configurable_views_filter_block
+    - context
+  theme:
+    - iied_tw
+id: iied_tw_exposedformsearchpage_2_3
+theme: iied_tw
+region: sidebar
+weight: -16
+provider: null
+plugin: 'configurable_views_filter_block_block:search-page_2'
+settings:
+  id: 'configurable_views_filter_block_block:search-page_2'
+  label: ''
+  label_display: '0'
+  provider: configurable_views_filter_block
+  views_label: ''
+  visible_filters:
+    type: type
+    theme: theme
+  no_groups: false
+  no_reset: false
+  no_sort: false
+  no_pager: false
+  filter_instance_id: facets
+visibility:
+  view_inclusion:
+    id: view_inclusion
+    negate: false
+    view_inclusion:
+      view-search-page_2: view-search-page_2

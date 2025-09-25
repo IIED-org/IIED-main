@@ -9,12 +9,14 @@ dependencies:
     - user.role.authenticated
   module:
     - better_exposed_filters
+    - facets_exposed_filters
     - rest
     - search_api
     - serialization
     - text
     - user
     - views_data_export
+    - views_filters_summary
 id: search
 label: Search
 module: views
@@ -209,8 +211,11 @@ display:
           bef:
             general:
               autosubmit: true
+              auto_submit_sort_only: false
+              autosubmit_breakpoint: ''
               autosubmit_exclude_textfield: true
               autosubmit_textfield_delay: 500
+              autosubmit_textfield_minimum_length: 3
               autosubmit_hide: true
               input_required: false
               allow_secondary: false
@@ -577,7 +582,7 @@ display:
     display_options:
       title: ''
       exposed_form:
-        type: basic
+        type: bef
         options:
           submit_button: Search
           reset_button: false
@@ -586,10 +591,303 @@ display:
           expose_sort_order: false
           sort_asc_label: Asc
           sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: basic_html
+          bef:
+            general:
+              autosubmit: true
+              auto_submit_sort_only: false
+              autosubmit_breakpoint: ''
+              autosubmit_exclude_textfield: true
+              autosubmit_textfield_delay: 500
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_hide: true
+              input_required: false
+              allow_secondary: true
+              secondary_label: 'Filter by'
+              secondary_open: true
+              reset_button_always_show: false
+            filter:
+              search_api_fulltext:
+                plugin_id: default
+                advanced:
+                  placeholder_text: Search
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+              facets_type:
+                plugin_id: bef
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: true
+                  collapsible_disable_automatic_open: false
+                  open_by_default: true
+                  is_secondary: true
+                  hide_label: false
+                  field_classes: ''
+                select_all_none: false
+                select_all_none_nested: false
+                display_inline: false
+                soft_limit: 5
+                soft_limit_label_less: 'Show less'
+                soft_limit_label_more: 'Show more'
+              facets_field_theme_s_:
+                plugin_id: bef
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: true
+                  collapsible_disable_automatic_open: false
+                  open_by_default: true
+                  is_secondary: true
+                  hide_label: false
+                  field_classes: ''
+                select_all_none: false
+                select_all_none_nested: false
+                display_inline: false
+                soft_limit: 5
+                soft_limit_label_less: 'Show less'
+                soft_limit_label_more: 'Show more'
       cache:
         type: search_api_none
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: "<div class=\"my-2\">No results found</div>\r\n<a class=\"h-10 px-3 py-2 mt-3 mb-4 transition bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500\" href=\"javascript:history.back();\">Go back to previous page</a></p>"
+            format: full_html
+          tokenize: false
       sorts: {  }
+      filters:
+        search_api_fulltext:
+          id: search_api_fulltext
+          table: search_api_index_acquia_search_index
+          field: search_api_fulltext
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: views_autocomplete_filters_search_api_fulltext
+          operator: and
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: search_api_fulltext_op
+            label: ''
+            description: ''
+            use_operator: false
+            operator: search_api_fulltext_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: k
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
+              publications_editor: '0'
+              publications_manager: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+            expose_fields: false
+            placeholder: Search
+            searched_fields_id: search_api_fulltext_searched_fields
+            value_maxlength: 128
+            autocomplete_filter: 1
+            autocomplete_min_chars: '2'
+            autocomplete_items: '10'
+            autocomplete_field: ''
+            autocomplete_raw_suggestion: 0
+            autocomplete_raw_dropdown: 1
+            autocomplete_dependent: 1
+            autocomplete_contextual: 1
+            autocomplete_autosubmit: 0
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          parse_mode: terms
+          min_length: null
+          fields: {  }
+        facets_type:
+          id: facets_type
+          table: search_api_index_acquia_search_index
+          field: facets_type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: 'Content type'
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: type
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              0: '0'
+              anonymous: '0'
+              viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
+              publications_editor: '0'
+              publications_manager: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: and
+            min_count: 1
+            show_numbers: true
+            processor_configs:
+              translate_entity:
+                processor_id: translate_entity
+                weights:
+                  build: 5
+                settings: {  }
+              display_value_widget_order:
+                processor_id: display_value_widget_order
+                weights:
+                  sort: -8
+                settings:
+                  sort: ASC
+              count_widget_order:
+                processor_id: count_widget_order
+                weights:
+                  sort: -9
+                settings:
+                  sort: DESC
+        facets_field_theme_s_:
+          id: facets_field_theme_s_
+          table: search_api_index_acquia_search_index
+          field: facets_field_theme_s_
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: facets_filter
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Theme(s)
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: theme
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              0: '0'
+              anonymous: '0'
+              viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
+              publications_editor: '0'
+              publications_manager: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          hierarchy: false
+          label_display: visible
+          facet:
+            query_operator: and
+            min_count: 1
+            show_numbers: true
+            processor_configs:
+              translate_entity:
+                processor_id: translate_entity
+                weights:
+                  build: 5
+                settings: {  }
+              display_value_widget_order:
+                processor_id: display_value_widget_order
+                weights:
+                  sort: 40
+                settings:
+                  sort: ASC
+              count_widget_order:
+                processor_id: count_widget_order
+                weights:
+                  sort: 30
+                settings:
+                  sort: DESC
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       defaults:
+        empty: false
         cache: false
         title: false
         css_class: false
@@ -598,11 +896,36 @@ display:
         style: true
         row: true
         sorts: false
-        filters: true
-        filter_groups: true
+        filters: false
+        filter_groups: false
+        header: false
       css_class: ''
       use_ajax: false
       display_description: ''
+      header:
+        views_filters_summary:
+          id: views_filters_summary
+          table: views
+          field: views_filters_summary
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: views_filters_summary
+          empty: false
+          filters:
+            facets_type: facets_type
+            facets_field_theme_s_: facets_field_theme_s_
+          show_labels: false
+          show_remove_link: true
+          show_reset_link: false
+          group_values: false
+          content: '@total @result_label @exposed_filter_summary'
+          filters_reset_link_title: Reset
+          filters_summary_separator: ' '
+          filters_summary_prefix: ''
+          filters_result_label:
+            plural: results
+            singular: result
       exposed_block: true
       display_extenders: {  }
       path: search

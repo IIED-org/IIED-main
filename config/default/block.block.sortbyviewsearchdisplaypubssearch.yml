@@ -1,6 +1,6 @@
 uuid: b71c90d7-9a95-4157-b35b-5d663c1b1a5b
 langcode: en
-status: true
+status: false
 dependencies:
   module:
     - search_api_sorts
@@ -10,7 +10,7 @@ dependencies:
 id: sortbyviewsearchdisplaypubssearch
 theme: iied_tw
 region: preface
-weight: -12
+weight: -14
 provider: null
 plugin: 'search_api_sorts_block:views_page:search__page_1'
 settings:

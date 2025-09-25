@@ -257,11 +257,11 @@ content:
     region: content
   field_pdf:
     type: file_default
-    label: hidden
+    label: above
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 6
+    weight: 105
     region: content
   field_pdf_pages:
     type: number_integer

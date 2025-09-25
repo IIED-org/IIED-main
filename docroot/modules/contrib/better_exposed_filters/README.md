@@ -28,22 +28,16 @@ Submit bug reports and feature suggestions, or track changes in the
 
 ## Requirements
 
-- [Views](https://www.drupal.org/project/views)
-- [Filter](https://www.drupal.org/project/filter)
-- [User](https://www.drupal.org/project/user)
-- [System](https://www.drupal.org/project/system)
-- [jQuery UI](https://www.drupal.org/project/jquery_ui)
-- [jQuery UI Slider](https://www.drupal.org/project/jquery_ui_slider)
-
+- Core modules
+  - views
+- Contrib library
+  - [NoUiSlider JS](https://www.drupal.org/project/nouislider_js)
 
 ## Installation
 
 Install as you would normally install a contributed Drupal module. For further
 information, see
 [Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
-
-For Slider functionality if wanting to use internal library place
-https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.js into `libraries/noUiSlider`
 
 
 ## Configuration

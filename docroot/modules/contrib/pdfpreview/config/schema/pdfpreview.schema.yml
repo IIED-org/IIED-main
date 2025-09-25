@@ -1,0 +1,27 @@
+pdfpreview.settings:
+  type: config_object
+  mapping:
+    quality:
+      type: integer
+      label: 'Quality of preview images'
+    size:
+      type: string
+      label: 'Size of the preview images'
+    path:
+      type: string
+      label: 'Location where preview images will be stored'
+    filenames:
+      type: string
+      label: 'Which approach to use to build filenames of previews (human-readable or md5)'
+    show_description:
+      type: boolean
+      label: 'Whether to show description by default'
+    tag:
+      type: string
+      label: 'The tag that should be used by default'
+    fallback_formatter:
+      type: string
+      label: 'Fallback formatter to be used by default'
+    type:
+      type: string
+      label: 'Image type to be used for the preview file'

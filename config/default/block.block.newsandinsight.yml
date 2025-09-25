@@ -11,7 +11,7 @@ dependencies:
 id: newsandinsight
 theme: iied_tw
 region: content
-weight: -9
+weight: -11
 provider: null
 plugin: 'system_menu_block:news-and-insight'
 settings:

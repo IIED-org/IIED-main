@@ -1,0 +1,7 @@
+pdfpreview.settings:
+  path: '/admin/config/media/pdfpreview'
+  defaults:
+    _form: 'Drupal\pdfpreview\PDFPreviewSettingsForm'
+    _title: 'PDF Preview'
+  requirements:
+    _permission: 'administer site configuration'

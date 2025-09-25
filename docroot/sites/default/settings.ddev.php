@@ -152,6 +152,17 @@ $settings['skip_permissions_hardening'] = TRUE;
 # $settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
 
 /**
+ * Use "local" config split for development
+ */
+$config['config_split.config_split.local']['status'] = TRUE;
+$config['config_split.config_split.dev']['status'] = FALSE;
+$config['config_split.config_split.stage']['status'] = FALSE;
+$config['config_split.config_split.prod']['status'] = FALSE;
+
+/* Disable clamAV in local environment */
+$config['clamav.settings']['enabled'] = FALSE;
+
+/**
  * ddev database credentials.
  */
 $databases['default']['default'] = array(

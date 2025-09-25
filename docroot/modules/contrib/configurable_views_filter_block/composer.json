@@ -1,0 +1,20 @@
+{
+    "name": "drupal/configurable_views_filter_block",
+    "description": "Allow multiple instances of Views exposed filters block with a custom set of form fields per instance.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "keywords": [
+        "Drupal",
+        "views"
+    ],
+    "authors": [
+        {
+            "name": "Manuel Adan (manuel.adan)",
+            "homepage": "https://www.drupal.org/u/manueladan",
+            "role": "Maintainer"
+        }
+    ],
+    "suggest": {
+        "drupal/better_exposed_filters": "Provides advanced options (e.g. links, checkboxes, or other widgets) to exposed Views elements."
+    }
+}

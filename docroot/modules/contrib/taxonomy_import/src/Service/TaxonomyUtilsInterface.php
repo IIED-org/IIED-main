@@ -33,11 +33,15 @@ interface TaxonomyUtilsInterface {
    *   The new parent, possibly 0.
    * @param string $description
    *   The new description.
+   * @param string $rowData
+   *   The array of term data to parse.
+   * @param string $customFields
+   *   The custom field machine names matched in Drupal with source data.
    *
    * @return bool
    *   Whether the operation was successful or not.
    */
-  public function updateTerm($vid, $term, $parentId, $description);
+  public function updateTerm($vid, $term, $parentId, $description, $rowData, $customFields);
 
   /**
    * Create a vocabulary given the name.
@@ -61,11 +65,15 @@ interface TaxonomyUtilsInterface {
    *   The parent, possibly 0.
    * @param string $description
    *   The description.
+   * @param string $rowData
+   *   The array of term data to parse.
+   * @param string $customFields
+   *   The custom field machine names matched in Drupal with source data.
    *
    * @return bool
    *   Whether the term was created or not.
    */
-  public function createTerm($vid, $name, $parentId, $description);
+  public function createTerm($vid, $name, $parentId, $description, $rowData, $customFields);
 
   /**
    * Returns the IDs of a term's parents.
@@ -87,6 +95,6 @@ interface TaxonomyUtilsInterface {
    *   This is an array of arrays, each with keys 'name', 'parent', and
    *   'description'.
    */
-  public function saveTerms($vid, $rows);
+  public function saveTerms($vid, $rows, $forceNewTerms);
 
 }

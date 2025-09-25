@@ -1,0 +1,4 @@
+/* Hide form field of non-enabled exposed filter. */
+div.hidden-exposed-filter {
+  display: none;
+}

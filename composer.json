@@ -73,7 +73,7 @@
     "drupal/admin_toolbar": "^3.1",
     "drupal/allowed_formats": "^3.0",
     "drupal/asset_injector": "^2.10",
-    "drupal/better_exposed_filters": "^6.0",
+    "drupal/better_exposed_filters": "^7.1@beta",
     "drupal/better_passwords": "^2.2",
     "drupal/block_class": "^3.0",
     "drupal/charts": "^5.0",
@@ -85,6 +85,7 @@
     "drupal/components": "^3.0@beta",
     "drupal/computed_field": "^3.0",
     "drupal/config_split": "^1.10",
+    "drupal/configurable_views_filter_block": "^1.0",
     "drupal/contact_block": "^1.6",
     "drupal/content_translation_redirect": "^2",
     "drupal/context": "^5.0",
@@ -118,6 +119,9 @@
     "drupal/imagemagick": "^4.0",
     "drupal/inline_entity_form": "^3.0@RC",
     "drupal/isbn": "^1.2",
+    "drupal/jquery_ui_datepicker": "^2.1",
+    "drupal/jquery_ui_slider": "^2.1",
+    "drupal/jquery_ui_touch_punch": "^1.1",
     "drupal/klaro": "^3.0",
     "drupal/language_switcher_extended": "^1.0",
     "drupal/layout_builder_restrictions": "^2.13",
@@ -144,6 +148,7 @@
     "drupal/password_policy": "^4.0",
     "drupal/password_policy_extras": "^4.0",
     "drupal/pathauto": "^1.8",
+    "drupal/pdfpreview": "^1.2",
     "drupal/publishcontent": "^1.2",
     "drupal/purge_file": "^1.2",
     "drupal/rabbit_hole": "^1.0@beta",
@@ -184,6 +189,7 @@
     "drupal/views_bulk_operations": "^4.3",
     "drupal/views_data_export": "^1.1",
     "drupal/views_field_view": "^1.0@beta",
+    "drupal/views_filters_summary": "^3.2",
     "drupal/views_infinite_scroll": "^2.0",
     "drupal/views_json_source": "^2.0",
     "drupal/webform": "^6.2",
@@ -294,6 +300,9 @@
       },
       "drupal/media_thumbnails": {
         "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"
+      },
+      "drupal/configurable_views_filter_block": {
+        "3527929": "https://www.drupal.org/files/issues/2025-06-02/configurable_views_filter_block-3527929-2.patch"
       },
       "drupal/core": {
         "Wrong language handling in MediaThumbnailFormatter when linking": "https://www.drupal.org/files/issues/2021-05-06/2961404-17.patch",

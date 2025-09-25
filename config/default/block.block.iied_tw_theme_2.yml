@@ -1,6 +1,6 @@
 uuid: c19b08b3-fda4-4b0a-aacc-7073137bdc2f
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - facets.facet.theme

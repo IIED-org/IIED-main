@@ -214,7 +214,6 @@ dependencies:
     - 'taxonomy_term:organisation:6589d7dc-8d11-4ffc-9ec2-708ee2a24b31'
     - 'taxonomy_term:organisation:65aeab9d-f12c-4565-b40d-bbe506c11494'
     - 'taxonomy_term:organisation:675efa4a-1e72-4693-9c01-fc495094ce34'
-    - 'taxonomy_term:organisation:67dcde95-7988-4757-8a1a-d1076fa6bd2f'
     - 'taxonomy_term:organisation:6837debb-f6cf-4403-a46f-b81852e4dc3f'
     - 'taxonomy_term:organisation:68442c13-c926-4903-b199-6527036dfada'
     - 'taxonomy_term:organisation:687fedcc-8b6d-4ec2-84f3-428922a4b3e1'
@@ -702,6 +701,9 @@ display:
               secondary_label: 'Advanced options'
               secondary_open: false
               reset_button_always_show: true
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_breakpoint: ''
+              auto_submit_sort_only: false
             filter:
               field_publisher_target_id:
                 plugin_id: default
@@ -712,6 +714,9 @@ display:
                   collapsible: false
                   is_secondary: false
                   collapsible_disable_automatic_open: false
+                  hide_label: false
+                  field_classes: ''
+                  open_by_default: false
               delta:
                 plugin_id: default
                 advanced:
@@ -719,6 +724,9 @@ display:
                   collapsible: false
                   is_secondary: false
                   collapsible_disable_automatic_open: false
+                  hide_label: false
+                  field_classes: ''
+                  open_by_default: false
       access:
         type: role
         options:

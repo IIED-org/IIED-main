@@ -14,7 +14,7 @@ third_party_settings:
 id: sortbyviewsearchdisplaypage
 theme: iied_tw
 region: preface
-weight: -12
+weight: -15
 provider: null
 plugin: 'search_api_sorts_block:views_page:search__page_2'
 settings:

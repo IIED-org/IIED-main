@@ -1,6 +1,6 @@
 uuid: a6d93da1-5a2b-4098-9a1b-cd354ea94019
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - facets.facet.pubs_country

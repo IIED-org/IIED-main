@@ -1,0 +1,23 @@
+uuid: f78a0415-84af-4ed4-9342-91e9d79f60b4
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.search
+  module:
+    - views
+  theme:
+    - iied_tw
+id: iied_tw_exposedformsearchpage_2
+theme: iied_tw
+region: sidebar
+weight: -8
+provider: null
+plugin: 'views_exposed_filter_block:search-page_2'
+settings:
+  id: 'views_exposed_filter_block:search-page_2'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+visibility: {  }

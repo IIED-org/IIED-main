@@ -51,7 +51,7 @@
 {{ attach_library('iied_tw/alpine') }}
 {{ attach_library('iied_tw/scroll-nav') }}
 
-<header role="banner" x-data="{ showSearch: $store.showSearch }" x-cloak>
+<header role="banner" x-data="{ showSearch: $store.showSearch }" x-cloak class="search-header">
 	<nav x-data="{ isOpen: false }" @click.away="isOpen = false" @keydown.escape.window="isOpen = false" role="navigation" aria-label="Main navigation">
 
 		<div>
@@ -88,7 +88,7 @@
 			</div>
 		</div>
 		{# Expanded search box  #}
-		{% include '@iied_tw/partials/_search_expand.html.twig' %}
+		{# {% include '@iied_tw/partials/_search_expand.html.twig' %} #}
 		{% include '@iied_tw/partials/_off-canvas-menu.html.twig' %}
 	</nav>
 </header>
@@ -103,32 +103,28 @@
 	<main role="main">
 		<a id="main-content" tabindex="-1"></a>
 		{# link is in html.html.twig #}
-		<div x-show="!$store.showSearch">
+		<div x-show="!$store.showSearch"> <!-- Hide when search is open -->
 			<div class="lg:flex lg:space-x-12">
 				<div class="lg:w-1/4">
 					<h1 class="xl:text-3xl my-4 text-2xl">Search results</h1>
 				</div>
-				{# Search box  #}
 				<div class="search-page lg:w-3/4">
-					{{ drupal_block('views_exposed_filter_block:search-page_2', {wrapper: false}) }}
-					{# result summary  #}
-					{{ drupal_block('facets_summary_block:search_summary') }}
-					{{ drupal_block('facets_summary_block:pubs_summary') }}
+				{# {{ drupal_block('block-iied-tw-exposedformsearchpage-2-2', {wrapper: false}) }} #}
+				{# result summary  #}
+				{# {{ drupal_block('facets_summary_block:search_summary') }}#}
+					{{ page.preface }}
 				</div>
-				{# {% include '@iied_tw/partials/_search_expand.html.twig' %} #}
 			</div>
-		</div>
+			</div>
 
 		{# If we wanted to use the responsive menu module we could add the button like this
 												     {{ drupal_block('responsive_menu_toggle', {wrapper: false}) }} #}
-		<div
-			class="lg:flex lg:space-x-12">
-
+		<div class="lg:flex lg:space-x-12">
 
 			{# Off-canvas overlay on mobile #}
 			{% if page.sidebar %}
 				<aside x-data="{ open: false }" class="lg:w-1/4 mb-2" role="complementary">
-					<div class="lg:block hidden mt-3 mb-3 ml-3 text-gray-500">Filter by</div>
+					{# <div class="lg:block hidden mt-3 mb-3 ml-3 text-gray-500">Filter by</div>
 					<!-- Button to show the filters -->
 					<button @click="open = true" class="lg:hidden rounded-xl flex px-3 py-2 border border-gray-300" value="Filters">
 						<svg fill="#000000" class="mt-1" width="16px" height="16px" viewbox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000">
@@ -136,7 +132,7 @@
 								<path class="cls-1" d="M15.12,3.55H.88c-.21,0-.38.17-.38.38s.17.38.38.38h14.24c.21,0,.38-.17.38-.38s-.17-.38-.38-.38h0ZM12.07,7.62H3.93c-.21,0-.38.17-.38.38s.17.38.38.38h8.14c.21,0,.38-.17.38-.38s-.17-.38-.38-.38h0ZM9.53,11.69h-3.08c-.21,0-.38.17-.38.38s.17.38.38.38h3.08c.21,0,.38-.17.38-.38s-.17-.38-.38-.38h0Z"/></g>
 						</svg>
 						<label class="px-3">Filters</label>
-					</button>
+					</button> #}
 					<!-- Sidebar -->
 					<div
 						x-show="open" x-transition:enter="transition ease-out duration-400" x-transition:enter-start="-left-full" x-transition:enter-end="left-0" x-transition:leave="transition ease-in duration-400" x-transition:leave-start="left-0" x-transition:leave-end="-left-full" class="xl:hidden fixed inset-0 z-40 flex transition-all">
@@ -163,18 +159,15 @@
 						</div>
 					</div>
 					<!-- Sidebar for desktop -->
-					<div class="lg:block rounded-xl facet-box hidden border border-gray-300">
+					<div>
 						{{ page.sidebar }}
 					</div>
 				</aside>
 			{% endif %}
 
-
 			{# absolute right-0 lg:relative -top-14  #}
 			<div class="lg:w-3/4 relative">
-				<div class="lg:flex lg:justify-end">
-					{{ page.preface }}
-				</div>
+		
 				{{ page.content }}
 			</div>
 			{# /.layout-content #}

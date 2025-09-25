@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for views_filters_summary_verf module.
+ */
+
+/**
+ * Implements hook_views_filters_summary_info_alter().
+ */
+function views_filters_summary_verf_views_filters_summary_info_alter(&$info, $filter) {
+  if ($filter->getPluginId() === 'verf') {
+    $values = [];
+    $configuration = $filter->configuration;
+    $target_entity_type_id = $configuration['verf_target_entity_type_id'];
+    $storage = \Drupal::entityTypeManager()->getStorage($target_entity_type_id);
+    foreach ($filter->value as $index => $index_value) {
+      if (empty($index_value)) {
+        continue;
+      }
+      if ($referenced_entity = $storage->load($index)) {
+        $values[] = [
+          'id' => $index,
+          'raw' => $referenced_entity->id(),
+          'value' => $referenced_entity->label(),
+        ];
+      }
+    }
+    $info['value'] = $values;
+  }
+}

@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Function implements hook_preprocess_page().
@@ -68,3 +69,13 @@ function taxonomy_import_help($route_name, RouteMatchInterface $route_match) {
     default:
   }
 }
+
+/**
+  * Implements hook_ENTITY_TYPE_insert().
+  */
+ function taxonomy_import_taxonomy_term_insert(EntityInterface $entity) {
+   if (\Drupal::isConfigSyncing()) {
+     // Prevent interruption of config sync.
+     return;
+   }
+ }
