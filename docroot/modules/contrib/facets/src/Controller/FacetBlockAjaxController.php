@@ -131,6 +131,20 @@ class FacetBlockAjaxController extends ControllerBase {
     $new_request = Request::create($path);
     $request_stack = new RequestStack();
 
+    // Add session to the response if set.
+    if ($request->hasSession()) {
+      $request->getSession()->save();
+      $new_request->setSession($request->getSession());
+    }
+
+    // Add ajax_page_state to the new request if set.
+    if ($request->request->has('ajax_page_state')) {
+      $new_request->request->set('ajax_page_state', $request->request->all('ajax_page_state'));
+    }
+    elseif ($request->query->has('ajax_page_state')) {
+      $new_request->query->set('ajax_page_state', $request->query->all('ajax_page_state'));
+    }
+
     $processed = $this->pathProcessor->processInbound($path, $new_request);
     $processed_request = Request::create($processed);
 

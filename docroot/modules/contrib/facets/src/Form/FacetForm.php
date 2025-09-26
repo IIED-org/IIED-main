@@ -808,7 +808,7 @@ class FacetForm extends EntityForm {
 
     $facet->setHardLimit($form_state->getValue(['facet_settings', 'hard_limit']));
     $facet->setExclude($form_state->getValue(['facet_settings', 'exclude']));
-    
+
     $facet_uses_hierarchy = $form_state->getValue(
       [
         'facet_settings',

@@ -189,9 +189,8 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
   }
 
   /**
-   * {@inheritDoc}
+   * Allow to render facet block if one of the following conditions are met.
    *
-   * Allow to render facet block if one of the following conditions are met:
    * - facet is allowed to be displayed regardless of the source visibility
    * - facet source is rendered in the same request as facet.
    */

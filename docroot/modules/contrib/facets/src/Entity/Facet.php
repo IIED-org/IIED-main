@@ -363,7 +363,7 @@ class Facet extends ConfigEntityBase implements FacetInterface {
   /**
    * {@inheritdoc}
    */
-  public function setWidget($id, array $configuration = NULL) {
+  public function setWidget($id, ?array $configuration = NULL) {
     if ($configuration === NULL) {
       $instance = $this->getWidgetManager()->createInstance($id);
       // Get the default configuration for this plugin.
@@ -401,7 +401,7 @@ class Facet extends ConfigEntityBase implements FacetInterface {
   /**
    * {@inheritdoc}
    */
-  public function setHierarchy($id, array $configuration = NULL) {
+  public function setHierarchy($id, ?array $configuration = NULL) {
     if ($configuration === NULL) {
       $instance = $this->getHierarchyManager()->createInstance($id);
       // Get the default configuration for this plugin.
@@ -775,12 +775,12 @@ class Facet extends ConfigEntityBase implements FacetInterface {
 
     $storage = \Drupal::entityTypeManager()->getStorage('facets_facet_source');
     if ($source_id = str_replace(':', '__', $this->facet_source_id ?? '')) {
-        // Load and return the facet source config object from the storage.
-        $facet_source = $storage->load($source_id);
-        if ($facet_source instanceof FacetSource) {
-            $this->facetSourceConfig = $facet_source;
-            return $this->facetSourceConfig;
-        }
+      // Load and return the facet source config object from the storage.
+      $facet_source = $storage->load($source_id);
+      if ($facet_source instanceof FacetSource) {
+        $this->facetSourceConfig = $facet_source;
+        return $this->facetSourceConfig;
+      }
     }
 
     // We didn't have a facet source config entity yet for this facet source

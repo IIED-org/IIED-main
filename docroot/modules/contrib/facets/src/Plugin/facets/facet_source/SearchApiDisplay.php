@@ -531,7 +531,7 @@ class SearchApiDisplay extends FacetSourcePluginBase implements SearchApiFacetSo
   }
 
   /**
-   * {@inheritDoc}
+   * Register a facet.
    *
    * Alter views view cache metadata:
    *  - When view being re-saved it will collect all cache metadata from its
@@ -571,6 +571,7 @@ class SearchApiDisplay extends FacetSourcePluginBase implements SearchApiFacetSo
    * Set the state, that the display is currently edited and saved.
    *
    * @param bool $display_edit_in_progress
+   *   True if the display being edited.
    */
   public function setDisplayEditInProgress(bool $display_edit_in_progress): void {
     $this->display_edit_in_progress = $display_edit_in_progress;

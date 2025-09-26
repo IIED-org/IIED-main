@@ -32,10 +32,10 @@
 
         // Update view on summary block click.
         if (updateFacetsSummaryBlock() && (facetId === 'facets_summary_ajax')) {
-          $('[data-drupal-facets-summary-id=' + facetSettings.facets_summary_id + ']').children('ul').children('li')
+          $(once(facetId, '[data-drupal-facets-summary-id=' + facetSettings.facets_summary_id + '] ul li'))
             .data('facetsViewsInstance', facetViewsInstance)
             .data('facetSettings', facetSettings)
-            .once('facetsViewsAjax').click(function (e) {
+            .click(function (e) {
               e.preventDefault();
               var facetLink = $(this).find('a');
               var viewsInstance = $(this).data('facetsViewsInstance');
@@ -50,23 +50,27 @@
         }
         // Update view on facet item click.
         else {
-          $('[data-drupal-facet-id=' + facetId + ']').filter('.js-facets-widget')
+          $(once('facetsViewsAjax', '.js-facets-widget[data-drupal-facet-id=' + facetId + ']'))
             .data('facetsViewsInstance', facetViewsInstance)
             .data('facetSettings', facetSettings)
-            .once('facetsViewsAjax')
             .off('facets_filter.facets')
             .on('facets_filter.facets', function (event, url) {
-              var viewsInstance = $(this).data('facetsViewsInstance');
-              var facetSettings = $(this).data('facetSettings');
+              var $facetWidget = $(this);
+              var viewsInstance = $facetWidget.data('facetsViewsInstance');
+              var facetSettings = $facetWidget.data('facetSettings');
+              var hasSliders = 'facets' in settings &&
+                'sliders' in settings.facets &&
+                typeof settings.facets.sliders[facetId] === 'object'
               if (typeof viewsInstance !== 'undefined' && viewsInstance !== null &&
-                  typeof facetSettings !== 'undefined' && facetSettings !== null) {
-                $(this).trigger('facets_filtering');
+                  typeof facetSettings !== 'undefined' && facetSettings !== null &&
+                  !hasSliders) {
+                $facetWidget.trigger('facets_filtering');
                 updateFacetsView(url, viewsInstance, facetSettings);
               }
             });
         }
         // Update view on slider trigger.
-        if ("facets" in settings && "sliders" in settings.facets && settings.facets.sliders[facetId] !== 'undefined') {
+        if ("facets" in settings && "sliders" in settings.facets && typeof settings.facets.sliders[facetId] === 'object') {
           $('[data-drupal-facet-id=' + facetId + ']')
             .data('facetsViewsInstance', facetViewsInstance)
             .data('facetSettings', facetSettings);
@@ -78,6 +82,7 @@
               var facetSettings = $(facet).data('facetSettings');
               if (typeof viewsInstance !== 'undefined' && viewsInstance !== null &&
                     typeof facetSettings !== 'undefined' && facetSettings !== null) {
+                  $(facet).trigger('facets_filtering');
                   updateFacetsView(href, viewsInstance, facetSettings);
                 }
             };
@@ -104,7 +109,7 @@
 
     return targetViewsInstance;
   };
- 
+
   // Get the dom id of the element if it is an AJAX view.
   var findAjaxViewsInstanceByElement = function ($element) {
     var targetViewInstance = null;
@@ -180,6 +185,10 @@
 
   // Helper function to update views output & Ajax facets.
   var updateFacetsViewRunner = function (href, viewsInstance, facetSettings) {
+    // Update url.
+    window.historyInitiated = true;
+    window.history.pushState(null, document.title, href);
+
     var views_parameters = Drupal.Views.parseQueryString(href);
     var views_arguments = Drupal.Views.parseViewArgs(href, 'search');
     var views_settings = $.extend(
@@ -194,10 +203,6 @@
     views_ajax_settings.submit = views_settings;
     views_ajax_settings.url = facetSettings.ajax_path + '?q=' + href;
     Drupal.ajax(views_ajax_settings).execute();
-
-    // Update url.
-    window.historyInitiated = true;
-    window.history.pushState(null, document.title, href);
 
     // ToDo: Update views+facets with ajax on history back.
     // For now we will reload the full page.
@@ -308,7 +313,9 @@
 
       if (reload) {
         href = addExposedFiltersToFacetsUrl(href, options.extraData.view_name, options.extraData.view_display_id);
-        options.url = addFacetsToExposedFilterRequest(options.url, href);
+        const url = new URL(href);
+        const relativeUrl = url.pathname + url.search + url.hash;
+        options.url = addFacetsToExposedFilterRequest(options.url, relativeUrl);
         updateFacetsBlocks(href);
       }
     }
@@ -319,10 +326,28 @@
 
   // Helper function to add exposed form data to facets url
   var addExposedFiltersToFacetsUrl = function (href, view_name, view_display_id) {
-    var $exposed_form = $('form#views-exposed-form-' + view_name.replace(/_/g, '-') + '-' + view_display_id.replace(/_/g, '-'));
+    // Find the exposed form to account for multiple forms on the same page.
+    // See http://drupal.org/node/2894747.
+    var $exposed_form = $(
+      `form[id^="views-exposed-form-${view_name.replace(
+        /_/g,
+        '-',
+      )}-${view_display_id.replace(/_/g, '-')}"]`,
+    );
 
-    var params = Drupal.Views.parseQueryString(href);
+    if ($exposed_form.length === 0) {
+      return href;
+    }
 
+    var params = {};
+
+    // Only parse when there is a query string to avoid views adding an
+    // extra parameter with the href as the property name.
+    if (href.indexOf('?') !== -1) {
+      params = Drupal.Views.parseQueryString(href);
+    }
+
+    // Add parameters for the views exposed form.
     $.each($exposed_form.serializeArray(), function () {
       params[this.name] = this.value;
     });

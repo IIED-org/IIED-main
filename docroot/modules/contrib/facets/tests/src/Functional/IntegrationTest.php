@@ -890,7 +890,13 @@ class IntegrationTest extends FacetsTestBase {
       $this->drupalGet('admin/config/search/facets/' . $id . '/settings');
       $this->submitForm([], 'Save');
       $warning = 'You may experience issues, because Search API Test Fulltext search view use cache. In case you will try to turn set cache plugin to none.';
-      $this->assertSession()->pageTextContains($warning);
+      if ($display_id === 'page_1') {
+        $this->assertSession()->pageTextNotContains($warning);
+      }
+      else {
+        // Make sure that user will get a warning about source cache plugin.
+        $this->assertSession()->pageTextContains($warning);
+      }
       // Check the view's cache settings again to see if they've been updated.
       $view = Views::getView('search_api_test_view');
       $view->setDisplay($display_id);

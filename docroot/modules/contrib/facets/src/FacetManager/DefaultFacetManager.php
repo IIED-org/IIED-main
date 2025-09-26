@@ -409,6 +409,9 @@ class DefaultFacetManager {
     if (empty($built_facet->getResults())) {
       $empty_behavior = $built_facet->getEmptyBehavior();
       if ($empty_behavior && $empty_behavior['behavior'] === 'text') {
+        // @codingStandardsIgnoreStart
+        $text = $this->t($empty_behavior['text'] ?? '');
+        // @codingStandardsIgnoreEnd
         return [
           [
             0 => $build,
@@ -418,9 +421,9 @@ class DefaultFacetManager {
               'class' => ['facet-empty'],
             ],
             'empty_text' => [
-              // @codingStandardsIgnoreStart
-              '#markup' => $this->t($empty_behavior['text']),
-              // @codingStandardsIgnoreEnd
+              '#type' => 'processed_text',
+              '#text' => $text,
+              '#format' => $empty_behavior['text_format'] ?? 'plain_text',
             ],
           ],
         ];

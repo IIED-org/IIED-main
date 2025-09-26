@@ -113,6 +113,11 @@ class FacetSettingsForm extends EntityForm {
 
     $facet_sources = [];
     foreach ($this->facetSourcePluginManager->getDefinitions() as $facet_source_id => $definition) {
+      // For now, we hide the facet sources for views display default.
+      // They should not be used to attach block facets.
+      if (substr($definition["display_id"], 0, 14) == 'views_default:') {
+        continue;
+      }
       $facet_sources[$definition['id']] = !empty($definition['label']) ? $definition['label'] : $facet_source_id;
     }
 
@@ -313,7 +318,7 @@ class FacetSettingsForm extends EntityForm {
           $facet->setOnlyVisibleWhenFacetSourceIsVisible(FALSE);
         }
         $views_cache_type = $view->display_handler->getOption('cache')['type'];
-        if ($views_cache_type !== 'none') {
+        if ($views_cache_type !== 'search_api_none') {
           $this->messenger()->addMessage($this->t('You may experience issues, because %view use cache. In case you will try to turn set cache plugin to none.', ['%view' => $view->storage->label()]));
         }
       }

@@ -7,7 +7,6 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\Core\Url;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\Result\Result;
 use Drupal\facets\Result\ResultInterface;

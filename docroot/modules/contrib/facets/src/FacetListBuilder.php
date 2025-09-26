@@ -358,6 +358,13 @@ class FacetListBuilder extends DraggableListBuilder {
 
     $facet_source_groups = [];
     foreach ($facet_sources as $facet_source) {
+
+      // For now, we hide the facet sources for views display default.
+      // They should not be used to attach block facets.
+      if (substr($facet_source["display_id"], 0, 14) == 'views_default:') {
+        continue;
+      }
+
       $facet_source_groups[$facet_source['id']] = [
         'facet_source' => $facet_source,
         'facets' => [],
