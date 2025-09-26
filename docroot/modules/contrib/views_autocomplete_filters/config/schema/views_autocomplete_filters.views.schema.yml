@@ -27,6 +27,12 @@ views.filter.views_autocomplete_filters_combine:
         autocomplete_dependent:
           type: integer
           label: 'Suggestions depend on other filter fields'
+        autocomplete_contextual:
+          type: integer
+          label: 'Allow Contextual filters to apply to this filter'
+        autocomplete_autosubmit:
+          type: integer
+          label: 'Autosubmit Views Exposed Form on autocomplete suggestion selection'
 
 views.filter.views_autocomplete_filters_search_api_fulltext:
   type: views.filter.search_api_fulltext
@@ -57,6 +63,12 @@ views.filter.views_autocomplete_filters_search_api_fulltext:
         autocomplete_dependent:
           type: integer
           label: 'Suggestions depend on other filter fields'
+        autocomplete_contextual:
+          type: integer
+          label: 'Allow Contextual filters to apply to this filter'
+        autocomplete_autosubmit:
+          type: integer
+          label: 'Autosubmit Views Exposed Form on autocomplete suggestion selection'
 
 views.filter.views_autocomplete_filters_search_api_text:
   type: views.filter.search_api_text
@@ -87,6 +99,12 @@ views.filter.views_autocomplete_filters_search_api_text:
         autocomplete_dependent:
           type: integer
           label: 'Suggestions depend on other filter fields'
+        autocomplete_contextual:
+          type: integer
+          label: 'Allow Contextual filters to apply to this filter'
+        autocomplete_autosubmit:
+          type: integer
+          label: 'Autosubmit Views Exposed Form on autocomplete suggestion selection'
 
 views.filter.views_autocomplete_filters_string:
   type: views.filter.string
@@ -117,3 +135,9 @@ views.filter.views_autocomplete_filters_string:
         autocomplete_dependent:
           type: integer
           label: 'Suggestions depend on other filter fields'
+        autocomplete_contextual:
+          type: integer
+          label: 'Allow Contextual filters to apply to this filter'
+        autocomplete_autosubmit:
+          type: integer
+          label: 'Autosubmit Views Exposed Form on autocomplete suggestion selection'

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "085b881859f0fe7d1ffcf9102d826764",
+    "content-hash": "b5f075c4592bf07a7f3f6b2e53b5dc4c",
     "packages": [
         {
             "name": "acquia/http-hmac-php",
@@ -3345,26 +3345,26 @@
         },
         {
             "name": "drupal/contact_block",
-            "version": "1.7.0",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/contact_block.git",
-                "reference": "8.x-1.7"
+                "reference": "2.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/contact_block-8.x-1.7.zip",
-                "reference": "8.x-1.7",
-                "shasum": "1ccc790294dad3dfcbe90e465b994fa4b48dc13e"
+                "url": "https://ftp.drupal.org/files/projects/contact_block-2.0.3.zip",
+                "reference": "2.0.3",
+                "shasum": "f5a6d653564cebd2ac3b40431b5c76b913a175a2"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^8 || ^9 || ^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.7",
-                    "datestamp": "1665911371",
+                    "version": "2.0.3",
+                    "datestamp": "1732952253",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3377,7 +3377,7 @@
             ],
             "authors": [
                 {
-                    "name": "Sutharsan",
+                    "name": "sutharsan",
                     "homepage": "https://www.drupal.org/user/73854"
                 },
                 {
@@ -11100,26 +11100,26 @@
         },
         {
             "name": "drupal/views_autocomplete_filters",
-            "version": "1.7.0",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_autocomplete_filters.git",
-                "reference": "8.x-1.7"
+                "reference": "2.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_autocomplete_filters-8.x-1.7.zip",
-                "reference": "8.x-1.7",
-                "shasum": "4061cac83e39279bbf5515b8ba8f8685b27b4023"
+                "url": "https://ftp.drupal.org/files/projects/views_autocomplete_filters-2.0.3.zip",
+                "reference": "2.0.3",
+                "shasum": "764dea9da6ac6e3a843d7fd5a64cb86d6720404e"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.7",
-                    "datestamp": "1697624365",
+                    "version": "2.0.3",
+                    "datestamp": "1745842632",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11140,7 +11140,7 @@
                     "homepage": "https://www.drupal.org/user/1463982"
                 },
                 {
-                    "name": "RobLoach",
+                    "name": "robloach",
                     "homepage": "https://www.drupal.org/user/61114"
                 },
                 {
