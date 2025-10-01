@@ -1,7 +1,7 @@
 services:
   facets_pretty_paths.route_subscriber:
     class: Drupal\facets_pretty_paths\RouteSubscriber
-    arguments: ['@plugin.manager.facets.facet_source']
+    arguments: ['@plugin.manager.facets.facet_source', '@module_handler']
     tags:
       - { name: event_subscriber }
   plugin.manager.facets_pretty_paths.coder:

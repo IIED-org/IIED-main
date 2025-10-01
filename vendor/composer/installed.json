@@ -5031,7 +5031,8 @@
                     }
                 },
                 "patches_applied": {
-                    "3527929": "https://www.drupal.org/files/issues/2025-06-02/configurable_views_filter_block-3527929-2.patch"
+                    "3527929 Configurable filter-block instance ID": "https://www.drupal.org/files/issues/2025-06-02/configurable_views_filter_block-3527929-2.patch",
+                    "3374162 Make it work with AJAX enabled": "https://www.drupal.org/files/issues/2023-08-17/3374162-allow-core-to-set-unique-block-ids.patch"
                 }
             },
             "installation-source": "dist",
@@ -6768,6 +6769,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Pretty paths for facets 3.x": "https://git.drupalcode.org/project/facets_pretty_paths/-/merge_requests/20.diff"
                 }
             },
             "installation-source": "dist",
@@ -14171,6 +14175,63 @@
                 "issues": "https://www.drupal.org/project/issues/views_json_source"
             },
             "install-path": "../../docroot/modules/contrib/views_json_source"
+        },
+        {
+            "name": "drupal/views_templates",
+            "version": "1.6.0",
+            "version_normalized": "1.6.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/views_templates.git",
+                "reference": "8.x-1.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/views_templates-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "681d7db0a77cf8d5e6758597e37931e35926a96d"
+            },
+            "require": {
+                "drupal/core": "^10.1 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.6",
+                    "datestamp": "1721227749",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Neslee Canil Pinto",
+                    "homepage": "https://www.drupal.org/u/neslee-canil-pinto",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "neslee canil pinto",
+                    "homepage": "https://www.drupal.org/user/3580850"
+                },
+                {
+                    "name": "nicxvan",
+                    "homepage": "https://www.drupal.org/user/531480"
+                }
+            ],
+            "description": "Reintroduces dynamic default views.",
+            "homepage": "https://www.drupal.org/project/views_templates",
+            "support": {
+                "source": "https://git.drupalcode.org/project/views_templates",
+                "issues": "https://www.drupal.org/project/issues/views_templates"
+            },
+            "install-path": "../../docroot/modules/contrib/views_templates"
         },
         {
             "name": "drupal/viewsreference",

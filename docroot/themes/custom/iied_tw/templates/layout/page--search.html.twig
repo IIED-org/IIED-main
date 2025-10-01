@@ -99,12 +99,11 @@
 
 {{ page.help }}
 
-<div x-data="{ showSearch: $store.showSearch }" class="container my-12">
+<div class="container my-12">
 	<main role="main">
 		<a id="main-content" tabindex="-1"></a>
 		{# link is in html.html.twig #}
-		<div x-show="!$store.showSearch"> <!-- Hide when search is open -->
-			<div class="lg:flex lg:space-x-12">
+					<div class="lg:flex lg:space-x-12">
 				<div class="lg:w-1/4">
 					<h1 class="xl:text-3xl my-4 text-2xl">Search results</h1>
 				</div>
@@ -115,12 +114,8 @@
 					{{ page.preface }}
 				</div>
 			</div>
-			</div>
 
-		{# If we wanted to use the responsive menu module we could add the button like this
-												     {{ drupal_block('responsive_menu_toggle', {wrapper: false}) }} #}
 		<div class="lg:flex lg:space-x-12">
-
 			{# Off-canvas overlay on mobile #}
 			{% if page.sidebar %}
 				<aside x-data="{ open: false }" class="lg:w-1/4 mb-2" role="complementary">
@@ -174,7 +169,7 @@
 
 		</div>
 	</div>
-</div>
+
 {# /.layout-content #}</main></div>{# /.layout-container #}{# {% if page.postscript %}
 				    <section>
 				      <div class="container p-4">

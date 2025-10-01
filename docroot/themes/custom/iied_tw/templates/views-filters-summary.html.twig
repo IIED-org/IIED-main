@@ -44,9 +44,10 @@
             <span class="values">
               {%- for value in item.groups -%}
                 <span class="value-container">
-                  <strong class="value">{{ value.value }}</strong>
                   {% if value.link and options.show_remove_link %}
-                    {{ value.link }}
+                    <a href='{{ value.link["#url"] }}'>
+                  <strong class="value">{{ value.value }}</strong>
+                    </a>
                   {% endif %}
                 </span>
               {% endfor %}

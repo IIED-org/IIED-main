@@ -473,7 +473,7 @@
 details {
     @apply lg:block rounded-xl hidden p-4 my-1 border border-gray-300 bg-gray-100;
     summary {
-      @apply text-xl font-serif text-iiedpink-900;;
+      @apply text-xl font-serif text-iiedpink-900;
     }
 }
 
@@ -499,9 +499,18 @@ details[open] > summary::after {
    .facet-box .block-facet--checkbox:first-child {
     border-top: none;
   }
-  .search-page .filter-chip {
-      @apply inline-flex items-center px-2 py-1 ml-2 my-1 space-x-1 border border-gray-300 rounded-full hover:bg-iiedblue-10;
+  .search-page .filter-chip, .views-filters-summary {
+    @apply flex inline-flex leading-loose;
+    .item {
+      @apply inline-flex items-center ml-2 mt-1 space-x-1 border border-gray-300 rounded-xl;
+      .value {
+        @apply border-none ml-1 m-0 leading-tight;
+      }
+      a.remove-filter {
+        @apply mr-1 pl-0 pt-0 bg-transparent hover:text-iiedblue-100 text-iiedblue-800 text-2xl font-light;
+      }
   }
+}
 
   /*-- animations --*/
   @keyframes bounce-x {

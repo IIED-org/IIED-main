@@ -174,12 +174,6 @@ class ConfigurableViewsExposedFilterBlock extends CoreViewsExposedFilterBlock {
       $this->applyInstanceIdProperty($build, $instance_id);
     }
 
-    // Set an new unique form id from the build id if available, or by adding a
-    // random number to the current id.
-    $new_form_id = isset($build['#build_id']) ? $build['#build_id'] : $build['#id'] . rand(100, 999);
-    $build['#id'] = $new_form_id;
-    $build['#attributes']['data-drupal-selector'] = $new_form_id;
-
     // Add CSS.
     $build['#attached']['library'][] = 'configurable_views_filter_block/configurable_views_filter_block.theme';
 

@@ -192,6 +192,7 @@
     "drupal/views_filters_summary": "^3.2",
     "drupal/views_infinite_scroll": "^2.0",
     "drupal/views_json_source": "^2.0",
+    "drupal/views_templates": "^1.6",
     "drupal/webform": "^6.2",
     "drupal/webform_content_creator": "^4.0",
     "drupal/webform_shs": "^2.0@beta",
@@ -298,11 +299,15 @@
       "drupal/address": {
         "Migrate using country names": "https://www.drupal.org/files/issues/2020-02-21/country_lookup_migrate_process_plugin-3114991-2.patch"
       },
+      "drupal/facets_pretty_paths": {
+        "Pretty paths for facets 3.x": "https://git.drupalcode.org/project/facets_pretty_paths/-/merge_requests/20.diff"
+      },
       "drupal/media_thumbnails": {
         "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"
       },
       "drupal/configurable_views_filter_block": {
-        "3527929": "https://www.drupal.org/files/issues/2025-06-02/configurable_views_filter_block-3527929-2.patch"
+        "3527929 Configurable filter-block instance ID": "https://www.drupal.org/files/issues/2025-06-02/configurable_views_filter_block-3527929-2.patch",
+        "3374162 Make it work with AJAX enabled": "https://www.drupal.org/files/issues/2023-08-17/3374162-allow-core-to-set-unique-block-ids.patch"
       },
       "drupal/core": {
         "Wrong language handling in MediaThumbnailFormatter when linking": "https://www.drupal.org/files/issues/2021-05-06/2961404-17.patch",
@@ -337,6 +342,11 @@
       },
       "drupal/google_analytics": {
         "3258588": "https://www.drupal.org/files/issues/2022-09-01/3258588_google_analytics_deprecated_function_2_5_001.patch"
+      },
+      "drupal/views_dependent_filters": {
+        "3512142 Facets 3.x support": "https://git.drupalcode.org/project/views_dependent_filters/-/merge_requests/13.diff",
+        "3503675 Module uses the wrong selector": "https://git.drupalcode.org/project/views_dependent_filters/-/merge_requests/11.diff",
+        "3512164": "https://git.drupalcode.org/project/views_dependent_filters/-/merge_requests/12.diff"
       }
     },
     "drupal-lenient": {

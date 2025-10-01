@@ -1,0 +1,21 @@
+{
+  "name": "drupal/views_templates",
+  "description": "Reintroduces dynamic default views.",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://www.drupal.org/project/views_templates",
+  "authors": [
+    {
+      "name": "Neslee Canil Pinto",
+      "homepage": "https://www.drupal.org/u/neslee-canil-pinto",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/views_templates",
+    "source": "https://git.drupalcode.org/project/views_templates"
+  },
+  "require": {
+    "drupal/core": "^10.1 || ^11"
+  }
+}

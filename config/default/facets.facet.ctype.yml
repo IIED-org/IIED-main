@@ -6,11 +6,7 @@ dependencies:
     - search_api.index.acquia_search_index
     - views.view.search
   module:
-    - facets_pretty_paths
     - search_api
-third_party_settings:
-  facets_pretty_paths:
-    coder: default_coder
 id: ctype
 name: ctype
 weight: 0

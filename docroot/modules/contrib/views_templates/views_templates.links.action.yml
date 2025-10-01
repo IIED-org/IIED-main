@@ -1,0 +1,6 @@
+views_add_template_local_action:
+  route_name: views_templates.list
+  title: 'Add view from template'
+  weight: 100
+  appears_on:
+    - entity.view.collection

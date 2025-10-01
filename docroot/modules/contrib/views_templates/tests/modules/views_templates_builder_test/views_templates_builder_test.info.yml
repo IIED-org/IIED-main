@@ -1,0 +1,12 @@
+name: 'Views Template Builder Test'
+type: module
+description: 'Views Template Test Builder Plugin'
+core_version_requirement: ^10.1 || ^11
+package: Testing
+dependencies:
+  - views_templates:views_templates
+
+# Information added by Drupal.org packaging script on 2024-07-17
+version: '8.x-1.6'
+project: 'views_templates'
+datestamp: 1721227752

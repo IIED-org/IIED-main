@@ -25,6 +25,8 @@ settings:
   visible_filters:
     type: type
     theme: theme
+    pub_type: pub_type
+    area: area
   no_groups: false
   no_reset: false
   no_sort: false

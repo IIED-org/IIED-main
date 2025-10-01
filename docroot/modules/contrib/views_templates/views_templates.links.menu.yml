@@ -1,0 +1,5 @@
+view_templates.view.collection:
+  title: Add view from template
+  parent: entity.view.collection
+  description: 'Manage views templates'
+  route_name: views_templates.list

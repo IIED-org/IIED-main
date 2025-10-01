@@ -1,0 +1,10 @@
+services:
+  logger.channel.views_templates:
+    parent: logger.channel_base
+    arguments: ['views_templates']
+  plugin.manager.views_templates.builder:
+    class: Drupal\views_templates\Plugin\ViewsBuilderPluginManager
+    parent: default_plugin_manager
+  views_templates.loader:
+    class: Drupal\views_templates\ViewsTemplateLoader
+    arguments: ['@extension.list.module']

@@ -1,0 +1,15 @@
+views_templates.create_from_template:
+  path: '/admin/structure/views/template/{view_template}/add'
+  defaults:
+    _form: '\Drupal\views_templates\ViewTemplateForm'
+    _title: 'Create from View template'
+  requirements:
+    _permission: 'administer views'
+
+views_templates.list:
+  path: '/admin/structure/views/template/list'
+  defaults:
+    _controller: '\Drupal\views_templates\Controller\ViewsBuilderController::templateList'
+    _title: 'Add view from template'
+  requirements:
+    _permission: 'administer views'
