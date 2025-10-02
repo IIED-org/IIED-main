@@ -5,7 +5,6 @@ dependencies:
   config:
     - views.view.search
   module:
-    - block_class
     - configurable_views_filter_block
     - context
   theme:
@@ -23,8 +22,8 @@ settings:
   provider: configurable_views_filter_block
   views_label: ''
   visible_filters:
-    type: type
     theme: theme
+    type: type
     pub_type: pub_type
     area: area
   no_groups: false
