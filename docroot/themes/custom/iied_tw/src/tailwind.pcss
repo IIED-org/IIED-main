@@ -439,9 +439,7 @@
     transform: none;
   }
   /*-- search --*/
-  .search-header .search-button {
-    @apply cursor-not-allowed pointer-events-none;
-  }
+
   .ui-widget.search-api-autocomplete-search { 
     @apply bg-white text-base; 
   } 
@@ -462,7 +460,7 @@
   .search-page .srp-text {
     @apply text-base;
   }  
-  .item-list__checkbox, .form-checkboxes { 
+  .item-list__checkbox, .form-checkboxes, .form-radios { 
     @apply mb-3;
    } 
 
@@ -470,8 +468,12 @@
     @apply flex justify-between w-full rounded-t-xl;
 }
 
+.off-canvas details {
+  @apply block lg:hidden;
+}
+
 details {
-    @apply lg:block rounded-xl hidden p-4 my-1 border border-gray-300 bg-gray-100;
+    @apply lg:block hidden rounded-xl p-4 my-1 border border-gray-300 bg-gray-100;
     summary {
       @apply text-xl font-serif text-iiedpink-900;
     }
@@ -493,21 +495,15 @@ details[open] > summary::after {
     @apply mb-2;
    }
 
-   .facets-widget-checkbox .facets-checkbox {
-    @apply mr-0.5 border border-gray-300 rounded shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-200 focus:ring-opacity-50;
-   } 
-   .facet-box .block-facet--checkbox:first-child {
-    border-top: none;
-  }
   .search-page .filter-chip, .views-filters-summary {
-    @apply flex inline-flex leading-loose;
+    @apply text-balance my-1 flex inline-flex;
     .item {
-      @apply inline-flex items-center ml-2 mt-1 space-x-1 border border-gray-300 rounded-xl;
+      @apply inline-flex items-center ml-2 mt-1 space-x-1 border border-gray-300 rounded-full;
       .value {
-        @apply border-none ml-1 m-0 leading-tight;
+        @apply leading-[1.5] border-none ml-1 my-1 align-middle;
       }
       a.remove-filter {
-        @apply mr-1 pl-0 pt-0 bg-transparent hover:text-iiedblue-100 text-iiedblue-800 text-2xl font-light;
+        @apply leading-[1.5]  mr-1 pl-0 pb-2 bg-transparent text-2xl hover:text-link-hover text-iiedblue-500 font-light;
       }
   }
 }

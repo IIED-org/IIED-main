@@ -1,0 +1,14 @@
+--- src/Plugin/Block/FacetBlock.php
++++ src/Plugin/Block/FacetBlock.php
+@@ -93,11 +93,6 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
+     if (!empty($build)) {
+       CacheableMetadata::createFromObject($this)->applyTo($build);
+ 
+-      // Add extra elements from facet source, for example, ajax scripts.
+-      // @see Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay
+-      /** @var \Drupal\facets\FacetSource\FacetSourcePluginInterface $facet_source */
+-      $facet_source = $facet->getFacetSource();
+-
+       // Add contextual links only when we have results.
+       $build['#contextual_links']['facets_facet'] = [
+         'route_parameters' => ['facets_facet' => $facet->id()],

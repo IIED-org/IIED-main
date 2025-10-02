@@ -1,0 +1,18 @@
+--- src/Widget/WidgetPluginBase.php
++++ src/Widget/WidgetPluginBase.php
+@@ -67,7 +67,6 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
+         'data-drupal-facet-filter-key' => $url_processor->getFilterKey(),
+         'data-drupal-facet-id' => $facet->id(),
+         'data-drupal-facet-alias' => $facet->getUrlAlias(),
+-        'data-drupal-facet-ajax' => '0',
+         'class' => [$facet->getActiveItems() ? 'facet-active' : 'facet-inactive'],
+       ],
+       '#context' => !empty($widget['type']) ? ['list_style' => $widget['type']] : [],
+@@ -197,7 +196,6 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
+     $items['#attributes']['data-drupal-facet-item-value'] = $result->getRawValue();
+     $items['#attributes']['data-drupal-facet-item-count'] = $result->getCount();
+     $items['#attributes']['data-drupal-facet-filter-value'] = $facet->getUrlAlias() . $url_processor->getSeparator() . $result->getRawValue();
+-    $items['#attributes']['data-drupal-facet-ajax'] = '0';
+ 
+     if ($facet->getShowOnlyOneResult()) {
+       $items['#attributes']['data-drupal-facet-single-selection-group'] = Html::getClass($facet->getUrlAlias());

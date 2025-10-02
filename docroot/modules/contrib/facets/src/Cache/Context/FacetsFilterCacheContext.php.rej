@@ -1,0 +1,11 @@
+--- src/Cache/Context/FacetsFilterCacheContext.php
++++ src/Cache/Context/FacetsFilterCacheContext.php
+@@ -7,7 +7,7 @@ use Drupal\Core\Cache\Context\CalculatedCacheContextInterface;
+ use Drupal\Core\Cache\Context\RequestStackCacheContextBase;
+ 
+ /**
+- * Defines the FacetsAjaxArgsCacheContext service, for per facets args caching.
++ * Defines the FacetsFilterCacheContext service, for per facets args caching.
+  *
+  * Cache context ID: 'facets_filter' (to vary by all request arguments).
+  * Calculated cache context ID: 'facets_filter:%key', e.g.'facets_filter:f'

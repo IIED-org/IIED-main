@@ -100,7 +100,6 @@
     "drupal/ds": "^3.9",
     "drupal/dynamic_entity_reference": "^3.1",
     "drupal/facets": "^3.0",
-    "drupal/facets_pretty_paths": "^2.0",
     "drupal/field_formatter": "^3.0",
     "drupal/field_group": "^3.1",
     "drupal/file_mdm": "^3.0",
@@ -299,9 +298,6 @@
       "drupal/address": {
         "Migrate using country names": "https://www.drupal.org/files/issues/2020-02-21/country_lookup_migrate_process_plugin-3114991-2.patch"
       },
-      "drupal/facets_pretty_paths": {
-        "Pretty paths for facets 3.x": "https://git.drupalcode.org/project/facets_pretty_paths/-/merge_requests/20.diff"
-      },
       "drupal/media_thumbnails": {
         "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"
       },
@@ -316,7 +312,8 @@
         "3208030": "https://www.drupal.org/files/issues/2022-07-08/3208030_16.patch",
         "3209204": "https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch",
         "3410100": "https://www.drupal.org/files/issues/2024-01-23/drupal-revert-source-editing-validation-tightening-3410100-38.patch",
-        "3062441": "https://www.drupal.org/files/issues/2024-03-27/3062441-patch-41.patch"
+        "3062441": "https://www.drupal.org/files/issues/2024-03-27/3062441-patch-41.patch",
+        "2894747": "https://git.drupalcode.org/project/drupal/-/merge_requests/10945.diff"
       },
       "drupal/views_field_view": {
         "Contextual filter parameter is not working": "https://www.drupal.org/files/issues/2022-08-09/multible_Contextual_filter_parameter-2873359-30.patch"

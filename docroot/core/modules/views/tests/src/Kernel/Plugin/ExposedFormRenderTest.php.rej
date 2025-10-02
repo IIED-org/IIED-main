@@ -1,0 +1,12 @@
+--- modules/views/tests/src/Kernel/Plugin/ExposedFormRenderTest.php
++++ modules/views/tests/src/Kernel/Plugin/ExposedFormRenderTest.php
+@@ -43,7 +43,8 @@ public function testExposedFormRender() {
+     $output = $exposed_form->renderExposedForm();
+     $this->setRawContent(\Drupal::service('renderer')->renderRoot($output));
+ 
+-    $this->assertFieldByXpath('//form/@id', Html::cleanCssIdentifier('views-exposed-form-' . $view->storage->id() . '-' . $view->current_display), 'Expected form ID found.');
++    $result = $this->xpath('//form[@data-drupal-target-view=:target]', [':target' => $view->dom_id]);
++    $this->assertCount(1, $result, 'Expected form "data-drupal-target-view" attribute found.');
+ 
+     $view->setDisplay('page_1');
+     $expected_action = $view->display_handler->getUrlInfo()->toString();
