@@ -100,6 +100,7 @@
     "drupal/ds": "^3.9",
     "drupal/dynamic_entity_reference": "^3.1",
     "drupal/facets": "^3.0",
+    "drupal/facets_pretty_paths": "^2.0",
     "drupal/field_formatter": "^3.0",
     "drupal/field_group": "^3.1",
     "drupal/file_mdm": "^3.0",

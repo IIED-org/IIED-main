@@ -1,0 +1,7 @@
+facets.facet.*.third_party.facets_pretty_paths:
+  type: mapping
+  label: 'Facet Pretty Paths third party settings on the Facet config'
+  mapping:
+    coder:
+      type: string
+      label: 'The coder plugin ID'

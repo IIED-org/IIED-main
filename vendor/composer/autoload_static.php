@@ -242,6 +242,7 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
             'Drush\\' => 6,
             'Drupal\\sophron\\' => 15,
             'Drupal\\rat\\' => 11,
+            'Drupal\\facets_pretty_paths\\' => 27,
             'Drupal\\Core\\' => 12,
             'Drupal\\Composer\\Plugin\\VendorHardening\\' => 39,
             'Drupal\\Composer\\Plugin\\Scaffold\\' => 32,
@@ -787,6 +788,10 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         'Drupal\\rat\\' => 
         array (
             0 => __DIR__ . '/..' . '/drupal/rat/src',
+        ),
+        'Drupal\\facets_pretty_paths\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/docroot/modules/contrib/facets_pretty_paths/src',
         ),
         'Drupal\\Core\\' => 
         array (

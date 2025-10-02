@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'b351126fc5c845fcb90c2c7fbb8019bbb40f6db8',
+        'reference' => 'c6ce790edbc017917fb2012ad5b3db4217c2e45d',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1021,6 +1021,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/facets_pretty_paths' => array(
+            'pretty_version' => '2.0.3',
+            'version' => '2.0.3.0',
+            'reference' => '2.0.3',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/facets_pretty_paths',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/field_formatter' => array(
             'pretty_version' => '3.0.0',
             'version' => '3.0.0.0',
@@ -1636,7 +1645,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'b351126fc5c845fcb90c2c7fbb8019bbb40f6db8',
+            'reference' => 'c6ce790edbc017917fb2012ad5b3db4217c2e45d',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
