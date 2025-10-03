@@ -17,7 +17,8 @@
     "drupal/pathauto": "^1"
   },
   "require-dev": {
-    "drupal/search_api": "^1.29"
+    "drupal/search_api": "^1.29",
+    "drupal/better_exposed_filters": "~7.0"
   },
   "repositories": [
     {

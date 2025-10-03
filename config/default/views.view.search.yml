@@ -1163,7 +1163,7 @@ display:
         filter_groups: false
         header: false
       css_class: ''
-      use_ajax: true
+      use_ajax: false
       display_description: ''
       header:
         views_filters_summary:

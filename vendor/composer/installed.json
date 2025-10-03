@@ -6771,6 +6771,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Pretty paths for facets 3.x": "https://git.drupalcode.org/project/facets_pretty_paths/-/merge_requests/20.diff"
                 }
             },
             "installation-source": "dist",
