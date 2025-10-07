@@ -80,7 +80,7 @@
 
 <article{{ attributes.addClass(classes) }}>
     <div{{ content_attributes.addClass('node-content') }}>
-    <div class="container py-8 mx-auto md:grid md:grid-flow-row-dense md:grid-cols-3">
+    <div class="md:grid md:grid-flow-row-dense md:grid-cols-3 container py-8 mx-auto">
 {#  order 2  #}    
       <div class="md:col-span-2 md:order-2">
         <nav aria-label="themes">
@@ -134,9 +134,12 @@
       <div class="md:order-1 md:row-span-2 md:mr-4">
         {% if node.field_cover_image[0] is not empty %}
           {{ node.field_cover_image.entity|view('embedded') }}
-        {% elseif node.field_media[0] is not empty  %}
+        {% elseif (node.field_media[0] is not empty) and (node.field_media[0].entity['uri'] is not null) %}
           {{ node.field_media.entity|view('embedded') }}
-        {% else %}
+            {% else %}
+          <div><img style="width:280px; height: auto;" src="/themes/custom/iied_tw/images/default-pdf.png" alt="Default PDF cover" /></div>
+          {% endif %}
+        {# {% else %}
           <div><svg alt="Document" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">
 
             <defs>
@@ -152,10 +155,10 @@
             </g>
             </svg>
           </div>
-        {% endif %}
+        {% endif %} #}
 
         {% include '@iied_tw/partials/_publication_details.html.twig' %}
-        <div class="flex flex-row items-center md:items-start md:flex-col">
+        <div class="md:items-start md:flex-col flex flex-row items-center">
           <div class="mb-6">
             {% include '@iied_tw/partials/_share_links.html.twig' %}
           </div>
@@ -165,7 +168,7 @@
 
 {#  order 3  #}  
       <div class="md:col-span-2 md:order-3">
-        <div class="prose prose-base lg:prose-lg lg:max-w-max">
+        <div class="prose-base lg:prose-lg lg:max-w-max prose">
           {{ content.body }}
       
           {{ content.field_external_url }}
@@ -175,7 +178,7 @@
         {# cite #}
        
         {# {% if drupal_view_result('citation', 'block_1') is not empty %}
-        <div class="pl-4 my-8 border-l-2 border-iiedblue-500">
+        <div class="border-iiedblue-500 pl-4 my-8 border-l-2">
           <span class="font-bold">How to cite:</span><br />
           {{- drupal_view('citation', 'block_1') -}}
         </div>
