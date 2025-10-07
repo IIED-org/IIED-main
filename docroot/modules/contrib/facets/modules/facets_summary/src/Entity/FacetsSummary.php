@@ -319,7 +319,9 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
 
     foreach (array_keys($this->getFacets() ?? []) as $facet_id) {
       $facet = Facet::load($facet_id);
-      $this->addDependency('config', $facet->getConfigDependencyName());
+      if (!empty($facet)) {
+        $this->addDependency('config', $facet->getConfigDependencyName());
+      }
     }
 
     return $this;

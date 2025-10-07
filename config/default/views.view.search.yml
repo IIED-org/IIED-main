@@ -328,15 +328,18 @@ display:
         options:
           view_modes:
             'entity:node':
+              ':default': search_result
               article: search_result
               blog: search_result
               event: search_result
+              impact_story: search_result
               long_read: search_result
               news: search_result
               page: search_result
               project: search_result
               publication: search_result
             'entity:taxonomy_term':
+              ':default': default
               collection: search_result
               person: search_result
               theme: search_result
@@ -613,7 +616,7 @@ display:
     display_plugin: page
     position: 2
     display_options:
-      title: ''
+      title: Search
       pager:
         type: full
         options:
@@ -802,6 +805,7 @@ display:
               editor: '0'
               manager: '0'
               administrator: '0'
+            facets_pretty_paths_coder: taxonomy_term_name_coder
           is_grouped: false
           group_info:
             label: ''
@@ -880,6 +884,7 @@ display:
               editor: '0'
               manager: '0'
               administrator: '0'
+            facets_pretty_paths_coder: url_encoded_coder
           is_grouped: false
           group_info:
             label: ''
@@ -973,6 +978,7 @@ display:
               editor: '0'
               manager: '0'
               administrator: '0'
+            facets_pretty_paths_coder: taxonomy_term_name_coder
           is_grouped: false
           group_info:
             label: ''
@@ -1066,6 +1072,7 @@ display:
               editor: '0'
               manager: '0'
               administrator: '0'
+            facets_pretty_paths_coder: url_encoded_coder
           is_grouped: false
           group_info:
             label: ''

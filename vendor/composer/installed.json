@@ -6701,7 +6701,9 @@
                         "message": "Covered by Drupal's security advisory policy"
                     }
                 },
-                "patches_applied": []
+                "patches_applied": {
+                    "Update aborted 3492410": "https://www.drupal.org/files/issues/2024-12-11/264.patch"
+                }
             },
             "installation-source": "dist",
             "notification-url": "https://packages.drupal.org/8/downloads",

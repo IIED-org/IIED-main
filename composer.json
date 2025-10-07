@@ -299,6 +299,9 @@
       "drupal/address": {
         "Migrate using country names": "https://www.drupal.org/files/issues/2020-02-21/country_lookup_migrate_process_plugin-3114991-2.patch"
       },
+      "drupal/facets": {
+        "Update aborted 3492410": "https://www.drupal.org/files/issues/2024-12-11/264.patch"
+      },
       "drupal/facets_pretty_paths": {
         "Pretty paths for facets 3.x": "https://git.drupalcode.org/project/facets_pretty_paths/-/merge_requests/20.diff"
       },

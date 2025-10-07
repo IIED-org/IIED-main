@@ -25,7 +25,7 @@ third_party_settings:
     commit_after_finalize: false
     debug_finalize: false
     highlighter:
-      maxAnalyzedChars: 51200
+      maxAnalyzedChars: 102400
       fragmenter: gap
       usePhraseHighlighter: true
       highlightMultiTerm: true
@@ -35,10 +35,10 @@ third_party_settings:
         pattern: blank
         maxAnalyzedChars: 10000
       highlight:
-        mergeContiguous: false
+        mergeContiguous: true
         requireFieldMatch: false
         snippets: 2
-        fragsize: 0
+        fragsize: 2
     mlt:
       mintf: 1
       mindf: 1
@@ -198,11 +198,13 @@ field_settings:
         - 'entity:node/title'
         - 'entity:taxonomy_term/name'
   field_type:
-    label: 'Aggregated field'
+    label: 'Type and vocabulary'
     property_path: aggregated_field
     type: string
     configuration:
       type: union
+      separator: |
+
       fields:
         - 'entity:node/type'
         - 'entity:taxonomy_term/vid'
@@ -341,7 +343,6 @@ datasource_settings:
         - article
         - blog
         - event
-        - hidden_handbrake
         - impact_story
         - long_read
         - news
