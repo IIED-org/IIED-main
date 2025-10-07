@@ -5,10 +5,15 @@
         {% set image_uri = node.field_cover_image|file_uri %}
         {% set image_alt = node.field_cover_image.alt %}
         {% if image_uri is not null %}
-          {{ node.field_cover_image[0].entity|view('card_cover') }}
+          {{ node.field_cover_image[0].entity|view('search_cover') }}
         {% endif %}
       {% else %}
-          {{ node.field_media[0].entity|view('card_cover') }}
+      
+        {% if node.field_media[0].entity['uri'] %}
+          {{ node.field_media[0].entity|view('search_cover') }}
+          {% else %}
+          <div><img src="/themes/custom/iied_tw/images/default-pdf.png" alt="Default PDF cover" /></div>
+        {% endif %}
       {% endif %}
     </div>
   {% endblock %}
@@ -16,6 +21,3 @@
   {% block meta %}
       <div class="text-gray-500">{{ node.type.entity.label() }}, {{ node.field_date_published.value|date('d F Y') }} </div>
   {% endblock %}
-
-
-

@@ -24,10 +24,10 @@ content:
       image_style: list_thumbnail
       image_link: ''
       tag: span
-      fallback_formatter: file_default
       image_loading:
         attribute: lazy
       show_description: 0
+      fallback_formatter: 0
     third_party_settings: {  }
     weight: 0
     region: content
