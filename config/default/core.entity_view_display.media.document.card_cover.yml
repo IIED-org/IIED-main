@@ -29,7 +29,7 @@ content:
     settings:
       image_style: card_cover
       image_link: ''
-      tag: span
+      tag: div
       image_loading:
         attribute: lazy
       show_description: 0
