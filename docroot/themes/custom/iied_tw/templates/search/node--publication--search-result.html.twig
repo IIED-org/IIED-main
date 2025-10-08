@@ -8,11 +8,10 @@
           {{ node.field_cover_image[0].entity|view('search_cover') }}
         {% endif %}
       {% else %}
-      
-        {% if node.field_media[0].entity['uri'] is not null %}
+        {% if node.field_media[0].entity %}
           {{ node.field_media[0].entity|view('search_cover') }}
           {% else %}
-          <div><img src="/themes/custom/iied_tw/images/default-pdf.png" alt="Default PDF cover" /></div>
+          <div><img src="/themes/custom/iied_tw/images/default-doc.svg" alt="Default PDF cover" /></div>
         {% endif %}
       {% endif %}
     </div>

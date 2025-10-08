@@ -3219,6 +3219,10 @@ cite {
   border-color: rgb(206 83 158 / var(--tw-border-opacity, 1));
 }
 
+.pdfpreview-image-wrapper img {
+  margin: auto;
+}
+
 .glb-toolbar {
   opacity: 1;
   bottom: 0;
@@ -5030,6 +5034,11 @@ button.cn-decline.klaro-close {
   margin-bottom: 6rem;
 }
 
+.my-3{
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
 .my-4{
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -5468,6 +5477,10 @@ button.cn-decline.klaro-close {
   width: 75%;
 }
 
+.w-\[300px\]{
+  width: 300px;
+}
+
 .w-\[96\%\]{
   width: 96%;
 }
@@ -5487,6 +5500,10 @@ button.cn-decline.klaro-close {
 
 .w-px{
   width: 1px;
+}
+
+.w-\[320px\]{
+  width: 320px;
 }
 
 .min-w-56{
