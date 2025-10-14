@@ -749,7 +749,7 @@ display:
                   collapsible_disable_automatic_open: false
                   open_by_default: false
                   is_secondary: false
-                  hide_label: false
+                  hide_label: true
                   field_classes: ''
       cache:
         type: search_api_none
@@ -1152,7 +1152,7 @@ display:
               manager: '0'
               administrator: '0'
             expose_fields: false
-            placeholder: Search
+            placeholder: ''
             searched_fields_id: search_api_fulltext_searched_fields
             value_maxlength: 128
             autocomplete_filter: 1
