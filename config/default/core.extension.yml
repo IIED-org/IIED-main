@@ -35,7 +35,6 @@ module:
   config_split: 0
   configurable_views_filter_block: 0
   contact: 0
-  contact_block: 0
   content_translation_redirect: 0
   context: 0
   contextual: 0
