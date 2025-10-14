@@ -4,17 +4,6 @@ plugin.plugin_configuration.facets_summary_processor.show_summary:
 plugin.plugin_configuration.facets_summary_processor.show_count:
   type: mapping
 
-plugin.plugin_configuration.facets_summary_processor.show_string:
-  type: mapping
-  label: 'Current text search'
-  mapping:
-    label:
-      type: label
-      label: 'Label'
-
-plugin.plugin_configuration.facets_summary_processor.hide_when_not_rendered:
-  type: mapping
-
 plugin.plugin_configuration.facets_summary_processor.show_text_when_empty:
   type: mapping
   label: 'No results behavior'

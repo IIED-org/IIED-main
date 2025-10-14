@@ -296,7 +296,7 @@ class Search extends ConfigEntityBase implements SearchInterface {
   /**
    * {@inheritdoc}
    */
-  public function setSuggesters(array $suggesters = NULL) {
+  public function setSuggesters(?array $suggesters = NULL) {
     $this->suggesterInstances = $suggesters;
 
     // Sanitize the suggester weights and limits.
@@ -429,6 +429,9 @@ class Search extends ConfigEntityBase implements SearchInterface {
 
     // If there are no suggesters set for the search, it can't be enabled.
     if (!$this->getSuggesters()) {
+      $vars = ['@name' => $this->label() ?: $this->id()];
+      \Drupal::logger('search_api_autocomplete')->warning('Autocomplete search @name was disabled because it has no enabled suggesters.', $vars);
+      \Drupal::messenger()->addWarning(t('Autocomplete search @name was disabled because it has no enabled suggesters.', $vars));
       $this->disable();
     }
   }
@@ -478,6 +481,12 @@ class Search extends ConfigEntityBase implements SearchInterface {
         $this->suggester_settings[$suggester_id] = $configuration;
       }
       else {
+        $vars = [
+          '@suggester' => $suggester->label() ?: $suggester->getPluginId(),
+          '@search' => $this->label() ?: $this->id(),
+        ];
+        \Drupal::logger('search_api_autocomplete')->warning('Disabled unsupported suggester @suggester for autocomplete search @search.', $vars);
+        \Drupal::messenger()->addWarning(t('Disabled unsupported suggester @suggester for autocomplete search @search.', $vars));
         unset($this->suggesterInstances[$suggester_id]);
       }
     }
@@ -501,7 +510,7 @@ class Search extends ConfigEntityBase implements SearchInterface {
     // Keep only "enforced" dependencies, then add those computed by
     // getDependencyData().
     $this->dependencies = array_intersect_key($this->dependencies, ['enforced' => TRUE]);
-    $this->dependencies += array_map('array_keys', $dependencies);
+    $this->addDependencies(array_map('array_keys', $dependencies));
     return $this;
   }
 

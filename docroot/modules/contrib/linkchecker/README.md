@@ -29,10 +29,6 @@ Administration > Reports > Broken links.
 REQUIREMENTS
 ------------
 
-This module requires the following module:
-
-  * Dynamic Entity Reference (https://www.drupal.org/project/dynamic_entity_reference)
-
 For internal URL extraction you need to make sure that Cron always get called
 with your real public site URL (for e.g. https://example.com/cron.php). Make
 sure it's never executed with https://localhost/cron.php or any other

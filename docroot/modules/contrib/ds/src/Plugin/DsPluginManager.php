@@ -5,6 +5,7 @@ namespace Drupal\ds\Plugin;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\ds\Attribute\DsField;
 
 /**
  * Plugin type manager for all ds plugins.
@@ -23,7 +24,7 @@ class DsPluginManager extends DefaultPluginManager {
    *   The module handler to invoke the alter hook with.
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
-    parent::__construct('Plugin/DsField', $namespaces, $module_handler, 'Drupal\ds\Plugin\DsField\DsFieldInterface', 'Drupal\ds\Annotation\DsField');
+    parent::__construct('Plugin/DsField', $namespaces, $module_handler, 'Drupal\ds\Plugin\DsField\DsFieldInterface', DsField::class, 'Drupal\ds\Annotation\DsField');
 
     $this->alterInfo('ds_fields_info');
     $this->setCacheBackend($cache_backend, 'ds_fields_info');

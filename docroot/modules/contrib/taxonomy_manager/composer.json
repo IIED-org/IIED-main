@@ -7,27 +7,14 @@
     "issues": "https://drupal.org/project/issues/taxonomy_manager",
     "source": "https://drupal.org/project/taxonomy_manager"
   },
-  "repositories": [
-    {
-      "type": "package",
-      "package": {
-        "name": "fancytree/fancytree",
-        "version": "2.38.3",
-        "type": "drupal-library",
-        "extra": {
-          "installer-name": "jquery.fancytree"
-        },
-        "dist": {
-          "url": "https://github.com/mar10/fancytree/archive/refs/tags/v2.38.3.zip",
-          "type": "zip"
-        }
-      }
-    }
-  ],
   "suggest": {
     "fancytree/fancytree": "The fancytree library is required to use the drupal/taxonomy_manager module."
   },
   "require": {
     "drupal/jquery_ui": "^1.7"
+  },
+  "require-dev": {
+    "drupal/term_merge":"^2.0",
+    "drupal/term_reference_change":"^2.0"
   }
 }

@@ -225,7 +225,7 @@ abstract class FieldFormatterBase extends EntityReferenceFormatterBase {
     foreach ($target_bundles as $value) {
       $bundle_field_names = array_map(
         function (FieldDefinitionInterface $field_definition) {
-          return $field_definition->getLabel();
+          return $field_definition->getLabel() . ' (' . $field_definition->getName() . ')';
         },
         $this->entityFieldManager->getFieldDefinitions($entity_type_id, $value)
       );

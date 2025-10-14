@@ -1,4 +1,4 @@
-uuid: cdb6c158-2976-4d8d-a1fd-578c08067a99
+uuid: 0cfd6a49-2413-407b-abdd-c8dfe48bc47a
 langcode: en
 status: true
 dependencies:
@@ -7,7 +7,6 @@ dependencies:
     - views.view.search
   module:
     - views
-    - search_api_autocomplete
 id: search
 label: Search
 index_id: acquia_search_index
@@ -17,6 +16,7 @@ suggester_settings:
     highlight:
       enabled: false
       field: ''
+    suggest_keys: false
     view_modes:
       'entity:node':
         article: ''
@@ -32,18 +32,17 @@ suggester_settings:
         person: ''
         theme: ''
 suggester_weights:
-  live_results: -50
-suggester_limits:
-  live_results: 15
+  live_results: 0
+suggester_limits: {  }
 search_settings:
   'views:search':
     displays:
       default: true
       selected: {  }
 options:
-  limit: 20
+  limit: 10
   min_length: 2
-  show_count: true
-  delay: 250
+  show_count: false
+  delay: 500
   submit_button_selector: ':submit'
   autosubmit: true

@@ -2,43 +2,32 @@
 Card for use in a slider only
 #}
 
-<div class="h-full overflow-hidden snap-center shrink-0">
-  <article{{ attributes.addClass('h-full') }}>
+<div class="snap-center shrink-0 h-full overflow-hidden">
+	<article{{attributes.addClass('h-full')}}>
 
-    <a href="{{ url }}" class="hover:no-underline">
-      <div class="flex flex-col content-start h-full overflow-hidden transition-shadow bg-white border border-gray-300 grow group rounded-xl">
-      
-        {# image #}
-        <div class="w-full p-2 overflow-hidden bg-gray-300 max-h-44">
-          {% if content.field_cover_image[0] %}
-            {% set image_uri = node.field_cover_image|file_uri %}
-            {% set image_alt = node.field_cover_image.alt %}
-            {% if image_uri is not null %}
-             <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-2 group-hover:-rotate-1 group-hover:scale-105">
-              <img src="{{ image_uri|image_style('card_cover') }}" alt="{{ image_alt }}" />
-              </div>
-            {% endif %}
-          {% else %}
-           <div class="m-auto transition duration-300 ease-out shadow-lg w-fit sm:w-fit sm:-rotate-2 group-hover:-rotate-1 group-hover:scale-105">
-             {{ node.field_media[0].entity|view('card_cover') }}
-        </div>
-          {% endif %}
-        </div>
-        
-{# color-rotate classes to be added #}
-          <div class="p-4 border-t-2 grow border-iiedorange-500 color-rotate">
-            <h5 class="mb-4 text-gray-900 sm:text-xl sm:leading-relaxed">
-                {% if node.field_short_title.value %}
-                {{ node.field_short_title.value }}
-                {% else %}
-                {{ label }}
-                {% endif %}
-            </h5>
-          </div>
+		<a href="{{ url }}" class="hover:no-underline">
+			<div
+				class="grow group rounded-xl flex flex-col content-start h-full overflow-hidden transition-shadow bg-white border border-gray-300">
 
-      </div>
-    </a>
+				{# image #}
+				<div class="max-h-44 w-full p-2 overflow-hidden bg-gray-300">
+					<div class="w-fit sm:w-fit sm:-rotate-2 group-hover:-rotate-1 group-hover:scale-105 m-auto transition duration-300 ease-out shadow-lg">
+						{% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'card_cover', 'img_style':'card_cover' } %}
+					</div>
+				</div>
+				{# color-rotate classes to be added #}
+				<div class="grow border-iiedorange-500 color-rotate p-4 border-t-2">
+					<h5 class="sm:text-xl sm:leading-relaxed mb-4 text-gray-900">
+						{% if node.field_short_title.value %}
+							{{ node.field_short_title.value }}
+						{% else %}
+							{{ label }}
+						{% endif %}
+					</h5>
+				</div>
 
-  </article>
+			</div>
+		</a>
+
+	</article>
 </div>
-      

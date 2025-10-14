@@ -96,7 +96,7 @@ class WebformSubmissionSubmittedToLabel extends FieldPluginBase {
       return $build;
     }
 
-    $source_entity = $this->getEntityTranslation($source_entity, $values);
+    $source_entity = $this->getEntityTranslationByRelationship($source_entity, $values);
 
     if (isset($source_entity)) {
       $access = $source_entity->access('view', NULL, TRUE);

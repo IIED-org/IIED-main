@@ -33,7 +33,7 @@ class ErrorHandlerSubscriber implements EventSubscriberInterface {
    * @param \Symfony\Component\HttpKernel\Event\RequestEvent|null $event
    *   The event to process.
    */
-  public function registerErrorHandler(RequestEvent $event = NULL): void {
+  public function registerErrorHandler(?RequestEvent $event = NULL): void {
     if (!$this->account->hasPermission('access devel information')) {
       return;
     }

@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
-    - field.storage.taxonomy_term.field_name
     - field.storage.node.field_area_list
     - field.storage.node.field_author_s_
     - field.storage.node.field_collections
@@ -13,12 +12,12 @@ dependencies:
     - field.storage.node.field_product_code
     - field.storage.node.field_product_code_new
     - field.storage.node.field_theme_s_
-    - search_api.server.acquia_search_server
+    - field.storage.taxonomy_term.field_name
+    - search_api.server.solr
   module:
-    - search_api_solr
     - node
+    - search_api_solr
     - taxonomy
-    - search_api
 third_party_settings:
   search_api_solr:
     finalize: false
@@ -26,7 +25,7 @@ third_party_settings:
     commit_after_finalize: false
     debug_finalize: false
     highlighter:
-      maxAnalyzedChars: 51200
+      maxAnalyzedChars: 102400
       fragmenter: gap
       usePhraseHighlighter: true
       highlightMultiTerm: true
@@ -36,10 +35,10 @@ third_party_settings:
         pattern: blank
         maxAnalyzedChars: 10000
       highlight:
-        mergeContiguous: false
+        mergeContiguous: true
         requireFieldMatch: false
         snippets: 2
-        fragsize: 0
+        fragsize: 2
     mlt:
       mintf: 1
       mindf: 1
@@ -198,6 +197,17 @@ field_settings:
       fields:
         - 'entity:node/title'
         - 'entity:taxonomy_term/name'
+  field_type:
+    label: 'Type and vocabulary'
+    property_path: aggregated_field
+    type: string
+    configuration:
+      type: union
+      separator: |
+
+      fields:
+        - 'entity:node/type'
+        - 'entity:taxonomy_term/vid'
   given:
     label: 'Full name » Given'
     datasource_id: 'entity:taxonomy_term'
@@ -333,6 +343,7 @@ datasource_settings:
         - article
         - blog
         - event
+        - impact_story
         - long_read
         - news
         - page
@@ -389,6 +400,7 @@ processor_settings:
       - field_product_code
       - field_product_code_new
       - field_title_or_name
+      - field_type
       - given
       - langcode
       - name
@@ -439,7 +451,8 @@ tracker_settings:
   default:
     indexing_order: fifo
 options:
-  cron_limit: 1000
+  cron_limit: 100
+  delete_on_fail: true
   index_directly: true
   track_changes_in_references: false
 server: solr

@@ -195,6 +195,25 @@ display:
     position: 2
     display_options:
       path: search-api-autocomplete-test-2
+  exposed_form_plugin:
+    display_plugin: page
+    id: exposed_form_plugin
+    display_title: Exposed Form Plugin Test
+    position: 3
+    display_options:
+      path: search-api-autocomplete-test-exposed-form-plugin
+      exposed_form:
+        type: search_api_autocomplete_test
+        options:
+          submit_button: Search
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      defaults:
+        exposed_form: false
 label: 'Search API Autocomplete Test view'
 module: views
 id: search_api_autocomplete_test_view

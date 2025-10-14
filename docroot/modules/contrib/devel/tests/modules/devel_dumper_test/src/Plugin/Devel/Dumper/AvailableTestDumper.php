@@ -19,7 +19,7 @@ class AvailableTestDumper extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public function dump($input, $name = NULL): void {
+  public function dump($input, ?string $name = NULL): void {
     // Add a predetermined string to $input to check if this dumper has been
     // selected successfully.
     $input = '<pre>AvailableTestDumper::dump() ' . $input . '</pre>';
@@ -40,7 +40,7 @@ class AvailableTestDumper extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public function exportAsRenderable($input, $name = NULL): array {
+  public function exportAsRenderable($input, ?string $name = NULL): array {
     // Add a predetermined string to $input to check if this dumper has been
     // selected successfully.
     $input = '<pre>AvailableTestDumper::exportAsRenderable() ' . $input . '</pre>';

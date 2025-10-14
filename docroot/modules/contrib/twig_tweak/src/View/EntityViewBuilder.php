@@ -38,7 +38,7 @@ class EntityViewBuilder {
   /**
    * Builds a render array for a given entity.
    */
-  public function build(EntityInterface $entity, string $view_mode = 'full', string $langcode = NULL, bool $check_access = TRUE): array {
+  public function build(EntityInterface $entity, string $view_mode = 'full', ?string $langcode = NULL, bool $check_access = TRUE): array {
     $build = [];
     $entity = $this->entityRepository->getTranslationFromContext($entity, $langcode);
     $access = $check_access ? $entity->access('view', NULL, TRUE) : AccessResult::allowed();

@@ -99,7 +99,7 @@ enum Comparison: string
             self::NotIn => !in_array($subject, $reference, self::isSingleValue($subject)), /* @phpstan-ignore-line */
             self::Regexp => is_string($subject) && 1 === preg_match($reference, $subject), /* @phpstan-ignore-line */
             self::NotRegexp => is_string($subject) && 1 !== preg_match($reference, $subject), /* @phpstan-ignore-line */
-            self::Contains => str_contains($subject, $reference), /* @phpstan-ignore-line */
+            self::Contains => is_string($subject) && str_contains($subject, $reference), /* @phpstan-ignore-line */
             self::NotContain => is_string($subject) && !str_contains($subject, $reference), /* @phpstan-ignore-line */
             self::StartsWith => is_string($subject) && str_starts_with($subject, $reference), /* @phpstan-ignore-line */
             self::EndsWith => is_string($subject) && str_ends_with($subject, $reference), /* @phpstan-ignore-line */
@@ -123,19 +123,19 @@ enum Comparison: string
             self::NotBetween => match (true) {
                 !is_array($reference),
                 !array_is_list($reference),
-                 2 !== count($reference) => throw new QueryException('The value used for comparison with the `' . $this->name . '` operator must be an list containing 2 values, the minimum and maximum values.'),
+                2 !== count($reference) => throw new QueryException('The value used for comparison with the `'.$this->name.'` operator must be an list containing 2 values, the minimum and maximum values.'),
                 default => true,
             },
             self::In,
             self::NotIn => match (true) {
-                !is_array($reference) => throw new QueryException('The value used for comparison with the `' . $this->name . '` operator must be an array.'),
+                !is_array($reference) => throw new QueryException('The value used for comparison with the `'.$this->name.'` operator must be an array.'),
                 default => true,
             },
             self::Regexp,
             self::NotRegexp => match (true) {
                 !is_string($reference),
                 '' === $reference,
-                false === @preg_match($reference, '') => throw new QueryException('The value used for comparison with the `' . $this->name . '` operator must be a valid regular expression pattern string.'),
+                false === @preg_match($reference, '') => throw new QueryException('The value used for comparison with the `'.$this->name.'` operator must be a valid regular expression pattern string.'),
                 default => true,
             },
             self::Contains,
@@ -143,7 +143,7 @@ enum Comparison: string
             self::StartsWith,
             self::EndsWith => match (true) {
                 !is_string($reference),
-                    '' === $reference => throw new QueryException('The value used for comparison with the `' . $this->name . '` operator must be a non empty string.'),
+                '' === $reference => throw new QueryException('The value used for comparison with the `'.$this->name.'` operator must be a non empty string.'),
                 default => true,
             },
             self::Equals,

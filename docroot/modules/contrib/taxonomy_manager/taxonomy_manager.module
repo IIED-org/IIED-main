@@ -60,3 +60,14 @@ function taxonomy_manager_vocabulary_translatable($vid): bool {
   }
   return $translatable ?? FALSE;
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function taxonomy_manager_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'taxonomy_manager' && isset($libraries['jquery.fancytree'])) {
+    if (!file_exists(DRUPAL_ROOT . array_key_first($libraries['jquery.fancytree']['js']))) {
+      $libraries['jquery.fancytree'] = $libraries['jquery.fancytree.cdn'];
+    }
+  }
+}

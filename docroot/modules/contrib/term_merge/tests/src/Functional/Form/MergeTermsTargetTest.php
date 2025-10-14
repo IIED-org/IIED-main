@@ -82,7 +82,7 @@ class MergeTermsTargetTest extends MergeTermsTestBase {
    * @return string[]
    *   Options that allow the invoking test to know which targets to select.
    */
-  public function selectedTargetsProvider(): array {
+  public static function selectedTargetsProvider(): array {
     $test_data['no target selected'] = ['none'];
     $test_data['both targets selected'] = ['both'];
 

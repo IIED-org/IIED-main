@@ -145,7 +145,7 @@ $connection->insert('field_config_instance')
 ->values(array(
   'id' => '8',
   'field_id' => '6',
-  'field_name' => 'field_brokenlink',
+  'field_name' => 'field_broken_link',
   'entity_type' => 'node',
   'bundle' => 'article',
   'data' => 'a:6:{s:5:"label";s:10:"brokenLink";s:6:"widget";a:4:{s:4:"type";s:26:"text_textarea_with_summary";s:6:"weight";s:1:"1";s:8:"settings";a:2:{s:4:"rows";i:20;s:12:"summary_rows";i:5;}s:6:"module";s:4:"text";}s:8:"settings";a:3:{s:15:"text_processing";i:1;s:15:"display_summary";i:0;s:18:"user_register_form";b:0;}s:7:"display";a:1:{s:7:"default";a:5:{s:5:"label";s:5:"above";s:4:"type";s:12:"text_default";s:8:"settings";a:0:{}s:6:"module";s:4:"text";s:6:"weight";i:12;}}s:8:"required";b:0;s:11:"description";s:0:"";}',
@@ -175,7 +175,7 @@ $connection->insert('field_config_instance')
   'field_name' => 'field_tax',
   'entity_type' => 'node',
   'bundle' => 'term_merge',
-  'data' => 'a:7:{s:5:"label";s:11:"Ingrediants";s:6:"widget";a:5:{s:6:"weight";s:2:"-3";s:4:"type";s:21:"taxonomy_autocomplete";s:6:"module";s:8:"taxonomy";s:6:"active";i:0;s:8:"settings";a:2:{s:4:"size";i:60;s:17:"autocomplete_path";s:21:"taxonomy/autocomplete";}}s:8:"settings";a:1:{s:18:"user_register_form";b:0;}s:7:"display";a:1:{s:7:"default";a:5:{s:5:"label";s:5:"above";s:4:"type";s:28:"taxonomy_term_reference_link";s:8:"settings";a:0:{}s:6:"module";s:8:"taxonomy";s:6:"weight";i:1;}}s:8:"required";i:0;s:11:"description";s:0:"";s:13:"default_value";N;}',
+  'data' => 'a:7:{s:5:"label";s:11:"Ingredients";s:6:"widget";a:5:{s:6:"weight";s:2:"-3";s:4:"type";s:21:"taxonomy_autocomplete";s:6:"module";s:8:"taxonomy";s:6:"active";i:0;s:8:"settings";a:2:{s:4:"size";i:60;s:17:"autocomplete_path";s:21:"taxonomy/autocomplete";}}s:8:"settings";a:1:{s:18:"user_register_form";b:0;}s:7:"display";a:1:{s:7:"default";a:5:{s:5:"label";s:5:"above";s:4:"type";s:28:"taxonomy_term_reference_link";s:8:"settings";a:0:{}s:6:"module";s:8:"taxonomy";s:6:"weight";i:1;}}s:8:"required";i:0;s:11:"description";s:0:"";s:13:"default_value";N;}',
   'deleted' => '0',
 ))
 ->values(array(

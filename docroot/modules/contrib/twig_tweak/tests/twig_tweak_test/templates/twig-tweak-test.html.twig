@@ -100,7 +100,7 @@
   {% set media_uri = node.field_media|file_uri %}
   <div class="tt-file-uri-from-media-field">{{ media_uri }}</div>
   {% if media_uri is not null %}
-    <div class="tt-image-style-from-file-uri-from-media-field">{{ media_uri|image_style('thumbnail') }}</div>
+    <div class="tt-image-style-from-file-uri-from-media-field">{{ media_uri|image_style('thumbnail') }}</div>xxxxxx
   {% endif %}
   <div class="tt-file-url-from-uri">{{ 'public://image-test.png'|file_url }}</div>
   <div class="tt-file-url-from-uri-absolute">{{ 'public://image-test.png'|file_url(false) }}</div>

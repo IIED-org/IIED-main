@@ -1,27 +1,20 @@
-          
-
-
 <!-- Search box with transition/close -->
-<div x-cloak x-show="showSearch" x-collapse @click.away="showSearch = false" @keydown.escape.window="showSearch = false"
-    id="searchbox"
-    class="transition-all duration-300 ease-in-out transform" x-ref="searchBox">
-    
-    <!-- Search box -->
-    <div x-show="showSearch" class="py-8 bg-gray-100">
-        <div class="container">
-            <div class="items-center lg:flex lg:space-x-12">
-                <div class="lg:w-1/4">
-                    <h1 class="my-4 text-2xl xl:text-3xl">Search IIED</h1> 
-                </div>
-                
-                <div class="search-page lg:w-3/4">
-                    <div class="pt-2">
-                        {{ drupal_block('views_exposed_filter_block:search-page_2', {wrapper: false}) }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div
+	x-cloak x-show="$store.showSearch" x-collapse @click.away="$store.showSearch = !$store.showSearch" @keydown.escape.window="$store.showSearch = !$store.showSearch" id="searchbox" class="nav-search transition-all duration-300 ease-in-out transform" x-ref="searchBox">
 
-
+	<!-- Search box -->
+	<div class="py-8 bg-gray-100">
+		<div class="container">
+			<div class="lg:flex lg:space-x-12 items-center">
+				<div class="lg:w-1/4">
+					<h1 class="xl:text-3xl my-4 text-2xl">Search IIED</h1>
+				</div>
+				<div class="search-page lg:w-3/4">
+					<div class="pt-2">
+						{{ drupal_block('views_exposed_filter_block:search-page_2', {wrapper: false}) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

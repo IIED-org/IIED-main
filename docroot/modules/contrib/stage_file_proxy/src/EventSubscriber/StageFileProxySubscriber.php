@@ -62,14 +62,14 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
     // Get the origin server.
     $server = $config->get('origin');
 
-    if (str_ends_with($server, '/')) {
-      $this->logger->error('Origin cannot end in /.');
-      $server = rtrim($server, '/ ');
-    }
-
     // Quit if no origin given.
     if (!$server) {
       return;
+    }
+
+    if (str_ends_with($server, '/')) {
+      $this->logger->error('Origin cannot end in /.');
+      $server = rtrim($server, '/ ');
     }
 
     // Quit if we are the origin, ignore http(s).
@@ -164,10 +164,11 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
 
       $query = $this->requestStack->getCurrentRequest()->query->all();
       $query_parameters = UrlHelper::filterQueryParameters($query);
+      $proxy_headers = $config->get('proxy_headers') ?? '';
       $options = [
         'verify' => $config->get('verify'),
         'query' => $query_parameters,
-        'headers' => $this->createProxyHeadersArray($config->get('proxy_headers')),
+        'headers' => $this->createProxyHeadersArray($proxy_headers),
       ];
 
       if ($config->get('hotlink')) {
@@ -221,7 +222,7 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
     $lines = explode("\n", $headers_string);
     $headers = [];
     foreach ($lines as $line) {
-      $header = explode('|', $line);
+      $header = explode('|', trim($line));
       if (count($header) > 1) {
         $headers[$header[0]] = $header[1];
       }

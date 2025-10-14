@@ -3,7 +3,7 @@
 namespace Drupal\geolocation\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Element\FormElementBase;
 
 /**
  * Provides a render element to display a geolocation map.
@@ -19,7 +19,7 @@ use Drupal\Core\Render\Element\FormElement;
  *
  * @FormElement("geolocation_input")
  */
-class GeolocationInput extends FormElement {
+class GeolocationInput extends FormElementBase {
 
   /**
    * {@inheritdoc}

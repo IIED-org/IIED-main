@@ -19,36 +19,8 @@ core.entity_view_display.*.*.*.third_party.ds:
           type: string
           label: 'Entity, bundle and view mode classes'
         settings:
-          type: mapping
+          type: layout_plugin.settings.ds.[%parent.id]
           label: 'Display Suite layout settings'
-          mapping:
-            classes:
-              type: 'sequence'
-              label: 'The layout classes'
-              sequence:
-                type: ds.classes.[%key]
-                label: 'Classes array'
-            wrappers:
-              type: 'sequence'
-              label: 'The layout wrappers'
-              sequence:
-                type: string
-                label: 'Field wrapper'
-            outer_wrapper:
-              type: string
-              label: 'The outer wrapper of the layout'
-            attributes:
-              type: string
-              label: 'The attributes of the layout'
-            link_attribute:
-              type: string
-              label: 'The link attribute of the layout'
-            link_custom:
-              type: string
-              label: 'The custom path of the layout'
-            label:
-              type: string
-              label: 'The position of the label'
     regions:
       type: sequence
       label: 'The regions of the layout'
@@ -108,34 +80,3 @@ ds.classes.*:
   sequence:
     type: string
     label: 'Class name'
-
-layout_plugin.settings.*:
-  type: layout_plugin.settings
-  mapping:
-    classes:
-      type: 'sequence'
-      label: 'The layout classes'
-      sequence:
-        type: ds.classes.[%key]
-        label: 'Classes array'
-    wrappers:
-      type: 'sequence'
-      label: 'The layout wrappers'
-      sequence:
-        type: string
-        label: 'Field wrapper'
-    outer_wrapper:
-      type: string
-      label: 'The outer wrapper of the layout'
-    attributes:
-      type: string
-      label: 'The attributes of the layout'
-    link_attribute:
-      type: string
-      label: 'The link attribute of the layout'
-    link_custom:
-      type: string
-      label: 'The custom path of the layout'
-    label:
-      type: string
-      label: 'The position of the label'

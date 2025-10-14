@@ -3,7 +3,6 @@
 namespace Drupal\Tests\twig_tweak\Kernel;
 
 use Drupal\Component\Utility\DeprecationHelper;
-use Drupal\Core\Cache\Cache;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\user\Traits\UserCreationTrait;
@@ -46,8 +45,13 @@ final class EntityFormViewBuilderTest extends AbstractTestCase {
 
   /**
    * Test callback.
+   *
+   * @see \twig_tweak_test_node_access()
    */
   public function testEntityFormViewBuilder(): void {
+    if (version_compare(\Drupal::VERSION, '11.1.dev', '<')) {
+      $this->markTestSkipped();
+    }
 
     $view_builder = $this->container->get('twig_tweak.entity_form_view_builder');
 
@@ -81,7 +85,7 @@ final class EntityFormViewBuilderTest extends AbstractTestCase {
         'node:1',
         'tag_from_twig_tweak_test_node_access',
       ],
-      'max-age' => 50,
+      'max-age' => 0,
     ];
     self::assertCache($expected_cache, $build['#cache']);
     self::assertStringContainsString('<form class="node-article-form node-form" ', $this->renderPlain($build));
@@ -117,7 +121,7 @@ final class EntityFormViewBuilderTest extends AbstractTestCase {
         'config:core.entity_form_display.node.article.default',
         'node:2',
       ],
-      'max-age' => Cache::PERMANENT,
+      'max-age' => 0,
     ];
     self::assertCache($expected_cache, $build['#cache']);
     self::assertStringContainsString('<form class="node-article-form node-form" ', $this->renderPlain($build));

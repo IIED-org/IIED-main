@@ -2,6 +2,7 @@
 
 namespace Drupal\serial\Plugin\Field\FieldFormatter;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
@@ -81,7 +82,8 @@ class SerialDefaultFormatter extends FormatterBase {
         '#serial_id' => $item->value,
       ];
       $elements[$delta] = [
-        '#markup' => $this->renderer->renderPlain($source),
+        '#markup' => DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '10.3.0', fn () => $this->renderer->renderInIsolation($source), fn () => $this->renderer->renderPlain($source),
+        ),
       ];
     }
     return $elements;

@@ -73,8 +73,10 @@ class ContextValidator implements ContextValidatorInterface {
   protected array $formIdRegexes = [
     '/^media_library_add_form_.*/',
     '/^media_.*_edit_form$/',
-    '/^layout_builder_translate_form.*/',
+    '/layout_builder_translate_form.*/',
+    '/layout_builder_block_translation.*/',
     '/^views_form_media_library_widget_.*/',
+    '/ai_ckeditor_dialog_form.*/',
   ];
 
   /**

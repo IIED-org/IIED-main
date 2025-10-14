@@ -84,6 +84,15 @@ user interface, only meant for advanced users:
 ## Information for developers
 
 
+### Using the autocomplete endpoint in custom frontend code
+
+Please note that the JSON suggestions returned by the autocomplete endpoint
+(`/search_api_autocomplete/{search_api_autocomplete_search}`) contain data in
+the `value` key that is not sanitized to be used as HTML. A sanitized HTML label
+for the suggested is returned in key `label`, the `value` key has to be escaped
+before it can be used as HTML.
+
+
 ### Supporting a new method of creating suggestions
 
 You can add your own implementation for creating autocomplete suggestions by

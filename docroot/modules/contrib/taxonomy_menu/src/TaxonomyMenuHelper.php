@@ -146,7 +146,7 @@ class TaxonomyMenuHelper {
       }
       // Remove specific term link.
       // Note: this link does not exist in the taxonomy menu and not in $links.
-      elseif (!empty($term)) {
+      else {
         $this->manager->removeDefinition($menu->buildMenuPluginId($term), FALSE);
       }
     }

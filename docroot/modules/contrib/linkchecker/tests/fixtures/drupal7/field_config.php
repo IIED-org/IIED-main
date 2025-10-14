@@ -182,7 +182,7 @@ $connection->insert('field_config')
 ))
 ->values(array(
   'id' => '6',
-  'field_name' => 'field_brokenlink',
+  'field_name' => 'field_broken_link',
   'type' => 'text_with_summary',
   'module' => 'text',
   'active' => '1',

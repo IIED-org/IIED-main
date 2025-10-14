@@ -140,7 +140,6 @@ class ClientFactory {
             if (!in_array($value->getStatusCode(), [401, 403], TRUE)) {
               return $value;
             }
-            $this->authService->refreshAccessToken();
             return $next($request, $options);
           },
         );

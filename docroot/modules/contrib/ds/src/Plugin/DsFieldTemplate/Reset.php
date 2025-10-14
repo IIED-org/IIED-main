@@ -2,15 +2,17 @@
 
 namespace Drupal\ds\Plugin\DsFieldTemplate;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\ds\Attribute\DsFieldTemplate;
+
 /**
  * Plugin for the reset field template.
- *
- * @DsFieldTemplate(
- *   id = "reset",
- *   title = @Translation("Full reset"),
- *   theme = "ds_field_reset",
- * )
  */
+#[DsFieldTemplate(
+  id: 'reset',
+  title: new TranslatableMarkup('Full reset'),
+  theme: 'ds_field_reset'
+)]
 class Reset extends DsFieldTemplateBase {
 
   /**

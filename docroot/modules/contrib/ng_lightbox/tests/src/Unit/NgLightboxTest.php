@@ -71,8 +71,9 @@ class NgLightboxTest extends UnitTestCase {
     $config_factory->get(Argument::exact('ng_lightbox.settings'))->willReturn($config);
     $admin_context = $this->prophesize('Drupal\Core\Routing\AdminContext');
     $admin_context->isAdminRoute()->willReturn($is_admin_route);
+    $requestStack = $this->prophesize('Symfony\Component\HttpFoundation\RequestStack');
 
-    $lightbox = new NgLightbox($path_matcher->reveal(), $alias_manager->reveal(), $config_factory->reveal(), $admin_context->reveal());
+    $lightbox = new NgLightbox($path_matcher->reveal(), $alias_manager->reveal(), $config_factory->reveal(), $admin_context->reveal(), $requestStack->reveal());
 
     return $lightbox;
   }

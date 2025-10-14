@@ -19,11 +19,10 @@
   },
   "license": "GPL-2.0-or-later",
   "require": {
-    "drupal/core": "^9.4 || ^10.0",
-    "drupal/dynamic_entity_reference": "^1.16 || ^2.0 || ^3.0 || ^4.0"
   },
   "require-dev": {
-     "drupal/redirect": "^1.8"
+     "drupal/redirect": "^1.8",
+     "drupal/paragraphs": "*"
   },
   "extra": {
     "drush": {

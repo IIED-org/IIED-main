@@ -211,4 +211,15 @@ class RedirectTest extends BrowserTestBase {
     $this->assertEquals(TRUE, $this->state->get('login_redirect_per_role_test.user_logout_called'));
   }
 
+  /**
+   * Test the redirect during a password reset URL.
+   */
+  public function testUserPassReset() {
+    $this->drupalGet(user_pass_reset_url($this->user1));
+    $this->submitForm([], 'Log in');
+    // During a pass reset, the user shouldn't be redirected to the configured
+    // page to prevent that the user can't edit the password.
+    $this->assertSession()->addressEquals("user/{$this->user1->id()}/edit");
+  }
+
 }

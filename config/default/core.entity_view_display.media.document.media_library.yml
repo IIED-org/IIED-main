@@ -10,9 +10,7 @@ dependencies:
     - image.style.media_library
     - media.type.document
   module:
-    - ds
-    - file
-    - media_pdf_thumbnail
+    - pdfpreview
 _core:
   default_config_hash: WA5PBCSll9OeXbS16GbGz8jNgz7vkUAmC_72nn0yyBo
 id: media.document.media_library
@@ -21,68 +19,17 @@ bundle: document
 mode: media_library
 content:
   field_media_document:
-    type: file_default
-    label: hidden
-    settings:
-      use_description_as_link_text: true
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  thumbnail:
-    type: media_pdf_thumbnail_image_field_formatter
+    type: pdfpreview
     label: hidden
     settings:
       image_style: media_library
       image_link: ''
-      image_link_attributes_target: ''
-      image_link_attributes_rel: ''
-      pdf_file_field: field_media_document
-      pdf_page: '1'
+      tag: span
+      fallback_formatter: file_default
       image_loading:
         attribute: lazy
-      image_link_attributes_download: 0
-      audio_page: ''
-      audio_field: ''
-      audio_enable: ''
-      audio_link: ''
-      audio_attributes_download: ''
-      audio_attributes_target: ''
-      audio_attributes_rel: ''
-      document_page: ''
-      document_field: ''
-      document_enable: ''
-      document_link: ''
-      document_attributes_download: ''
-      document_attributes_target: ''
-      document_attributes_rel: ''
-      image_page: ''
-      image_field: ''
-      image_enable: ''
-      image_attributes_download: ''
-      image_attributes_target: ''
-      image_attributes_rel: ''
-      remote_video_page: ''
-      remote_video_field: ''
-      remote_video_enable: ''
-      remote_video_link: ''
-      remote_video_attributes_download: ''
-      remote_video_attributes_target: ''
-      remote_video_attributes_rel: ''
-      video_page: ''
-      video_field: ''
-      video_enable: ''
-      video_link: ''
-      video_attributes_download: ''
-      video_attributes_target: ''
-      video_attributes_rel: ''
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
+      show_description: 0
+    third_party_settings: {  }
     weight: 0
     region: content
 hidden:
@@ -92,4 +39,5 @@ hidden:
   langcode: true
   name: true
   search_api_excerpt: true
+  thumbnail: true
   uid: true

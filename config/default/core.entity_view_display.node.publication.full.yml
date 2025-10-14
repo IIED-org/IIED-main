@@ -59,6 +59,7 @@ dependencies:
     - ds
     - field_formatter
     - field_group
+    - file
     - isbn
     - layout_builder
     - link
@@ -419,14 +420,7 @@ content:
       settings: {  }
       label: hidden
       link_to_entity: false
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
+    third_party_settings: {  }
     weight: 24
     region: content
   field_meta_tags:
@@ -445,13 +439,12 @@ content:
     weight: 26
     region: content
   field_pdf:
-    type: field_link
-    label: hidden
+    type: file_default
+    label: above
     settings:
-      type: ''
-      settings: {  }
+      use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 27
+    weight: 52
     region: content
   field_pdf_pages:
     type: number_integer

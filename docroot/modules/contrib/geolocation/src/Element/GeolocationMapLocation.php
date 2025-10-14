@@ -3,7 +3,7 @@
 namespace Drupal\geolocation\Element;
 
 use Drupal\Core\Render\Element;
-use Drupal\Core\Render\Element\RenderElement;
+use Drupal\Core\Render\Element\RenderElementBase;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -26,7 +26,7 @@ use Drupal\Core\Template\Attribute;
  *
  * @FormElement("geolocation_map_location")
  */
-class GeolocationMapLocation extends RenderElement {
+class GeolocationMapLocation extends RenderElementBase {
 
   /**
    * {@inheritdoc}

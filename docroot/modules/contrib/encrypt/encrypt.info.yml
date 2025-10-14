@@ -1,6 +1,6 @@
 name: Encrypt
 description: 'Provides an API for two-way encryption.'
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^8 || ^9 || ^10 || ^11
 package: Encryption
 dependencies:
   - key:key
@@ -8,7 +8,7 @@ dependencies:
 type: module
 configure: entity.encryption_profile.collection
 
-# Information added by Drupal.org packaging script on 2022-11-28
-version: '8.x-3.1'
+# Information added by Drupal.org packaging script on 2024-09-29
+version: '8.x-3.2'
 project: 'encrypt'
-datestamp: 1669655250
+datestamp: 1727640044

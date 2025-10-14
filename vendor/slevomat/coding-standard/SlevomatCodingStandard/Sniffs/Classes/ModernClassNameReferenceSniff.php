@@ -34,10 +34,10 @@ class ModernClassNameReferenceSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		$tokens = TokenHelper::getOnlyNameTokenCodes();
-		$tokens[] = T_CLASS_C;
-
-		return $tokens;
+		return [
+			T_CLASS_C,
+			...TokenHelper::ONLY_NAME_TOKEN_CODES,
+		];
 	}
 
 	/**
@@ -71,7 +71,7 @@ class ModernClassNameReferenceSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($pointer, 'self::class');
+		FixerHelper::replace($phpcsFile, $pointer, 'self::class');
 		$phpcsFile->fixer->endChangeset();
 	}
 
@@ -142,9 +142,8 @@ class ModernClassNameReferenceSniff implements Sniff
 					return;
 				}
 
-				/** @var int $classPointer */
 				$classPointer = FunctionHelper::findClassPointer($phpcsFile, $functionPointer);
-				if (!ClassHelper::isFinal($phpcsFile, $classPointer)) {
+				if ($classPointer === null || !ClassHelper::isFinal($phpcsFile, $classPointer)) {
 					return;
 				}
 			}
@@ -166,7 +165,7 @@ class ModernClassNameReferenceSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 		if ($tokens[$functionPointer - 1]['code'] === T_NS_SEPARATOR) {
-			$phpcsFile->fixer->replaceToken($functionPointer - 1, '');
+			FixerHelper::replace($phpcsFile, $functionPointer - 1, '');
 		}
 
 		FixerHelper::change($phpcsFile, $functionPointer, $tokens[$openParenthesisPointer]['parenthesis_closer'], $fixedContent);

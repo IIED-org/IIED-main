@@ -2,18 +2,19 @@
 
 namespace Drupal\ds\Plugin\DsField\Book;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\ds\Attribute\DsField;
 use Drupal\ds\Plugin\DsField\DsFieldBase;
 
 /**
  * Plugin that the book navigation.
- *
- * @DsField(
- *   id = "book_navigation",
- *   title = @Translation("Book navigation"),
- *   entity_type = "node",
- *   provider = "book"
- * )
  */
+#[DsField(
+  id: 'book_navigation',
+  title: new TranslatableMarkup('Book navigation'),
+  entity_type: 'node',
+  provider: 'book'
+)]
 class BookNavigation extends DsFieldBase {
 
   /**

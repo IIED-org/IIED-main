@@ -2,12 +2,13 @@
 
 namespace Drupal\term_merge\Form;
 
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\Checkboxes;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
-use Drupal\taxonomy\TermStorageInterface;
 use Drupal\taxonomy\VocabularyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -17,18 +18,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class MergeTerms extends FormBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
    * The term storage handler.
    *
-   * @var \Drupal\taxonomy\TermStorageInterface
+   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
-  protected TermStorageInterface $termStorage;
+  protected EntityStorageInterface $termStorage;
 
   /**
    * The vocabulary.
@@ -37,12 +31,7 @@ class MergeTerms extends FormBase {
    */
   protected VocabularyInterface $vocabulary;
 
-  /**
-   * The private temporary storage factory.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
-   */
-  protected PrivateTempStoreFactory $tempStoreFactory;
+  protected bool $hasSynonyms;
 
   /**
    * Constructs a MergeTerms object.
@@ -52,10 +41,13 @@ class MergeTerms extends FormBase {
    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
    *   The private temporary storage factory service.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, PrivateTempStoreFactory $tempStoreFactory) {
-    $this->entityTypeManager = $entityTypeManager;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected PrivateTempStoreFactory $tempStoreFactory,
+    ModuleHandlerInterface $module_handler,
+  ) {
     $this->termStorage = $entityTypeManager->getStorage('taxonomy_term');
-    $this->tempStoreFactory = $tempStoreFactory;
+    $this->hasSynonyms = $module_handler->moduleExists('synonyms');
   }
 
   /**
@@ -64,7 +56,8 @@ class MergeTerms extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('tempstore.private')
+      $container->get('tempstore.private'),
+      $container->get('module_handler'),
     );
   }
 
@@ -81,8 +74,17 @@ class MergeTerms extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?VocabularyInterface $taxonomy_vocabulary = NULL) {
     $this->vocabulary = $taxonomy_vocabulary;
+
+    if ($this->hasSynonyms) {
+      $form['terms_to_synonym'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Add source term as synonym'),
+        '#description' => $this->t('Selected terms titles will get moved to the target term.'),
+      ];
+    }
+
 
     $form['terms'] = [
       '#type' => 'checkboxes',
@@ -123,6 +125,10 @@ class MergeTerms extends FormBase {
 
     $term_store = $this->tempStoreFactory->get('term_merge');
     $term_store->set('terms', $selected_terms);
+
+    if (!empty($form_state->getValue('terms_to_synonym')) || $form_state->hasValue('terms_to_synonym')) {
+      $term_store->set('terms_to_synonym', $form_state->getValue('terms_to_synonym'));
+    }
 
     $route_name = 'entity.taxonomy_vocabulary.merge_target';
     $route_parameters['taxonomy_vocabulary'] = $this->vocabulary->id();

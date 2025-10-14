@@ -41,6 +41,7 @@ class EncryptTest extends EncryptTestBase {
     // Test the encryption service with our encryption profile.
     $test_string = 'testing 123 &*#';
     $enc_string = \Drupal::service('encryption')->encrypt($test_string, $encryption_profile);
+    /* cspell:disable-next-line */
     $this->assertEquals('zhfgorfvkgrraovggrfgvat 123 &*#', $enc_string, 'The encryption service is not properly processing');
 
     // Test the decryption service with our encryption profile.
@@ -93,12 +94,12 @@ class EncryptTest extends EncryptTestBase {
     // The encryption key field is now visible.
     $this->assertSession()->fieldExists('encryption_key');
 
-    // Check that the 128 bit key exists so display changes don't give false
+    // Check that the 128-bit key exists so display changes don't give false
     // positives on the key deletion assertions below.
     $this->drupalGet('admin/config/system/encryption/profiles');
     $this->assertSession()->pageTextContains('Key 128 bit');
 
-    // Now delete the testkey.
+    // Now delete the test key.
     $this->drupalGet('admin/config/system/keys');
     $this->clickLink('Delete');
     // Warning is shown that linked dependency will also be deleted when
@@ -109,7 +110,7 @@ class EncryptTest extends EncryptTestBase {
     $this->assertSession()->pageTextContains('Test encryption profile');
     $this->submitForm([], 'Delete');
 
-    // Check that the 128 bit key no longer exists.
+    // Check that the 128-bit key no longer exists.
     $this->drupalGet('admin/config/system/encryption/profiles');
     $this->assertSession()->pageTextNotContains('Key 128 bit');
 
@@ -177,7 +178,7 @@ class EncryptTest extends EncryptTestBase {
     ];
     $this->submitForm($edit, 'Save');
 
-    // Check if encryption method configuration was succesfully saved.
+    // Check if encryption method configuration was successfully saved.
     $this->drupalGet('admin/config/system/encryption/profiles/manage/test_config_encryption_profile');
     // First, confirm we want to edit the encryption profile.
     $this->submitForm([], 'Edit');

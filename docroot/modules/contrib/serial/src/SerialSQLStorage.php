@@ -2,12 +2,14 @@
 
 namespace Drupal\serial;
 
+use Drupal\Core\Utility\Error;
 use Drupal\Core\Database\Database;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -34,11 +36,19 @@ class SerialSQLStorage implements ContainerInjectionInterface, SerialStorageInte
   protected $entityFieldManager;
 
   /**
+   * The Drupal Logger Factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected $loggerFactory;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityFieldManager $entityFieldManager) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityFieldManager $entityFieldManager, LoggerChannelFactoryInterface $loggerFactory) {
     $this->entityTypeManager = $entityTypeManager;
     $this->entityFieldManager = $entityFieldManager;
+    $this->loggerFactory = $loggerFactory;
   }
 
   /**
@@ -102,7 +112,7 @@ class SerialSQLStorage implements ContainerInjectionInterface, SerialStorageInte
     // https://www.drupal.org/node/608166
     catch (\Exception $e) {
       $transaction->rollback();
-      watchdog_exception('serial', $e);
+      Error::logException($this->loggerFactory->get('serial'), $e);
       throw $e;
     }
   }

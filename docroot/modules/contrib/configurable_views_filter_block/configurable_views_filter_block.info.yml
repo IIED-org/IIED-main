@@ -1,0 +1,12 @@
+name: Configurable Views Filter Block
+type: module
+description: Allow multiple instances of Views exposed filters block with a custom set of form fields per instance.
+package: Views
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - drupal:views
+
+# Information added by Drupal.org packaging script on 2025-05-15
+version: '1.0.0'
+project: 'configurable_views_filter_block'
+datestamp: 1747326790

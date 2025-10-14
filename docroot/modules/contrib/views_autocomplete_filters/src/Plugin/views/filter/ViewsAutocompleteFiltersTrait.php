@@ -10,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 trait ViewsAutocompleteFiltersTrait {
 
   /**
-   * Add autocomplete options
+   * Add autocomplete options.
    *
    * @return array
    *   Returns the options of plugin.
@@ -29,6 +29,8 @@ trait ViewsAutocompleteFiltersTrait {
       'autocomplete_raw_suggestion' => ['default' => TRUE],
       'autocomplete_raw_dropdown' => ['default' => TRUE],
       'autocomplete_dependent' => ['default' => FALSE],
+      'autocomplete_contextual' => ['default' => FALSE],
+      'autocomplete_autosubmit' => ['default' => FALSE],
     ];
     // Get the existing options from plugin schema.
     /** @var \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager */
@@ -43,7 +45,7 @@ trait ViewsAutocompleteFiltersTrait {
   /**
    * Build the options form.
    */
-  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+  public function buildOptionsForm(&$form, FormStateInterface $form_state): void {
     parent::buildOptionsForm($form, $form_state);
 
     if (!$this->canExpose() || empty($form['expose'])) {
@@ -52,7 +54,8 @@ trait ViewsAutocompleteFiltersTrait {
 
     // Build form elements for the right side of the exposed filter form.
     $states = [
-      'visible' => ['
+      'visible' => [
+        '
           :input[name="options[expose][autocomplete_filter]"]' => ['checked' => TRUE],
       ],
     ];
@@ -66,6 +69,16 @@ trait ViewsAutocompleteFiltersTrait {
 
     // Add autocomplete options form elements, only if they are defined.
     // The elements are visible only if the autocomplete filter is checked.
+    if (array_key_exists('autocomplete_contextual', $this->options['expose'])) {
+      $form['expose']['autocomplete_contextual'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Allow Contextual filters to apply to this filter'),
+        '#default_value' => $this->options['expose']['autocomplete_contextual'],
+        '#description' => $this->t('Autocomplete suggestions will take into account Contextual filters. <strong>This will not work if you have filters that are dependent on the URL.</strong>'),
+        '#states' => $states,
+      ];
+    }
+
     if (array_key_exists('autocomplete_items', $this->options['expose'])) {
       $form['expose']['autocomplete_items'] = [
         '#type' => 'number',
@@ -99,7 +112,7 @@ trait ViewsAutocompleteFiltersTrait {
 
     if (array_key_exists('autocomplete_field', $this->options['expose'])) {
       $field_options = $this->getFieldOptions();
-      // Get the autocomplete field with same nane if exists.
+      // Get the autocomplete field with same name if exists.
       if (empty($this->options['expose']['autocomplete_field']) && !empty($field_options[$this->options['id']])) {
         $this->options['expose']['autocomplete_field'] = $this->options['id'];
       }
@@ -133,6 +146,16 @@ trait ViewsAutocompleteFiltersTrait {
         '#states' => $states,
       ];
     }
+
+    if (array_key_exists('autocomplete_autosubmit', $this->options['expose'])) {
+      $form['expose']['autocomplete_autosubmit'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Autosubmit on selection'),
+        '#default_value' => $this->options['expose']['autocomplete_autosubmit'],
+        '#description' => $this->t('The form will be submitted when selecting an element from suggestions list.'),
+        '#states' => $states,
+      ];
+    }
   }
 
   /**
@@ -141,11 +164,11 @@ trait ViewsAutocompleteFiltersTrait {
    * @return array
    *   The list of options.
    */
-  protected function getFieldOptions() {
+  protected function getFieldOptions(): array {
     $field_options = [];
 
     // Limit options to fields with the same name.
-    /** @var \Drupal\views\Plugin\views\field\FieldHandlerInterface $handler */
+    /** @var \Drupal\views\Plugin\views\field\FieldPluginBase $handler */
     foreach ($this->view->display_handler->getHandlers('field') as $id => $handler) {
       if (in_array($this->realField, [
         $handler->field,
@@ -164,7 +187,10 @@ trait ViewsAutocompleteFiltersTrait {
     return $field_options;
   }
 
-  public function valueForm(&$form, FormStateInterface $form_state) {
+  /**
+   * {@inheritdoc}
+   */
+  public function valueForm(&$form, FormStateInterface $form_state): void {
     parent::valueForm($form, $form_state);
     $exposed = $form_state->get('exposed');
     if (!$exposed || empty($this->options['expose']['autocomplete_filter'])) {
@@ -179,7 +205,7 @@ trait ViewsAutocompleteFiltersTrait {
 
     // Add autocomplete path to the exposed textfield.
     $view_args = !empty($this->view->args) ? implode('||', $this->view->args) : 0;
-    $form['value']['#autocomplete_route_name'] = 'viewsfilters.autocomplete';
+    $form['value']['#autocomplete_route_name'] = 'views_filters.autocomplete';
     $form['value']['#autocomplete_route_parameters'] = [
       'view_name' => $this->view->storage->get('id'),
       'view_display' => $this->view->current_display,
@@ -187,17 +213,18 @@ trait ViewsAutocompleteFiltersTrait {
       'view_args' => $view_args,
     ];
 
-    // Add JS script to expands the behaviour of the default autocompletion.
-    // Override the "select" option of the jQueryUI auto-complete for
-    // to make sure we do not use quotes for inputs with comma.
-    $form['#attached']['library'][] = 'views_autocomplete_filters/drupal.views-autocomplete-filters';
-
     // Add JS script with core autocomplete overrides to the end of JS files
     // list to be sure it is added after the "misc/autocomplete.js" file. Also
     // mark the field with special class.
     if (!empty($this->options['expose']['autocomplete_dependent'])) {
-      $form['#attached']['library'][] = 'views_autocomplete_filters/drupal.views-autocomplete-filters-dependent';
+      $form['#attached']['library'][] = 'views_autocomplete_filters/1-dependent';
       $form['value']['#attributes']['class'][] = 'views-ac-dependent-filter';
+    }
+
+    // Add JS script for autosubmit.
+    if (!empty($this->options['expose']['autocomplete_autosubmit'])) {
+      $form['#attached']['library'][] = 'views_autocomplete_filters/2-autosubmit';
+      $form['value']['#attributes']['class'][] = 'views-ac-autosubmit';
     }
   }
 

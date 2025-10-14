@@ -8,7 +8,8 @@
 /**
  * Implements hook_preprocess_HOOK().
  */
-function iied_tw_preprocess_block(&$variables) {
+function iied_tw_preprocess_block(&$variables)
+{
   if (iied_tw_get_active_theme() == 'iied_tw' && $variables['base_plugin_id'] == 'system_branding_block') {
     $variables['site_logo'] = '';
     if ($variables['content']['site_logo']['#access'] && $variables['content']['site_logo']['#uri']) {
@@ -24,7 +25,8 @@ function iied_tw_preprocess_block(&$variables) {
  * @return string
  *   The name of the active theme.
  */
-function iied_tw_get_active_theme() {
+function iied_tw_get_active_theme()
+{
   return \Drupal::service('theme.manager')->getActiveTheme()->getName();
 }
 
@@ -44,9 +46,10 @@ function iied_tw_get_active_theme() {
 /**
  * Implements hook_theme_suggestions_HOOK().
  */
-function iied_tw_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+function iied_tw_theme_suggestions_alter(array &$suggestions, array $variables, $hook)
+{
   if ($hook == 'image') {
-    if ($node = \Drupal::routeMatch()->getParameter('node') ) {
+    if ($node = \Drupal::routeMatch()->getParameter('node')) {
       $image_style = $variables['style_name'];
       $suggestions[] = "image__" . $node->bundle();
       $suggestions[] = "image__" . $node->bundle() . '__' . $image_style;;
@@ -61,7 +64,8 @@ function iied_tw_theme_suggestions_alter(array &$suggestions, array $variables, 
 /**
  * Implements hook_theme_suggestions_taxonomy_term_alter().
  */
-function iied_tw_theme_suggestions_taxonomy_term_alter(array &$suggestions, array $variables) {
+function iied_tw_theme_suggestions_taxonomy_term_alter(array &$suggestions, array $variables)
+{
   /** @var \Drupal\taxonomy\TermInterface $term */
   $term = $variables['elements']['#taxonomy_term'];
   $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
@@ -74,7 +78,8 @@ function iied_tw_theme_suggestions_taxonomy_term_alter(array &$suggestions, arra
 /**
  * Implements hook_theme_suggestions_container_alter().
  */
-function iied_tw_theme_suggestions_container_alter(&$suggestions, array $variables) {
+function iied_tw_theme_suggestions_container_alter(&$suggestions, array $variables)
+{
   $element = $variables['element'];
 
   if (isset($element['#type']) && $element['#type'] == 'view') {
@@ -87,29 +92,30 @@ function iied_tw_theme_suggestions_container_alter(&$suggestions, array $variabl
   }
 }
 
-function iied_tw_preprocess_page(&$variables) {
+function iied_tw_preprocess_page(&$variables)
+{
   $variables['#attached']['drupalSettings']['responsive_menu']['custom'] = [
     'options' => [
       'navbar' => [
         'add' => FALSE
       ],
     ],
-    'config' => [
-    ],
+    'config' => [],
   ];
 }
 
 /**
  * Implements hook_preprocess_HOOK().
  */
-function iied_tw_preprocess_paragraph(&$variables) {
+function iied_tw_preprocess_paragraph(&$variables)
+{
 
   $paragraph = $variables['paragraph'];
   $paragraph_bundle = $paragraph->bundle();
 
   // For tab_box paragraph we want to assemble some simpler arrays to iterate
   // over in the paragraph template.
-  if ($paragraph_bundle == 'tab_box' ) {
+  if ($paragraph_bundle == 'tab_box') {
     // Attach the theme alpine library, as we're on the tab_box paragraph.
     $variables['#attached']['library'][] =  'iied_tw/alpine';
     foreach ($variables['content']['field_tabs'] as $key => $tab) {
@@ -119,7 +125,7 @@ function iied_tw_preprocess_paragraph(&$variables) {
       }
     }
   }
-  if ($paragraph_bundle == 'accordion_box' ) {
+  if ($paragraph_bundle == 'accordion_box') {
 
     // Attach the theme alpine library, the accordion_box paragraph needs it!
     $variables['#attached']['library'][] =  'iied_tw/alpine-collapse';
@@ -137,7 +143,8 @@ function iied_tw_preprocess_paragraph(&$variables) {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function iied_tw_preprocess_links__language_block(&$variables) {
+function iied_tw_preprocess_links__language_block(&$variables)
+{
 
   // Remove the link to the current language.
   $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
@@ -153,7 +160,8 @@ use Drupal\Core\Url;
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function iied_tw_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function iied_tw_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
   // Add reset password link.
   $url_object = Url::fromRoute('user.pass');
   $form['password_reset_link'] = [
@@ -169,7 +177,8 @@ function iied_tw_form_user_login_form_alter(&$form, FormStateInterface $form_sta
 /**
  * Implements hook_preprocess_node() for Impact story nodes.
  */
-function iied_tw_preprocess_node(&$variables) {
+function iied_tw_preprocess_node(&$variables)
+{
   if ($variables['node']->bundle() == 'impact_story' && !$variables['node']->field_global_term->isEmpty()) {
     // Load the taxonomy term entity.
     $term = $variables['node']->field_global_term->entity;
@@ -182,7 +191,7 @@ function iied_tw_preprocess_node(&$variables) {
       if ($parent_tid && $parent_tid !== '0') {
         // Load the parent term.
         $parent_term = \Drupal\taxonomy\Entity\Term::load($parent_tid);
-        
+
         if ($parent_term) {
           // Add the parent term name to the variable array.
           $variables['parent_term_name'] = $parent_term->label();
@@ -198,18 +207,19 @@ function iied_tw_preprocess_node(&$variables) {
  * Implements hook__theme_suggestions_block_alter().
  */
 
-function iied_tw_theme_suggestions_block_alter(array &$suggestions, array $variables) 
-{ 
+function iied_tw_theme_suggestions_block_alter(array &$suggestions, array $variables)
+{
   // Block suggestions for custom block types. 
-  if (isset($variables['elements']['content']['#block_content'])) { 
-    array_splice($suggestions, 1, 0, 'block__type__' . $variables['elements']['content']['#block_content']->bundle()); 
-  } 
+  if (isset($variables['elements']['content']['#block_content'])) {
+    array_splice($suggestions, 1, 0, 'block__type__' . $variables['elements']['content']['#block_content']->bundle());
+  }
 }
 
 /**
  * Implements hook_preprocess_HOOK() for taxonomy-term templates.
  */
-function iied_tw_preprocess_taxonomy_term(&$variables) {
+function iied_tw_preprocess_taxonomy_term(&$variables)
+{
   // Get the taxonomy term entity.
   $term = $variables['elements']['#taxonomy_term'];
 
@@ -222,11 +232,8 @@ function iied_tw_preprocess_taxonomy_term(&$variables) {
 
       // Use the Drupal service container to get the file_url_generator service.
       $url = \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
-      
+
       $variables['term_image_url'] = $url;
     }
   }
 }
-
-
-

@@ -6,6 +6,74 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\facets_exposed_filters\Plugin\views\filter\FacetsFilter;
+
+/**
+ * Implements hook_config_schema_info_alter().
+ */
+function facets_pretty_paths_config_schema_info_alter(&$definitions) {
+  if (isset($definitions['views_filter']['mapping']['expose']['mapping'])) {
+    $definitions['views_filter']['mapping']['expose']['mapping']['facets_pretty_paths_coder'] = [
+      'type' => 'string',
+      'label' => 'The coder plugin ID',
+    ];
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function facets_pretty_paths_form_views_ui_config_item_form_alter(&$form, FormStateInterface $form_state) {
+  // Add coder options into the exposed filter config form for views facets
+  // exposed filters.
+  $type = $form_state->get('type');
+  $handler = $form_state->get('handler');
+  if ($type === 'filter' && $handler instanceof FacetsFilter) {
+    /** @var \Drupal\facets_pretty_paths\Coder\CoderPluginManager $pretty_paths_coder_manager */
+    $pretty_paths_coder_manager = \Drupal::service('plugin.manager.facets_pretty_paths.coder');
+    $coders = [0 => t('None')];
+    $coder_descriptions = [0 => t('Do not use a pretty paths coder (use the default views query string), e.g. ?color=<strong>2</strong>')];
+    foreach ($pretty_paths_coder_manager->getDefinitions() as $coder_id => $definition) {
+      $coders[$definition['id']] = !empty($definition['label']) ? $definition['label'] : $coder_id;
+      $coder_descriptions[$definition['id']] = $definition['description'] ?? '';
+    }
+    $form['options']['expose']['facets_pretty_paths_coder'] = [
+      '#type' => 'radios',
+      '#title' => t('Pretty paths coder'),
+      '#options' => $coders,
+      '#required' => FALSE,
+      '#default_value' => $handler->options['expose']['facets_pretty_paths_coder'] ?? 0,
+    ];
+
+    foreach ($coder_descriptions as $coder_id => $coder_description) {
+      $form['options']['expose']['facets_pretty_paths_coder'][$coder_id]['#description'] = str_replace('color', $handler->options['expose']['identifier'], $coder_description);
+    }
+
+    // Add our custom submit handler to run before the default.
+    array_unshift($form['actions']['submit']['#submit'], '_facets_pretty_paths_handler_edit_form_submit');
+  }
+}
+
+/**
+ * Custom submit handler for the views_ui_config_item_form form.
+ *
+ * @param array $form
+ *   The views_ui_config_item_form form for a facets exposed filter.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ */
+function _facets_pretty_paths_handler_edit_form_submit(&$form, FormStateInterface $form_state) {
+  // Store coder choice into the handler (views does not automatically do this).
+  $handler = $form_state->get('handler');
+  if ($value = $form_state->getValue(['options', 'expose', 'facets_pretty_paths_coder'])) {
+    // A pretty paths coder was chosen.
+    $handler->options['expose']['facets_pretty_paths_coder'] = $value;
+  }
+  elseif (isset($handler->options['expose']['facets_pretty_paths_coder'])) {
+    // The "None" option was chosen.
+    unset($handler->options['expose']['facets_pretty_paths_coder']);
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().

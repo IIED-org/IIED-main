@@ -27,9 +27,9 @@ class BetterExposedFiltersHelper {
    * @return array
    *   Rewritten $options.
    */
-  public static function rewriteOptions(array $options, $rewrite_settings, $reorder = FALSE, $rewrite_based_on_key = FALSE) {
+  public static function rewriteOptions(array $options, string $rewrite_settings, bool $reorder = FALSE, bool $rewrite_based_on_key = FALSE): array {
     // Break out early if we don't have anything to rewrite.
-    if (empty($rewrite_settings) || !is_string($rewrite_settings)) {
+    if (empty($rewrite_settings)) {
       return $options;
     }
 
@@ -48,15 +48,13 @@ class BetterExposedFiltersHelper {
     $lines = explode("\n", trim($rewrite_settings));
     foreach ($lines as $line) {
       [$search, $replace] = array_map('trim', explode('|', $line));
-      if (!empty($search)) {
-        $rewrites[$search] = $replace;
+      $rewrites[$search] = $replace;
 
-        // Find the key of the option we need to reorder.
-        if ($reorder) {
-          $key = array_search($search, $flat_options);
-          if ($key !== FALSE) {
-            $order[] = $key;
-          }
+      // Find the key of the option we need to reorder.
+      if ($reorder) {
+        $key = array_search($search, $flat_options);
+        if ($key !== FALSE) {
+          $order[] = $key;
         }
       }
     }
@@ -128,7 +126,7 @@ class BetterExposedFiltersHelper {
    * @return array
    *   Flattened list of scalar options.
    */
-  public static function flattenOptions(array $options, $preserve_keys = FALSE) {
+  public static function flattenOptions(array $options, bool $preserve_keys = FALSE): array {
     $flat_options = [];
 
     foreach ($options as $key => $choice) {
@@ -156,7 +154,7 @@ class BetterExposedFiltersHelper {
    * @return array
    *   Alphabetically sorted array of original values.
    */
-  public static function sortOptions(array $options) {
+  public static function sortOptions(array $options): array {
     // Flatten array of mixed values to a simple array of scalar values.
     $flat_options = self::flattenOptions($options, TRUE);
 
@@ -182,7 +180,7 @@ class BetterExposedFiltersHelper {
    * @return array
    *   Alphabetically sorted array of original values.
    */
-  public static function sortNestedOptions(array $options, $delimiter = '-') {
+  public static function sortNestedOptions(array $options, string $delimiter = '-'): array {
     // Flatten array of mixed values to a simple array of scalar values.
     $flat_options = self::flattenOptions($options, TRUE);
     $prev_key = NULL;

@@ -19,17 +19,17 @@ interface DevelDumperInterface {
    *
    * @param mixed $input
    *   The variable to dump.
-   * @param string $name
+   * @param string|null $name
    *   (optional) The label to output before variable, defaults to NULL.
    */
-  public function dump(mixed $input, $name = NULL);
+  public function dump(mixed $input, ?string $name = NULL);
 
   /**
    * Returns a string representation of a variable.
    *
    * @param mixed $input
    *   The variable to export.
-   * @param ?string $name
+   * @param string|null $name
    *   (optional) The label to output before variable, defaults to NULL.
    *
    * @return \Drupal\Component\Render\MarkupInterface|string
@@ -42,13 +42,13 @@ interface DevelDumperInterface {
    *
    * @param mixed $input
    *   The variable to export.
-   * @param string $name
+   * @param string|null $name
    *   (optional) The label to output before variable, defaults to NULL.
    *
    * @return array
    *   String representation of a variable wrapped in a render array.
    */
-  public function exportAsRenderable(mixed $input, $name = NULL): array;
+  public function exportAsRenderable(mixed $input, ?string $name = NULL): array;
 
   /**
    * Checks if requirements for this plugin are satisfied.

@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\linkchecker\Unit;
 
-use Drupal\linkchecker\LinkCheckerResponseCodes;
 use Drupal\Tests\UnitTestCase;
+use Drupal\linkchecker\LinkCheckerResponseCodes;
 
 /**
  * Tests \Drupal\linkchecker\LinkCheckerResponseCodes.
@@ -51,7 +51,7 @@ class LinkCheckerResponseCodesTest extends UnitTestCase {
    *
    * @see testIsValid()
    */
-  public function isValidDataProvider() {
+  public static function isValidDataProvider() {
     return [
       [100, TRUE],
       [101, TRUE],

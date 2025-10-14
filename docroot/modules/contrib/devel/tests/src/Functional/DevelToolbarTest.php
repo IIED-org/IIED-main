@@ -14,7 +14,7 @@ class DevelToolbarTest extends DevelBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['devel', 'toolbar', 'block'];
+  protected static $modules = ['devel', 'toolbar', 'block', 'node'];
 
   /**
    * The user for tests.
@@ -123,6 +123,12 @@ class DevelToolbarTest extends DevelBrowserTestBase {
     // Make sure that the configuration cache tags are present for users with
     // the adequate permission.
     $this->drupalLogin($this->develUser);
+
+    // Dont go to the user/n page as thats uncacheable per https://gitlab.com/drupalspoons/devel/-/issues/541#note_2113393769
+    $node_type = $this->drupalCreateContentType();
+    $node = $this->drupalCreateNode(['type' => $node_type->id()]);
+    $this->drupalGet($node->toUrl());
+
     $this->assertSession()->responseHeaderContains('X-Drupal-Cache-Tags', 'config:devel.toolbar.settings');
     $this->assertSession()->responseHeaderContains('X-Drupal-Cache-Tags', 'config:system.menu.devel');
 
@@ -133,7 +139,7 @@ class DevelToolbarTest extends DevelBrowserTestBase {
 
     // Triggers a page reload and verify that the page is served from the
     // cache.
-    $this->drupalGet('');
+    $this->drupalGet($node->toUrl());
     $this->assertSession()->responseHeaderContains('X-Drupal-Dynamic-Cache', 'HIT');
   }
 

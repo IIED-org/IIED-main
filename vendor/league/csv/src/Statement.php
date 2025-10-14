@@ -16,6 +16,7 @@ namespace League\Csv;
 use ArrayIterator;
 use CallbackFilterIterator;
 use Closure;
+use Deprecated;
 use Iterator;
 use OutOfBoundsException;
 use ReflectionException;
@@ -28,13 +29,17 @@ use function array_values;
 use function is_string;
 
 /**
- * Criteria to filter a {@link TabularDataReader} object.
+ * Criteria to filter a {@link TabularData} object.
  *
  * @phpstan-import-type ConditionExtended from Query\PredicateCombinator
  * @phpstan-import-type OrderingExtended from Query\SortCombinator
  */
 class Statement
 {
+    final protected const COLUMN_ALL = 0;
+    final protected const COLUMN_INCLUDE = 1;
+    final protected const COLUMN_EXCLUDE = 2;
+
     /** @var array<ConditionExtended> Callables to filter the iterator. */
     protected array $where = [];
     /** @var array<OrderingExtended> Callables to sort the iterator. */
@@ -45,45 +50,37 @@ class Statement
     protected int $limit = -1;
     /** @var array<string|int> */
     protected array $select = [];
+    /** @var self::COLUMN_* */
+    protected int $select_mode = self::COLUMN_ALL;
 
     /**
-     * @param ?callable(array, array-key): bool $where, Deprecated argument use Statement::where instead
-     * @param int $offset, Deprecated argument use Statement::offset instead
-     * @param int $limit, Deprecated argument use Statement::limit instead
-     *
-     * @throws Exception
-     * @throws InvalidArgument
-     * @throws ReflectionException
-     */
-    public static function create(?callable $where = null, int $offset = 0, int $limit = -1): self
-    {
-        $stmt = new self();
-        if (null !== $where) {
-            $stmt = $stmt->where($where);
-        }
-
-        if (0 !== $offset) {
-            $stmt = $stmt->offset($offset);
-        }
-
-        if (-1 !== $limit) {
-            $stmt = $stmt->limit($limit);
-        }
-
-        return $stmt;
-    }
-
-    /**
-     * Sets the Iterator element columns.
+     * Select all the columns from the tabular data that MUST BE present in the ResultSet.
      */
     public function select(string|int ...$columns): self
     {
-        if ($columns === $this->select) {
+        if ($columns === $this->select && self::COLUMN_INCLUDE === $this->select_mode) {
             return $this;
         }
 
         $clone = clone $this;
         $clone->select = $columns;
+        $clone->select_mode = [] === $columns ? self::COLUMN_ALL : self::COLUMN_INCLUDE;
+
+        return $clone;
+    }
+
+    /**
+     * Select all the columns from the tabular data that MUST NOT BE present in the ResultSet.
+     */
+    public function selectAllExcept(string|int ...$columns): self
+    {
+        if ($columns === $this->select && self::COLUMN_EXCLUDE === $this->select_mode) {
+            return $this;
+        }
+
+        $clone = clone $this;
+        $clone->select = $columns;
+        $clone->select_mode = [] === $columns ? self::COLUMN_ALL : self::COLUMN_EXCLUDE;
 
         return $clone;
     }
@@ -126,68 +123,68 @@ class Statement
         $reflection = new ReflectionFunction($where instanceof Closure ? $where : $where(...));
 
         return match ($reflection->getNumberOfRequiredParameters()) {
-            0 => throw new InvalidArgument('The where condition must be a callable with 2 required parameters.'),
+            0 => throw new InvalidArgument('The where condition must be callable with 2 required parameters.'),
             1 => fn (mixed $record, int $key) => $where($record),
             default => $where,
         };
     }
 
-    public function andWhere(string|int $column, Query\Constraint\Comparison|Closure|string $operator, mixed $value = null): self
+    public function andWhere(string|int $column, Query\Constraint\Comparison|Closure|callable|string $operator, mixed $value = null): self
     {
         return $this->appendWhere('and', Query\Constraint\Column::filterOn($column, $operator, $value));
     }
 
-    public function orWhere(string|int $column, Query\Constraint\Comparison|Closure|string $operator, mixed $value = null): self
+    public function orWhere(string|int $column, Query\Constraint\Comparison|Closure|callable|string $operator, mixed $value = null): self
     {
         return $this->appendWhere('or', Query\Constraint\Column::filterOn($column, $operator, $value));
     }
 
-    public function whereNot(string|int $column, Query\Constraint\Comparison|Closure|string $operator, mixed $value = null): self
+    public function whereNot(string|int $column, Query\Constraint\Comparison|Closure|callable|string $operator, mixed $value = null): self
     {
         return $this->appendWhere('not', Query\Constraint\Column::filterOn($column, $operator, $value));
     }
 
-    public function xorWhere(string|int $column, Query\Constraint\Comparison|Closure|string $operator, mixed $value = null): self
+    public function xorWhere(string|int $column, Query\Constraint\Comparison|Closure|callable|string $operator, mixed $value = null): self
     {
         return $this->appendWhere('xor', Query\Constraint\Column::filterOn($column, $operator, $value));
     }
 
-    public function andWhereColumn(string|int $first, Query\Constraint\Comparison|string $operator, array|int|string $second): self
+    public function andWhereColumn(string|int $first, Query\Constraint\Comparison|callable|string $operator, array|int|string $second): self
     {
         return $this->appendWhere('and', Query\Constraint\TwoColumns::filterOn($first, $operator, $second));
     }
 
-    public function orWhereColumn(string|int $first, Query\Constraint\Comparison|string $operator, array|int|string $second): self
+    public function orWhereColumn(string|int $first, Query\Constraint\Comparison|callable|string $operator, array|int|string $second): self
     {
         return $this->appendWhere('or', Query\Constraint\TwoColumns::filterOn($first, $operator, $second));
     }
 
-    public function xorWhereColumn(string|int $first, Query\Constraint\Comparison|string $operator, array|int|string $second): self
+    public function xorWhereColumn(string|int $first, Query\Constraint\Comparison|callable|string $operator, array|int|string $second): self
     {
         return $this->appendWhere('xor', Query\Constraint\TwoColumns::filterOn($first, $operator, $second));
     }
 
-    public function whereNotColumn(string|int $first, Query\Constraint\Comparison|string $operator, array|int|string $second): self
+    public function whereNotColumn(string|int $first, Query\Constraint\Comparison|callable|string $operator, array|int|string $second): self
     {
         return $this->appendWhere('not', Query\Constraint\TwoColumns::filterOn($first, $operator, $second));
     }
 
-    public function andWhereOffset(Query\Constraint\Comparison|Closure|string $operator, mixed $value = null): self
+    public function andWhereOffset(Query\Constraint\Comparison|Closure|callable|string $operator, mixed $value = null): self
     {
         return $this->appendWhere('and', Query\Constraint\Offset::filterOn($operator, $value));
     }
 
-    public function orWhereOffset(Query\Constraint\Comparison|Closure|string $operator, mixed $value = null): self
+    public function orWhereOffset(Query\Constraint\Comparison|Closure|callable|string $operator, mixed $value = null): self
     {
         return $this->appendWhere('or', Query\Constraint\Offset::filterOn($operator, $value));
     }
 
-    public function xorWhereOffset(Query\Constraint\Comparison|Closure|string $operator, mixed $value = null): self
+    public function xorWhereOffset(Query\Constraint\Comparison|Closure|callable|string $operator, mixed $value = null): self
     {
         return $this->appendWhere('xor', Query\Constraint\Offset::filterOn($operator, $value));
     }
 
-    public function whereNotOffset(Query\Constraint\Comparison|Closure|string $operator, mixed $value = null): self
+    public function whereNotOffset(Query\Constraint\Comparison|Closure|callable|string $operator, mixed $value = null): self
     {
         return $this->appendWhere('not', Query\Constraint\Offset::filterOn($operator, $value));
     }
@@ -237,7 +234,7 @@ class Statement
      *
      * The column value can be modified using the callback before ordering.
      */
-    public function orderByAsc(string|int $column, ?Closure $callback = null): self
+    public function orderByAsc(string|int $column, callable|Closure|null $callback = null): self
     {
         return $this->orderBy(Query\Ordering\Column::sortOn($column, 'asc', $callback));
     }
@@ -247,7 +244,7 @@ class Statement
      *
      * The column value can be modified using the callback before ordering.
      */
-    public function orderByDesc(string|int $column, ?Closure $callback = null): self
+    public function orderByDesc(string|int $column, callable|Closure|null $callback = null): self
     {
         return $this->orderBy(Query\Ordering\Column::sortOn($column, 'desc', $callback));
     }
@@ -280,10 +277,7 @@ class Statement
      */
     public function limit(int $limit): self
     {
-        if (-1 > $limit) {
-            throw InvalidArgument::dueToInvalidLimit($limit, __METHOD__);
-        }
-
+        $limit >= -1 || throw InvalidArgument::dueToInvalidLimit($limit, __METHOD__);
         if ($limit === $this->limit) {
             return $this;
         }
@@ -295,15 +289,39 @@ class Statement
     }
 
     /**
-     * Executes the prepared Statement on the {@link TabularDataReader} object.
+     * Apply the callback if the given "condition" is (or resolves to) true.
+     *
+     * @param (callable($this): bool)|bool $condition
+     * @param callable($this): (self|null) $onSuccess
+     * @param ?callable($this): (self|null) $onFail
+     */
+    public function when(callable|bool $condition, callable $onSuccess, ?callable $onFail = null): self
+    {
+        if (!is_bool($condition)) {
+            $condition = $condition($this);
+        }
+
+        return match (true) {
+            $condition => $onSuccess($this),
+            null !== $onFail => $onFail($this),
+            default => $this,
+        } ?? $this;
+    }
+
+    /**
+     * Executes the prepared Statement on the {@link TabularData} object.
      *
      * @param array<string> $header an optional header to use instead of the tabular data header
      *
      * @throws InvalidArgument
      * @throws SyntaxError
      */
-    public function process(TabularDataReader $tabular_data, array $header = []): TabularDataReader
+    public function process(TabularData|TabularDataProvider $tabular_data, array $header = []): TabularDataReader
     {
+        if ($tabular_data instanceof TabularDataProvider) {
+            $tabular_data = $tabular_data->getTabularData();
+        }
+
         if ([] === $header) {
             $header = $tabular_data->getHeader();
         }
@@ -318,10 +336,16 @@ class Statement
         }
 
         if (0 !== $this->offset || -1 !== $this->limit) {
-            $iterator = Query\Limit::new($this->offset, $this->limit)->slice($iterator);
+            $iterator = (new Query\Limit($this->offset, $this->limit))->slice($iterator);
         }
 
-        return (new ResultSet($iterator, $header))->select(...$this->select);
+        $iterator = new ResultSet($iterator, $header);
+
+        return match ($this->select_mode) {
+            self::COLUMN_EXCLUDE => $iterator->selectAllExcept(...$this->select),
+            self::COLUMN_INCLUDE => $iterator->select(...$this->select),
+            default => $iterator,
+        };
     }
 
     /**
@@ -333,6 +357,7 @@ class Statement
      * @see Statement::process()
      * @deprecated Since version 9.16.0
      */
+    #[Deprecated(message:'this method no longer affects on the outcome of the class, use League\Csv\Statement::process() instead', since:'league/csv:9.16.0')]
     protected function applySelect(Iterator $records, array $recordsHeader, array $select): TabularDataReader
     {
         $hasHeader = [] !== $recordsHeader;
@@ -381,6 +406,7 @@ class Statement
      * @deprecated Since version 9.15.0
      * @codeCoverageIgnore
      */
+    #[Deprecated(message:'this method no longer affects on the outcome of the class, use League\Csv\Statement::applyFilter() instead', since:'league/csv:9.15.0')]
     protected function filter(Iterator $iterator, callable $callable): CallbackFilterIterator
     {
         return new CallbackFilterIterator($iterator, $callable);
@@ -395,19 +421,20 @@ class Statement
      * @deprecated Since version 9.16.0
      * @codeCoverageIgnore
      */
-     protected function applyFilter(Iterator $iterator): Iterator
-     {
-         $filter = function (array $record, string|int $key): bool {
-             foreach ($this->where as $where) {
-                 if (true !== $where($record, $key)) {
-                     return false;
-                 }
-             }
+    #[Deprecated(message:'this method no longer affects on the outcome of the class, use League\Csv\Statement::process() instead', since:'league/csv:9.16.0')]
+    protected function applyFilter(Iterator $iterator): Iterator
+    {
+        $filter = function (array $record, string|int $key): bool {
+            foreach ($this->where as $where) {
+                if (true !== $where($record, $key)) {
+                    return false;
+                }
+            }
 
-             return true;
-         };
+            return true;
+        };
 
-         return new CallbackFilterIterator($iterator, $filter);
+        return new CallbackFilterIterator($iterator, $filter);
     }
 
     /**
@@ -419,6 +446,7 @@ class Statement
      * @deprecated Since version 9.16.0
      * @codeCoverageIgnore
      */
+    #[Deprecated(message:'this method no longer affects on the outcome of the class, use League\Csv\Statement::process() instead', since:'league/csv:9.16.0')]
     protected function buildOrderBy(Iterator $iterator): Iterator
     {
         if ([] === $this->order_by) {
@@ -434,7 +462,6 @@ class Statement
 
             return $cmp ?? 0;
         };
-
 
         $class = new class () extends ArrayIterator {
             public function seek(int $offset): void
@@ -452,5 +479,40 @@ class Statement
         $it->uasort($compare);
 
         return $it;
+    }
+
+
+    /**
+     * DEPRECATION WARNING! This method will be removed in the next major point release.
+     *
+     * @param ?callable(array, array-key): bool $where , Deprecated argument use Statement::where instead
+     * @param int $offset, Deprecated argument use Statement::offset instead
+     * @param int $limit, Deprecated argument use Statement::limit instead
+     *
+     * @throws Exception
+     * @throws InvalidArgument
+     * @throws ReflectionException
+     *
+     * @see Statement::__construct()
+     * @deprecated Since version 9.22.0
+     * @codeCoverageIgnore
+     */
+    #[Deprecated(message:'use League\Csv\Statement::__construct() instead', since:'league/csv:9.22.0')]
+    public static function create(?callable $where = null, int $offset = 0, int $limit = -1): self
+    {
+        $stmt = new self();
+        if (null !== $where) {
+            $stmt = $stmt->where($where);
+        }
+
+        if (0 !== $offset) {
+            $stmt = $stmt->offset($offset);
+        }
+
+        if (-1 !== $limit) {
+            $stmt = $stmt->limit($limit);
+        }
+
+        return $stmt;
     }
 }

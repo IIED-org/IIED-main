@@ -19,7 +19,7 @@ class PermissionsTest extends TermMergeTestBase {
    *   expectedStatusCode: int
    *      The status code that should be returned.
    */
-  public function permissionsProvider(): array {
+  public static function permissionsProvider(): array {
     $test_data = [];
 
     $test_data['no permissions'] = [

@@ -188,6 +188,10 @@ class CommonMap extends GeolocationStyleBase {
       }
     }
 
+    if (empty($build['locations']) && !$this->evenEmpty()) {
+      return [];
+    }
+
     $build = $this->mapCenterManager->alterMap($build, $this->options['centre'], $this);
 
     if ($this->view->getRequest()->get('geolocation_common_map_dynamic_view')) {

@@ -4,7 +4,7 @@ description: 'Theme for testing a theme-provided layout'
 base theme: starterkit_theme
 core_version_requirement: ^10.2 || ^11
 
-# Information added by Drupal.org packaging script on 2024-08-03
-version: '8.x-3.23'
+# Information added by Drupal.org packaging script on 2025-05-05
+version: '8.x-3.30'
 project: 'ds'
-datestamp: 1722718291
+datestamp: 1746467922

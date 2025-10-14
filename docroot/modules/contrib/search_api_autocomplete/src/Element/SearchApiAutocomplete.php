@@ -25,6 +25,8 @@ class SearchApiAutocomplete extends Textfield {
     $info['#search_id'] = NULL;
     $info['#data'] = [];
 
+    // Note: Keep this in sync with AutocompleteHelper::alterElement().
+    /* @see \Drupal\search_api_autocomplete\Utility\AutocompleteHelper::alterElement() */
     array_unshift($info['#process'], [$class, 'processSearchApiAutocomplete']);
 
     return $info;

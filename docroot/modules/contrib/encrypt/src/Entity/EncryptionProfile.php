@@ -2,15 +2,15 @@
 
 namespace Drupal\encrypt\Entity;
 
+use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Component\Utility\Crypt;
-use Drupal\encrypt\EncryptionProfileInterface;
-use Drupal\encrypt\Exception\EncryptException;
 use Drupal\encrypt\EncryptionMethodInterface;
 use Drupal\encrypt\EncryptionMethodPluginCollection;
+use Drupal\encrypt\EncryptionProfileInterface;
+use Drupal\encrypt\Exception\EncryptException;
 use Drupal\key\Entity\Key;
 
 /**
@@ -26,7 +26,6 @@ use Drupal\key\Entity\Key;
  *       "edit" = "Drupal\encrypt\Form\EncryptionProfileForm",
  *       "delete" = "Drupal\encrypt\Form\EncryptionProfileDeleteForm",
  *       "test" = "Drupal\encrypt\Form\EncryptionProfileTestForm",
- *       "default" = "Drupal\encrypt\Form\EncryptionProfileDefaultForm"
  *     }
  *   },
  *   config_prefix = "profile",
@@ -37,7 +36,6 @@ use Drupal\key\Entity\Key;
  *     "uuid" = "uuid"
  *   },
  *   links = {
- *     "canonical" = "/admin/config/system/encryption/profiles/{encryption_profile}",
  *     "add-form" = "/admin/config/system/encryption/profiles/add",
  *     "edit-form" = "/admin/config/system/encryption/profiles/manage/{encryption_profile}",
  *     "delete-form" = "/admin/config/system/encryption/profiles/manage/{encryption_profile}/delete",

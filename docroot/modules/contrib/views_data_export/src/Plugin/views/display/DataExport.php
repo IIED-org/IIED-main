@@ -5,18 +5,18 @@ namespace Drupal\views_data_export\Plugin\views\display;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponse;
 use Drupal\Core\Config\StorageException;
+use Drupal\Core\File\FileExists;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\rest\Plugin\views\display\RestExport;
-use Drupal\views\Views;
-use Drupal\views\ViewExecutable;
 use Drupal\Core\Url;
+use Drupal\rest\Plugin\views\display\RestExport;
+use Drupal\search_api\Plugin\views\query\SearchApiQuery;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Views;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
-use Drupal\search_api\Plugin\views\query\SearchApiQuery;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Drupal\Core\File\FileSystemInterface;
 
 /**
  * Provides a data export display plugin.
@@ -148,7 +148,7 @@ class DataExport extends RestExport {
       ],
       'title' => t('Exporting data...'),
       'progressive' => TRUE,
-      'progress_message' => t('@percentage% complete. Time elapsed: @elapsed'),
+      'progress_message' => t('Time elapsed: @elapsed. Estimated @estimate remaining.'),
       'finished' => [static::class, 'finishBatch'],
     ];
     batch_set($batch_definition);
@@ -633,7 +633,7 @@ class DataExport extends RestExport {
    * {@inheritdoc}
    */
   public function getAvailableGlobalTokens($prepared = FALSE, array $types = []) {
-    $types += ['date'];
+    $types = array_merge($types, ['date']);
     return parent::getAvailableGlobalTokens($prepared, $types);
   }
 
@@ -716,7 +716,7 @@ class DataExport extends RestExport {
       $user_ID = $current_user->isAuthenticated() ? $current_user->id() : NULL;
       $timestamp = \Drupal::time()->getRequestTime();
       $filename = \Drupal::token()->replace($view->getDisplay()->options['filename'], ['view' => $view]);
-      $extension = reset($view->getDisplay()->options['style']['options']['formats']);
+      $extension = reset($view->getStyle()->options['formats']);
 
       // Checks if extension is already included in the filename.
       if (!preg_match("/^.*\.($extension)$/i", $filename)) {
@@ -746,7 +746,13 @@ class DataExport extends RestExport {
         $fileSystem = \Drupal::service('file_system');
         $fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
         $destination = $directory . $filename;
-        $file = \Drupal::service('file.repository')->writeData('', $destination, FileSystemInterface::EXISTS_REPLACE);
+        if (version_compare(\Drupal::VERSION, '10.3', '>=')) {
+          $file = \Drupal::service('file.repository')->writeData('', $destination, FileExists::Replace);
+        }
+        else {
+          // @phpstan-ignore-next-line
+          $file = \Drupal::service('file.repository')->writeData('', $destination, FileSystemInterface::EXISTS_REPLACE);
+        }
         if (!$file) {
           // Failed to create the file, abort the batch.
           unset($context['sandbox']);
@@ -799,22 +805,35 @@ class DataExport extends RestExport {
     $string = (string) $rendered_rows['#markup'];
 
     // Workaround for CSV headers, remove the first line.
-    if ($context['sandbox']['progress'] != 0 && reset($view->getStyle()->options['formats']) == 'csv') {
-      $string = preg_replace('/^[^\n]+/', '', $string);
+    $options = $view->getStyle()->options;
+    if ($context['sandbox']['progress'] != 0 && reset($options['formats']) == 'csv') {
+      $string = $options['csv_settings']['output_header']
+        ? preg_replace('/^[^\n]+/', '', $string)
+        : "\n{$string}";
     }
 
     // Workaround for XML.
     $output_format = reset($view->getStyle()->options['formats']);
     if ($output_format == 'xml') {
+      $format_options = $view->getStyle()->options['xml_settings'];
+      $root_node_name = $format_options['root_node_name'];
+      $encoding = $format_options['encoding'];
       $maximum = $export_limit ? $export_limit : $total_rows;
-      // Remove xml declaration and response opening tag.
+
+      // Remove xml declaration, root node opening tag.
       if ($context['sandbox']['progress'] != 0) {
-        $string = str_replace('<?xml version="1.0"?>', '', $string);
-        $string = str_replace('<response>', '', $string);
+        if (!empty($encoding)) {
+          $string = str_replace('<?xml version="1.0" encoding="' . $encoding . '"?>', '', $string);
+        }
+        else {
+          $string = str_replace('<?xml version="1.0"?>', '', $string);
+        }
+        $string = str_replace("<{$root_node_name}>", '', $string);
       }
-      // Remove response closing tag.
+
+      // Remove root node closing tag.
       if ($context['sandbox']['progress'] + $items_this_batch < $maximum) {
-        $string = str_replace('</response>', '', $string);
+        $string = str_replace("</{$root_node_name}>", '', $string);
       }
     }
 
@@ -835,11 +854,11 @@ class DataExport extends RestExport {
         $rowIndex++;
         $colIndex = 0;
         foreach ($row->getCellIterator() as $cell) {
-          $previousExcel->getActiveSheet()->setCellValueByColumnAndRow(++$colIndex, $rowIndex, $cell->getValue());
+          $previousExcel->getActiveSheet()->setCellValue([++$colIndex, $rowIndex], $cell->getValue());
         }
       }
 
-      $objWriter = new Xlsx($previousExcel);
+      $objWriter = IOFactory::createWriter($previousExcel, ucfirst($output_format));
       $objWriter->save($vdeFileRealPath);
     }
     // Write rendered rows to output file.
@@ -897,7 +916,7 @@ class DataExport extends RestExport {
         // Create a web server accessible URL for the private file.
         // Permissions for accessing this URL will be inherited from the View
         // display's configuration.
-        $url = \Drupal::service('file_url_generator')->generateAbsoluteString($results['vde_file']);
+        $url = \Drupal::service('file_url_generator')->generateString($results['vde_file']);
         $message = t('Export complete. Download the file <a download href=":download_url"  data-download-enabled="false" id="vde-automatic-download">here</a>.', [':download_url' => $url]);
         // If the user specified instant download than redirect to the file.
         if ($results['automatic_download']) {
@@ -924,13 +943,19 @@ class DataExport extends RestExport {
    */
   protected function getRoute($view_id, $display_id) {
     $route = parent::getRoute($view_id, $display_id);
-    $view = Views::getView($view_id);
-    $view->setDisplay($display_id);
 
     // If this display is going to perform a redirect to the batch url
     // make sure thr redirect response is never cached.
-    if ($view->display_handler->getOption('export_method') == 'batch') {
+    if ($this->getOption('export_method') == 'batch') {
       $route->setOption('no_cache', TRUE);
+
+      // Additionally if the path is an admin path we need to set the
+      // _admin_route option to TRUE so the batch process is executed in the
+      // same theme as we'd normally expect for the path even though this is
+      // not an HTML route.
+      if (str_starts_with($this->getOption('path') ?? '', 'admin/')) {
+        $route->setOption('_admin_route', TRUE);
+      }
     }
     return $route;
   }

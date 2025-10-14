@@ -83,7 +83,7 @@ class Settings {
    * @param array|string $metadata
    *   Settings Metadata.
    */
-  public function __construct(Config $config, string $network_id = NULL, string $secret_key = NULL, string $application_uuid = NULL, $metadata = NULL) {
+  public function __construct(Config $config, ?string $network_id = NULL, ?string $secret_key = NULL, ?string $application_uuid = NULL, $metadata = NULL) {
     $this->config = $config;
     $this->identifier = $network_id ?? '';
     $this->secretKey = $secret_key ?? '';
@@ -140,7 +140,7 @@ class Settings {
    * @return mixed
    *   The Metadata.
    */
-  public function getMetadata(string $key = NULL) {
+  public function getMetadata(?string $key = NULL) {
     if (isset($key) && isset($this->metadata[$key])) {
       return $this->metadata[$key];
     }

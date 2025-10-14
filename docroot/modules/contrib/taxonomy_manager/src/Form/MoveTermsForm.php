@@ -44,7 +44,7 @@ class MoveTermsForm extends FormBase {
    *
    * @todo Add autocomplete to select/add parent term.
    */
-  public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL, $selected_terms = []) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?VocabularyInterface $taxonomy_vocabulary = NULL, $selected_terms = []) {
     if (empty($selected_terms)) {
       $form['info'] = [
         '#markup' => $this->t('Please select the terms you want to move.'),

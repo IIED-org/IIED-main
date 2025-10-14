@@ -1,0 +1,5 @@
+configurable_views_filter_block.theme:
+  version: VERSION
+  css:
+    theme:
+      css/configurable_views_filter_block.theme.css: {}

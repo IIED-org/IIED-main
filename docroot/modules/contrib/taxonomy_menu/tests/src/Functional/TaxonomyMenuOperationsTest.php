@@ -181,4 +181,20 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
     );
   }
 
+  /**
+   * Tests if unpublished term becomes disabled from menu.
+   */
+  public function testUnpublishedTerm() {
+    $this->drupalGet('taxonomy/term/3/edit');
+    $edit = [
+      'status[value]' => FALSE,
+    ];
+
+    $this->submitForm($edit, 'Save');
+
+    $this->drupalGet('admin/structure/menu/manage/test-menu');
+
+    $this->assertSession()->checkboxNotChecked('links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.3][enabled]');
+  }
+
 }

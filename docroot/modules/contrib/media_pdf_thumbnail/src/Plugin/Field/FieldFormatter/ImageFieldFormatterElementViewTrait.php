@@ -47,8 +47,10 @@ trait ImageFieldFormatterElementViewTrait {
         $settings[static::IMAGE_LINK_SETTINGS] = $settings[$bundle . static::MEDIA_BUNDLE_LINK];
       }
       else {
-        $this->mediaPdfThumbnailImageManager->getGenericThumbnail();
-        return NULL;
+        $settings[static::IMAGE_STYLE_SETTINGS] = $settings['default_bundle' . static::MEDIA_BUNDLE_IMAGE_STYLE];
+        $settings[static::IMAGE_LINK_SETTINGS] = $settings['default_bundle' . static::MEDIA_BUNDLE_LINK];
+        $settings['is_default_bundle'] = TRUE;
+        return $settings;
       }
     }
 
@@ -71,6 +73,8 @@ trait ImageFieldFormatterElementViewTrait {
    * @return array
    *   Element.
    *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\TypedData\Exception\ReadOnlyException
    */
   protected function renderImage(array $element, string | int $imageId, EntityInterface $entity): array {
@@ -81,7 +85,7 @@ trait ImageFieldFormatterElementViewTrait {
     $value = $imageItem->getValue();
     $value['target_id'] = $imageId;
     $value['alt'] = $entity->name->value;
-    $this->handleDerivative($imageId, $value);
+    $this->handleDerivative($imageId, $value, $element[0]['#image_style']);
     $imageItem->setValue($value);
     $element[0]['#item'] = $imageItem;
     return $element;
@@ -94,15 +98,46 @@ trait ImageFieldFormatterElementViewTrait {
    *   Image id.
    * @param array $value
    *   Value.
+   * @param string $imageStyleSetting
+   *   The name of the image style.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function handleDerivative(string | int $imageId, array &$value): void {
+  protected function handleDerivative(string | int $imageId, array &$value, string $imageStyleSetting): void {
     unset($value['width']);
     unset($value['height']);
     $file = File::load($imageId);
+
+    // If no file found, use the generic thumbnail.
+    if (empty($file) || !$this->mediaPdfThumbnailImageManager->checkFileExists($file)) {
+      $this->mediaPdfThumbnailImageManager->getLogger()->warning('No file found for image id: @imageId. Using generic thumbnail instead', ['@imageId' => $imageId]);
+      $file = $this->mediaPdfThumbnailImageManager->getGenericThumbnail(TRUE);
+    }
     $uri = !empty($file) ? $file->getFileUri() : NULL;
-    $imageStyleSetting = $this->getSetting('image_style');
-    $imageStyle = !empty($imageStyleSetting) ? $this->imageStyleStorage->load($this->getSetting('image_style')) : NULL;
+    if (empty($uri)) {
+      $this->mediaPdfThumbnailImageManager->getLogger()->error('Couldn\'t get generic thumbnail for image id: @imageId', ['@imageId' => $imageId]);
+      return;
+    }
+
+    // If the uri is not a valid file, try to get default thumbnail.
+    if (!$this->mediaPdfThumbnailImageManager->checkFileExistsByUri($uri)) {
+      $this->mediaPdfThumbnailImageManager->getLogger()->warning('No valid file uri found for image id: @imageId (@uri). Using generic thumbnail instead', [
+        '@imageId' => $imageId,
+        '@uri' => $uri,
+      ]);
+      $file = $this->mediaPdfThumbnailImageManager->getGenericThumbnail(TRUE);
+      if (empty($file)) {
+        $this->mediaPdfThumbnailImageManager->getLogger()
+          ->error('Couldn\'t get generic thumbnail for image id: @imageId', ['@imageId' => $imageId]);
+        return;
+      }
+      $uri = $file->getFileUri();
+    }
+    $value['uri'] = $uri;
+    $imageStyle = !empty($imageStyleSetting) ? $this->imageStyleStorage->load($imageStyleSetting) : NULL;
     $derivativeUri = !empty($imageStyle) ? $imageStyle->buildUri($uri) : NULL;
+
     // If no derivative uri, get the original image size.
     if (empty($derivativeUri)) {
       $imageSize = getimagesize($uri);
@@ -111,7 +146,7 @@ trait ImageFieldFormatterElementViewTrait {
     }
     // If derivative uri exists, get the derivative image size or create it.
     else {
-      if (!file_exists($derivativeUri)) {
+      if (!$this->mediaPdfThumbnailImageManager->checkFileExistsByUri($derivativeUri)) {
         $derivativeUri = $imageStyle->createDerivative($uri, $derivativeUri) ? $derivativeUri : NULL;
       }
       $imageSize = !empty($derivativeUri) ? getimagesize($derivativeUri) : getimagesize($uri);

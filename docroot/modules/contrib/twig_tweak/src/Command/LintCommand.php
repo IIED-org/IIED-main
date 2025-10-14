@@ -12,7 +12,7 @@
 // @codingStandardsIgnoreFile
 // This code is a literal copy of Symfony's LintCommand.
 // @see https://github.com/symfony/symfony/blob/5.x/src/Symfony/Bridge/Twig/Command/LintCommand.php
-// @cspell:ignore Weistroff Tamarelle Fabien Potencier
+// @cspell:ignore Weistroff Tamarelle Fabien Potencier Jérôme
 namespace Drupal\twig_tweak\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -223,7 +223,7 @@ EOF
         return min($errors, 1);
     }
 
-    private function renderException(OutputInterface $output, string $template, Error $exception, string $file = null)
+    private function renderException(OutputInterface $output, string $template, Error $exception, ?string $file = null)
     {
         $line = $exception->getTemplateLine();
 

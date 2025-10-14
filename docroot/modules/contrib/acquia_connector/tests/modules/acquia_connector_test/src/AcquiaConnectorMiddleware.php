@@ -44,7 +44,14 @@ class AcquiaConnectorMiddleware {
             $query = UrlHelper::parse($request->getRequestTarget());
             return ($query['query']['client_id'] === '38357830-bacd-4b4d-a356-f508c6ddecf8') ? new FulfilledPromise(new Response(200)) : new FulfilledPromise(new Response(403));
           }
-          $oauth_content = Json::decode((string) $request->getBody());
+          $oauth_content = [];
+          parse_str((string) $request->getBody(), $oauth_content);
+          // Following if condition will be removed once we eliminate all
+          // account authentication stuff and relying solely on the Acquia ID.
+          if (!isset($oauth_content['grant_type']) || (isset($oauth_content['grant_type']) && $oauth_content['grant_type'] != 'client_credentials')) {
+            $oauth_content = Json::decode((string) $request->getBody());
+          }
+
           // API Key / Secret Response.
           if ($oauth_content['grant_type'] === 'client_credentials' && $oauth_content['client_id'] === 'VALID_KEY' && $oauth_content['client_secret'] === 'VALID_SECRET') {
             return new FulfilledPromise(
@@ -93,7 +100,6 @@ class AcquiaConnectorMiddleware {
                 [],
                 Json::encode([
                   'access_token' => 'ACCESS_TOKEN',
-                  'refresh_token' => 'REFRESH_TOKEN',
                 ])
               )
             );
@@ -107,19 +113,6 @@ class AcquiaConnectorMiddleware {
                 json_encode([
                   'error' => 'invalid_grant',
                   'error_description' => 'Authorization code doesn\'t exist or is invalid for the client',
-                ])
-              )
-            );
-          }
-          // New refresh token response.
-          if ($oauth_content['grant_type'] === 'refresh_token') {
-            return new FulfilledPromise(
-              new Response(
-                200,
-                [],
-                Json::encode([
-                  'access_token' => 'ACCESS_TOKEN_REFRESHED',
-                  'refresh_token' => 'REFRESH_TOKEN_REFRESHED',
                 ])
               )
             );

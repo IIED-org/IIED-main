@@ -154,22 +154,30 @@ abstract class GeolocationGeometryBase extends FieldItemBase {
    * @return float[]
    *   Coordinates.
    */
-  protected static function getRandomCoordinates(array $reference_point = NULL, int $range = 5) {
+
+  /**
+   * Return a random set of latitude/longitude.
+   *
+   * @return float[]
+   *   Coordinates.
+   */
+  protected static function getRandomCoordinates(array $reference_point = NULL, float $range = 5) {
     if ($reference_point) {
       return [
         'latitude' => rand(
-          max(-89, ($reference_point['latitude'] - $range)),
-          min(90, ($reference_point['latitude'] + $range))
-        ) - (float) (rand(0, 999999) / 1000000),
+          (int) max(-89, ($reference_point['latitude'] - $range)),
+          (int) min(90, ($reference_point['latitude'] + $range))
+        ) - (rand(0, 999999) / 1000000),
         'longitude' => rand(
-          max(-179, ($reference_point['longitude'] - $range)),
-          min(180, ($reference_point['longitude'] + $range))
-        ) - (float) (rand(0, 999999) / 1000000),
+          (int) max(-179, ($reference_point['longitude'] - $range)),
+          (int) min(180, ($reference_point['longitude'] + $range))
+        ) - (rand(0, 999999) / 1000000),
       ];
     }
+
     return [
-      'latitude' => rand(-89, 90) - rand(0, 999999) / 1000000.0,
-      'longitude' => rand(-179, 180) - rand(0, 999999) / 1000000.0,
+      'latitude' => rand(-89, 90) - rand(0, 999999) / 1000000,
+      'longitude' => rand(-179, 180) - rand(0, 999999) / 1000000,
     ];
   }
 

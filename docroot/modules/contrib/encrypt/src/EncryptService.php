@@ -3,12 +3,12 @@
 namespace Drupal\encrypt;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\encrypt\Exception\EncryptionMethodCanNotDecryptException;
 use Drupal\encrypt\Exception\EncryptException;
+use Drupal\encrypt\Exception\EncryptionMethodCanNotDecryptException;
 use Drupal\key\KeyRepositoryInterface;
 
 /**
- * Class EncryptService.
+ * Provides a service for performing encryption.
  *
  * @package Drupal\encrypt
  */
@@ -36,18 +36,20 @@ class EncryptService implements EncryptServiceInterface {
   protected $configFactory;
 
   /**
-   * {@inheritdoc}
+   * Constructs an EncryptService object.
    *
    * @param \Drupal\encrypt\EncryptionMethodManager $encrypt_manager
    *   The EncryptionMethod plugin manager.
    * @param \Drupal\key\KeyRepositoryInterface $key_repository
    *   The KeyRepository.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The configuration factory.
+   *   The configuration factory. Optional in 3.x and required in 4.x.
    */
-  public function __construct(EncryptionMethodManager $encrypt_manager, KeyRepositoryInterface $key_repository, ConfigFactoryInterface $config_factory = NULL) {
+  public function __construct(EncryptionMethodManager $encrypt_manager, KeyRepositoryInterface $key_repository, ?ConfigFactoryInterface $config_factory = NULL) {
     $this->encryptManager = $encrypt_manager;
     $this->keyRepository = $key_repository;
+    // @todo Remove \Drupal:configFactory() for 4.x.
+    // @phpstan-ignore-next-line Drupal calls should be avoided in classes.
     $this->configFactory = $config_factory ?: \Drupal::configFactory();
   }
 
@@ -75,6 +77,8 @@ class EncryptService implements EncryptServiceInterface {
    * {@inheritdoc}
    */
   public function encrypt($text, EncryptionProfileInterface $encryption_profile) {
+    // If validate fails, an exception is thrown, so nothing will be returned.
+    // @phpstan-ignore-next-line should return string but return statement is missing
     if ($this->validate($text, $encryption_profile)) {
       $key = $encryption_profile->getEncryptionKey();
       return $encryption_profile->getEncryptionMethod()->encrypt($text, $key->getKeyValue());
@@ -88,6 +92,8 @@ class EncryptService implements EncryptServiceInterface {
     if (!$encryption_profile->getEncryptionMethod()->canDecrypt()) {
       throw new EncryptionMethodCanNotDecryptException();
     }
+    // If validate fails, an exception is thrown, so nothing will be returned.
+    // @phpstan-ignore-next-line should return string but return statement is missing
     if ($this->validate($text, $encryption_profile)) {
       $key = $encryption_profile->getEncryptionKey();
       return $encryption_profile->getEncryptionMethod()->decrypt($text, $key->getKeyValue());

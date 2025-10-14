@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Update hooks for PDFpreview module.
+ */
+
+/**
+ * Adds output file configuration value to the module's settings.
+ */
+function pdfpreview_update_8001() {
+  \Drupal::configFactory()->getEditable('pdfpreview.settings')
+    ->set('type', 'jpg')
+    ->save();
+}

@@ -336,7 +336,11 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 								$fixedDocComment,
 							);
 						} else {
-							$phpcsFile->fixer->replaceToken($startPointer, substr($tokens[$startPointer]['content'], 1));
+							FixerHelper::replace(
+								$phpcsFile,
+								$startPointer,
+								substr($tokens[$startPointer]['content'], 1),
+							);
 						}
 
 						$phpcsFile->fixer->endChangeset();
@@ -490,7 +494,8 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				$nameToReference = $useStatement->getNameAsReferencedInFile();
 				$addUse = false;
 				// Lock the use statement, so it is not modified by other sniffs
-				$phpcsFile->fixer->replaceToken(
+				FixerHelper::replace(
+					$phpcsFile,
 					$useStatement->getPointer(),
 					$phpcsFile->fixer->getTokenContent($useStatement->getPointer()),
 				);
@@ -503,7 +508,11 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				$useTypeFormatted = $useTypeName !== null ? sprintf('%s ', $useTypeName) : '';
 
 				$phpcsFile->fixer->addNewline($useStatementPlacePointer);
-				$phpcsFile->fixer->addContent($useStatementPlacePointer, sprintf('use %s%s;', $useTypeFormatted, $canonicalName));
+				FixerHelper::add(
+					$phpcsFile,
+					$useStatementPlacePointer,
+					sprintf('use %s%s;', $useTypeFormatted, $canonicalName),
+				);
 
 				$alreadyAddedUses[$reference->type][] = $canonicalName;
 			}
@@ -559,9 +568,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	 */
 	private function getSpecialExceptionNames(): array
 	{
-		if ($this->normalizedSpecialExceptionNames === null) {
-			$this->normalizedSpecialExceptionNames = SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
-		}
+		$this->normalizedSpecialExceptionNames ??= SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
 
 		return $this->normalizedSpecialExceptionNames;
 	}
@@ -571,9 +578,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	 */
 	private function getIgnoredNames(): array
 	{
-		if ($this->normalizedIgnoredNames === null) {
-			$this->normalizedIgnoredNames = SniffSettingsHelper::normalizeArray($this->ignoredNames);
-		}
+		$this->normalizedIgnoredNames ??= SniffSettingsHelper::normalizeArray($this->ignoredNames);
 
 		return $this->normalizedIgnoredNames;
 	}
@@ -583,9 +588,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	 */
 	private function getNamespacesRequiredToUse(): array
 	{
-		if ($this->normalizedNamespacesRequiredToUse === null) {
-			$this->normalizedNamespacesRequiredToUse = SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
-		}
+		$this->normalizedNamespacesRequiredToUse ??= SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
 
 		return $this->normalizedNamespacesRequiredToUse;
 	}
@@ -612,6 +615,14 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$useStatementPlacePointer = $openTagPointer;
+		if (
+			substr($tokens[$openTagPointer]['content'], -1) !== $phpcsFile->eolChar
+			&& $tokens[$openTagPointer + 1]['content'] === $phpcsFile->eolChar
+		) {
+			// @codeCoverageIgnoreStart
+			$useStatementPlacePointer++;
+			// @codeCoverageIgnoreEnd
+		}
 
 		$nonWhitespacePointerAfterOpenTag = TokenHelper::findNextNonWhitespace($phpcsFile, $openTagPointer + 1);
 		if (in_array($tokens[$nonWhitespacePointerAfterOpenTag]['code'], Tokens::$commentTokens, true)) {

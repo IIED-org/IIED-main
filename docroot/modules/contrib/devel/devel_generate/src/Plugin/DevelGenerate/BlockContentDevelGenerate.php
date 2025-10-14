@@ -2,14 +2,14 @@
 
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
-use Drupal\block_content\BlockContentInterface;
-use Drupal\content_translation\ContentTranslationManagerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\block_content\BlockContentInterface;
+use Drupal\content_translation\ContentTranslationManagerInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

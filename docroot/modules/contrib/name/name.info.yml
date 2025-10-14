@@ -1,7 +1,7 @@
 name: Name Field
 type: module
 description: 'Defines a persons name field type.'
-core_version_requirement: ^9.1 || ^10
+core_version_requirement: ^10.3 || ^11
 dependencies:
   - 'drupal:field'
 test_dependencies:
@@ -9,7 +9,7 @@ test_dependencies:
 package: Field types
 configure: name.settings
 
-# Information added by Drupal.org packaging script on 2023-12-08
-version: '8.x-1.0-rc6'
+# Information added by Drupal.org packaging script on 2024-11-28
+version: '8.x-1.0'
 project: 'name'
-datestamp: 1702049145
+datestamp: 1732821198

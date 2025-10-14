@@ -2,9 +2,9 @@
 
 namespace Drupal\config_filter;
 
-use Drupal\config_filter\Config\FilteredStorage;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
+use Drupal\config_filter\Config\FilteredStorage;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;

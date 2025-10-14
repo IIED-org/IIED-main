@@ -1,0 +1,15 @@
+{
+  "description": "Cspell config for taxonomy manager module.",
+  "language": "en-US",
+  "allowCompoundWords": false,
+  "globRoot": ".",
+  "minWordLength": 4,
+  "ignorePaths": [],
+  "dictionaries": [],
+  "dictionaryDefinitions": [],
+  "words": [
+    "fancytree",
+    "Fancytree",
+    "Hutterer"
+  ]
+}

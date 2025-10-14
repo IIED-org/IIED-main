@@ -169,7 +169,7 @@ class Subscription {
    * @return array
    *   The Raw Subscription Data.
    */
-  public function getSubscription($refresh = NULL, $body = []) {
+  public function getSubscription(?bool $refresh = NULL, array $body = []) {
     // If Settings do not exist, we have no subscription to fetch.
     if (!$this->hasCredentials()) {
       // Ensure subscription data is scrubbed.

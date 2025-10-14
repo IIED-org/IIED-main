@@ -3,8 +3,8 @@
 namespace Drupal\Tests\linkchecker\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\node\Entity\NodeType;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Test linkchecker with the redirect module.
@@ -47,9 +47,9 @@ class LinkcheckerRedirectTest extends KernelTestBase {
     'path_alias',
     'link',
     'views',
-    'dynamic_entity_reference',
     'linkchecker',
     'redirect',
+    'path_alias',
   ];
 
   /**
@@ -64,6 +64,7 @@ class LinkcheckerRedirectTest extends KernelTestBase {
       $this->installSchema('system', 'sequences');
     }
     $this->installSchema('linkchecker', 'linkchecker_index');
+    $this->installEntitySchema('path_alias');
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');
     $this->installEntitySchema('redirect');
@@ -91,11 +92,9 @@ class LinkcheckerRedirectTest extends KernelTestBase {
   public function testLinkcheckerRedirect() {
     $node = $this->createNode(['type' => 'links']);
     $this->linkCheckerLinkStorage->create([
-      'url' => '/unexisting-url',
-      'entity_id' => [
-        'target_id' => $node->id(),
-        'target_type' => $node->getEntityTypeId(),
-      ],
+      'url' => '/non-existing-url',
+      'parent_entity_type_id' => $node->getEntityTypeId(),
+      'parent_entity_id' => $node->id(),
       'entity_field' => 'body',
       'entity_langcode' => $node->language()->getId(),
       'last_check' => 680356800,
@@ -104,12 +103,12 @@ class LinkcheckerRedirectTest extends KernelTestBase {
     ])->save();
 
     $redirect = $this->redirectStorage->create();
-    $redirect->setSource('unexisting-url');
+    $redirect->setSource('non-existing-url');
     $redirect->setRedirect('<front>');
     $redirect->setStatusCode(301);
     $redirect->save();
 
-    $links = $this->linkCheckerLinkStorage->loadByProperties(['url' => '/unexisting-url']);
+    $links = $this->linkCheckerLinkStorage->loadByProperties(['url' => '/non-existing-url']);
     $this->assertNotEmpty($links);
     $link = current($links);
 

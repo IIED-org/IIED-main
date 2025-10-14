@@ -2,11 +2,12 @@
 
 namespace Drupal\linkchecker\Plugin\QueueWorker;
 
-use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\linkchecker\LinkCheckerLinkInterface;
 use Drupal\linkchecker\Plugin\LinkStatusHandlerManager;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -60,13 +61,26 @@ class LinkStatusHandle extends QueueWorkerBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function processItem($data) {
-    $response = $data['response'];
+    if (empty($data) || !is_array($data)) {
+      return;
+    }
+
+    $response = $data['response'] ?? NULL;
+    if (!$response instanceof ResponseInterface) {
+      return;
+    }
+
     try {
       /** @var \Drupal\linkchecker\Plugin\LinkStatusHandlerInterface $handler */
       $handler = $this->statusHandlerManager->createInstance($data['handler']);
     }
-    catch (PluginNotFoundException $e) {
+    catch (\Throwable $e) {
       // Skip it.
+      return;
+    }
+
+    if (empty($handler)) {
+      return;
     }
 
     foreach ($data['links'] as $linkId) {
@@ -76,10 +90,15 @@ class LinkStatusHandle extends QueueWorkerBase implements ContainerFactoryPlugin
           ->getStorage('linkcheckerlink')
           ->load($linkId);
 
+        if (!$link instanceof LinkCheckerLinkInterface) {
+          continue;
+        }
+
         $handler->handle($link, $response);
       }
-      catch (\Exception $e) {
+      catch (\Throwable $e) {
         // If we can`t load Link or entity - just skip it.
+        continue;
       }
     }
   }

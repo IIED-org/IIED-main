@@ -66,52 +66,46 @@ integrated slider for opacity (if opacity is enabled).
 
 Install as you would normally install a contributed Drupal module. For further information, see [Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
 
-If you installed color field via [Composer](https://getcomposer.org), the
-packages will have been suggested but not automatically installed. If you have
-Asset Packagist already configured - as most Commerce users will - skip to just
-requiring the desired package(s).
-```bash
-composer require bower-asset/jquery-simple-color bower-asset/spectrum
-```
+Additionally depending on which widget(s) you are using you will need the relevant JavaScript Libraries.
+There are multiple ways to install them.
 
-Otherwise, to install them you will need to add
-[Asset Packagist](https://asset-packagist.org) to your composer.json and
-do some and make a couple other changes to your `composer.json`. Specifically,
-in the `extra` key add/adjust current values:
-```json
-"installer-types": [
-  "npm-asset",
-  "bower-asset"
-],
-"installer-paths": {
-  "web/core": [
-    "type:drupal-core"
-  ],
-  "web/libraries/{$name}": [
-    "type:bower-asset",
-    "type:npm-asset",
-    "type:drupal-library"
-  ],
-  "web/modules/contrib/{$name}": [
-    "type:drupal-module"
-  ],
-  "web/profiles/contrib/{$name}": [
-    "type:drupal-profile"
-  ],
-  "web/themes/contrib/{$name}": [
-    "type:drupal-theme"
-  ],
-  "drush/contrib/{$name}": [
-    "type:drupal-drush"
-  ]
-},
-```
+1. (**Recommended**) Us the [Composer Merge Plugin](https://github.com/wikimedia/composer-merge-plugin).
+   Require the composer merge plug and add the following to the extra section of your composer.json
+   (adjusting the path as necessary to match your system).
+   ```
+   "merge-plugin": {
+     "include": [
+       "web/modules/contrib/color_field/composer.libraries.json"
+       ]
+   },
+   ```
+   Then run `composer update drupal/color_field` and libraries should be installed.
 
-then run
-```bash
-composer require oomphinc/composer-installers-extender
-composer require bower-asset/jquery-simple-color bower-asset/spectrum
-```
+
+2. Alternatively you can use Asset Packagist, see [Asset Packagist](https://asset-packagist.org) for more information.
+   Add Asset packagist to your `composer.json` and make a couple other changes to your. 
+   Specifically, in the `extra` key add/adjust current values:
+   ```json
+   "installer-types": [
+     "npm-asset",
+     "bower-asset"
+   ],
+   "installer-paths": {
+     "web/libraries/{$name}": [
+       "type:bower-asset",
+       "type:npm-asset",
+       "type:drupal-library"
+     ]
+   }
+   ```
+
+   then run
+   ```bash
+   composer require oomphinc/composer-installers-extender
+   composer require bower-asset/jquery-simple-color bower-asset/spectrum
+   ```
+
+3. You can also manually install the libraries from github but that is not recommended.
 
 ## Configuration
 
@@ -122,16 +116,16 @@ composer require bower-asset/jquery-simple-color bower-asset/spectrum
 1. Profit!
 
 
-## More info
+## More Information
 
-http://www.w3.org/TR/css3-color/#color
-https://github.com/mikeemoo/ColorJizz-PHP
-http://www.colorhexa.com/ff0000
-https://github.com/PrimalPHP/Color/blob/master/lib/Primal/Color/Parser.php
-https://github.com/matthewbaggett/php-color/blob/master/Color.php
+- http://www.w3.org/TR/css3-color/#color
+- https://github.com/mikeemoo/ColorJizz-PHP
+- http://www.colorhexa.com/ff0000
+- https://github.com/PrimalPHP/Color/blob/master/lib/Primal/Color/Parser.php
+- https://github.com/matthewbaggett/php-color/blob/master/Color.php
 
 
-## Maintainers (optional)
+## Maintainers
 [//]: # cSpell:disable
 [//]: # Do not add maintainers to cspell-project-words file
 

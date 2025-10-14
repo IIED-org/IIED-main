@@ -4,8 +4,8 @@ namespace Drupal\Tests\login_destination\Functional;
 
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\login_destination\Entity\LoginDestination;
-use Drupal\Tests\login_destination\Traits\LoginDestinationCreationTrait;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\login_destination\Traits\LoginDestinationCreationTrait;
 use Drupal\user\UserInterface;
 
 /**
@@ -20,7 +20,7 @@ class RedirectTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'claro';
 
   /**
    * {@inheritdoc}
@@ -204,8 +204,8 @@ class RedirectTest extends BrowserTestBase {
     $url = user_pass_reset_url($this->account);
     $this->drupalGet($url);
     // And use the one-time login link.
-    $this->submitForm(NULL, 'Log in');
-    $this->assertSession()->pageTextContains('You have just used your one-time login link. It is no longer necessary to use this link to log in. Please change your password.');
+    $this->submitForm([], 'Log in');
+    $this->assertSession()->pageTextContains('You have just used your one-time login link.');
     $this->assertSession()->titleEquals(strtr('@name | @site', [
       '@name' => $this->account->getAccountName(),
       '@site' => $this->config('system.site')->get('name'),
@@ -243,8 +243,8 @@ class RedirectTest extends BrowserTestBase {
     $url = user_pass_reset_url($this->account);
     $this->drupalGet($url);
     // And use the one-time login link.
-    $this->submitForm(NULL, 'Log in');
-    $this->assertSession()->pageTextContains('You have just used your one-time login link. It is no longer necessary to use this link to log in. Please change your password.');
+    $this->submitForm([], 'Log in');
+    $this->assertSession()->pageTextContains('You have just used your one-time login link.');
     $this->assertSession()->titleEquals(strtr('@name | @site', [
       '@name' => $this->account->getAccountName(),
       '@site' => $this->config('system.site')->get('name'),
@@ -277,7 +277,7 @@ class RedirectTest extends BrowserTestBase {
     $url = user_pass_reset_url($this->account);
     $this->drupalGet($url);
     // And use the one-time login link.
-    $this->submitForm(NULL, 'Log in');
+    $this->submitForm([], 'Log in');
 
     // Assert that the redirect happened immediately.
     $this->assertSession()->statusCodeEquals(200);
@@ -307,7 +307,7 @@ class RedirectTest extends BrowserTestBase {
     $url = user_pass_reset_url($this->account);
     $this->drupalGet($url);
     // And use the one-time login link.
-    $this->submitForm(NULL, 'Log in');
+    $this->submitForm([], 'Log in');
 
     // Ensure that no login destination redirect happened.
     $this->assertSession()->addressEquals('/user/2/edit');

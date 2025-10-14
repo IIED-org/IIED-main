@@ -200,7 +200,7 @@ trait NameFormSettingsHelperTrait {
         $default_options[] = $value;
       }
       // Simple checks on the taxonomy includes.
-      elseif (preg_match(NameOptionsProvider::vocabularyRegExp, $value, $matches)) {
+      elseif (preg_match(NameOptionsProvider::VOCABULARY_REGEX, $value, $matches)) {
         if (!\Drupal::moduleHandler()->moduleExists('taxonomy')) {
           $form_state->setError($element, t("The taxonomy module must be enabled before using the '%tag' tag in %label.", [
             '%tag' => $matches[0],

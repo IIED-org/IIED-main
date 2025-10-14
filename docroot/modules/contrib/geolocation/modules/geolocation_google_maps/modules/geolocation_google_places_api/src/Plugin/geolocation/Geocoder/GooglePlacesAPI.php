@@ -70,7 +70,15 @@ class GooglePlacesAPI extends GoogleGeocoderBase {
       $request_url .= '&key=' . $google_key;
     }
     if (!empty($this->configuration['component_restrictions']['country'])) {
-      $request_url .= '&components=country:' . $this->configuration['component_restrictions']['country'];
+      $data = explode(',', $this->configuration['component_restrictions']['country']);
+      if (is_array($data)) {
+        foreach ($data as $country) {
+          $request_url .= '&components[]=country:' . $country;
+        }
+      }
+      else {
+        $request_url .= '&components=country:' . $this->configuration['component_restrictions']['country'];
+      }
     }
     if (!empty($config->get('google_map_custom_url_parameters')['language'])) {
       $request_url .= '&language=' . $config->get('google_map_custom_url_parameters')['language'];
@@ -80,7 +88,7 @@ class GooglePlacesAPI extends GoogleGeocoderBase {
       $result = Json::decode(\Drupal::httpClient()->request('GET', $request_url)->getBody());
     }
     catch (RequestException $e) {
-      watchdog_exception('geolocation', $e);
+      \Drupal::logger('geolocation')->warning($e->getMessage());
       return FALSE;
     }
 
@@ -111,7 +119,7 @@ class GooglePlacesAPI extends GoogleGeocoderBase {
 
     }
     catch (RequestException $e) {
-      watchdog_exception('geolocation', $e);
+      \Drupal::logger('geolocation')->warning($e->getMessage());
       return FALSE;
     }
 

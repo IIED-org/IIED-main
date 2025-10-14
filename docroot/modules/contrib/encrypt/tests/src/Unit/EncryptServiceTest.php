@@ -2,15 +2,15 @@
 
 namespace Drupal\Tests\encrypt\Unit;
 
-use Prophecy\PhpUnit\ProphecyTrait;
+use Drupal\Tests\UnitTestCase;
+use Drupal\encrypt\EncryptService;
 use Drupal\encrypt\EncryptionMethodInterface;
 use Drupal\encrypt\EncryptionMethodManager;
 use Drupal\encrypt\EncryptionProfileInterface;
 use Drupal\encrypt\Exception\EncryptionMethodCanNotDecryptException;
 use Drupal\key\Entity\Key;
 use Drupal\key\KeyRepositoryInterface;
-use Drupal\Tests\UnitTestCase;
-use Drupal\encrypt\EncryptService;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Unit tests for EncryptService class.

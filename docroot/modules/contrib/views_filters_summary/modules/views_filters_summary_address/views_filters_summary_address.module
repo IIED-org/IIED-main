@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for views_filters_summary_address module.
+ */
+
+/**
+ * Implements hook_views_filters_summary_plugin_alias().
+ */
+function views_filters_summary_address_views_filters_summary_plugin_alias($filter) {
+  if ($filter->getPluginId() === 'administrative_area') {
+    // The administrative_area plugin behaves like the list_field plugin.
+    return 'list_field';
+  }
+}
+
+/**
+ * Implements hook_views_filters_summary_valid_index().
+ */
+function views_filters_summary_address_views_filters_summary_valid_index($index, $filter) {
+  if ($filter->getPluginId() === 'administrative_area') {
+    // Array is similar to: ['AL' => 'AL', 'AK' => 'AK'].
+    return is_string($index);
+  }
+}

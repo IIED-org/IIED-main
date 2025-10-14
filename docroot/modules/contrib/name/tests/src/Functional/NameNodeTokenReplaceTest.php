@@ -31,6 +31,13 @@ class NameNodeTokenReplaceTest extends NameTestBase {
   protected $formatter;
 
   /**
+   * The interface language.
+   *
+   * @var \Drupal\Core\Language\LanguageInterface
+   */
+  protected $interfaceLanguage;
+
+  /**
    * The token service.
    *
    * @var \Drupal\Core\Utility\Token

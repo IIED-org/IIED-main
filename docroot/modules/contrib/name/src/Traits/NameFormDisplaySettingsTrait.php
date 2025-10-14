@@ -46,6 +46,7 @@ trait NameFormDisplaySettingsTrait {
       'widget_layout' => 'stacked',
       'field_title_display' => 'before',
       'show_component_required_marker' => FALSE,
+      'flag_required_input' => FALSE,
       'credentials_inline' => FALSE,
     ];
   }
@@ -100,6 +101,13 @@ trait NameFormDisplaySettingsTrait {
       '#title' => $this->t('Show component required marker'),
       '#default_value' => $this->getSetting('show_component_required_marker'),
       '#description' => $this->t('Appends an asterisk after the component title if the component is required as part of a complete name.'),
+      '#table_group' => 'components_extra',
+    ];
+    $element['flag_required_input'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Flags inputs as required'),
+      '#default_value' => $this->getSetting('flag_required_input'),
+      '#description' => $this->t('This automatically validates for empty fields, and flags inputs as required.'),
       '#table_group' => 'components_extra',
     ];
     $element['labels'] = [

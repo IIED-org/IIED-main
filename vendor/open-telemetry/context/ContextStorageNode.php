@@ -20,31 +20,37 @@ final class ContextStorageNode implements ScopeInterface, ContextStorageScopeInt
     ) {
     }
 
+    #[\Override]
     public function offsetExists(mixed $offset): bool
     {
         return isset($this->localStorage[$offset]);
     }
 
+    #[\Override]
     public function offsetGet(mixed $offset): mixed
     {
         return $this->localStorage[$offset];
     }
 
+    #[\Override]
     public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->localStorage[$offset] = $value;
     }
 
+    #[\Override]
     public function offsetUnset(mixed $offset): void
     {
         unset($this->localStorage[$offset]);
     }
 
+    #[\Override]
     public function context(): ContextInterface
     {
         return $this->context;
     }
 
+    #[\Override]
     public function detach(): int
     {
         $flags = 0;
@@ -52,15 +58,18 @@ final class ContextStorageNode implements ScopeInterface, ContextStorageScopeInt
             $flags |= ScopeInterface::INACTIVE;
         }
 
+        static $detached;
+        $detached ??= (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+
         if ($this === $this->head->node) {
-            assert($this->previous !== $this);
+            assert($this->previous !== $detached);
             $this->head->node = $this->previous;
-            $this->previous = $this;
+            $this->previous = $detached;
 
             return $flags;
         }
 
-        if ($this->previous === $this) {
+        if ($this->previous === $detached) {
             return $flags | ScopeInterface::DETACHED;
         }
 
@@ -71,7 +80,7 @@ final class ContextStorageNode implements ScopeInterface, ContextStorageScopeInt
             assert($n->previous !== null);
         }
         $n->previous = $this->previous;
-        $this->previous = $this;
+        $this->previous = $detached;
 
         return $flags | ScopeInterface::MISMATCH | $depth;
     }

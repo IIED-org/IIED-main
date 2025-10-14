@@ -8,7 +8,7 @@ dependencies:
 test_dependencies:
   - token:token
 
-# Information added by Drupal.org packaging script on 2024-06-04
-version: '3.0.1'
+# Information added by Drupal.org packaging script on 2025-03-31
+version: '3.0.2'
 project: 'color_field'
-datestamp: 1717506870
+datestamp: 1743394005

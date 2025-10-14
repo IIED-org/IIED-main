@@ -55,7 +55,7 @@ Click on Import which redirects you to
 
 If .csv file contains three colums, the first column value is set as Name,
 second column value is set as Parent and third column value is set as
-Description. For creating hierarchy based taxonomy, the values in the second
+description. For creating hierarchy based taxonomy, the values in the second
 column should come in the first column at the beginning of the file.
 
 Similarly .xml file can have three tags with values from which first value will

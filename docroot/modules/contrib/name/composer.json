@@ -27,6 +27,8 @@
   "license": "GPL-2.0+",
   "require": { },
   "require-dev": {
-    "drupal/token": "^1.0"
+    "drupal/token": "^1.0",
+    "drupal/diff": "^2@beta",
+    "drupal/feeds": "^3@rc"
   }
 }

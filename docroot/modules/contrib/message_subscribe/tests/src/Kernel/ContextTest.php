@@ -10,7 +10,7 @@ use Drupal\og\Og;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
+use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 
 /**
  * Test getting context from entity.
@@ -21,7 +21,7 @@ use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
 class ContextTest extends MessageSubscribeTestBase {
 
   use CommentTestTrait;
-  use EntityReferenceTestTrait;
+  use EntityReferenceFieldCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -200,7 +200,7 @@ class ContextTest extends MessageSubscribeTestBase {
     $original_context = ['node' => [1 => 1], 'user' => [1 => 1]];
     $context = $this->subscribers->getBasicContext($comment, $subscribe_options, $original_context);
 
-    $this->assertEquals($original_context, $context, 'Correct context when skiping context.');
+    $this->assertEquals($original_context, $context, 'Correct context when skipping context.');
   }
 
 }

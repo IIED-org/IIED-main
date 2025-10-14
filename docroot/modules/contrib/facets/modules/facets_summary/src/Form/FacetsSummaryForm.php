@@ -211,6 +211,14 @@ class FacetsSummaryForm extends EntityForm {
         ],
       ],
     ];
+
+    $form['facets_summary_settings']['only_visible_when_facet_source_is_visible'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Hide Summary when Facet Source is not rendered'),
+      '#description' => $this->t('When checked, this facet will only be rendered when the facet source is rendered. If you want to show facets on other pages too, you need to uncheck this setting.'),
+      '#default_value' => $facets_summary->getOnlyVisibleWhenFacetSourceIsVisible(),
+    ];
+
     foreach ($all_processors as $processor_id => $processor) {
       $clean_css_id = Html::cleanCssIdentifier($processor_id);
       $form['facets_summary_settings'][$processor_id]['status'] = [
@@ -250,13 +258,6 @@ class FacetsSummaryForm extends EntityForm {
         $form['facets_summary_settings'][$processor_id]['settings'] += $processor_form;
       }
     }
-
-    $form['search_filter_identifier'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Search filter identifier'),
-      '#description' => $this->t('The name which you see in the url when executing a search, e.g. when searching for "lorem" and the url is /search?search_api_fulltext=lorem, the search filter identifier used is "search_api_fulltext". <br>When using views, this filter identifier can be configured in the view settings filter.'),
-      '#default_value' => $facets_summary->getSearchFilterIdentifier(),
-    ];
 
     $form['weights'] = [
       '#type' => 'details',
@@ -371,8 +372,8 @@ class FacetsSummaryForm extends EntityForm {
     // Store processor settings.
     /** @var \Drupal\facets_summary\FacetsSummaryInterface $facets_summary */
     $facets_summary = $this->entity;
+    $facets_summary->setOnlyVisibleWhenFacetSourceIsVisible($values['facets_summary_settings']['only_visible_when_facet_source_is_visible'] ?? FALSE);
 
-    $facets_summary->setSearchFilterIdentifier($values["search_filter_identifier"]);
     /** @var \Drupal\facets_summary\Processor\ProcessorInterface $processor */
     $processors = $facets_summary->getProcessors(FALSE);
     foreach ($processors as $processor_id => $processor) {

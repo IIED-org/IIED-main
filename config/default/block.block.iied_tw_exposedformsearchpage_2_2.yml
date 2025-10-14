@@ -1,0 +1,36 @@
+uuid: ad6a6b00-83b8-461d-97fb-8ed6418fdf87
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.search
+  module:
+    - configurable_views_filter_block
+    - context
+  theme:
+    - iied_tw
+id: iied_tw_exposedformsearchpage_2_2
+theme: iied_tw
+region: preface
+weight: -16
+provider: null
+plugin: 'configurable_views_filter_block_block:search-page_2'
+settings:
+  id: 'configurable_views_filter_block_block:search-page_2'
+  label: ''
+  label_display: '0'
+  provider: configurable_views_filter_block
+  views_label: ''
+  visible_filters:
+    k: k
+  no_groups: true
+  no_reset: false
+  no_sort: false
+  no_pager: false
+  filter_instance_id: searchtext
+visibility:
+  view_inclusion:
+    id: view_inclusion
+    negate: false
+    view_inclusion:
+      view-search-page_2: view-search-page_2

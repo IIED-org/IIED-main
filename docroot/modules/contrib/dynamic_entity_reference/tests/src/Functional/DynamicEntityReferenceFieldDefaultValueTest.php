@@ -118,7 +118,7 @@ class DynamicEntityReferenceFieldDefaultValueTest extends BrowserTestBase {
       'default_value_input[' . $field_name . '][0][target_id]' => $referenced_node->getTitle() . ' (' . $referenced_node->id() . ')',
     ];
     $this->drupalGet('admin/structure/types/manage/reference_content/fields/node.reference_content.' . $field_name);
-    $this->submitForm($field_edit, t('Save settings'));
+    $this->submitForm($field_edit, 'Save settings');
     $field_config = \Drupal::entityTypeManager()->getStorage('field_config')->loadUnchanged($field_config->id());
     $default_value = $field_config->getDefaultValueLiteral();
     $this->assertNotEmpty($default_value);

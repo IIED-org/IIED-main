@@ -8,6 +8,7 @@
 Sniff provides the following settings:
 
 * `enableNativeTypeHint`: enforces native typehint. It's on by default if you're on PHP 8.3+
+* `fixableNativeTypeHint`: (default: `yes`) allows fixing native type hints. Use `no` to disable fixing, or `private` to fix only private constants (safer for inheritance/interface compatibility).
 
 #### SlevomatCodingStandard.TypeHints.DeclareStrictTypes 🔧
 
@@ -121,7 +122,7 @@ Sniff provides the following settings:
 * `enableStandaloneNullTrueFalseTypeHints`: enforces to transform `@return true`, `@return false` or `@return null` into native typehints. It's on by default if you're on PHP 8.2+.
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E.g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 
-This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
+You can add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint` annotation to the method to skip the check.
 
 #### SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing 🔧
 

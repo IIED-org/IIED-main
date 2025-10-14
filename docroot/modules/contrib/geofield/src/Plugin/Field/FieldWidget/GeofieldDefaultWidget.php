@@ -64,14 +64,16 @@ class GeofieldDefaultWidget extends GeofieldBaseWidget {
 
     if ($this->getSetting('geometry_validation')) {
       // Append notice to the field description in the widget:
-      $element['#description'] = $element['#description'] . '<br />' . $this->t('Geometry Validation enabled (valid WKT or Geojson format & values required)');
+      $geometry_validation_enabled = $this->t('Geometry Validation enabled (valid <a href="https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry" target="blank">WKT</a> or <a href="https://en.wikipedia.org/wiki/GeoJSON" target="blank">GeoJson</a> format & values required).');
+      $element['#description'] = !empty($element['#description']) ? $element['#description'] . '<br />' . $geometry_validation_enabled : $geometry_validation_enabled;
       $element['#element_validate'] = [
         [get_class($this), 'validateGeofieldGeometryText'],
       ];
     }
     else {
       // Append notice to the field description in the widget:
-      $element['#description'] = $element['#description'] . '<br />' . $this->t('Geometry Validation disabled (invalid WKT or Geojson format & values will be set as NULL)');
+      $geometry_validation_not_enabled = $this->t('Geometry Validation disabled (invalid WKT or Geojson format & values will be set as NULL.)');
+      $element['#description'] = !empty($element['#description']) ? $element['#description'] . '<br />' . $geometry_validation_not_enabled : $geometry_validation_not_enabled;
     }
 
     return ['value' => $element];

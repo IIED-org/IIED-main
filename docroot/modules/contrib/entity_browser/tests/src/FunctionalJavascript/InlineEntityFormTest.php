@@ -414,7 +414,7 @@ class InlineEntityFormTest extends EntityBrowserWebDriverTestBase {
    * {@inheritdoc}
    */
   protected function sortableUpdate($item, $from, $to = NULL) {
-    list ($container) = explode(' ', $item, 2);
+    [$container] = explode(' ', $item, 2);
 
     $js = <<<END
 (Drupal.entityBrowserEntityReference || Drupal.entityBrowserMultiStepDisplay).entitiesReordered(document.querySelector("$container"));

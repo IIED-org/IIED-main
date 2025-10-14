@@ -28,7 +28,6 @@ dependencies:
     - form_mode_control
     - help
     - media
-    - media_pdf_thumbnail
     - media_revisions_ui
     - node
     - paragraphs
@@ -52,7 +51,6 @@ permissions:
   - 'access help pages'
   - 'access toolbar'
   - 'access user profiles'
-  - 'add pdf image entity entities'
   - 'administer comments'
   - 'administer nodes'
   - 'create article content'

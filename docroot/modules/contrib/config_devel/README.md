@@ -1,21 +1,18 @@
-INTRODUCTION
-------------
+# Config Devel
 
-The Config Devel provides tools to simplify the workflow when developing
-modules that provide install configuration.
+The Config Devel provides tools to simplify the workflow when developing modules
+that provide install configuration.
 
-WARNING: This is a developer tool. Do not deploy in production environments.
+**WARNING**: This is a developer tool. Do not deploy in production environments.
 Exercise caution and always use version control.
 
-INSTALLATION
-------------
+## Installation
 
- * Install as you would normally install a contributed Drupal module. Visit
-   https://www.drupal.org/docs/8/extending-drupal-8/installing-drupal-8-modules
-   for further information.
+Install as you would normally install a contributed Drupal module. Visit
+https://www.drupal.org/docs/extending-drupal/installing-modules for further
+information.
 
-USAGE
------
+## USAGE
 
 This module provides three different tools:
 
@@ -55,15 +52,15 @@ Features in the Drupal 7 era. In order to achieve this you need to:
     type: module
     description: The description.
     package: Features
-    core: 8.x
+    core_version_requirement: ^10
 
     config_devel:
-    - core.base_field_override.node.article.promote
-    - core.entity_form_display.node.article.default
-    - core.entity_view_display.node.article.default
-    - core.entity_view_display.node.article.teaser
-    - field.field.node.article.body
-    - node.type.article
+      - core.base_field_override.node.article.promote
+      - core.entity_form_display.node.article.default
+      - core.entity_view_display.node.article.default
+      - core.entity_view_display.node.article.teaser
+      - field.field.node.article.body
+      - node.type.article
     ```
 5. Run `drush config:devel-export my_module`. The resulting module folder will
    have all the files needed, enable it on another installation and you will get

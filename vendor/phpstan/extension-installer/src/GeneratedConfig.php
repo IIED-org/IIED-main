@@ -12,7 +12,7 @@ final class GeneratedConfig
 	public const EXTENSIONS = array (
   'composer/composer' => 
   array (
-    'install_path' => '/app/vendor/composer/composer',
+    'install_path' => '/var/www/html/vendor/composer/composer',
     'relative_install_path' => '../../../composer/composer',
     'extra' => 
     array (
@@ -21,12 +21,12 @@ final class GeneratedConfig
         0 => 'phpstan/rules.neon',
       ),
     ),
-    'version' => '2.8.6',
+    'version' => '2.8.12',
     'phpstanVersionConstraint' => NULL,
   ),
   'composer/pcre' => 
   array (
-    'install_path' => '/app/vendor/composer/pcre',
+    'install_path' => '/var/www/html/vendor/composer/pcre',
     'relative_install_path' => '../../../composer/pcre',
     'extra' => 
     array (
@@ -40,7 +40,7 @@ final class GeneratedConfig
   ),
   'mglaman/phpstan-drupal' => 
   array (
-    'install_path' => '/app/vendor/mglaman/phpstan-drupal',
+    'install_path' => '/var/www/html/vendor/mglaman/phpstan-drupal',
     'relative_install_path' => '../../../mglaman/phpstan-drupal',
     'extra' => 
     array (
@@ -50,12 +50,12 @@ final class GeneratedConfig
         1 => 'rules.neon',
       ),
     ),
-    'version' => '1.3.3',
-    'phpstanVersionConstraint' => '>=1.10.56.0-dev, <2.0.0.0-dev',
+    'version' => '1.3.9',
+    'phpstanVersionConstraint' => '>=1.12.0.0-dev, <2.0.0.0-dev',
   ),
   'phpstan/phpstan-deprecation-rules' => 
   array (
-    'install_path' => '/app/vendor/phpstan/phpstan-deprecation-rules',
+    'install_path' => '/var/www/html/vendor/phpstan/phpstan-deprecation-rules',
     'relative_install_path' => '../../phpstan-deprecation-rules',
     'extra' => 
     array (
@@ -69,7 +69,7 @@ final class GeneratedConfig
   ),
   'phpstan/phpstan-phpunit' => 
   array (
-    'install_path' => '/app/vendor/phpstan/phpstan-phpunit',
+    'install_path' => '/var/www/html/vendor/phpstan/phpstan-phpunit',
     'relative_install_path' => '../../phpstan-phpunit',
     'extra' => 
     array (

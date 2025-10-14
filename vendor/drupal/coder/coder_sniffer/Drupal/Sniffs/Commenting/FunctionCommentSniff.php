@@ -75,12 +75,16 @@ class FunctionCommentSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $ignore = Tokens::$methodPrefixes;
+        $ignore = (Tokens::$methodPrefixes + Tokens::$phpcsCommentTokens);
         $ignore[T_WHITESPACE] = T_WHITESPACE;
         $functionCodeStart    = $stackPtr;
 
         for ($commentEnd = ($stackPtr - 1); $commentEnd >= 0; $commentEnd--) {
             if (isset($ignore[$tokens[$commentEnd]['code']]) === true) {
+                if (isset(Tokens::$phpcsCommentTokens[$tokens[$commentEnd]['code']]) === true) {
+                    $functionCodeStart = $commentEnd;
+                }
+
                 continue;
             }
 
@@ -91,8 +95,15 @@ class FunctionCommentSniff implements Sniff
                 continue;
             }
 
+            // If there is a phpstan-ignore inline comment disregard it and continue searching backwards
+            // to find the function comment.
+            if ($this->tokenIsPhpstanComment($tokens[$commentEnd]) === true) {
+                $functionCodeStart = $commentEnd;
+                continue;
+            }
+
             break;
-        }
+        }//end for
 
         // Constructor methods are exempt from requiring a docblock.
         // @see https://www.drupal.org/project/coder/issues/3400560.
@@ -179,6 +190,20 @@ class FunctionCommentSniff implements Sniff
 
 
     /**
+     * Determine if a token is a '@phpstan-' control comment.
+     *
+     * @param array<mixed> $token The token to be checked.
+     *
+     * @return bool True if the token contains a @phpstan comment.
+     */
+    public static function tokenIsPhpstanComment($token)
+    {
+        return ($token['code'] === T_COMMENT && strpos($token['content'], ' @phpstan-') !== false);
+
+    }//end tokenIsPhpstanComment()
+
+
+    /**
      * Process the return comment of this function comment.
      *
      * @param \PHP_CodeSniffer\Files\File $phpcsFile    The file being scanned.
@@ -233,13 +258,18 @@ class FunctionCommentSniff implements Sniff
                 $typeNames      = explode('|', $returnType);
                 $suggestedNames = [];
                 $hasNull        = false;
+                // Do not check PHPStan types that contain any kind of brackets.
+                // See https://phpstan.org/writing-php-code/phpdoc-types#general-arrays .
+                $isPhpstanType = preg_match('/[<\[\{\(]/', $returnType) === 1;
                 foreach ($typeNames as $i => $typeName) {
                     if (strtolower($typeName) === 'null') {
                         $hasNull = true;
                     }
 
                     $suggestedName = $this->suggestType($typeName);
-                    if (in_array($suggestedName, $suggestedNames, true) === false) {
+                    if (in_array($suggestedName, $suggestedNames, true) === false
+                        || $isPhpstanType === true
+                    ) {
                         $suggestedNames[] = $suggestedName;
                     }
                 }

@@ -191,7 +191,6 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
       'num_menus' => array_shift($args),
       'num_links' => array_shift($args),
       'kill' => $options['kill'],
-      'pipe' => $options['pipe'],
       'link_types' => array_combine($link_types, $link_types),
     ];
 

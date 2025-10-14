@@ -1,0 +1,12 @@
+uuid: 689cf2d2-15dd-42ee-939b-c7a4298752ad
+langcode: en
+status: true
+dependencies: {  }
+id: search_api__views_data_export__search__data_export_1
+name: 'search_api:views_data_export__search__data_export_1'
+filter_key: ''
+url_processor: query_string
+breadcrumb:
+  active: false
+  before: true
+  group: false

@@ -1,0 +1,33 @@
+ds.layout_plugin.settings.default:
+  type: layout_plugin.settings
+  mapping:
+    classes:
+      type: 'sequence'
+      label: 'The layout classes'
+      sequence:
+        type: ds.classes.[%key]
+        label: 'Classes array'
+    wrappers:
+      type: 'sequence'
+      label: 'The layout wrappers'
+      sequence:
+        type: string
+        label: 'Field wrapper'
+    outer_wrapper:
+      type: string
+      label: 'The outer wrapper of the layout'
+    attributes:
+      type: string
+      label: 'The attributes of the layout'
+    link_attribute:
+      type: string
+      label: 'The link attribute of the layout'
+    link_custom:
+      type: string
+      label: 'The custom path of the layout'
+    label:
+      type: string
+      label: 'The position of the label'
+
+layout_plugin.settings.ds.*:
+  type: ds.layout_plugin.settings.default

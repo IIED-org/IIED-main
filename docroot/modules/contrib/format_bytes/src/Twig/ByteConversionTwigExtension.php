@@ -15,7 +15,7 @@ class ByteConversionTwigExtension extends AbstractExtension {
    */
   public function getFilters() {
     return [
-      new TwigFilter('format_bytes', 'format_size'),
+      new TwigFilter('format_bytes', 'Drupal\Core\StringTranslation\ByteSizeMarkup::create'),
     ];
   }
 

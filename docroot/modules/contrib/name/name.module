@@ -144,7 +144,8 @@ function name_user_format_name_alter_preload($account) {
     $field_name = Drupal::config('name.settings')->get('user_preferred');
     if ($field_name && FieldConfig::loadByName('user', 'user', $field_name)) {
       $in_preload = TRUE;
-      $account = User::load($account->id());
+      $id = $account->id();
+      $account = $id ? User::load($id) : 'unknown';
       $in_preload = FALSE;
     }
   }
@@ -463,6 +464,11 @@ function name_element_render_component(array $components, $component_key, array 
   if ($component['type'] == 'select') {
     $element['#options'] = $component['options'];
     $element['#size'] = 1;
+    if ($element['#options']['_none']) {
+      $element['#empty_value'] = '_none';
+      $element['#empty_option'] = $element['#options']['_none'];
+      unset($element['#options']['_none']);
+    }
   }
   elseif (!empty($component['autocomplete'])) {
     $element += $component['autocomplete'];
@@ -470,6 +476,11 @@ function name_element_render_component(array $components, $component_key, array 
 
   $show_component_required_marker = $core
     && !empty($base_element['#show_component_required_marker'])
+    && !in_array('default_value_input', $base_element['#field_parents'], TRUE);
+
+  $flag_required_input = $core
+    && $base_element['#required']
+    && !empty($base_element['#flag_required_input'])
     && !in_array('default_value_input', $base_element['#field_parents'], TRUE);
 
   // Enable the title options.
@@ -514,6 +525,7 @@ function name_element_render_component(array $components, $component_key, array 
         '#title_display' => 'before',
       ];
       $element['#title_display'] = 'invisible';
+      $element['#required'] = $flag_required_input;
       $element['#description'] = $label;
       $element['#after_build'][] = 'name_component_description_after_build_label_alter';
       break;
@@ -575,11 +587,12 @@ function name_element_validate($element, &$form_state) {
     }
   }
 
-  if (!$empty && (count($minimum_components) != count(array_intersect_key($minimum_components, $item_components)))) {
-    $missing_components = array_diff(array_keys($minimum_components), array_keys($item_components));
-    $missing_components = array_combine($missing_components, $missing_components);
-    $missing_labels = array_intersect_key($labels, $missing_components);
+  $missing_components = array_diff(array_keys($minimum_components), array_keys($item_components));
+  $missing_components = array_combine($missing_components, $missing_components);
+  $missing_labels = array_intersect_key($labels, $missing_components);
 
+  // Partially filled out.
+  if (!$empty && (count($minimum_components) != count(array_intersect_key($minimum_components, $item_components)))) {
     // Generate error message for the first missing element.
     $form_state->setError($element[key($missing_labels)], t('@name also requires the following parts: <em>@components</em>.', [
       '@name' => $element['#title'],
@@ -592,8 +605,21 @@ function name_element_validate($element, &$form_state) {
     }
   }
 
+  // Fully filled out.
   if ($empty && $element['#required']) {
-    $form_state->setError($element, t('@name field is required.', ['@name' => $element['#title']]));
+    $is_inline = \Drupal::moduleHandler()->moduleExists('inline_form_errors');
+    if ($is_inline) {
+      // Mark the other missing elements too, but hide the error message.
+      foreach ($missing_labels as $key => $label) {
+        $form_state->setError($element[$key], t('@name also requires the following parts: <em>@components</em>.', [
+          '@name' => $element['#title'],
+          '@components' => $label,
+        ]));
+      }
+    }
+    else {
+      $form_state->setError($element, t('@name field is required.', ['@name' => $element['#title']]));
+    }
   }
   return $element;
 }

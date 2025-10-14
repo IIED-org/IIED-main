@@ -54,6 +54,7 @@ class Tabs extends WidgetSelectorBase {
         return $trigger['#widget_id'];
       }
     }
+    return '';
   }
 
 }

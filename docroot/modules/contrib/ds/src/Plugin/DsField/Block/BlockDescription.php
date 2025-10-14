@@ -2,20 +2,21 @@
 
 namespace Drupal\ds\Plugin\DsField\Block;
 
-use Drupal\ds\Plugin\DsField\DsFieldBase;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\ds\Attribute\DsField;
+use Drupal\ds\Plugin\DsField\DsFieldBase;
 
 /**
  * Plugin that renders the title of a block.
- *
- * @DsField(
- *   id = "block_description",
- *   title = @Translation("Description"),
- *   entity_type = "block_content",
- *   provider = "block_content"
- * )
  */
+#[DsField(
+  id: 'block_description',
+  title: new TranslatableMarkup('Description'),
+  entity_type: 'block_content',
+  provider: 'block_content'
+)]
 class BlockDescription extends DsFieldBase {
 
   /**

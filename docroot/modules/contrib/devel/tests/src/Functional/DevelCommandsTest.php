@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\devel\Functional;
 
-use Drupal\devel\Drush\Commands\DevelCommands;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\devel\Drush\Commands\DevelCommands;
 use Drush\TestTraits\DrushTestTrait;
 
 /**

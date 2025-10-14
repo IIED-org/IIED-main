@@ -57,15 +57,17 @@ class LinkcheckerLinkPageEntityLabel extends FieldPluginBase {
       return '';
     }
 
-    if (!$linkchecker_link->hasField('entity_id')) {
+    if (!$linkchecker_link->hasField('parent_entity_type_id')
+    || $linkchecker_link->get('parent_entity_type_id')->isEmpty()) {
       return '';
     }
 
-    if ($linkchecker_link->get('entity_id')->isEmpty()) {
+    if (!$linkchecker_link->hasField('parent_entity_id')
+    || $linkchecker_link->get('parent_entity_id')->isEmpty()) {
       return '';
     }
 
-    $linked_entity = $linkchecker_link->get('entity_id')->entity;
+    $linked_entity = $linkchecker_link->getParentEntity();
 
     if (!$linked_entity instanceof EntityInterface) {
       return '';

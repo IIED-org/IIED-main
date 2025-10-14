@@ -6,6 +6,9 @@
   "keywords": ["php", "layout", "drupal"],
   "homepage": "https://www.drupal.org/project/ds",
   "minimum-stability": "dev",
+  "require": {
+    "drupal/core": "^10.2 || ^11"
+  },
   "require-dev": {
     "drupal/devel": "5.x-dev",
     "drupal/field_group": "3.x-dev"

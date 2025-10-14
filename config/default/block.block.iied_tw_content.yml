@@ -11,7 +11,7 @@ _core:
 id: iied_tw_content
 theme: iied_tw
 region: content
-weight: -6
+weight: -9
 provider: null
 plugin: system_main_block
 settings:
