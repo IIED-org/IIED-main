@@ -31,7 +31,7 @@ content:
       image_link: ''
       tag: div
       image_loading:
-        attribute: eager
+        attribute: lazy
       show_description: 0
       fallback_formatter: 0
     third_party_settings: {  }
