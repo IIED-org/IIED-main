@@ -26,6 +26,9 @@ xdebug.log
 # Ignore Lando overrides
 .lando.local.yml
 
+# Ignore local scripts
+scripts/*local.sh
+
 # Ignore node
 node_modules
 
