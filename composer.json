@@ -86,7 +86,7 @@
     "drupal/computed_field": "^3.0",
     "drupal/config_split": "^1.10",
     "drupal/configurable_views_filter_block": "^1.0",
-    "drupal/contact_block": "^1.6",
+    "drupal/contact_block": "^2.0",
     "drupal/content_translation_redirect": "^2",
     "drupal/context": "^5.0",
     "drupal/core-composer-scaffold": "^10",

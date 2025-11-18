@@ -310,7 +310,6 @@ class ExposedFormTest extends ViewTestBase {
       'page' => ['page'],
     ];
     foreach ($arguments as $argument => $bundles) {
-      $element = $this->assertSession()->elementExists('xpath', $xpath);
       $element->find('css', 'select')->selectOption($argument);
       $element->findButton('Apply')->click();
       $this->assertCacheContext('url');
