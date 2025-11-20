@@ -1,25 +1,25 @@
-INTRODUCTION
-------------
+# INTRODUCTION
+
 The Contact Block module provides you with contact forms in a block. It extends
 Drupal core's Contact module which provides the forms.
 
- * Visit the module's project page:
-   https://drupal.org/project/contact_block
+ - Visit the module's project page:
+   <https://drupal.org/project/contact_block>
 
-REQUIREMENTS
-------------
+## REQUIREMENTS
+
 This module requires the following modules:
 
-* Contact module (Drupal core)
+- Contact module (Drupal core)
 
-INSTALLATION
-------------
+## INSTALLATION
+
 Install as you would normally install a contributed Drupal module. See:
-  https://www.drupal.org/documentation/install/modules-themes/modules-8
+  <https://www.drupal.org/documentation/install/modules-themes/modules-8>
   for further information.
 
-CONFIGURATION
--------------
+## CONFIGURATION
+
 Create a contact form
  - Home > Administration > Structure > Contact forms
  - Edit (or delete) the default contact forms. Use Manage fields to add, update
@@ -43,10 +43,13 @@ the 'user' placeholder. For example in /user/{user}.
 The contact forms of Contact module remain functional at their URL. Use custom
 code or an other module to deny access to these pages.
 
-MAINTAINERS
------------
+## MAINTAINERS
+
 Current maintainers:
- * Erik Stielstra (Sutharsan) https://www.drupal.org/user/73854
+ - Erik Stielstra (Sutharsan) <https://www.drupal.org/u/sutharsan>
+ - Ilcho Vuchkov (vuil) <https://www.frupal.org/u/vuil>
 
 This project has been sponsored by:
- * Wizzlern, The Drupal trainers
+ - Wizzlern, The Drupal trainers
+ - Annertech, Drupal Agency in Ireland & UK
+ - MODERNA BG LTD, Digital Agency in Bulgaria & United Europe (EU)

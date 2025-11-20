@@ -12,6 +12,7 @@
 
 namespace Composer;
 
+use Composer\Advisory\AuditConfig;
 use Composer\Autoload\AutoloadGenerator;
 use Composer\Console\GithubActionError;
 use Composer\DependencyResolver\DefaultPolicy;
@@ -23,6 +24,7 @@ use Composer\DependencyResolver\Operation\UninstallOperation;
 use Composer\DependencyResolver\PoolOptimizer;
 use Composer\DependencyResolver\Pool;
 use Composer\DependencyResolver\Request;
+use Composer\DependencyResolver\SecurityAdvisoryPoolFilter;
 use Composer\DependencyResolver\Solver;
 use Composer\DependencyResolver\SolverProblemsException;
 use Composer\DependencyResolver\PolicyInterface;
@@ -431,9 +433,9 @@ class Installer
                         $repoSet->addRepository($repo);
                     }
 
-                    $auditConfig = $this->config->get('audit');
+                    $auditConfig = AuditConfig::fromConfig($this->config);
 
-                    return $auditor->audit($this->io, $repoSet, $packages, $this->auditFormat, true, $auditConfig['ignore'] ?? [], $auditConfig['abandoned'] ?? Auditor::ABANDONED_FAIL) > 0 && $this->errorOnAudit ? self::ERROR_AUDIT_FAILED : 0;
+                    return $auditor->audit($this->io, $repoSet, $packages, $this->auditFormat, true, $auditConfig->ignoreList, $auditConfig->abandoned, $auditConfig->ignoreSeverity, $auditConfig->ignoreUnreachable, $auditConfig->ignoreAbandonedPackages) > 0 && $this->errorOnAudit ? self::ERROR_AUDIT_FAILED : 0;
                 } catch (TransportException $e) {
                     $this->io->error('Failed to audit '.$target.' packages.');
                     if ($this->io->isVerbose()) {
@@ -498,7 +500,7 @@ class Installer
             $request->setUpdateAllowList($this->updateAllowList, $this->updateAllowTransitiveDependencies);
         }
 
-        $pool = $repositorySet->createPool($request, $this->io, $this->eventDispatcher, $this->createPoolOptimizer($policy), $this->ignoredTypes, $this->allowedTypes);
+        $pool = $repositorySet->createPool($request, $this->io, $this->eventDispatcher, $this->createPoolOptimizer($policy), $this->ignoredTypes, $this->allowedTypes, $this->createSecurityAuditPoolFilter());
 
         $this->io->writeError('<info>Updating dependencies</info>');
 
@@ -531,6 +533,10 @@ class Installer
 
         if (!$lockTransaction->getOperations()) {
             $this->io->writeError('Nothing to modify in lock file');
+
+            if ($this->minimalUpdate && $this->updateAllowList === null && $this->locker->isFresh()) {
+                $this->io->writeError('<warning>The --minimal-changes option should be used with package arguments or after modifying composer.json requirements, otherwise it will likely not yield any dependency changes.</warning>');
+            }
         }
 
         $exitCode = $this->extractDevPackages($lockTransaction, $platformRepo, $aliases, $policy, $lockedRepository);
@@ -538,7 +544,7 @@ class Installer
             return $exitCode;
         }
 
-        \Composer\Semver\CompilingMatcher::clear();
+        Semver\CompilingMatcher::clear();
 
         // write lock
         $platformReqs = $this->extractPlatformRequirements($this->package->getRequires());
@@ -768,7 +774,7 @@ class Installer
             }
             unset($rootRequires, $link);
 
-            $pool = $repositorySet->createPool($request, $this->io, $this->eventDispatcher, null, $this->ignoredTypes, $this->allowedTypes);
+            $pool = $repositorySet->createPool($request, $this->io, $this->eventDispatcher, null, $this->ignoredTypes, $this->allowedTypes, null);
 
             // solve dependencies
             $solver = new Solver($policy, $pool, $this->io);
@@ -957,10 +963,10 @@ class Installer
         }
 
         $preferredVersions = null;
-        if ($forUpdate && $this->minimalUpdate && $this->updateAllowList !== null && $lockedRepo !== null) {
+        if ($forUpdate && $this->minimalUpdate && $lockedRepo !== null) {
             $preferredVersions = [];
             foreach ($lockedRepo->getPackages() as $pkg) {
-                if ($pkg instanceof AliasPackage || in_array($pkg->getName(), $this->updateAllowList, true)) {
+                if ($pkg instanceof AliasPackage || ($this->updateAllowList !== null && in_array($pkg->getName(), $this->updateAllowList, true))) {
                     continue;
                 }
                 $preferredVersions[$pkg->getName()] = $pkg->getVersion();
@@ -1101,10 +1107,19 @@ class Installer
         return new PoolOptimizer($policy);
     }
 
+    private function createSecurityAuditPoolFilter(): ?SecurityAdvisoryPoolFilter
+    {
+        $auditConfig = AuditConfig::fromConfig($this->config);
+
+        if ($auditConfig->blockInsecure || $auditConfig->blockAbandoned) {
+            return new SecurityAdvisoryPoolFilter(new Auditor(), $auditConfig);
+        }
+
+        return null;
+    }
+
     /**
      * Create Installer
-     *
-     * @return Installer
      */
     public static function create(IOInterface $io, Composer $composer): self
     {
@@ -1159,7 +1174,6 @@ class Installer
 
     /**
      * @param array<string, ConstraintInterface> $constraints
-     * @return Installer
      */
     public function setTemporaryConstraints(array $constraints): self
     {
@@ -1170,8 +1184,6 @@ class Installer
 
     /**
      * Whether to run in drymode or not
-     *
-     * @return Installer
      */
     public function setDryRun(bool $dryRun = true): self
     {
@@ -1190,8 +1202,6 @@ class Installer
 
     /**
      * Whether to download only or not.
-     *
-     * @return Installer
      */
     public function setDownloadOnly(bool $downloadOnly = true): self
     {
@@ -1202,8 +1212,6 @@ class Installer
 
     /**
      * prefer source installation
-     *
-     * @return Installer
      */
     public function setPreferSource(bool $preferSource = true): self
     {
@@ -1214,8 +1222,6 @@ class Installer
 
     /**
      * prefer dist installation
-     *
-     * @return Installer
      */
     public function setPreferDist(bool $preferDist = true): self
     {
@@ -1226,8 +1232,6 @@ class Installer
 
     /**
      * Whether or not generated autoloader are optimized
-     *
-     * @return Installer
      */
     public function setOptimizeAutoloader(bool $optimizeAutoloader): self
     {
@@ -1244,8 +1248,6 @@ class Installer
     /**
      * Whether or not generated autoloader considers the class map
      * authoritative.
-     *
-     * @return Installer
      */
     public function setClassMapAuthoritative(bool $classMapAuthoritative): self
     {
@@ -1260,8 +1262,6 @@ class Installer
 
     /**
      * Whether or not generated autoloader considers APCu caching.
-     *
-     * @return Installer
      */
     public function setApcuAutoloader(bool $apcuAutoloader, ?string $apcuAutoloaderPrefix = null): self
     {
@@ -1273,8 +1273,6 @@ class Installer
 
     /**
      * update packages
-     *
-     * @return Installer
      */
     public function setUpdate(bool $update): self
     {
@@ -1285,8 +1283,6 @@ class Installer
 
     /**
      * Allows disabling the install step after an update
-     *
-     * @return Installer
      */
     public function setInstall(bool $install): self
     {
@@ -1297,8 +1293,6 @@ class Installer
 
     /**
      * enables dev packages
-     *
-     * @return Installer
      */
     public function setDevMode(bool $devMode = true): self
     {
@@ -1311,8 +1305,6 @@ class Installer
      * set whether to run autoloader or not
      *
      * This is disabled implicitly when enabling dryRun
-     *
-     * @return Installer
      */
     public function setDumpAutoloader(bool $dumpAutoloader = true): self
     {
@@ -1326,7 +1318,6 @@ class Installer
      *
      * This is disabled implicitly when enabling dryRun
      *
-     * @return Installer
      * @deprecated Use setRunScripts(false) on the EventDispatcher instance being injected instead
      */
     public function setRunScripts(bool $runScripts = true): self
@@ -1338,8 +1329,6 @@ class Installer
 
     /**
      * set the config instance
-     *
-     * @return Installer
      */
     public function setConfig(Config $config): self
     {
@@ -1350,8 +1339,6 @@ class Installer
 
     /**
      * run in verbose mode
-     *
-     * @return Installer
      */
     public function setVerbose(bool $verbose = true): self
     {
@@ -1377,7 +1364,6 @@ class Installer
      *
      * @param  bool|string[] $ignorePlatformReqs
      *
-     * @return Installer
      *
      * @deprecated use setPlatformRequirementFilter instead
      */
@@ -1388,9 +1374,6 @@ class Installer
         return $this->setPlatformRequirementFilter(PlatformRequirementFilterFactory::fromBoolOrList($ignorePlatformReqs));
     }
 
-    /**
-     * @return Installer
-     */
     public function setPlatformRequirementFilter(PlatformRequirementFilterInterface $platformRequirementFilter): self
     {
         $this->platformRequirementFilter = $platformRequirementFilter;
@@ -1400,8 +1383,6 @@ class Installer
 
     /**
      * Update the lock file to the exact same versions and references but use current remote metadata like URLs and mirror info
-     *
-     * @return Installer
      */
     public function setUpdateMirrors(bool $updateMirrors): self
     {
@@ -1415,8 +1396,6 @@ class Installer
      * that are already installed will be kept at their current version
      *
      * @param string[] $packages
-     *
-     * @return Installer
      */
     public function setUpdateAllowList(array $packages): self
     {
@@ -1436,7 +1415,6 @@ class Installer
      * dependencies which are not root requirement or all transitive dependencies including root requirements
      *
      * @param  int       $updateAllowTransitiveDependencies One of the UPDATE_ constants on the Request class
-     * @return Installer
      */
     public function setUpdateAllowTransitiveDependencies(int $updateAllowTransitiveDependencies): self
     {
@@ -1451,8 +1429,6 @@ class Installer
 
     /**
      * Should packages be preferred in a stable version when updating?
-     *
-     * @return Installer
      */
     public function setPreferStable(bool $preferStable = true): self
     {
@@ -1463,8 +1439,6 @@ class Installer
 
     /**
      * Should packages be preferred in a lowest version when updating?
-     *
-     * @return Installer
      */
     public function setPreferLowest(bool $preferLowest = true): self
     {
@@ -1477,8 +1451,6 @@ class Installer
      * Only relevant for partial updates (with setUpdateAllowList), if this is enabled currently locked versions will be preferred for packages which are not in the allowlist
      *
      * This reduces the update to
-     *
-     * @return Installer
      */
     public function setMinimalUpdate(bool $minimalUpdate = true): self
     {
@@ -1491,8 +1463,6 @@ class Installer
      * Should the lock file be updated when updating?
      *
      * This is disabled implicitly when enabling dryRun
-     *
-     * @return Installer
      */
     public function setWriteLock(bool $writeLock = true): self
     {
@@ -1505,8 +1475,6 @@ class Installer
      * Should the operations (package install, update and removal) be executed on disk?
      *
      * This is disabled implicitly when enabling dryRun
-     *
-     * @return Installer
      */
     public function setExecuteOperations(bool $executeOperations = true): self
     {
@@ -1517,8 +1485,6 @@ class Installer
 
     /**
      * Should an audit be run after installation is complete?
-     *
-     * @return Installer
      */
     public function setAudit(bool $audit): self
     {
@@ -1529,9 +1495,6 @@ class Installer
 
     /**
      * Should exit with status code 5 on audit error
-     *
-     * @param bool $errorOnAudit
-     * @return Installer
      */
     public function setErrorOnAudit(bool $errorOnAudit): self
     {
@@ -1544,7 +1507,6 @@ class Installer
      * What format should be used for audit output?
      *
      * @param Auditor::FORMAT_* $auditFormat
-     * @return Installer
      */
     public function setAuditFormat(string $auditFormat): self
     {
@@ -1559,8 +1521,6 @@ class Installer
      * Call this if you want to ensure that third-party code never gets
      * executed. The default is to automatically install, and execute
      * custom third-party installers.
-     *
-     * @return Installer
      */
     public function disablePlugins(): self
     {
@@ -1569,9 +1529,6 @@ class Installer
         return $this;
     }
 
-    /**
-     * @return Installer
-     */
     public function setSuggestedPackagesReporter(SuggestedPackagesReporter $suggestedPackagesReporter): self
     {
         $this->suggestedPackagesReporter = $suggestedPackagesReporter;

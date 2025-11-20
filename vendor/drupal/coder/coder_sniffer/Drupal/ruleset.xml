@@ -63,7 +63,10 @@
   <rule ref="Generic.NamingConventions.ConstructorName"/>
   <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
   <rule ref="Generic.PHP.DeprecatedFunctions"/>
-  <rule ref="Generic.PHP.DisallowShortOpenTag"/>
+  <rule ref="Generic.PHP.DisallowShortOpenTag">
+    <!-- Do not run this sniff on .yml files -->
+    <exclude-pattern>*.yml</exclude-pattern>
+  </rule>
   <rule ref="Generic.PHP.LowerCaseKeyword"/>
   <rule ref="Generic.PHP.UpperCaseConstant"/>
   <rule ref="Generic.Strings.UnnecessaryStringConcat">
@@ -124,6 +127,15 @@
 
   <!-- SlevomatCodingStandard sniffs -->
   <rule ref="SlevomatCodingStandard.Classes.BackedEnumTypeSpacing"/>
+  <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments">
+    <properties>
+       <property name="forbiddenCommentPatterns" type="array">
+         <!-- Catch comments ending in 2 dots, bot leave comments ending in 3
+         dots alone. -->
+         <element value="/(?&lt;!\.)\.\.(?!\.)$/"/>
+       </property>
+    </properties>
+  </rule>
   <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
   <rule ref="SlevomatCodingStandard.PHP.ShortList"/>
   <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">

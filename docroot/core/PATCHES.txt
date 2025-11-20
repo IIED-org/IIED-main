@@ -33,7 +33,3 @@ Source: https://www.drupal.org/files/issues/2024-03-27/3062441-patch-41.patch
 Source: https://git.drupalcode.org/project/drupal/-/merge_requests/10945.diff
 
 
-3163299
-Source: https://www.drupal.org/files/issues/2024-10-24/3163299_120_d10.3.5.patch
-
-
