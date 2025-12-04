@@ -1,4 +1,5 @@
 global-styling:
+  version: 5.1
   css:
     base:
       dist/tailwind.css: {}
