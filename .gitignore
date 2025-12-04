@@ -32,8 +32,9 @@ node_modules
 # Ignore MacOS files
 .DS_Store
 
-# Dev mode: don't include tailwind.css 
+# Dev mode: don't include output css 
 tailwind.css
+# styles.css
 
 # Remove flexslider pending review
 docroot/libraries/flexslider
