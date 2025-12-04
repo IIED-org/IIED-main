@@ -20,7 +20,14 @@ class NgLightboxTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'node', 'user', 'path_alias', 'ng_lightbox', 'path'];
+  protected static $modules = [
+    'system',
+    'node',
+    'user',
+    'path_alias',
+    'ng_lightbox',
+    'path',
+  ];
 
   /**
    * {@inheritdoc}
@@ -37,6 +44,7 @@ class NgLightboxTest extends KernelTestBase {
     // Create the node type.
     NodeType::create(['type' => 'page'])->save();
   }
+
   /**
    * Test the pattern matching for link paths.
    */
@@ -52,9 +60,12 @@ class NgLightboxTest extends KernelTestBase {
     $this->assertLightboxEnabled(Link::fromTextAndUrl('Normal Path', $node->toUrl())->toString(TRUE)->getGeneratedLink());
 
     // Create a second node and make sure it doesn't get lightboxed.
-    $secondnode = Node::create(['type' => 'page', 'title' => $this->randomString()]);
-    $secondnode->save();
-    $this->assertLightboxNotEnabled(Link::fromTextAndUrl('Second Path', $secondnode->toUrl())->toString(TRUE)->getGeneratedLink());
+    $second_node = Node::create([
+      'type' => 'page',
+      'title' => $this->randomString(),
+    ]);
+    $second_node->save();
+    $this->assertLightboxNotEnabled(Link::fromTextAndUrl('Second Path', $second_node->toUrl())->toString(TRUE)->getGeneratedLink());
 
     $this->assertLightboxNotEnabled(Link::fromTextAndUrl('Empty Path', Url::fromRoute('<nolink>'))->toString(TRUE)->getGeneratedLink());
   }

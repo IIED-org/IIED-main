@@ -59,7 +59,7 @@ final class TwigTweakTest extends BrowserTestBase {
     $image_file->save();
 
     $media_file = File::create([
-      'uri' => $test_files[8]->uri,
+      'uri' => $test_files[9]->uri,
       'uuid' => '5dd794d0-cb75-4130-9296-838aebc1fe74',
       'status' => FileInterface::STATUS_PERMANENT,
     ]);

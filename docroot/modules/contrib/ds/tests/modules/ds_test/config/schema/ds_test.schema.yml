@@ -14,3 +14,10 @@ ds.field_template.ds_test_template:
       sequence:
         type: string
         label: 'Class name'
+
+layout_plugin.settings.ds.dstest_1col_extended:
+  type: ds.layout_plugin.settings.default
+  mapping:
+    extra_config:
+      type: boolean
+      label: 'Extra config'

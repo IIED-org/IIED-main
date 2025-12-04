@@ -6,6 +6,7 @@
        "GPL-2.0-or-later"
     ],
     "require-dev": {
-      "drupal/token": "*"
+      "drupal/token": "*",
+      "drupal/commerce": "*"
     }
 }

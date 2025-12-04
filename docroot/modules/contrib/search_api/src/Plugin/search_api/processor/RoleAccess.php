@@ -6,6 +6,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Session\UserSession;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\LoggerTrait;
@@ -18,18 +20,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Adds access checks based on user roles.
- *
- * @SearchApiProcessor(
- *   id = "role_access",
- *   label = @Translation("Role-based access"),
- *   description = @Translation("Adds an access check based on a user's roles. This may be sufficient for sites where access is primarily granted or denied based on roles and permissions. For grants-based access checks on ""Content"" or ""Comment"" entities the ""Content access"" processor may be a suitable alternative."),
- *   stages = {
- *     "add_properties" = 0,
- *     "pre_index_save" = -10,
- *     "preprocess_query" = -30,
- *   },
- * )
  */
+#[SearchApiProcessor(
+  id: 'role_access',
+  label: new TranslatableMarkup('Role-based access'),
+  description: new TranslatableMarkup('Adds an access check based on a user\'s roles. This may be sufficient for sites where access is primarily granted or denied based on roles and permissions. For grants-based access checks on "Content" or "Comment" entities the "Content access" processor may be a suitable alternative.'),
+  stages: [
+    'add_properties' => 0,
+    'pre_index_save' => -10,
+    'preprocess_query' => -30,
+  ],
+)]
 class RoleAccess extends ProcessorPluginBase {
 
   use LoggerTrait;
@@ -128,7 +129,7 @@ class RoleAccess extends ProcessorPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getPropertyDefinitions(DatasourceInterface $datasource = NULL) {
+  public function getPropertyDefinitions(?DatasourceInterface $datasource = NULL) {
     $properties = [];
     if (!$datasource) {
       $definition = [
@@ -223,8 +224,9 @@ class RoleAccess extends ProcessorPluginBase {
     }
     else {
       $query->abort();
+      $index = $query->getIndex();
       $this->getLogger()->warning('Role-based access checks could not be added to a search query on index %index since the required field is not available. You should re-save the index.', [
-        '%index' => $query->getIndex()->label(),
+        '%index' => $index->label() ?? $index->id(),
       ]);
     }
   }

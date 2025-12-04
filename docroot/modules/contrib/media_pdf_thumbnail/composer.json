@@ -3,7 +3,11 @@
     "type": "drupal-module",
     "description": "Media PDF Thumbnail",
     "keywords": [
-        "Drupal"
+        "drupal",
+        "protect",
+        "media",
+        "pdf",
+        "thumbnail"
     ],
     "license": "GPL-2.0+",
     "homepage": "https://www.drupal.org/project/media_pdf_thumbnail",

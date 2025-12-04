@@ -6,8 +6,7 @@ type: theme
 base theme: stable9
 libraries:
   - iied_tw/global-styling
-  - iied_tw/priority-nav
-
+  - iied_tw/init
 regions:
   header: Header
   navbar_branding: Navbar branding

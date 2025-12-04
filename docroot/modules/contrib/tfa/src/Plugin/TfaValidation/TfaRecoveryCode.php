@@ -132,7 +132,13 @@ class TfaRecoveryCode extends TfaBasePlugin implements TfaValidationInterface, C
    */
   public function allowUserSetupAccess(RouteMatchInterface $route, AccountInterface $account) {
     // Only allow user setup access to the 'show codes' if user is self.
-    return (($route->getRouteName() !== 'tfa.validation.setup') || ($this->uid === $account->id()));
+    $route_name = $route->getRouteName();
+    $is_recovery_code_view = ($route_name === 'tfa.plugin.reset' && $route->getParameter('reset') !== "1");
+    $admin_is_allowed = (
+      $route_name !== 'tfa.validation.setup'
+      && !$is_recovery_code_view
+    );
+    return (($this->uid === $account->id()) || $admin_is_allowed);
   }
 
   /**

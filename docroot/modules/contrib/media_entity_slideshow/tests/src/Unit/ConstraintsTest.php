@@ -2,9 +2,10 @@
 
 namespace Drupal\Tests\media_entity_slideshow\Unit;
 
+use Drupal\Core\Validation\ExecutionContext;
+use Drupal\Tests\UnitTestCase;
 use Drupal\media_entity_slideshow\Plugin\Validation\Constraint\ItemsCountConstraint;
 use Drupal\media_entity_slideshow\Plugin\Validation\Constraint\ItemsCountConstraintValidator;
-use Drupal\Tests\UnitTestCase;
 
 /**
  * Tests media_entity_slideshow constraints.
@@ -25,9 +26,7 @@ class ConstraintsTest extends UnitTestCase {
     $this->assertEquals('At least one slideshow item must exist.', $constraint->message, 'Correct constraint message found.');
 
     // Test the validator with valid values.
-    $execution_context = $this->getMockBuilder('\Drupal\Core\TypedData\Validation\ExecutionContext')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $execution_context = $this->createMock(ExecutionContext::class);
 
     $execution_context->expects($this->exactly(0))
       ->method('addViolation');
@@ -39,9 +38,7 @@ class ConstraintsTest extends UnitTestCase {
     $validator->validate($value, $constraint);
 
     // Test the validator with invalid values.
-    $execution_context = $this->getMockBuilder('\Drupal\Core\TypedData\Validation\ExecutionContext')
-      ->disableOriginalConstructor()
-      ->getMock();
+    $execution_context = $this->createMock(ExecutionContext::class);
 
     $execution_context->expects($this->exactly(1))
       ->method('addViolation')

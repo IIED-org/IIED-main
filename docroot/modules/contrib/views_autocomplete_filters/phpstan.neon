@@ -1,0 +1,12 @@
+# Configuration file for PHPStan static code checking, see https://phpstan.org.
+
+includes:
+  - phar://phpstan.phar/conf/bleedingEdge.neon
+
+parameters:
+  level: 3
+  paths:
+    - .
+  excludePaths:
+    - src/Plugin/views/filter/ViewsAutocompleteFiltersSearchApiFulltext.php
+    - src/Plugin/views/filter/ViewsAutocompleteFiltersSearchApiText.php

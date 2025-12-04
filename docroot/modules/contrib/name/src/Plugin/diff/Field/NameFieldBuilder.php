@@ -25,10 +25,8 @@ class NameFieldBuilder extends FieldDiffBuilderBase {
 
   /**
    * The name formatter.
-   *
-   * @var \Drupal\name\NameFormatterInterface
    */
-  protected $formatter;
+  protected NameFormatterInterface $formatter;
 
   /**
    * Constructs a Name Field diff builder instance.
@@ -68,15 +66,15 @@ class NameFieldBuilder extends FieldDiffBuilderBase {
   /**
    * {@inheritdoc}
    */
-  public function build(FieldItemListInterface $items) {
+  public function build(FieldItemListInterface $field_items): array {
     $result = [];
     if ($this->configuration['compare_format']) {
-      foreach ($items as $item) {
+      foreach ($field_items as $item) {
         $result[] = (string) $this->formatter->format($item->filteredArray(), $this->configuration['compare_format']);
       }
     }
     else {
-      foreach ($items as $item) {
+      foreach ($field_items as $item) {
         $output = [];
         $values = $item->toArray();
         foreach ($item->activeComponents() as $key => $label) {
@@ -91,7 +89,7 @@ class NameFieldBuilder extends FieldDiffBuilderBase {
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form['compare_format'] = [
       '#type' => 'select',
       '#title' => $this->t('Name format'),
@@ -106,7 +104,7 @@ class NameFieldBuilder extends FieldDiffBuilderBase {
   /**
    * {@inheritdoc}
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     $this->configuration['compare_format'] = $form_state->getValue('compare_format');
 
     parent::submitConfigurationForm($form, $form_state);
@@ -115,9 +113,9 @@ class NameFieldBuilder extends FieldDiffBuilderBase {
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     $default_configuration = [
-      'format' => '',
+      'compare_format' => '',
     ];
     $default_configuration += parent::defaultConfiguration();
 

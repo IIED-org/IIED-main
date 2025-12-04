@@ -12,7 +12,7 @@ use Drupal\linkchecker\LinkCheckerLinkInterface;
  *
  * @group linkchecker
  */
-class LinkCheckerLinkExtractionTest extends LinkCheckerBaseTest {
+class LinkCheckerLinkExtractionTest extends LinkCheckerBase {
 
   /**
    * {@inheritdoc}
@@ -89,7 +89,7 @@ class LinkCheckerLinkExtractionTest extends LinkCheckerBaseTest {
       Flash plugin can be found at <a href="http://www.adobe.com/">Adobe</a>.
 </object>
 
-<!-- object tag: Embed Quicktime Movies on HTML pages -->
+<!-- object tag: Embed Quick time Movies on HTML pages -->
 <object width="420" height="282"
   classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B"
   codebase="http://www.apple.com/qtactivex/qtplugin.cab">
@@ -114,7 +114,7 @@ class LinkCheckerLinkExtractionTest extends LinkCheckerBaseTest {
   <a href="http://example.org/video/foo3.mp4">/video/foo3.mp4</a>
 </object>
 
-<!-- object tag: Play MP4 videos with Quicktime -->
+<!-- object tag: Play MP4 videos with Quick time -->
 <object width="420" height="282" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
   <param name="src" value="http://example.org/video/foo4.mp4" />
   <param name="href" value="http://example.org/video/foo5.mp4" />
@@ -136,7 +136,7 @@ class LinkCheckerLinkExtractionTest extends LinkCheckerBaseTest {
     <param name="flashvars" value="file=http://example.org/video/foo1.flv&width=420&height=270" />
 </object>
 
-<!-- Embed ActiveX control as objekt -->
+<!-- Embed ActiveX control as object -->
 <object width="267" height="175" classid="CLSID:05589FA1-C356-11CE-BF01-00AA0055595A">
   <param name="filename" value="ritmo.mid">
 </object>

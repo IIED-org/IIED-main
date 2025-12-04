@@ -5,7 +5,7 @@
  * Contains views API hooks in the views_execution group for Flag module.
  */
 
-use \Drupal\views\ViewExecutable;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_views_query_substitutions().

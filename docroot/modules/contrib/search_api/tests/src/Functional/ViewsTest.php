@@ -878,7 +878,7 @@ class ViewsTest extends SearchApiBrowserTestBase {
    * @param string $arguments
    *   (optional) A string to append to the search path.
    */
-  protected function checkResults(array $query, array $expected_results = NULL, string $label = 'Search', string $arguments = '', string $path = 'search-api-test'): void {
+  protected function checkResults(array $query, ?array $expected_results = NULL, string $label = 'Search', string $arguments = '', string $path = 'search-api-test'): void {
     $this->drupalGet($path . '/' . $arguments, ['query' => $query]);
 
     if (isset($expected_results)) {
@@ -1041,11 +1041,7 @@ class ViewsTest extends SearchApiBrowserTestBase {
     $this->assertSession()->statusCodeEquals(200);
     // The entity type's label was changed in 10.1.x, so need to keep it
     // variable as long as we support versions older than 10.1.0.
-    // @todo Hardcode again once we depend on Drupal 10.1.0.
-    $entity_type_label = $this->container->get('entity_type.manager')
-      ->getDefinition('entity_test_mulrev_changed')
-      ->getLabel();
-    $this->assertSession()->pageTextContains("$entity_type_label datasource");
+    $this->assertSession()->pageTextContains("Test entity - mul changed revisions and data table datasource");
     $this->assertSession()->pageTextContains('Authored on');
     $this->assertSession()->pageTextContains('Body (indexed field)');
     $this->assertSession()->pageTextContains('Index Test index');

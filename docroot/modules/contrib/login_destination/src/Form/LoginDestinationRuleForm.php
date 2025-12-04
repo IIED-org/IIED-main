@@ -287,7 +287,7 @@ class LoginDestinationRuleForm extends EntityForm {
       $displayable_string = $uri_reference;
     }
     elseif ($scheme === 'entity') {
-      list($entity_type, $entity_id) = explode('/', substr($uri, 7), 2);
+      [$entity_type, $entity_id] = explode('/', substr($uri, 7), 2);
       // Show the 'entity:' URI as the entity autocomplete would.
       if ($this->entityTypeManager->getDefinition($entity_type, FALSE) && $entity = $this->entityTypeManager
         ->getStorage($entity_type)

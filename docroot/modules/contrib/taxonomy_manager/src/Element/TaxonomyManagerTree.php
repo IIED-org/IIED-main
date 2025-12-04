@@ -5,7 +5,7 @@ namespace Drupal\taxonomy_manager\Element;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Query\QueryException;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Element\FormElementBase;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -13,7 +13,7 @@ use Drupal\taxonomy\Entity\Term;
  *
  * @FormElement("taxonomy_manager_tree")
  */
-class TaxonomyManagerTree extends FormElement {
+class TaxonomyManagerTree extends FormElementBase {
 
   /**
    * {@inheritdoc}
@@ -38,14 +38,14 @@ class TaxonomyManagerTree extends FormElement {
     if (!empty($element['#vocabulary'])) {
       $taxonomy_vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load($element['#vocabulary']);
       $pager_size = $element['#pager_size'] ?? -1;
-      $terms = TaxonomyManagerTree::loadTerms($taxonomy_vocabulary, 0, $pager_size);
-      $list = TaxonomyManagerTree::getNestedListJsonArray($terms);
+      $terms = static::loadTerms($taxonomy_vocabulary, 0, $pager_size);
+      $list = static::getNestedListJsonArray($terms);
 
       // Expand tree to given terms.
       if (isset($element['#terms_to_expand'])) {
         $terms_to_expand = is_array($element['#terms_to_expand']) ? $element['#terms_to_expand'] : [$element['#terms_to_expand']];
         foreach ($terms_to_expand as $term_to_expand) {
-          TaxonomyManagerTree:self::getFirstPath($term_to_expand, $list);
+          static::getFirstPath($term_to_expand, $list);
         }
       }
 
@@ -139,7 +139,8 @@ class TaxonomyManagerTree extends FormElement {
   /**
    * Helper function that transforms a flat taxonomy tree in a nested array.
    */
-  public static function getNestedList($tree = [], $max_depth = NULL, $parent = 0, $parents_index = [], $depth = 0) {
+  public static function getNestedList($tree = [], $max_depth = NULL, $parent = 0, $parents_index = [], $depth = 0): array {
+    $return = [];
     foreach ($tree as $term) {
       foreach ($term->parents as $term_parent) {
         if ($term_parent == $parent) {
@@ -153,7 +154,7 @@ class TaxonomyManagerTree extends FormElement {
 
     foreach ($return as &$term) {
       if (isset($parents_index[$term->id()]) && (is_null($max_depth) || $depth < $max_depth)) {
-        $term->children = TaxonomyManagerTree::getNestedList($parents_index[$term->id()], $max_depth, $term->id(), $parents_index, $depth + 1);
+        $term->children = static::getNestedList($parents_index[$term->id()], $max_depth, $term->id(), $parents_index, $depth + 1);
       }
     }
 
@@ -172,10 +173,10 @@ class TaxonomyManagerTree extends FormElement {
           'key' => $term->id(),
         ];
 
-        if (isset($term->children) || TaxonomyManagerTree::getChildCount($term->id()) >= 1) {
+        if (isset($term->children) || static::getChildCount($term->id()) >= 1) {
           // If the given terms array is nested, directly process the terms.
           if (isset($term->children)) {
-            $item['children'] = TaxonomyManagerTree::getNestedListJsonArray($term->children);
+            $item['children'] = static::getNestedListJsonArray($term->children);
           }
           // It the term has children, but they are not present in the array,
           // mark the item for lazy loading.
@@ -208,7 +209,7 @@ class TaxonomyManagerTree extends FormElement {
         $parent = array_shift($parents);
         $path[] = $parent;
         $next_tid = $parent->id();
-        if (TaxonomyManagerTree::isRoot($parent->id())) {
+        if (static::isRoot($parent->id())) {
           break;
         }
       }
@@ -229,7 +230,7 @@ class TaxonomyManagerTree extends FormElement {
       }
       if (isset($index)) {
         $path[] = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
-        $list[$index]['children'] = TaxonomyManagerTree::getPartialTree($path);
+        $list[$index]['children'] = static::getPartialTree($path);
         $list[$index]['lazy'] = FALSE;
         $list[$index]['expanded'] = TRUE;
       }
@@ -239,7 +240,7 @@ class TaxonomyManagerTree extends FormElement {
   /**
    * Returns partial tree for a given path.
    */
-  public function getPartialTree($path, $depth = 0) {
+  public static function getPartialTree($path, $depth = 0) {
     $tree = [];
     $parent = $path[$depth];
     $children = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($parent->id());
@@ -257,7 +258,7 @@ class TaxonomyManagerTree extends FormElement {
         'selected' => TRUE,
       ];
       if (isset($next_term) && $child->id() == $next_term->id()) {
-        $tree[$index]['children'] = TaxonomyManagerTree::getPartialTree($path, $depth);
+        $tree[$index]['children'] = static::getPartialTree($path, $depth);
       }
       $index++;
     }

@@ -127,6 +127,7 @@ class TaxonomyManagerHelper {
     $new_terms = [];
     $terms = explode("\n", str_replace("\r", '', $input));
     $parents = !empty($parents) ? $parents : 0;
+    $base_weight = 0;
 
     if ($keep_order) {
       $max_weight = self::getMaxWeight($vid, $parents);
@@ -290,7 +291,7 @@ class TaxonomyManagerHelper {
    *
    * @param int $vid
    *   The vocabulary id.
-   * @param int $parents
+   * @param int[] $parents
    *   An array of parent term ids for the new inserted terms. Can be 0.
    *
    * @return int
@@ -309,9 +310,7 @@ class TaxonomyManagerHelper {
     $max_weight = 0;
     if (!$parents) {
       // Sorted by weight, then name, we can pull the last's weight to get max.
-      if (!empty($vocabulary)) {
-        $max_weight = (end($vocabulary)->weight);
-      }
+      $max_weight = (end($vocabulary)->weight);
     }
     else {
       $parent_vocabularies = [];

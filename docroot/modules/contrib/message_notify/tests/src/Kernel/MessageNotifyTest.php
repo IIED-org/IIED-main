@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\message_notify\Kernel;
 
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\message\Entity\Message;
 use Drupal\message\Entity\MessageTemplate;
 use Drupal\message_notify\Exception\MessageNotifyException;
@@ -152,7 +152,7 @@ class MessageNotifyTest extends KernelTestBase {
    * @return array
    *   The test cases.
    */
-  public function providerPostSendRenderedField():array {
+  public static function providerPostSendRenderedField():array {
     $cases = [];
 
     $cases['plain fields'] = [

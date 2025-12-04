@@ -8,54 +8,20 @@ use Drupal\Core\Url;
 use Drupal\facets_summary\FacetsSummaryInterface;
 use Drupal\facets_summary\Processor\BuildProcessorInterface;
 use Drupal\facets_summary\Processor\ProcessorPluginBase;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides a processor that adds a link to reset facet filters.
  *
  * @SummaryProcessor(
  *   id = "reset_facets",
- *   label = @Translation("Adds reset facets link"),
+ *   label = @Translation("Adds reset facets link."),
  *   description = @Translation("When checked, this facet will add a link to reset enabled facets."),
  *   stages = {
  *     "build" = 30
  *   }
  * )
  */
-class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessorInterface, ContainerFactoryPluginInterface {
-
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
-   * Builds ResetFacetsProcessor object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param string $plugin_definition
-   *   The plugin_definition for the plugin instance.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $request_stack) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->requestStack = $request_stack;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static($configuration, $plugin_id, $plugin_definition, $container->get('request_stack'));
-  }
+class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessorInterface {
 
   /**
    * Indicates that reset link should be positioned before facet links.
@@ -79,24 +45,14 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
     $configuration = $facets_summary->getProcessorConfigs()[$this->getPluginId()];
     $hasReset = FALSE;
 
-    $request_stack = \Drupal::requestStack();
-    $request = $request_stack->getMainRequest();
-    if (!empty($request->query)) {
-      $query_params = $request->query->all();
-    }
-
-    // Clear the text if set in the configuration.
-    if (isset($configuration['settings']['clear_string'])
-      && $configuration['settings']['clear_string'] === 1
-      && !empty($query_params[$facets_summary->getSearchFilterIdentifier()])) {
-      unset($query_params[$facets_summary->getSearchFilterIdentifier()]);
-      $hasReset = TRUE;
-    }
-
-    // Do nothing else if there are no selected facets or reset text is empty.
-    if ((empty($build['#items']) || empty($configuration['settings']['link_text'])) && !$hasReset) {
+    // Do nothing if there are no selected facets.
+    if (empty($build['#items'])) {
       return $build;
     }
+
+    $request_stack = \Drupal::requestStack();
+    $request = $request_stack->getMainRequest();
+    $query_params = $request->query->all();
 
     // Bypass all active facets and remove them from the query parameters array.
     foreach ($facets as $facet) {
@@ -179,18 +135,6 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
       '#title' => $this->t('Reset facets link text'),
       '#default_value' => $config['link_text'],
     ];
-    $build['clear_string'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Clear the current search string'),
-      '#default_value' => $config['clear_string'],
-      '#description' => $this->t('If checked, the reset link will also clear the text used for the search.'),
-      '#states' => [
-        'visible' => [
-          // @todo get the processor id (show_string) dynamically
-          ':input[name="facets_summary_settings[show_string][status]"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
 
     $build['position'] = [
       '#type' => 'select',
@@ -213,7 +157,6 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
   public function defaultConfiguration() {
     return [
       'link_text' => '',
-      'clear_string' => FALSE,
       'position' => static::POSITION_BEFORE,
     ];
   }

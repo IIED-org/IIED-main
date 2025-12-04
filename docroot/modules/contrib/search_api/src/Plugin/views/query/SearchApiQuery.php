@@ -12,6 +12,7 @@ use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\LoggerTrait;
 use Drupal\search_api\ParseMode\ParseModeInterface;
@@ -25,6 +26,7 @@ use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
 use Drupal\user\Entity\User;
+use Drupal\views\Attribute\ViewsQuery;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
@@ -32,13 +34,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines a Views query class for searching on Search API indexes.
- *
- * @ViewsQuery(
- *   id = "search_api_query",
- *   title = @Translation("Search API Query"),
- *   help = @Translation("The query will be generated and run using the Search API.")
- * )
  */
+#[ViewsQuery(
+  id: 'search_api_query',
+  title: new TranslatableMarkup('Search API Query'),
+  help: new TranslatableMarkup('The query will be generated and run using the Search API.'),
+)]
 class SearchApiQuery extends QueryPluginBase {
 
   use LoggerTrait;
@@ -161,13 +162,13 @@ class SearchApiQuery extends QueryPluginBase {
    *
    * @param string $table
    *   The Views base table ID.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface|null $entity_type_manager
    *   (optional) The entity type manager to use.
    *
    * @return \Drupal\search_api\IndexInterface|null
    *   The requested search index, or NULL if it could not be found and loaded.
    */
-  public static function getIndexFromTable($table, EntityTypeManagerInterface $entity_type_manager = NULL) {
+  public static function getIndexFromTable($table, ?EntityTypeManagerInterface $entity_type_manager = NULL) {
     // @todo Instead use Views::viewsData() – injected, too – to load the base
     //   table definition and use the "index" (or maybe rename to
     //   "search_api_index") field from there.
@@ -267,7 +268,7 @@ class SearchApiQuery extends QueryPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
+  public function init(ViewExecutable $view, DisplayPluginBase $display, ?array &$options = NULL) {
     try {
       parent::init($view, $display, $options);
       $this->index = static::getIndexFromTable($view->storage->get('base_table'));
@@ -951,7 +952,7 @@ class SearchApiQuery extends QueryPluginBase {
    *
    * @see \Drupal\search_api\Query\QueryInterface::setLanguages()
    */
-  public function setLanguages(array $languages = NULL) {
+  public function setLanguages(?array $languages = NULL) {
     if (!$this->shouldAbort()) {
       $this->query->setLanguages($languages);
     }
@@ -1030,7 +1031,7 @@ class SearchApiQuery extends QueryPluginBase {
    *
    * @see \Drupal\search_api\Query\QueryInterface::setFulltextFields()
    */
-  public function setFulltextFields(array $fields = NULL) {
+  public function setFulltextFields(?array $fields = NULL) {
     if (!$this->shouldAbort()) {
       $this->query->setFulltextFields($fields);
     }
@@ -1359,7 +1360,7 @@ class SearchApiQuery extends QueryPluginBase {
         }
       }
       else {
-        $variables['%server'] = $server->label();
+        $variables['%server'] = $server->label() ?? $server->id();
         $this->getLogger()->warning('Tried to sort results randomly on server %server which does not support random sorting.', $variables);
       }
     }

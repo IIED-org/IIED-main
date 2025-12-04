@@ -40,7 +40,7 @@ abstract class ContextReactionFormBase extends FormBase {
    * @return array
    *   The form structure.
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ContextInterface $context = NULL, $reaction_id = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?ContextInterface $context = NULL, $reaction_id = NULL) {
     $this->context = $context;
     $this->reaction = $this->context->getReaction($reaction_id);
 

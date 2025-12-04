@@ -2,10 +2,10 @@
 
 namespace Drupal\Tests\devel_generate\Functional;
 
+use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 
 /**
  * Tests the logic to generate data.

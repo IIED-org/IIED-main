@@ -132,7 +132,6 @@ class ViewsCacheInvalidationTest extends KernelTestBase {
 
     $this->installSchema('node', ['node_access']);
     $this->installSchema('search_api', ['search_api_item']);
-    $this->installSchema('system', ['sequences']);
 
     $this->installEntitySchema('node');
     $this->installEntitySchema('search_api_task');

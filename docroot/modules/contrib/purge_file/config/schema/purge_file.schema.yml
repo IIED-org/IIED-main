@@ -1,0 +1,16 @@
+purge_file.settings:
+  type: config_object
+  label: 'Purge File Settings'
+  mapping:
+    base_urls:
+      type: string
+      label: 'Base URLs'
+    workflow:
+      type: string
+      label: 'Purge File workflow'
+    wildcard:
+      type: boolean
+      label: 'Add a wildcard to the URL'
+    debug:
+      type: boolean
+      label: 'Enable debug'

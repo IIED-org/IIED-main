@@ -4,9 +4,6 @@
  */
 
 (function ($, Drupal) {
-
-  'use strict';
-
   /**
    * Behaviors for setting summaries on content type form.
    *
@@ -14,23 +11,27 @@
    *
    * @prop {Drupal~behaviorAttach} attach
    *   Attaches summary behaviors on content type edit forms.
-   */  
+   */
   Drupal.behaviors.linkcheckerContentTypes = {
-    attach: function (context) {
-      var $context = $(context);
+    attach(context) {
+      const $context = $(context);
       // Provide the vertical tab summaries.
-      $context.find('#edit-linkchecker').drupalSetSummary(function (context) {
-        var vals = [];
-        var $editContext = $(context);
-        $editContext.find('input:checked').next('label').each(function () {
-          vals.push(Drupal.checkPlain($(this).text()));
+      $context
+        .find('#edit-linkchecker')
+        .drupalSetSummary(function (editContext) {
+          const values = [];
+          const $editContext = $(editContext);
+          $editContext
+            .find('input:checked')
+            .next('label')
+            .each(function () {
+              values.push(Drupal.checkPlain($(this).textContent));
+            });
+          if (!values.length) {
+            return Drupal.t('Disabled');
+          }
+          return values.join(', ');
         });
-        if (!vals.length) {
-          return Drupal.t('Disabled');
-        }
-        return vals.join(', ');
-      });
-    }
+    },
   };
-
 })(jQuery, Drupal);

@@ -121,7 +121,7 @@ class SettingsForm extends ConfigFormBase {
         '#theme' => 'status_messages',
         '#message_list' => [
           'info' => [
-            $this->t('The Klaro! <strong>notice dialog</strong> briefly informs about the use of external services or cookies. The <strong>consent dialog modal</strong> is be used to manage consents for services or purposes.', [], ['context' => 'klaro']),
+            $this->t('The Klaro! <strong>notice dialog</strong> briefly informs about the use of external services or cookies. The <strong>consent dialog modal</strong> is used to manage consents for services or purposes.', [], ['context' => 'klaro']),
           ],
         ],
         '#status_headings' => [
@@ -438,6 +438,20 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('styles') ? implode(',', $config->get('styles')) : '',
     ];
 
+    $form['styling']['disable_powered_by'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Hide "powered by Klaro!"', [], ['context' => 'klaro']),
+      '#description' => $this->t('Check to remove the "Powered by Klaro!" text from the consent dialog modal.', [], ['context' => 'klaro']),
+      '#default_value' => $config->get('library.disable_powered_by'),
+    ];
+
+    $form['styling']['show_notice_title'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show title in notice dialog.', [], ['context' => 'klaro']),
+      '#description' => $this->t('Activate to display the title of the Klaro! notice dialog. Otherwise it will be visually hidden.', [], ['context' => 'klaro']),
+      '#default_value' => $config->get('show_notice_title'),
+    ];
+
     $form['styling']['html_texts'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow HTML in texts', [], ['context' => 'klaro']),
@@ -475,6 +489,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('dialog_mode', $form_state->getValue('dialog_mode'))
       ->set('library.additional_class', $form_state->getValue('additional_class'))
       ->set('library.html_texts', $form_state->getValue('html_texts'))
+      ->set('library.disable_powered_by', $form_state->getValue('disable_powered_by'))
       ->set('library.group_by_purpose', $form_state->getValue([
         'apps',
         'group_by_purpose',
@@ -514,6 +529,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('exclude_urls', array_filter($exclude_urls))
       ->set('disable_urls', array_filter($disable_urls))
       ->set('styles', $styles)
+      ->set('show_notice_title', $form_state->getValue('show_notice_title'))
       ->set('override_css', $form_state->getValue('override_css'))
       ->set('process_descriptions', $form_state->getValue([
         'apps',

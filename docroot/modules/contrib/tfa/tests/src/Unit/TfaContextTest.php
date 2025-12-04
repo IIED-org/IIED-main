@@ -82,17 +82,17 @@ class TfaContextTest extends UnitTestCase {
     $this->tfaValidationManager = $this->prophesize(TfaValidationPluginManager::class)->reveal();
     $this->tfaLoginManager = $this->prophesize(TfaLoginPluginManager::class)->reveal();
     $this->tfaSettings = $this->prophesize(ImmutableConfig::class)->reveal();
-    $this->configFactory = $this->prophesize(ConfigFactoryInterface::class);
-    $this->configFactory->get('tfa.settings')->willReturn($this->tfaSettings);
-    $this->configFactory = $this->configFactory->reveal();
+    $config_factory_mock = $this->prophesize(ConfigFactoryInterface::class);
+    $config_factory_mock->get('tfa.settings')->willReturn($this->tfaSettings);
+    $this->configFactory = $config_factory_mock->reveal();
 
-    $this->user = $this->prophesize(UserInterface::class);
-    $this->user->id()->willReturn(3);
-    $this->user = $this->user->reveal();
+    $user = $this->prophesize(UserInterface::class);
+    $user->id()->willReturn(3);
+    $this->user = $user->reveal();
 
-    $this->userStorage = $this->prophesize(UserStorageInterface::class);
-    $this->userStorage->load(3)->willReturn($this->user);
-    $this->userStorage = $this->userStorage->reveal();
+    $user_storage = $this->prophesize(UserStorageInterface::class);
+    $user_storage->load(3)->willReturn($this->user);
+    $this->userStorage = $user_storage->reveal();
 
     $this->userData = $this->prophesize(UserDataInterface::class)->reveal();
   }

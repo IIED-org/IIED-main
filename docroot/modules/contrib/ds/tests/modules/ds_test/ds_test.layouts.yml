@@ -36,3 +36,11 @@ dstest_2col_fluid:
       label: Left
     right:
       label: Right
+dstest_1col_extended:
+  label: Test One column (extended)
+  category: Display Suite
+  class: '\Drupal\ds_test\Plugin\DsLayoutExtended'
+  template: templates/dstest-1col
+  regions:
+    ds_content:
+      label: Content

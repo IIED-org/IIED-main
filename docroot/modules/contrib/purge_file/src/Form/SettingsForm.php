@@ -4,28 +4,11 @@ namespace Drupal\purge_file\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configure Purge file settings for this site.
  */
 class SettingsForm extends ConfigFormBase {
-
-  /**
-   * Used to get the processors option list.
-   *
-   * @var \Drupal\purge\Plugin\Purge\Processor\ProcessorsServiceInterface
-   */
-  protected $purgeProcessors;
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    $instance = parent::create($container);
-    $instance->purgeProcessors = $container->get('purge.processors');
-    return $instance;
-  }
 
   /**
    * {@inheritdoc}
@@ -45,37 +28,46 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $enabled_processors = $this->processorsOptionList();
-
     $config = $this->config('purge_file.settings');
+    $url_purger_types = purge_file_supported_url_purgers();
+    $url_purger_types_enabled = purge_file_supported_url_purgers_enabled();
+
+    $have_url = in_array('url', $url_purger_types_enabled);
+    $have_wildcardurl = in_array('wildcardurl', $url_purger_types_enabled);
+
+    if (empty($url_purger_types_enabled)) {
+      $this->messenger()->addError($this->t('No URL purger is enabled. There must exists at least one purger that supports URLs. Supported purgers: @purgers_supported', [
+        '@purgers_supported' => implode(', ', $url_purger_types),
+      ]));
+    }
+
+    if (!$have_wildcardurl && $have_url) {
+      $this->messenger()->addWarning($this->t('The "Wildcard URL" purge invalidation is not supported. The Purge File module will use the "URL" purger regardless of the "Wildcard" setting below.'));
+    }
+
     $form['base_urls'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Base URL(s)'),
-      '#description' => $this->t('The base URLs of the site, separated by commas. Set it up for sites which front URL is different than the backoffice URL.'),
+      '#description' => $this->t('The base URLs of the site, separated by commas. Set it up for sites which front URL is different than the back office URL.'),
       '#default_value' => $config->get('base_urls'),
     ];
 
-    $form['processor'] = [
+    $form['workflow'] = [
       '#type' => 'select',
-      '#title' => $this->t('Processor'),
-      '#description' => $this->t('The purge processor that will be used to purge the updated / deleted files.'),
-      '#default_value' => $config->get('processor'),
-      '#options' => $enabled_processors,
-      '#disabled' => empty($enabled_processors),
+      '#title' => $this->t('Workflow'),
+      '#description' => $this->t('Process immediately or use a queue.'),
+      '#default_value' => $config->get('workflow'),
+      '#options' => [
+        'immediate' => $this->t('Immediately on file updates'),
+        'queue' => $this->t('In bulk via Queue'),
+      ],
       '#required' => TRUE,
     ];
 
-    if (empty($enabled_processors)) {
-      $form['processors_unavailable'] = [
-        '#type' => 'item',
-        '#markup' => $this->t('No processors available. Please enable a purge processor to your site to make the module works.'),
-      ];
-    }
-
     $form['wildcard'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Wilcard'),
-      '#description' => $this->t('Add wilcard to end of purge URL, purging all variants, such as query string tracking codes.'),
+      '#title' => $this->t('Wildcard'),
+      '#description' => $this->t('Add wildcard to end of purge URL, purging all variants, such as query string tracking codes. Requires that the purger supports the "wildcardurl" invalidation.'),
       '#default_value' => $config->get('wildcard'),
     ];
 
@@ -90,29 +82,14 @@ class SettingsForm extends ConfigFormBase {
   }
 
   /**
-   * List of processors that can be selected to purge the files.
-   *
-   * @return array
-   *   Key-value of respective plugin id and plugin label.
-   */
-  protected function processorsOptionList() {
-    $processors_enabled = $this->purgeProcessors->getPluginsEnabled();
-    $processors_list = [];
-    foreach ($processors_enabled as $processor_id) {
-      $processors_list[$processor_id] = $this->purgeProcessors->get($processor_id)->getLabel();
-    }
-    return $processors_list;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('purge_file.settings')
-      ->set('wildcard', $form_state->getValue('wildcard'))
-      ->set('debug', $form_state->getValue('debug'))
+      ->set('workflow', $form_state->getValue('workflow'))
+      ->set('wildcard', (bool) $form_state->getValue('wildcard'))
+      ->set('debug', (bool) $form_state->getValue('debug'))
       ->set('base_urls', $form_state->getValue('base_urls'))
-      ->set('processor', $form_state->getValue('processor'))
       ->save();
     parent::submitForm($form, $form_state);
   }

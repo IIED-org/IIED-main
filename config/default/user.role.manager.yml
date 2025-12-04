@@ -49,7 +49,6 @@ dependencies:
     - layout_builder
     - masquerade
     - media
-    - media_pdf_thumbnail
     - media_revisions_ui
     - node
     - paragraphs
@@ -92,7 +91,6 @@ permissions:
   - 'access webform submission log'
   - 'access webform submission user'
   - access_all_form_modes
-  - 'add pdf image entity entities'
   - 'addrow tablefield'
   - 'administer block classes'
   - 'administer block content'
@@ -105,7 +103,6 @@ permissions:
   - 'administer media'
   - 'administer menu'
   - 'administer nodes'
-  - 'administer pdf image entity entities'
   - 'administer redirects'
   - 'administer scn configuration'
   - 'administer url aliases'
@@ -183,7 +180,6 @@ permissions:
   - 'delete own project content'
   - 'delete own publication content'
   - 'delete own webform content'
-  - 'delete pdf image entity entities'
   - 'delete publication revisions'
   - 'delete terms in collection'
   - 'delete terms in global'
@@ -225,7 +221,6 @@ permissions:
   - 'edit own project content'
   - 'edit own publication content'
   - 'edit own webform content'
-  - 'edit pdf image entity entities'
   - 'edit terms in collection'
   - 'edit terms in global'
   - 'edit terms in list'
@@ -323,6 +318,5 @@ permissions:
   - 'view publication revisions'
   - 'view the administration theme'
   - 'view unpublished paragraphs'
-  - 'view unpublished pdf image entity entities'
   - 'view user email addresses'
   - 'view webform revisions'

@@ -2,17 +2,18 @@
 
 namespace Drupal\Tests\linkchecker\Functional;
 
-use Drupal\block_content\Entity\BlockContent;
-use Drupal\block_content\Entity\BlockContentType;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\Tests\BrowserTestBase;
+use Drupal\block_content\Entity\BlockContent;
+use Drupal\block_content\Entity\BlockContentType;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\linkchecker\Entity\LinkCheckerLink;
 use Drupal\linkchecker\LinkCheckerLinkInterface;
 use Drupal\node\Entity\NodeType;
-use Drupal\Tests\BrowserTestBase;
+use Drupal\user\Entity\User;
 
 /**
  * Test case for interface tests.
@@ -39,6 +40,13 @@ class LinkCheckerInterfaceTest extends BrowserTestBase {
     'node',
     'path',
   ];
+
+  /**
+   * Admin user object.
+   *
+   * @var \Drupal\user\Entity\User
+   */
+  protected User $adminUser;
 
   /**
    * {@inheritdoc}
@@ -97,6 +105,8 @@ class LinkCheckerInterfaceTest extends BrowserTestBase {
     $permissions = [
       // Block permissions.
       'administer blocks',
+      // @see \Drupal\block_content\BlockContentAccessControlHandler::checkCreateAccess
+      'administer block content',
       // Comment permissions.
       'administer comments',
       'access comments',
@@ -106,7 +116,7 @@ class LinkCheckerInterfaceTest extends BrowserTestBase {
       // Node permissions.
       'create page content',
       'edit own page content',
-      // Path aliase permissions.
+      // Path aliases permissions.
       'administer url aliases',
       'create url aliases',
       // Content filter permissions.
@@ -114,8 +124,8 @@ class LinkCheckerInterfaceTest extends BrowserTestBase {
     ];
 
     // User to set up linkchecker.
-    $this->admin_user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->admin_user);
+    $this->adminUser = $this->drupalCreateUser($permissions);
+    $this->drupalLogin($this->adminUser);
   }
 
   /**

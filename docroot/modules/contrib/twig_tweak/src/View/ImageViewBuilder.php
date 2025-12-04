@@ -43,7 +43,7 @@ class ImageViewBuilder {
    * @return array
    *   A renderable array to represent the image.
    */
-  public function build(FileInterface $file, string $style = NULL, array $attributes = [], bool $responsive = FALSE, bool $check_access = TRUE): array {
+  public function build(FileInterface $file, ?string $style = NULL, array $attributes = [], bool $responsive = FALSE, bool $check_access = TRUE): array {
     $access = $check_access ? $file->access('view', NULL, TRUE) : AccessResult::allowed();
 
     $build = $access->isAllowed() ? $this->doBuild($file, $style, $attributes, $responsive) : [];
@@ -59,7 +59,7 @@ class ImageViewBuilder {
   /**
    * Actually builds the image.
    */
-  private function doBuild(FileInterface $file, string $style = NULL, array $attributes = [], bool $responsive = FALSE): array {
+  private function doBuild(FileInterface $file, ?string $style = NULL, array $attributes = [], bool $responsive = FALSE): array {
     $build['#uri'] = $file->getFileUri();
     $build['#attributes'] = $attributes;
 

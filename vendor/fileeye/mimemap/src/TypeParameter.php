@@ -8,44 +8,23 @@ namespace FileEye\MimeMap;
 class TypeParameter
 {
     /**
-     * Parameter name.
+     * @param string      $name    Parameter name.
+     * @param string      $value   Parameter value.
+     * @param string|null $comment Comment for this parameter.
      *
-     * @var string
+     * @api
      */
-    protected $name;
-
-    /**
-     * Parameter value.
-     *
-     * @var string
-     */
-    protected $value;
-
-    /**
-     * Parameter comment.
-     *
-     * @var string
-     */
-    protected $comment;
-
-    /**
-     * Constructor.
-     *
-     * @param string $name    Parameter name.
-     * @param string $value   Parameter value.
-     * @param string $comment Comment for this parameter.
-     */
-    public function __construct(string $name, string $value, ?string $comment = null)
-    {
-        $this->name = $name;
-        $this->value = $value;
-        if ($comment !== null) {
-            $this->comment = $comment;
-        }
+    public function __construct(
+        protected readonly string $name,
+        protected readonly string $value,
+        protected readonly ?string $comment = null,
+    ) {
     }
 
     /**
      * Gets the parameter name.
+     *
+     * @api
      */
     public function getName(): string
     {
@@ -54,6 +33,8 @@ class TypeParameter
 
     /**
      * Gets the parameter value.
+     *
+     * @api
      */
     public function getValue(): string
     {
@@ -62,6 +43,8 @@ class TypeParameter
 
     /**
      * Does this parameter have a comment?
+     *
+     * @api
      */
     public function hasComment(): bool
     {
@@ -72,10 +55,13 @@ class TypeParameter
      * Gets the parameter comment.
      *
      * @throws UndefinedException
+     *
+     * @api
      */
     public function getComment(): string
     {
         if ($this->hasComment()) {
+            assert(is_string($this->comment));
             return $this->comment;
         }
         throw new UndefinedException('Parameter comment is not defined');
@@ -85,6 +71,8 @@ class TypeParameter
      * Gets a string representation of this parameter.
      *
      * @param int $format The format of the output string.
+     *
+     * @api
      */
     public function toString(int $format = Type::FULL_TEXT): string
     {

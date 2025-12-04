@@ -81,7 +81,7 @@ class LinkCleanUp {
   }
 
   /**
-   * Proccess link deletion within batch operation.
+   * Process link deletion within batch operation.
    *
    * @param mixed $context
    *   Batch context.
@@ -151,8 +151,8 @@ class LinkCleanUp {
     // Get list of link IDs that should be deleted.
     $query = $storage->getQuery();
     $query->accessCheck();
-    $query->condition('entity_id.target_id', $entity->id());
-    $query->condition('entity_id.target_type', $entity->getEntityTypeId());
+    $query->condition('parent_entity_type_id', $entity->getEntityTypeId());
+    $query->condition('parent_entity_id', $entity->id());
     if (!empty($extractedIds)) {
       $query->condition('lid', $extractedIds, 'NOT IN');
     }
@@ -163,6 +163,78 @@ class LinkCleanUp {
       $linksToDelete = $storage->loadMultiple($ids);
       $storage->delete($linksToDelete);
     }
+  }
+
+  /**
+   * Clean up queues data per specified linkchecker entity id.
+   */
+  public function cleanUpQueues($id): void {
+    // Since both queues have different data structure - handle it using
+    // separate queries.
+    $queue_status_handle_items = $this->database
+      ->select('queue', 'q')
+      ->fields('q', ['item_id', 'data'])
+      ->condition('name', 'linkchecker_status_handle')
+      ->condition('data', '%' . serialize([$id => $id]) . '%', 'LIKE')
+      ->execute()
+      ->fetchAll(\PDO::FETCH_ASSOC);
+    foreach ($queue_status_handle_items as $queue_status_handle_item) {
+      // If there is just 1 id in the queue item -> delete it.
+      // Otherwise - update it.
+      $queue_status_handle_item_data = unserialize($queue_status_handle_item['data']);
+      if (count($queue_status_handle_item_data['links']) > 1) {
+        $index = array_search($id, $queue_status_handle_item_data['links'], TRUE);
+        if ($index !== FALSE) {
+          unset($queue_status_handle_item_data['links'][$index]);
+          $this->database->update('queue')
+            ->fields(['data' => serialize($queue_status_handle_item_data)])
+            ->condition('item_id', $queue_status_handle_item['item_id'])
+            ->condition('name', 'linkchecker_status_handle')
+            ->execute();
+        }
+      }
+      else {
+        $this->deleteQueueItemById($queue_status_handle_item['item_id']);
+      }
+    }
+
+    $queue_check_items = $this->database
+      ->select('queue', 'q')
+      ->fields('q', ['item_id', 'data'])
+      ->condition('name', 'linkchecker_check')
+      ->condition('data', '%"' . $id . '"%', 'LIKE')
+      ->execute()
+      ->fetchAll(\PDO::FETCH_ASSOC);
+    // Theoretically there should be no case when 1 link is in several queue
+    // items. But, loop through everything we found just to be sure.
+    foreach ($queue_check_items as $queue_check_item) {
+      $data = unserialize($queue_check_item['data']);
+      // Find index of deleted linkchecker entity.
+      if (count($data) > 1) {
+        $index = array_search($id, $data, TRUE);
+        if ($index !== FALSE) {
+          unset($data[$index]);
+          $this->database->update('queue')
+            ->fields(['data' => serialize($data)])
+            ->condition('item_id', $queue_check_item['item_id'])
+            ->condition('name', 'linkchecker_check')
+            ->execute();
+        }
+      }
+      else {
+        $this->deleteQueueItemById($queue_check_item['item_id']);
+      }
+    }
+  }
+
+  /**
+   * Deletes queue item by id.
+   */
+  protected function deleteQueueItemById($item_id): void {
+    $this->database
+      ->delete('queue')
+      ->condition('item_id', $item_id)
+      ->execute();
   }
 
   /**

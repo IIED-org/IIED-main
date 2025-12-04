@@ -10,6 +10,7 @@ use Drupal\Component\Utility\Xss;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\responsive_image\Entity\ResponsiveImageStyle;
+use Drupal\Component\Utility\Html;
 
 /**
  * Prepares variables for colorbox formatter templates.
@@ -138,7 +139,6 @@ function template_preprocess_colorbox_formatter(&$variables) {
   }
   $unique_id = 'colorbox-' . Crypt::randomBytesBase64(8);
   $variables['attributes']['title'] = _colorbox_formatter_get_caption($variables);
-  ;
   $variables['attributes']['data-colorbox-gallery'] = $gallery_id;
   $variables['attributes']['class'] = $classes_array;
   $variables['attributes']['aria-controls'] = $unique_id;
@@ -429,5 +429,5 @@ function _colorbox_formatter_get_caption(&$variables) {
   if (((strpos($colorbox_style, 'colorbox/example') !== FALSE) || $config->get('colorbox_caption_trim')) && (strlen($caption) > $trim_length)) {
     $caption = substr($caption, 0, $trim_length - 5) . '...';
   }
-  return Xss::filter($caption);
+  return Html::decodeEntities(Xss::filter($caption ?? ''));
 }

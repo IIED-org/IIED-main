@@ -18,12 +18,7 @@ include:
 variables:
   # Broaden test coverage.
   OPT_IN_TEST_PREVIOUS_MINOR: 1
+  OPT_IN_TEST_PREVIOUS_MAJOR: 1
+  KUBERNETES_CPU_REQUEST: 8
+  _CONCURRENCY_THREADS: 16
   _PHPUNIT_CONCURRENT: 1
-
-composer (next major):
-  variables:
-    _LENIENT_ALLOW_LIST: "ckeditor,embed,entity_embed,inline_entity_form"
-
-phpunit (next major):
-  before_script:
-    - 'sed -i "s/core_version_requirement.*/core_version_requirement: \^11/" web/modules/contrib/**/*.info.yml'

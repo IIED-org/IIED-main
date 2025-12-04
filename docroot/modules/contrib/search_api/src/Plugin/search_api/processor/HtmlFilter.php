@@ -5,7 +5,9 @@ namespace Drupal\search_api\Plugin\search_api\processor;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\Item\FieldInterface;
 use Drupal\search_api\Plugin\search_api\data_type\value\TextValueInterface;
 use Drupal\search_api\Processor\FieldsProcessorPluginBase;
@@ -17,18 +19,17 @@ use Symfony\Component\Yaml\Parser;
 
 /**
  * Strips HTML tags from fulltext fields and decodes HTML entities.
- *
- * @SearchApiProcessor(
- *   id = "html_filter",
- *   label = @Translation("HTML filter"),
- *   description = @Translation("Strips HTML tags from fulltext fields and decodes HTML entities. Use this processor when indexing HTML data – for example, node bodies for certain text formats. The processor also allows to boost (or ignore) the contents of specific elements."),
- *   stages = {
- *     "pre_index_save" = 0,
- *     "preprocess_index" = -15,
- *     "preprocess_query" = -15,
- *   }
- * )
  */
+#[SearchApiProcessor(
+  id: 'html_filter',
+  label: new TranslatableMarkup('HTML filter'),
+  description: new TranslatableMarkup('Strips HTML tags from fulltext fields and decodes HTML entities. Use this processor when indexing HTML data – for example, node bodies for certain text formats. The processor also allows to boost (or ignore) the contents of specific elements.'),
+  stages: [
+    'pre_index_save' => 0,
+    'preprocess_index' => -15,
+    'preprocess_query' => -15,
+  ],
+)]
 class HtmlFilter extends FieldsProcessorPluginBase {
 
   /**
@@ -193,8 +194,11 @@ class HtmlFilter extends FieldsProcessorPluginBase {
    * {@inheritdoc}
    */
   protected function processFieldValue(&$value, $type) {
+    if (!is_string($value)) {
+      return;
+    }
     // Remove invisible content.
-    $text = preg_replace('@<(applet|audio|canvas|command|embed|iframe|map|menu|noembed|noframes|noscript|script|style|svg|video)[^>]*>.*</\1>@siU', ' ', $value);
+    $text = $this->removeInvisibleHtmlElements($value);
     $is_text_type = $this->getDataTypeHelper()->isTextType($type);
     if ($is_text_type) {
       // Let removed tags still delimit words.
@@ -209,6 +213,41 @@ class HtmlFilter extends FieldsProcessorPluginBase {
       $text = strip_tags($text);
       $value = $this->normalizeText(trim($text));
     }
+  }
+
+  /**
+   * Removes all invisible HTML elements (like "script") from the given HTML.
+   *
+   * @param string $html
+   *   The HTML to sanitize.
+   *
+   * @return string
+   *   The same HTML string with all invisible elements completely removed.
+   */
+  protected function removeInvisibleHtmlElements(string $html): string {
+    $regex = '/<(applet|audio|canvas|command|embed|iframe|map|menu|noembed|noframes|noscript|script|style|svg|video)/iU';
+    $result = '';
+    while (preg_match($regex, $html, $matches, PREG_OFFSET_CAPTURE)) {
+      /** @var int $match_pos */
+      $match_pos = $matches[0][1];
+      $result .= substr($html, 0, $match_pos);
+      $closing_angle_bracket_pos = strpos($html, '>', $match_pos + strlen($matches[0][0]));
+      if ($closing_angle_bracket_pos === FALSE) {
+        return $result;
+      }
+      if ($html[$closing_angle_bracket_pos - 1] === '/') {
+        $html = substr($html, $closing_angle_bracket_pos + 1);
+      }
+      else {
+        $end_tag = "</{$matches[1][0]}>";
+        $end_tag_pos = strpos($html, $end_tag, $closing_angle_bracket_pos + 1);
+        if ($end_tag_pos === FALSE) {
+          return $result;
+        }
+        $html = substr($html, $end_tag_pos + strlen($end_tag));
+      }
+    }
+    return $result . $html;
   }
 
   /**

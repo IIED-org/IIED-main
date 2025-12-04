@@ -6,7 +6,7 @@ type: module
 dependencies:
   - drupal:text
 
-# Information added by Drupal.org packaging script on 2024-12-27
-version: '2.4.0'
+# Information added by Drupal.org packaging script on 2025-06-24
+version: '2.5.0'
 project: 'textfield_counter'
-datestamp: 1735316361
+datestamp: 1750761357

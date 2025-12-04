@@ -10,11 +10,27 @@
     attach: function (context, settings) {
       if (drupalSettings.better_exposed_filters.slider) {
         $.each(drupalSettings.better_exposed_filters.slider_options, function (i, sliderOptions) {
+          let tooltips;
           let slider;
-          var data_selector = 'edit-' + sliderOptions.dataSelector;
+          const data_selector = 'edit-' + sliderOptions.dataSelector;
+          const direction = $('html[dir="rtl"]').length > 0 ? 'rtl' : 'ltr';
 
           // Collect all possible input fields for this filter.
           var $inputs = $(once('slider-filter', "input[data-drupal-selector=" + data_selector + "], input[data-drupal-selector=" + data_selector + "-max], input[data-drupal-selector=" + data_selector + "-min]", context));
+
+          // Set up tooltips.
+          if ($inputs.length) {
+            tooltips = false;
+            if (sliderOptions.tooltips) {
+              const tooltipValuePrefix = sliderOptions.tooltips_value_prefix ?? '';
+              const tooltipValueSuffix = sliderOptions.tooltips_value_suffix ?? '';
+              tooltips = {
+                to: function (value) {
+                  return tooltipValuePrefix + ' ' + Math.trunc(Number(value)) + ' ' + tooltipValueSuffix;
+                }
+              };
+            }
+          }
 
           // This is a single-value filter.
           if ($inputs.length === 1) {
@@ -30,6 +46,12 @@
             // Build the HTML and settings for the slider.
             slider = document.createElement('div');
             slider.className = 'bef-slider';
+
+            // Element must be part of the DOM tree for getComputedStyle to
+            // return non-empty values.
+            // @see https://github.com/leongersen/noUiSlider/blob/15.5.1/dist/nouislider.js#L1000
+            document.body.appendChild(slider);
+
             noUiSlider.create(slider, {
               range: {
                 'min': parseFloat(sliderOptions.min),
@@ -40,6 +62,7 @@
               animationDuration: parseInt(sliderOptions.animate),
               orientation: sliderOptions.orientation,
               start: [defaultValue],
+              direction: direction,
               format: {
                 // 'to' the formatted value. Receives a number.
                 to: function (value) {
@@ -49,7 +72,8 @@
                 from: function (value) {
                   return Math.trunc(Number(value));
                 }
-              }
+              },
+              tooltips: tooltips
             });
             // This fires every time the slider values are changed, either by a
             // user or by calling API methods. Additionally, it fires
@@ -89,6 +113,12 @@
 
             slider = document.createElement('div');
             slider.className = 'bef-slider';
+
+            // Element must be part of the DOM tree for getComputedStyle to
+            // return non-empty values.
+            // @see https://github.com/leongersen/noUiSlider/blob/15.5.1/dist/nouislider.js#L1000
+            document.body.appendChild(slider);
+
             noUiSlider.create(slider, {
               range: {
                 'min': parseFloat(sliderOptions.min),
@@ -100,6 +130,18 @@
               orientation: sliderOptions.orientation,
               start: [defaultMin, defaultMax],
               connect: true,
+              direction: direction,
+              format: {
+                // 'to' the formatted value. Receives a number.
+                to: function (value) {
+                  return Math.trunc(Number(value));
+                },
+                // 'from' the formatted value.
+                from: function (value) {
+                  return Math.trunc(Number(value));
+                }
+              },
+              tooltips: tooltips
             });
             // Update the textfields as the sliders are moved.
             slider.noUiSlider.on('update', function (values) {
@@ -114,14 +156,15 @@
               $(slider).parents('form').find('[data-bef-auto-submit-click]').click();
             });
 
-            $min.after(slider);
+            const $slider_wrapper = $(`.${sliderOptions.dataSelector}-slider-wrapper`);
+            $slider_wrapper.append(slider);
 
             // Update the slider when the fields are updated.
             $min.blur(function () {
               befUpdateSlider($(this), 0, slider);
             });
             $max.blur(function () {
-              befUpdateSlider($(this), 0, slider);
+              befUpdateSlider($(this), 1, slider);
             });
           }
         });
@@ -133,7 +176,7 @@
    * Update a slider when a related input element is changed.
    *
    * We don't need to check whether the new value is valid based on slider min,
-   * max, and step because the slider will do that automatically and then we
+   * max, and step because the slider will do that automatically, and then we
    * update the textfield on the slider's change event.
    *
    * We still have to make sure that the min & max values of a range slider
@@ -181,7 +224,7 @@
     // The slider's change event will then update the textfield again so that
     // they both have the same value.
     if (valIndex != null) {
-      slider.noUiSlider.setHandle(valIndex, val);
+      slider.noUiSlider.setHandle(valIndex, val, null, true);
     }
     else {
       slider.noUiSlider.set(val);

@@ -36,7 +36,7 @@ class WebformElementSignatureTest extends WebformElementBrowserTestBase {
 
     // Check signature display.
     $this->drupalGet('/webform/test_element_signature');
-    $assert_session->responseContains('<input data-drupal-selector="edit-signature" aria-describedby="edit-signature--description" type="hidden" name="signature" value="" class="js-webform-signature form-webform-signature" data-drupal-states="{&quot;disabled&quot;:{&quot;.webform-submission-test-element-signature-add-form :input[name=\u0022disable\u0022]&quot;:{&quot;checked&quot;:true}},&quot;readonly&quot;:{&quot;.webform-submission-test-element-signature-add-form :input[name=\u0022readonly\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
+    $this->assertSession()->elementExists('xpath', '//input[@data-drupal-selector = "edit-signature"][@aria-describedby = "edit-signature--description"][@type = "hidden"][@name = "signature"][@value = ""][@class = "js-webform-signature form-webform-signature"]');
     $assert_session->responseContains('<input type="submit" name="op" value="Reset" class="button js-form-submit form-submit" />');
     $assert_session->responseContains('<canvas></canvas>');
     $assert_session->responseContains('</div>');

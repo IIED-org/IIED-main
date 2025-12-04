@@ -38,9 +38,9 @@ tfa.overview:
     _title: 'TFA'
   requirements:
     _custom_access: '\Drupal\tfa\Controller\TfaLoginController::accessSelfOrAdmin'
-    _permission: 'setup own tfa'
   options:
     _admin_route: TRUE
+    _tfa_permission: 'setup own tfa'
 
 tfa.validation.setup:
   path: '/user/{user}/security/tfa/{method}'
@@ -49,9 +49,9 @@ tfa.validation.setup:
     _title: 'TFA setup'
   requirements:
     _custom_access: '\Drupal\tfa\Controller\TfaLoginController::accessSelfOrAdmin'
-    _permission: 'setup own tfa'
   options:
     _admin_route: TRUE
+    _tfa_permission: 'setup own tfa'
 
 tfa.disable:
   path: '/user/{user}/security/tfa/disable'
@@ -60,10 +60,10 @@ tfa.disable:
     _title: 'TFA disable'
   requirements:
     _custom_access: '\Drupal\tfa\Controller\TfaLoginController::accessSelfOrAdmin'
-    _permission: 'disable own tfa'
     user: \d+
   options:
     _admin_route: TRUE
+    _tfa_permission: 'disable own tfa'
 
 tfa.plugin.reset:
   path: '/user/{user}/security/tfa/{method}/{reset}'
@@ -72,6 +72,6 @@ tfa.plugin.reset:
     _title: 'TFA setup'
   requirements:
     _custom_access: '\Drupal\tfa\Controller\TfaLoginController::accessSelfOrAdmin'
-    _permission: 'setup own tfa'
   options:
     _admin_route: TRUE
+    _tfa_permission: 'setup own tfa'

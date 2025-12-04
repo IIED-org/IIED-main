@@ -20,14 +20,14 @@ abstract class DevelDumperBase extends PluginBase implements DevelDumperInterfac
   /**
    * {@inheritdoc}
    */
-  public function dump($input, $name = NULL): void {
+  public function dump($input, ?string $name = NULL): void {
     echo (string) $this->export($input, $name);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function exportAsRenderable($input, $name = NULL): array {
+  public function exportAsRenderable($input, ?string $name = NULL): array {
     return ['#markup' => $this->export($input, $name)];
   }
 
@@ -65,6 +65,9 @@ abstract class DevelDumperBase extends PluginBase implements DevelDumperInterfac
       [$manager_class_name, 'exportAsRenderable'],
       [$manager_class_name, 'message'],
       [Debug::class, 'dump'],
+      'devel_export',
+      'devel_message',
+      'devel_debug',
       'dpm',
       'dvm',
       'dsm',
@@ -76,8 +79,6 @@ abstract class DevelDumperBase extends PluginBase implements DevelDumperInterfac
       'dfb',
       'dfbt',
       'dpq',
-      'kint',
-      'ksm',
       'ddebug_backtrace',
       'kdevel_print_object',
       'backtrace_error_handler',

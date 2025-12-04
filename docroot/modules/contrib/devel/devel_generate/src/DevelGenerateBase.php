@@ -14,6 +14,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\PluginBase;
+use JetBrains\PhpStorm\Deprecated;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -57,11 +58,11 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     $instance = new static($configuration, $plugin_id, $plugin_definition);
     $instance->entityTypeManager = $container->get('entity_type.manager');
-    $instance->messenger = $container->get('messenger');
     $instance->languageManager = $container->get('language_manager');
     $instance->moduleHandler = $container->get('module_handler');
     $instance->stringTranslation = $container->get('string_translation');
     $instance->entityFieldManager = $container->get('entity_field.manager');
+    $instance->setMessenger($container->get('messenger'));
 
     return $instance;
   }
@@ -112,7 +113,7 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
    */
   public function generate(array $values): void {
     $this->generateElements($values);
-    $this->setMessage('Generate process complete.');
+    $this->messenger()->addMessage('Generate process complete.');
   }
 
   /**
@@ -178,14 +179,9 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
    *   (optional) The message type, as defined in MessengerInterface. Defaults
    *   to MessengerInterface::TYPE_STATUS.
    */
+  #[Deprecated(reason: 'Use the messenger trait directly.')]
   protected function setMessage($msg, string $type = MessengerInterface::TYPE_STATUS): void {
-    if (function_exists('drush_log')) {
-      $msg = strip_tags($msg);
-      drush_log($msg);
-    }
-    else {
-      $this->messenger->addMessage($msg, $type);
-    }
+    $this->messenger()->addMessage($msg, $type);
   }
 
   /**

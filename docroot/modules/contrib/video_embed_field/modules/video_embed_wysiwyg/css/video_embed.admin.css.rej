@@ -1,0 +1,8 @@
+--- modules/video_embed_wysiwyg/css/video_embed.admin.css
++++ modules/video_embed_wysiwyg/css/video_embed.admin.css
+@@ -1,4 +1,4 @@
+ .ckeditor5-toolbar-button-videoEmbed {
+   /* @todo Choose the best icon and remove others. */
+-  background-image: url(../icons/film.svg);
++  background-image: url(../icons/play-circle.svg);
+ }

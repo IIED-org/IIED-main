@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\stage_file_proxy\Controller;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Image\ImageFactory;
@@ -11,7 +12,7 @@ use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\image\Controller\ImageStyleDownloadController as CoreImageStyleDownloadController;
 use Drupal\image\ImageStyleInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
@@ -19,6 +20,8 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
  * Decorate core's image style controller to retry failed requests.
  */
 final class ImageStyleDownloadController implements ContainerInjectionInterface {
+
+  use AutowireTrait;
 
   /**
    * The decorated used to decorate the images.
@@ -39,20 +42,14 @@ final class ImageStyleDownloadController implements ContainerInjectionInterface 
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The system service.
    */
-  public function __construct(LockBackendInterface $lock, ImageFactory $image_factory, StreamWrapperManagerInterface $stream_wrapper_manager, FileSystemInterface $file_system = NULL) {
+  public function __construct(
+    #[Autowire(service: 'lock')]
+    protected LockBackendInterface $lock,
+    protected ImageFactory $image_factory,
+    protected StreamWrapperManagerInterface $stream_wrapper_manager,
+    protected FileSystemInterface $file_system,
+  ) {
     $this->decorated = new CoreImageStyleDownloadController($lock, $image_factory, $stream_wrapper_manager, $file_system);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('lock'),
-      $container->get('image.factory'),
-      $container->get('stream_wrapper_manager'),
-      $container->get('file_system')
-    );
   }
 
   /**
@@ -80,7 +77,7 @@ final class ImageStyleDownloadController implements ContainerInjectionInterface 
    * @param string|null $required_derivative_scheme
    *   The required scheme for the derivative image.
    *
-   * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|Response
+   * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\Response
    *   The transferred file as response or some error response.
    */
   public function deliver(Request $request, string $scheme, ImageStyleInterface $image_style, ?string $required_derivative_scheme = 'public') {

@@ -6,7 +6,7 @@ use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorageSchema;
 
 /**
- * Defines the linkcheckerfile schema handler.
+ * Defines storage schema handler for the linkcheckerlink entity type.
  */
 class LinkCheckerLinkStorageSchema extends SqlContentEntityStorageSchema {
 

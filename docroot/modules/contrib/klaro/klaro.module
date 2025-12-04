@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
@@ -117,8 +118,10 @@ function klaro_page_attachments_alter(array &$attachments) {
       continue;
     }
 
+    if (!isset($item['#attributes']['data-type'])) {
+      $item['#attributes']['data-type'] = $item['#attributes']['type'] ?? 'text/javascript';
+    }
     $item['#attributes']['type'] = 'text/plain';
-    $item['#attributes']['data-type'] = 'application/javascript';
     $item['#attributes']['data-name'] = $attachment_apps[$identifier];
     if (isset($item['#attributes']['src'])) {
       $item['#attributes']['data-src'] = $item['#attributes']['src'];
@@ -212,6 +215,9 @@ function klaro_preprocess_field(&$variables) {
   if ($variables["element"]['#formatter'] == "video_embed_field_video") {
     foreach ($variables['items'] as $i => $item) {
       $src = $item['content']['children']['#url'];
+      if (empty($src)) {
+        continue;
+      }
       $app = $helper->matchKlaroApp($src);
       if ($app) {
         $variables['items'][$i]['content']['children']['#attributes']['data-src'] = $src;
@@ -222,6 +228,18 @@ function klaro_preprocess_field(&$variables) {
     $url = $helper->getThumbnail($variables['element']['#object']);
     if ($url) {
       $variables['items'][0]['content']['children']['#attributes']['data-thumbnail'] = $url;
+    }
+  }
+
+  // Rewrite markup from field formatter simple_gmap.
+  if ($variables["element"]['#formatter'] == "simple_gmap") {
+    foreach ($variables['items'] as $i => &$item) {
+      // We have to render the field to process the markup.
+      $output = \Drupal::service('renderer')->render($item['content']);
+      $output = $helper->processHtml($output);
+      $item['content'] = [
+        '#markup' => Markup::create($output),
+      ];
     }
   }
 
@@ -243,13 +261,4 @@ function klaro_preprocess_leaflet_map(&$variables) {
   $variables['attributes']['data-name'] = 'leaflet';
   $variables['attributes']['data-id'] = $variables['map_id'];
   $variables['map_id'] .= '-protected';
-}
-
-/**
- * Implements hook_update_status_alter().
- */
-function klaro_update_status_alter(&$projects) {
-  if (isset($projects['klaro']['title'])) {
-    $projects['klaro']['title'] = 'Klaro Cookie & Consent Management';
-  }
 }

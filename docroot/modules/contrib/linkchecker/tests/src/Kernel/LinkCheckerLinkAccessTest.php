@@ -6,12 +6,12 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\linkchecker\Entity\LinkCheckerLink;
 use Drupal\linkchecker\LinkCheckerLinkInterface;
-use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\user\RoleInterface;
 
 /**
@@ -39,7 +39,6 @@ class LinkCheckerLinkAccessTest extends KernelTestBase {
     'field',
     'text',
     'path_alias',
-    'dynamic_entity_reference',
     'linkchecker',
   ];
 
@@ -155,10 +154,8 @@ class LinkCheckerLinkAccessTest extends KernelTestBase {
 
       $link = LinkCheckerLink::create([
         'url' => 'http://example.com/',
-        'entity_id' => [
-          'target_id' => $entity->id(),
-          'target_type' => $entity->getEntityTypeId(),
-        ],
+        'parent_entity_type_id' => $entity->getEntityTypeId(),
+        'parent_entity_id' => $entity->id(),
         'entity_field' => $field_storage['field_name'],
         'entity_langcode' => $entity->language()->getId(),
       ]);
@@ -179,10 +176,8 @@ class LinkCheckerLinkAccessTest extends KernelTestBase {
     // remove parent entity directly from database we should handle it.
     $link = LinkCheckerLink::create([
       'url' => 'http://example.com/',
-      'entity_id' => [
-        'target_id' => 9999,
-        'target_type' => 'node',
-      ],
+      'parent_entity_type_id' => 'node',
+      'parent_entity_id' => 9999,
       'entity_field' => 'test_text_field',
       'entity_langcode' => 'en',
     ]);
@@ -241,10 +236,10 @@ class LinkCheckerLinkAccessTest extends KernelTestBase {
    * Helper function for bundle creation.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entityTypeDefinition
-   *   The enity type.
+   *   The entity type.
    *
    * @return string
-   *   The nudle ID.
+   *   The bundle ID.
    */
   protected function createBundle(EntityTypeInterface $entityTypeDefinition) {
     if ($bundleEntityType = $entityTypeDefinition->getBundleEntityType()) {

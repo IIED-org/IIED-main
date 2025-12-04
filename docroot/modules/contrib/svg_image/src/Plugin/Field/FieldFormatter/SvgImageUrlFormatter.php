@@ -2,12 +2,8 @@
 
 namespace Drupal\svg_image\Plugin\Field\FieldFormatter;
 
-use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Render\Markup;
-use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageUrlFormatter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -29,9 +25,11 @@ class SvgImageUrlFormatter extends ImageUrlFormatter {
   /**
    * The file URL generator.
    *
-   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface|null
+   * @todo Our parent class will provide this in a future release.
+   * @see https://www.drupal.org/project/drupal/issues/2811043
    */
-  protected $fileUrlGenerator;
+  protected ?FileUrlGeneratorInterface $fileUrlGenerator;
 
   /**
    * {@inheritdoc}
@@ -51,34 +49,26 @@ class SvgImageUrlFormatter extends ImageUrlFormatter {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = [];
+    $elements = parent::viewElements($items, $langcode);
 
-    /** @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $items */
-    if (empty($images = $this->getEntitiesToView($items, $langcode))) {
-      // Early opt-out if the field is empty.
+    // Early opt-out if the field is empty.
+    if (empty($elements)) {
       return $elements;
     }
 
-    /** @var \Drupal\image\ImageStyleInterface $imageStyle */
-    $imageStyle = $this->imageStyleStorage->load($this->getSetting('image_style'));
+    /** @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $items */
+    $images = $this->getEntitiesToView($items, $langcode);
+    $has_image_style = $this->getSetting('image_style');
+
     /** @var \Drupal\file\FileInterface[] $images */
     foreach ($images as $delta => $image) {
-      $imageUri = $image->getFileUri();
-      $isSvg = svg_image_is_file_svg($image);
-      $url = ($imageStyle && !$isSvg)
-        ? $imageStyle->buildUrl($imageUri)
-        : $this->fileUrlGenerator->generateAbsoluteString($imageUri);
-
-      $url = $this->fileUrlGenerator->transformRelative($url);
-
-      // Add cacheability metadata from the image and image style.
-      $cacheability = CacheableMetadata::createFromObject($image);
-      if ($imageStyle) {
-        $cacheability->addCacheableDependency(CacheableMetadata::createFromObject($imageStyle));
+      if (svg_image_is_file_svg($image) && $has_image_style) {
+        // Only change the URL if we're dealing with an SVG and an image style
+        // is set.
+        // Otherwise, keep the build of the parent formatter.
+        $imageUri = $image->getFileUri();
+        $elements[$delta]['#markup'] = $this->fileUrlGenerator->generateString($imageUri);
       }
-
-      $elements[$delta] = ['#markup' => Markup::create($url)];
-      $cacheability->applyTo($elements[$delta]);
     }
 
     return $elements;

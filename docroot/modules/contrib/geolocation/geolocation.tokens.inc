@@ -120,7 +120,7 @@ function geolocation_tokens($type, $tokens, array $data, array $options, Bubblea
                 }
               }
               catch (\Exception $e) {
-                watchdog_exception('geolocation', $e);
+                \Drupal::logger('geolocation')->alert($e->getMessage());
               }
             }
           }

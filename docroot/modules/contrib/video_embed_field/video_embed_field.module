@@ -28,7 +28,7 @@ function video_embed_field_theme() {
 }
 
 /**
- *  Implements hook_help().
+ * Implements hook_help().
  */
 function video_embed_field_help($route_name, RouteMatchInterface $route_match) {
   if ($route_name !== 'help.page.video_embed_field') {

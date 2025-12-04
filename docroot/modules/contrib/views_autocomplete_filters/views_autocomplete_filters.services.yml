@@ -2,3 +2,10 @@ services:
   views_autocomplete_filters.install_helper:
     class: Drupal\views_autocomplete_filters\ViewsAutocompleteFiltersInstallHelper
     arguments: ['@config.factory', '@config.storage']
+
+  Drupal\views_autocomplete_filters\Hook\ViewsHooks:
+    class: Drupal\views_autocomplete_filters\Hook\ViewsHooks
+    autowire: true
+  Drupal\views_autocomplete_filters\Hook\ConfigHooks:
+    class: Drupal\views_autocomplete_filters\Hook\ConfigHooks
+    autowire: true

@@ -1,6 +1,6 @@
 swiper:
   js:
-    https://unpkg.com/swiper@6.8.4/swiper-bundle.min.js: { type: external, minified: true }
+    dist/swiper-bundle.min.js: { async: true, minified: true }
   css:
     theme:
-      https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css: { type: external, minified: true }
+      dist/swiper-bundle.min.css: { async: true, minified: true }

@@ -1,0 +1,23 @@
+{
+  "name": "drupal/pdfpreview",
+  "description": "PDFPreview lets you show a preview of PDF files.",
+  "type": "drupal-module",
+  "homepage": "https://drupal.org/project/pdfpreview",
+  "authors": [
+    {
+      "name": "Michael Strelan (mstrelan)",
+      "homepage": "https://www.drupal.org/u/mstrelan",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://drupal.org/project/issues/pdfpreview",
+    "source": "https://cgit.drupalcode.org/pdfpreview"
+  },
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "require": {
+    "drupal/core": "^10 || ^11",
+    "drupal/imagemagick": "^3.7 || ^4.0"
+  }
+}

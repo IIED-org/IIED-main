@@ -44,7 +44,7 @@ class NameFormatParser {
   protected $sep3 = '';
 
   /**
-   * Used to seperate words using the "b" and "B" modifiers.
+   * Used to separate words using the "b" and "B" modifiers.
    *
    * @var string
    */
@@ -63,9 +63,8 @@ class NameFormatParser {
    *   - sep2 (string): second separator.
    *   - sep3 (string): third separator.
    *   - markup (string): key of the markup type.
-   *   - boundary (string): regexp for word boundary.
    *
-   * @return \Drupal\Component\Render\MarkupInterface
+   * @return string
    *   A renderable object representing the name.
    */
   public function parse(array $name_components, $format = '', array $settings = []) {
@@ -75,9 +74,6 @@ class NameFormatParser {
       }
     }
     $this->markup = !empty($settings['markup']) ? $settings['markup'] : 'none';
-    if (isset($settings['boundary']) && strlen($settings['boundary'])) {
-      $this->boundary = $settings['boundary'];
-    }
 
     $name_string = $this->format($name_components, $format);
     switch ($this->markup) {
@@ -85,7 +81,7 @@ class NameFormatParser {
       case 'simple':
       case 'rdfa':
       case 'microdata':
-        return new FormattableMarkup($name_string, []);
+        return (new FormattableMarkup($name_string, []))->jsonSerialize();
 
       // Unescaped text.
       case 'raw':
@@ -94,7 +90,7 @@ class NameFormatParser {
       // Raw component values.
       case 'none':
       default:
-        return new HtmlEscapedText($name_string);
+        return (new HtmlEscapedText($name_string))->jsonSerialize();
 
     }
   }

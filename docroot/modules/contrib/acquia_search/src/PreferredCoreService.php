@@ -113,7 +113,10 @@ class PreferredCoreService {
   public function getAvailableCores() {
     // When there was an Acquia Search API failure, or we are able to connect,
     // however no cores were found return an empty array.
-    $cores = $this->acquiaSearchApiClient->getSearchIndexes();
+    $cores = drupal_static('acquia_search_available_cores');
+    if ($cores === NULL) {
+      $cores = $this->acquiaSearchApiClient->getSearchIndexes();
+    }
     if (empty($cores)) {
       return [];
     }

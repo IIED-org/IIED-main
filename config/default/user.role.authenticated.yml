@@ -5,6 +5,7 @@ dependencies:
   config:
     - filter.format.webform_default
     - search_api_autocomplete.search.acquia_search
+    - search_api_autocomplete.search.search
   module:
     - comment
     - contact
@@ -12,7 +13,6 @@ dependencies:
     - filter
     - klaro
     - media
-    - media_pdf_thumbnail
     - search_api_autocomplete
     - shortcut
     - system
@@ -34,7 +34,6 @@ permissions:
   - 'skip comment approval'
   - 'use klaro'
   - 'use search_api_autocomplete for acquia_search'
+  - 'use search_api_autocomplete for search'
   - 'use text format webform_default'
   - 'view media'
-  - 'view private pdf thumbnails'
-  - 'view published pdf image entity entities'

@@ -415,3 +415,60 @@ final class BlankLinesBetweenVsAttributesWithoutCommentIssueSquiz3594
 
     public $property2;
 }
+
+class PHP84FinalProperties {
+    final int $finalA;
+
+    /**
+     * Docblock
+     */
+    public final string $publicfinal;
+    #[AnAttribute]
+    final bool $finalB;
+
+    final private bool $finalPrivate;
+}
+
+class MultilineCommentShouldNotBeSplitUp {
+    // This is the first line
+    // of a multi-line comment
+    // which should be recognized as belonging
+    // with the property.
+    public $prop;
+
+
+    /* This is the first line
+       of a multi-line comment
+       which should be recognized as belonging
+       with the property.
+     */
+    public $prop;
+}
+
+class AsymVisibility {
+    protected private(set) int $asymProtectedPrivate;
+
+    /**
+     * Docblock
+     */
+    protected(set) final string $asymProtected;
+    #[AnAttribute]
+
+    public(set) string|bool $asymPublic;
+
+
+    private(set) private bool $asymPrivate;
+}
+
+abstract class PHP84AbstractProperties {
+    abstract int $abstractA {get;}
+
+    /**
+     * Docblock
+     */
+    public abstract string $publicAbstract { set; }
+    #[AnAttribute]
+    abstract bool $abstractB {get;}
+
+    abstract protected bool $abstractProtected { set; }
+}

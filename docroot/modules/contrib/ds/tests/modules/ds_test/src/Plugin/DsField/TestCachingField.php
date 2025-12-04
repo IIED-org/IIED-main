@@ -3,17 +3,18 @@
 namespace Drupal\ds_test\Plugin\DsField;
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\ds\Attribute\DsField;
 use Drupal\ds\Plugin\DsField\DsFieldBase;
 
 /**
  * Test caching field plugin.
- *
- * @DsField(
- *   id = "test_caching_field",
- *   title = @Translation("Test Caching field"),
- *   entity_type = "node"
- * )
  */
+#[DsField(
+  id: 'test_caching_field',
+  title: new TranslatableMarkup('Test Caching field'),
+  entity_type: 'node'
+)]
 class TestCachingField extends DsFieldBase {
 
   /**

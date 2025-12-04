@@ -139,7 +139,7 @@ class UserProfilePage extends ConditionPluginBase implements ContainerFactoryPlu
     if (empty($this->configuration['user_status'])) {
       return $this->t('No user status field is selected.');
     }
-    return t('Select user profile page status');
+    return $this->t('Select user profile page status');
 
   }
 

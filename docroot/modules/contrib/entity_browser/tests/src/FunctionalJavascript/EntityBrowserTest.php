@@ -41,7 +41,7 @@ class EntityBrowserTest extends EntityBrowserWebDriverTestBase {
     // Test the Edit functionality.
     $this->assertSession()->pageTextContains('llama.jpg');
     $this->assertSession()->buttonExists('Edit');
-    // @TODO Test the edit button.
+    // @todo Test the edit button.
     // Test the Delete functionality.
     $this->assertSession()->buttonExists('Remove');
     $this->getSession()->getPage()->pressButton('Remove');

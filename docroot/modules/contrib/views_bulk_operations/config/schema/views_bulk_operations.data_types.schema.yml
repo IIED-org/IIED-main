@@ -4,6 +4,9 @@ views_bulk_operations_action_config:
     add_confirmation:
       type: boolean
       label: 'Should a confirmation step be added?'
+    confirm_help_text:
+      type: string
+      label: 'Confirmation step help text'
     label_override:
       type: string
       label: 'Action label override'

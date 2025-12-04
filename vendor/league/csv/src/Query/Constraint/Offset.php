@@ -1,16 +1,23 @@
 <?php
 
+/**
+ * League.Csv (https://csv.thephpleague.com)
+ *
+ * (c) Ignace Nyamagana Butera <nyamsprod@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace League\Csv\Query\Constraint;
 
-use ArrayIterator;
 use CallbackFilterIterator;
 use Closure;
 use Iterator;
-use IteratorIterator;
+use League\Csv\MapIterator;
 use League\Csv\Query;
-use Traversable;
 
 /**
  * Enable filtering a record based on its offset.
@@ -36,11 +43,15 @@ final class Offset implements Query\Predicate
      * @throws Query\QueryException
      */
     public static function filterOn(
-        Comparison|Closure|string $operator,
+        Comparison|Closure|callable|string $operator,
         mixed $value = null,
     ): self {
         if ($operator instanceof Closure) {
             return new self($operator, null);
+        }
+
+        if (is_callable($operator)) {
+            return new self(Closure::fromCallable($operator), $value);
         }
 
         return new self(
@@ -63,10 +74,6 @@ final class Offset implements Query\Predicate
 
     public function filter(iterable $value): Iterator
     {
-        return new CallbackFilterIterator(match (true) {
-            $value instanceof Iterator => $value,
-            $value instanceof Traversable => new IteratorIterator($value),
-            default => new ArrayIterator($value),
-        }, $this);
+        return new CallbackFilterIterator(MapIterator::toIterator($value), $this);
     }
 }

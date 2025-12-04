@@ -99,6 +99,7 @@ class NameWidget extends WidgetBase implements ContainerFactoryPluginInterface, 
       '#widget_layout' => empty($settings['widget_layout']) ? 'stacked' : $settings['widget_layout'],
       '#component_layout' => empty($settings['component_layout']) ? 'default' : $settings['component_layout'],
       '#show_component_required_marker' => !empty($settings['show_component_required_marker']),
+      '#flag_required_input' => !empty($settings['flag_required_input']),
     ];
 
     // WidgetBase may have already overridden the display title
@@ -162,6 +163,13 @@ class NameWidget extends WidgetBase implements ContainerFactoryPluginInterface, 
     $values = parent::massageFormValues($values, $form, $form_state);
     $new_values = [];
     foreach ($values as $item) {
+      // Filter out the 'none' option. Use a strict comparison, because
+      // 0 == 'any string'.
+      $index = array_search('_none', $item, TRUE);
+      if ($index !== FALSE) {
+        $item[$index] = '';
+      }
+
       $value = implode('', array_intersect_key($item, _name_translations()));
       if (strlen($value)) {
         $new_values[] = $item;

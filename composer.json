@@ -73,19 +73,20 @@
     "drupal/admin_toolbar": "^3.1",
     "drupal/allowed_formats": "^3.0",
     "drupal/asset_injector": "^2.10",
-    "drupal/better_exposed_filters": "^6.0",
+    "drupal/better_exposed_filters": "^7.1@beta",
     "drupal/better_passwords": "^2.2",
     "drupal/block_class": "^3.0",
     "drupal/charts": "^5.0",
     "drupal/chosen": "^3.0",
     "drupal/clamav": "^2.1",
     "drupal/color_field": "^3.0",
-    "drupal/colorbox": "^2.0",
+    "drupal/colorbox": "^2.1",
     "drupal/colorbox_load": "^1.3",
     "drupal/components": "^3.0@beta",
     "drupal/computed_field": "^3.0",
     "drupal/config_split": "^1.10",
-    "drupal/contact_block": "^1.6",
+    "drupal/configurable_views_filter_block": "^1.0",
+    "drupal/contact_block": "^2.0",
     "drupal/content_translation_redirect": "^2",
     "drupal/context": "^5.0",
     "drupal/core-composer-scaffold": "^10",
@@ -98,9 +99,7 @@
     "drupal/draggableviews": "^2.0",
     "drupal/ds": "^3.9",
     "drupal/dynamic_entity_reference": "^3.1",
-    "drupal/eu_cookie_compliance": "^1.14",
-    "drupal/eu_cookie_compliance_gtm": "^2.1",
-    "drupal/facets": "^2.0",
+    "drupal/facets": "^3.0",
     "drupal/facets_pretty_paths": "^2.0",
     "drupal/field_formatter": "^3.0",
     "drupal/field_group": "^3.1",
@@ -118,8 +117,11 @@
     "drupal/hal": "^2.0",
     "drupal/honeypot": "^2.1",
     "drupal/imagemagick": "^4.0",
-    "drupal/inline_entity_form": "^1.0@RC",
+    "drupal/inline_entity_form": "^3.0@RC",
     "drupal/isbn": "^1.2",
+    "drupal/jquery_ui_datepicker": "^2.1",
+    "drupal/jquery_ui_slider": "^2.1",
+    "drupal/jquery_ui_touch_punch": "^1.1",
     "drupal/klaro": "^3.0",
     "drupal/language_switcher_extended": "^1.0",
     "drupal/layout_builder_restrictions": "^2.13",
@@ -146,8 +148,9 @@
     "drupal/password_policy": "^4.0",
     "drupal/password_policy_extras": "^4.0",
     "drupal/pathauto": "^1.8",
+    "drupal/pdfpreview": "^1.2",
     "drupal/publishcontent": "^1.2",
-    "drupal/purge_file": "^1.0",
+    "drupal/purge_file": "^1.2",
     "drupal/rabbit_hole": "^1.0@beta",
     "drupal/readmore_js": "^2.0",
     "drupal/readonlymode": "^1.1",
@@ -158,32 +161,35 @@
     "drupal/search404": "^2.1",
     "drupal/search_api": "^1.23",
     "drupal/search_api_autocomplete": "^1.6",
-    "drupal/search_api_solr": "^4.3",
+    "drupal/search_api_solr": "^4.3.10",
     "drupal/search_api_sorts": "1.x-dev@dev",
     "drupal/search_api_sorts_widget": "^1.0",
     "drupal/serial": "^2.0",
     "drupal/session_limit": "^2.0",
-    "drupal/stage_file_proxy": "^3",
-    "drupal/stories": "^3.0@alpha",
+    "drupal/sophron": "^2.2",
+    "drupal/stage_file_proxy": "^3.1",
+    "drupal/stories": "^3.0.0-alpha3",
     "drupal/svg_image": "^3.0",
+    "drupal/tablefield": "^3.0",
     "drupal/taxonomy_import": "^2.0",
     "drupal/taxonomy_manager": "^2.0",
     "drupal/taxonomy_menu": "^3.4",
     "drupal/term_merge": "^2.0@beta",
     "drupal/term_reference_tree": "^2.0",
     "drupal/textfield_counter": "^2.4",
-    "drupal/tfa": "^1.10",
+    "drupal/tfa": "^1.12",
     "drupal/token": "^1.10",
     "drupal/twig_field_value": "^2.0",
     "drupal/twig_tweak": "^3.2",
     "drupal/varnish_purge": "^2.3",
     "drupal/view_password": "^6.0",
     "drupal/view_unpublished": "^1.0",
-    "drupal/views_autocomplete_filters": "^1.3",
+    "drupal/views_autocomplete_filters": "^2.0",
     "drupal/views_bulk_edit": "^3.0",
     "drupal/views_bulk_operations": "^4.3",
     "drupal/views_data_export": "^1.1",
     "drupal/views_field_view": "^1.0@beta",
+    "drupal/views_filters_summary": "^3.2",
     "drupal/views_infinite_scroll": "^2.0",
     "drupal/views_json_source": "^2.0",
     "drupal/webform": "^6.2",
@@ -292,8 +298,18 @@
       "drupal/address": {
         "Migrate using country names": "https://www.drupal.org/files/issues/2020-02-21/country_lookup_migrate_process_plugin-3114991-2.patch"
       },
+      "drupal/facets": {
+        "Update aborted 3492410": "https://www.drupal.org/files/issues/2024-12-11/264.patch"
+      },
+      "drupal/facets_pretty_paths": {
+        "Pretty paths for facets 3.x": "https://git.drupalcode.org/project/facets_pretty_paths/-/merge_requests/20.diff"
+      },
       "drupal/media_thumbnails": {
         "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"
+      },
+      "drupal/configurable_views_filter_block": {
+        "3527929 Configurable filter-block instance ID": "https://www.drupal.org/files/issues/2025-06-02/configurable_views_filter_block-3527929-2.patch",
+        "3374162 Make it work with AJAX enabled": "https://www.drupal.org/files/issues/2023-08-17/3374162-allow-core-to-set-unique-block-ids.patch"
       },
       "drupal/core": {
         "Wrong language handling in MediaThumbnailFormatter when linking": "https://www.drupal.org/files/issues/2021-05-06/2961404-17.patch",
@@ -301,11 +317,9 @@
         "The language of content entities incorrectly falls back to the default language...": "https://www.drupal.org/files/issues/2023-12-18/3061761-57.patch",
         "3208030": "https://www.drupal.org/files/issues/2022-07-08/3208030_16.patch",
         "3209204": "https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch",
-        "3410100": "https://www.drupal.org/files/issues/2024-01-23/drupal-revert-source-editing-validation-tightening-3410100-38.patch"
-      },
-      "drupal/facets": {
-        "Add option to show current search string in facet summary": "https://www.drupal.org/files/issues/2022-12-30/facets-current_search_string-2979223-57.patch",
-        "Robustify how ajax finds the facet block": "https://www.drupal.org/files/issues/2023-01-20/facets-ajax-improvements-3013795-40.patch"
+        "3410100": "https://www.drupal.org/files/issues/2024-01-23/drupal-revert-source-editing-validation-tightening-3410100-38.patch",
+        "3062441": "https://www.drupal.org/files/issues/2024-03-27/3062441-patch-41.patch",
+        "2894747": "https://git.drupalcode.org/project/drupal/-/merge_requests/10945.diff"
       },
       "drupal/views_field_view": {
         "Contextual filter parameter is not working": "https://www.drupal.org/files/issues/2022-08-09/multible_Contextual_filter_parameter-2873359-30.patch"
@@ -332,8 +346,10 @@
       "drupal/google_analytics": {
         "3258588": "https://www.drupal.org/files/issues/2022-09-01/3258588_google_analytics_deprecated_function_2_5_001.patch"
       },
-      "drupal/video_embed_field": {
-        "3311063": "https://www.drupal.org/files/issues/2023-09-12/3311063-35.patch"
+      "drupal/views_dependent_filters": {
+        "3512142 Facets 3.x support": "https://git.drupalcode.org/project/views_dependent_filters/-/merge_requests/13.diff",
+        "3503675 Module uses the wrong selector": "https://git.drupalcode.org/project/views_dependent_filters/-/merge_requests/11.diff",
+        "3512164": "https://git.drupalcode.org/project/views_dependent_filters/-/merge_requests/12.diff"
       }
     },
     "drupal-lenient": {

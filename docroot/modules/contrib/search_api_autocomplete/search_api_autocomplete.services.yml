@@ -13,7 +13,6 @@ services:
 
   search_api_autocomplete.helper:
     class: Drupal\search_api_autocomplete\Utility\AutocompleteHelper
-    arguments: ['@element_info']
     tags:
       - { name: access_check, applies_to: _search_api_autocomplete }
 

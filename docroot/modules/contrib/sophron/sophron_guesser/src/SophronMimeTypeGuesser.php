@@ -31,18 +31,18 @@ class SophronMimeTypeGuesser implements MimeTypeGuesserInterface {
   /**
    * {@inheritdoc}
    */
-  public function guessMimeType(string $path): string {
+  public function guessMimeType(string $path): ?string {
     $extension = '';
     $file_parts = explode('.', $this->fileSystem->basename($path));
 
-    // Remove the first part: a full filename should not match an extension.
-    array_shift($file_parts);
-
-    // Iterate over the file parts, trying to find a match.
-    // For 'my.awesome.image.jpeg', we try: 'jpeg', then 'image.jpeg', then
-    // 'awesome.image.jpeg'.
-    while ($additional_part = array_pop($file_parts)) {
-      $extension = strtolower($additional_part . ($extension ? '.' . $extension : ''));
+    // Remove the first part: a full filename should not match an extension,
+    // then iterate over the file parts, trying to find a match.
+    // For 'my.awesome.image.jpeg', we try: 'awesome.image.jpeg', then
+    // 'image.jpeg', then 'jpeg'.
+    // We explicitly check for NULL because that indicates that the array is
+    // empty.
+    while (array_shift($file_parts) !== NULL) {
+      $extension = strtolower(implode('.', $file_parts));
       $mime_map_extension = $this->mimeMapManager->getExtension($extension);
       try {
         return $mime_map_extension->getDefaultType();
@@ -52,7 +52,7 @@ class SophronMimeTypeGuesser implements MimeTypeGuesserInterface {
       }
     }
 
-    return 'application/octet-stream';
+    return NULL;
   }
 
   /**

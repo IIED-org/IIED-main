@@ -3,6 +3,7 @@
 namespace Drupal\Tests\search_api\Functional;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -782,7 +783,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $url_options['query']['datasource'] = 'entity:node';
     $this->drupalGet($this->getIndexPath('fields/add/nojs'), $url_options);
     $this->assertHtmlEscaped($field_name);
-    $this->assertSession()->responseContains('(<code>field__field_</code>)');
+    $this->assertSession()->responseContains('field__field_');
 
     $this->addField('entity:node', 'field__field_', $field_name);
 
@@ -853,6 +854,33 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $url_options = ['query' => ['datasource' => 'entity:node']];
     $this->drupalGet($path, $url_options);
     $this->assertSession()->responseNotContains('property_path=type');
+
+    // Ensure that we have expand buttons for items with one or more nested
+    // properties, then visit that page to ensure that the nested property is
+    // shown.
+    $path = $this->getIndexPath('fields/add/nojs');
+    $url_options = [
+      'query' => [
+        'datasource' => 'entity:node',
+        'property_path' => 'uid',
+      ],
+    ];
+    $this->assertSession()->elementExists('xpath', '//a[contains(@href, "property_path=uid")]');
+    $this->drupalGet($path, $url_options);
+    $this->assertSession()->responseContains('uid:entity');
+
+    // Do the same for the nested path to get to the third level.
+    $path = $this->getIndexPath('fields/add/nojs');
+    $url_options = [
+      'query' => [
+        'datasource' => 'entity:node',
+        'property_path' => 'uid:entity',
+      ],
+    ];
+    $substring = 'property_path=' . urlencode('uid:entity');
+    $this->assertSession()->elementExists('xpath', "//a[contains(@href, \"{$substring}\")]");
+    $this->drupalGet($path, $url_options);
+    $this->assertSession()->responseContains('uid:entity:changed');
 
     // The "Content access" processor correctly marked fields as locked.
     $this->assertArrayHasKey('uid', $fields, 'uid field is indexed.');
@@ -1092,8 +1120,14 @@ class IntegrationTest extends SearchApiBrowserTestBase {
       '#theme' => 'username',
       '#account' => $this->adminUser,
     ];
+    $renderer = \Drupal::getContainer()->get('renderer');
     $args = [
-      '@user' => \Drupal::getContainer()->get('renderer')->renderPlain($username),
+      '@user' => DeprecationHelper::backwardsCompatibleCall(
+        \Drupal::VERSION,
+        '10.3',
+        fn () => $renderer->renderInIsolation($username),
+        fn () => $renderer->renderPlain($username),
+      ),
       ':url' => $this->getIndex()->toUrl('break-lock-form')->toString(),
     ];
     $message = (string) new FormattableMarkup('This index is being edited by user @user, and is therefore locked from editing by others. This lock is @age old. Click here to <a href=":url">break this lock</a>.', $args);

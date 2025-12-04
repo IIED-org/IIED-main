@@ -24,37 +24,15 @@ class IndexTaskManager implements IndexTaskManagerInterface, EventSubscriberInte
    */
   const TRACK_ITEMS_TASK_TYPE = 'trackItems';
 
-  /**
-   * The Search API task manager.
-   *
-   * @var \Drupal\search_api\Task\TaskManagerInterface
-   */
-  protected $taskManager;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Constructs an IndexTaskManager object.
-   *
-   * @param \Drupal\search_api\Task\TaskManagerInterface $task_manager
-   *   The Search API task manager.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   */
-  public function __construct(TaskManagerInterface $task_manager, EntityTypeManagerInterface $entity_type_manager) {
-    $this->taskManager = $task_manager;
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  public function __construct(
+    protected TaskManagerInterface $taskManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events['search_api.task.' . self::TRACK_ITEMS_TASK_TYPE][] = ['trackItems'];
 
     return $events;
@@ -166,7 +144,7 @@ class IndexTaskManager implements IndexTaskManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function startTracking(IndexInterface $index, array $datasource_ids = NULL) {
+  public function startTracking(IndexInterface $index, ?array $datasource_ids = NULL) {
     foreach ($datasource_ids ?? $index->getDatasourceIds() as $datasource_id) {
       $data = [
         'datasource' => $datasource_id,
@@ -216,7 +194,7 @@ class IndexTaskManager implements IndexTaskManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function stopTracking(IndexInterface $index, array $datasource_ids = NULL) {
+  public function stopTracking(IndexInterface $index, ?array $datasource_ids = NULL) {
     $valid_tracker = $index->hasValidTracker();
     if (!isset($datasource_ids)) {
       $this->taskManager->deleteTasks($this->getTaskConditions($index));

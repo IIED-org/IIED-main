@@ -137,7 +137,10 @@ class ViewsExposedForm extends FormBase implements WorkspaceSafeFormInterface {
 
     $form['#action'] = $form_action;
     $form['#theme'] = $view->buildThemeFunctions('views_exposed_form');
-    $form['#id'] = Html::cleanCssIdentifier('views_exposed_form-' . $view->storage->id() . '-' . $display['id']);
+    $clean_form_id = Html::cleanCssIdentifier('views_exposed_form-' . $view->storage->id() . '-' . $display['id']);
+    $form['#attributes']['class'][] = $clean_form_id;
+    // The form can be possibly rendered twice on a page, make the id unique.
+    $form['#id'] = Html::getUniqueId($clean_form_id);
     // Labels are built too late for inline form errors to work, resulting
     // in duplicated messages.
     $form['#disable_inline_form_errors'] = TRUE;

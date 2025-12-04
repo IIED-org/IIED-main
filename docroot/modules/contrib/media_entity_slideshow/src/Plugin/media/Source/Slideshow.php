@@ -34,10 +34,10 @@ class Slideshow extends MediaSourceBase implements MediaSourceEntityConstraintsI
   /**
    * {@inheritdoc}
    */
-  public function getMetadata(MediaInterface $media, $name) {
+  public function getMetadata(MediaInterface $media, $attribute_name) {
     $source_field = $this->configuration['source_field'];
 
-    switch ($name) {
+    switch ($attribute_name) {
       case 'default_name':
         // The default name will be the timestamp + number of slides.
         $length = $this->getMetadata($media, 'length');
@@ -82,7 +82,7 @@ class Slideshow extends MediaSourceBase implements MediaSourceEntityConstraintsI
         return $thumbnail;
 
       default:
-        return parent::getMetadata($media, $name);
+        return parent::getMetadata($media, $attribute_name);
     }
   }
 

@@ -33,7 +33,7 @@ class MergeTermsConfirmTest extends MergeTermsTestBase {
    *   - terms: an array of source taxonomy term ids.
    *   - target: a string representing the target taxonomy term.
    */
-  public function selectedTermsProvider(): array {
+  public static function selectedTermsProvider(): array {
 
     $test_data['no terms new target'] = [
       'terms' => [],
@@ -212,7 +212,7 @@ class MergeTermsConfirmTest extends MergeTermsTestBase {
    *   - methodName: the method name associated with the selected merge option.
    *   - target: a string representing the target taxonomy term.
    */
-  public function termMergerMethodProvider(): array {
+  public static function termMergerMethodProvider(): array {
     $methods['new term'] = [
       'methodName' => 'mergeIntoNewTerm',
       'target' => 'New term',

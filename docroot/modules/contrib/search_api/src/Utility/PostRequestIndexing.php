@@ -35,28 +35,24 @@ class PostRequestIndexing implements PostRequestIndexingInterface, DestructableI
    */
   protected $recursion = 0;
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Constructs a new class instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
   public function destruct() {
+    ++$this->recursion;
     foreach ($this->operations as $index_id => $item_ids) {
+      // Remove these item IDs from $this->operations right away so we can
+      // detect whether new operations were added and don't just re-execute all
+      // operations when recursing.
+      $this->operations[$index_id] = array_diff_key($this->operations[$index_id], $item_ids);
+      if (empty($this->operations[$index_id])) {
+        unset($this->operations[$index_id]);
+      }
+
       try {
         $storage = $this->entityTypeManager->getStorage('search_api_index');
       }
@@ -64,6 +60,7 @@ class PostRequestIndexing implements PostRequestIndexingInterface, DestructableI
         // It might be possible that the module got uninstalled during the rest
         // of the page request, or something else happened. To be on the safe
         // side, catch the exception in case the entity type isn't found.
+        --$this->recursion;
         return;
       }
 
@@ -94,21 +91,18 @@ class PostRequestIndexing implements PostRequestIndexingInterface, DestructableI
         }
       }
       catch (SearchApiException $e) {
-        $vars['%index'] = $index->label();
+        $vars['%index'] = $index->label() ?? $index->id();
         $this->logException($e, '%type while trying to index items on %index: @message in %function (line %line of %file).', $vars);
       }
-
-      // We usually shouldn't be called twice in a page request, but no harm in
-      // being too careful: Remove the operation once it was executed correctly.
-      unset($this->operations[$index_id]);
     }
 
     // Make sure that no new items were added while processing the previous
     // ones. Otherwise, call this method again to index those as well. (But also
     // guard against infinite recursion.)
-    if ($this->operations && ++$this->recursion <= 5) {
+    if ($this->operations && $this->recursion <= 5) {
       $this->destruct();
     }
+    --$this->recursion;
   }
 
   /**
@@ -127,6 +121,13 @@ class PostRequestIndexing implements PostRequestIndexingInterface, DestructableI
     foreach ($item_ids as $item_id) {
       unset($this->operations[$index_id][$item_id]);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isIndexingActive(): bool {
+    return $this->recursion > 0;
   }
 
 }

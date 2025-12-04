@@ -117,8 +117,7 @@ class FlagListBuilder extends DraggableListBuilder {
    */
   protected function getFlagType(FlagInterface $flag) {
     // Get the flaggable entity type definition.
-    $flaggable_entity_type = \Drupal::entityTypeManager()
-      ->getDefinition($flag->getFlaggableEntityTypeId());
+    $flaggable_entity_type = $this->entityTypeManager->getDefinition($flag->getFlaggableEntityTypeId());
 
     return [
       '#markup' => $flaggable_entity_type->getLabel(),
@@ -153,24 +152,26 @@ class FlagListBuilder extends DraggableListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
+    /** @var \Drupal\flag\FlagInterface $flag */
+    $flag = $entity;
 
-    $row['label'] = $entity->label();
+    $row['label'] = $flag->label();
 
-    $row['flag_type'] = $this->getFlagType($entity);
+    $row['flag_type'] = $this->getFlagType($flag);
 
-    $row['roles'] = $this->getFlagRoles($entity);
+    $row['roles'] = $this->getFlagRoles($flag);
 
-    $row['bundles'] = $this->getBundles($entity);
+    $row['bundles'] = $this->getBundles($flag);
 
     $row['global'] = [
-      '#markup' => $entity->isGlobal() ? $this->t('Global') : $this->t('Personal'),
+      '#markup' => $flag->isGlobal() ? $this->t('Global') : $this->t('Personal'),
     ];
 
     $row['status'] = [
-      '#markup' => $entity->status() ? $this->t('Enabled') : $this->t('Disabled'),
+      '#markup' => $flag->status() ? $this->t('Enabled') : $this->t('Disabled'),
     ];
 
-    return $row + parent::buildRow($entity);
+    return $row + parent::buildRow($flag);
   }
 
 }

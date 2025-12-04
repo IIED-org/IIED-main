@@ -5,7 +5,7 @@ namespace Drupal\geolocation\Element;
 use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\Element;
-use Drupal\Core\Render\Element\RenderElement;
+use Drupal\Core\Render\Element\RenderElementBase;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -25,7 +25,7 @@ use Drupal\Core\Template\Attribute;
  *
  * @FormElement("geolocation_map")
  */
-class GeolocationMap extends RenderElement {
+class GeolocationMap extends RenderElementBase {
 
   /**
    * Map Provider.

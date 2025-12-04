@@ -118,7 +118,7 @@ final class DevelCommands extends DrushCommands {
   #[CLI\OptionsetGetEditor()]
   public function hook(string $hook, string $implementation): void {
     // Get implementations in the .install files as well.
-    include_once __DIR__ . '/core/includes/install.inc';
+    include_once DRUPAL_ROOT . '/core/includes/install.inc';
     drupal_load_updates();
     $info = $this->codeLocate($implementation . ('_' . $hook));
     $exec = self::getEditor('');
@@ -195,7 +195,7 @@ final class DevelCommands extends DrushCommands {
       $input->setArgument('event', $event);
     }
 
-    /** @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $event_dispatcher */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcher $event_dispatcher */
     $event_dispatcher = $this->eventDispatcher;
     if ($implementations = $event_dispatcher->getListeners($event)) {
       $choices = [];
@@ -251,7 +251,7 @@ final class DevelCommands extends DrushCommands {
    */
   public function codeLocate($function_name): array {
     // Get implementations in the .install files as well.
-    include_once __DIR__ . '/core/includes/install.inc';
+    include_once DRUPAL_ROOT . '/core/includes/install.inc';
     drupal_load_updates();
 
     if (!str_contains($function_name, '::')) {
@@ -284,7 +284,7 @@ final class DevelCommands extends DrushCommands {
   #[CLI\Argument(name: 'prefix', description: 'Optional prefix to filter the service list by.')]
   #[CLI\Usage(name: 'drush devel-services', description: 'Gets a list of all available container services')]
   #[CLI\Usage(name: 'drush dcs plugin.manager', description: 'Get all services containing "plugin.manager"')]
-  public function services($prefix = NULL, array $options = ['format' => 'yaml']): array {
+  public function services(?string $prefix = NULL, array $options = ['format' => 'yaml']): array {
     $container = $this->getContainer();
     $services = $container->getServiceIds();
 

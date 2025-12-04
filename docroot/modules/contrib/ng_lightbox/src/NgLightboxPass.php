@@ -15,7 +15,7 @@ class NgLightboxPass implements CompilerPassInterface {
    */
   public function process(ContainerBuilder $container) {
     $lightbox_renderers = [];
-    foreach ($container->findTaggedServiceIds('render.main_content_renderer') as $id => $attributes_list) {
+    foreach ($container->findTaggedServiceIds('render.main_content_renderer') as $attributes_list) {
       foreach ($attributes_list as $attributes) {
         if (!empty($attributes['ng_lightbox'])) {
           $format = $attributes['format'];

@@ -1004,7 +1004,13 @@ class Utility {
             }
           }
           elseif ($escaped) {
-            $k[] = trim($key);
+            $trimmed = trim($key);
+            // See the boost_term_payload field type in schema.xml. If we send
+            // shorter or larger keys then defined by solr.LengthFilterFactory
+            // we'll trigger a "SpanQuery is null" exception.
+            if (mb_strlen($trimmed) >= 2 && mb_strlen($trimmed) <= 100) {
+              $k[] = $trimmed;
+            }
           }
           else {
             switch ($parse_mode_id) {
@@ -1012,7 +1018,14 @@ class Utility {
               case "sloppy_terms":
               case 'fuzzy_terms':
               case 'edismax':
-                $k[] = $queryHelper->escapePhrase(trim($key));
+                $trimmed = trim($key);
+                // See the boost_term_payload field type in schema.xml. If we
+                // send shorter or larger keys then defined by
+                // solr.LengthFilterFactory we'll trigger a "SpanQuery is null"
+                // exception.
+                if (mb_strlen($trimmed) >= 2 && mb_strlen($trimmed) <= 100) {
+                  $k[] = $queryHelper->escapePhrase($trimmed);
+                }
                 break;
 
               case 'phrase':
@@ -1038,15 +1051,7 @@ class Utility {
         }
       }
 
-      // See the boost_term_payload field type in schema.xml. If we send shorter
-      // or larger keys then defined by solr.LengthFilterFactory we'll trigger a
-      // "SpanQuery is null" exception.
-      $k = array_filter($k, function ($v) {
-        $v = trim($v, '"');
-        return (mb_strlen($v) >= 2) && (mb_strlen($v) <= 100);
-      });
-
-      if ($k) {
+      if (!empty($k)) {
         $payload_scores[] = ' {!payload_score f=boost_term v=' . implode(' func=max} {!payload_score f=boost_term v=', $k) . ' func=max}';
       }
     }

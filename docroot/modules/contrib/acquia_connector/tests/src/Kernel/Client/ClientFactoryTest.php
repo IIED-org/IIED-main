@@ -26,19 +26,6 @@ final class ClientFactoryTest extends AcquiaConnectorTestBase {
   }
 
   /**
-   * Tests the refresh token and retry middleware.
-   */
-  public function testRefreshRetryMiddleware(): void {
-    $this->populateOauthSettings([
-      'access_token' => 'ACCESS_TOKEN_RETRY_MIDDLEWARE',
-      'refresh_token' => 'REFRESH_TOKEN',
-    ]);
-    $client = $this->container->get('acquia_connector.client.factory')->getCloudApiClient();
-    $response = $client->get('/test-retry-middleware');
-    self::assertEquals(200, $response->getStatusCode());
-  }
-
-  /**
    * Tests exception if we don't have a token set.
    */
   public function testConnectorException(): void {

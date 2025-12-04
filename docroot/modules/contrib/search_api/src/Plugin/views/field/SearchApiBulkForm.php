@@ -2,6 +2,7 @@
 
 namespace Drupal\search_api\Plugin\views\field;
 
+use Drupal\views\Attribute\ViewsField;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\EntityInterface;
@@ -19,9 +20,8 @@ use Drupal\views\ViewExecutable;
 
 /**
  * Defines an actions-based bulk operation form element.
- *
- * @ViewsField("search_api_bulk_form")
  */
+#[ViewsField('search_api_bulk_form')]
 class SearchApiBulkForm extends BulkForm {
 
   use SearchApiFieldTrait {
@@ -33,7 +33,7 @@ class SearchApiBulkForm extends BulkForm {
   /**
    * {@inheritdoc}
    */
-  public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
+  public function init(ViewExecutable $view, DisplayPluginBase $display, ?array &$options = NULL) {
     parent::init($view, $display, $options);
 
     $entity_type_ids = array_values($this->getIndex()->getEntityTypes());

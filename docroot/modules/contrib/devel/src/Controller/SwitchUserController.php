@@ -55,7 +55,7 @@ class SwitchUserController extends ControllerBase {
    * We don't call session_save_session() because we really want to change
    * users. Usually unsafe!
    *
-   * @param string $name
+   * @param string|null $name
    *   The username to switch to, or NULL to log out.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
@@ -63,7 +63,7 @@ class SwitchUserController extends ControllerBase {
    *
    * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
    */
-  public function switchUser($name = NULL) {
+  public function switchUser(?string $name = NULL) {
     if (empty($name) || !($account = $this->userStorage->loadByProperties(['name' => $name]))) {
       throw new AccessDeniedHttpException();
     }

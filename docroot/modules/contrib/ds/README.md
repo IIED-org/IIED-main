@@ -17,6 +17,12 @@ having to maintain dozens of twig files.
 6. Click "Save"
 [Read more](https://drupal.org/node/1795282)
 
+## Adding custom layouts.
+
+Layouts are based on using the Drupal Core Layout API.
+See ds.layouts.yml for many examples.
+See https://www.drupal.org/docs/drupal-apis/layout-api
+
 ## BC settings
 
 - When setting the default field template to e.g. minimal, but only moving a
@@ -69,6 +75,11 @@ having to maintain dozens of twig files.
 - Contact form manage display saving but not rendering: the key here is to
   install the contact storage module.
   See https://www.drupal.org/project/ds/issues/2832259#comment-15397394
+- Merge on ds-field-expert on item attributes accumulates:The ds-field-expert
+  mergeAttribute accumulates the values in field_item_wrapper_attributes in
+  some cases. You can alter the template in your custom theme folder to fix
+  that problem.
+  See https://www.drupal.org/project/ds/issues/3496186 for more information.
 
 ## Links
 

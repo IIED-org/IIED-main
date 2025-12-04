@@ -1,0 +1,6 @@
+bef_test.test:
+  label: test
+  mediaQuery: 'all and (min-width: 500px)'
+  weight: 0
+  multipliers:
+    - 1x

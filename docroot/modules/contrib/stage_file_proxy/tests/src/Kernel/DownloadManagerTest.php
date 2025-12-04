@@ -7,6 +7,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\stage_file_proxy\DownloadManager;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Test stage file proxy module.
@@ -60,6 +61,13 @@ class DownloadManagerTest extends KernelTestBase {
   protected DownloadManager $downloadManager;
 
   /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected RequestStack $requestStack;
+
+  /**
    * Before a test method is run, setUp() is invoked.
    *
    * Create new downloadManager object.
@@ -72,7 +80,8 @@ class DownloadManagerTest extends KernelTestBase {
     $this->client = new Client();
     $this->logger = \Drupal::logger('test_logger');
     $this->configFactory = $this->container->get('config.factory');
-    $this->downloadManager = new DownloadManager($this->client, $this->fileSystem, $this->logger, $this->configFactory, \Drupal::lock());
+    $this->requestStack = new RequestStack();
+    $this->downloadManager = new DownloadManager($this->client, $this->fileSystem, $this->logger, $this->configFactory, \Drupal::lock(), $this->requestStack);
   }
 
   /**

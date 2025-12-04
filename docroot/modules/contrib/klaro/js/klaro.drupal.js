@@ -42,6 +42,11 @@
       // Decorate wrapperIdentifiers in context.
       Drupal.behaviors.klaro.klaroDecorateWrapper(context, settings);
 
+      // Remove unused data attributes.
+      context.querySelectorAll('a[data-name]')?.forEach((item) => {
+        item.removeAttribute('data-href');
+      });
+
       // Store reference to manager once.
       if (!Drupal.behaviors.klaro.manager) {
         Drupal.behaviors.klaro.manager = klaro.getManager(Drupal.behaviors.klaro.config);
@@ -58,12 +63,17 @@
       // Observe klaro-element to add aria-features.
       Drupal.behaviors.klaro.klaroElementObserver();
 
-      // Fix broken aria reference, see #3483896
-      document.querySelector('#klaro-cookie-notice')?.removeAttribute('aria-labelledby');
-
-      // Add title to learn more link.
-      let label_open_consent_dialog = Drupal.t("Open consent dialog", {},{context: 'klaro'});
-      document.querySelector('a.cm-link.cn-learn-more')?.setAttribute('title', label_open_consent_dialog);
+      // Add accessibility features to the learn more link.
+      let learn_more_link = document.querySelector('a.cm-link.cn-learn-more');
+      if (learn_more_link) {
+        // Add title to learn more link.
+        let label_open_consent_dialog = Drupal.t("Open consent dialog", {},{context: 'klaro'});
+        learn_more_link.setAttribute('title', label_open_consent_dialog);
+        // Add the "button" role to the learn more link.
+        learn_more_link.setAttribute('role', 'button');
+        // Add the attribute aria-haspopup="dialog".
+        learn_more_link.setAttribute('aria-haspopup', 'dialog');
+      }
 
       // Store reference to manager once.
       if (!Drupal.behaviors.klaro.manager) {
@@ -109,7 +119,7 @@
 
         if (title) {
           let title_elem = document.createElement('p');
-          title_elem.innerHTML = title;
+          title_elem.textContent = title;
           el.firstChild.prepend(title_elem);
         }
       });
@@ -121,10 +131,19 @@
           if (elements.length > 0) {
             let title_elem = document.createElement('p');
             title_elem.innerHTML = service.contextualConsentText;
-            let el = elements[0];
-            el.parentNode.replaceChild(title_elem, el);
+            Array.prototype.forEach.call(elements, function (el) {
+              el.parentNode.replaceChild(title_elem.cloneNode(true), el);
+            });
           }
         }
+      });
+
+      // Add link to consent manager for contextual consents.
+      var elements = once('klaro-consent-link', '[data-type="placeholder"] div.context-notice');
+      var title = Drupal.t("Open the Consent Management Dialog", {}, {context: 'klaro'});
+      var linktext = Drupal.t("Manage privacy settings", {}, {context: 'klaro'});
+      Array.prototype.forEach.call(elements, function (el) {
+        el.insertAdjacentHTML('beforeend', `<p class="cm-dialog-link"><a href="#" title="${title}" rel="open-consent-manager">${linktext}</a></p>`);
       });
 
       // Call Behaviors if needed.
@@ -274,13 +293,22 @@
         }
         labels[0].focus();
       }
+      // Add accessibility features to the preferences dialog : role dialog, aria-modal and aria-labelledby.
+      if (document.querySelector('.cm-modal.cm-klaro')) {
+        var elem = document.querySelector('.cm-modal.cm-klaro');
+        elem.setAttribute('role', 'dialog');
+        elem.setAttribute('aria-modal', 'true');
+        elem.querySelector('.cm-header .title').setAttribute('id', 'cm-modal-title');
+        elem.setAttribute('aria-labelledby', 'cm-modal-title');
+      }
+
       // Handle close button X.
       if (drupalSettings.klaro.show_close_button) {
         if (document.querySelector('#klaro-cookie-notice')) {
           var elem = document.querySelector('#klaro-cookie-notice');
         }
         else if (document.querySelector('.cm-modal.cm-klaro')) {
-          var elem = document.querySelector('.cm-modal.cm-klaro .cm-footer');
+          var elem = document.querySelector('.cm-modal.cm-klaro');
           if ((Drupal.behaviors.klaro.manager.confirmed) && (!Drupal.behaviors.klaro.config.mustConsent)) {
             elem = false;
           }

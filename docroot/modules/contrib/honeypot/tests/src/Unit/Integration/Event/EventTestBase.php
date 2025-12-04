@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\honeypot\Unit\Integration\Event;
 
-use Drupal\rules\Core\RulesEventManager;
 use Drupal\Tests\rules\Unit\Integration\Event\EventTestBase as RulesEventTestBase;
+use Drupal\rules\Core\RulesEventManager;
 
 /**
  * Base class containing common code for Honeypot event tests.

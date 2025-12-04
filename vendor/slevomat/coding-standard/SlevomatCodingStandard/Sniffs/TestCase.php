@@ -21,7 +21,6 @@ use function sprintf;
 use function strlen;
 use function strpos;
 use function substr;
-use function version_compare;
 use const PHP_EOL;
 
 /**
@@ -29,6 +28,8 @@ use const PHP_EOL;
  */
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
+
+	private const TAB_WIDTH = 4;
 
 	/**
 	 * @param array<string, string|int|bool|array<int|string, (string|int|bool|null)>> $sniffProperties
@@ -45,14 +46,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$codeSniffer->init();
 
 		if (count($sniffProperties) > 0) {
-			/** @phpstan-ignore-next-line */
-			if (version_compare(Config::VERSION, '3.8.0', '>=')) {
-				foreach ($sniffProperties as $name => $value) {
-					$sniffProperties[$name] = [
-						'value' => $value,
-						'scope' => 'sniff',
-					];
-				}
+			foreach ($sniffProperties as $name => $value) {
+				$sniffProperties[$name] = [
+					'value' => $value,
+					'scope' => 'sniff',
+				];
 			}
 
 			$codeSniffer->ruleset->ruleset[self::getSniffName()]['properties'] = $sniffProperties;
@@ -75,6 +73,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		}
 
 		$codeSniffer->ruleset->populateTokenListeners();
+		$codeSniffer->config->tabWidth = self::TAB_WIDTH;
 
 		$file = new LocalFile($filePath, $codeSniffer->ruleset, $codeSniffer->config);
 		$file->process();
@@ -85,13 +84,35 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	protected static function assertNoSniffErrorInFile(File $phpcsFile): void
 	{
 		$errors = $phpcsFile->getErrors();
-		self::assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
+		$text = sprintf('No errors expected, but %d errors found:', count($errors));
+		foreach ($errors as $line => $error) {
+			$text .= sprintf(
+				'%sLine %d:%s%s',
+				PHP_EOL,
+				$line,
+				PHP_EOL,
+				self::getFormattedErrors($error),
+			);
+		}
+
+		self::assertEmpty($errors, $text);
 	}
 
 	protected static function assertNoSniffWarningInFile(File $phpcsFile): void
 	{
 		$warnings = $phpcsFile->getWarnings();
-		self::assertEmpty($warnings, sprintf('No warnings expected, but %d warnings found.', count($warnings)));
+		$text = sprintf('No warnings expected, but %d warnings found:', count($warnings));
+		foreach ($warnings as $line => $warning) {
+			$text .= sprintf(
+				'%sLine %d:%s%s',
+				PHP_EOL,
+				$line,
+				PHP_EOL,
+				self::getFormattedErrors($warning),
+			);
+		}
+
+		self::assertEmpty($warnings, $text);
 	}
 
 	protected static function assertSniffError(File $phpcsFile, int $line, string $code, ?string $message = null): void

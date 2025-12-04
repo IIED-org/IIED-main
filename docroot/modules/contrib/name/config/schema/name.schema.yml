@@ -82,33 +82,33 @@ name.generate.examples:
       type: sequence
       label: 'Examples'
       sequence:
-        - type: mapping
-          label: 'Name'
-          mapping:
-            title:
-              type: string
-              label: 'Title'
-            given:
-              type: string
-              label: 'Given'
-            middle:
-              type: string
-              label: 'Middle'
-            family:
-              type: string
-              label: 'Family'
-            generational:
-              type: string
-              label: 'Generational'
-            credentials:
-              type: string
-              label: 'Credentials'
-            preferred:
-              type: string
-              label: 'Preferred'
-            alternative:
-              type: string
-              label: 'Alternative'
+        type: mapping
+        label: 'Name'
+        mapping:
+          title:
+            type: string
+            label: 'Title'
+          given:
+            type: string
+            label: 'Given'
+          middle:
+            type: string
+            label: 'Middle'
+          family:
+            type: string
+            label: 'Family'
+          generational:
+            type: string
+            label: 'Generational'
+          credentials:
+            type: string
+            label: 'Credentials'
+          preferred:
+            type: string
+            label: 'Preferred'
+          alternative:
+            type: string
+            label: 'Alternative'
 name.generate.components:
   type: config_object
   label: 'Components'
@@ -126,7 +126,7 @@ name.generate.components:
           type: sequence
           label: 'Given names'
           sequence:
-            - type: string
+            type: string
         middle:
           type: sequence
           label: 'Middle names'
@@ -375,32 +375,32 @@ field.field_settings.name:
           type: sequence
           label: 'Title'
           sequence:
-            - type: string
+            type: string
         given:
           type: sequence
           label: 'Given'
           sequence:
-            - type: string
+            type: string
         middle:
           type: sequence
           label: 'Middle'
           sequence:
-            - type: string
+            type: string
         family:
           type: sequence
           label: 'Family'
           sequence:
-            - type: string
+            type: string
         generational:
           type: sequence
           label: 'Generational'
           sequence:
-            - type: string
+            type: string
         credentials:
           type: sequence
           label: 'Credentials'
           sequence:
-            - type: string
+            type: string
     autocomplete_separator:
       type: mapping
       label: 'Maximum length'
@@ -427,17 +427,17 @@ field.field_settings.name:
       type: sequence
       label: 'Title options'
       sequence:
-        - type: label
+        type: label
     generational_options:
       type: sequence
       label: 'Generational options'
       sequence:
-        - type: label
+        type: label
     sort_options:
       type: sequence
       label: 'Sort options'
       sequence:
-        - type: boolean
+        type: boolean
     widget_layout:
       type: string
       label: 'Widget layout'
@@ -450,6 +450,9 @@ field.field_settings.name:
     show_component_required_marker:
       type: boolean
       label: 'Show component required marker'
+    flag_required_input:
+      type: boolean
+      label: 'Show component required input marker'
     credentials_inline:
       type: boolean
       lable: 'Credentials inline'
@@ -593,6 +596,9 @@ field.widget.settings.name_default:
     show_component_required_marker:
       type: boolean
       label: 'Show component required marker'
+    flag_required_input:
+      type: boolean
+      label: 'Show component required input marker'
     credentials_inline:
       type: boolean
       lable: 'Credentials inline'
@@ -640,7 +646,9 @@ field.widget.settings.name_default:
         credentials:
           label: 'Credentials'
           type: string
-
+    field_title_display:
+      type: string
+      label: 'Field title display option'
 field.formatter.settings.name_default:
   type: mapping
   label: 'Name format settings'

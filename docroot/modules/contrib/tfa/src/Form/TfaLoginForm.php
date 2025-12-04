@@ -103,7 +103,7 @@ class TfaLoginForm extends UserLoginForm {
           $redirect_config = $this->config('tfa.settings')->get('users_without_tfa_redirect');
           if ($redirect_config && $user->hasPermission("setup own tfa")) {
             // Redirect user directly to the TFA account setup overview page.
-            if ($this->getRequest()->request->has('destination')) {
+            if ($this->getRequest()->query->has('destination')) {
               $this->getRequest()->query->remove('destination');
             }
             $form_state->setRedirect('tfa.overview', ['user' => $user->id()]);

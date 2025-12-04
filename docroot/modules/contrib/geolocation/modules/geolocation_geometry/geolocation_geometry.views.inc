@@ -46,7 +46,7 @@ function geolocation_geometry_field_views_data(FieldStorageConfigInterface $fiel
   }
 
   // Make sure views.views.inc is loaded.
-  \Drupal::moduleHandler()->loadInclude('inc', 'views', 'views.views');
+  \Drupal::moduleHandler()->loadInclude('views', 'inc', 'views.views');
 
   $entity_definition = \Drupal::entityTypeManager()->getDefinition($field_storage->getTargetEntityTypeId());
 

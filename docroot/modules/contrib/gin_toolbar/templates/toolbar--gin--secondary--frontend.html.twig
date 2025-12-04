@@ -8,8 +8,9 @@
             <li class="gin-breadcrumb__item">
               {% if entity_edit_url and entity_title %}
                 <a class="gin-breadcrumb__link gin-back-to-admin" href="{{ entity_edit_url }}">{{ 'Edit %title'|t({ '%title': entity_title }) }}</a>
-              {% else %}
-                <a class="gin-breadcrumb__link gin-back-to-admin" href="{{ path('system.admin_content') }}">{{ 'Back to Administration'|t }}</a>
+              {% elseif admin_content_url %}
+                {# Display a different link when not on an entity page, or it is inaccessible. #}
+                <a class="gin-breadcrumb__link gin-back-to-admin" href="{{ admin_content_url }}">{{ 'Back to Administration'|t }}</a>
               {% endif %}
             </li>
           </ol>

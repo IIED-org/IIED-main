@@ -216,7 +216,7 @@ abstract class BackendTestBase extends KernelTestBase {
    * @return \Drupal\search_api\Query\QueryInterface
    *   A search query on the test index.
    */
-  protected function buildSearch($keys = NULL, array $conditions = [], array $fields = NULL, $place_id_sort = TRUE) {
+  protected function buildSearch($keys = NULL, array $conditions = [], ?array $fields = NULL, $place_id_sort = TRUE) {
     static $i = 0;
 
     $query = $this->getIndex()->query();
@@ -393,6 +393,7 @@ abstract class BackendTestBase extends KernelTestBase {
    * Tests whether facets work correctly.
    */
   protected function checkFacets() {
+    // OR facets should ignore condition groups with the corresponding tag.
     $query = $this->buildSearch();
     $conditions = $query->createAndAddConditionGroup('OR', ['facet:category']);
     $conditions->addCondition('category', 'article_category');
@@ -415,6 +416,19 @@ abstract class BackendTestBase extends KernelTestBase {
     usort($category_facets, [$this, 'facetCompare']);
     $this->assertEquals($expected, $category_facets, 'Incorrect OR facets were returned');
 
+    // This should also work with a nested condition group.
+    $query = $this->buildSearch();
+    $conditions = $query->createConditionGroup('OR', ['facet:category']);
+    $conditions->addCondition('category', 'article_category');
+    $query->createAndAddConditionGroup()->addConditionGroup($conditions);
+    $query->setOption('search_api_facets', $facets);
+    $results = $query->execute();
+    $this->assertResults([4, 5], $results, 'OR facets query');
+    $category_facets = $results->getExtraData('search_api_facets')['category'];
+    usort($category_facets, [$this, 'facetCompare']);
+    $this->assertEquals($expected, $category_facets, 'Incorrect OR facets were returned');
+
+    // Other condition groups should not be affected.
     $query = $this->buildSearch();
     $conditions = $query->createAndAddConditionGroup('OR', ['facet:category']);
     $conditions->addCondition('category', 'article_category');
@@ -438,6 +452,7 @@ abstract class BackendTestBase extends KernelTestBase {
     usort($category_facets, [$this, 'facetCompare']);
     $this->assertEquals($expected, $category_facets, 'Incorrect OR facets were returned');
 
+    // AND facets won't ignore existing conditions.
     $query = $this->buildSearch();
     $query->createAndAddConditionGroup('OR', ['facet:category'])
       ->addCondition('category', 'article_category');

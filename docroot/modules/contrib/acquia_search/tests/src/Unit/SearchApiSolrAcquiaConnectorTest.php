@@ -196,6 +196,10 @@ final class SearchApiSolrAcquiaConnectorTest extends UnitTestCase {
     $date_formatter = $this->createMock(DateFormatterInterface::class);
     $messenger = $this->createMock(MessengerInterface::class);
     $cache_default = $this->getMockBuilder('Drupal\Core\Cache\MemoryBackend')->disableOriginalConstructor()->getMock();
+
+    // Effectively disable the memory cache.
+    $cache_default->method('get')->willReturn(FALSE);
+
     $datetime_time = new Time(new RequestStack());
     $subscription = $this->createMock(Subscription::class);
     $settings = $this->createMock(Settings::class);

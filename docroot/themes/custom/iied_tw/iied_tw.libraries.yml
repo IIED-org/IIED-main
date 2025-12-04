@@ -1,20 +1,17 @@
 global-styling:
+  version: 5.1
   css:
     base:
-      dist/styles.css: {}
+      dist/styles.css: { minified: true }
 alpine:
   js:
     https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js: { type: external, minified: true, attributes: { defer: true } }
 alpine-collapse:
   js:
     https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js: { type: external, minified: true }
-priority-nav:
-  header: true
-  css:
-    theme:
-      dist/priority-nav/priority-nav-core.css: {}
+alpine-focus:
   js:
-    dist/priority-nav/priority-nav.js: { async: true }
+    https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js: { type: external, minified: true }
 copyprint:
    js:
     dist/js/copyprint.js: { async: true }
@@ -24,6 +21,9 @@ copycite:
 counter:
    js:
     dist/js/counter.js: {}
+init:
+   js:
+    dist/js/init.js: {}
 paypal:
   header: true
   js: 

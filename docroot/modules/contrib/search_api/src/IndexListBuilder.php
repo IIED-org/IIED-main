@@ -4,6 +4,7 @@ namespace Drupal\search_api;
 
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
@@ -130,8 +131,9 @@ class IndexListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOperations(EntityInterface $entity) {
-    $operations = parent::getDefaultOperations($entity);
+  public function getDefaultOperations(EntityInterface $entity/* , ?CacheableMetadata $cacheability = NULL */) {
+    $cacheability = func_num_args() > 1 ? func_get_arg(1) : NULL;
+    $operations = parent::getDefaultOperations($entity, $cacheability);
 
     if ($entity instanceof IndexInterface) {
       $route_parameters['search_api_index'] = $entity->id();
@@ -201,7 +203,7 @@ class IndexListBuilder extends ConfigEntityListBuilder {
 
     $description = $entity->get('description');
     if ($description) {
-      $row['data']['title']['data']['#suffix'] = '<div class="description">' . $description . '</div>';
+      $row['data']['title']['data']['#suffix'] = '<div class="description">' . Xss::filterAdmin($description) . '</div>';
     }
 
     if ($status

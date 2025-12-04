@@ -3,15 +3,20 @@
 namespace Drupal\ng_lightbox\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\ng_lightbox\NgLightbox;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * The lightbox settings form.
+ */
 class NgLightboxSettingsForm extends ConfigFormBase {
 
   /**
+   * The config factory.
+   *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $config;
@@ -28,9 +33,17 @@ class NgLightboxSettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param array $lightbox_renderers
+   *   The lightbox renderers.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
+   *   Typed config manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, array $lightbox_renderers) {
-    parent::__construct($config_factory);
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    array $lightbox_renderers,
+    TypedConfigManagerInterface $typed_config_manager,
+  ) {
+    parent::__construct($config_factory, $typed_config_manager);
     $this->renderers = $lightbox_renderers;
   }
 
@@ -40,7 +53,8 @@ class NgLightboxSettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->getParameter('ng_lightbox_renderers')
+      $container->getParameter('ng_lightbox_renderers'),
+      $container->get('config.typed'),
     );
   }
 

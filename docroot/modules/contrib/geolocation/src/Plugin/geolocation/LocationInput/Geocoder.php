@@ -164,10 +164,9 @@ class Geocoder extends LocationInputBase implements LocationInputInterface, Cont
     }
 
     $settings = $this->getSettings($option_settings);
-
     $location_data = $this->geocoderManager
       ->getGeocoder($settings['plugin_id'], $settings['settings'])
-      ->geocode($form_value['geocoder']['geolocation_geocoder_address']);
+      ->geocode($form_value['geocoder']['geolocation_geocoder_address'] ?? '');
 
     if (!empty($location_data['location'])) {
       return $location_data['location'];

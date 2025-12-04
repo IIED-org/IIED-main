@@ -22,6 +22,7 @@ use Drupal\encrypt\Plugin\EncryptionMethod\EncryptionMethodBase;
  * )
  *
  * phpcs:disable PHPCompatibility
+ * cSpell:ignore RIJNDAEL
  */
 class McryptAES128Encryption extends EncryptionMethodBase implements EncryptionMethodInterface {
   use StringTranslationTrait;

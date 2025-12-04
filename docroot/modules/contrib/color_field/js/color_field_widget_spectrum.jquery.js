@@ -7,6 +7,9 @@
 
   'use strict';
 
+  // jQuery 4 polyfill for isArray function
+  $.isArray = $.isArray || Array.isArray;
+
   /**
    * Enables spectrum on color elements.
    *

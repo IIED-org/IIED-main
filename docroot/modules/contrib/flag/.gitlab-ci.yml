@@ -48,8 +48,5 @@ include:
 ################
 variables:
   _PHPUNIT_CONCURRENT: 1
+  OPT_IN_TEST_PREVIOUS_MAJOR: 1
   OPT_IN_TEST_PREVIOUS_MINOR: 1
-
-phpcs:
-  before_script:
-    - cp $_WEB_ROOT/core/phpcs.xml.dist ./core.phpcs.xml.dist

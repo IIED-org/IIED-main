@@ -143,7 +143,6 @@ class PagesIntegrationTest extends IntegrationTestBase {
         "search_api_page.search_api_page.{$this->searchId}",
       ],
       'module' => [
-        'search_api_autocomplete',
         'search_api_autocomplete_test',
         'search_api_page',
       ],

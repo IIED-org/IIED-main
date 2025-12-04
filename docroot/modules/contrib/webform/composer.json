@@ -31,7 +31,7 @@
     }
   },
   "require": {
-    "drupal/core": "^10.1",
+    "drupal/core": "^10.2",
     "php": ">=8.1"
   },
   "require-dev": {

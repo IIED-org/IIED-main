@@ -7,10 +7,53 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\term_reference_tree\Plugin\Field\FieldWidget\TermReferenceTree;
+
+/**
+ * Implements hook_help().
+ */
+function term_reference_tree_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the term_reference_tree module.
+    case 'help.page.term_reference_tree':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This module provides an expandable tree widget for
+      the Taxonomy Term Reference field in Drupal. This widget is intended to
+      serve as a replacement for Drupal core Taxonomy Term Reference widget,
+      which is a flat list of radio buttons or checkboxes and not necessarily
+      fit for medium to large taxonomy trees.') . '</p>';
+      $output .= '<p>' . t('This widget has the following features:') . '</p>';
+      $output .= '<ul>' . t('<li>Expand/minimize buttons</li>') . '</ul>';
+      $output .= '<ul>' . t('<li>Fully theme-able</li>') . '</ul>';
+      $output .= '<ul>' . t('<li>Filter and sort available options with a view
+      (if views is installed)</li>') . '</ul>';
+      $output .= '<ul>' . t('<li>The ability to start with the tree either
+      minimized or maximized</li>') . '</ul>';
+      $output .= '<ul>' . t('<li>If you limit the number of selectable options,
+      client-side javascript limits the number of terms that can be selected by
+      disabling the other remaining options when the limit has been reached
+      (this is enforced on the server side too).</li>') . '</ul>';
+      $output .= '<ul>' . t('<li>For large trees, this widget now optionally
+      keeps a list of selected items below the tree.</li>') . '</ul>';
+      $output .= '<ul>' . t('<li>You can use tokens to alter the widget label
+      (good for adding icons, turning the options into links, etc).</li>') . '</ul>';
+      $output .= '<p>' . t('This module now comes with a display formatter with
+      the following features:') . '</p>';
+      $output .= '<ul>' . t('<li>Display taxonomy terms as a nested list by
+      hierarchy.</li>') . '</ul>';
+      $output .= '<ul>' . t('<li>Displayed terms can be altered with tokens or
+      themed using a custom theme function.</li>') . '</ul>';
+      $output .= '<p>' . t('Future features include:') . '</p>';
+      $output .= '<ul>' . t('<li>Dynamic loading of the tree as it is expanded
+      (for very large trees)</li>') . '</ul>';
+      return $output;
+  }
+}
 
 /**
  * Implements hook_theme().
@@ -278,10 +321,12 @@ function _term_reference_tree_get_children($tid, $vid) {
   $table = 'taxonomy_term_field_data';
   $alias = 't';
 
+  $default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+
   $query = \Drupal::database()
     ->select($table, $alias);
   $query->join('taxonomy_term__parent', 'p', 't.tid = p.entity_id');
-  $query->fields('t', ['tid', 'name']);
+  $query->fields('t', ['tid', 'name', 'langcode', 'status']);
   $query->addField('t', 'vid', 'vocabulary_machine_name');
   $query
     ->condition('t.vid', $vid)
@@ -291,11 +336,21 @@ function _term_reference_tree_get_children($tid, $vid) {
     ->addTag('term_reference_tree_get_children')
     ->orderBy('t.weight')
     ->orderBy('t.name');
+
+  if (\Drupal::moduleHandler()->moduleExists('locale')) {
+    $query->condition('t.langcode', [
+      \Drupal::languageManager()->getCurrentLanguage()->getId(),
+      $default_langcode,
+    ], 'IN');
+  }
+  
   $result = $query->execute();
 
   $terms = [];
   while ($term = $result->fetchObject()) {
-    $terms[$term->tid] = $term;
+    if (!isset($terms[$term->tid]) || $terms[$term->tid]->langcode === $default_langcode) {
+      $terms[$term->tid] = $term;
+    }
   }
 
   return $terms;
@@ -380,7 +435,9 @@ function _term_reference_tree_build_level($element, $term, $form_state, $value, 
   $container['#level_start_minimized'] = $depth > 1 && $element['#start_minimized'] && !($term->children_selected);
 
   foreach ($term->children as $child) {
-    $container[$child->tid] = _term_reference_tree_build_item($element, $child, $form_state, $value, $max_choices, $parent_tids, $container, $depth);
+    if ($child->status == 1) {
+      $container[$child->tid] = _term_reference_tree_build_item($element, $child, $form_state, $value, $max_choices, $parent_tids, $container, $depth);
+    }
   }
 
   return $container;
@@ -397,25 +454,11 @@ function _term_reference_tree_build_level($element, $term, $form_state, $value, 
 function _term_reference_tree_build_item($element, $term, $form_state, $value, $max_choices, $parent_tids, $parent, $depth) {
   $leaves_only = FALSE;
 
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $t = NULL;
-  if (\Drupal::moduleHandler()->moduleExists('locale') && !empty($term->tid)) {
-    $t = \Drupal::entityTypeManager()
-      ->getStorage('taxonomy_term')
-      ->load($term->tid);
-    if ($t && $t->hasTranslation($langcode)) {
-      $term_name = $t->getTranslation($langcode)->label();
-    }
-  }
-  if (empty($term_name)) {
-    $term_name = $term->name;
-  }
-
   $container = [
     '#type' => 'checkbox_tree_item',
     '#max_choices' => $max_choices,
     '#leaves_only' => $leaves_only,
-    '#term_name' => $term_name,
+    '#term_name' => $term->name,
     '#level_start_minimized' => FALSE,
     '#select_parents' => $element['#select_parents'],
     '#depth' => $depth,
@@ -424,7 +467,7 @@ function _term_reference_tree_build_item($element, $term, $form_state, $value, $
   if (!$element['#leaves_only'] || count($term->children) == 0) {
     $e = [
       '#type' => ($max_choices == 1) ? 'radio' : 'checkbox',
-      '#title' => $term_name,
+      '#title' => $term->name,
       '#on_value' => $term->tid,
       '#off_value' => 0,
       '#return_value' => $term->tid,
@@ -438,14 +481,14 @@ function _term_reference_tree_build_item($element, $term, $form_state, $value, $
       if ($e['#type'] == 'radio') {
         $parents_for_id = array_merge($element['#parents'], [$term->tid]);
         $e['#id'] = Html::getId('edit-' . implode('-', $parents_for_id));
-        $e['#parents'] = array_merge($element['#parents'], ['wiget']);
+        $e['#parents'] = array_merge($element['#parents'], ['widget']);
       }
     }
   }
   else {
     $e = [
       '#type' => 'checkbox_tree_label',
-      '#value' => $term_name,
+      '#value' =>  $term->name,
     ];
   }
 
@@ -537,6 +580,8 @@ function _term_reference_tree_get_parent($tid) {
 
 /**
  * Helper function to output a single level of the term reference tree display.
+ * 
+ * @throws \Drupal\Core\Entity\EntityMalformedException
  */
 function _term_reference_tree_output_list_level(&$element, &$tree) {
   $tree_element = [];
@@ -555,26 +600,19 @@ function _term_reference_tree_output_list_level(&$element, &$tree) {
         if (!$term instanceof TermInterface) {
           continue;
         }
-        $url = $term->toUrl();
-        $uri['options']['html'] = TRUE;
-        $class = $item['selected'] ? 'selected' : 'unselected';
 
-        $t = NULL;
-        $term_name = '';
-        if (\Drupal::moduleHandler()
-          ->moduleExists('locale') && !empty($term->tid)) {
-          $t = $term;
-          if ($t && $t->hasTranslation($langcode)) {
-            $term_name = $t->getTranslation($langcode)->label();
+        if (\Drupal::moduleHandler()->moduleExists('locale') && !empty($term->tid)) {
+          if ($term->hasTranslation($langcode)) {
+            $term = $term->getTranslation($langcode);
           }
         }
-        if (empty($term_name)) {
-          $term_name = $term->label();
-        }
+
+        $class = $item['selected'] ? 'selected' : 'unselected';
+        
         $tree_element['#items'][] = [
           '#type' => 'link',
-          '#title' => $term_name,
-          '#url' => $url,
+          '#title' => $term->label(),
+          '#url' => $term->toUrl(),
           '#attributes' => ['class' => [$class]],
         ];
         if (isset($item['children'])) {

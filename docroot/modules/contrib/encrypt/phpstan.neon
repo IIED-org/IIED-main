@@ -1,0 +1,13 @@
+parameters:
+	level: 1
+	ignoreErrors:
+		# Todo: Remove when Drupal 9 support is dropped.
+		-
+			message: '#Call to deprecated method setMethods#'
+			reportUnmatched: false
+		# The following appears to be a false positive.
+		# See https://github.com/mglaman/phpstan-drupal/issues/113
+		- '#Plugin definitions cannot be altered#'
+		# https://git.drupalcode.org/project/gitlab_templates/-/blob/main/assets/phpstan.neon?ref_type=heads
+		# new static() is a best practice in Drupal, so we cannot fix that.
+		- "#^Unsafe usage of new static#"

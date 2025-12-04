@@ -46,11 +46,12 @@
  */
 #}
 
+{{ attach_library('iied_tw/alpine-focus') }}
 {{ attach_library('iied_tw/alpine-collapse') }}
 {{ attach_library('iied_tw/alpine') }}
 {{ attach_library('iied_tw/scroll-nav') }}
 
-<header role="banner" x-data="{ showSearch: false }" x-cloak>
+<header role="banner" x-data="{ showSearch: $store.showSearch }" x-cloak>
 	<nav x-data="{ isOpen: false }" @click.away="isOpen = false" @keydown.escape.window="isOpen = false" role="navigation" aria-label="Main navigation">
 
 		<div>
@@ -88,6 +89,7 @@
 		</div>
 
 		{% include '@iied_tw/partials/_search_expand.html.twig' %}
+
 		{% include '@iied_tw/partials/_off-canvas-menu.html.twig' %}
 	</nav>
 </header>

@@ -1,0 +1,4 @@
+services:
+  logger.channel.message_subscribe_ui:
+    parent: logger.channel_base
+    arguments: ['message_subscribe_ui']

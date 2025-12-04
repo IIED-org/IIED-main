@@ -2,12 +2,12 @@
 
 namespace Drupal\Tests\devel_generate\Traits;
 
-use Drupal\comment\Tests\CommentTestTrait;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Language\Language;
+use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
+use Drupal\comment\Tests\CommentTestTrait;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 
 /**
  * Provides methods to assist Devel Generate testing.

@@ -3,12 +3,12 @@ description: 'Use colspan and rowspan on table fields.'
 package: Field types
 
 type: module
-core_version_requirement: ^9.1 || ^10
+core_version_requirement: ^10.3 || ^11
 
 dependencies:
   - tablefield:tablefield
 
-# Information added by Drupal.org packaging script on 2023-02-24
-version: '8.x-2.4'
+# Information added by Drupal.org packaging script on 2025-03-20
+version: '3.0.0'
 project: 'tablefield'
-datestamp: 1677254143
+datestamp: 1742478992

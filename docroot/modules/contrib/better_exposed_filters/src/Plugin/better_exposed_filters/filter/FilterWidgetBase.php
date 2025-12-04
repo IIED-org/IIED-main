@@ -2,12 +2,12 @@
 
 namespace Drupal\better_exposed_filters\Plugin\better_exposed_filters\filter;
 
-use Drupal\better_exposed_filters\BetterExposedFiltersHelper;
-use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetBase;
-use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\better_exposed_filters\BetterExposedFiltersHelper;
+use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetBase;
+use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetInterface;
 use Drupal\views\Plugin\views\filter\NumericFilter;
 use Drupal\views\Plugin\views\filter\StringFilter;
 
@@ -21,7 +21,7 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
   /**
    * {@inheritdoc}
    */
-  public static function isApplicable($filter = NULL, array $filter_options = []) {
+  public static function isApplicable(mixed $filter = NULL, array $filter_options = []): bool {
     /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
     $is_applicable = FALSE;
 
@@ -71,11 +71,12 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return parent::defaultConfiguration() + [
       'advanced' => [
         'collapsible' => FALSE,
         'collapsible_disable_automatic_open' => FALSE,
+        'open_by_default' => FALSE,
         'is_secondary' => FALSE,
         'placeholder_text' => '',
         'rewrite' => [
@@ -83,6 +84,8 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
           'filter_rewrite_values_key' => FALSE,
         ],
         'sort_options' => FALSE,
+        'hide_label' => FALSE,
+        'field_classes' => '',
       ],
     ];
   }
@@ -90,7 +93,7 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
     $filter = $this->handler;
     $filter_widget_type = $this->getExposedFilterWidgetType();
@@ -147,6 +150,13 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
       ];
     }
 
+    $form['advanced']['hide_label'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Hide the label'),
+      '#description' => $this->t('Hides the label visually, so it is still usable for accessibility purposes.'),
+      '#default_value' => !empty($this->configuration['advanced']['hide_label']),
+    ];
+
     // Allow any filter to be collapsible.
     $form['advanced']['collapsible'] = [
       '#type' => 'checkbox',
@@ -172,6 +182,21 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
       ],
     ];
 
+    // Make filter open by default.
+    $form['advanced']['open_by_default'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Open by default'),
+      '#default_value' => !empty($this->configuration['advanced']['open_by_default']),
+      '#description' => $this->t(
+        'Collapsible filter will be opened by default. It can be collapsed by the user if they wish, but after the page reload (or AJAX view refresh) it will be opened again.'
+      ),
+      '#states' => [
+        'visible' => [
+          ':input[name="exposed_form_options[bef][filter][' . $filter->options['id'] . '][configuration][advanced][collapsible]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
     // Allow any filter to be moved into the secondary options' element.
     $form['advanced']['is_secondary'] = [
       '#type' => 'checkbox',
@@ -185,19 +210,27 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
       '#description' => $this->t('Places this element in the secondary options portion of the exposed form.'),
     ];
 
+    $form['advanced']['field_classes'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Custom classes added to the field element'),
+      '#default_value' => $this->configuration['advanced']['field_classes'],
+      '#description' => $this->t('To add multiple classes separate them with a space'),
+    ];
+
     return $form;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function exposedFormAlter(array &$form, FormStateInterface $form_state) {
+  public function exposedFormAlter(array &$form, FormStateInterface $form_state): void {
     /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
     $filter = $this->handler;
     $filter_id = $filter->options['expose']['identifier'];
     $field_id = $this->getExposedFilterFieldId();
     $is_collapsible = $this->configuration['advanced']['collapsible'];
     $collapsible_disable_automatic_open = $this->configuration['advanced']['collapsible_disable_automatic_open'];
+    $open_by_default = $this->configuration['advanced']['open_by_default'] ?? FALSE;
     $is_secondary = !empty($form['secondary']) && $this->configuration['advanced']['is_secondary'];
 
     // Sort options alphabetically.
@@ -211,6 +244,19 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
     if (!empty($this->configuration['advanced']['placeholder_text'])) {
       // @todo Add token replacement for placeholder text.
       $form[$field_id]['#placeholder'] = $this->configuration['advanced']['placeholder_text'];
+    }
+
+    // Visually hidden label.
+    if (!empty($this->configuration['advanced']['hide_label'])) {
+      // Check if the field was wrapped with a fieldset.
+      // @see \Drupal\views\Plugin\views\filter\FilterPluginBase::buildExposedForm
+      // @see \Drupal\views\Plugin\views\filter\FilterPluginBase::buildValueWrapper
+      if (empty($form["{$field_id}_wrapper"][$field_id])) {
+        $form[$field_id]['#title_display'] = 'invisible';
+      }
+      else {
+        $form["{$field_id}_wrapper"]['#title_display'] = 'invisible';
+      }
     }
 
     // Handle filter value rewrites.
@@ -237,26 +283,28 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
     }
 
     // If selected, collect our collapsible filter form element and put it in
-    // a details element.
-    if ($is_collapsible) {
-      $details = [];
-      $details[$field_id . '_collapsible'] = [
-        '#type' => 'details',
-        '#title' => $exposed_label,
-        '#description' => $exposed_description,
-        '#attributes' => [
-          'class' => ['form-item'],
-        ],
-        '#collapsible_disable_automatic_open' => $collapsible_disable_automatic_open,
-      ];
+    // a details' element.
+    if (!empty($form[$field_id]) || !empty($form["{$field_id}_wrapper"])) {
+      if ($is_collapsible) {
+        $details = [];
+        $details[$field_id . '_collapsible'] = [
+          '#type' => 'details',
+          '#title' => $exposed_label,
+          '#description' => $exposed_description,
+          '#attributes' => [
+            'class' => ['form-item'],
+          ],
+          '#collapsible_disable_automatic_open' => $collapsible_disable_automatic_open,
+        ];
 
-      if ($is_secondary) {
-        // Move secondary elements.
-        $this->addElementToGroup($form, $form_state, $field_id . '_collapsible', 'secondary');
+        if (!empty($open_by_default)) {
+          $details[$field_id . '_collapsible']['#open'] = TRUE;
+        }
+
+        // Retain same weight as the original fields for details.
+        $pos = array_search($field_id, array_keys($form));
+        $form = array_merge(array_slice($form, 0, $pos), $details, array_slice($form, $pos));
       }
-      // Retain same weight as the original fields for details.
-      $pos = array_search($field_id, array_keys($form));
-      $form = array_merge(array_slice($form, 0, $pos), $details, array_slice($form, $pos));
     }
 
     // Add possible field wrapper to validate for "between" operator.
@@ -301,6 +349,16 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
         }
       }
 
+      // Handle secondary elements first.
+      if ($is_secondary) {
+        if ($is_collapsible) {
+          $this->addElementToGroup($form, $form_state, $field_id . '_collapsible', 'secondary');
+        }
+        else {
+          $this->addElementToGroup($form, $form_state, $element, 'secondary');
+        }
+      }
+
       // Move collapsible elements.
       if ($is_collapsible) {
         $this->addElementToGroup($form, $form_state, $element, $field_id . '_collapsible');
@@ -308,10 +366,14 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
       else {
         $form[$element]['#title'] = $exposed_label;
         $form[$element]['#description'] = $exposed_description;
+      }
 
-        // Move secondary elements.
-        if ($is_secondary) {
-          $this->addElementToGroup($form, $form_state, $element, 'secondary');
+      // Add custom classes to the field form element.
+      if ($this->configuration['advanced']['field_classes']) {
+        $field_classes = $this->configuration['advanced']['field_classes'];
+        $field_classes_array = explode(' ', $field_classes);
+        foreach ($field_classes_array as $class) {
+          $form[$element]['#attributes']['class'][] = $class;
         }
       }
 
@@ -331,22 +393,30 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
    * @return array
    *   The altered element.
    */
-  public function processSortedOptions(array $element, FormStateInterface $form_state) {
+  public function processSortedOptions(array $element, FormStateInterface $form_state): array {
     $options = &$element['#options'];
 
     // Ensure "- Any -" value does not get sorted.
     $any_option = FALSE;
-    if (empty($element['#required'])) {
+    if ($element['#required']) {
       // We use array_slice to preserve they keys needed to determine the value
       // when using a filter (e.g. taxonomy terms).
-      $any_option = array_slice($options, 0, 1, TRUE);
-      // Array_slice does not modify the existing array, we need to remove the
-      // option manually.
-      unset($options[key($any_option)]);
+      $first_option = array_slice($options, 0, 1, TRUE);
+
+      // Only preserve the first option if it's actually "- Any -"
+      // translated or untranslated.
+      $first_option_value = reset($first_option);
+      if ($first_option_value === '- Any -' || $first_option_value === $this->t('- Any -')) {
+        $any_option = $first_option;
+        // Array_slice does not modify the existing array, we need to remove the
+        // option manually.
+        unset($options[key($any_option)]);
+      }
     }
 
     // Not all option arrays will have simple data types. We perform a custom
-    // sort in case users want to sort more complex fields (e.g taxonomy terms).
+    // sort in case users want to sort more complex fields
+    // (example taxonomy terms).
     if (!empty($element['#nested'])) {
       $delimiter = $element['#nested_delimiter'] ?? '-';
       $options = BetterExposedFiltersHelper::sortNestedOptions($options, $delimiter);
@@ -372,7 +442,7 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
     /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
     $filter = $this->handler;
     $field_id = $filter->options['expose']['identifier'];
-    $is_grouped_filter = $filter->options['is_grouped'] ?: FALSE;
+    $is_grouped_filter = $filter->options['is_grouped'];
 
     // Grouped filters store their identifier elsewhere.
     if ($is_grouped_filter) {
@@ -388,7 +458,7 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
    * @return string
    *   The type of the form render element use for the exposed filter.
    */
-  protected function getExposedFilterWidgetType() {
+  protected function getExposedFilterWidgetType(): string {
     // We need to dig into the exposed form configuration to retrieve the
     // form type of the filter.
     $form = [];

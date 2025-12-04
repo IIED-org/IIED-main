@@ -2,13 +2,16 @@
 
 namespace Drupal\facets_pretty_paths;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Drupal\Core\Url;
 use Drupal\facets\FacetSource\FacetSourcePluginManager;
+use Drupal\facets_exposed_filters\Plugin\views\filter\FacetsFilter;
+use Drupal\views\Views;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Alter facet source routes, adding a parameter.
+ * Alter facet source routes.
  */
 class RouteSubscriber extends RouteSubscriberBase {
 
@@ -20,21 +23,52 @@ class RouteSubscriber extends RouteSubscriberBase {
   protected $facetSourcePluginManager;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a RouteSubscriber object.
    *
    * @param \Drupal\facets\FacetSource\FacetSourcePluginManager $facetSourcePluginManager
    *   The plugin.manager.facets.facet_source service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
-  public function __construct(FacetSourcePluginManager $facetSourcePluginManager) {
+  public function __construct(FacetSourcePluginManager $facetSourcePluginManager, ModuleHandlerInterface $module_handler) {
     $this->facetSourcePluginManager = $facetSourcePluginManager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
    * {@inheritdoc}
    */
   public function alterRoutes(RouteCollection $collection) {
-    $sources = $this->facetSourcePluginManager->getDefinitions();
-    foreach ($sources as $source) {
+    $urls = [];
+    $pretty_facets_exposed_filters_views = [];
+
+    if ($this->moduleHandler->moduleExists('facets_exposed_filters')) {
+      // Extract URLs from views that contain facets exposed filters with
+      // enabled pretty path coder settings.
+      foreach (Views::getApplicableViews('uses_route') as $data) {
+        [$view_id, $display_id] = $data;
+        $view = Views::getView($view_id);
+        $view->setDisplay($display_id);
+        foreach ($view->getDisplay()->getHandlers('filter') as $handler) {
+          if ($handler instanceof FacetsFilter && !empty($handler->options['expose']['facets_pretty_paths_coder'])) {
+            $urls[] = $view->getUrl();
+            $pretty_facets_exposed_filters_views[] = $view_id;
+            continue;
+          }
+        }
+      }
+    }
+
+    // Extract URLs from facet source entities that use the pretty paths URL
+    // processor.
+    foreach ($this->facetSourcePluginManager->getDefinitions() as $source) {
       $sourcePlugin = $this->facetSourcePluginManager->createInstance($source['id']);
       $path = $sourcePlugin->getPath();
 
@@ -47,9 +81,12 @@ class RouteSubscriber extends RouteSubscriberBase {
         // processor is pretty paths.
         continue;
       }
+      $urls[] = Url::fromUri('internal:' . $path);
+    }
 
+    // Set up routing.
+    foreach ($urls as $url) {
       try {
-        $url = Url::fromUri('internal:' . $path);
         $sourceRoute = $collection->get($url->getRouteName());
 
         // Ensure this only triggers once per route.
@@ -79,12 +116,16 @@ class RouteSubscriber extends RouteSubscriberBase {
           }
 
           $sourceRoute->setPath($routePath);
+
+          // Use our controller for views with pretty facets exposed filters.
+          if (in_array($sourceRoute->getDefault('view_id'), $pretty_facets_exposed_filters_views)) {
+            $sourceRoute->setDefault('_controller', 'Drupal\\facets_pretty_paths\\Routing\\ViewPageController::handle');
+          }
         }
       }
       catch (\Exception $e) {
 
       }
-
     }
 
   }

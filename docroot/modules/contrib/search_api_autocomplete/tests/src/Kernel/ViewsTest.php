@@ -4,6 +4,7 @@ namespace Drupal\Tests\search_api_autocomplete\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\search_api\Query\ConditionInterface;
+use Drupal\search_api_autocomplete\Element\SearchApiAutocomplete as AutocompleteElement;
 use Drupal\search_api_autocomplete\Entity\Search;
 use Drupal\search_api_autocomplete\Search\SearchPluginManager;
 use Drupal\search_api_autocomplete\Utility\PluginHelper;
@@ -112,13 +113,7 @@ class ViewsTest extends KernelTestBase {
     ];
     $query = $plugin->createQuery('foobar', $data);
     $this->assertNull($query->getOriginalKeys());
-    // @todo Remove check once we depend on Drupal 9.0+.
-    if (method_exists($this, 'assertStringContainsString')) {
-      $this->assertStringContainsString('foobar', (string) $query);
-    }
-    else {
-      $this->assertContains('foobar', (string) $query);
-    }
+    $this->assertStringContainsString('foobar', (string) $query);
     $conditions = $query->getConditionGroup()->getConditions();
     $conditions = $this->collectConditions($conditions);
     $this->assertCount(1, $conditions);
@@ -202,6 +197,38 @@ class ViewsTest extends KernelTestBase {
     else {
       $this->assertEquals('textfield', $keys_element['#type']);
     }
+
+    // Check that the "#process" callbacks were altered correctly in
+    // AutocompleteHelper::alterElement().
+    if ($display_id === 'exposed_form_plugin' &&
+        $expect_altered &&
+        !empty($keys_element['#process'])) {
+      $element_class = AutocompleteElement::class;
+      $element_class_methods = [];
+      foreach ($keys_element['#process'] as $process_callback) {
+        $process_callback_method = '';
+        if (is_array($process_callback)) {
+          $process_callback_method = implode('::', $process_callback);
+        }
+        elseif (is_string($process_callback)) {
+          $process_callback_method = $process_callback;
+        }
+
+        if (str_starts_with($process_callback_method, "$element_class::") ||
+            str_starts_with($process_callback_method, 'Drupal\Core\Render\Element\Textfield::')) {
+          $process_callback_parts = explode('::', $process_callback_method);
+          $element_class_methods[$process_callback_parts[1]][] = $process_callback_method;
+        }
+      }
+
+      $duplicate_class_methods = array_filter($element_class_methods, function ($v) {
+        return count($v) > 1;
+      });
+      $this->assertEmpty(
+        $duplicate_class_methods,
+        'There should not be duplicate element #process callbacks. The following methods are duplicated: ' . print_r($duplicate_class_methods, TRUE),
+      );
+    }
   }
 
   /**
@@ -212,10 +239,11 @@ class ViewsTest extends KernelTestBase {
    *
    * @see \Drupal\Tests\search_api_autocomplete\Kernel\ViewsTest::testFormAltering()
    */
-  public function formAlteringDataProvider() {
+  public static function formAlteringDataProvider(): array {
     return [
       'do alter' => ['page', TRUE],
       "don't alter" => ['page_2', FALSE],
+      'exposed_form_plugin' => ['exposed_form_plugin', TRUE],
     ];
   }
 

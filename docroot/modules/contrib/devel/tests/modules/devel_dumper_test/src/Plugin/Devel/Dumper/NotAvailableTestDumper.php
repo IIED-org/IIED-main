@@ -19,7 +19,7 @@ class NotAvailableTestDumper extends DevelDumperBase {
   /**
    * {@inheritdoc}
    */
-  public function dump($input, $name = NULL): void {
+  public function dump($input, ?string $name = NULL): void {
     $input = '<pre>' . $input . '</pre>';
     echo $input;
   }

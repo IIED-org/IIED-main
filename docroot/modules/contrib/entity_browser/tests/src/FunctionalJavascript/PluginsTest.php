@@ -229,7 +229,7 @@ class PluginsTest extends EntityBrowserWebDriverTestBase {
     $this->getSession()->getPage()->checkField('entity_browser_select[file:' . $image->id() . ']');
     $this->getSession()->getPage()->pressButton('Select entities');
 
-    // TODO test if entities were selected. Will most likely need a custom event
+    // @todo test if entities were selected. Will most likely need a custom event
     // subscriber that displays a message or something along those lines.
   }
 

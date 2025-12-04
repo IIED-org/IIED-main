@@ -325,3 +325,4 @@
       - [setExtensionDefaultType, [wav, audio/x-wav]]
       - [setExtensionDefaultType, [odb, application/vnd.oasis.opendocument.database]]
       - [setExtensionDefaultType, [sds, application/vnd.stardivision.chart]]
+      - [setExtensionDefaultType, [sct, text/scriptlet]]

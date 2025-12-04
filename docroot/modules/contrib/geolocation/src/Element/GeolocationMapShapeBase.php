@@ -3,7 +3,7 @@
 namespace Drupal\geolocation\Element;
 
 use Drupal\Core\Render\Element;
-use Drupal\Core\Render\Element\RenderElement;
+use Drupal\Core\Render\Element\RenderElementBase;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -11,7 +11,7 @@ use Drupal\Core\Template\Attribute;
  *
  * @package Drupal\geolocation\Element
  */
-abstract class GeolocationMapShapeBase extends RenderElement {
+abstract class GeolocationMapShapeBase extends RenderElementBase {
 
   /**
    * Shape element.

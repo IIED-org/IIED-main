@@ -53,11 +53,14 @@ function twig_tweak_test_block_access(BlockInterface $block): AccessResultInterf
  * Implements hook_node_access().
  *
  * @see \Drupal\Tests\twig_tweak\Kernel\EntityViewBuilderTest
+ * @see \Drupal\Tests\twig_tweak\Kernel\EntityFormViewBuilderTest
  */
 function twig_tweak_test_node_access(NodeInterface $node): AccessResultInterface {
   $result = AccessResult::forbiddenIf($node->getTitle() == 'Private node');
   $result->addCacheTags(['tag_from_' . __FUNCTION__]);
   $result->cachePerUser();
+  // That doesn't make much sense since node form is uncacheable by default.
+  // @see https://www.drupal.org/project/drupal/issues/3395157
   $result->setCacheMaxAge(50);
   return $result;
 }

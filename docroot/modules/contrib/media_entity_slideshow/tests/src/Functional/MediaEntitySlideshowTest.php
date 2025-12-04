@@ -3,10 +3,10 @@
 namespace Drupal\Tests\media_entity_slideshow\Functional;
 
 use Drupal\Core\Language\Language;
-use Drupal\file\Entity\File;
-use Drupal\media\Entity\Media;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\TestFileCreationTrait;
+use Drupal\file\Entity\File;
+use Drupal\media\Entity\Media;
 
 /**
  * Tests for media entity slideshow.

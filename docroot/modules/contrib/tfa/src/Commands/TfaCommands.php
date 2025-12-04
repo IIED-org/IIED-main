@@ -21,7 +21,7 @@ class TfaCommands extends DrushCommands implements SanitizePluginInterface {
   protected $database;
 
   /**
-   * TokenManagment service.
+   * TokenManagement service.
    *
    * @var \Drupal\tfa\Commands\TfaTokenManagement
    */

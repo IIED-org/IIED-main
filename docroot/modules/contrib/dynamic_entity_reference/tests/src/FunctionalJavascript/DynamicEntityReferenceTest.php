@@ -215,9 +215,8 @@ class DynamicEntityReferenceTest extends WebDriverTestBase {
     // path for delta 1 autocomplete field.
     $this->assertSame($autocomplete_field_1->getAttribute('data-autocomplete-path'), $entity_test_path);
     $page = $this->getSession()->getPage();
-    $assert_session->assertWaitOnAjaxRequest(20000);
     $page->checkField('settings[entity_test][handler_settings][auto_create]');
-    $this->submitForm([], t('Save settings'));
+    $this->submitForm([], 'Save settings');
     $assert_session->pageTextContains('Saved Foobar configuration');
     \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
     $this->drupalGet('entity_test/add');

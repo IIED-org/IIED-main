@@ -8,6 +8,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
+use Drupal\file\FileInterface;
 use Drupal\media_pdf_thumbnail\Pdf;
 
 /**
@@ -51,7 +52,7 @@ class MediaPdfThumbnailImagickManager {
    *   Stream wrapper manager.
    */
   public function __construct(LoggerChannelFactoryInterface $loggerChannel, FileSystemInterface $fileSystem, StreamWrapperManagerInterface $streamWrapperManager) {
-    $this->logger = $loggerChannel->get('Media PDF Thumbnail (MediaPdfThumbnailImagickManager');
+    $this->logger = $loggerChannel->get('Media PDF Thumbnail');
     $this->fileSystem = $fileSystem;
     $this->streamWrapperManager = $streamWrapperManager;
   }
@@ -179,6 +180,86 @@ class MediaPdfThumbnailImagickManager {
       'path' => !empty($realPath) ? $realPath : $tempPdfPath,
       'delete' => FALSE,
     ];
+  }
+
+  /**
+   * Check file exists.
+   *
+   * @param \Drupal\file\FileInterface $file
+   *   File.
+   *
+   * @return bool
+   *   Return true if file exists for given file entity.
+   */
+  public function checkFileExists(FileInterface $file): bool {
+    try {
+      $streamWrapper = $this->streamWrapperManager->getViaUri($file->getFileUri());
+      if (!$streamWrapper) {
+        return FALSE;
+      }
+
+      // Capture the error message from aws-sdk-php.
+      $errorMessage = NULL;
+      set_error_handler(function ($errno, $errstr) use (&$errorMessage) {
+        $errorMessage = $errstr;
+        return TRUE;
+      });
+
+      $result = $streamWrapper->stream_open($file->getFileUri(), 'rb', 0, $opened_path);
+
+      restore_error_handler();
+
+      if ($errorMessage) {
+        $this->logger->error($errorMessage);
+        return FALSE;
+      }
+
+      return $result;
+    }
+    catch (\Exception $e) {
+      $this->logger->error($e->getMessage());
+      return FALSE;
+    }
+  }
+
+  /**
+   * Check file exists for given file uri.
+   *
+   * @param string $uri
+   *   File URI.
+   *
+   * @return bool
+   *   Return true if file exists.
+   */
+  public function checkFileExistsByUri(string $uri): bool {
+    try {
+      $streamWrapper = $this->streamWrapperManager->getViaUri($uri);
+      if (!$streamWrapper) {
+        return FALSE;
+      }
+
+      // Capture the error message from aws-sdk-php.
+      $errorMessage = NULL;
+      set_error_handler(function ($errno, $errstr) use (&$errorMessage) {
+        $errorMessage = $errstr;
+        return TRUE;
+      });
+
+      $result = $streamWrapper->stream_open($uri, 'rb', 0, $opened_path);
+
+      restore_error_handler();
+
+      if ($errorMessage) {
+        $this->logger->error($errorMessage);
+        return FALSE;
+      }
+
+      return $result;
+    }
+    catch (\Exception $e) {
+      $this->logger->error($e->getMessage());
+      return FALSE;
+    }
   }
 
 }

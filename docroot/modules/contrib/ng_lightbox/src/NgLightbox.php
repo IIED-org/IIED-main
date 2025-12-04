@@ -3,10 +3,11 @@
 namespace Drupal\ng_lightbox;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Routing\AdminContext;
 use Drupal\Core\Url;
+use Drupal\path_alias\AliasManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides a Service Class for NgLightbox.
@@ -47,6 +48,13 @@ class NgLightbox {
   protected $adminContext;
 
   /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * An array of paths that were already checked and their match status.
    *
    * @var array
@@ -66,16 +74,24 @@ class NgLightbox {
    *   The config factory so we can get the lightbox settings.
    * @param \Drupal\Core\Routing\AdminContext $admin_context
    *   Provides a helper class to determine whether the route is an admin one.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
    */
-  public function __construct(PathMatcherInterface $path_matcher, AliasManagerInterface $alias_manager, ConfigFactoryInterface $config_factory, AdminContext $admin_context) {
+  public function __construct(
+    PathMatcherInterface $path_matcher,
+    AliasManagerInterface $alias_manager,
+    ConfigFactoryInterface $config_factory,
+    AdminContext $admin_context,
+    RequestStack $request_stack,
+  ) {
     $this->pathMatcher = $path_matcher;
     $this->aliasManager = $alias_manager;
     $this->config = $config_factory->get('ng_lightbox.settings');
     $this->adminContext = $admin_context;
+    $this->requestStack = $request_stack;
   }
 
   /**
-   * Checks whether a give path matches the ng-lightbox path rules.
    * This function checks both internal paths and aliased paths.
    *
    * @param \Drupal\Core\Url $url
@@ -85,6 +101,8 @@ class NgLightbox {
    *   TRUE if it matches the given rules.
    */
   public function isNgLightboxEnabledPath(Url $url) {
+
+    $request = $this->requestStack->getCurrentRequest();
 
     // No lightbox on external Urls.
     if ($url->isExternal()) {
@@ -96,7 +114,7 @@ class NgLightbox {
       return FALSE;
     }
 
-    // @TODO, decide whether we want to try and support paths or to adopt routes
+    // @todo , decide whether we want to try and support paths or to adopt routes
     // like core is trying to force us into.
     $path = strtolower($url->toString());
 
@@ -108,7 +126,7 @@ class NgLightbox {
     }
 
     // Remove the base path.
-    if ($base_path = \Drupal::request()->getBasePath()) {
+    if ($base_path = $request->getBasePath()) {
       $path = substr($path, strlen($base_path));
     }
 
@@ -117,7 +135,7 @@ class NgLightbox {
       return $this->matches[$path];
     }
 
-    // Normalise the patterns as well so that they match the normalised paths.
+    // Normalize the patterns as well so that they match the normalized paths.
     // Exit early if no enabled paths.
     if (!$patterns = $this->config->get('patterns')) {
       return FALSE;

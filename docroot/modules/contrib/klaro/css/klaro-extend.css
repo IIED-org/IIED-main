@@ -40,6 +40,10 @@
   transform: scale(1.2);
 }
 
+.klaro .context-notice p.cm-dialog-link {
+  margin-top: 6px;
+}
+
 .klaro.learn-more-as-button
   .cookie-notice:not(.cookie-modal-notice)
   a.cm-link.cn-learn-more {
@@ -57,6 +61,15 @@
   background-color: var(--dark2, #5c5c5c);
   font-size: 1em;
   line-height: 1.125rem;
+}
+
+.klaro.hide-consent-dialog-title h2#id-cookie-title {
+  position: absolute !important;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px;
+  height: 1px;
+  word-wrap: normal;
 }
 
 .klaro-close {

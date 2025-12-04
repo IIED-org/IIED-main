@@ -104,7 +104,7 @@ class DevelDumperTest extends DevelBrowserTestBase {
     $this->assertSession()->responseContains('devel_dumper_test/css/devel_dumper_test.css');
     $this->assertSession()->responseContains('devel_dumper_test/js/devel_dumper_test.js');
 
-    $debug_filename = \Drupal::service('file_system')->getTempDirectory() . '/' . 'drupal_debug.txt';
+    $debug_filename = \Drupal::service('file_system')->getTempDirectory() . '/drupal_debug.txt';
     $this->drupalGet('devel_dumper_test/debug');
     $file_content = file_get_contents($debug_filename);
     $expected = <<<EOF

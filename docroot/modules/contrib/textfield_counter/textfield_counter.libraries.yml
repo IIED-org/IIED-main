@@ -5,6 +5,5 @@ counter:
   js:
     js/textfield_counter.js: {}
   dependencies:
-    - core/jquery
+    - core/drupal
     - core/once
-    - core/drupalSettings

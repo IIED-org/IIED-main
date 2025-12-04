@@ -190,7 +190,7 @@ class TfaDisableForm extends FormBase {
       '@uid' => $account->id(),
     ]);
 
-    // E-mail account to inform user that it has been disabled.
+    // Email account to inform user that it has been disabled.
     if ($account->getEmail()) {
       $params = ['account' => $account];
       $this->mailManager->mail('tfa', 'tfa_disabled_configuration', $account->getEmail(), $account->getPreferredLangcode(), $params);

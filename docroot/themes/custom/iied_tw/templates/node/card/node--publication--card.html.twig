@@ -1,18 +1,9 @@
 {% extends '@iied_tw/node/card/node--card.html.twig' %}
   {% block image %}
-    {% if content.field_cover_image[0] %}
-      {% set image_uri = node.field_cover_image|file_uri %}
-      {% set image_alt = node.field_cover_image.alt %}
-      {% if image_uri is not null %}
-        <div class="m-auto shadow-lg w-fit">
-          <img src="{{ image_uri|image_style('search_cover') }}" alt="{{ image_alt }}" />
-         </div>
-      {% endif %}
-        {% else %}
-          <div class="m-auto shadow-lg w-fit not-prose">
-            {{ node.field_media[0].entity|view('search_cover') }}
-          </div>
-      {% endif %}
+  <div class="not-prose items-start w-2/12 shadow-lg">
+    {# Insert publication image with default settings #}
+    {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'card_cover', 'img_style':'card_cover' } %} 
+  </div> 
   {% endblock %} 
   {% block date %}
       <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.field_date_published.value|date('d F Y') }} </p>

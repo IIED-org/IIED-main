@@ -69,7 +69,7 @@ class MergeTermsTest extends MergeTermsTestBase {
    *   - expectingErrors: a boolean indicating the form is expected to generate
    *     an error.
    */
-  public function validatesSelectedTermsTestDataProvider(): array {
+  public static function validatesSelectedTermsTestDataProvider(): array {
     $test_data['No terms selected'] = [
       'selectedTerms' => [],
       'expectingErrors' => TRUE,

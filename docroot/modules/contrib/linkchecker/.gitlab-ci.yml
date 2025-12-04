@@ -5,12 +5,17 @@ include:
       - '/includes/include.drupalci.main.yml'
       - '/includes/include.drupalci.variables.yml'
       - '/includes/include.drupalci.workflows.yml'
+
 variables:
-  OPT_IN_TEST_NEXT_MINOR: 1
-  OPT_IN_TEST_NEXT_MAJOR: 1
-  RUN_JOB_UPGRADE_STATUS: 1
+  OPT_IN_TEST_PREVIOUS_MAJOR: 0
+  OPT_IN_TEST_CURRENT: 1
+  OPT_IN_TEST_NEXT_MINOR: 0
+  OPT_IN_TEST_NEXT_MAJOR: 0
+  RUN_JOB_UPGRADE_STATUS: 0
 cspell:
-  allow_failure: false
+  # Forbidden words will be fixed in the next major release due to API changes
+  # required: https://www.drupal.org/project/linkchecker/issues/3531794
+  allow_failure: true
 phpcs:
   allow_failure: false
 phpstan:
@@ -22,6 +27,4 @@ phpstan (next major):
 phpunit (next minor):
   allow_failure: false
 phpunit (next major):
-  allow_failure: false
-upgrade status:
   allow_failure: false

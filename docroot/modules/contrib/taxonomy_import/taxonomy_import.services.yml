@@ -1,0 +1,4 @@
+services:
+  taxonomy_import.term_utils:
+    class: Drupal\taxonomy_import\Service\TaxonomyUtils
+    arguments: ['@entity_type.manager']

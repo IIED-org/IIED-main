@@ -3,17 +3,18 @@
 namespace Drupal\ds\Plugin\DsField;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\ds\Attribute\DsField;
+use Drupal\ds\Plugin\Derivative\DynamicCopyField as DynamicCopyFieldDerivative;
 use Drupal\ds\Plugin\DsPluginManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines a generic dynamic field that holds a copy of an existing ds field.
- *
- * @DsField(
- *   id = "dynamic_copy_field",
- *   deriver = "Drupal\ds\Plugin\Derivative\DynamicCopyField",
- * )
  */
+#[DsField(
+  id: 'dynamic_copy_field',
+  deriver: DynamicCopyFieldDerivative::class
+)]
 class DynamicCopyField extends DsFieldBase {
 
   /**

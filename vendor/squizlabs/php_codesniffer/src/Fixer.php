@@ -7,11 +7,12 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/HEAD/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer;
 
+use InvalidArgumentException;
 use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Common;
@@ -81,7 +82,7 @@ class Fixer
      * All changes in changeset must be able to be applied, or else
      * the entire changeset is rejected.
      *
-     * @var array
+     * @var array<int, string>
      */
     private $changeset = [];
 
@@ -200,7 +201,7 @@ class Fixer
 
         $this->enabled = false;
 
-        if ($this->numFixes > 0) {
+        if ($this->numFixes > 0 || $this->inConflict === true) {
             if (PHP_CODESNIFFER_VERBOSITY > 1) {
                 if (ob_get_level() > 0) {
                     ob_end_clean();
@@ -221,10 +222,10 @@ class Fixer
     /**
      * Generates a text diff of the original file and the new content.
      *
-     * @param string  $filePath Optional file path to diff the file against.
-     *                          If not specified, the original version of the
-     *                          file will be used.
-     * @param boolean $colors   Print coloured output or not.
+     * @param string|null $filePath Optional file path to diff the file against.
+     *                              If not specified, the original version of the
+     *                              file will be used.
+     * @param boolean     $colors   Print coloured output or not.
      *
      * @return string
      *
@@ -402,7 +403,7 @@ class Fixer
             if ($bt[1]['class'] === __CLASS__) {
                 $sniff = 'Fixer';
             } else {
-                $sniff = Common::getSniffCode($bt[1]['class']);
+                $sniff = $this->getSniffCodeForDebug($bt[1]['class']);
             }
 
             $line = $bt[0]['line'];
@@ -487,7 +488,7 @@ class Fixer
                     $line  = $bt[0]['line'];
                 }
 
-                $sniff = Common::getSniffCode($sniff);
+                $sniff = $this->getSniffCodeForDebug($sniff);
 
                 $numChanges = count($this->changeset);
 
@@ -544,7 +545,7 @@ class Fixer
                 $line  = $bt[0]['line'];
             }
 
-            $sniff = Common::getSniffCode($sniff);
+            $sniff = $this->getSniffCodeForDebug($sniff);
 
             $tokens     = $this->currentFile->getTokens();
             $type       = $tokens[$stackPtr]['type'];
@@ -659,7 +660,7 @@ class Fixer
                 $line  = $bt[0]['line'];
             }
 
-            $sniff = Common::getSniffCode($sniff);
+            $sniff = $this->getSniffCodeForDebug($sniff);
 
             $tokens     = $this->currentFile->getTokens();
             $type       = $tokens[$stackPtr]['type'];
@@ -697,10 +698,10 @@ class Fixer
     /**
      * Replace the content of a token with a part of its current content.
      *
-     * @param int $stackPtr The position of the token in the token stack.
-     * @param int $start    The first character to keep.
-     * @param int $length   The number of characters to keep. If NULL, the content of
-     *                      the token from $start to the end of the content is kept.
+     * @param int      $stackPtr The position of the token in the token stack.
+     * @param int      $start    The first character to keep.
+     * @param int|null $length   The number of characters to keep. If NULL, the content of
+     *                           the token from $start to the end of the content is kept.
      *
      * @return bool If the change was accepted.
      */
@@ -841,6 +842,26 @@ class Fixer
         }
 
     }//end changeCodeBlockIndent()
+
+
+    /**
+     * Get the sniff code for the current sniff or the class name if the passed class is not a sniff.
+     *
+     * @param string $className Class name.
+     *
+     * @return string
+     */
+    private function getSniffCodeForDebug($className)
+    {
+        try {
+            $sniffCode = Common::getSniffCode($className);
+            return $sniffCode;
+        } catch (InvalidArgumentException $e) {
+            // Sniff code could not be determined. This may be an abstract sniff class or a helper class.
+            return $className;
+        }
+
+    }//end getSniffCodeForDebug()
 
 
 }//end class

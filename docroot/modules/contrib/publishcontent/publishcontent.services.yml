@@ -1,5 +1,6 @@
 services:
   publishcontent.access:
     class: Drupal\publishcontent\Access\PublishContentAccess
+    arguments: ['@module_handler']
     tags:
       - {name: access_check, applies_to: _publish_access_check}

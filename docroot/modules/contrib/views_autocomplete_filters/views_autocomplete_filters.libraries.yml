@@ -1,15 +1,15 @@
-drupal.views-autocomplete-filters:
-  version: VERSION
+1-dependent:
   js:
-    js/views-autocomplete-filters.js: {}
+    js/1-dependent.js: {}
   dependencies:
     - core/jquery
     - core/drupal
+    - core/once
     - core/drupal.form
-drupal.views-autocomplete-filters-dependent:
-  version: VERSION
+
+2-autosubmit:
   js:
-    js/views-autocomplete-filters-dependent.js: {}
+    js/2-autosubmit.js: {}
   dependencies:
     - core/jquery
     - core/drupal

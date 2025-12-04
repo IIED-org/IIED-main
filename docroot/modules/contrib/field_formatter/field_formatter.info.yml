@@ -3,7 +3,7 @@ description: 'Collection of general formatters that display a single field from 
 type: module
 core_version_requirement: ^9.1 || ^10 || ^11
 
-# Information added by Drupal.org packaging script on 2024-08-20
-version: '3.0.0-rc5'
+# Information added by Drupal.org packaging script on 2024-10-17
+version: '3.0.0'
 project: 'field_formatter'
-datestamp: 1724167092
+datestamp: 1729171497

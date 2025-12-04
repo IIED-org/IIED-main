@@ -112,7 +112,7 @@ Now you should be ready to configure the TFA module.
 
 ##### TFA Security Advisory Related Configuration
 
-###### Configured Plugins Enforce TFA Requiered
+###### Configured Plugins Enforce TFA Required
 Prior to 8.x-1.4 the TFA module would only check if a user had configured the
 current default validation plugin to determine if TFA was required for login.
 
@@ -124,8 +124,8 @@ a provisioned status, this includes disabled plugins. This can create a
 situation where a user is unable to log in due to having a disabled plugin
 provisioned without any enabled plugins provisioned.
 
-If an adminsitrator is unable to re-enable a disabled plugin that prevents
-authentciation, or belives that this restriction is not neccessary for their
+If an administrator is unable to re-enable a disabled plugin that prevents
+authentication, or believes that this restriction is not necessary for their
 site they may limit the validation to only test enabled plugins by adding the
 following into the sites settings.php file.
 
@@ -137,7 +137,7 @@ capable of generating authentication codes.  As of the date of this ReadMe,
 some of the more popular options include:
   * Google Authenticator (Android, iOS)
   * Microsoft Authenticator (Android, iOS)
-  * Twilio Authy (Android, iOS, Windows, macOS, Linux)
+  * Twilio Authy (Android, iOS)
   * FreeOTP (Android, iOS)
   * WinAuth (Windows)
   * GAuth Authenticator (Chrome browser extension and Chrome OS)

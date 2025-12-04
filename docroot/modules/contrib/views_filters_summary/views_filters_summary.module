@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for views_filters_summary module.
+ *
+ * Provides the ability to show which filters are used in Views Result.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function views_filters_summary_theme($existing, $type, $theme, $path): array {
+  return [
+    'views_filters_summary' => [
+      'variables' => [
+        'summary' => NULL,
+        'options' => [],
+        'exposed_form_id' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_views_data().
+ */
+function views_filters_summary_views_data(): array {
+  $data['views']['views_filters_summary'] = [
+    'title' => t('Views exposed filters summary'),
+    'help' => t('Shows result summary with filters.'),
+    'area' => [
+      'id' => 'views_filters_summary',
+    ],
+  ];
+
+  return $data;
+}

@@ -6,12 +6,13 @@
  */
 
 /**
- * Load all stages into available render elements.
+ * Load all stages into theme.registry.
  */
 function klaro__testing_theme($existing, $type, $theme, $path) {
+  $stages_path = $path . '/templates';
+
   $items = [];
-  $stages = scandir($path . '/templates');
-  foreach ($stages as $stage) {
+  foreach (scandir($stages_path) as $stage) {
     $stage_name = basename($stage, '.html.twig');
     if (empty($stage_name) || $stage_name == "." || $stage_name == "..") {
       continue;
@@ -20,7 +21,7 @@ function klaro__testing_theme($existing, $type, $theme, $path) {
     $items['STAGE__' . $stage_name] = [
       'render element' => 'children',
       'template' => $stage_name,
-      'path' => $path . '/templates',
+      'path' => $stages_path,
     ];
   }
   return $items;

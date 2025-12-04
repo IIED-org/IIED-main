@@ -1,21 +1,23 @@
 {% extends '@iied_tw/search/node--search-result.html.twig' %}
   {% block image %} 
-    <div class="max-w-[75%] h-auto mx-auto rounded shadow-md">
-      {% if content.field_cover_image[0] %}
+    <div class="max-w-[75%] w-[170px] h-auto mx-auto rounded shadow-md">
+       {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'search_cover', 'img_style':'search_cover' } %} 
+      {# {% if content.field_cover_image[0] %}
         {% set image_uri = node.field_cover_image|file_uri %}
         {% set image_alt = node.field_cover_image.alt %}
         {% if image_uri is not null %}
-          {{ node.field_cover_image[0].entity|view('card_cover') }}
+          {{ node.field_cover_image[0].entity|view('search_cover') }}
         {% endif %}
       {% else %}
-          {{ node.field_media[0].entity|view('card_cover') }}
-      {% endif %}
+        {% if node.field_media[0].entity %}
+          {{ node.field_media[0].entity|view('search_cover') }}
+          {% else %}
+          <div><img src="/themes/custom/iied_tw/images/default-doc.svg" alt="Default PDF cover" /></div>
+        {% endif %}
+      {% endif %} #}
     </div>
   {% endblock %}
 
   {% block meta %}
       <div class="text-gray-500">{{ node.type.entity.label() }}, {{ node.field_date_published.value|date('d F Y') }} </div>
   {% endblock %}
-
-
-

@@ -4,28 +4,20 @@ namespace FileEye\MimeMap\Test;
 
 use Symfony\Component\Filesystem\Filesystem;
 use FileEye\MimeMap\Map\MimeMapInterface;
+use FileEye\MimeMap\Map\MiniMap;
 use FileEye\MimeMap\MapHandler;
 use FileEye\MimeMap\MapUpdater;
+use FileEye\MimeMap\SourceUpdateException;
 use PHPUnit\Framework\Attributes\BackupStaticProperties;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \FileEye\MimeMap\MapUpdater
- * @backupStaticAttributes enabled
- */
 #[CoversClass(MapUpdater::class)]
 #[BackupStaticProperties(true)]
 class MapUpdaterTest extends MimeMapTestBase
 {
-
-    /** @var MimeMapInterface */
-    protected $newMap;
-
-    /** @var MapUpdater */
-    protected $updater;
-
-    /** @var Filesystem */
-    protected $fileSystem;
+    protected readonly MimeMapInterface $newMap;
+    protected readonly MapUpdater $updater;
+    protected readonly Filesystem $fileSystem;
 
     public function setUp(): void
     {
@@ -57,6 +49,7 @@ class MapUpdaterTest extends MimeMapTestBase
                 'txt' => ['t' => ['text/plain']],
             ],
         ];
+        // @phpstan-ignore method.impossibleType
         $this->assertSame($expected, $this->newMap->getMapArray());
         $this->assertSame(['image/jpeg', 'text/plain'], $this->newMap->listTypes());
         $this->assertSame(['jpe', 'jpeg', 'jpg', 'txt'], $this->newMap->listExtensions());
@@ -65,16 +58,14 @@ class MapUpdaterTest extends MimeMapTestBase
 
     public function testLoadMapFromApacheFileZeroLines(): void
     {
+        $this->expectException(SourceUpdateException::class);
         $this->updater->loadMapFromApacheFile(dirname(__FILE__) . '/../fixtures/zero.mime-types.txt');
-        $this->assertSame([], $this->newMap->getMapArray());
     }
 
     public function testLoadMapFromApacheMissingFile(): void
     {
-        $this->assertSame(
-            ["Failed accessing certainly_missing.xml"],
-            $this->updater->loadMapFromApacheFile('certainly_missing.xml')
-        );
+        $this->expectException(SourceUpdateException::class);
+        $this->updater->loadMapFromApacheFile('certainly_missing.txt');
     }
 
     public function testApplyOverridesFailure(): void
@@ -120,6 +111,7 @@ class MapUpdaterTest extends MimeMapTestBase
                 'image/pdf' => ['t' => ['application/pdf']],
             ],
         ];
+        // @phpstan-ignore method.impossibleType
         $this->assertSame($expected, $this->newMap->getMapArray());
         $this->assertSame(['application/pdf', 'application/x-atari-2600-rom', 'application/x-pdf', 'text/plain'], $this->newMap->listTypes());
         $this->assertSame(['a26', 'asc', 'pdf', 'txt'], $this->newMap->listExtensions());
@@ -129,15 +121,14 @@ class MapUpdaterTest extends MimeMapTestBase
     public function testLoadMapFromFreedesktopFileZeroLines(): void
     {
         $this->updater->loadMapFromFreedesktopFile(dirname(__FILE__) . '/../fixtures/zero.freedesktop.xml');
+        // @phpstan-ignore method.impossibleType
         $this->assertSame([], $this->newMap->getMapArray());
     }
 
     public function testLoadMapFromFreedesktopMissingFile(): void
     {
-        $this->assertSame(
-            ["Failed loading file certainly_missing.xml"],
-            $this->updater->loadMapFromFreedesktopFile('certainly_missing.xml')
-        );
+        $this->expectException(SourceUpdateException::class);
+        $this->updater->loadMapFromFreedesktopFile('certainly_missing.xml');
     }
 
     public function testLoadMapFromFreedesktopInvalidFile(): void
@@ -151,15 +142,17 @@ class MapUpdaterTest extends MimeMapTestBase
     public function testEmptyMapNotWriteable(): void
     {
         $this->expectException('LogicException');
-        $this->assertNull($this->newMap->getFileName());
+        $this->assertSame('', $this->newMap->getFileName());
     }
 
     public function testWriteMapToPhpClassFile(): void
     {
-        $this->fileSystem->copy(__DIR__ . '/../../src/Map/MiniMap.php.test', __DIR__ . '/../../src/Map/MiniMap.php');
-        MapHandler::setDefaultMapClass('\FileEye\MimeMap\Map\MiniMap');
+        $this->fileSystem->copy(__DIR__ . '/../fixtures/MiniMap.php.test', __DIR__ . '/../fixtures/MiniMap.php');
+        include_once(__DIR__ . '/../fixtures/MiniMap.php');
+        // @phpstan-ignore class.notFound, argument.type
+        MapHandler::setDefaultMapClass(MiniMap::class);
         $map_a = MapHandler::map();
-        $this->assertStringContainsString('src/Map/MiniMap.php', $map_a->getFileName());
+        $this->assertStringContainsString('fixtures/MiniMap.php', $map_a->getFileName());
         $content = file_get_contents($map_a->getFileName());
         assert(is_string($content));
         $this->assertStringNotContainsString('text/plain', $content);
@@ -171,7 +164,23 @@ class MapUpdaterTest extends MimeMapTestBase
         $this->assertStringContainsString('text/plain', $content);
         $this->assertStringContainsString('bing/bong', $content);
         $this->assertStringContainsString('binbon', $content);
-        $this->fileSystem->remove(__DIR__ . '/../../src/Map/MiniMap.php');
+        $this->fileSystem->remove(__DIR__ . '/../fixtures/MiniMap.php');
+    }
+
+    public function testWriteMapToPhpClassFileFailure(): void
+    {
+        $this->fileSystem->copy(__DIR__ . '/../fixtures/MiniMap.php.test', __DIR__ . '/../fixtures/MiniMap.php');
+        include_once(__DIR__ . '/../fixtures/MiniMap.php');
+        // @phpstan-ignore class.notFound, argument.type
+        MapHandler::setDefaultMapClass(MiniMap::class);
+        $map_a = MapHandler::map();
+        $this->assertStringContainsString('fixtures/MiniMap.php', $map_a->getFileName());
+        $content = file_get_contents($map_a->getFileName());
+        assert(is_string($content));
+        $this->assertStringNotContainsString('text/plain', $content);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("Failed loading file foo://bar.stub");
+        $this->updater->writeMapToPhpClassFile("foo://bar.stub");
     }
 
     public function testGetDefaultMapBuildFile(): void

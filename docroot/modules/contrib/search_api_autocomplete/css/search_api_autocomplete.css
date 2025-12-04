@@ -10,9 +10,10 @@
   border: 0;
 }
 
+/* stylelint-disable-next-line -- Error reported inconsistently. */
 .search-api-autocomplete-search .ui-menu-item-wrapper.ui-state-active .search-api-autocomplete-suggestion {
-  color: #FFF;
-  background: #0072B9;
+  color: #fff;
+  background: #0072b9;
 }
 
 .search-api-autocomplete-search .ui-menu-item {

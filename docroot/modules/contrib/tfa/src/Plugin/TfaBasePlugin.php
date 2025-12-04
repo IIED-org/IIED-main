@@ -64,7 +64,7 @@ abstract class TfaBasePlugin extends PluginBase {
   /**
    * Encryption profile.
    *
-   * @var \Drupal\encrypt\EncryptionProfileManagerInterface
+   * @var \Drupal\encrypt\EncryptionProfileInterface
    */
   protected $encryptionProfile;
 

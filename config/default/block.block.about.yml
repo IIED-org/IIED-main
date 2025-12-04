@@ -5,14 +5,13 @@ dependencies:
   config:
     - system.menu.about
   module:
-    - block_class
     - system
   theme:
     - iied_tw
 id: about
 theme: iied_tw
 region: content
-weight: -10
+weight: -12
 provider: null
 plugin: 'system_menu_block:about'
 settings:

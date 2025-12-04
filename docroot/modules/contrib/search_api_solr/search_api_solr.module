@@ -683,7 +683,7 @@ function search_api_solr_form_search_api_index_fields_alter(&$form, FormStateInt
         ],
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
-          'width' => 700,
+          'width' => '90%',
         ]),
       ],
       '#weight' => -10,

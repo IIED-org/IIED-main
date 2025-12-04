@@ -14,10 +14,10 @@ provider plugin).
 ### Storing field values
 
 If you want to store field values you will have to map them to actual bundle
-fields. At the momemnt there is no GUI for that, so the only method of doing
+fields. At the moment there is no GUI for that, so the only method of doing
 that for now is via CMI.
 
-This whould be an example of that (the field_map section):
+This would be an example of that (the field_map section):
 
 ```
 langcode: en

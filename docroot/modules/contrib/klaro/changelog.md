@@ -1,3 +1,49 @@
+**V.3.x-dev**
+
+-
+
+**V.3.0.6**
+
+- Issue #3524773: Add service for simple_popup_blocks
+- Issue #3528128: Accessibility improvements to the customize dialog
+- Issue #3516782: Fix Klaro langcode parsing to support Drupal’s language variants [Bugfix]
+- Issue #3489012: Extending Base Tests
+- Issue #3494233: Revert #3493374 after finished #3069491
+- Issue #3507391: Multiple contextual consents do not respect custom description text [Bugfix]
+- Issue #3530033: CSpell: Replace "whitelist"
+- Issue #3491582: Is "Powered by klaro" required? (BSD license) [legal]
+- Issue #3521502: Add support for Javascript with type "module"
+- Issue #3517615: Typo in config screen
+- Issue #3529598: Suggest 'menu_link_attributes' instead of 'link_attributes' module in the documentation
+- Issue #3522878: Missing ARIA label IDs / Add help text to hide notice dialog title.
+
+**V.3.0.5**
+  - [SA-CONTRIB-2025-050](https://www.drupal.org/sa-contrib-2025-050)
+
+**V.3.0.4**
+
+Includes:
+  - Issue #3512989: Move close button to header
+
+**V.3.0.3**
+
+Includes:
+  - Issue #3508693: Add base_path to klaro_placeholder.js.
+  - Issue #3512275: Bugfix TypeError in Drupal\klaro\Utility\KlaroHelper::matchKlaroApp()
+
+**V.3.0.2**
+
+Includes:
+  - Issue #3512019: Add Umami Analytics service
+
+**V.3.0.1**
+
+Includes:
+  - Issue #3484844: Show title on notice dialog optional
+  - Issue #3498377: Add configurable description for purpose
+  - Issue #3500091: Add link to consent manager in contextual dialog.
+  - Issue #3495242: Add service for Simple Google Maps
+
 **V.3.0.0**
 
 Includes:

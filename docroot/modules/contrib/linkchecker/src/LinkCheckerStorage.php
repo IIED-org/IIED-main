@@ -20,12 +20,16 @@ class LinkCheckerStorage extends SqlContentEntityStorage {
    *   An array of IDs, or an empty array if not found.
    */
   public function getExistingIdsFromLink(LinkCheckerLink $link) {
-    $query = $this->getQuery();
-    $query->accessCheck()
+    $parent_entity = $link->getParentEntity();
+    if ($parent_entity === NULL) {
+      return [];
+    }
+    $query = $this
+      ->getQuery()
+      ->accessCheck(TRUE)
       ->condition('urlhash', LinkCheckerLink::generateHash($link->getUrl()))
-      ->condition('entity_id.target_id', $link->getParentEntity()->id())
-      ->condition('entity_id.target_type', $link->getParentEntity()
-        ->getEntityTypeId())
+      ->condition('parent_entity_type_id', $parent_entity->getEntityTypeId())
+      ->condition('parent_entity_id', $parent_entity->id())
       ->condition('entity_field', $link->getParentEntityFieldName())
       ->condition('entity_langcode', $link->getParentEntityLangcode());
     return $query->execute();

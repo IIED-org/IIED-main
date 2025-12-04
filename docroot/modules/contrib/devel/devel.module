@@ -135,7 +135,7 @@ function devel_local_tasks_alter(&$local_tasks) {
 /**
  * Sets message.
  */
-function devel_set_message($msg, $type = NULL) {
+function devel_set_message($msg, ?string $type = NULL) {
   if (function_exists('drush_log')) {
     drush_log($msg, $type);
   }
@@ -177,7 +177,7 @@ function devel_set_handler($handlers) {
  *   The level of the error raised.
  * @param string $message
  *   The error message.
- * @param string $filename
+ * @param string|null $filename
  *   (optional) The filename that the error was raised in.
  * @param int $line
  *   (optional) The line number the error was raised at.
@@ -185,7 +185,7 @@ function devel_set_handler($handlers) {
  *   (optional) An array that points to the active symbol table at the point the
  *   error occurred.
  */
-function backtrace_error_handler($error_level, $message, $filename = NULL, $line = NULL, array $context = NULL) {
+function backtrace_error_handler($error_level, $message, ?string $filename = NULL, $line = NULL, ?array $context = NULL) {
   // Hide stack trace and parameters from unqualified users.
   if (!Drupal::currentUser()->hasPermission('access devel information')) {
     // Do what core does in bootstrap.inc and errors.inc.
@@ -290,14 +290,14 @@ function devel_page_attachments_alter(array &$attachments): void {
  *
  * @param mixed $input
  *   The variable to dump.
- * @param string $name
+ * @param string|null $name
  *   (optional) The label to output before variable, defaults to NULL.
  * @param string $plugin_id
  *   (optional) The plugin ID, defaults to NULL.
  *
  * @see \Drupal\devel\DevelDumperManager::dump()
  */
-function devel_dump($input, $name = NULL, $plugin_id = NULL) {
+function devel_dump($input, ?string $name = NULL, $plugin_id = NULL) {
   Drupal::service('devel.dumper')->dump($input, $name, $plugin_id);
 }
 
@@ -308,7 +308,7 @@ function devel_dump($input, $name = NULL, $plugin_id = NULL) {
  *
  * @param mixed $input
  *   The variable to dump.
- * @param string $name
+ * @param string|null $name
  *   (optional) The label to output before variable, defaults to NULL.
  * @param string $plugin_id
  *   (optional) The plugin ID, defaults to NULL.
@@ -318,7 +318,7 @@ function devel_dump($input, $name = NULL, $plugin_id = NULL) {
  *
  * @see \Drupal\devel\DevelDumperManager::export()
  */
-function devel_export($input, $name = NULL, $plugin_id = NULL) {
+function devel_export($input, ?string $name = NULL, $plugin_id = NULL) {
   return Drupal::service('devel.dumper')->export($input, $name, $plugin_id);
 }
 
@@ -338,7 +338,7 @@ function devel_export($input, $name = NULL, $plugin_id = NULL) {
  *
  * @see \Drupal\devel\DevelDumperManager::message()
  */
-function devel_message(mixed $input, ?string $name = NULL, string $type = MessengerInterface::TYPE_STATUS, string $plugin_id = NULL): void {
+function devel_message(mixed $input, ?string $name = NULL, string $type = MessengerInterface::TYPE_STATUS, ?string $plugin_id = NULL): void {
   Drupal::service('devel.dumper')
     ->message(input: $input, name: $name, type: $type, plugin_id: $plugin_id);
 }
@@ -350,7 +350,7 @@ function devel_message(mixed $input, ?string $name = NULL, string $type = Messen
  *
  * @param mixed $input
  *   The variable to log to the drupal_debug.txt log file.
- * @param string $name
+ * @param string|null $name
  *   (optional) If set, a label to output before $data in the log file.
  * @param string $plugin_id
  *   (optional) The plugin ID, defaults to NULL.
@@ -360,7 +360,7 @@ function devel_message(mixed $input, ?string $name = NULL, string $type = Messen
  *
  * @see \Drupal\devel\DevelDumperManager::debug()
  */
-function devel_debug($input, $name = NULL, $plugin_id = NULL) {
+function devel_debug($input, ?string $name = NULL, $plugin_id = NULL) {
   return Drupal::service('devel.dumper')->debug($input, $name, $plugin_id);
 }
 
@@ -394,63 +394,8 @@ if (!function_exists('ddm')) {
    *
    * @see \Drupal\devel\DevelDumperManager::debug()
    */
-  function ddm($data, $label = NULL) {
+  function ddm($data, ?string $label = NULL) {
     return Drupal::service('devel.dumper')->debug($data, $label, 'default');
-  }
-
-}
-
-if (!function_exists('kint')) {
-
-  /**
-   * Prints passed argument(s) using Kint debug tool.
-   *
-   * Wrapper for DevelDumperManager::dump().
-   *
-   * @see \Drupal\devel\DevelDumperManager::dump()
-   */
-  function kint() {
-    $args = func_get_args();
-    if (count($args) == 1) {
-      // Pass a single argument directly, which works for any plug-in.
-      $args = $args[0];
-      $name = NULL;
-    }
-    else {
-      // Pass an array marked with a special name. The kint plug-in expands the
-      // arguments and prints each separately.
-      $name = '__ARGS__';
-    }
-
-    Drupal::service('devel.dumper')->dump($args, $name, 'kint');
-  }
-
-}
-
-if (!function_exists('ksm')) {
-
-  /**
-   * Prints passed argument(s) to the 'message' area of the page.
-   *
-   * Wrapper for DevelDumperManager::message().
-   *
-   * @see \Drupal\devel\DevelDumperManager::message()
-   */
-  function ksm(): void {
-    $args = func_get_args();
-    if (count($args) == 1) {
-      // Pass a single argument directly, which works for any plug-in.
-      $args = $args[0];
-      $name = NULL;
-    }
-    else {
-      // Pass an array marked with a special name. The kint plug-in expands the
-      // arguments and prints each separately.
-      $name = '__ARGS__';
-    }
-
-    Drupal::service('devel.dumper')
-      ->message(input: $args, name: $name, plugin_id: 'kint');
   }
 
 }
@@ -476,7 +421,7 @@ if (!function_exists('ksm')) {
  *
  * @see \Drupal\devel\DevelDumperManager::message()
  */
-function dpm(mixed $input, string $name = NULL, string $type = MessengerInterface::TYPE_STATUS, bool $load_dependencies = FALSE): mixed {
+function dpm(mixed $input, ?string $name = NULL, string $type = MessengerInterface::TYPE_STATUS, bool $load_dependencies = FALSE): mixed {
   Drupal::service('devel.dumper')
     ->message(input: $input, name: $name, type: $type, load_references: $load_dependencies);
 
@@ -512,7 +457,7 @@ function dvm(mixed $input, ?string $name = NULL, bool $load_dependencies = FALSE
 /**
  * An alias for dpm(), for historic reasons.
  */
-function dsm($input, $name = NULL, $load_dependencies = FALSE) {
+function dsm($input, ?string $name = NULL, $load_dependencies = FALSE) {
   Drupal::service('devel.dumper')
     ->message(input: $input, name: $name, load_references: $load_dependencies);
 }
@@ -524,21 +469,9 @@ function dsm($input, $name = NULL, $load_dependencies = FALSE) {
  *
  * @see \Drupal\devel\DevelDumperManager::dumpOrExport()
  */
-function dpr($input, $export = FALSE, $name = NULL) {
+function dpr($input, $export = FALSE, ?string $name = NULL) {
   return Drupal::service('devel.dumper')
     ->dumpOrExport(input: $input, name: $name, export: $export, plugin_id: 'default');
-}
-
-/**
- * Wrapper for DevelDumperManager::dumpOrExport().
- *
- * An alias for devel_dump(). Saves carpal tunnel syndrome.
- *
- * @see \Drupal\devel\DevelDumperManager::dumpOrExport()
- */
-function kpr($input, $export = FALSE, $name = NULL) {
-  return Drupal::service('devel.dumper')
-    ->dumpOrExport(input: $input, name: $name, export: $export);
 }
 
 /**
@@ -548,7 +481,7 @@ function kpr($input, $export = FALSE, $name = NULL) {
  *
  * @see \Drupal\devel\DevelDumperManager::dumpOrExport()
  */
-function dvr($input, $export = FALSE, $name = NULL) {
+function dvr($input, $export = FALSE, ?string $name = NULL) {
   return Drupal::service('devel.dumper')
     ->dumpOrExport(input: $input, name: $name, export: $export, plugin_id: 'drupal_variable');
 }
@@ -573,13 +506,13 @@ function dargs($always = TRUE) {
  * @param bool $return
  *   Whether to return the string. Default is FALSE, meaning to print it
  *   and return $query instead.
- * @param string $name
+ * @param string|null $name
  *   Optional name for identifying the output.
  *
  * @return object|string
  *   The $query object, or the query string if $return was TRUE.
  */
-function dpq($query, $return = FALSE, $name = NULL) {
+function dpq($query, $return = FALSE, ?string $name = NULL) {
   if (Drupal::currentUser()->hasPermission('access devel information')) {
     if (method_exists($query, 'preExecute')) {
       $query->preExecute();

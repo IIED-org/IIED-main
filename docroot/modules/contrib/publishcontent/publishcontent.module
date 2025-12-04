@@ -6,13 +6,12 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\publishcontent\Access\PublishContentAccess;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function publishcontent_form_node_form_alter(&$form, FormStateInterface $form_state) {
-  $config = \Drupal::config('publishcontent.settings');
+  $config = Drupal::config('publishcontent.settings');
   $form['status']['widget']['value']['#title'] = $config->get('publish_text_value');
   if (!array_key_exists('#default_value', $form['status']['widget']['value'])) {
     $form['status']['widget']['value']['#default_value'] = 0;
@@ -27,10 +26,11 @@ function publishcontent_form_node_form_alter(&$form, FormStateInterface $form_st
   if (!empty($form['status']) && empty($form['status']['#access'])) {
     $user = Drupal::currentUser();
     $node = $form_state->getFormObject()->getEntity();
-    $publishContentAccess = new PublishContentAccess();
+    /** @var \Drupal\publishcontent\Access\PublishContentAccess $publish_content_access */
+    $publish_content_access = Drupal::service('publishcontent.access');
     $form['status']['#access'] = TRUE;
 
-    if (!$publishContentAccess->access($user, $node)->isAllowed()) {
+    if (!$publish_content_access->access($user, $node)->isAllowed()) {
       $form['status']['#disabled'] = TRUE;
       $form['status']['widget']['value']['#description'] = t('You can not change the @published status.', [
         '@published' => $config->get('publish_text_value'),

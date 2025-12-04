@@ -17,9 +17,10 @@ final class Composite implements ResourceDetectorInterface
     {
     }
 
+    #[\Override]
     public function getResource(): ResourceInfo
     {
-        $resource = ResourceInfoFactory::emptyResource();
+        $resource = ResourceInfoFactory::mandatoryResource();
         foreach ($this->resourceDetectors as $resourceDetector) {
             $resource = $resource->merge($resourceDetector->getResource());
         }

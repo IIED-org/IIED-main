@@ -34,6 +34,9 @@ class LayoutClassesTest extends TestBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function testDsTestLayouts() {
+    $add_machine_name_column = (int) \Drupal::VERSION >= 11;
+    $colspan = $add_machine_name_column ? 9 : 8;
+
     // Check that the ds_3col_equal_width layout is not available (through the
     // alter).
     $this->drupalGet('admin/structure/types/manage/article/display');
@@ -183,7 +186,7 @@ class LayoutClassesTest extends TestBase {
     ];
     $this->drupalGet('admin/structure/types/manage/article/display/full');
     $this->submitForm($edit, 'Save');
-    $this->assertSession()->responseContains('<td colspan="9">' . t('Block region') . '</td>');
+    $this->assertSession()->responseContains('<td colspan="' . $colspan . '">' . t('Block region') . '</td>');
 
     // Configure fields.
     $fields = [
@@ -197,8 +200,8 @@ class LayoutClassesTest extends TestBase {
     // Change layout via admin/structure/ds/change-layout.
     // First verify that header and footer are not here.
     $this->drupalGet('admin/structure/types/manage/article/display/full');
-    $this->assertSession()->responseNotContains('<td colspan="8">' . t('Header') . '</td>');
-    $this->assertSession()->responseNotContains('<td colspan="8">' . t('Footer') . '</td>');
+    $this->assertSession()->responseNotContains('<td colspan="' . $colspan . '">' . t('Header') . '</td>');
+    $this->assertSession()->responseNotContains('<td colspan="' . $colspan . '">' . t('Footer') . '</td>');
 
     // Remap the regions.
     $edit = [
@@ -211,9 +214,9 @@ class LayoutClassesTest extends TestBase {
     $this->drupalGet('admin/structure/types/manage/article/display/full');
 
     // Verify new regions.
-    $this->assertSession()->responseContains('<td colspan="9">' . t('Header') . '</td>');
-    $this->assertSession()->responseContains('<td colspan="9">' . t('Footer') . '</td>');
-    $this->assertSession()->responseContains('<td colspan="9">' . t('Block region') . '</td>');
+    $this->assertSession()->responseContains('<td colspan="' . $colspan . '">' . t('Header') . '</td>');
+    $this->assertSession()->responseContains('<td colspan="' . $colspan . '">' . t('Footer') . '</td>');
+    $this->assertSession()->responseContains('<td colspan="' . $colspan . '">' . t('Block region') . '</td>');
 
     // Verify settings.
     /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $entity_display */
@@ -228,7 +231,7 @@ class LayoutClassesTest extends TestBase {
 
     // Check regions of fields.
     $body = $entity_display->getComponent('body');
-    $this->assertEquals($body['region'], 'footer');
+    $this->assertEquals('footer', $body['region']);
 
     // Test that a default view mode with no layout is not affected by a
     // disabled view mode.

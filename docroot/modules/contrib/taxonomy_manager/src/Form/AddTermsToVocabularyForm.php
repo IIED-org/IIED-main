@@ -49,7 +49,7 @@ class AddTermsToVocabularyForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL, $parents = []) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?VocabularyInterface $taxonomy_vocabulary = NULL, $parents = []) {
     // Cache form state so that we keep the parents in the modal dialog.
     // For non modals (non POST request), form state caching on is not allowed.
     // @see FormState::setCached()

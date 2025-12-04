@@ -15,6 +15,7 @@ use FileEye\MimeMap\Extension;
 use FileEye\MimeMap\Map\AbstractMap;
 use FileEye\MimeMap\Map\DefaultMap;
 use FileEye\MimeMap\MapHandler;
+use FileEye\MimeMap\MappingException;
 use FileEye\MimeMap\Type;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -55,8 +56,8 @@ class MimeMapManager implements MimeMapManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function isMapClassValid(string $map_class): bool {
-    if (class_exists($map_class) && in_array(AbstractMap::class, class_parents($map_class))) {
+  public function isMapClassValid(string $mapClass): bool {
+    if (class_exists($mapClass) && in_array(AbstractMap::class, class_parents($mapClass))) {
       return TRUE;
     }
     return FALSE;
@@ -77,8 +78,8 @@ class MimeMapManager implements MimeMapManagerInterface {
           break;
 
         case static::CUSTOM_MAP:
-          $map_class = $this->sophronSettings->get('map_class');
-          $this->setMapClass($this->isMapClassValid($map_class) ? $map_class : DrupalMap::class);
+          $mapClass = $this->sophronSettings->get('map_class');
+          $this->setMapClass($this->isMapClassValid($mapClass) ? $mapClass : DrupalMap::class);
           break;
 
       }
@@ -89,12 +90,12 @@ class MimeMapManager implements MimeMapManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function setMapClass(string $map_class): MimeMapManagerInterface {
-    $this->currentMapClass = $map_class;
-    if (!isset($this->initializedMapClasses[$map_class])) {
-      $event = new MapEvent($map_class);
+  public function setMapClass(string $mapClass): MimeMapManagerInterface {
+    $this->currentMapClass = $mapClass;
+    if (!isset($this->initializedMapClasses[$mapClass])) {
+      $event = new MapEvent($mapClass);
       $this->eventDispatcher->dispatch($event, MapEvent::INIT);
-      $this->initializedMapClasses[$map_class] = $event->getErrors();
+      $this->initializedMapClasses[$mapClass] = $event->getErrors();
     }
     return $this;
   }
@@ -102,9 +103,9 @@ class MimeMapManager implements MimeMapManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getMappingErrors(string $map_class): array {
-    $this->setMapClass($map_class);
-    return $this->initializedMapClasses[$map_class] ?? [];
+  public function getMappingErrors(string $mapClass): array {
+    $this->setMapClass($mapClass);
+    return $this->initializedMapClasses[$mapClass] ?? [];
   }
 
   /**
@@ -147,6 +148,56 @@ class MimeMapManager implements MimeMapManagerInterface {
         'description' => $is_sophron_guessing ? $this->t('The <strong>Sophron guesser</strong> module is providing MIME type guessing. <a href=":url">Uninstall the module</a> to revert to Drupal core guessing.', [':url' => Url::fromRoute('system.modules_uninstall')->toString()]) : $this->t('Drupal core is providing MIME type guessing. <a href=":url">Install the <strong>Sophron guesser</strong> module</a> to allow the enhanced guessing provided by Sophron.', [':url' => Url::fromRoute('system.modules_list')->toString()]),
       ],
     ];
+  }
+
+  /**
+   * Returns an array of gaps of a map vs Drupal's core mapping.
+   *
+   * @param class-string<\FileEye\MimeMap\Map\MimeMapInterface> $mapClass
+   *   A FQCN.
+   *
+   * @return array
+   *   An array of simple arrays, each having a file extension, its Drupal MIME
+   *   type guess, and a gap information.
+   *
+   * @todo add to interface in sophron:3.0.0
+   */
+  public function determineMapGaps(string $mapClass): array {
+    $currentMapClass = $this->getMapClass();
+    $this->setMapClass($mapClass);
+
+    $core_extended_guesser = new CoreExtensionMimeTypeGuesserExtended();
+
+    $extensions = $core_extended_guesser->listExtensions();
+    sort($extensions);
+
+    $rows = [];
+    foreach ($extensions as $ext) {
+      $drupal_mime_type = $core_extended_guesser->guessMimeType('a.' . (string) $ext);
+
+      $extension = $this->getExtension((string) $ext);
+      try {
+        $mimemap_mime_type = $extension->getDefaultType();
+      }
+      catch (MappingException $e) {
+        $mimemap_mime_type = '';
+      }
+
+      $gap = '';
+      if ($mimemap_mime_type === '') {
+        $gap = $this->t('No MIME type mapped to this file extension.');
+      }
+      elseif (mb_strtolower($drupal_mime_type) != mb_strtolower($mimemap_mime_type)) {
+        $gap = $this->t("File extension mapped to '@type' instead.", ['@type' => $mimemap_mime_type]);
+      }
+
+      if ($gap !== '') {
+        $rows[] = [(string) $ext, $drupal_mime_type, $gap];
+      }
+    }
+
+    $this->setMapClass($currentMapClass);
+    return $rows;
   }
 
 }

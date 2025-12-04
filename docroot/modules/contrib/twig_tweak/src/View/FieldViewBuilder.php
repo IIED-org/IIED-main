@@ -49,7 +49,7 @@ class FieldViewBuilder {
     EntityInterface $entity,
     string $field_name,
     $view_mode = 'full',
-    string $langcode = NULL,
+    ?string $langcode = NULL,
     bool $check_access = TRUE,
   ): array {
 

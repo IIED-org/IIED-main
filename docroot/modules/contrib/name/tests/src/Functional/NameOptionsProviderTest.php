@@ -67,7 +67,7 @@ class NameOptionsProviderTest extends NameTestBase {
     $field->getConfig('entity_test')->setSettings($settings)->save();
 
     $expected = [
-      '' => '--',
+      '_none' => '--',
       'b' => 'b',
       'a' => 'a',
       'c' => 'c',
@@ -78,7 +78,7 @@ class NameOptionsProviderTest extends NameTestBase {
     $settings['sort_options']['title'] = TRUE;
     $field->getConfig('entity_test')->setSettings($settings)->save();
     $expected = [
-      '' => '--',
+      '_none' => '--',
       'a' => 'a',
       'b' => 'b',
       'c' => 'c',
@@ -115,7 +115,7 @@ class NameOptionsProviderTest extends NameTestBase {
     $field->getConfig('entity_test')->setSettings($settings)->save();
 
     $expected = [
-      '' => '--',
+      '_none' => '--',
       'bar' => 'bar',
       'baz' => 'baz',
       'foo' => 'foo',

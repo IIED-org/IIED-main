@@ -7,7 +7,9 @@
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\SearchApiException;
@@ -125,30 +127,6 @@ function template_preprocess_search_api_admin_data_type_table(array &$variables)
 }
 
 /**
- * Prepares variables for search_api_form_item_list form templates.
- *
- * Default template: search-api-form-item-list.html.twig.
- *
- * @param array &$variables
- *   Associative array of template variables, with the following structure:
- *   - element: The element to be rendered, as an array, potentially containing
- *     a "#title" key, plus the list items as its children.
- */
-function template_preprocess_search_api_form_item_list(array &$variables) {
-  $element = $variables['element'];
-
-  $variables['items'] = [
-    '#theme' => 'item_list',
-  ];
-  if (!empty($element['#title'])) {
-    $variables['items']['#title'] = $element['#title'];
-  }
-  foreach (Element::children($element) as $key) {
-    $variables['items']['#items'][$key] = $element[$key];
-  }
-}
-
-/**
  * Prepares variables for search_api_server form templates.
  *
  * Default template: search-api-server.html.twig.
@@ -164,7 +142,7 @@ function template_preprocess_search_api_server(array &$variables) {
 
   if (($description = $server->getDescription())) {
     // Sanitize the description and append to the output.
-    $variables['description'] = $description;
+    $variables['description'] = Markup::create(Xss::filterAdmin($description));
   }
 
   // Initialize the $rows variable which will hold the different parts of server
@@ -282,7 +260,7 @@ function template_preprocess_search_api_index(array &$variables) {
 
   if (($description = $index->getDescription())) {
     // Sanitize the description and append to the output.
-    $variables['description'] = $description;
+    $variables['description'] = Markup::create(Xss::filterAdmin($description));
   }
 
   // Initialize the $rows variable which will hold the different parts of server

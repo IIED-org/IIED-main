@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Theme override of an image.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the img tag.
+ * - style_name: (optional) The name of the image style applied.
+ *
+ * @see template_preprocess_image()
+ */
+#}
+
+{% set image_classes = [
+      'object-cover', 
+      'object-center', 
+      'mb-4 border', 
+      'border-gray-200', 
+      'rounded', 
+      'shadow-sm',
+      'bg-iiedblue-50',
+      'md:w-48',
+      'xl:w-80',
+      'active:bg-gray-100',
+	] 
+%}
+
+<img {{ attributes.addClass(image_classes) }} />

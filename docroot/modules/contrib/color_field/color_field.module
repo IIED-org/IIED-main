@@ -147,7 +147,7 @@ function color_field_token_info(): array {
 /**
  * Implements hook_tokens().
  */
-function color_field_tokens(string $type, array $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
+function color_field_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
   $replacements = [];
 
   if ($type === 'color_field' && !empty($data['color_field'])) {
@@ -173,6 +173,7 @@ function color_field_tokens(string $type, array $tokens, array $data, array $opt
           break;
 
         case 'rgba':
+        case 'rgb:rgba':
           $replacements[$original] = $color_hex->toRgb()->toString(TRUE);
 
           break;

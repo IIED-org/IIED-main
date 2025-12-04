@@ -21,7 +21,7 @@ class TermMergerTermCrudTest extends MergeTermsTestBase {
    *   - methodName: the selected method for merging to the target term.
    *   - target: a string representing the target taxonomy term.
    */
-  public function mergeTermFunctionsProvider(): array {
+  public static function mergeTermFunctionsProvider(): array {
 
     $functions['::mergeIntoNewTerm'] = [
       'methodName' => 'mergeIntoNewTerm',

@@ -55,6 +55,9 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
       ->willReturn(TRUE);
     $cache_default = $this->getMockBuilder('Drupal\Core\Cache\MemoryBackend')->disableOriginalConstructor()->getMock();
 
+    // Effectively disable the memory cache.
+    $cache_default->method('get')->willReturn(FALSE);
+
     return new AcquiaSearchApiClient(
       $this->createMock(LoggerChannelInterface::class),
       $subscription,
@@ -69,6 +72,7 @@ final class PreferredCoreServiceTest extends AcquiaSearchTestCase {
    * @dataProvider availableCoresData
    */
   public function testGetListOfAvailableCores(array $indexes, array $expected): void {
+    drupal_static_reset('acquia_search_available_cores');
     $client = new Client([
       'handler' => HandlerStack::create(
         new MockHandler([

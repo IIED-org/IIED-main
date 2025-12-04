@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
@@ -125,7 +126,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 			}
 
 			$phpcsFile->fixer->beginChangeset();
-			$phpcsFile->fixer->addContentBefore($namePointer, NamespaceHelper::NAMESPACE_SEPARATOR);
+			FixerHelper::addBefore($phpcsFile, $namePointer, NamespaceHelper::NAMESPACE_SEPARATOR);
 			$phpcsFile->fixer->endChangeset();
 		}
 	}
@@ -135,9 +136,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	 */
 	protected function getNormalizedInclude(): array
 	{
-		if ($this->normalizedInclude === null) {
-			$this->normalizedInclude = $this->normalizeNames($this->include);
-		}
+		$this->normalizedInclude ??= $this->normalizeNames($this->include);
 		return $this->normalizedInclude;
 	}
 
@@ -146,9 +145,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	 */
 	private function getNormalizedExclude(): array
 	{
-		if ($this->normalizedExclude === null) {
-			$this->normalizedExclude = $this->normalizeNames($this->exclude);
-		}
+		$this->normalizedExclude ??= $this->normalizeNames($this->exclude);
 		return $this->normalizedExclude;
 	}
 

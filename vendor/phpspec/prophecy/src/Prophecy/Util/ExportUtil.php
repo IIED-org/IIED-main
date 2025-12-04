@@ -131,9 +131,9 @@ class ExportUtil
                 return 'Binary String: 0x'.bin2hex($value);
             }
 
-            return "'".
-            str_replace(array("\r\n", "\n\r", "\r"), array("\n", "\n", "\n"), $value).
-            "'";
+            return "'"
+            .str_replace(array("\r\n", "\n\r", "\r"), array("\n", "\n", "\n"), $value)
+            ."'";
         }
 
         $whitespace = str_repeat(' ', 4 * $indentation);
@@ -147,7 +147,6 @@ class ExportUtil
                 return 'Array &'.$key;
             }
 
-            \assert(\is_array($value));
             $array  = $value;
             $key    = $processed->add($value);
             $values = '';
@@ -172,12 +171,10 @@ class ExportUtil
             $class = get_class($value);
 
             if ($processed->contains($value)) {
-                \assert(\is_object($value));
                 return sprintf('%s#%d Object', $class, spl_object_id($value));
             }
 
             $processed->add($value);
-            \assert(\is_object($value));
             $values = '';
             $array  = self::toArray($value);
 

@@ -137,7 +137,6 @@ abstract class AcquiaConnectorTestBase extends KernelTestBase {
     if (!$data) {
       $data = [
         'access_token' => 'ACCESS_TOKEN',
-        'refresh_token' => 'REFRESH_TOKEN',
       ];
     }
 

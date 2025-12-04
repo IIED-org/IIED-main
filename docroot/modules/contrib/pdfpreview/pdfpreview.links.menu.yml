@@ -1,0 +1,5 @@
+pdfpreview.settings:
+  title: PDF Preview
+  description: 'Configure PDF Preview settings'
+  route_name: pdfpreview.settings
+  parent: system.admin_config_media

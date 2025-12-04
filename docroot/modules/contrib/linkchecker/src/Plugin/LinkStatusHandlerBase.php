@@ -175,8 +175,25 @@ abstract class LinkStatusHandlerBase extends PluginBase implements LinkStatusHan
    * Helper function to switch session.
    */
   protected function switchSession() {
-    // Switch anonymous user to an admin.
-    $this->accountSwitcher->switchTo(new UserSession(['uid' => user_load_by_name($this->linkcheckerSetting->get('error.impersonate_account'))]));
+    // Switch to the user that is configured as impersonate_account.
+    $loadedUser = user_load_by_name($this->linkcheckerSetting->get('error.impersonate_account'));
+
+    if (empty($loadedUser)) {
+      $loadedUser = user_load_by_name('admin');
+      // Theoretically admin user could be renamed, so try to load it by id.
+      if (!$loadedUser) {
+        $loadedUser = $this->entityTypeManager->getStorage('user')->load(1);
+      }
+    }
+
+    $userSessionValues = [
+      'uid' => $loadedUser->id(),
+      'name' => $loadedUser->getAccountName(),
+      'roles' => $loadedUser->getRoles(),
+      'mail' => $loadedUser->getEmail(),
+    ];
+
+    $this->accountSwitcher->switchTo(new UserSession($userSessionValues));
   }
 
   /**

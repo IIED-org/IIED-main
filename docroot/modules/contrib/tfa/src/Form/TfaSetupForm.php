@@ -251,9 +251,9 @@ class TfaSetupForm extends FormBase {
       }
       // Record the method in progress regardless of whether in full setup.
       $storage['step_method'] = $method;
-      // Record the plugin label for use in errors.
-      $storage['plugin_label'] = $plugin['label'];
     }
+    // Record the plugin label for use in errors.
+    $storage['plugin_label'] = $plugin['label'] ?? $this->t('plugin');
     $form_state->setStorage($storage);
     return $form;
   }
@@ -311,7 +311,7 @@ class TfaSetupForm extends FormBase {
   public function cancelForm(array &$form, FormStateInterface $form_state) {
     $account = $form['account']['#value'];
     $storage = $form_state->getStorage();
-    $label = $storage['plugin_label'] ?? '';
+    $label = $storage['plugin_label'];
     $this->messenger()->addWarning($this->t('Setup of @plugin_label canceled.', ['@plugin_label' => $label]));
     $form_state->setRedirect('tfa.overview', ['user' => $account->id()]);
   }

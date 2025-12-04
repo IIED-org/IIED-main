@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\taxonomy\Entity\Term;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -38,6 +39,15 @@ class TaxonomyManagerAccessCheck implements AccessInterface {
     // vocabulary as a route param, get it from the taxonomy_term param.
     $taxonomyVocabulary = $route_match->getParameter('taxonomy_vocabulary')?->id() ?? $route_match->getParameter('taxonomy_term')?->bundle();
 
+    if (!$taxonomyVocabulary) {
+      // Check if there is a tid and get the vocabulary from the term.
+      $tid = $route_match->getParameter('tid');
+      if ($tid) {
+        $term = Term::load($tid);
+        $taxonomyVocabulary = $term->bundle();
+      }
+    }
+
     $routeName = $route_match->getRouteName();
     switch ($routeName) {
       case "taxonomy_manager.admin_vocabulary.delete":
@@ -48,6 +58,7 @@ class TaxonomyManagerAccessCheck implements AccessInterface {
 
       case "taxonomy_manager.admin_vocabulary.move":
       case 'taxonomy_manager.taxonomy_term.edit':
+      case 'taxonomy_manager.term_form':
         if ($account->hasPermission('edit terms in ' . $taxonomyVocabulary)) {
           return AccessResult::allowed()->cachePerPermissions();
         }

@@ -8,7 +8,7 @@ dependencies:
   - drupal:layout_builder
   - gin_toolbar:gin_toolbar
 
-# Information added by Drupal.org packaging script on 2024-08-02
-version: '1.0.0-rc8'
+# Information added by Drupal.org packaging script on 2025-05-06
+version: '1.0.0-rc9'
 project: 'gin_lb'
-datestamp: 1722577170
+datestamp: 1746521688

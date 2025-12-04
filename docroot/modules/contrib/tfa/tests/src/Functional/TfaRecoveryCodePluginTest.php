@@ -23,7 +23,7 @@ class TfaRecoveryCodePluginTest extends TfaTestBase {
   /**
    * Non-admin user account. Standard tfa user.
    *
-   * @var \Drupal\user\Entity\User
+   * @var \Drupal\user\UserInterface
    */
   public $userAccount;
 
@@ -75,7 +75,9 @@ class TfaRecoveryCodePluginTest extends TfaTestBase {
       ->save();
 
     $permissions = ['setup own tfa', 'disable own tfa'];
-    $this->userAccount = $this->createUser($permissions);
+    $user_account = $this->createUser($permissions);
+    $this->assertNotFalse($user_account);
+    $this->userAccount = $user_account;
 
     $this->tfaSetupManager = \Drupal::service('plugin.manager.tfa.setup');
     $this->setupPlugin = $this->tfaSetupManager->createInstance($this->validationPluginId . '_setup', ['uid' => $this->userAccount->id()]);

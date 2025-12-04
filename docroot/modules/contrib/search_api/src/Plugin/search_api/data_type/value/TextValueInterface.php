@@ -73,7 +73,7 @@ interface TextValueInterface extends \Stringable {
    *
    * @return $this
    */
-  public function setTokens(array $tokens = NULL);
+  public function setTokens(?array $tokens = NULL);
 
   /**
    * Retrieves the properties set for this text value.

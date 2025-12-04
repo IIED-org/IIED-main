@@ -8,6 +8,7 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldFilteredMarkup;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -16,6 +17,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Render\Element;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\TranslationStatusInterface;
 use Drupal\field_group\FormatterHelper;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -38,6 +40,12 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  *   }
  * )
  */
+#[FieldWidget(
+  id: 'paragraphs',
+  label: new TranslatableMarkup('Paragraphs (stable)'),
+  description: new TranslatableMarkup('The stable paragraphs inline form widget.'),
+  field_types: ['entity_reference_revisions']
+)]
 class ParagraphsWidget extends WidgetBase {
 
   /**
@@ -1142,8 +1150,9 @@ class ParagraphsWidget extends WidgetBase {
         else {
           $converted_paragraph = $converted_paragraphs[$key];
           if (!$converted_paragraph->hasTranslation($langcode)) {
+            $values = $paragraph_values instanceof ParagraphInterface ? $paragraph_values->toArray() : $paragraph_values;
             // Add the translation to the default translation paragraph.
-            $conversion_manager->addTranslation($converted_paragraph, $langcode, $paragraph_values);
+            $conversion_manager->addTranslation($converted_paragraph, $langcode, $values);
           }
         }
       }
@@ -1241,7 +1250,7 @@ class ParagraphsWidget extends WidgetBase {
    *     - label: The label of the paragraph type.
    *     - weight: The weight of the paragraph type.
    */
-  public function getAllowedTypes(FieldDefinitionInterface $field_definition = NULL) {
+  public function getAllowedTypes(?FieldDefinitionInterface $field_definition = NULL) {
 
     $return_bundles = array();
     /** @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface $selection_manager */
@@ -1524,7 +1533,7 @@ class ParagraphsWidget extends WidgetBase {
    * @return \Drupal\paragraphs\Entity\Paragraph[]
    *   Child paragraphs.
    */
-  protected function getChildParagraphs(FormStateInterface $form_state, $field_name, ParagraphInterface $paragraph = NULL, array $array_parents = []) {
+  protected function getChildParagraphs(FormStateInterface $form_state, $field_name, ?ParagraphInterface $paragraph = NULL, array $array_parents = []) {
 
     // Convert the parents structure which only includes field names and delta
     // to the full storage array key which includes a prefix and a subform.
@@ -1583,7 +1592,7 @@ class ParagraphsWidget extends WidgetBase {
    * @return array
    *   The built form structure.
    */
-  protected function buildNestedParagraphsFoDragDrop(FormStateInterface $form_state, ParagraphInterface $paragraph = NULL, array $array_parents = []) {
+  protected function buildNestedParagraphsFoDragDrop(FormStateInterface $form_state, ?ParagraphInterface $paragraph = NULL, array $array_parents = []) {
     // Look for nested elements.
     $elements = [];
     $field_definitions = [];
@@ -2340,7 +2349,7 @@ class ParagraphsWidget extends WidgetBase {
       $new_field_storage[$field_name] = $clear_paragraphs($new_field_storage[$field_name]);
     }
 
-    $reorder_paragraphs = function ($reorder_values, $parents = [], FieldableEntityInterface $parent_entity = NULL) use ($complete_field_storage, &$new_field_storage, &$reorder_paragraphs) {
+    $reorder_paragraphs = function ($reorder_values, $parents = [], ?FieldableEntityInterface $parent_entity = NULL) use ($complete_field_storage, &$new_field_storage, &$reorder_paragraphs) {
       foreach ($reorder_values as $field_name => $values) {
         foreach ($values['list'] as $delta => $item_values) {
           $old_keys = array_merge(

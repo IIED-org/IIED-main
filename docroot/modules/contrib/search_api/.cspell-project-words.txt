@@ -1,6 +1,5 @@
 bigrams
 datasource
-datasources
 foobaz
 foobuz
 freeland
@@ -9,12 +8,11 @@ hideable
 hurlbat
 montara
 nonspacing
-postprocessed
 postprocesses
 seidl
+setseed
 stopword
 stopwords
-unescapes
 unpreprocessed
 uppercased
 webtest

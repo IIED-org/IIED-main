@@ -141,7 +141,7 @@ class FieldFormatterFromViewDisplayTest extends KernelTestBase {
           </div>
 
 EXPECTED;
-    $this->assertEquals($expected_output, $build['test_er_field']['#markup']);
+    $this->assertEquals($expected_output, (string) $build['test_er_field']['#markup']);
   }
 
 }

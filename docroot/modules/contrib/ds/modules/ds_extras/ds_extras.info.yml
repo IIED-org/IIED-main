@@ -7,7 +7,7 @@ configure: admin/structure/ds/settings
 dependencies:
   - ds:ds
 
-# Information added by Drupal.org packaging script on 2024-08-03
-version: '8.x-3.23'
+# Information added by Drupal.org packaging script on 2025-05-05
+version: '8.x-3.30'
 project: 'ds'
-datestamp: 1722718291
+datestamp: 1746467922
