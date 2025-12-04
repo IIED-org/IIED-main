@@ -44,15 +44,17 @@
 		<!-- End define dataLayer and the gtag function -->
 		<head-placeholder token="{{ placeholder_token }}">
 			<title>{{ head_title|safe_join(' | ') }}</title>
+			<!-- 
+			<link rel="preload" href="/themes/custom/iied_tw/dist/fonts/lato-v25-latin-regular" as="font" type="font/woff2" />
+			<link rel="preload" href="/themes/custom/iied_tw/dist/fonts/noto-serif-v33-latin-regular" as="font" type="font/woff2" />
+			-->
 			<css-placeholder token="{{ placeholder_token }}">
-				<js-placeholder token="{{ placeholder_token }}"></head>
+				<js-placeholder token="{{ placeholder_token }}">
+				</head>
 				<body
 					id="page" {{ attributes }}>
 					<div>
-						{#
-						              Keyboard navigation/accessibility link to main content section in
-						              page.html.twig.
-						            #}
+						{# Keyboard navigation/accessibility link to main content section in page.html.twig #}
 						<a href="#main-content" class="visually-hidden focusable">
 							{{ 'Skip to main content'|t }}
 						</a>

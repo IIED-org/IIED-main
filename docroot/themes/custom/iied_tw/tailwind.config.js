@@ -13,7 +13,7 @@ module.exports = {
     },
 
     extend: {
-            fontFamily: {
+      fontFamily: {
         sans: ['Lato', 'sans-serif'],
         headline: ['Noto Serif', 'serif'], 
       },
