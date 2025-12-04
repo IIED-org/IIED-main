@@ -18,3 +18,9 @@ effects:
       width: null
       height: 270
       upscale: false
+  383bc673-05b5-4cad-9300-68fe32fb6127:
+    uuid: 383bc673-05b5-4cad-9300-68fe32fb6127
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp
