@@ -38,3 +38,6 @@ tailwind.css
 
 # Remove flexslider pending review
 docroot/libraries/flexslider
+
+# Ignore environment-specific .htaccess
+docroot/.htaccess
