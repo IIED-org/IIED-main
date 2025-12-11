@@ -1,7 +1,11 @@
 {#
 For general featured card display
 #}
-
+{% if (node.field_short_title.value) %}
+	{% set title_text = node.field_short_title.value %}
+{% else %}
+	{% set title_text = node.label %}
+{% endif %}
 <article{{attributes.addClass('h-full')}}>
 
 	<a href="{{ url }}" class="hover:no-underline">
@@ -10,7 +14,7 @@ For general featured card display
 
 			<div class="max-h-44 md:max-h-56 lg:max-h-96 w-3/12 p-2">
 				<div class="w-fit sm:w-fit sm:-rotate-3 group-hover:-rotate-2 group-hover:scale-110 m-auto transition duration-300 ease-out shadow-lg">
-          {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'embedded', 'img_style':'card_370' } %}
+          {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'embedded', 'img_style':'card_370', 'alt_text': title_text|striptags  } %}
 				</div>
 
 				<div class="flex flex-col justify-between w-9/12 h-full p-4">

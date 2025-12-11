@@ -237,3 +237,9 @@ function iied_tw_preprocess_taxonomy_term(&$variables)
     }
   }
 }
+
+// function iied_tw_preprocess_image(&$variables) {
+//   if (empty($variables['attributes']['alt'])) {
+//     $variables['attributes']['alt'] = "Cover image";
+//   }
+// }

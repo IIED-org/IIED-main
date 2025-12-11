@@ -2,7 +2,11 @@
 For general solo card display
 Minor mod of pub card md where sm: has been replaced with lg:
 #}
-
+{% if (node.field_short_title.value) %}
+	{% set title_text = node.field_short_title.value %}
+{% else %}
+	{% set title_text = node.label %}
+{% endif %}
 <article{{attributes.addClass('h-full')}}>
 
 	<a href="{{ url }}" class="hover:no-underline">
@@ -11,7 +15,7 @@ Minor mod of pub card md where sm: has been replaced with lg:
 				<div
 					class="w-fit lg:w-fit lg:-rotate-3 group-hover:-rotate-2 group-hover:scale-110 m-auto transition duration-300 ease-out shadow-lg">
 					{# TODO fix card image displays #}
-					{% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'card_cover', 'img_style':'card_cover' } %}
+					{% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'card_cover', 'img_style':'card_cover', 'alt_text': title_text|striptags } %}
 				</div>
 			</div>
 

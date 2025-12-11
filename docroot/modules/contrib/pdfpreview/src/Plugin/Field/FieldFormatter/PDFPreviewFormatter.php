@@ -203,6 +203,12 @@ class PDFPreviewFormatter extends ImageFormatter {
         $item_attributes['alt'] = $item->description;
         $item_attributes['title'] = $item->description;
       }
+      else {
+        // Use filename without extension as fallback for accessibility.
+        $filename = pathinfo($file->getFilename(), PATHINFO_FILENAME);
+        $item_attributes['alt'] = $this->t('Preview of @filename', ['@filename' => $filename]);
+        $item_attributes['title'] = $this->t('Preview of @filename', ['@filename' => $filename]);
+      }
       $item_attributes['class'][] = 'pdfpreview-file';
 
       // Separate the PDF previews from the other files.

@@ -63,9 +63,9 @@ x-data="{swiper: null}"
     })"
 >
 
-  <div class="absolute inset-y-0 left-0 z-10 flex items-center transform -translate-y-1/2 top-1/2">
-    <button @click="swiper.slidePrev()" class="flex items-center justify-center w-10 h-10 -ml-2 bg-white border border-gray-300 rounded-full lg:-ml-4 focus:outline-none">
-      <svg viewbox="0 0 20 20" fill="currentColor" class="w-6 h-6 chevron-left">
+  <div class="top-1/2 absolute inset-y-0 left-0 z-10 flex items-center transform -translate-y-1/2">
+    <button alt="< previous" @click="swiper.slidePrev()" class="lg:-ml-4 focus:outline-none flex items-center justify-center w-10 h-10 -ml-2 bg-white border border-gray-300 rounded-full">
+      <svg viewbox="0 0 20 20" fill="currentColor" class="chevron-left w-6 h-6">
         <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
       </svg>
     </button>
@@ -93,9 +93,9 @@ x-data="{swiper: null}"
     </div>
   </div>
 
-  <div class="absolute inset-y-0 right-0 z-10 flex items-center transform -translate-y-1/2 top-1/2">
-    <button @click="swiper.slideNext()" class="flex items-center justify-center w-10 h-10 -mr-2 bg-white border border-gray-300 rounded-full lg:-mr-4 focus:outline-none">
-      <svg viewbox="0 0 20 20" fill="currentColor" class="w-6 h-6 chevron-right">
+  <div class="top-1/2 absolute inset-y-0 right-0 z-10 flex items-center transform -translate-y-1/2">
+    <button alt="next >" @click="swiper.slideNext()" class="lg:-mr-4 focus:outline-none flex items-center justify-center w-10 h-10 -mr-2 bg-white border border-gray-300 rounded-full">
+      <svg viewbox="0 0 20 20" fill="currentColor" class="chevron-right w-6 h-6">
         <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
       </svg>
     </button>

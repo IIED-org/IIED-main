@@ -3,12 +3,16 @@
 {% set display_mode = display_mode ? display_mode : 'embedded' %}
 {% if content.field_cover_image[0] and node.field_cover_image|file_uri %}
 	{% set image_uri = node.field_cover_image|file_uri %}
-	{% set image_alt = node.field_cover_image.alt %}
+	{% if (content.field_cover_image['#items'].entity.field_media_image.alt is empty)  %}
+		{% set image_alt = "Preview of \'" ~ alt_text ~ "\'" %}
+	{% else %}
+		{% set image_alt = content.field_cover_image['#items'].entity.field_media_image.alt %}
+	{% endif %}
 	<img src="{{ image_uri|image_style(img_style) }}" alt="{{ image_alt }}"/>
-  {% else %}
+{% else %}
   {% set media_uri = node.field_media[0]|file_uri %}
   {% if (media_uri is not null) %}
-    {{ (node.field_media[0].entity|view(display_mode)) }}
+		{{ (node.field_media[0].entity|view(display_mode)) }}
   {% else %}
 	<svg alt="Default document cover" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="flex-no-shrink w-full fill-current" viewbox="0 0 256 256" xml:space="preserve">
 		<defs></defs>

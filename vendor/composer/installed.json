@@ -10746,6 +10746,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3344262 Add alt text": "https://www.drupal.org/files/issues/2025-08-15/pdfpreview-missing-alt-text.patch"
                 }
             },
             "installation-source": "dist",

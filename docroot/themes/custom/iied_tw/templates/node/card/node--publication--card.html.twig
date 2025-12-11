@@ -1,9 +1,14 @@
 {% extends '@iied_tw/node/card/node--card.html.twig' %}
+  {% block title %}
+    {% if (node.field_short_title.value) %}
+      {% set title_text = node.field_short_title.value %}
+    {% else %}
+      {% set title_text = node.label %}
+    {% endif %}
+  {% endblock %}
   {% block image %}
-  <div class="not-prose items-start w-2/12 shadow-lg">
     {# Insert publication image with default settings #}
-    {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'card_cover', 'img_style':'card_cover' } %} 
-  </div> 
+    {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'card_cover', 'img_style':'card_cover', 'alt_text': title_text|striptags } %}
   {% endblock %} 
   {% block date %}
       <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.field_date_published.value|date('d F Y') }} </p>
