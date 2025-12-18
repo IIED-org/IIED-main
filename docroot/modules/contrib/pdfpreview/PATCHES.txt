@@ -5,3 +5,7 @@ Patches applied to this directory:
 Source: https://www.drupal.org/files/issues/2025-08-15/pdfpreview-missing-alt-text.patch
 
 
+3344262 test for empty
+Source: patches/3344262-pdfpreview-missing-alt-text.patch
+
+

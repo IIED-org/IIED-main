@@ -10748,7 +10748,8 @@
                     }
                 },
                 "patches_applied": {
-                    "3344262 Add alt text": "https://www.drupal.org/files/issues/2025-08-15/pdfpreview-missing-alt-text.patch"
+                    "3344262 Add alt text": "https://www.drupal.org/files/issues/2025-08-15/pdfpreview-missing-alt-text.patch",
+                    "3344262 test for empty": "patches/3344262-pdfpreview-missing-alt-text.patch"
                 }
             },
             "installation-source": "dist",

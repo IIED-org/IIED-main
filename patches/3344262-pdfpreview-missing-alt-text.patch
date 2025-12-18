@@ -1,0 +1,11 @@
+--- a//modules/contrib/pdfpreview/src/Plugin/Field/FieldFormatter/PDFPreviewFormatter.php
++++ b/modules/contrib/pdfpreview/src/Plugin/Field/FieldFormatter/PDFPreviewFormatter.php
+@@ -199,7 +199,7 @@ public function viewElements(FieldItemListInterface $items, $langcode) {
+       $item_attributes = $item->_attributes;
+       unset($item->_attributes);
+ 
+-      if (isset($item->description)) {
++      if (!empty($item->description)) {
+         $item_attributes['alt'] = $item->description;
+         $item_attributes['title'] = $item->description;
+       }

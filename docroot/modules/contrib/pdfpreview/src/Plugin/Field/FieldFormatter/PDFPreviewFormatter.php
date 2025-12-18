@@ -199,7 +199,7 @@ class PDFPreviewFormatter extends ImageFormatter {
       $item_attributes = $item->_attributes;
       unset($item->_attributes);
 
-      if (isset($item->description)) {
+      if (!empty($item->description)) {
         $item_attributes['alt'] = $item->description;
         $item_attributes['title'] = $item->description;
       }

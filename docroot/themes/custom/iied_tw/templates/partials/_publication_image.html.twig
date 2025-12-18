@@ -1,4 +1,5 @@
 {# returns image tag for pub cover. Default style is card_cover #}
+{{ breakpoint() }}
 {% set img_style = img_style ? img_style : 'card_cover' %}
 {% set display_mode = display_mode ? display_mode : 'embedded' %}
 {% if content.field_cover_image[0] and node.field_cover_image|file_uri %}
