@@ -22,6 +22,7 @@ third_party_settings:
       disable_css: false
       entity_classes: no_classes
       settings:
+        label: ''
         classes:
           layout_class: {  }
           ds_content: {  }
@@ -31,7 +32,6 @@ third_party_settings:
         attributes: ''
         link_attribute: ''
         link_custom: ''
-        label: ''
     regions:
       ds_content:
         - field_size

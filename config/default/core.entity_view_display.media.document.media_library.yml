@@ -24,11 +24,11 @@ content:
     settings:
       image_style: media_library
       image_link: ''
+      show_description: '1'
       tag: span
       fallback_formatter: file_default
       image_loading:
         attribute: lazy
-      show_description: 0
     third_party_settings: {  }
     weight: 0
     region: content
