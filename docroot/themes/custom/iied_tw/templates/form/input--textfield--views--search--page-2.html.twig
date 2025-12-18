@@ -19,7 +19,7 @@
 {{ children }} #}
 
 <div x-data="{ showSearch: $store.showSearch }" class='pt-2'>
-    <label aria-label="Ssarch" class='relative text-gray-500'>
+    <label aria-label="search" class='relative text-gray-500'>
     <input{{ attributes.addClass('px-3 w-52 text-sm srp-text bg-white border border-gray-300 rounded-full srp-w h-10 srp-h focus:outline-none') }} 
         type="text"
         x-trap="$store.showSearch"

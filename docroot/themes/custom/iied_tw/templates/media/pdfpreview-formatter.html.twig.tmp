@@ -7,6 +7,6 @@
     {{ description }}
   {% endif %}
 {% else %}
-    {% include base_path ~ directory ~ '/images/default-doc.svg' %}
+    {% include base_path ~ directory/images/default-doc.svg' %}
  {% endif %}
 </div>
