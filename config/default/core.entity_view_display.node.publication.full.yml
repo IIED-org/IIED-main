@@ -50,7 +50,6 @@ dependencies:
     - field.field.node.publication.field_theme_s_
     - field.field.node.publication.field_translator
     - field.field.node.publication.field_work_programme_global_enga
-    - image.style.page
     - node.type.publication
   module:
     - address
@@ -63,7 +62,6 @@ dependencies:
     - isbn
     - layout_builder
     - link
-    - media
     - metatag
     - options
     - serial
@@ -281,21 +279,12 @@ content:
     weight: 31
     region: content
   field_cover_image:
-    type: media_thumbnail
+    type: entity_reference_entity_view
     label: above
     settings:
-      image_link: ''
-      image_style: page
-      image_loading:
-        attribute: lazy
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
+      view_mode: embedded
+      link: false
+    third_party_settings: {  }
     weight: 20
     region: content
   field_date_published:

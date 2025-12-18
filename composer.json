@@ -350,6 +350,10 @@
         "3512142 Facets 3.x support": "https://git.drupalcode.org/project/views_dependent_filters/-/merge_requests/13.diff",
         "3503675 Module uses the wrong selector": "https://git.drupalcode.org/project/views_dependent_filters/-/merge_requests/11.diff",
         "3512164": "https://git.drupalcode.org/project/views_dependent_filters/-/merge_requests/12.diff"
+      },
+      "drupal/pdfpreview": {
+        "3344262 Add alt text": "https://www.drupal.org/files/issues/2025-08-15/pdfpreview-missing-alt-text.patch",
+        "3344262 test for empty": "patches/3344262-pdfpreview-missing-alt-text.patch"
       }
     },
     "drupal-lenient": {

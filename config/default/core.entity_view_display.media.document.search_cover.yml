@@ -29,10 +29,10 @@ content:
     settings:
       image_style: search_cover
       image_link: ''
+      show_description: '1'
       tag: div
       image_loading:
         attribute: lazy
-      show_description: 0
       fallback_formatter: 0
     third_party_settings: {  }
     weight: 0
