@@ -1,0 +1,12 @@
+<div class="pdfpreview" id="pdfpreview-{{ fid }}">
+{% if theme == "image_formatter" %}
+  <{{ tag }} class="pdfpreview-image-wrapper">
+  {{ element }}
+  </{{ tag }}>
+  {% if description %}
+    {{ description }}
+  {% endif %}
+{% else %}
+    {% include base_path ~ directory ~ '/images/default-doc.svg' %}
+ {% endif %}
+</div>
