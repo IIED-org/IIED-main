@@ -1,0 +1,70 @@
+id: d6_piwik_settings
+label: Piwik 6 configuration
+migration_tags:
+  - Drupal 6
+  - Configuration
+source:
+  plugin: variable
+  variables:
+    - piwik_cache
+    - piwik_codesnippet_after
+    - piwik_codesnippet_before
+    - piwik_custom
+    - piwik_domain_mode
+    - piwik_pages
+    - piwik_privacy_donottrack
+    - piwik_roles
+    - piwik_site_id
+    - piwik_site_search
+    - piwik_trackmessages
+    - piwik_track
+    - piwik_trackfiles_extensions
+    - piwik_trackmailto
+    - piwik_trackuserid
+    - piwik_translation_set
+    - piwik_url_http
+    - piwik_url_https
+    - piwik_visibility_pages
+    - piwik_visibility_roles
+    - piwik_page_title_hierarchy
+    - piwik_page_title_hierarchy_exclude_home
+  source_module: piwik
+process:
+  cache: piwik_cache
+  'codesnippet/after': piwik_codesnippet_after
+  'codesnippet/before': piwik_codesnippet_before
+  domain_mode: piwik_domain_mode
+  'privacy/donottrack': piwik_privacy_donottrack
+  site_id: piwik_site_id
+  'track/files': piwik_track
+  'track/files_extensions': piwik_trackfiles_extensions
+  'track/mailto': piwik_trackmailto
+  'track/messages': piwik_trackmessages
+  'track/site_search': piwik_site_search
+  'track/userid': piwik_trackuserid
+  'translation_set': piwik_translation_set
+  url_http: piwik_url_http
+  url_https: piwik_url_https
+  'visibility/user_account_mode': piwik_custom
+  'visibility/request_path_mode': piwik_visibility_pages
+  'visibility/request_path_pages':
+    plugin: matomo_visibility_pages
+    source:
+      - piwik_visibility_pages
+      - piwik_pages
+    # If Piwik uses PHP visibility, don't migrate it unless the PHP module is
+    # enabled.
+    skip_php: true
+  'visibility/user_role_mode': piwik_visibility_roles
+  'visibility/user_role_roles':
+    plugin: matomo_visibility_roles
+    source:
+      - piwik_roles
+  page_title_hierarchy: piwik_page_title_hierarchy
+  page_title_hierarchy_exclude_home: piwik_page_title_hierarchy_exclude_home
+destination:
+  plugin: config
+  config_name: matomo.settings
+migration_dependencies:
+  optional:
+    - d6_user_role

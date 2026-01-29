@@ -1,0 +1,5 @@
+entity.matomo_tagmanager_container.collection:
+  title: 'Matomo Tag Manager containers'
+  description: 'Configure the website integration with Matomo Tag Manager.'
+  route_name: entity.matomo_tagmanager_container.collection
+  parent: matomo.admin_settings_form

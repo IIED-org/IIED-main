@@ -1,0 +1,126 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Matomo Analytics module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_install().
+ */
+function matomo_install(): void {
+  // Make the default install more user and GDPR friendly.
+  \user_role_grant_permissions('authenticated', [
+    'opt-in or out of matomo tracking',
+  ]);
+
+  if (\Drupal::moduleHandler()->moduleExists('views')) {
+    // Enable Matomo views display extender.
+    $config = \Drupal::service('config.factory')->getEditable('views.settings');
+    /** @var array $display_extenders */
+    $display_extenders = $config->get('display_extenders') ?: [];
+    $display_extenders[] = 'matomo';
+    $config->set('display_extenders', $display_extenders);
+    $config->save();
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Remove cache directory if module is uninstalled.
+ */
+function matomo_uninstall(): void {
+  $path = 'public://matomo';
+  if (\Drupal::service('file_system')->prepareDirectory($path)) {
+    \Drupal::service('file_system')->scanDirectory($path, '/.*/', ['callback' => '_matomo_uninstall_file_delete']);
+    \Drupal::service('file_system')->rmdir($path);
+
+    // Change query-strings on css/js files to enforce reload for all users.
+    \Drupal::service('asset.query_string')->reset();
+
+    \Drupal::logger('matomo')->info('Local cache has been purged.');
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('views')) {
+    // Remove Matomo views display extender.
+    $config = \Drupal::service('config.factory')->getEditable('views.settings');
+    /** @var array $display_extenders */
+    $display_extenders = $config->get('display_extenders') ?: [];
+    $key = \array_search('matomo', $display_extenders, TRUE);
+    if ($key !== FALSE) {
+      unset($display_extenders[$key]);
+      $config->set('display_extenders', $display_extenders);
+      $config->save();
+    }
+  }
+}
+
+/**
+ * Removes unmanaged file from the file system.
+ *
+ * @param string $uri
+ *   The file to delete.
+ *
+ * @internal
+ */
+function _matomo_uninstall_file_delete($uri): void {
+  \Drupal::service('file_system')->delete($uri);
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function matomo_requirements(string $phase): array {
+  $requirements = [];
+
+  if ($phase == 'runtime') {
+    $config = \Drupal::config('matomo.settings');
+
+    // Raise warning if Matomo user account has not been set yet.
+    if (empty($config->get('site_id') ?? '')) {
+      $requirements['matomo_site_id'] = [
+        'title' => \t('Matomo module'),
+        'description' => \t('Matomo module has not been configured yet. Configure its settings from the <a href=":url">Matomo settings page</a>.', [':url' => Url::fromRoute('matomo.admin_settings_form')->toString()]),
+        'severity' => REQUIREMENT_WARNING,
+        'value' => \t('Not configured'),
+      ];
+    }
+  }
+
+  return $requirements;
+}
+
+/**
+ * Add new disable cookies setting to Matomo default configuration.
+ */
+function matomo_update_8101(): void {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('matomo.settings');
+  $config->set('privacy.disablecookies', FALSE);
+  $config->save(TRUE);
+}
+
+/**
+ * Add new disable tracking setting to Matomo default configuration.
+ */
+function matomo_update_8102(): void {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('matomo.settings');
+  $config->set('disable_tracking', FALSE);
+  $config->save(TRUE);
+}
+
+/**
+ * Add new disable status codes setting to Matomo default configuration.
+ */
+function matomo_update_8103(): void {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('matomo.settings');
+  $config->set('status_codes_disabled', []);
+  $config->save(TRUE);
+}

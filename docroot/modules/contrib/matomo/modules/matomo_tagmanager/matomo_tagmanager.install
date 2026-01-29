@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Matomo Tag Manager module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Convert container ID into container URL. Remove settings.
+ */
+function matomo_tagmanager_update_8001(): void {
+  $container_location = '';
+  $tagmanager_config = \Drupal::configFactory()->getEditable('matomo_tagmanager.settings');
+  // Delete no more needed config.
+  if ($tagmanager_config != NULL) {
+    $container_location = $tagmanager_config->get('container_location') ?? '';
+    $tagmanager_config->delete();
+  }
+
+  /** @var Drupal\matomo_tagmanager\ContainerStorageInterface $container_storage */
+  $container_storage = \Drupal::entityTypeManager()->getStorage('matomo_tagmanager_container');
+  /** @var \Drupal\matomo_tagmanager\Entity\ContainerInterface[] $containers */
+  $containers = $container_storage->loadMultiple();
+
+  if (empty($containers)) {
+    return;
+  }
+
+  // Convert container ID into container URL.
+  $matomo_config = \Drupal::config('matomo.settings');
+  /** @var string $url_http */
+  $url_http = $matomo_config->get('url_http');
+  /** @var string $url_https */
+  $url_https = $matomo_config->get('url_https');
+  $matomo_url = empty($url_https) ? $url_http : $url_https;
+  $matomo_url = \rtrim($matomo_url, '/');
+  $container_location = \ltrim($container_location, '/');
+  foreach ($containers as $container) {
+    if (!$container->get('container_url')) {
+      /** @var string $container_id */
+      $container_id = $container->get('container_id');
+      $container_url = "{$matomo_url}/{$container_location}container_{$container_id}.js";
+      $container->set('container_url', $container_url);
+      $container->save();
+    }
+  }
+}

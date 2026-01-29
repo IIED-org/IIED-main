@@ -1,0 +1,19 @@
+matomo:
+  js:
+    js/matomo.js: {}
+  drupalSettings:
+    matomo:
+      disableCookies: false
+      trackColorbox: false
+      trackMailto: false
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+
+matomo.admin:
+  js:
+    js/matomo.admin.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.vertical-tabs

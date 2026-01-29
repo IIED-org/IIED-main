@@ -1,0 +1,169 @@
+# Schema for the configuration files of the matomo module.
+
+matomo.settings:
+  type: config_object
+  label: 'Matomo settings'
+  mapping:
+    site_id:
+      type: string
+      label: 'Matomo site ID'
+    url_http:
+      type: string
+      label: 'Matomo HTTP URL'
+    url_https:
+      type: string
+      label: 'Matomo HTTPS URL'
+    domain_mode:
+      type: integer
+      label: 'What are you tracking?'
+    visibility:
+      type: mapping
+      label: 'Visibility'
+      mapping:
+        request_path_mode:
+          type: integer
+          label: 'Add tracking to specific pages'
+        request_path_pages:
+          type: string
+          label: 'Pages by their paths'
+        user_role_mode:
+          type: integer
+          label: 'Add tracking for specific roles'
+        user_role_roles:
+          type: sequence
+          label: 'Roles'
+          sequence:
+            type: string
+            label: 'Role'
+        user_account_mode:
+          type: integer
+          label: 'Allow users to customize tracking on their account page'
+    track:
+      type: mapping
+      label: 'Links and downloads'
+      mapping:
+        mailto:
+          type: boolean
+          label: 'Track clicks on mailto links'
+        files:
+          type: boolean
+          label: 'Track downloads'
+        files_extensions:
+          type: string
+          label: 'File extension list'
+        colorbox:
+          type: boolean
+          label: 'Track content in colorbox modal dialogs'
+        userid:
+          type: boolean
+          label: 'Track User ID'
+        messages:
+          type: sequence
+          label: 'Track messages of type'
+          sequence:
+            type: string
+            label: 'Message type'
+        site_search:
+          type: boolean
+          label: 'Track internal search'
+    privacy:
+      type: mapping
+      label: 'Privacy'
+      mapping:
+        donottrack:
+          type: boolean
+          label: 'Universal web tracking opt-out'
+        disablecookies:
+          type: boolean
+          label: 'Disable cookies'
+    custom:
+      type: mapping
+      label: 'Custom variables'
+      mapping:
+        variable:
+          type: sequence
+          label: 'Custom variable'
+          sequence:
+            type: mapping
+            label: 'Variable'
+            mapping:
+              slot:
+                type: integer
+                label: 'Slot number'
+              name:
+                type: string
+                label: 'The custom variable name.'
+              value:
+                type: string
+                label: 'The custom variable value.'
+              scope:
+                type: string
+                label: 'The scope for the custom variable.'
+    codesnippet:
+      type: mapping
+      label: 'Custom code snippets'
+      mapping:
+        before:
+          type: string
+          label: 'Code snippet (before)'
+        after:
+          type: string
+          label: 'Code snippet (after)'
+    translation_set:
+      type: boolean
+      label: 'Track translation sets as one unit'
+    disable_tracking:
+      type: boolean
+      label: 'Disable tracking'
+    cache:
+      type: boolean
+      label: 'Locally cache tracking code file'
+    page_title_hierarchy:
+      type: boolean
+      label: 'Show page titles as hierarchy like breadcrumbs'
+    page_title_hierarchy_exclude_home:
+      type: boolean
+      label: 'Hide home page from hierarchy'
+    status_codes_disabled:
+      type: sequence
+      label: 'Status codes disabled'
+      sequence:
+        type: string
+        label: 'Status code'
+
+views.display_extender.matomo:
+  type: views_display_extender
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Enable Matomo integration'
+    keyword_gets:
+      type: string
+      label: 'GET parameters for keyword'
+    keyword_behavior:
+      type: string
+      label: 'Keyword behavior'
+    keyword_concat_separator:
+      type: string
+      label: 'Keyword concatenation separator'
+    category_behavior:
+      type: string
+      label: 'Category behavior'
+    category_gets:
+      type: string
+      label: 'GET parameters for category'
+    category_concat_separator:
+      type: string
+      label: 'Category concatenation separator'
+    category_fallback:
+      type: string
+      label: 'Category fallback'
+    category_facets:
+      type: sequence
+      label: 'Facets used for category'
+      sequence:
+        type: string
+        label: 'Facet ID'
+    category_facets_concat_separator:
+      type: string
+      label: 'Category concatenation separator for facets'

@@ -1,0 +1,13 @@
+# https://git.drupalcode.org/project/gitlab_templates/
+
+composer:
+  variables:
+    DRUPAL_CORE: "^10.6"
+
+include:
+  - project: $_GITLAB_TEMPLATES_REPO
+    ref: $_GITLAB_TEMPLATES_REF
+    file:
+      - '/includes/include.drupalci.main.yml'
+      - '/includes/include.drupalci.variables.yml'
+      - '/includes/include.drupalci.workflows.yml'

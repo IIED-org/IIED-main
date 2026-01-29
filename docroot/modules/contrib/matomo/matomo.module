@@ -1,0 +1,815 @@
+<?php
+
+/**
+ * @file
+ * Drupal Module: Matomo.
+ *
+ * Adds the required Javascript to all your Drupal pages to allow tracking by
+ * the Matomo statistics package.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Component\Render\MarkupInterface;
+use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Crypt;
+use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\File\FileExists;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Url;
+use Drupal\Core\Utility\Error;
+use Drupal\matomo\Component\Render\MatomoJavaScriptSnippet;
+use Drupal\matomo\Form\MatomoAdminSettingsForm;
+use Drupal\matomo\HookHandler\ViewsPostRenderHookHandler;
+use Drupal\matomo\MatomoInterface;
+use Drupal\node\NodeInterface;
+use Drupal\views\Plugin\views\cache\CachePluginBase;
+use Drupal\views\ViewExecutable;
+use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+
+/**
+ * Implements hook_help().
+ */
+function matomo_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'matomo.admin_settings_form':
+      return \t('<a href=":pk_url">Matomo Analytics</a> is an open source (GPL license) web analytics software. It gives interesting reports on your website visitors, your popular pages, the search engines keywords they used, the language they speak... and so much more. Matomo aims to be an open source alternative to Google Analytics.', [':pk_url' => 'https://www.matomo.org/']);
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ *
+ * Insert JavaScript to the appropriate scope/region of the page.
+ */
+function matomo_page_attachments(array &$page) {
+  $account = \Drupal::currentUser();
+  $config = \Drupal::config('matomo.settings');
+  $id = $config->get('site_id') ?? '';
+  $request = \Drupal::request();
+
+  // Add module cache tags.
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $config->getCacheTags());
+
+  if (empty($id)) {
+    // Tracking is disabled if no site ID had been configured yet.
+    return;
+  }
+
+  if ($config->get('disable_tracking')) {
+    // Tracking is disabled in favor of other methods (e.g. Tag Manager).
+    return;
+  }
+
+  // Get page http status code for visibility filtering.
+  $status = NULL;
+  $exception = $request->attributes->get('exception');
+  if ($exception && $exception instanceof HttpExceptionInterface) {
+    $status = $exception->getStatusCode();
+  }
+
+  // Early return if status matches configured values.
+  $disabled_status_codes = $config->get('status_codes_disabled') ?? [];
+  if (in_array($status, $disabled_status_codes)) {
+    return;
+  }
+
+  $trackable_status_codes = [
+    // "Forbidden" status code.
+    '403',
+    // "Not Found" status code.
+    '404',
+  ];
+
+  // 1. Track page views based on visibility value.
+  // 2. Check if we should track the currently active user's role.
+  if ((_matomo_visibility_pages() || in_array($status, $trackable_status_codes)) && _matomo_visibility_user($account)) {
+
+    $url_http = $config->get('url_http');
+    $url_https = $config->get('url_https');
+
+    $set_custom_url = '';
+    $set_document_title = '';
+
+    // Add link tracking.
+    $link_settings = [];
+    $link_settings['disableCookies'] = $config->get('privacy.disablecookies');
+    $link_settings['trackMailto'] = $config->get('track.mailto');
+
+    $track_colorbox = $config->get('track.colorbox');
+    if ((\Drupal::moduleHandler()->moduleExists('colorbox')) && $track_colorbox) {
+      $link_settings['trackColorbox'] = $track_colorbox;
+    }
+
+    $page['#attached']['drupalSettings']['matomo'] = $link_settings;
+    $page['#attached']['library'][] = 'matomo/matomo';
+
+    // Matomo can show a tree view of page titles that represents the site
+    // structure if setDocumentTitle() provides the page titles as a "/"
+    // delimited list. This may makes it easier to browse through the statistics
+    // of page titles on larger sites.
+    if ($config->get('page_title_hierarchy') == TRUE) {
+      $titles = \_matomo_get_hierarchy_titles();
+
+      // Remove all empty titles.
+      $titles = \array_filter($titles);
+
+      if (!empty($titles)) {
+        // Encode title, at least to keep "/" intact.
+        $titles = \array_map('rawurlencode', $titles);
+
+        $set_document_title = Json::encode(\implode('/', $titles));
+      }
+    }
+
+    // Add messages tracking.
+    $message_events = '';
+    $message_types = $config->get('track.messages');
+    if ($message_types) {
+      $message_types = \array_values(\array_filter($message_types));
+      $status_heading = [
+        'status' => \t('Status message'),
+        'warning' => \t('Warning message'),
+        'error' => \t('Error message'),
+      ];
+
+      foreach (\Drupal::messenger()->all() as $type => $messages) {
+        // Track only the selected message types.
+        if (\in_array($type, $message_types, TRUE)) {
+          foreach ($messages as $message) {
+            if ($message instanceof MarkupInterface) {
+              $message = $message->__toString();
+            }
+
+            $message_events .= '_paq.push(["trackEvent", ' . Json::encode(\t('Messages')) . ', ' . Json::encode($status_heading[$type]) . ', ' . Json::encode(\strip_tags($message)) . ']);';
+          }
+        }
+      }
+    }
+
+    // If this node is a translation of another node, pass the original
+    // node instead.
+    if (\Drupal::moduleHandler()->moduleExists('content_translation') && $config->get('translation_set')) {
+      // Check if we have a node object, it has translation enabled, and its
+      // language code does not match its source language code.
+      if ($request->attributes->has('node')) {
+        $node = $request->attributes->get('node');
+        if ($node instanceof NodeInterface && \Drupal::service('entity.repository')->getTranslationFromContext($node) !== $node->getUntranslated()) {
+          $set_custom_url = Json::encode(Url::fromRoute('entity.node.canonical', ['node' => $node->id()], ['language' => $node->getUntranslated()->language()])->toString());
+        }
+      }
+    }
+
+    // Track access denied (403) and file not found (404) pages.
+    if ($status == '403') {
+      $set_document_title = '"403/URL = " + encodeURIComponent(document.location.pathname+document.location.search) + "/From = " + encodeURIComponent(document.referrer)';
+    }
+    elseif ($status == '404') {
+      $set_document_title = '"404/URL = " + encodeURIComponent(document.location.pathname+document.location.search) + "/From = " + encodeURIComponent(document.referrer)';
+    }
+
+    // #2693595: User has entered an invalid login and clicked on forgot
+    // password link. This link contains the username or email address and may
+    // get send to Matomo if we do not override it. Override only if 'name'
+    // query param exists. Last custom url condition, this need to win.
+    //
+    // URLs to protect are:
+    // - user/password?name=username
+    // - user/password?name=foo@example.com
+    if (\Drupal::routeMatch()->getRouteName() == 'user.pass' && $request->query->has('name')) {
+      $set_custom_url = Json::encode(Url::fromRoute('user.pass')->toString());
+    }
+
+    // Add custom variables.
+    $matomo_custom_vars = $config->get('custom.variable');
+    $custom_variable = '';
+    for ($i = 1; $i <= MatomoAdminSettingsForm::MAX_CUSTOM_VARIABLES; ++$i) {
+      $custom_var_name = !empty($matomo_custom_vars[$i]['name']) ? $matomo_custom_vars[$i]['name'] : '';
+      if (!empty($custom_var_name)) {
+        $custom_var_value = !empty($matomo_custom_vars[$i]['value']) ? $matomo_custom_vars[$i]['value'] : '';
+        $custom_var_scope = !empty($matomo_custom_vars[$i]['scope']) ? $matomo_custom_vars[$i]['scope'] : 'visit';
+
+        $types = [];
+        if ($request->attributes->has('node')) {
+          $node = $request->attributes->get('node');
+          if ($node instanceof NodeInterface) {
+            $types += ['node' => $node];
+          }
+        }
+        $custom_var_name = \Drupal::token()->replace($custom_var_name, $types, ['clear' => TRUE]);
+        $custom_var_value = \Drupal::token()->replace($custom_var_value, $types, ['clear' => TRUE]);
+
+        // Suppress empty custom names and/or variables.
+        if (!\mb_strlen(\trim($custom_var_name)) || !\mb_strlen(\trim($custom_var_value))) {
+          continue;
+        }
+
+        // Custom variables names and values are limited to 200 characters in
+        // length. It is recommended to store values that are as small as
+        // possible to ensure that the Matomo Tracking request URL doesn't go
+        // over the URL limit for the webserver or browser.
+        $custom_var_name = \rtrim(\substr($custom_var_name, 0, (int) 200));
+        $custom_var_value = \rtrim(\substr($custom_var_value, 0, (int) 200));
+
+        // Add variables to tracker.
+        $custom_variable .= '_paq.push(["setCustomVariable", ' . Json::encode($i) . ', ' . Json::encode($custom_var_name) . ', ' . Json::encode($custom_var_value) . ', ' . Json::encode($custom_var_scope) . ']);';
+      }
+    }
+
+    // Add any custom code snippets if specified.
+    $codesnippet_before = $config->get('codesnippet.before');
+    $codesnippet_after = $config->get('codesnippet.after');
+
+    // Build tracker code.
+    // @see https://matomo.org/docs/javascript-tracking/#toc-asynchronous-tracking
+    $script = 'var _paq = _paq || [];';
+    $script .= '(function(){';
+    $script .= 'var u=(("https:" == document.location.protocol) ? "' . UrlHelper::filterBadProtocol($url_https) . '" : "' . UrlHelper::filterBadProtocol($url_http) . '");';
+    $script .= '_paq.push(["setSiteId", ' . Json::encode($id) . ']);';
+    $script .= '_paq.push(["setTrackerUrl", u+"matomo.php"]);';
+
+    // Track logged in users across all devices.
+    if ($config->get('track.userid') && $account->isAuthenticated()) {
+      $script .= '_paq.push(["setUserId", ' . Json::encode(\matomo_user_id_hash($account->id())) . ']);';
+    }
+
+    // Set custom url.
+    if (!empty($set_custom_url)) {
+      $script .= '_paq.push(["setCustomUrl", ' . $set_custom_url . ']);';
+    }
+    // Set custom document title.
+    if (!empty($set_document_title)) {
+      $script .= '_paq.push(["setDocumentTitle", ' . $set_document_title . ']);';
+    }
+
+    // Custom file download extensions.
+    if ($config->get('track.files') && !($config->get('track.files_extensions') == MatomoInterface::MATOMO_TRACKFILES_EXTENSIONS)) {
+      $script .= '_paq.push(["setDownloadExtensions", ' . Json::encode($config->get('track.files_extensions')) . ']);';
+    }
+
+    // Disable tracking for visitors who have opted out from tracking via DNT
+    // (Do-Not-Track) header.
+    if ($config->get('privacy.donottrack')) {
+      $script .= '_paq.push(["setDoNotTrack", 1]);';
+    }
+
+    // Disable all Matomo tracking cookies.
+    if ($config->get('privacy.disablecookies')) {
+      $script .= '_paq.push(["disableCookies"]);';
+    }
+
+    // Domain tracking type.
+    /** @var \Drupal\Core\Session\SessionConfigurationInterface $session_config */
+    $session_config = \Drupal::service('session_configuration');
+    $cookie_domain = $session_config->getOptions(\Drupal::request())['cookie_domain'] ?? '';
+    $domain_mode = $config->get('domain_mode');
+
+    // Per RFC 2109, cookie domains must contain at least one dot other than the
+    // first. For hosts such as 'localhost' or IP Addresses we don't set a
+    // cookie domain.
+    if ($domain_mode == 1 && \count(\explode('.', $cookie_domain)) > MatomoAdminSettingsForm::MULTI_DOMAIN_TRIGGER && !\is_numeric(\str_replace('.', '', $cookie_domain))) {
+      $script .= '_paq.push(["setCookieDomain", ' . Json::encode($cookie_domain) . ']);';
+    }
+
+    // Ordering $custom_variable before $codesnippet_before allows users to add
+    // custom code snippets that may use deleteCustomVariable() and/or
+    // getCustomVariable().
+    if (!empty($custom_variable)) {
+      $script .= $custom_variable;
+    }
+    if (!empty($codesnippet_before)) {
+      $script .= $codesnippet_before;
+    }
+
+    // Site search tracking support.
+    // NOTE: It's recommended not to call trackPageView() on the Site Search
+    // Result page.
+    $keys = ($request->query->has('keys') ? \trim($request->get('keys')) : '');
+    if (
+      \Drupal::moduleHandler()->moduleExists('search')
+      && $config->get('track.site_search')
+      && (\strpos(\Drupal::routeMatch()->getRouteName(), 'search.view') === 0)
+      && $keys
+    ) {
+      // Parameters:
+      // 1. Search keyword searched for. Example: "Banana"
+      // 2. Search category selected in your search engine. If you do not need
+      //    this, set to false. Example: "Organic Food"
+      // 3. Number of results on the Search results page. Zero indicates a
+      //    'No Result Search Keyword'. Set to false if you don't know.
+      //
+      // hook_preprocess_search_results() is not executed if search result is
+      // empty. Make sure the counter is set to 0 if there are no results.
+      $script .= '_paq.push(["trackSiteSearch", ' . Json::encode($keys) . ', false, (window.matomo_search_results) ? window.matomo_search_results : 0]);';
+    }
+    else {
+      $script .= 'if (!window.matomo_search_results_active) {_paq.push(["trackPageView"]);}';
+    }
+
+    // Add link tracking.
+    if ($config->get('track.files')) {
+      // Disable tracking of links with ".no-tracking" and ".colorbox" classes.
+      $ignore_classes = [
+        'no-tracking',
+        'colorbox',
+      ];
+      // Disable the download & outlink tracking for specific CSS classes.
+      // Custom code snippets with 'setIgnoreClasses' will override the value.
+      // @see https://developer.matomo.org/api-reference/tracking-javascript#disable-the-download-amp-outlink-tracking-for-specific-css-classes
+      $script .= '_paq.push(["setIgnoreClasses", ' . Json::encode($ignore_classes) . ']);';
+
+      // Enable download & outlink link tracking.
+      $script .= '_paq.push(["enableLinkTracking"]);';
+    }
+
+    if (!empty($message_events)) {
+      $script .= $message_events;
+    }
+    if (!empty($codesnippet_after)) {
+      $script .= $codesnippet_after;
+    }
+
+    $script .= 'var d=document,';
+    $script .= 'g=d.createElement("script"),';
+    $script .= 's=d.getElementsByTagName("script")[0];';
+    $script .= 'g.type="text/javascript";';
+    $script .= 'g.defer=true;';
+    $script .= 'g.async=true;';
+
+    // Should a local cached copy of the tracking code be used?
+    if ($config->get('cache')) {
+      $url = \_matomo_cache($url_http . 'matomo.js');
+      if ($url) {
+        // A dummy query-string is added to filenames, to gain control over
+        // browser-caching. The string changes on every update or full cache
+        // flush, forcing browsers to load a new copy of the files, as the
+        // URL changed.
+        $query_string = '?' . (\Drupal::state()->get('system.css_js_query_string') ?: '0');
+
+        $script .= 'g.src="' . $url . $query_string . '";';
+      }
+    }
+    else {
+      $script .= 'g.src=u+"matomo.js";';
+    }
+
+    $script .= 's.parentNode.insertBefore(g,s);';
+    $script .= '})();';
+
+    // Add tracker code.
+    $page['#attached']['html_head'][] = [
+      [
+        '#tag' => 'script',
+        '#value' => new MatomoJavaScriptSnippet($script),
+      ],
+      'matomo_tracking_script',
+    ];
+  }
+}
+
+/**
+ * Generate user id hash to implement USER_ID.
+ *
+ * The USER_ID value should be a unique, persistent, and non-personally
+ * identifiable string identifier that represents a user or signed-in
+ * account across devices.
+ *
+ * @param int $uid
+ *   User id.
+ *
+ * @return string
+ *   User id hash.
+ */
+function matomo_user_id_hash($uid) {
+  return Crypt::hmacBase64($uid, \Drupal::service('private_key')->get() . Settings::getHashSalt());
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function matomo_entity_extra_field_info() {
+  $extra = [];
+  $extra['user']['user']['form']['matomo'] = [
+    'label' => \t('Matomo settings'),
+    'description' => \t('Matomo module form element.'),
+    'weight' => (int) 3,
+  ];
+
+  return $extra;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Allow users to decide if tracking code will be added to pages or not.
+ */
+function matomo_form_user_form_alter(&$form, FormStateInterface $form_state) {
+  $config = \Drupal::config('matomo.settings');
+  /** @var \Drupal\user\AccountForm $userform */
+  $userform = $form_state->getFormObject();
+  /** @var \Drupal\user\UserInterface $account */
+  $account = $userform->getEntity();
+  $visibility_users = $config->get('visibility.user_account_mode');
+  if ($account->hasPermission('opt-in or out of matomo tracking') && $visibility_users != 0 && \_matomo_visibility_roles($account)) {
+    $account_data_matomo = \Drupal::service('user.data')->get('matomo', $account->id());
+
+    $form['matomo'] = [
+      '#type' => 'details',
+      '#title' => \t('Matomo settings'),
+      '#weight' => (int) 3,
+      '#open' => TRUE,
+    ];
+    $description = '';
+    switch ($visibility_users) {
+      case MatomoAdminSettingsForm::VISIBILITY_USER_ACCOUNT_MODE_OPT_OUT:
+        $description = \t('Users are tracked by default, but you are able to opt out.');
+        break;
+
+      case MatomoAdminSettingsForm::VISIBILITY_USER_ACCOUNT_MODE_OPT_IN:
+        $description = \t('Users are <em>not</em> tracked by default, but you are able to opt in.');
+        break;
+    }
+
+    // Disable tracking for visitors who have opted out from tracking via DNT
+    // (Do-Not-Track) header.
+    $disabled = FALSE;
+    if ($config->get('privacy.donottrack') && \Drupal::request()->headers->has('dnt')) {
+      $disabled = TRUE;
+
+      // Override settings value.
+      $account_data_matomo['users'] = FALSE;
+
+      $description .= '<span class="admin-missing">';
+      $description .= ' ' . \t('You have opted out from tracking via browser privacy settings.');
+      $description .= '</span>';
+    }
+
+    // Migrate old Piwik settings to Matomo.
+    $account_data_piwik = \Drupal::service('user.data')->get('piwik', $account->id());
+    if (isset($account_data_piwik['user_account_users'])) {
+      $account_data_matomo['user_account_users'] = $account_data_piwik['user_account_users'];
+    }
+
+    $form['matomo']['user_account_users'] = [
+      '#type' => 'checkbox',
+      '#title' => \t('Enable user tracking'),
+      '#description' => $description,
+      '#default_value' => $account_data_matomo['user_account_users'] ?? ($visibility_users == 1),
+      '#disabled' => $disabled,
+    ];
+
+    // hook_user_update() is missing in D8, add custom submit handler.
+    $form['actions']['submit']['#submit'][] = 'matomo_user_profile_form_submit';
+  }
+}
+
+/**
+ * Submit callback for user profile form to save the Matomo setting.
+ */
+function matomo_user_profile_form_submit($form, FormStateInterface $form_state) {
+  /** @var \Drupal\user\AccountForm $userform */
+  $userform = $form_state->getFormObject();
+  /** @var \Drupal\user\UserInterface $account */
+  $account = $userform->getEntity();
+  if ($account->id() && $form_state->hasValue('user_account_users')) {
+    \Drupal::service('user.data')->set('matomo', $account->id(), 'user_account_users', (int) $form_state->getValue('user_account_users'));
+  }
+
+  // Remove old Piwik setting to complete migration to Matomo.
+  $account_data_piwik = \Drupal::service('user.data')->get('piwik', $account->id());
+  if (isset($account_data_piwik)) {
+    \Drupal::service('user.data')->delete('piwik', $account->id());
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function matomo_cron() {
+  $config = \Drupal::config('matomo.settings');
+  $request_time = \Drupal::time()->getRequestTime();
+
+  // Regenerate the matomo.js every day.
+  if ($request_time - \Drupal::state()->get('matomo.last_cache') >= (int) 86400 && $config->get('cache')) {
+    \_matomo_cache($config->get('url_http') . 'matomo.js', TRUE);
+    \Drupal::state()->set('matomo.last_cache', $request_time);
+  }
+}
+
+/**
+ * Implements hook_preprocess_item_list__search_results().
+ *
+ * Collects and adds the number of search results to the head.
+ */
+function matomo_preprocess_item_list__search_results(&$variables) {
+  $config = \Drupal::config('matomo.settings');
+
+  // Only run on search results list.
+  if ($config->get('track.site_search')) {
+    // There is no search result $variable available that hold the number of
+    // items found. The variable $variables['items'] has the current page items
+    // only. But the pager item number can tell the number of search results.
+    /** @var \Drupal\Core\Pager\PagerManagerInterface $pager_manager */
+    $pager_manager = \Drupal::service('pager.manager');
+    $pager = $pager_manager->getPager();
+    $pager_total_items = $pager ? $pager->getTotalItems() : 0;
+    $variables['#attached']['html_head'][] = [
+      [
+        '#tag' => 'script',
+        '#value' => 'window.matomo_search_results = ' . $pager_total_items . ';',
+        '#weight' => JS_LIBRARY - 1,
+      ],
+      'matomo_search_script',
+    ];
+  }
+}
+
+/**
+ * Download/Synchronize/Cache tracking code file locally.
+ *
+ * @param string $location
+ *   The full URL to the external javascript file.
+ * @param bool $synchronize
+ *   Synchronize to local cache if remote file has changed.
+ *
+ * @return mixed
+ *   The path to the local javascript file on success, boolean FALSE on failure.
+ *
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ */
+function _matomo_cache($location, $synchronize = FALSE) {
+  $path = 'public://matomo';
+  $file_destination = $path . '/' . \basename($location);
+
+  if (!\file_exists($file_destination) || $synchronize) {
+    // Download the latest tracking code.
+    try {
+      $data = \Drupal::httpClient()
+        ->get($location)
+        ->getBody()
+        ->getContents();
+
+      if (\file_exists($file_destination)) {
+        // Synchronize tracking code and and replace local file if outdated.
+        $data_hash_local = Crypt::hashBase64(\file_get_contents($file_destination));
+        $data_hash_remote = Crypt::hashBase64($data);
+        // Check that the files directory is writable.
+        if ($data_hash_local != $data_hash_remote && \Drupal::service('file_system')->prepareDirectory($path)) {
+          // Save updated tracking code file to disk.
+          \Drupal::service('file_system')->saveData($data, $file_destination, FileExists::Replace);
+          // Based on Drupal Core class AssetDumper.
+          if (\extension_loaded('zlib') && \Drupal::config('system.performance')->get('js.gzip')) {
+            \Drupal::service('file_system')->saveData(\gzencode($data, (int) 9, \FORCE_GZIP), $file_destination . '.gz', FileExists::Replace);
+          }
+          \Drupal::logger('matomo')->info('Locally cached tracking code file has been updated.');
+
+          // Change query-strings on css/js files to enforce reload for all
+          // users.
+          \Drupal::service('asset.query_string')->reset();
+        }
+      }
+      else {
+        // Check that the files directory is writable.
+        if (\Drupal::service('file_system')->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY)) {
+          // There is no need to flush JS here as core refreshes JS caches
+          // automatically, if new files are added.
+          \Drupal::service('file_system')->saveData($data, $file_destination, FileExists::Replace);
+          // Based on Drupal Core class AssetDumper.
+          if (\extension_loaded('zlib') && \Drupal::config('system.performance')->get('js.gzip')) {
+            \Drupal::service('file_system')->saveData(\gzencode($data, (int) 9, \FORCE_GZIP), $file_destination . '.gz', FileExists::Replace);
+          }
+          \Drupal::logger('matomo')->info('Locally cached tracking code file has been saved.');
+
+          // Return the local JS file path.
+          return \Drupal::service('file_url_generator')->generateString($file_destination);
+        }
+      }
+    }
+    catch (RequestException $exception) {
+      Error::logException(\Drupal::logger('matomo'), $exception);
+    }
+  }
+  else {
+    // Return the local JS file path.
+    return \Drupal::service('file_url_generator')->generateString($file_destination);
+  }
+}
+
+/**
+ * Delete cached files and directory.
+ */
+function matomo_clear_js_cache() {
+  $path = 'public://matomo';
+  if (\Drupal::service('file_system')->prepareDirectory($path)) {
+    \Drupal::service('file_system')->scanDirectory($path, '/.*/', ['callback' => '_matomo_file_delete']);
+    \Drupal::service('file_system')->rmdir($path);
+
+    // Change query-strings on css/js files to enforce reload for all users.
+    \Drupal::service('asset.query_string')->reset();
+
+    \Drupal::logger('matomo')->info('Local cache has been purged.');
+  }
+}
+
+/**
+ * Implements hook_views_post_render().
+ */
+function matomo_views_post_render(ViewExecutable $view, array &$output, CachePluginBase $cache) {
+  /** @var \Drupal\matomo\HookHandler\ViewsPostRenderHookHandler $instance */
+  $instance = \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(ViewsPostRenderHookHandler::class);
+  $instance->process($view, $output, $cache);
+}
+
+/**
+ * Tracking visibility check for an user object.
+ *
+ * @param object $account
+ *   A user object containing an array of roles to check.
+ *
+ * @return bool
+ *   TRUE if the current user is being tracked by Matomo, otherwise FALSE.
+ */
+function _matomo_visibility_user($account) {
+  $config = \Drupal::config('matomo.settings');
+  $enabled = FALSE;
+
+  // Is current user a member of a role that should be tracked?
+  if (\_matomo_visibility_roles($account)) {
+    // Use the user's block visibility setting, if necessary.
+    $visibility_user_account_mode = $config->get('visibility.user_account_mode');
+    if ($visibility_user_account_mode != 0) {
+      $user_data_matomo = \Drupal::service('user.data')->get('matomo', $account->id());
+      if ($account->id() && isset($user_data_matomo['user_account_users'])) {
+        $enabled = $user_data_matomo['user_account_users'];
+      }
+      else {
+        $enabled = ($visibility_user_account_mode == 1);
+      }
+    }
+    else {
+      $enabled = TRUE;
+    }
+  }
+
+  return $enabled;
+}
+
+/**
+ * Tracking visibility check for user roles.
+ *
+ * Based on visibility setting this function returns TRUE if Matomo code should
+ * be added for the current role and otherwise FALSE.
+ *
+ * @param object $account
+ *   A user object containing an array of roles to check.
+ *
+ * @return bool
+ *   TRUE if JS code should be added for the current role and otherwise FALSE.
+ */
+function _matomo_visibility_roles($account) {
+  $config = \Drupal::config('matomo.settings');
+  $enabled = $visibility_user_role_mode = $config->get('visibility.user_role_mode');
+  $user_role_roles = $config->get('visibility.user_role_roles');
+
+  if (!empty($user_role_roles)) {
+    // One or more roles are selected.
+    foreach (\array_values($account->getRoles()) as $user_role) {
+      // Is the current user a member of one of these roles?
+      if (\in_array($user_role, $user_role_roles, TRUE)) {
+        // Current user is a member of a role that should be tracked/excluded
+        // from tracking.
+        $enabled = !$visibility_user_role_mode;
+        break;
+      }
+    }
+  }
+  else {
+    // No role is selected for tracking, therefore all roles should be tracked.
+    $enabled = TRUE;
+  }
+
+  return $enabled;
+}
+
+/**
+ * Tracking visibility check for pages.
+ *
+ * Based on visibility setting this function returns TRUE if JS code should
+ * be added to the current page and otherwise FALSE.
+ */
+function _matomo_visibility_pages() {
+  static $page_match;
+
+  // Cache visibility result if function is called more than once.
+  if (!isset($page_match)) {
+    $config = \Drupal::config('matomo.settings');
+    $visibility_request_path_mode = $config->get('visibility.request_path_mode');
+    $visibility_request_path_pages = $config->get('visibility.request_path_pages');
+
+    // Match path if necessary.
+    if (!empty($visibility_request_path_pages)) {
+      // Convert path to lowercase. This allows comparison of the same path
+      // with different case. Ex: /Page, /page, /PAGE.
+      $pages = \mb_strtolower($visibility_request_path_pages);
+      if ($visibility_request_path_mode < MatomoAdminSettingsForm::VISIBILITY_REQUEST_PATH_MODE_PHP) {
+        // Compare the lowercase path alias (if any) and internal path.
+        $path = \Drupal::service('path.current')->getPath();
+        $path_alias = \Drupal::service('path_alias.manager')->getAliasByPath($path);
+        if (empty($path_alias)) {
+          $path_alias = \mb_strtolower($path);
+        }
+        else {
+          $path_alias = \mb_strtolower($path_alias);
+        }
+        $page_match = \Drupal::service('path.matcher')->matchPath($path_alias, $pages) || (($path != $path_alias) && \Drupal::service('path.matcher')->matchPath($path, $pages));
+        // When $visibility_request_path_mode has a value of 0, the tracking
+        // code is displayed on all pages except those listed in $pages. When
+        // set to 1, it is displayed only on those pages listed in $pages.
+        $page_match = !($visibility_request_path_mode xor $page_match);
+      }
+      elseif (\Drupal::moduleHandler()->moduleExists('php')) {
+        $page_match = \php_eval($visibility_request_path_pages);
+      }
+      else {
+        $page_match = FALSE;
+      }
+    }
+    else {
+      $page_match = TRUE;
+    }
+  }
+  return $page_match;
+}
+
+/**
+ * Get the page titles trail for the current page.
+ *
+ * Based on menu_get_active_breadcrumb().
+ *
+ * @return array
+ *   All page titles, including current page.
+ */
+function _matomo_get_hierarchy_titles() {
+  $titles = [];
+  $path = Url::fromRoute('<current>')->toString();
+  $config = \Drupal::config('system.site');
+  $matomo_conf = \Drupal::config('matomo.settings');
+
+  // No breadcrumb for the front page.
+  if (($path === Url::fromUserInput($config->get('page.front'))->toString())) {
+    return $titles;
+  }
+
+  // Load up the menu tree.
+  // @todo Check this is a sane approach.
+  $menu_tree = \Drupal::menuTree();
+  $menu_name = \Drupal::config('system.menu.main')->get('id');
+
+  // Build the typical default set of menu tree parameters.
+  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters($menu_name);
+
+  // Load the tree based on this set of parameters.
+  $tree = $menu_tree->load($menu_name, $parameters);
+
+  // Transform the tree using the manipulators.
+  $manipulators = [
+    // Only show links that are accessible for the current user.
+    ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+    // Use the default sorting of menu links.
+    ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+    // Fatten the menu.
+    ['callable' => 'menu.default_tree_manipulators:flatten'],
+  ];
+  $tree = $menu_tree->transform($tree, $manipulators);
+
+  if (!empty($tree)) {
+    foreach ($tree as $menu_item) {
+      // If the item is in the active trail and we don't have a front page link
+      // when we have set to exclude home from the breadcrumbs then add the
+      // title.
+      if ($menu_item->inActiveTrail && !($matomo_conf->get('page_title_hierarchy_exclude_home') && $menu_item->link->getRouteName() == '<front>')) {
+        $titles[] = $menu_item->link->getTitle();
+      }
+    }
+  }
+
+  return $titles;
+}
+
+/**
+ * Removes unmanaged file from the file system.
+ *
+ * @param string $uri
+ *   The file to delete.
+ *
+ * @internal
+ */
+function _matomo_file_delete($uri) {
+  \Drupal::service('file_system')->delete($uri);
+}
