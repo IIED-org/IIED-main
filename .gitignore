@@ -29,9 +29,6 @@ xdebug.log
 # Ignore node
 node_modules
 
-# Ignore MacOS files
-.DS_Store
-
 # Dev mode: don't include output css 
 tailwind.css
 # styles.css
@@ -41,3 +38,4 @@ docroot/libraries/flexslider
 
 # Ignore environment-specific .htaccess
 docroot/.htaccess
+.DS_Store
