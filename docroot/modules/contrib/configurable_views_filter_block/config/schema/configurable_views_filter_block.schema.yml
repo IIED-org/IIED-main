@@ -1,0 +1,25 @@
+block.settings.configurable_views_filter_block_block:*:
+  type: configurable_views_filter_block
+
+configurable_views_filter_block:
+  type: views_block
+  label: 'Configurable view block'
+  mapping:
+    visible_filters:
+      type: sequence
+      label: 'Visible filters'
+      sequence:
+        type: string
+        label: 'Filter name'
+    no_groups:
+      type: boolean
+      label: 'Hide groups'
+    no_reset:
+      type: boolean
+      label: 'Hide reset'
+    no_sort:
+      type: boolean
+      label: 'Hide sort'
+    no_pager:
+      type: boolean
+      label: 'Hide pager'

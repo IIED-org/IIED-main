@@ -11,7 +11,7 @@ _core:
 id: iied_tw_local_tasks
 theme: iied_tw
 region: content
-weight: -16
+weight: -15
 provider: null
 plugin: local_tasks_block
 settings:

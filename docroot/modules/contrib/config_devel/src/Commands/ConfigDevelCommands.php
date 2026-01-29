@@ -137,7 +137,7 @@ class ConfigDevelCommands extends DrushCommands {
     $config = $this->getExtensionConfig($type, $extension);
 
     if (empty($config)) {
-      throw new \Exception(sprintf("Couldn't export configuration. There is no config available for %s.", $extension));
+      throw new \Exception(sprintf("Couldn't export configuration. The '%s' extension has no config declared in a 'config_devel' section in the info file.", $extension));
     }
 
     // Export the required config.
@@ -285,6 +285,10 @@ class ConfigDevelCommands extends DrushCommands {
    *
    * @return array
    *   An array containing install and optional config.
+   *
+   * @throws \Exception
+   *   Throws an exception if the 'config_devel' property of the extension's
+   *   info file is badly formed.
    */
   protected function getExtensionConfig($type, $extension) {
     $filename = \Drupal::service('extension.path.resolver')->getPath($type, $extension) . '/' . $extension .'.info.yml';
@@ -292,6 +296,10 @@ class ConfigDevelCommands extends DrushCommands {
 
     $config = [];
     if (isset($info['config_devel'])) {
+      if (!is_array($info['config_devel'])) {
+        throw new \Exception("The 'config_devel' property in the '$extension' extension must be an array.");
+      }
+
       // Keep backwards compatibility for the old format. This has config names
       // listed directly beneath 'config_devel', rather than an intermediate
       // level for 'install' and 'optional'.
@@ -375,7 +383,12 @@ class ConfigDevelCommands extends DrushCommands {
     $config_path = \Drupal::service('extension.path.resolver')->getPath($type, $extension) . "/$directory";
     foreach ($config_list as $name) {
       $file_name = $config_path . '/' . $name . '.yml';
-      $this->importSingle($file_name);
+      try {
+        $this->importSingle($file_name);
+      }
+      catch (\Exception $e) {
+        throw new \Exception("No config file found for config '$name'.");
+      }
     }
   }
 

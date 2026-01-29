@@ -39,25 +39,6 @@ interface FacetsSummaryInterface extends ConfigEntityInterface {
   public function setFacetSourceId($facet_source_id);
 
   /**
-   * Returns the search filter identifier.
-   *
-   * @return string
-   *   The search filter identifier.
-   */
-  public function getSearchFilterIdentifier();
-
-  /**
-   * Sets a string representation of the search filter identifier.
-   *
-   * @param string $search_filter_identifier
-   *   The search filter identifier.
-   *
-   * @return $this
-   *   Returns self.
-   */
-  public function setSearchFilterIdentifier($search_filter_identifier);
-
-  /**
    * Returns the plugin instance of a facet source.
    *
    * @return \Drupal\facets\FacetSource\FacetSourcePluginInterface
@@ -138,6 +119,23 @@ interface FacetsSummaryInterface extends ConfigEntityInterface {
    *   An array of processors and their configs.
    */
   public function getProcessorConfigs();
+
+  /**
+   * Sets the "only visible when facet source is visible" boolean flag.
+   *
+   * @param bool $only_visible_when_facet_source_is_visible
+   *   A boolean flag indicating if the facet should be hidden on a page that
+   *   does not show the facet source.
+   */
+  public function setOnlyVisibleWhenFacetSourceIsVisible($only_visible_when_facet_source_is_visible);
+
+  /**
+   * Returns the "only visible when facet source is visible" boolean flag.
+   *
+   * @return bool
+   *   True when the facet is only shown on a page with the facet source.
+   */
+  public function getOnlyVisibleWhenFacetSourceIsVisible();
 
   /**
    * Adds a processor for this facet.

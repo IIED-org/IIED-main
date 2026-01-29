@@ -299,7 +299,15 @@ abstract class EntityDisplayBase extends ConfigEntityBase implements EntityDispl
     // Depend on configured modes.
     if ($this->mode != 'default') {
       $mode_entity = $this->entityTypeManager()->getStorage('entity_' . $this->displayContext . '_mode')->load($target_entity_type->id() . '.' . $this->mode);
-      $this->addDependency('config', $mode_entity->getConfigDependencyName());
+      if ($mode_entity !== NULL) {
+        $this->addDependency('config', $mode_entity->getConfigDependencyName());
+      }
+      else {
+        $this->getLogger()->warning('Entity @display mode "@id" could not be loaded', [
+          '@display' => $this->displayContext,
+          '@id' => $target_entity_type->id() . '.' . $this->mode,
+        ]);
+      }
     }
     return $this;
   }

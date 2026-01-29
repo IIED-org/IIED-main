@@ -4,7 +4,7 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/HEAD/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\PEAR\Tests\Commenting;
@@ -75,11 +75,16 @@ final class FunctionCommentUnitTest extends AbstractSniffUnitTest
             364 => 1,
             406 => 1,
             417 => 1,
-            455 => 1,
-            464 => 1,
-            473 => 1,
-            485 => 1,
-            501 => 1,
+            456 => 1,
+            466 => 1,
+            474 => 1,
+            476 => 1,
+            486 => 1,
+            502 => 1,
+            521 => 1,
+            523 => 1,
+            533 => 1,
+            545 => 1,
         ];
 
     }//end getErrorList()

@@ -1,3 +1,18 @@
+Search API Autocomplete 1.10 (2025-01-15):
+------------------------------------------
+- #3487349 by recrit, drunken monkey: Fixed AutocompleteHelper::alterElement()
+  to not add duplicate process callbacks.
+- #3495585 by drunken monkey: Added warning messages when suggesters are invalid.
+- #3496037 by drunken monkey: Fixed implicitly nullable parameter type hints.
+- #3484623 by drunken monkey: Added note about JSON responses not containing
+  valid HTML to README.md.
+- #3458912 by sourojeetpaul, drunken monkey, kristen pol: Added a logo.
+- #3457996 by drunken monkey: Increased Drupal core version requirement to 10.2.
+- #3455534 by infojunkie, sarwan_verma, drunken monkey: Fixed unchecked use of
+  DeprecationHelper class.
+- #3455000 by codebymikey, drunken monkey: Fixed inconsistent sorting of
+  dependencies in config exports.
+
 Search API Autocomplete 1.9 (2024-06-16):
 -----------------------------------------
 - #3442321 by drunken monkey: Fixed call to deprecated method renderPlain().

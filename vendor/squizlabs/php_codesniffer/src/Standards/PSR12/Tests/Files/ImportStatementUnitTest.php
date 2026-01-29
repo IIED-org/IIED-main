@@ -4,7 +4,7 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2019 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/HEAD/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\PSR12\Tests\Files;
@@ -31,9 +31,10 @@ final class ImportStatementUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [
-            2 => 1,
-            4 => 1,
-            7 => 1,
+            2  => 1,
+            4  => 1,
+            7  => 1,
+            10 => 1,
         ];
 
     }//end getErrorList()

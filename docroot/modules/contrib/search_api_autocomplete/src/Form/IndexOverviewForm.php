@@ -127,7 +127,7 @@ class IndexOverviewForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, IndexInterface $search_api_index = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?IndexInterface $search_api_index = NULL) {
     try {
       // Display hint about using the new Search API Solr Autocomplete module.
       // See search_api_autocomplete_requirements().

@@ -3,6 +3,7 @@
 namespace Drupal\login_redirect_per_role;
 
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 
 /**
  * Interface defining Login And Logout Redirect Per Role helper service.
@@ -25,7 +26,7 @@ interface LoginRedirectPerRoleInterface {
    * @return bool
    *   Result of check.
    */
-  public function isApplicableOnCurrentPage();
+  public function isApplicableOnCurrentPage(): bool;
 
   /**
    * Return URL to redirect on user login.
@@ -33,7 +34,7 @@ interface LoginRedirectPerRoleInterface {
    * @return \Drupal\Core\Url|null
    *   URL to redirect to on success or NULL otherwise.
    */
-  public function getLoginRedirectUrl();
+  public function getLoginRedirectUrl(): ?Url;
 
   /**
    * Set Login destination parameter to do redirect.
@@ -41,7 +42,7 @@ interface LoginRedirectPerRoleInterface {
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   User account to set destination for.
    */
-  public function setLoginDestination(AccountInterface $account = NULL);
+  public function setLoginDestination(?AccountInterface $account = NULL): void;
 
   /**
    * Return URL to redirect on user logout.
@@ -49,7 +50,7 @@ interface LoginRedirectPerRoleInterface {
    * @return \Drupal\Core\Url|null
    *   URL to redirect to on success or NULL otherwise.
    */
-  public function getLogoutRedirectUrl();
+  public function getLogoutRedirectUrl(): ?Url;
 
   /**
    * Set Logout destination parameter to do redirect.
@@ -57,7 +58,7 @@ interface LoginRedirectPerRoleInterface {
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   User account to set destination for.
    */
-  public function setLogoutDestination(AccountInterface $account = NULL);
+  public function setLogoutDestination(?AccountInterface $account = NULL): void;
 
   /**
    * Return logout configuration.
@@ -65,7 +66,7 @@ interface LoginRedirectPerRoleInterface {
    * @return array
    *   Logout configuration on success or an empty array otherwise.
    */
-  public function getLogoutConfig();
+  public function getLogoutConfig(): array;
 
   /**
    * Return login configuration.
@@ -73,6 +74,6 @@ interface LoginRedirectPerRoleInterface {
    * @return array
    *   Login configuration on success or an empty array otherwise.
    */
-  public function getLoginConfig();
+  public function getLoginConfig(): array;
 
 }

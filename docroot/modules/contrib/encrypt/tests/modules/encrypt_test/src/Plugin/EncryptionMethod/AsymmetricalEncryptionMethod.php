@@ -3,8 +3,8 @@
 namespace Drupal\encrypt_test\Plugin\EncryptionMethod;
 
 use Drupal\encrypt\EncryptionMethodInterface;
-use Drupal\encrypt_test\Exception\AsymmetricalEncryptionMethodCanNotDecryptException;
 use Drupal\encrypt\Plugin\EncryptionMethod\EncryptionMethodBase;
+use Drupal\encrypt_test\Exception\AsymmetricalEncryptionMethodCanNotDecryptException;
 
 /**
  * Encryption-only encryption method, it can NOT decrypt.

@@ -201,6 +201,7 @@ function linkchecker_entity_update(EntityInterface $entity) {
  */
 function linkchecker_entity_delete(EntityInterface $entity) {
   if ($entity instanceof LinkCheckerLinkInterface) {
+    \Drupal::service('linkchecker.clean_up')->cleanUpQueues($entity->id());
     return;
   }
 

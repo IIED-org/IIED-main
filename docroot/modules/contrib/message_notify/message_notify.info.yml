@@ -6,7 +6,7 @@ dependencies:
   - message:message
 type: module
 
-# Information added by Drupal.org packaging script on 2024-09-09
-version: '8.x-1.4'
+# Information added by Drupal.org packaging script on 2025-02-17
+version: '8.x-1.5'
 project: 'message_notify'
-datestamp: 1725912821
+datestamp: 1739804812

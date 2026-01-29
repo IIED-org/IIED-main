@@ -73,7 +73,7 @@ class TermReferenceTree extends WidgetBase {
     $form['cascading_selection'] = [
       '#type' => 'select',
       '#title' => $this->t('Cascading selection'),
-      '#description' => $this->t('On parent selection, automatically select children if none were selected. Some may then be manually unselected. In the same way, on parent unselection, unselect children if all were selected. <em>This option is only valid if an unlimited number of values can be selected.</em>'),
+      '#description' => $this->t('On parent selection, automatically select children if none were selected. Some may then be manually unselected. In the same way, on parent unselect, unselect children if all were selected. <em>This option is only valid if an unlimited number of values can be selected.</em>'),
       '#default_value' => $this->getSetting('cascading_selection'),
       '#options' => [
         self::CASCADING_SELECTION_NONE => $this->t('None'),

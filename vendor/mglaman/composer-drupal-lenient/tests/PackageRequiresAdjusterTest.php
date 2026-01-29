@@ -43,6 +43,34 @@ class PackageRequiresAdjusterTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
+     * @covers ::applies
+     * @dataProvider provideTypes
+     */
+    public function testAppliesWithAllowsAll(string $name, string $type): void
+    {
+        $root = new RootPackage('foo', '1.0', '1.0');
+        $root->setExtra([
+            'drupal-lenient' => [
+                'allow-all' => true,
+            ]
+        ]);
+        $composer = new Composer();
+        $composer->setPackage($root);
+
+        $adjuster = new PackageRequiresAdjuster($composer);
+        $package = new Package($name, '1.0', '1.0');
+        $package->setType($type);
+
+        $expected = !(($type === 'library' || $type === 'drupal-core'));
+        self::assertEquals(
+            $expected,
+            $adjuster->applies($package),
+            "Package $name of type $type should be allowed."
+        );
+    }
+
+    /**
      * @return array<int, array<int, string|bool>>
      */
     public function provideTypes(): array
@@ -87,8 +115,9 @@ class PackageRequiresAdjusterTest extends TestCase
             new Constraint('>=', '8.0'),
             new Constraint('>=', '9.0'),
             new Constraint('>=', '10.0'),
+            new Constraint('>=', '11.0'),
         ]);
-        $originalTokenConstraint = new Constraint('>=', '1.10.0');
+        $originalSimplenewsConstraint = new Constraint('>=', '4.0.0');
         $package = new CompletePackage('foo', '1.0', '1.0');
         $package->setType('drupal-module');
         $package->setRequires([
@@ -99,12 +128,12 @@ class PackageRequiresAdjusterTest extends TestCase
                 Link::TYPE_REQUIRE,
                 $originalDrupalCoreConstraint->getPrettyString()
             ),
-            'drupal/token' => new Link(
+            'drupal/simplenews' => new Link(
                 'bar',
-                'drupal/token',
-                $originalTokenConstraint,
+                'drupal/simplenews',
+                $originalSimplenewsConstraint,
                 Link::TYPE_REQUIRE,
-                $originalTokenConstraint->getPrettyString()
+                $originalSimplenewsConstraint->getPrettyString()
             )
         ]);
         $adjuster->adjust($package);
@@ -113,8 +142,8 @@ class PackageRequiresAdjusterTest extends TestCase
             $package->getRequires()['drupal/core']->getConstraint()->getPrettyString()
         );
         self::assertSame(
-            $originalTokenConstraint,
-            $package->getRequires()['drupal/token']->getConstraint()
+            $originalSimplenewsConstraint,
+            $package->getRequires()['drupal/simplenews']->getConstraint()
         );
         if ($coreVersion !== null) {
             self::assertTrue(
@@ -129,8 +158,8 @@ class PackageRequiresAdjusterTest extends TestCase
     public function provideAdjustData(): array
     {
         return [
-            [null, '^8 || ^9 || ^10 || ^11'],
-            ['10.0.0-alpha5', '^8 || ^9 || ^10 || ^11'],
+            [null, '^8 || ^9 || ^10 || ^11 || ^12'],
+            ['10.0.0-alpha5', '^8 || ^9 || ^10 || ^11 || ^12'],
         ];
     }
 }

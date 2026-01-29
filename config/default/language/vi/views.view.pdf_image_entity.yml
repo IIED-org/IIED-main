@@ -1,7 +1,0 @@
-display:
-  default:
-    display_title: Default
-    display_options:
-      fields:
-        id:
-          label: Mã

@@ -25,7 +25,7 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
   /**
    * The current view.
    */
-  protected ViewExecutable $view;
+  protected ?ViewExecutable $view = NULL;
 
   /**
    * The display handler.
@@ -68,13 +68,22 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
    */
   public function __construct(
     protected readonly EventDispatcherInterface $eventDispatcher,
-    protected readonly PagerManagerInterface $pagerManager
+    protected readonly PagerManagerInterface $pagerManager,
   ) {}
 
   /**
    * {@inheritdoc}
    */
   public function init(ViewExecutable $view, DisplayPluginBase $display, $relationship): void {
+    // Don't reinitialize if we're working on the same view.
+    if (
+      $this->view !== NULL &&
+      $this->view->id() === $view->id() &&
+      $this->view->current_display === $view->current_display
+    ) {
+      return;
+    }
+
     $this->view = $view;
     $this->displayHandler = $display;
     $this->relationship = $relationship;

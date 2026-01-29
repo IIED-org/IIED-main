@@ -7,7 +7,7 @@ leaflet:
     url: https://github.com/Leaflet/Leaflet/blob/master/LICENSE
     gpl-compatible: true
   css:
-    component:
+    theme:
       'https://unpkg.com/leaflet@1.8.0/dist/leaflet.css': { type: external, minified: true }
   js:
     'https://unpkg.com/leaflet@1.8.0/dist/leaflet.js': { type: external, minified: true }
@@ -83,9 +83,9 @@ geocoder.photon:
   js:
     js/photon-geocoder.js: {}
   dependencies:
-  - core/once
-  - core/jquery
-  - geolocation/geolocation.geocoder.api
+    - core/once
+    - core/jquery
+    - geolocation/geolocation.geocoder.api
 
 #
 # Map Features
@@ -128,7 +128,7 @@ mapfeature.client_location_indicator:
   js:
     js/MapFeature/geolocation-client-location-indicator.js: {}
   dependencies:
-  - geolocation_leaflet/geolocation.leaflet
+    - geolocation_leaflet/geolocation.leaflet
 
 # MarkerIconAdjustment support.
 mapfeature.leaflet_marker_icon:
@@ -304,7 +304,7 @@ mapfeature.leaflet_control_locate:
   js:
     js/MapFeature/geolocation-control-locate.js: {}
   dependencies:
-  - geolocation_leaflet/geolocation.leaflet
+    - geolocation_leaflet/geolocation.leaflet
 
 # Control Fullscreen
 leaflet.fullscreen:
@@ -327,8 +327,8 @@ mapfeature.leaflet_control_fullscreen:
   js:
     js/MapFeature/geolocation-control-fullscreen.js: {}
   dependencies:
-  - geolocation_leaflet/geolocation.leaflet
-  - geolocation_leaflet/leaflet.fullscreen
+    - geolocation_leaflet/geolocation.leaflet
+    - geolocation_leaflet/leaflet.fullscreen
 
 # Control Tile layer
 mapfeature.leaflet_control_layer:
@@ -338,8 +338,8 @@ mapfeature.leaflet_control_layer:
   js:
     js/MapFeature/geolocation-control-layer.js: {}
   dependencies:
-  - geolocation_leaflet/geolocation.leaflet
-  - geolocation_leaflet/leaflet-providers
+    - geolocation_leaflet/geolocation.leaflet
+    - geolocation_leaflet/leaflet-providers
 
 leaflet.rotate:
   header: true

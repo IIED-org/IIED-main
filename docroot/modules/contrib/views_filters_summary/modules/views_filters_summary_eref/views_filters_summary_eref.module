@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for views_filters_summary_eref module.
+ */
+
+/**
+ * Implements hook_views_filters_summary_info_alter().
+ */
+function views_filters_summary_eref_views_filters_summary_info_alter(&$info, $filter) {
+  if ($filter->getPluginId() === 'eref_node_titles') {
+    $values = [];
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    foreach ($filter->value as $index => $nid) {
+      if ($node = $storage->load($nid)) {
+        $values[] = [
+          'id' => $index,
+          'raw' => $node->id(),
+          'value' => $node->label(),
+        ];
+      }
+    }
+    $info['value'] = $values;
+  }
+}

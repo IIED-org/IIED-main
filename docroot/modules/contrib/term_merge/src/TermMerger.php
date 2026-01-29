@@ -2,11 +2,11 @@
 
 namespace Drupal\term_merge;
 
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\taxonomy\TermInterface;
-use Drupal\taxonomy\TermStorageInterface;
 use Drupal\term_reference_change\ReferenceMigrator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Implements TermMergerInterface to provide a term merger service.
@@ -18,7 +18,7 @@ class TermMerger implements TermMergerInterface {
    *
    * @var \Drupal\taxonomy\TermStorageInterface
    */
-  protected TermStorageInterface $termStorage;
+  protected EntityStorageInterface $termStorage;
 
   /**
    * The entity type manager.
@@ -37,9 +37,9 @@ class TermMerger implements TermMergerInterface {
   /**
    * The event dispatcher.
    *
-   * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
-  protected ContainerAwareEventDispatcher $dispatcher;
+  protected EventDispatcherInterface $dispatcher;
 
   /**
    * TermMerger constructor.
@@ -48,15 +48,16 @@ class TermMerger implements TermMergerInterface {
    *   The entity type manager service.
    * @param \Drupal\term_reference_change\ReferenceMigrator $migrator
    *   The reference migration service.
-   * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $dispatcher
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   The event dispatcher.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     ReferenceMigrator $migrator,
-    ContainerAwareEventDispatcher $dispatcher
+    EventDispatcherInterface $dispatcher
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->termStorage = $this->entityTypeManager->getStorage('taxonomy_term');

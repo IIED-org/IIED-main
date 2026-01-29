@@ -1,0 +1,98 @@
+{
+    "description": "This default CSpell configuration for contrib projects is based on core/.cspell.json. Some of the arrays are expanded in scripts/prepare-cspell.php. See https://project.pages.drupalcode.org/gitlab_templates/jobs/cspell/ for more details.",
+    "language": "en-US",
+    "allowCompoundWords": false,
+    "globRoot": ".",
+    "minWordLength": 4,
+    "ignorePaths": [
+        "web",
+        "vendor",
+        "node_modules",
+        ".git",
+        "*.patch",
+        "*.svg",
+        "*_ignore_*",
+        "build.env",
+        "**/.*.json",
+        "package.json",
+        "yarn.lock",
+        "phpstan*",
+        ".*ignore",
+        "./composer.lock",
+        "./composer.json",
+        "./CHANGELOG.txt",
+        "_cspell_unrecognized_words.txt"
+    ],
+    "dictionaries": [
+        "companies",
+        "fonts",
+        "html",
+        "php",
+        "softwareTerms",
+        "misc",
+        "typescript",
+        "node",
+        "css",
+        "bash",
+        "filetypes",
+        "npm",
+        "lorem-ipsum",
+        "sql",
+        "fullstack",
+        "drupal",
+        "dictionary",
+        "project-words"
+    ],
+    "dictionaryDefinitions": [
+        {
+            "name": "drupal",
+            "path": "web/core/misc/cspell/drupal-dictionary.txt"
+        },
+        {
+            "name": "dictionary",
+            "path": "web/core/misc/cspell/dictionary.txt"
+        },
+        {
+            "name": "project-words",
+            "path": "./.cspell-project-words.txt",
+            "description": "The project's own custom dictionary (optional)"
+        }
+    ],
+    "words": [
+        "linkchecker",
+        "lando",
+        "ddev",
+        "endapply",
+        "nightwatchjs",
+        "testgroup",
+        "testgroups",
+        "backlinks",
+        "mdhash",
+        "uploaders",
+        "vocabs",
+        "curlopt",
+        "returntransfer",
+        "curle",
+        "customrequest",
+        "failonerror",
+        "postfields",
+        "followlocation",
+        "colourdefinitionsniff",
+        "seletorsingleline",
+        "teamplatespacingaftercomment",
+        "tforvalue",
+        "trhowscommentindentation",
+        "unecessaryfiledeclaration"
+    ],
+    "flagWords": [
+        "e-mail",
+        "grey",
+        "queuing"
+    ],
+    "overrides": [
+        {
+            "filename": "**/{*.engine,*.inc,*.install,*.module,*.profile,*.theme}",
+            "languageId": "php"
+        }
+    ]
+}

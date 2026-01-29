@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\admin_toolbar\Functional;
 
+use Drupal\Tests\BrowserTestBase;
 use Drupal\media\Entity\MediaType;
 use Drupal\system\Entity\Menu;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests Admin Toolbar tools functionality.
@@ -14,9 +14,7 @@ use Drupal\Tests\BrowserTestBase;
 class AdminToolbarToolsSortTest extends BrowserTestBase {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
+   * {@inheritdoc}
    */
   protected static $modules = [
     'toolbar',
@@ -42,6 +40,9 @@ class AdminToolbarToolsSortTest extends BrowserTestBase {
 
   /**
    * Tests that menu updates on entity add/update/delete.
+   *
+   * @return void
+   *   Nothing to return.
    */
   public function testMenuUpdate() {
 
@@ -108,6 +109,9 @@ class AdminToolbarToolsSortTest extends BrowserTestBase {
 
   /**
    * Tests sorting of menus by label rather than machine name.
+   *
+   * @return void
+   *   Nothing to return.
    */
   public function testMenuSorting() {
 
@@ -231,6 +235,9 @@ class AdminToolbarToolsSortTest extends BrowserTestBase {
    * @param string $url
    *   The url to assert exists in the admin menu.
    *
+   * @return void
+   *   Nothing to return.
+   *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
   protected function assertMenuHasHref($url) {
@@ -243,6 +250,9 @@ class AdminToolbarToolsSortTest extends BrowserTestBase {
    *
    * @param string $url
    *   The url to assert exists in the admin menu.
+   *
+   * @return void
+   *   Nothing to return.
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    */

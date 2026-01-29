@@ -22,76 +22,36 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RedirectURLSettingsForm extends ConfigFormBase {
 
   /**
-   * The path validator.
-   *
-   * @var \Drupal\Core\Path\PathValidatorInterface
-   */
-  protected $pathValidator;
-
-  /**
-   * Entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * The token service.
-   *
-   * @var \Drupal\Core\Utility\Token
-   */
-  protected $token;
-
-  /**
-   * The alias manager.
-   *
-   * @var \Drupal\path_alias\AliasManagerInterface
-   */
-  protected $aliasManager;
-
-  /**
-   * The login redirect per role service.
-   *
-   * @var \Drupal\login_redirect_per_role\LoginRedirectPerRoleInterface
-   */
-  protected $loginRedirectPerRole;
-
-  /**
    * Constructs a SiteInformationForm object.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The factory for configuration objects.
-   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
    *   The typed config manager.
-   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
+   * @param \Drupal\Core\Path\PathValidatorInterface $pathValidator
    *   The path validator.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   The module handler.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
-   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $aliasManager
    *   The alias manager service.
-   * @param \Drupal\login_redirect_per_role\LoginRedirectPerRoleInterface $login_redirect_per_role
+   * @param \Drupal\login_redirect_per_role\LoginRedirectPerRoleInterface $loginRedirectPerRole
    *   The login redirect per role service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typed_config_manager, PathValidatorInterface $path_validator, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, Token $token, AliasManagerInterface $alias_manager, LoginRedirectPerRoleInterface $login_redirect_per_role) {
-    parent::__construct($config_factory, $typed_config_manager);
-
-    $this->pathValidator = $path_validator;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->moduleHandler = $module_handler;
-    $this->token = $token;
-    $this->aliasManager = $alias_manager;
-    $this->loginRedirectPerRole = $login_redirect_per_role;
+  public function __construct(
+    ConfigFactoryInterface $configFactory,
+    TypedConfigManagerInterface $typedConfigManager,
+    private readonly PathValidatorInterface $pathValidator,
+    private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly ModuleHandlerInterface $moduleHandler,
+    private readonly Token $token,
+    private readonly AliasManagerInterface $aliasManager,
+    private readonly LoginRedirectPerRoleInterface $loginRedirectPerRole,
+  ) {
+    parent::__construct($configFactory, $typedConfigManager);
   }
 
   /**
@@ -113,7 +73,7 @@ class RedirectURLSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  protected function getEditableConfigNames() {
+  protected function getEditableConfigNames(): array {
     return [
       'login_redirect_per_role.settings',
     ];
@@ -122,14 +82,14 @@ class RedirectURLSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'redirect_url_admin_settings';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     $config = $this->config('login_redirect_per_role.settings');
     $actions = $this->getAvailableActions();
     $roles = $this->getAvailableUserRoleNames();
@@ -223,7 +183,7 @@ class RedirectURLSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
     parent::validateForm($form, $form_state);
 
     $roles = $this->getAvailableUserRoleNames();
@@ -235,8 +195,23 @@ class RedirectURLSettingsForm extends ConfigFormBase {
           continue;
         }
 
-        $path = $this->token->replace($settings['redirect_url']);
-        $is_token = $path !== $settings['redirect_url'];
+        $redirect_url = $settings['redirect_url'];
+
+        // Checks if the redirect URL equals <front> or starts with
+        // '/', '?', '#' or '['.
+        if ($redirect_url !== '<front>' && !in_array($redirect_url[0], ['/', '?', '#', '['])) {
+          $form_state->setErrorByName(
+            $action_id . '][' . $role_id . '][redirect_url',
+            $this->t(
+              '<strong>@action:</strong> Redirect URL for "@role" role must begin with "/", "?" or "#".',
+              ['@action' => $action_label, '@role' => $roles[$role_id]]
+            )
+          );
+          continue;
+        }
+
+        $path = $this->token->replace($redirect_url);
+        $is_token = $path !== $redirect_url;
 
         $path = $this->loginRedirectPerRole->stripSubdirectoryFromPath($path);
         $path = $this->aliasManager->getPathByAlias($path);
@@ -261,14 +236,13 @@ class RedirectURLSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     parent::submitForm($form, $form_state);
 
     $config = $this->config('login_redirect_per_role.settings');
 
-    $actions = $this->getAvailableActions();
-    foreach ($actions as $action_id => $action_label) {
-      $config->set($action_id, $form_state->getValue($action_id));
+    foreach (array_keys($this->getAvailableActions()) as $actionId) {
+      $config->set($actionId, $form_state->getValue($actionId));
     }
 
     $config->save();
@@ -277,22 +251,19 @@ class RedirectURLSettingsForm extends ConfigFormBase {
   /**
    * Return available user role names keyed by role id.
    *
-   * @return array
+   * @return array<string, string>
    *   Available user role names.
    */
-  protected function getAvailableUserRoleNames() {
+  protected function getAvailableUserRoleNames(): array {
     $names = [];
 
+    /** @var \Drupal\user\RoleInterface[] $roles */
     $roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple();
 
-    if (isset($roles[RoleInterface::ANONYMOUS_ID])) {
-      unset($roles[RoleInterface::ANONYMOUS_ID]);
-    }
+    unset($roles[RoleInterface::ANONYMOUS_ID]);
 
     foreach ($roles as $role) {
-      if ($role instanceof RoleInterface) {
-        $names[$role->id()] = $role->label();
-      }
+      $names[$role->id()] = $role->label();
     }
 
     return $names;
@@ -301,10 +272,10 @@ class RedirectURLSettingsForm extends ConfigFormBase {
   /**
    * Return available actions.
    *
-   * @return array
+   * @return array<string, \Drupal\Core\StringTranslation\TranslatableMarkup>
    *   Available actions.
    */
-  protected function getAvailableActions() {
+  protected function getAvailableActions(): array {
     return [
       'login' => $this->t('Login redirect'),
       'logout' => $this->t('Logout redirect'),

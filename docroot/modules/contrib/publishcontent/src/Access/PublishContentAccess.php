@@ -3,6 +3,7 @@
 namespace Drupal\publishcontent\Access;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
@@ -12,6 +13,13 @@ use Drupal\publishcontent\PublishContentPermissions as Perm;
  * Access class checking the permissions for publishing and unpublishing.
  */
 class PublishContentAccess implements AccessInterface {
+
+  /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
 
   /**
    * The account performing the action.
@@ -33,6 +41,16 @@ class PublishContentAccess implements AccessInterface {
    * @var array
    */
   protected $arguments;
+
+  /**
+   * PublishContentAccess constructor.
+   *
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   The module handler interface.
+   */
+  public function __construct(ModuleHandlerInterface $moduleHandler) {
+    $this->moduleHandler = $moduleHandler;
+  }
 
   /**
    * {@inheritdoc}
@@ -62,11 +80,52 @@ class PublishContentAccess implements AccessInterface {
             || $this->accessUnpublishAnyType()
             || $this->accessUnpublishOwnType()
             || $this->accessUnpublishEditableType()))) {
-      return AccessResult::allowed();
+
+      $hook = "publishcontent_{$action}_access";
+
+      $access = array_merge(
+        $this->moduleHandler->invokeAll($hook, [
+          $this->node,
+          $this->account,
+        ]),
+        [AccessResult::allowed()]
+      );
+
+      return $this->processAccessHookResults($access);
     }
 
     return AccessResult::forbidden();
+  }
 
+  /**
+   * Process all acess hooks.
+   *
+   * We grant access if both of these conditions are met:
+   * - No modules say to deny access.
+   * - At least one module says to grant access.
+   *
+   * @param \Drupal\Core\Access\AccessResultInterface[] $access
+   *   An array of access results of the fired access hook.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The combined result of the various access check results.
+   *
+   *   All their cacheability metadata is merged as well.
+   *
+   * @see \Drupal\Core\Access\AccessResultInterface::orIf()
+   */
+  protected function processAccessHookResults(array $access) {
+    // No results means no opinion.
+    if (empty($access)) {
+      return AccessResult::neutral();
+    }
+
+    /** @var \Drupal\Core\Access\AccessResultInterface $result */
+    $result = array_shift($access);
+    foreach ($access as $other) {
+      $result = $result->orIf($other);
+    }
+    return $result;
   }
 
   /**

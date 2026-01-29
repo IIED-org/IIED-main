@@ -43,6 +43,7 @@ use Drupal\linkchecker\LinkCheckerLinkInterface;
  *   admin_permission = "administer linkchecker",
  *   entity_keys = {
  *     "id" = "lid",
+ *     "uuid" = "uuid",
  *     "published" = "status"
  *   },
  *   links = {
@@ -180,15 +181,17 @@ class LinkCheckerLink extends ContentEntityBase implements LinkCheckerLinkInterf
    * {@inheritdoc}
    */
   public function getParentEntity() {
-    return $this->get('entity_id')->entity;
+    $entity_type_id = $this->get('parent_entity_type_id')->getString();
+    $entity_id = $this->get('parent_entity_id')->getString();
+    return $this->entityTypeManager()->getStorage($entity_type_id)->load($entity_id);
   }
 
   /**
    * {@inheritdoc}
    */
   public function setParentEntity(FieldableEntityInterface $entity) {
-    $this->get('entity_id')->target_id = $entity->id();
-    $this->get('entity_id')->target_type = $entity->getEntityTypeId();
+    $this->set('parent_entity_type_id', $entity->getEntityTypeId());
+    $this->set('parent_entity_id', $entity->id());
     return $this;
   }
 
@@ -264,6 +267,12 @@ class LinkCheckerLink extends ContentEntityBase implements LinkCheckerLinkInterf
 
     $fields[$entity_type->getKey('published')]->setLabel(new TranslatableMarkup('Check link status'));
 
+    // UUID field, required for JSON:API.
+    $fields['uuid'] = BaseFieldDefinition::create('uuid')
+      ->setLabel(new TranslatableMarkup('UUID'))
+      ->setDescription(new TranslatableMarkup('The entity UUID.'))
+      ->setReadOnly(TRUE);
+
     // Hash of URL.
     $fields['urlhash'] = BaseFieldDefinition::create('string')
       ->setLabel(new TranslatableMarkup('URL hash'))
@@ -307,10 +316,16 @@ class LinkCheckerLink extends ContentEntityBase implements LinkCheckerLinkInterf
       ->setLabel(new TranslatableMarkup('Last checked'))
       ->setDescription(new TranslatableMarkup('Timestamp of the last link check.'));
 
+    // Entity type id related to the link.
+    $fields['parent_entity_type_id'] = BaseFieldDefinition::create('string')
+      ->setLabel(new TranslatableMarkup('Entity Type id'))
+      ->setDescription(new TranslatableMarkup('The entity type id string of the entity in which link was found.'))
+      ->setRequired(TRUE);
+
     // Entity id related to the link.
-    $fields['entity_id'] = BaseFieldDefinition::create('dynamic_entity_reference')
-      ->setLabel(new TranslatableMarkup('Entity id'))
-      ->setDescription(new TranslatableMarkup('ID of entity in which link was found.'))
+    $fields['parent_entity_id'] = BaseFieldDefinition::create('integer')
+      ->setLabel(new TranslatableMarkup('Entity ID'))
+      ->setDescription(new TranslatableMarkup('The entity id integer of the entity in which link was found.'))
       ->setRequired(TRUE);
 
     // Entity field related to the link.

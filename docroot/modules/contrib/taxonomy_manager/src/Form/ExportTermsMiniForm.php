@@ -42,7 +42,7 @@ class ExportTermsMiniForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL, $selected_terms = []) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?VocabularyInterface $taxonomy_vocabulary = NULL, $selected_terms = []) {
 
     $form['voc'] = [
       '#type' => 'value',

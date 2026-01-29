@@ -7,7 +7,7 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/HEAD/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer;
@@ -764,7 +764,7 @@ class Runner
      * The reporting information returned by each child process is merged
      * into the main reporter class.
      *
-     * @param array $childProcs An array of child processes to wait for.
+     * @param array<int, string> $childProcs An array of child processes to wait for.
      *
      * @return bool
      */
@@ -777,7 +777,8 @@ class Runner
 
         while (count($childProcs) > 0) {
             $pid = pcntl_waitpid(0, $status);
-            if ($pid <= 0) {
+            if ($pid <= 0 || isset($childProcs[$pid]) === false) {
+                // No child or a child with an unmanaged PID was returned.
                 continue;
             }
 
@@ -856,9 +857,14 @@ class Runner
             return;
         }
 
+        $showColors  = $this->config->colors;
+        $colorOpen   = '';
+        $progressDot = '.';
+        $colorClose  = '';
+
         // Show progress information.
         if ($file->ignored === true) {
-            echo 'S';
+            $progressDot = 'S';
         } else {
             $errors   = $file->getErrorCount();
             $warnings = $file->getWarningCount();
@@ -870,27 +876,19 @@ class Runner
                 // Files with unfixable errors or warnings are E (red).
                 // Files with no errors or warnings are . (black).
                 if ($fixable > 0) {
-                    if ($this->config->colors === true) {
-                        echo "\033[31m";
-                    }
+                    $progressDot = 'E';
 
-                    echo 'E';
-
-                    if ($this->config->colors === true) {
-                        echo "\033[0m";
+                    if ($showColors === true) {
+                        $colorOpen  = "\033[31m";
+                        $colorClose = "\033[0m";
                     }
                 } else if ($fixed > 0) {
-                    if ($this->config->colors === true) {
-                        echo "\033[32m";
-                    }
+                    $progressDot = 'F';
 
-                    echo 'F';
-
-                    if ($this->config->colors === true) {
-                        echo "\033[0m";
+                    if ($showColors === true) {
+                        $colorOpen  = "\033[32m";
+                        $colorClose = "\033[0m";
                     }
-                } else {
-                    echo '.';
                 }//end if
             } else {
                 // Files with errors are E (red).
@@ -899,38 +897,34 @@ class Runner
                 // Files with fixable warnings are W (green).
                 // Files with no errors or warnings are . (black).
                 if ($errors > 0) {
-                    if ($this->config->colors === true) {
+                    $progressDot = 'E';
+
+                    if ($showColors === true) {
                         if ($fixable > 0) {
-                            echo "\033[32m";
+                            $colorOpen = "\033[32m";
                         } else {
-                            echo "\033[31m";
+                            $colorOpen = "\033[31m";
                         }
-                    }
 
-                    echo 'E';
-
-                    if ($this->config->colors === true) {
-                        echo "\033[0m";
+                        $colorClose = "\033[0m";
                     }
                 } else if ($warnings > 0) {
-                    if ($this->config->colors === true) {
+                    $progressDot = 'W';
+
+                    if ($showColors === true) {
                         if ($fixable > 0) {
-                            echo "\033[32m";
+                            $colorOpen = "\033[32m";
                         } else {
-                            echo "\033[33m";
+                            $colorOpen = "\033[33m";
                         }
-                    }
 
-                    echo 'W';
-
-                    if ($this->config->colors === true) {
-                        echo "\033[0m";
+                        $colorClose = "\033[0m";
                     }
-                } else {
-                    echo '.';
                 }//end if
             }//end if
         }//end if
+
+        echo $colorOpen.$progressDot.$colorClose;
 
         $numPerLine = 60;
         if ($numProcessed !== $numFiles && ($numProcessed % $numPerLine) !== 0) {
@@ -963,12 +957,12 @@ class Runner
         // Allocate all needed memory beforehand as much as possible.
         $errorMsg    = PHP_EOL.'The PHP_CodeSniffer "%1$s" command ran out of memory.'.PHP_EOL;
         $errorMsg   .= 'Either raise the "memory_limit" of PHP in the php.ini file or raise the memory limit at runtime'.PHP_EOL;
-        $errorMsg   .= 'using `%1$s -d memory_limit=512M` (replace 512M with the desired memory limit).'.PHP_EOL;
+        $errorMsg   .= 'using "%1$s -d memory_limit=512M" (replace 512M with the desired memory limit).'.PHP_EOL;
         $errorMsg    = sprintf($errorMsg, $command);
         $memoryError = 'Allowed memory size of';
         $errorArray  = [
             'type'    => 42,
-            'message' => 'Some random dummy string to take up memory and take up some more memory and some more',
+            'message' => 'Some random dummy string to take up memory and take up some more memory and some more and more and more and more',
             'file'    => 'Another random string, which would be a filename this time. Should be relatively long to allow for deeply nested files',
             'line'    => 31427,
         ];

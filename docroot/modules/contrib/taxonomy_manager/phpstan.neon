@@ -1,0 +1,8 @@
+parameters:
+  level: 1
+
+  ignoreErrors:
+    # new static() is a best practice in Drupal, so we cannot fix that.
+    - "#^Unsafe usage of new static#"
+    # Core ignores this as well.
+    - "#^Class .* extends @internal class#"

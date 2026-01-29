@@ -3,7 +3,6 @@
 namespace Drupal\textfield_counter\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -63,7 +62,7 @@ trait TextFieldCounterWidgetTrait {
    * @param bool $storageSettingMaxlengthField
    *   Whether or not the field has storage settings that include a maximum
    *   length. Such fields allow for using the storage settings rather than the
-   *   wiget setting.
+   *   widget setting.
    */
   public function addCounterPositionSettingsFormElement(array &$form, $storageSettingMaxlengthField = FALSE) {
     $form['counter_position'] = [
@@ -116,7 +115,7 @@ trait TextFieldCounterWidgetTrait {
    * @param bool $storageSettingMaxlengthField
    *   Whether or not the field has storage settings that include a maximum
    *   length. Such fields allow for using the storage settings rather than the
-   *   wiget setting.
+   *   widget setting.
    */
   public function addJsPreventSubmitSettingsFormElement(array &$form, $storageSettingMaxlengthField = FALSE) {
     $form['js_prevent_submit'] = [
@@ -152,7 +151,7 @@ trait TextFieldCounterWidgetTrait {
    * @param bool $storageSettingMaxlengthField
    *   Whether or not the field has storage settings that include a maximum
    *   length. Such fields allow for using the storage settings rather than the
-   *   wiget setting.
+   *   widget setting.
    */
   public function addCountHtmlSettingsFormElement(array &$form, $storageSettingMaxlengthField = FALSE) {
     $form['count_html_characters'] = [
@@ -197,7 +196,7 @@ trait TextFieldCounterWidgetTrait {
    * @param bool $storageSettingMaxlengthField
    *   Whether or not the field has storage settings that include a maximum
    *   length. Such fields allow for using the storage settings rather than the
-   *   wiget setting.
+   *   widget setting.
    */
   public function addTextCountStatusMessageSettingsFormElement(array &$form, $storageSettingMaxlengthField = FALSE) {
     $form['textcount_status_message'] = [
@@ -363,7 +362,7 @@ trait TextFieldCounterWidgetTrait {
    * Validates the field for the maximum number of characters.
    *
    * @param array $element
-   *   The render array for the element to which fiels are being attached.
+   *   The render array for the element to which fields are being attached.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The Drupal form state.
    * @param int $maxlength
@@ -393,7 +392,7 @@ trait TextFieldCounterWidgetTrait {
    * @param array $element
    *   The form element.
    * @param string $value
-   *   The value whose length is to be calcluated.
+   *   The value whose length is to be calculated.
    *
    * @return int
    *   The length of the value.

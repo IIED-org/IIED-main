@@ -20,94 +20,67 @@ New issues should be associated with the [IIED-main project](https://github.com/
 - **Ready for test**: Issued assigned to someone else to check work is complete
 - **Done**: Issue is closed
 
-## Local developer setup with Lando
+## Local developer setup with ddev
 
-This repository comes with a .lando.yml file which will help to set up locally
-using Lando, Docker and Acquia command line acli.
+This repository comes with a `.ddev/config.yaml` file which will help to set up locally using ddev and Docker.
 
 ## Requirements
 
-To run locally, you will need Lando and Docker.
-Note that the macOS and Windows Lando installer will install Docker for you if
-needed. Please check the relevent documentation.
-
- - Lando https://docs.lando.dev/basics/installation.html
- - Docker https://docs.lando.dev/basics/installation.html#system-requirements
+To run locally, you will need [Docker](https://www.docker.com/products/docker-desktop/) (or OrbStack) and [ddev](https://ddev.com/get-started/).
 
 ## Setup
 
-1. Clone this repo, move into the directory that contains the codebase and connect to Acquia git remote.
+1. Clone this repo, move into the directory that contains the codebase:
 
 ```
 git clone git@github.com:IIED-org/IIED-main.git IIED-main
 cd IIED-main
-git remote add ac <acquiaGitPath>
 ```
 
-To determine the <acquiaGitPath>, navigate to the application overview page via https://cloud.acquia.com/a/applications, select “View Git Information” from the Actions menu and copy the git URL, e.g. irforum@svn-6076.devcloud.hosting.acquia.com:irforum.git
+2. Start Docker Desktop and run `ddev start` to build the docker containers. Note that if you have any Lando containers running you will need to stop them.
 
-2. Run lando start to build the docker contaiers.
-
-```
-lando start
-```
-3. Import a copy of the database.
-
-The 'acquia' Lando recipe includes the Acquia Command Line utility. This can be
-run with `lando acli`.
-
-This repo also includes an .acquia-cli.yml file which defines which cloud
-instance to connect to.
-
-To pull a copy of the database we can run the following command.
+3. Download a copy of last night's production database via Jenkins and save it to the project root. Import it using the following command:
 
 ```
-lando acli pull:database
-```
-This references .acquia-cli.yml to connect to the IIED Pubs cloud app. It
-will ask which environment to pull the database from. Follow the prompts to set up credentials for accessing the Acquia server as necessary.
-
-Select the prod database: [1].
-
-```
-Using Cloud Application IIED Pubs
-
- Choose a Cloud Platform environment [Dev, dev (vcs: dev-master)]:
-  [0] Dev, dev (vcs: dev-master)
-  [1] Prod, prod (vcs: tags/2021-11-02)
-  [2] Stage, test (vcs: tags/2021-11-02)
-> 0
+ddev import-db -f iied-prod-yyyymmdd.sql.gz
+ddev drush cr
 ```
 
-4. Create settings.local.php
-
-To override certain settings and configuration we can use settings.local.php.
-To do so, copy the sites/default/iied.example.settings.local.php file to
-sites/default/settings.local.php. This will include some recommended defaults.
+4. To modify the theme, including tailwind.pcss and twig templates, move into the theme directory, install the necessary node modules, and run the watch command:
 
 ```
-cp docroot/sites/default/iied.settings.local.php  docroot/sites/default/settings.local.php
+cd docroot/themes/custom/iied_tw
+ddev npm install
+ddev npm run watch
 ```
 
-5. Config split
+Open https://iied-main.ddev.site:3000 to view live changes in the browser. When ready to deploy, build a minimised (dist) version:
 
-We are using the Config Split module to separate configuration intended for
-specific environments. We have splits for local, dev and live.
-In the docroot/sites/default/iied.example.settings.local.php file we include the
+```
+ddev npm run build
+```
+
+5. Composer updates: run `ddev composer update --dry-run` to see what updates are available. Ensure you're on an issue branch before running the command for real, i.e. without the `--dry-run` flag.
+
+6. Config split
+
+We use the Config Split module to separate configuration intended for
+specific environments. We have splits for local, dev, stage and live.
+In the docroot/sites/default/settings.ddev.php file we include the
 following:
 
 ```
 /**
- * Use "local" config split
+ * Use "local" config split for development
  */
-$config['config_split.config_split.live']['status'] = FALSE;
-$config['config_split.config_split.dev']['status'] = FALSE;
 $config['config_split.config_split.local']['status'] = TRUE;
+$config['config_split.config_split.dev']['status'] = FALSE;
+$config['config_split.config_split.stage']['status'] = FALSE;
+$config['config_split.config_split.prod']['status'] = FALSE;
 ```
 
 This set the 'local' split to active and the 'live' and 'dev' to inactive. With
-this setup, running `drush cr` then `drush cim` will import the local split
-configuration as well as the default configuration. In our case, this will
+this setup, running `ddev drush cr` then `ddev drush cim` will import the local split configuration as well as the default configuration. In our case, this will
 enable other modules useful for developers like devel and stage_file_proxy.
 
 To enable a module on the current (probably local) split and not have it enabled
@@ -116,7 +89,7 @@ by default. As an example, we'll try this with the help_topics module.
 Enable the module
 
 ```
-lando drush en help_topics
+ddev drush en help_topics
 ```
 
 Then add it to the complete split at:
@@ -126,8 +99,8 @@ https://iied-main.lndo.site/admin/config/development/configuration/config-split/
 Clear the cache and export the config.
 
 ```
-lando drush cr
-lando drush cex
+ddev drush cr
+ddev drush cex
 ```
 
 A git diff will show that the config/default/config_split.config_split.local.yml
@@ -152,43 +125,23 @@ index acadb2a47..1ff8d48de 100644
 This should result in the module being enabled only when the local split is
 active.
 
-6. Enable and configure stage_file_proxy
-
-To avoid having to copy all files locally, stage_file_proxy can be enabled and
-configured.
-
-```
-lando drush en stage_file_proxy
-```
-
-Now add the the following line to the end of the settings.local.php file.
-
-```
-$config['stage_file_proxy.settings']['origin']  = 'https://www.iied.org';
-```
-
 7. Common drush commands.
 
 Generate a one time login link:
 
 ```
-lando drush uli
+ddev drush uli
 ```
 
 Clear the cache:
 
 ```
-lando drush cr
+ddev drush cr
 ```
 
-Follow the appserver logs:
-```
-lando logs -s appserver --follow
-```
-
-Inspect the lando configuration:
+Inspect the ddev configuration:
 
 ```
-lando info
+ddev describe
 ```
 

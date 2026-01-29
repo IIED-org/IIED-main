@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
 use const T_CLOSURE;
@@ -62,7 +63,7 @@ class StaticClosureSniff implements Sniff
 			T_VARIABLE,
 			'$this',
 			$closureScopeOpenerPointer + 1,
-			$closureScopeCloserPointer,
+			$closureScopeCloserPointer + 1,
 		);
 		if ($thisPointer !== null) {
 			return;
@@ -96,7 +97,7 @@ class StaticClosureSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContentBefore($closurePointer, 'static ');
+		FixerHelper::addBefore($phpcsFile, $closurePointer, 'static ');
 		$phpcsFile->fixer->endChangeset();
 	}
 

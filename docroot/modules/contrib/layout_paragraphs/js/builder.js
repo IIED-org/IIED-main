@@ -95,7 +95,7 @@
   const reorderComponents = debounce(doReorderComponents);
 
   /**
-   * Returns a list of errors for the attempted move, or an empty array if there are no errors.
+   * Returns a list of errors for the "accepts" dragula callback, or an empty array if there are no errors.
    * @param {Element} settings The builder settings.
    * @param {Element} el The element being moved.
    * @param {Element} target The destination
@@ -103,10 +103,26 @@
    * @param {Element} sibling The next sibling element
    * @return {Array} An array of errors.
    */
-  function moveErrors(settings, el, target, source, sibling) {
-    return Drupal._lpbMoveErrors
+  function acceptsErrors(settings, el, target, source, sibling) {
+    return Drupal._lpbMoveErrors.accepts
       .map((validator) =>
         validator.apply(null, [settings, el, target, source, sibling]),
+      )
+      .filter((errors) => errors !== false && errors !== undefined);
+  }
+
+  /**
+   * Returns a list of errors for the "moves" dragula callback, or an empty array if there are no errors.
+   * @param {Element} settings The builder settings.
+   * @param {Element} el The element being moved.
+   * @param {Element} source The source
+   * @param {Element} handle The drag handle being grabbed
+   * @return {Array} An array of errors.
+   */
+  function movesErrors(settings, el, source, handle) {
+    return Drupal._lpbMoveErrors.moves
+      .map((validator) =>
+        validator.apply(null, [settings, el, source, handle]),
       )
       .filter((errors) => errors !== false && errors !== undefined);
   }
@@ -258,7 +274,7 @@
     // Check to see if the next position is allowed by calling the 'accepts' callback.
     while (
       targets[pos + dir] !== undefined &&
-      moveErrors(
+      acceptsErrors(
         settings,
         $item[0],
         targets[pos + dir].parentNode,
@@ -401,17 +417,9 @@
       containers,
       {
         accepts: (el, target, source, sibling) =>
-          moveErrors(settings, el, target, source, sibling).length === 0,
-        moves(el, source, handle) {
-          const $handle = $(handle);
-          if ($handle.closest('.lpb-drag').length) {
-            return true;
-          }
-          if ($handle.closest('.lpb-controls').length) {
-            return false;
-          }
-          return true;
-        },
+          acceptsErrors(settings, el, target, source, sibling).length === 0,
+        moves: (el, source, handle) =>
+          movesErrors(settings, el, source, handle).length === 0,
       },
     );
     drake.on('drop', (el) => {
@@ -445,14 +453,18 @@
     return drake;
   }
 
-  // An array of move error callback functions.
-  Drupal._lpbMoveErrors = [];
+  // An object with arrays for "accepts" and "moves" dragula callback functions.
+  Drupal._lpbMoveErrors = {
+    'accepts': [],
+    'moves': [],
+  };
   /**
    * Registers a move validation function.
    * @param {Function} f The validator function.
+   * @param {String} t The dragula callback to register the validator for.
    */
-  Drupal.registerLpbMoveError = (f) => {
-    Drupal._lpbMoveErrors.push(f);
+  Drupal.registerLpbMoveError = (f, c = 'accepts') => {
+    Drupal._lpbMoveErrors[c].push(f);
   };
   // Checks nesting depth.
   Drupal.registerLpbMoveError((settings, el, target) => {
@@ -477,6 +489,12 @@
       }
     }
   });
+  // Prevents controls ui from being used as a drag handle.
+  Drupal.registerLpbMoveError((settings, el, source, handle) => {
+    if (!handle.closest('.lpb-drag') && handle.closest('.lpb-controls')) {
+      return 'Disable dragging for controls elements other than drag handle.';
+    }
+  }, 'moves');
   Drupal.AjaxCommands.prototype.LayoutParagraphsEventCommand = (
     ajax,
     response,

@@ -1,10 +1,17 @@
-taxonomy_import.settings:
-  route_name: taxonomy_import.settings
+taxonomy_import.help:
+  route_name: taxonomy_import.help
   title: 'Taxonomy Import'
   description: 'Upload data via taxonomy import'
   parent: system.admin_config_content
+taxonomy_import.import:
+  route_name: taxonomy_import.import
+  title: 'Import Terms'
+  description: 'Upload data via taxonomy import'
+  parent: taxonomy_import.help
+  weight: 10
 taxonomy_import.config:
   route_name: taxonomy_import.config
-  title: 'Configure the taxonomy import'
-  description: 'Configure the taxonomy import'
-  parent: system.admin_config_content
+  title: 'Configure taxonomy import'
+  description: 'Configure Module'
+  parent: taxonomy_import.help
+  weight: 0

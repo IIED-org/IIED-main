@@ -1,0 +1,16 @@
+--- a/modules/contrib/pdfpreview/src/Plugin/Field/FieldFormatter/PDFPreviewFormatter.php
++++ b/modules/contrib/pdfpreview/src/Plugin/Field/FieldFormatter/PDFPreviewFormatter.php
+@@ -201,11 +201,13 @@ public function viewElements(FieldItemListInterface $items, $langcode) {
+ 
+       if (!empty($item->description)) {
+         $item_attributes['alt'] = $item->description;
++        $item_attributes['title'] = 'Cover image';
+       }
+       else {
+         // Use filename without extension as fallback for accessibility.
+         $filename = pathinfo($file->getFilename(), PATHINFO_FILENAME);
+         $item_attributes['alt'] = $this->t('Preview of @filename', ['@filename' => $filename]);
++        $item_attributes['title'] = 'Cover image';
+       }
+       $item_attributes['class'][] = 'pdfpreview-file';
+ 

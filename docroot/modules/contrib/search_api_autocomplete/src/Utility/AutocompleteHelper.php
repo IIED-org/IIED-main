@@ -4,8 +4,8 @@ namespace Drupal\search_api_autocomplete\Utility;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultReasonInterface;
-use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\search_api_autocomplete\Element\SearchApiAutocomplete as AutocompleteElement;
 use Drupal\search_api_autocomplete\SearchInterface;
 
 /**
@@ -14,24 +14,12 @@ use Drupal\search_api_autocomplete\SearchInterface;
 class AutocompleteHelper implements AutocompleteHelperInterface {
 
   /**
-   * The element info manager.
-   *
-   * @var \Drupal\Core\Render\ElementInfoManagerInterface
-   */
-  protected $elementInfo;
-
-  /**
    * Constructs a new class instance.
-   *
-   * @param \Drupal\Core\Render\ElementInfoManagerInterface|null $element_info
-   *   The element info manager.
    */
-  public function __construct(ElementInfoManagerInterface $element_info = NULL) {
-    if (!$element_info) {
-      @trigger_error('Constructing \Drupal\search_api_autocomplete\Utility\AutocompleteHelper without $element_info is deprecated in search_api_autocomplete:8.x-1.6 and will stop working in search_api_autocomplete:2.0.0. See https://www.drupal.org/node/3224354', E_USER_DEPRECATED);
-      $element_info = \Drupal::service('plugin.manager.element_info');
+  public function __construct() {
+    if (func_get_args()) {
+      @trigger_error('Constructing \Drupal\search_api_autocomplete\Utility\AutocompleteHelper with any parameters is deprecated in search_api_autocomplete:8.x-1.10 and will stop working in search_api_autocomplete:2.0.0. See https://www.drupal.org/node/3487349', E_USER_DEPRECATED);
     }
-    $this->elementInfo = $element_info;
   }
 
   /**
@@ -58,13 +46,12 @@ class AutocompleteHelper implements AutocompleteHelperInterface {
     $element['#search_id'] = $search->id();
     $element['#additional_data'] = $data;
 
-    // In case another module (for instance, Better Exposed Filters) adds a
-    // "#process" key for our element type, make sure it is present on this
-    // element now, too.
-    $info = $this->elementInfo->getInfo('search_api_autocomplete');
-    if (!empty($info['#process'])) {
-      $old_process = $element['#process'] ?? [];
-      $element['#process'] = array_merge($old_process, $info['#process']);
+    // If the element already has the "#process" key set, the default callbacks
+    // (including our own processSearchApiAutocomplete() callback) will not be
+    // added anymore. Make sure that processSearchApiAutocomplete() will still
+    // be called.
+    if (isset($element['#process'])) {
+      array_unshift($element['#process'], [AutocompleteElement::class, 'processSearchApiAutocomplete']);
     }
   }
 

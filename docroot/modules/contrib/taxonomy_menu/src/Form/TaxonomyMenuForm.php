@@ -2,11 +2,11 @@
 
 namespace Drupal\taxonomy_menu\Form;
 
+use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Menu\MenuParentFormSelector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityFieldManager;
 
 /**
  * Builds the taxonomy menu form.
@@ -190,7 +190,7 @@ class TaxonomyMenuForm extends EntityForm {
   /**
    * {@inheritdoc}
    */
-  public function save(array $form, FormStateInterface $form_state) {
+  public function save(array $form, FormStateInterface $form_state): void {
     $taxonomy_menu = $this->entity;
     $status = $taxonomy_menu->save();
 

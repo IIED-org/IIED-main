@@ -30,7 +30,7 @@ use SlevomatCodingStandard\Helpers\TypeHint;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_key_exists;
 use function array_map;
-use function array_merge;
+use function array_push;
 use function array_unique;
 use function array_values;
 use function count;
@@ -178,7 +178,7 @@ class ReturnTypeHintSniff implements Sniff
 
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->replaceToken($returnTypeHint->getStartPointer(), 'never');
+					FixerHelper::replace($phpcsFile, $returnTypeHint->getStartPointer(), 'never');
 					$phpcsFile->fixer->endChangeset();
 				}
 			}
@@ -205,7 +205,7 @@ class ReturnTypeHintSniff implements Sniff
 			? ($hasReturnAnnotation && !$isAnnotationReturnTypeVoidOrNever)
 			: FunctionHelper::returnsValue($phpcsFile, $functionPointer);
 
-		if ($returnsValue && !$hasReturnAnnotation) {
+		if (($returnsValue || $isAbstract) && !$hasReturnAnnotation) {
 			if (count($prefixedReturnAnnotations) !== 0) {
 				$this->reportUselessSuppress($phpcsFile, $functionPointer, $isSuppressedAnyTypeHint, $suppressNameAnyTypeHint);
 				return;
@@ -255,7 +255,8 @@ class ReturnTypeHintSniff implements Sniff
 						: 'void';
 
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->addContent(
+					FixerHelper::add(
+						$phpcsFile,
 						$phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'],
 						sprintf(': %s', $fixedReturnType),
 					);
@@ -366,10 +367,7 @@ class ReturnTypeHintSniff implements Sniff
 		foreach ($typeHints as $typeHint) {
 			if ($this->enableUnionTypeHint && TypeHintHelper::isUnofficialUnionTypeHint($typeHint)) {
 				$canTryUnionTypeHint = true;
-				$typeHintsWithConvertedUnion = array_merge(
-					$typeHintsWithConvertedUnion,
-					TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint),
-				);
+				array_push($typeHintsWithConvertedUnion, ...TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint));
 			} else {
 				$typeHintsWithConvertedUnion[] = $typeHint;
 			}
@@ -408,9 +406,12 @@ class ReturnTypeHintSniff implements Sniff
 				return;
 			}
 
-			$typeHintsWithConvertedUnion[$typeHintNo] = TypeHintHelper::isVoidTypeHint($typeHint)
-				? 'null'
-				: TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
+			if (TypeHintHelper::isVoidTypeHint($typeHint) || TypeHintHelper::isNeverTypeHint($typeHint)) {
+				$this->reportUselessSuppress($phpcsFile, $functionPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
+				return;
+			}
+
+			$typeHintsWithConvertedUnion[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 		}
 
 		if ($originalReturnTypeNode instanceof NullableTypeNode) {
@@ -451,7 +452,8 @@ class ReturnTypeHintSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent(
+		FixerHelper::add(
+			$phpcsFile,
 			$phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'],
 			sprintf(': %s', $returnTypeHint),
 		);
@@ -633,7 +635,7 @@ class ReturnTypeHintSniff implements Sniff
 		$position = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$closurePointer]['scope_opener'] - 1, $closurePointer);
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent($position, ': void');
+		FixerHelper::add($phpcsFile, $position, ': void');
 		$phpcsFile->fixer->endChangeset();
 	}
 
@@ -712,14 +714,12 @@ class ReturnTypeHintSniff implements Sniff
 	 */
 	private function getTraversableTypeHints(): array
 	{
-		if ($this->normalizedTraversableTypeHints === null) {
-			$this->normalizedTraversableTypeHints = array_map(
-				static fn (string $typeHint): string => NamespaceHelper::isFullyQualifiedName($typeHint)
-						? $typeHint
-						: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint),
-				SniffSettingsHelper::normalizeArray($this->traversableTypeHints),
-			);
-		}
+		$this->normalizedTraversableTypeHints ??= array_map(
+			static fn (string $typeHint): string => NamespaceHelper::isFullyQualifiedName($typeHint)
+					? $typeHint
+					: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint),
+			SniffSettingsHelper::normalizeArray($this->traversableTypeHints),
+		);
 		return $this->normalizedTraversableTypeHints;
 	}
 

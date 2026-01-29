@@ -22,7 +22,6 @@ class LinkcheckerLinkCheckerServiceTest extends KernelTestBase {
    */
   protected static $modules = [
     'system',
-    'dynamic_entity_reference',
     'linkchecker',
   ];
 
@@ -227,10 +226,8 @@ class LinkcheckerLinkCheckerServiceTest extends KernelTestBase {
   protected function createDummyLink($url) {
     $link = LinkCheckerLink::create([
       'url' => $url,
-      'entity_id' => [
-        'target_id' => 1,
-        'target_type' => 'dummy_type',
-      ],
+      'parent_entity_type_id' => 'dummy_type',
+      'parent_entity_id' => 1,
       'entity_field' => 'dummy_field',
       'entity_langcode' => 'en',
     ]);

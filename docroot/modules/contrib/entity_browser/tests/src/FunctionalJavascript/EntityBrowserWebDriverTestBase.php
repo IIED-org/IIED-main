@@ -310,7 +310,7 @@ abstract class EntityBrowserWebDriverTestBase extends WebDriverTestBase {
    * @return bool
    *   Whether the core version is higher than the requested one.
    */
-  protected  function coreVersion(string $version): bool {
+  protected function coreVersion(string $version): bool {
     return version_compare(\Drupal::VERSION, $version, '>=');
   }
 

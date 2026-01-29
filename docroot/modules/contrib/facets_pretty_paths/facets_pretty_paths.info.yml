@@ -7,7 +7,7 @@ dependencies:
   - facets:facets
   - pathauto:pathauto
 
-# Information added by Drupal.org packaging script on 2024-08-07
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2024-09-23
+version: '2.0.3'
 project: 'facets_pretty_paths'
-datestamp: 1723043306
+datestamp: 1727110031

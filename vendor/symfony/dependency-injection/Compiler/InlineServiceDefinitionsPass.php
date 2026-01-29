@@ -144,9 +144,9 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
             return $value;
         }
 
-        $this->container->log($this, sprintf('Inlined service "%s" to "%s".', $id, $this->currentId));
+        $this->container->log($this, \sprintf('Inlined service "%s" to "%s".', $id, $this->currentId));
         $this->inlinedIds[$id] = $definition->isPublic() || !$definition->isShared();
-        $this->notInlinedIds[$this->currentId] = true;
+        $this->notInlinedIds[$this->currentId ?? ''] = true;
 
         if ($definition->isShared()) {
             return $definition;

@@ -3,6 +3,7 @@
 namespace Drupal\linkchecker\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
@@ -82,10 +83,17 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
   protected $currentUser;
 
   /**
+   * ModuleHandler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * LinkCheckerAdminSettingsForm constructor.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, DateFormatterInterface $date_formatter, FilterPluginManager $plugin_manager_filter, LinkCheckerService $linkchecker_checker, LinkExtractorBatch $extractorBatch, LinkCleanUp $linkCleanUp, UserStorageInterface $user_storage, LinkCheckerResponseCodesInterface $linkCheckerResponseCodes, ModuleHandlerInterface $module_handler, AccountInterface $current_user) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, DateFormatterInterface $date_formatter, FilterPluginManager $plugin_manager_filter, LinkCheckerService $linkchecker_checker, LinkExtractorBatch $extractorBatch, LinkCleanUp $linkCleanUp, UserStorageInterface $user_storage, LinkCheckerResponseCodesInterface $linkCheckerResponseCodes, ModuleHandlerInterface $module_handler, AccountInterface $current_user, TypedConfigManagerInterface $typed_config_manager) {
+    parent::__construct($config_factory, $typed_config_manager);
     $this->dateFormatter = $date_formatter;
     $this->extractorBatch = $extractorBatch;
     $this->linkCleanUp = $linkCleanUp;
@@ -111,7 +119,8 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
       $container->get('entity_type.manager')->getStorage('user'),
       $container->get('linkchecker.response_codes'),
       $container->get('module_handler'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('config.typed')
     );
   }
 
@@ -194,7 +203,7 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('base_path'),
       '#type' => 'textfield',
       '#title' => $this->t('Base path'),
-      '#description' => $this->t('Should not start with URL scheme'),
+      '#description' => $this->t('Should not start with URL scheme and should not have trailing slash. For example www.example.com if the project URL is https://www.example.com'),
     ];
 
     $form['general']['search_published_contents_only'] = [
@@ -242,7 +251,7 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('extract.from_object'),
       '#type' => 'checkbox',
       '#title' => $this->t('Extract links in <code>&lt;object&gt;</code> and <code>&lt;param&gt;</code> tags'),
-      '#description' => $this->t('Enable this checkbox if multimedia and other links in object and their param tags should be extracted. The object tag is used for flash, java, quicktime and other applets.'),
+      '#description' => $this->t('Enable this checkbox if multimedia and other links in object and their param tags should be extracted. The object tag is used for flash, java, quick time and other applets.'),
     ];
     $form['tag']['linkchecker_extract_from_video'] = [
       '#default_value' => $config->get('extract.from_video'),
@@ -388,7 +397,7 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
       ],
     ];
     if ($this->moduleHandler->moduleExists('dblog') && $this->currentUser->hasPermission('access site reports')) {
-      $form['error']['#description'] = $this->t('If enabled, outdated links in content providing a status 
+      $form['error']['#description'] = $this->t('If enabled, outdated links in content providing a status
           <em>Moved Permanently</em> (status code 301) are automatically updated to the most recent URL. If used,
           it is recommended to use a value of <em>three</em> to make sure this is not only a temporarily change.
           This feature trust sites to provide a valid permanent redirect.

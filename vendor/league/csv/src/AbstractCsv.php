@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace League\Csv;
 
+use Closure;
+use Deprecated;
 use Generator;
+use InvalidArgumentException;
 use RuntimeException;
 use SplFileObject;
 use Stringable;
@@ -31,6 +34,8 @@ use function strlen;
 use const FILTER_FLAG_STRIP_HIGH;
 use const FILTER_FLAG_STRIP_LOW;
 use const FILTER_UNSAFE_RAW;
+use const STREAM_FILTER_READ;
+use const STREAM_FILTER_WRITE;
 
 /**
  * An abstract class to enable CSV document loading.
@@ -47,6 +52,8 @@ abstract class AbstractCsv implements ByteSequence
     protected string $enclosure = '"';
     protected string $escape = '\\';
     protected bool $is_input_bom_included = false;
+    /** @var array<Closure(array): array> collection of Closure to format the record before reading. */
+    protected array $formatters = [];
 
     /**
      * @final This method should not be overwritten in child classes
@@ -95,7 +102,7 @@ abstract class AbstractCsv implements ByteSequence
      */
     public static function createFromString(Stringable|string $content = ''): static
     {
-        return new static(Stream::createFromString((string) $content));
+        return new static(Stream::createFromString($content));
     }
 
     /**
@@ -168,8 +175,13 @@ abstract class AbstractCsv implements ByteSequence
      */
     public function supportsStreamFilterOnRead(): bool
     {
-        return $this->document instanceof Stream
-            && (static::STREAM_FILTER_MODE & STREAM_FILTER_READ) === STREAM_FILTER_READ;
+        if (!$this->document instanceof Stream) {
+            return false;
+        }
+
+        $mode = $this->document->getMode();
+
+        return strcspn($mode, 'r+') !== strlen($mode);
     }
 
     /**
@@ -177,8 +189,13 @@ abstract class AbstractCsv implements ByteSequence
      */
     public function supportsStreamFilterOnWrite(): bool
     {
-        return $this->document instanceof Stream
-            && (static::STREAM_FILTER_MODE & STREAM_FILTER_WRITE) === STREAM_FILTER_WRITE;
+        if (!$this->document instanceof Stream) {
+            return false;
+        }
+
+        $mode = $this->document->getMode();
+
+        return strcspn($mode, 'wae+') !== strlen($mode);
     }
 
     /**
@@ -204,27 +221,27 @@ abstract class AbstractCsv implements ByteSequence
      */
     public function chunk(int $length): Generator
     {
-        if ($length < 1) {
-            throw InvalidArgument::dueToInvalidChunkSize($length, __METHOD__);
-        }
+        0 < $length || throw InvalidArgument::dueToInvalidChunkSize($length, __METHOD__);
 
+        $this->getInputBOM();
         $this->document->rewind();
         $this->document->setFlags(0);
-        if (-1 === $this->document->fseek(strlen($this->getInputBOM()))) {
-            throw new RuntimeException('Unable to seek the document.');
-        }
+        $this->is_input_bom_included || -1 < $this->document->fseek($this->input_bom?->length() ?? 0) || throw new RuntimeException('Unable to seek the document.');
 
-        yield from str_split($this->getOutputBOM().$this->document->fread($length), $length);
+        yield from str_split($this->output_bom?->value.$this->document->fread($length), $length);
 
-        while ($this->document->valid()) {
-            yield $this->document->fread($length);
+        while (!$this->document->eof()) {
+            $chunk = $this->document->fread($length);
+            false !== $chunk || throw new RuntimeException('Unable to read the document.');
+
+            yield $chunk;
         }
     }
 
     /**
      * Retrieves the CSV content.
      *
-     * @throws Exception If the string representation can not be returned
+     * @throws Exception If the string representation cannot be returned
      */
     public function toString(): string
     {
@@ -241,69 +258,35 @@ abstract class AbstractCsv implements ByteSequence
      *
      * Returns the number of characters read from the handle and passed through to the output.
      *
-     * @throws Exception
+     * @throws InvalidArgumentException|Exception
      */
-    public function output(?string $filename = null): int
+    public function download(?string $filename = null): int
     {
         if (null !== $filename) {
-            $this->sendHeaders($filename);
+            HttpHeaders::forFileDownload($filename, 'text/csv');
         }
 
+        $bomOutputLength = 0;
+        if (null !== $this->output_bom) {
+            echo $this->output_bom->value;
+            $bomOutputLength = $this->output_bom->length();
+        }
+
+        $this->getInputBOM();
         $this->document->rewind();
         $this->document->setFlags(0);
-        if (!$this->is_input_bom_included && -1 === $this->document->fseek(strlen($this->getInputBOM()))) {
-            throw new RuntimeException('Unable to seek the document.');
+        $this->is_input_bom_included || -1 < $this->document->fseek($this->input_bom?->length() ?? 0) || throw new RuntimeException('Unable to seek the document.');
+
+        $documentOutputLength = 0;
+        while (!$this->document->eof()) {
+            $chunk = $this->document->fread(8192);
+            false !== $chunk || throw new RuntimeException('Unable to read the document.');
+            $documentOutputLength += strlen($chunk);
+            echo $chunk;
+            flush();
         }
 
-        $stream = Stream::createFromString($this->getOutputBOM());
-        $stream->rewind();
-
-        $res1 = $stream->fpassthru();
-        if (false === $res1) {
-            throw new RuntimeException('Unable to output the document.');
-        }
-
-        $res2 = $this->document->fpassthru();
-        if (false === $res2) {
-            throw new RuntimeException('Unable to output the document.');
-        }
-
-        return $res1 + $res2;
-    }
-
-    /**
-     * Send the CSV headers.
-     *
-     * Adapted from Symfony\Component\HttpFoundation\ResponseHeaderBag::makeDisposition
-     *
-     * @throws Exception if the submitted header is invalid according to RFC 6266
-     *
-     * @see https://tools.ietf.org/html/rfc6266#section-4.3
-     */
-    protected function sendHeaders(string $filename): void
-    {
-        if (strlen($filename) !== strcspn($filename, '\\/')) {
-            throw InvalidArgument::dueToInvalidHeaderFilename($filename);
-        }
-
-        $flag = FILTER_FLAG_STRIP_LOW;
-        if (1 === preg_match('/[^\x20-\x7E]/', $filename)) {
-            $flag |= FILTER_FLAG_STRIP_HIGH;
-        }
-
-        /** @var string $filtered_name */
-        $filtered_name = filter_var($filename, FILTER_UNSAFE_RAW, $flag);
-        $filename_fallback = str_replace('%', '', $filtered_name);
-
-        $disposition = sprintf('attachment; filename="%s"', str_replace('"', '\\"', $filename_fallback));
-        if ($filename !== $filename_fallback) {
-            $disposition .= sprintf("; filename*=utf-8''%s", rawurlencode($filename));
-        }
-
-        header('Content-Type: text/csv');
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Description: File Transfer');
-        header('Content-Disposition: '.$disposition);
+        return $bomOutputLength + $documentOutputLength;
     }
 
     /**
@@ -317,9 +300,7 @@ abstract class AbstractCsv implements ByteSequence
             return $this;
         }
 
-        if (1 !== strlen($delimiter)) {
-            throw InvalidArgument::dueToInvalidDelimiterCharacter($delimiter, __METHOD__);
-        }
+        1 === strlen($delimiter) || throw InvalidArgument::dueToInvalidDelimiterCharacter($delimiter, __METHOD__);
 
         $this->delimiter = $delimiter;
         $this->resetProperties();
@@ -338,9 +319,7 @@ abstract class AbstractCsv implements ByteSequence
             return $this;
         }
 
-        if (1 !== strlen($enclosure)) {
-            throw InvalidArgument::dueToInvalidEnclosureCharacter($enclosure, __METHOD__);
-        }
+        1 === strlen($enclosure) || throw InvalidArgument::dueToInvalidEnclosureCharacter($enclosure, __METHOD__);
 
         $this->enclosure = $enclosure;
         $this->resetProperties();
@@ -365,6 +344,18 @@ abstract class AbstractCsv implements ByteSequence
 
         $this->escape = $escape;
         $this->resetProperties();
+
+        return $this;
+    }
+
+    /**
+     * Adds a record formatter.
+     *
+     * @param callable(array): array $formatter
+     */
+    public function addFormatter(callable $formatter): static
+    {
+        $this->formatters[] = !$formatter instanceof Closure ? $formatter(...) : $formatter;
 
         return $this;
     }
@@ -416,13 +407,65 @@ abstract class AbstractCsv implements ByteSequence
      * @throws InvalidArgument If the stream filter API can not be appended
      * @throws UnavailableFeature If the stream filter API can not be used
      */
-    public function addStreamFilter(string $filtername, null|array $params = null): static
+    public function appendStreamFilterOnRead(string $filtername, mixed $params = null): static
     {
-        if (!$this->document instanceof Stream) {
-            throw UnavailableFeature::dueToUnsupportedStreamFilterApi(get_class($this->document));
-        }
+        $this->document instanceof Stream || throw UnavailableFeature::dueToUnsupportedStreamFilterApi(get_class($this->document));
 
-        $this->document->appendFilter($filtername, static::STREAM_FILTER_MODE, $params);
+        $this->document->appendFilter($filtername, STREAM_FILTER_READ, $params);
+        $this->stream_filters[$filtername] = true;
+        $this->resetProperties();
+        $this->input_bom = null;
+
+        return $this;
+    }
+
+    /**
+     * Append a stream filter.
+     *
+     * @throws InvalidArgument If the stream filter API can not be appended
+     * @throws UnavailableFeature If the stream filter API can not be used
+     */
+    public function appendStreamFilterOnWrite(string $filtername, mixed $params = null): static
+    {
+        $this->document instanceof Stream || throw UnavailableFeature::dueToUnsupportedStreamFilterApi(get_class($this->document));
+
+        $this->document->appendFilter($filtername, STREAM_FILTER_WRITE, $params);
+        $this->stream_filters[$filtername] = true;
+        $this->resetProperties();
+        $this->input_bom = null;
+
+        return $this;
+    }
+
+    /**
+     * Prepend a stream filter.
+     *
+     * @throws InvalidArgument If the stream filter API can not be appended
+     * @throws UnavailableFeature If the stream filter API can not be used
+     */
+    public function prependStreamFilterOnWrite(string $filtername, mixed $params = null): static
+    {
+        $this->document instanceof Stream || throw UnavailableFeature::dueToUnsupportedStreamFilterApi(get_class($this->document));
+
+        $this->document->prependFilter($filtername, STREAM_FILTER_READ, $params);
+        $this->stream_filters[$filtername] = true;
+        $this->resetProperties();
+        $this->input_bom = null;
+
+        return $this;
+    }
+
+    /**
+     * Prepend a stream filter.
+     *
+     * @throws InvalidArgument If the stream filter API can not be appended
+     * @throws UnavailableFeature If the stream filter API can not be used
+     */
+    public function prependStreamFilterOnRead(string $filtername, mixed $params = null): static
+    {
+        $this->document instanceof Stream || throw UnavailableFeature::dueToUnsupportedStreamFilterApi(get_class($this->document));
+
+        $this->document->prependFilter($filtername, STREAM_FILTER_READ, $params);
         $this->stream_filters[$filtername] = true;
         $this->resetProperties();
         $this->input_bom = null;
@@ -440,6 +483,7 @@ abstract class AbstractCsv implements ByteSequence
      *
      * Returns the stream filter mode.
      */
+    #[Deprecated(message:'use League\Csv\AbstractCsv::supportsStreamFilterOnRead() or League\Csv\AbstractCsv::supportsStreamFilterOnWrite() instead', since:'league/csv:9.7.0')]
     public function getStreamFilterMode(): int
     {
         return static::STREAM_FILTER_MODE;
@@ -455,6 +499,7 @@ abstract class AbstractCsv implements ByteSequence
      *
      * Tells whether the stream filter capabilities can be used.
      */
+    #[Deprecated(message:'use League\Csv\AbstractCsv::supportsStreamFilterOnRead() or League\Csv\AbstractCsv::supportsStreamFilterOnWrite() instead', since:'league/csv:9.7.0')]
     public function supportsStreamFilter(): bool
     {
         return $this->document instanceof Stream;
@@ -469,6 +514,7 @@ abstract class AbstractCsv implements ByteSequence
      * @see AbstractCsv::toString
      * @codeCoverageIgnore
      */
+    #[Deprecated(message:'use League\Csv\AbstractCsv::toString() instead', since:'league/csv:9.7.0')]
     public function getContent(): string
     {
         return $this->toString();
@@ -483,8 +529,96 @@ abstract class AbstractCsv implements ByteSequence
      *
      * Retrieves the CSV content
      */
+    #[Deprecated(message:'use League\Csv\AbstractCsv::toString() instead', since:'league/csv:9.1.0')]
     public function __toString(): string
     {
         return $this->toString();
+    }
+
+    /**
+     * DEPRECATION WARNING! This method will be removed in the next major point release.
+     *
+     * @throws Exception if the submitted header is invalid according to RFC 6266
+     *
+     * @see HttpHeaders::forFileDownload()
+     * @codeCoverageIgnore
+     *
+     * Send the CSV headers.
+     *
+     * Adapted from Symfony\Component\HttpFoundation\ResponseHeaderBag::makeDisposition
+     *
+     * @deprecated since version 9.17.0
+     * @see https://tools.ietf.org/html/rfc6266#section-4.3
+     */
+    #[Deprecated(message:'the method no longer affect the outcome of the class, use League\Csv\HttpHeaders::forFileDownload instead', since:'league/csv:9.17.0')]
+    protected function sendHeaders(string $filename): void
+    {
+        if (strlen($filename) !== strcspn($filename, '\\/')) {
+            throw InvalidArgument::dueToInvalidHeaderFilename($filename);
+        }
+
+        $flag = FILTER_FLAG_STRIP_LOW;
+        if (1 === preg_match('/[^\x20-\x7E]/', $filename)) {
+            $flag |= FILTER_FLAG_STRIP_HIGH;
+        }
+
+        /** @var string $filtered_name */
+        $filtered_name = filter_var($filename, FILTER_UNSAFE_RAW, $flag);
+        $filename_fallback = str_replace('%', '', $filtered_name);
+
+        $disposition = sprintf('attachment; filename="%s"', str_replace('"', '\\"', $filename_fallback));
+        if ($filename !== $filename_fallback) {
+            $disposition .= sprintf("; filename*=utf-8''%s", rawurlencode($filename));
+        }
+
+        header('Content-Type: text/csv');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: '.$disposition);
+    }
+
+    /**
+     * DEPRECATION WARNING! This method will be removed in the next major point release.
+     *
+     * @codeCoverageIgnore
+     * @deprecated since version 9.18.0
+     * @see AbstractCsv::download()
+     *
+     * Outputs all data on the CSV file.
+     *
+     * Returns the number of characters read from the handle and passed through to the output.
+     *
+     * @throws Exception
+     */
+    #[Deprecated(message:'use League\Csv\AbstractCsv::download() instead', since:'league/csv:9.18.0')]
+    public function output(?string $filename = null): int
+    {
+        try {
+            return $this->download($filename);
+        } catch (InvalidArgumentException $exception) {
+            throw new InvalidArgument($exception->getMessage());
+        }
+    }
+
+    /**
+     * DEPRECATION WARNING! This method will be removed in the next major point release.
+     * @codeCoverageIgnore
+     * @deprecated since version 9.22.0
+     * @see AbstractCsv::appendStreamFilterOnRead()
+     * @see AbstractCsv::appendStreamFilterOnWrite()
+     *
+     * Append a stream filter.
+     *
+     * @throws InvalidArgument If the stream filter API can not be appended
+     * @throws UnavailableFeature If the stream filter API can not be used
+     */
+    #[Deprecated(message:'use League\Csv\AbstractCsv::appendStreamFilterOnRead() or League\Csv\AbstractCsv::prependStreamFilterOnRead() instead', since:'league/csv:9.18.0')]
+    public function addStreamFilter(string $filtername, ?array $params = null): static
+    {
+        if (STREAM_FILTER_READ === static::STREAM_FILTER_MODE) {
+            return $this->appendStreamFilterOnRead($filtername, $params);
+        }
+
+        return $this->appendStreamFilterOnWrite($filtername, $params);
     }
 }

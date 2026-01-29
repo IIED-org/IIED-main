@@ -6,6 +6,47 @@
  */
 
 /**
+ * Implements hook_requirements().
+ */
+function taxonomy_manager_requirements($phase) {
+  $requirements = [];
+
+  // Report the version of Fancytree.
+  if ($phase == 'runtime') {
+    $requirements['taxonomy_manager'] = [
+      'title' => t('Taxonomy manager'),
+    ];
+
+    $library = \Drupal::service('library.discovery')->getLibraryByName('taxonomy_manager', 'jquery.fancytree');
+    $libraryPath = $library['js'][0]['data'];
+
+    // Handle protocol-relative URLs by prepending 'https:' for validation
+    // purposes.
+    $testUrl = (substr($libraryPath, 0, 2) === '//') ? 'https:' . $libraryPath : $libraryPath;
+
+    // Check if library path is a valid URL.
+    if (filter_var($testUrl, FILTER_VALIDATE_URL)) {
+      $requirements['taxonomy_manager']['severity'] = REQUIREMENT_OK;
+      $requirements['taxonomy_manager']['value'] = t('Fancytree library is loaded from a CDN.');
+    }
+    else {
+      // Check if the local file exists.
+      if (file_exists(DRUPAL_ROOT . '/' . $libraryPath)) {
+        $requirements['taxonomy_manager']['severity'] = REQUIREMENT_OK;
+        $requirements['taxonomy_manager']['value'] = t('Fancytree library is found and loaded locally.');
+      }
+      else {
+        $requirements['taxonomy_manager']['severity'] = REQUIREMENT_WARNING;
+        $requirements['taxonomy_manager']['value'] = t('Fancytree library is not found locally.');
+        $requirements['taxonomy_manager']['description'] = t('The Fancytree library will be loaded via CDN, but consider adding it as a composer dependency.');
+      }
+    }
+  }
+
+  return $requirements;
+}
+
+/**
  * Implements hook_install().
  */
 function taxonomy_manager_install() {

@@ -5,8 +5,8 @@
  * Charts post-update file.
  */
 
-use Drupal\charts\ConfigUpdater;
 use Drupal\Component\Serialization\Yaml;
+use Drupal\charts\ConfigUpdater;
 
 /**
  * Initialize advanced requirements cdn config value.

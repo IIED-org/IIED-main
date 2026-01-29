@@ -94,7 +94,17 @@ class Suggestion implements SuggestionInterface {
    * @param array|null $render
    *   (optional) The render array.
    */
-  public function __construct($suggested_keys = NULL, Url $url = NULL, $prefix = NULL, $label = NULL, $suggestion_prefix = NULL, $user_input = NULL, $suggestion_suffix = NULL, $results_count = NULL, array $render = NULL) {
+  public function __construct(
+    $suggested_keys = NULL,
+    ?Url $url = NULL,
+    $prefix = NULL,
+    $label = NULL,
+    $suggestion_prefix = NULL,
+    $user_input = NULL,
+    $suggestion_suffix = NULL,
+    $results_count = NULL,
+    ?array $render = NULL,
+  ) {
     $this->suggestedKeys = $suggested_keys;
     $this->url = $url;
     $this->prefix = $prefix;

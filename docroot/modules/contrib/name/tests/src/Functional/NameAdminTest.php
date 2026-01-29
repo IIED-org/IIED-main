@@ -36,13 +36,13 @@ class NameAdminTest extends NameTestBase {
     ];
     $all_values = [
       1 => [
-        'title' => t('Default'),
+        'title' => 'Default',
         'machine' => 'default',
         'pattern' => '((((t+ig)+im)+if)+is)+jc',
         'formatted' => '(1) Mr John Peter Mark Doe Jnr., B.Sc., Ph.D. (2) JOAN SUE SMITH (3) Prince',
       ],
       2 => [
-        'title' => t('Family'),
+        'title' => 'Family',
         'machine' => 'family',
         'pattern' => 'f',
         'formatted' => '(1) Doe (2) SMITH (3) &lt;&lt;empty&gt;&gt;',
@@ -50,27 +50,27 @@ class NameAdminTest extends NameTestBase {
         'delete link' => Url::fromRoute('entity.name_format.delete_form', ['name_format' => 'family'])->toString(),
       ],
       3 => [
-        'title' => t('Full'),
+        'title' => 'Full',
         'machine' => 'full',
         'pattern' => '((((t+ig)+im)+if)+is)+jc',
         'formatted' => '(1) Mr John Peter Mark Doe Jnr., B.Sc., Ph.D. (2) JOAN SUE SMITH (3) Prince',
-        'edit' => t('Edit'),
+        'edit' => 'Edit',
         'edit link' => Url::fromRoute('entity.name_format.edit_form', ['name_format' => 'full'])->toString(),
-        'delete' => t('Delete'),
+        'delete' => 'Delete',
         'delete link' => Url::fromRoute('entity.name_format.delete_form', ['name_format' => 'full'])->toString(),
       ],
       4 => [
-        'title' => t('Given'),
+        'title' => 'Given',
         'machine' => 'given',
         'pattern' => 'g',
         'formatted' => '(1) John (2) JOAN (3) Prince',
-        'edit' => t('Edit'),
+        'edit' => 'Edit',
         'edit link' => Url::fromRoute('entity.name_format.edit_form', ['name_format' => 'given'])->toString(),
-        'delete' => t('Delete'),
+        'delete' => 'Delete',
         'delete link' => Url::fromRoute('entity.name_format.delete_form', ['name_format' => 'given'])->toString(),
       ],
       5 => [
-        'title' => t('Given Family'),
+        'title' => 'Given Family',
         'machine' => 'short_full',
         'pattern' => 'g+if',
         'formatted' => '(1) John Doe (2) JOAN SMITH (3) Prince',
@@ -78,7 +78,7 @@ class NameAdminTest extends NameTestBase {
         'delete link' => Url::fromRoute('entity.name_format.delete_form', ['name_format' => 'short_full'])->toString(),
       ],
       6 => [
-        'title' => t('Title Family'),
+        'title' => 'Title Family',
         'machine' => 'formal',
         'pattern' => 't+if',
         'formatted' => '(1) Mr Doe (2) SMITH (3) &lt;&lt;empty&gt;&gt;',
@@ -111,7 +111,7 @@ class NameAdminTest extends NameTestBase {
       'name_settings[sep3]' => '-',
     ];
     $this->drupalGet('admin/config/regional/name/settings');
-    $this->submitForm($test_values, t('Save configuration'));
+    $this->submitForm($test_values, 'Save configuration');
     $this->assertSession()->pageTextContains(t('The configuration options have been saved.'));
 
     foreach ($test_values as $name => $value) {
@@ -130,8 +130,8 @@ class NameAdminTest extends NameTestBase {
     $this->assertSession()->responseContains('Format string help');
     $values = ['label' => '', 'id' => '', 'pattern' => ''];
     $this->drupalGet('admin/config/regional/name/add');
-    $this->submitForm($values, t('Save format'));
-    foreach ([t('Name'), t('Machine-readable name'), t('Format')] as $title) {
+    $this->submitForm($values, 'Save format');
+    foreach ([t('Name'), 'Machine-readable name', 'Format'] as $title) {
       $this->assertSession()->pageTextContains(t('@field field is required', ['@field' => $title]));
     }
     $values = [
@@ -140,23 +140,23 @@ class NameAdminTest extends NameTestBase {
       'pattern' => 'a',
     ];
     $this->drupalGet('admin/config/regional/name/add');
-    $this->submitForm($values, t('Save format'));
-    $this->assertSession()->pageTextNotContains(t('@field field is required', ['@field' => t('Format')]));
-    $this->assertSession()->pageTextNotContains(t('@field field is required', ['@field' => t('Machine-readable name')]));
+    $this->submitForm($values, 'Save format');
+    $this->assertSession()->pageTextNotContains(t('@field field is required', ['@field' => 'Format']));
+    $this->assertSession()->pageTextNotContains(t('@field field is required', ['@field' => 'Machine-readable name']));
 
     $values = ['label' => 'given', 'id' => '%&*(', 'pattern' => 'a'];
     $this->drupalGet('admin/config/regional/name/add');
-    $this->submitForm($values, t('Save format'));
+    $this->submitForm($values, 'Save format');
     $this->assertSession()->pageTextContains(t('The machine-readable name must contain only lowercase letters, numbers, and underscores.'));
 
     $values = ['label' => 'default', 'id' => 'default', 'pattern' => 'a'];
     $this->drupalGet('admin/config/regional/name/add');
-    $this->submitForm($values, t('Save format'));
+    $this->submitForm($values, 'Save format');
     $this->assertSession()->pageTextContains(t('The machine-readable name is already in use. It must be unique.'));
 
     $values = ['label' => 'Test', 'id' => 'test', 'pattern' => '\a\bc'];
     $this->drupalGet('admin/config/regional/name/add');
-    $this->submitForm($values, t('Save format'));
+    $this->submitForm($values, 'Save format');
     $this->assertSession()->pageTextContains(t('Name format Test added.'));
 
     $row = [
@@ -171,7 +171,7 @@ class NameAdminTest extends NameTestBase {
 
     $values = ['label' => 'new name', 'pattern' => 'f+g'];
     $this->drupalGet('admin/config/regional/name/manage/test');
-    $this->submitForm($values, t('Save format'));
+    $this->submitForm($values, 'Save format');
     $this->assertSession()->pageTextContains(t('Name format new name has been updated.'));
 
     $row = [
@@ -190,7 +190,7 @@ class NameAdminTest extends NameTestBase {
     $this->drupalGet('admin/config/regional/name/manage/test/delete');
     $this->assertSession()->pageTextContains(t('Are you sure you want to delete the custom format @title?', ['@title' => $values['label']]));
 
-    $this->submitForm([], t('Delete'));
+    $this->submitForm([], 'Delete');
     $this->assertSession()->pageTextContains(t('The name format @title has been deleted.', ['@title' => $values['label']]));
   }
 
@@ -216,7 +216,7 @@ class NameAdminTest extends NameTestBase {
     ];
     $all_values = [
       1 => [
-        'title' => t('Default'),
+        'title' => 'Default',
         'machine' => 'default',
         // 'examples' => 'todo',
         'edit link' => Url::fromRoute('entity.name_list_format.edit_form', ['name_list_format' => 'default'])->toString(),
@@ -244,10 +244,10 @@ class NameAdminTest extends NameTestBase {
       // 'el_al_first' => '',.
     ];
     $this->drupalGet('admin/config/regional/name/list/add');
-    $this->submitForm($values, t('Save list format'));
+    $this->submitForm($values, 'Save list format');
     $labels = [
-      t('Name'),
-      t('Machine-readable name'),
+      'Name',
+      'Machine-readable name',
     ];
     foreach ($labels as $title) {
       $this->assertSession()->pageTextContains(t('@field field is required', ['@field' => $title]));
@@ -262,18 +262,18 @@ class NameAdminTest extends NameTestBase {
       'el_al_first' => '5',
     ];
     $this->drupalGet('admin/config/regional/name/list/add');
-    $this->submitForm($values, t('Save list format'));
-    $this->assertSession()->pageTextNotContains(t('@field field is required', ['@field' => t('Last delimiter type')]));
-    $this->assertSession()->pageTextNotContains(t('@field field is required', ['@field' => t('Machine-readable name')]));
+    $this->submitForm($values, 'Save list format');
+    $this->assertSession()->pageTextNotContains(t('@field field is required', ['@field' => 'Last delimiter type']));
+    $this->assertSession()->pageTextNotContains(t('@field field is required', ['@field' => 'Machine-readable name']));
 
     $values['id'] = '%&*(';
     $this->drupalGet('admin/config/regional/name/list/add');
-    $this->submitForm($values, t('Save list format'));
+    $this->submitForm($values, 'Save list format');
     $this->assertSession()->pageTextContains(t('The machine-readable name must contain only lowercase letters, numbers, and underscores.'));
 
     $values = ['label' => 'default', 'id' => 'default', 'delimiter' => 'a'];
     $this->drupalGet('admin/config/regional/name/list/add');
-    $this->submitForm($values, t('Save list format'));
+    $this->submitForm($values, 'Save list format');
     $this->assertSession()->pageTextContains(t('The machine-readable name is already in use. It must be unique.'));
 
     $values = [
@@ -286,7 +286,7 @@ class NameAdminTest extends NameTestBase {
       'el_al_first' => '1',
     ];
     $this->drupalGet('admin/config/regional/name/list/add');
-    $this->submitForm($values, t('Save list format'));
+    $this->submitForm($values, 'Save list format');
     $this->assertSession()->pageTextContains(t('Name list format Test label added.'));
 
     $row = [
@@ -313,7 +313,7 @@ class NameAdminTest extends NameTestBase {
     $this->drupalGet('admin/config/regional/name/list/manage/test/delete');
     $this->assertSession()->pageTextContains(t('Are you sure you want to delete the custom list format @title?', ['@title' => $values['label']]));
 
-    $this->submitForm([], t('Delete'));
+    $this->submitForm([], 'Delete');
     $this->assertSession()->pageTextContains(t('The name list format @title has been deleted.', ['@title' => $values['label']]));
   }
 

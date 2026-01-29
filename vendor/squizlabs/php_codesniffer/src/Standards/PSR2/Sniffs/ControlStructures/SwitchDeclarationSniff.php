@@ -4,7 +4,7 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/HEAD/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\PSR2\Sniffs\ControlStructures;
@@ -152,7 +152,7 @@ class SwitchDeclarationSniff implements Sniff
                         $error = 'Terminating statement must be on a line by itself';
                         $fix   = $phpcsFile->addFixableError($error, $nextCloser, 'BreakNotNewLine');
                         if ($fix === true) {
-                            $phpcsFile->fixer->addNewLine($prev);
+                            $phpcsFile->fixer->addNewline($prev);
                             $phpcsFile->fixer->replaceToken($nextCloser, trim($tokens[$nextCloser]['content']));
                         }
                     } else {
@@ -172,7 +172,15 @@ class SwitchDeclarationSniff implements Sniff
                 }//end if
             } else {
                 $error = strtoupper($type).' statements must be defined using a colon';
-                $phpcsFile->addError($error, $nextCase, 'WrongOpener'.$type);
+                if ($tokens[$opener]['code'] === T_SEMICOLON) {
+                    $fix = $phpcsFile->addFixableError($error, $nextCase, 'WrongOpener'.$type);
+                    if ($fix === true) {
+                        $phpcsFile->fixer->replaceToken($opener, ':');
+                    }
+                } else {
+                    // Probably a case/default statement with colon + curly braces.
+                    $phpcsFile->addError($error, $nextCase, 'WrongOpener'.$type);
+                }
             }//end if
 
             // We only want cases from here on in.
@@ -380,6 +388,7 @@ class SwitchDeclarationSniff implements Sniff
                 T_CONTINUE => T_CONTINUE,
                 T_THROW    => T_THROW,
                 T_EXIT     => T_EXIT,
+                T_GOTO     => T_GOTO,
             ];
 
             $terminator = $phpcsFile->findStartOfStatement(($lastToken - 1));

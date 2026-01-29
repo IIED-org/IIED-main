@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\config_filter\Kernel;
 
-use Drupal\config_filter\Config\FilteredStorageInterface;
 use Drupal\Core\Config\DatabaseStorage;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\config_filter\Config\FilteredStorageInterface;
 
 /**
  * Storage factory test.

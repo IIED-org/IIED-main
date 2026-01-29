@@ -101,6 +101,7 @@ return array(
     'Nevay\\SPI\\' => array($vendorDir . '/tbachert/spi/src'),
     'Micheh\\PhpCodeSniffer\\' => array($vendorDir . '/micheh/phpcs-gitlab/src'),
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
+    'MabeEnum\\' => array($vendorDir . '/marc-mabe/php-enum/src'),
     'League\\Csv\\' => array($vendorDir . '/league/csv/src'),
     'League\\Container\\' => array($vendorDir . '/league/container/src'),
     'Laminas\\Stdlib\\' => array($vendorDir . '/laminas/laminas-stdlib/src'),

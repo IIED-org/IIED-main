@@ -141,10 +141,10 @@ class TextareaWithSummaryAndCounterWidget extends TextareaWithSummaryWidget {
     $element['summary']['#access'] = $this->getSetting('enable_summary');
 
     $entity = $items->getEntity();
-    $field_defintion = $items->getFieldDefinition();
+    $field_definition = $items->getFieldDefinition();
 
     if ($maxlength = $this->getSetting('maxlength')) {
-      $this->fieldFormElement($element, $entity, $field_defintion, $delta);
+      $this->fieldFormElement($element, $entity, $field_definition, $delta);
       $count_html_characters = $this->getSetting('count_html_characters');
       if (isset($element['value'])) {
         $element['value']['#textfield-maxlength'] = $maxlength;
@@ -152,11 +152,13 @@ class TextareaWithSummaryAndCounterWidget extends TextareaWithSummaryWidget {
       }
       $element['#textfield-maxlength'] = $maxlength;
       $element['#textfield-count-html'] = $count_html_characters;
-      $element['#element_validate'][] = [static::class, 'validateFieldFormElement'];
+      if (!$this->getSetting('count_only_mode')) {
+        $element['#element_validate'][] = [static::class, 'validateFieldFormElement'];
+      }
     }
 
     if ($summary_maxlength = $this->getSetting('summary_maxlength')) {
-      $this->fieldFormElement($element['summary'], $entity, $field_defintion, $delta, TRUE);
+      $this->fieldFormElement($element['summary'], $entity, $field_definition, $delta, TRUE);
       $element['summary']['#textfield-maxlength'] = $summary_maxlength;
       $element['summary']['#textfield-count-html'] = $this->getSetting('count_html_characters');
       if (!$this->getSetting('count_only_mode')) {

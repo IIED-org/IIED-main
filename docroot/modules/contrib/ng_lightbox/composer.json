@@ -1,0 +1,11 @@
+{
+    "name": "drupal/ng_lightbox",
+    "description": "A path based lightbox solution using CSS 3 properties.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/ng_lightbox",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/ng_lightbox",
+        "source": "https://git.drupalcode.org/project/ng_lightbox"
+    }
+}

@@ -20,7 +20,10 @@ class SortWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
   public static $testViews = ['bef_test'];
 
   /**
-   * Tests combining sort options (sort order and sort by).
+   * Tests combining sort options.
+   *
+   * Tests combining sort order and sort by, as well as using a custom
+   * query string parameter.
    */
   public function testCombineSortOptions() {
     $view = Views::getView('bef_test');
@@ -35,6 +38,7 @@ class SortWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
       'sort' => [
         'advanced' => [
           'combine' => TRUE,
+          'combine_param' => 'sort_bef_combine_test',
         ],
       ],
     ]);
@@ -44,7 +48,7 @@ class SortWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
 
     // Assert our "sort_bef_combine" contains both sort by and sort order
     // options.
-    $options = $output['sort_bef_combine']['#options'];
+    $options = $output['sort_bef_combine_test']['#options'];
     $assert = [
       'created_ASC' => 'Created Asc',
       'created_DESC' => 'Created Desc',
@@ -72,6 +76,7 @@ class SortWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
       'sort' => [
         'advanced' => [
           'combine' => TRUE,
+          'combine_param' => 'sort_bef_combine_test',
           'combine_rewrite' => "Created Desc|down\r\nCreated Asc|up",
         ],
       ],
@@ -82,7 +87,7 @@ class SortWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
 
     // Assert our "sort_bef_combine" contains both sort by and sort order
     // options, and has its options rewritten.
-    $options = $output['sort_bef_combine']['#options'];
+    $options = $output['sort_bef_combine_test']['#options'];
     $assert = [
       'created_DESC' => 'down',
       'created_ASC' => 'up',
@@ -110,6 +115,7 @@ class SortWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
       'sort' => [
         'advanced' => [
           'combine' => TRUE,
+          'combine_param' => 'sort_bef_combine_test',
           'reset' => TRUE,
           'reset_label' => 'Reset sort',
         ],
@@ -120,7 +126,7 @@ class SortWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
     $output = $this->getExposedFormRenderArray($view);
 
     // Assert our "sort_bef_combine" contains a reset option at the top.
-    $options = $output['sort_bef_combine']['#options'];
+    $options = $output['sort_bef_combine_test']['#options'];
     $assert = [
       ' ' => 'Reset sort',
       'created_ASC' => 'Created Asc',

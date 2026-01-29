@@ -3,10 +3,10 @@
 namespace Drupal\Tests\encrypt\Unit\Entity;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\key\KeyInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\encrypt\EncryptionMethodInterface;
 use Drupal\encrypt\Entity\EncryptionProfile;
+use Drupal\key\KeyInterface;
 
 /**
  * Unit tests for EncryptionProfile class.
@@ -64,13 +64,13 @@ class EncryptionProfileTest extends UnitTestCase {
     $key_type = $this->createMock('\Drupal\key\Plugin\KeyType\EncryptionKeyType');
     $key_type->expects($this->any())
       ->method('getPluginId')
-      ->will($this->returnValue('encryption'));
+      ->willReturn('encryption');
     $this->key->expects($this->any())
       ->method('getKeyType')
-      ->will($this->returnValue($key_type));
+      ->willReturn($key_type);
     $this->key->expects($this->any())
       ->method('getKeyValue')
-      ->will($this->returnValue("key_value"));
+      ->willReturn("key_value");
 
     // Mock an EncryptionMethod.
     $this->encryptionMethod = $this->createMock('\Drupal\encrypt\EncryptionMethodInterface');
@@ -78,16 +78,26 @@ class EncryptionProfileTest extends UnitTestCase {
     // Set up expectations for encryption method.
     $this->encryptionMethod->expects($this->any())
       ->method('checkDependencies')
-      ->will($this->returnValue([]));
+      ->willReturn([]);
 
     // Mock a KeyRepository.
     $this->keyRepository = $this->createMock('\Drupal\key\KeyRepository');
 
     // Mock a plugin collection.
-    $this->pluginCollection = $this->getMockBuilder('\Drupal\Core\Plugin\DefaultLazyPluginCollection')
-      ->disableOriginalConstructor()
-      ->setMethods(['get', 'set', 'addInstanceID'])
-      ->getMock();
+    $mock_builder_plugin_collection = $this->getMockBuilder('\Drupal\Core\Plugin\DefaultLazyPluginCollection');
+    // @todo Remove this conditional once support for Drupal <11 is dropped.
+    if (method_exists($mock_builder_plugin_collection, 'onlyMethods')) {
+      $this->pluginCollection = $mock_builder_plugin_collection
+        ->disableOriginalConstructor()
+        ->onlyMethods(['get', 'set', 'addInstanceID'])
+        ->getMock();
+    }
+    else {
+      $this->pluginCollection = $mock_builder_plugin_collection
+        ->disableOriginalConstructor()
+        ->setMethods(['get', 'set', 'addInstanceID'])
+        ->getMock();
+    }
   }
 
   /**
@@ -100,48 +110,66 @@ class EncryptionProfileTest extends UnitTestCase {
    */
   public function testValidate($enc_method_id, $enc_key, $enc_method_def, $expected_errors) {
     // Set up a mock for the EncryptionProfile class to mock some methods.
-    $encryption_profile = $this->getMockBuilder('\Drupal\encrypt\Entity\EncryptionProfile')
-      ->setMethods([
-        'getEncryptionMethod',
-        'getEncryptionMethodId',
-        'getEncryptionKey',
-        'getEncryptionKeyId',
-      ]
-      )
-      ->disableOriginalConstructor()
-      ->getMock();
+    $mock_builder_encryption_profile = $this->getMockBuilder('\Drupal\encrypt\Entity\EncryptionProfile');
+    // @todo Remove this conditional once support for Drupal <11 is dropped.
+    if (method_exists($mock_builder_encryption_profile, 'onlyMethods')) {
+      $encryption_profile = $mock_builder_encryption_profile
+        ->onlyMethods(
+          [
+            'getEncryptionMethod',
+            'getEncryptionMethodId',
+            'getEncryptionKey',
+            'getEncryptionKeyId',
+          ]
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
+    }
+    else {
+      $encryption_profile = $mock_builder_encryption_profile
+        ->setMethods(
+          [
+            'getEncryptionMethod',
+            'getEncryptionMethodId',
+            'getEncryptionKey',
+            'getEncryptionKeyId',
+          ]
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
+    }
 
     // Set expectations for the EncryptionMethod.
     $this->encryptionMethod->expects($this->any())
       ->method('getPluginDefinition')
-      ->will($this->returnValue($enc_method_def));
+      ->willReturn($enc_method_def);
 
     // Set expectations for EncryptionProfile entity.
     $encryption_profile->expects($this->any())
       ->method('getEncryptionMethodId')
-      ->will($this->returnValue($enc_method_id));
+      ->willReturn($enc_method_id);
     $encryption_profile->expects($this->any())
       ->method('getEncryptionKeyId')
-      ->will($this->returnValue($enc_key));
+      ->willReturn($enc_key);
     if ($enc_method_id == "test_encryption_method") {
       $encryption_profile->expects($this->any())
         ->method('getEncryptionMethod')
-        ->will($this->returnValue($this->encryptionMethod));
+        ->willReturn($this->encryptionMethod);
     }
     else {
       $encryption_profile->expects($this->any())
         ->method('getEncryptionMethod')
-        ->will($this->returnValue(FALSE));
+        ->willReturn(FALSE);
     }
     if ($enc_key == "test_key") {
       $encryption_profile->expects($this->any())
         ->method('getEncryptionKey')
-        ->will($this->returnValue($this->key));
+        ->willReturn($this->key);
     }
     if ($enc_key == "wrong_key") {
       $encryption_profile->expects($this->any())
         ->method('getEncryptionKey')
-        ->will($this->returnValue(FALSE));
+        ->willReturn(FALSE);
     }
 
     $errors = $encryption_profile->validate();
@@ -202,28 +230,44 @@ class EncryptionProfileTest extends UnitTestCase {
    */
   public function testGetEncryptionMethod() {
     // Set up a mock for the EncryptionProfile class to mock some methods.
-    $encryption_profile = $this->getMockBuilder('\Drupal\encrypt\Entity\EncryptionProfile')
-      ->setMethods([
-        'getPluginCollection',
-        'getEncryptionMethodId',
-      ]
-      )
-      ->disableOriginalConstructor()
-      ->getMock();
+    $mock_builder_encryption_profile = $this->getMockBuilder('\Drupal\encrypt\Entity\EncryptionProfile');
+    // @todo Remove this conditional once support for Drupal <11 is dropped.
+    if (method_exists($mock_builder_encryption_profile, 'onlyMethods')) {
+      $encryption_profile = $mock_builder_encryption_profile
+        ->onlyMethods(
+          [
+            'getPluginCollection',
+            'getEncryptionMethodId',
+          ]
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
+    }
+    else {
+      $encryption_profile = $mock_builder_encryption_profile
+        ->setMethods(
+          [
+            'getPluginCollection',
+            'getEncryptionMethodId',
+          ]
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
+    }
 
     // Set up expectations for plugin collection.
     $this->pluginCollection->expects($this->atLeastOnce())
       ->method('get')
       ->with('test_encryption_method')
-      ->will($this->returnValue($this->encryptionMethod));
+      ->willReturn($this->encryptionMethod);
 
     // Set up expectations for encryption profile.
     $encryption_profile->expects($this->any())
       ->method('getPluginCollection')
-      ->will($this->returnValue($this->pluginCollection));
+      ->willReturn($this->pluginCollection);
     $encryption_profile->expects($this->any())
       ->method('getEncryptionMethodId')
-      ->will($this->returnValue('test_encryption_method'));
+      ->willReturn('test_encryption_method');
 
     $result = $encryption_profile->getEncryptionMethod();
     $this->assertInstanceOf(EncryptionMethodInterface::class, $result);
@@ -236,10 +280,20 @@ class EncryptionProfileTest extends UnitTestCase {
    */
   public function testSetEncryptionMethod() {
     // Set up a mock for the EncryptionProfile class to mock some methods.
-    $encryption_profile = $this->getMockBuilder('\Drupal\encrypt\Entity\EncryptionProfile')
-      ->setMethods(['getPluginCollection'])
-      ->disableOriginalConstructor()
-      ->getMock();
+    // @todo Remove this conditional once support for Drupal <11 is dropped.
+    $mock_builder_encryption_profile = $this->getMockBuilder('\Drupal\encrypt\Entity\EncryptionProfile');
+    if (method_exists($mock_builder_encryption_profile, 'onlyMethods')) {
+      $encryption_profile = $mock_builder_encryption_profile
+        ->onlyMethods(['getPluginCollection'])
+        ->disableOriginalConstructor()
+        ->getMock();
+    }
+    else {
+      $encryption_profile = $mock_builder_encryption_profile
+        ->setMethods(['getPluginCollection'])
+        ->disableOriginalConstructor()
+        ->getMock();
+    }
 
     $this->pluginCollection->expects($this->once())
       ->method('addInstanceID');
@@ -247,12 +301,12 @@ class EncryptionProfileTest extends UnitTestCase {
     // Set up expectations for encryption profile.
     $encryption_profile->expects($this->any())
       ->method('getPluginCollection')
-      ->will($this->returnValue($this->pluginCollection));
+      ->willReturn($this->pluginCollection);
 
     // Set up expectations for encryption method.
     $this->encryptionMethod->expects($this->any())
       ->method('getPluginId')
-      ->will($this->returnValue('test_encryption_method'));
+      ->willReturn('test_encryption_method');
 
     $encryption_profile->setEncryptionMethod($this->encryptionMethod);
   }
@@ -264,27 +318,43 @@ class EncryptionProfileTest extends UnitTestCase {
    */
   public function testGetEncryptionKey() {
     // Set up a mock for the EncryptionProfile class to mock some methods.
-    $encryption_profile = $this->getMockBuilder('\Drupal\encrypt\Entity\EncryptionProfile')
-      ->setMethods([
-        'getKeyRepository',
-        'getEncryptionKeyId',
-      ]
-      )
-      ->disableOriginalConstructor()
-      ->getMock();
+    $mock_builder_encryption_profile = $this->getMockBuilder('\Drupal\encrypt\Entity\EncryptionProfile');
+    // @todo Remove this conditional once support for Drupal <11 is dropped.
+    if (method_exists($mock_builder_encryption_profile, 'onlyMethods')) {
+      $encryption_profile = $mock_builder_encryption_profile
+        ->onlyMethods(
+          [
+            'getKeyRepository',
+            'getEncryptionKeyId',
+          ]
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
+    }
+    else {
+      $encryption_profile = $this->getMockBuilder('\Drupal\encrypt\Entity\EncryptionProfile')
+        ->setMethods(
+          [
+            'getKeyRepository',
+            'getEncryptionKeyId',
+          ]
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
+    }
 
     $this->keyRepository->expects($this->any())
       ->method('getKey')
       ->with($this->equalTo('test_key'))
-      ->will($this->returnValue($this->key));
+      ->willReturn($this->key);
 
     $encryption_profile->expects($this->any())
       ->method('getKeyRepository')
-      ->will($this->returnValue($this->keyRepository));
+      ->willReturn($this->keyRepository);
 
     $encryption_profile->expects($this->any())
       ->method('getEncryptionKeyId')
-      ->will($this->returnValue('test_key'));
+      ->willReturn('test_key');
 
     $result = $encryption_profile->getEncryptionKey();
     $this->assertInstanceOf(KeyInterface::class, $result);
@@ -301,7 +371,7 @@ class EncryptionProfileTest extends UnitTestCase {
     // Set up expectations for key entity.
     $this->key->expects($this->any())
       ->method('id')
-      ->will($this->returnValue('test_key'));
+      ->willReturn('test_key');
 
     $encryption_profile->setEncryptionKey($this->key);
     $this->assertEquals("test_key", $encryption_profile->getEncryptionKeyId());

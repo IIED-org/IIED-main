@@ -15,13 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class PageAttachments implements ContainerInjectionInterface {
 
   /**
-   * The config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected ConfigFactoryInterface $configFactory;
-
-  /**
    * The context validator.
    *
    * @var \Drupal\gin_lb\Service\ContextValidatorInterface
@@ -31,16 +24,15 @@ class PageAttachments implements ContainerInjectionInterface {
   /**
    * Constructor.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The config factory service.
    * @param \Drupal\gin_lb\Service\ContextValidatorInterface $contextValidator
    *   The context validator.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The config factory service.
    */
   public function __construct(
-    ConfigFactoryInterface $configFactory,
     ContextValidatorInterface $contextValidator,
+    protected ConfigFactoryInterface $configFactory,
   ) {
-    $this->configFactory = $configFactory;
     $this->contextValidator = $contextValidator;
   }
 
@@ -50,8 +42,8 @@ class PageAttachments implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container): static {
     // @phpstan-ignore-next-line
     return new static(
+      $container->get('gin_lb.context_validator'),
       $container->get('config.factory'),
-      $container->get('gin_lb.context_validator')
     );
   }
 
@@ -78,13 +70,7 @@ class PageAttachments implements ContainerInjectionInterface {
       $attachments['#attached']['library'][] = 'gin_lb/gin_lb_10';
     }
 
-    $config = $this->configFactory->get('gin_lb.settings');
-    if ($config->get('toastify_loading') === 'cdn') {
-      $attachments['#attached']['library'][] = 'gin_lb/toastify_cdn';
-      $attachments['#attached']['library'][] = 'gin_lb/gin_lb_toastify';
-    }
-    elseif ($config->get('toastify_loading') === 'composer') {
-      $attachments['#attached']['library'][] = 'gin_lb/toastify_composer';
+    if ($this->configFactory->get('gin_lb.settings')->get('toastify_loading') !== 'custom') {
       $attachments['#attached']['library'][] = 'gin_lb/gin_lb_toastify';
     }
   }

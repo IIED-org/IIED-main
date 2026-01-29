@@ -1,0 +1,12 @@
+name: Configurable Views Filter Block Test
+type: module
+description: Base test setup for the Configurable Views Filter Block.
+package: Testing
+dependencies:
+  - drupal:views
+  - drupal:node
+
+# Information added by Drupal.org packaging script on 2025-05-15
+version: '1.0.0'
+project: 'configurable_views_filter_block'
+datestamp: 1747326790

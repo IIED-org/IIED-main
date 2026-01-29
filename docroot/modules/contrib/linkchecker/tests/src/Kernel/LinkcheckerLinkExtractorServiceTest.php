@@ -3,11 +3,12 @@
 namespace Drupal\Tests\linkchecker\Kernel;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Queue\DatabaseQueue;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\linkchecker\Entity\LinkCheckerLink;
 use Drupal\linkchecker\LinkCheckerLinkInterface;
 use Drupal\node\Entity\NodeType;
-use Drupal\Tests\node\Traits\NodeCreationTrait;
 
 /**
  * Test link extractor service.
@@ -28,7 +29,6 @@ class LinkcheckerLinkExtractorServiceTest extends KernelTestBase {
     'field',
     'filter',
     'text',
-    'dynamic_entity_reference',
     'linkchecker',
     'path_alias',
   ];
@@ -121,6 +121,12 @@ class LinkcheckerLinkExtractorServiceTest extends KernelTestBase {
     $this->folder2 = $this->randomMachineName(5);
 
     $this->extractorService = $this->container->get('linkchecker.extractor');
+    // Prepare queue table cuz it's being used in hook_entity_delete().
+    $database_connection = $this->container->get('database');
+    $database_schema = $database_connection->schema();
+    $database_queue = new DatabaseQueue($this->randomString(), $database_connection);
+    $schema_definition = $database_queue->schemaDefinition();
+    $database_schema->createTable(DatabaseQueue::TABLE_NAME, $schema_definition);
   }
 
   /**
@@ -171,6 +177,19 @@ class LinkcheckerLinkExtractorServiceTest extends KernelTestBase {
     foreach ($this->getRelativeUrls() as $url) {
       $this->assertTrue(in_array($url, $extracted), new FormattableMarkup('URL @url was not extracted!', ['@url' => $url]));
     }
+  }
+
+  /**
+   * Test that we can extract internal URLs.
+   */
+  public function testInternalUrls() {
+    // Enable internal links URLs only.
+    $this->linkcheckerSetting->set('check_links_types', LinkCheckerLinkInterface::TYPE_ALL);
+    $this->linkcheckerSetting->save(TRUE);
+    $extracted = $this->extractorService->getLinks([
+      'internal:/node/add',
+    ], $this->baseUrl . '/' . $this->folder1 . '/' . $this->folder2);
+    self::assertCount(1, $extracted);
   }
 
   /**
@@ -235,10 +254,8 @@ class LinkcheckerLinkExtractorServiceTest extends KernelTestBase {
     foreach ($urls as $url) {
       $tmpLink = LinkCheckerLink::create([
         'url' => $url,
-        'entity_id' => [
-          'target_id' => $node->id(),
-          'target_type' => $node->getEntityTypeId(),
-        ],
+        'parent_entity_type_id' => $node->getEntityTypeId(),
+        'parent_entity_id' => $node->id(),
         'entity_field' => 'body',
         'entity_langcode' => 'en',
       ]);

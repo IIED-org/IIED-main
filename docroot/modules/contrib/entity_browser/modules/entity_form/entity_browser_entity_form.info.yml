@@ -7,7 +7,7 @@ dependencies:
   - entity_browser:entity_browser
   - inline_entity_form:inline_entity_form
 
-# Information added by Drupal.org packaging script on 2025-02-16
-version: '8.x-2.13'
+# Information added by Drupal.org packaging script on 2025-09-04
+version: '8.x-2.15'
 project: 'entity_browser'
-datestamp: 1739701404
+datestamp: 1756969162

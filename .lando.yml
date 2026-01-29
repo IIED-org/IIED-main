@@ -37,15 +37,16 @@ services:
       command: '/bin/s6-svscan /etc/services.d'
     portforward: true
   node:
-    type: node:16
+    type: node:20
     scanner: false
     ssl: true
-    # command: cd /app/docroot/themes/custom/iied_tw && npm run watch
     port: 80
     overrides:
       ports:
       - 3000:3000
       - 3001:3001
+    # build:
+       # cmd: cd /app/docroot/themes/custom/iied_tw && npm install && npm run dev
   solr:
     type: solr:8.11
     portforward: true

@@ -5,7 +5,6 @@
  * Install, update and uninstall functions for the devel module.
  */
 
-use Drupal\devel\Plugin\Devel\Dumper\Kint;
 use Drupal\devel\Plugin\Devel\Dumper\VarDumper;
 
 /**
@@ -15,9 +14,6 @@ function devel_install() {
   $rich_dumper = NULL;
   if (VarDumper::checkRequirements()) {
     $rich_dumper = 'var_dumper';
-  }
-  elseif (Kint::checkRequirements()) {
-    $rich_dumper = 'kint';
   }
   if (isset($rich_dumper)) {
     \Drupal::configFactory()->getEditable('devel.settings')

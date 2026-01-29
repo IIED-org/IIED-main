@@ -20,6 +20,7 @@
         "drupal/core": "^10.3 || ^11"
     },
     "require-dev": {
-        "drupal/rules": "^4.0"
+        "drupal/rules": "^4.0",
+        "drupal/webform": "^6.2"
     }
 }

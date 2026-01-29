@@ -2,13 +2,15 @@
 
 namespace Drupal\Tests\linkchecker\Kernel;
 
+use Drupal\Core\Queue\DatabaseQueue;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\linkchecker\Entity\LinkCheckerLink;
 use Drupal\linkchecker\LinkCheckerLinkInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
-use Drupal\Tests\node\Traits\NodeCreationTrait;
 use GuzzleHttp\Psr7\Response;
 
 /**
@@ -19,6 +21,7 @@ use GuzzleHttp\Psr7\Response;
 class LinkcheckerUnpublish404Test extends KernelTestBase {
 
   use NodeCreationTrait;
+  use UserCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -30,7 +33,6 @@ class LinkcheckerUnpublish404Test extends KernelTestBase {
     'field',
     'filter',
     'text',
-    'dynamic_entity_reference',
     'linkchecker',
     'path_alias',
   ];
@@ -72,13 +74,37 @@ class LinkcheckerUnpublish404Test extends KernelTestBase {
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');
     $this->installEntitySchema('linkcheckerlink');
-    $this->installConfig(['field', 'user', 'node', 'filter', 'linkchecker']);
+    $this->installConfig([
+      'field',
+      'user',
+      'node',
+      'filter',
+      'linkchecker',
+      'system',
+    ]);
 
     $this->checkerService = $this->container->get('linkchecker.checker');
     $this->linkcheckerSetting = $this->container->get('config.factory')
       ->getEditable('linkchecker.settings');
     $this->unpublish404Handler = $this->container->get('plugin.manager.link_status_handler')
       ->createInstance('unpublish_404');
+
+    // Prepare queue table cuz it's being used in hook_entity_delete().
+    $database_connection = $this->container->get('database');
+    $database_schema = $database_connection->schema();
+    $database_queue = new DatabaseQueue($this->randomString(), $database_connection);
+    $schema_definition = $database_queue->schemaDefinition();
+    $database_schema->createTable(DatabaseQueue::TABLE_NAME, $schema_definition);
+
+    // Since install hooks are not being called in Kernel tests - do it
+    // manually.
+    // We're calling it to set the impersonate_account in the config.
+    // @see \Drupal\KernelTests\KernelTestBase::enableModules()
+    $this->setUpCurrentUser(['uid' => 1], [
+      'administer linkchecker',
+      'access content',
+    ]);
+    linkchecker_install();
   }
 
   /**
@@ -121,10 +147,8 @@ class LinkcheckerUnpublish404Test extends KernelTestBase {
     foreach ($urls as $url) {
       $tmpLink = LinkCheckerLink::create([
         'url' => $url,
-        'entity_id' => [
-          'target_id' => $node->id(),
-          'target_type' => $node->getEntityTypeId(),
-        ],
+        'parent_entity_type_id' => $node->getEntityTypeId(),
+        'parent_entity_id' => $node->id(),
         'entity_field' => 'body',
         'entity_langcode' => $node->language()->getId(),
       ]);

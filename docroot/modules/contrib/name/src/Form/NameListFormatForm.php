@@ -134,7 +134,7 @@ class NameListFormatForm extends EntityForm {
     else {
       $this->messenger()->addMessage($this->t('Name list format %label has been updated.', ['%label' => $this->entity->label()]));
     }
-    $this->entity->save();
+    return $this->entity->save();
   }
 
   /**

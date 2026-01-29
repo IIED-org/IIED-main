@@ -2,17 +2,18 @@
 
 namespace Drupal\better_exposed_filters\Plugin\better_exposed_filters\filter;
 
+use Drupal\better_exposed_filters\Attribute\FiltersWidget;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Sliders widget implementation.
- *
- * @BetterExposedFiltersFilterWidget(
- *   id = "bef_sliders",
- *   label = @Translation("Sliders"),
- * )
  */
+#[FiltersWidget(
+  id: 'bef_sliders',
+  title: new TranslatableMarkup('Sliders'),
+)]
 class Sliders extends FilterWidgetBase {
 
   // Slider animation options.
@@ -29,7 +30,7 @@ class Sliders extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return parent::defaultConfiguration() + [
       'min' => 0,
       'max' => 99999,
@@ -37,17 +38,20 @@ class Sliders extends FilterWidgetBase {
       'animate' => self::ANIMATE_NONE,
       'animate_ms' => 0,
       'orientation' => self::ORIENTATION_HORIZONTAL,
+      'enable_tooltips' => FALSE,
+      'tooltips_value_prefix' => '',
+      'tooltips_value_suffix' => '',
     ];
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function isApplicable($filter = NULL, array $filter_options = []) {
+  public static function isApplicable(mixed $filter = NULL, array $filter_options = []): bool {
     /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
     $is_applicable = FALSE;
 
-    // The date filter handler extends the numeric filter handler so we have
+    // The date filter handler extends the numeric filter handler, so we have
     // to exclude it specifically.
     $is_numeric_filter = is_a($filter, 'Drupal\views\Plugin\views\filter\NumericFilter');
     $is_range_filter = is_a($filter, 'Drupal\range\Plugin\views\filter\Range');
@@ -62,7 +66,7 @@ class Sliders extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
     $filter = $this->handler;
 
@@ -127,13 +131,41 @@ class Sliders extends FilterWidgetBase {
       '#description' => $this->t('The orientation of the range slider.'),
     ];
 
+    $form['enable_tooltips'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable tooltips'),
+      '#default_value' => $this->configuration['enable_tooltips'],
+    ];
+
+    $form['tooltips_value_prefix'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Tooltips value prefix'),
+      '#default_value' => $this->configuration['tooltips_value_prefix'],
+      '#states' => [
+        'visible' => [
+          ':input[name="exposed_form_options[bef][filter][' . $filter->field . '][configuration][enable_tooltips]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['tooltips_value_suffix'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Tooltips value suffix'),
+      '#default_value' => $this->configuration['tooltips_value_suffix'],
+      '#states' => [
+        'visible' => [
+          ':input[name="exposed_form_options[bef][filter][' . $filter->field . '][configuration][enable_tooltips]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
     return $form;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
     parent::validateConfigurationForm($form, $form_state);
 
     // Max must be > min.
@@ -151,8 +183,8 @@ class Sliders extends FilterWidgetBase {
       $form_state->setError($form['step'], $this->t('The slider step option for %name cannot have more than 5 decimal places.'));
     }
 
-    // Very small step and a vary large range can go beyond the max value of
-    // an int in PHP. Thus we look for a decimal point when casting the result
+    // Very small step and a very large range can go beyond the max value of
+    // an int in PHP. Thus, we look for a decimal point when casting the result
     // to a string.
     if (strpos((string) ($max - $min) / $step, '.')) {
       $form_state->setError($form['step'], $this->t('The slider range must be evenly divisible by the step option.'));
@@ -162,25 +194,40 @@ class Sliders extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function exposedFormAlter(array &$form, FormStateInterface $form_state) {
+  public function exposedFormAlter(array &$form, FormStateInterface $form_state): void {
     $field_id = $this->getExposedFilterFieldId();
 
     parent::exposedFormAlter($form, $form_state);
 
-    // Attach the JS (@see /js/sliders.js)
-    $form[$field_id]['#attached']['library'][] = 'better_exposed_filters/sliders';
+    $data_selector = Html::getId($field_id);
+    // Add the JS placeholder.
+    $form["{$field_id}_wrapper"]["{$field_id}_wrapper"]['slider_wrapper'] = [
+      '#type' => 'container',
+      '#weight' => 0,
+      '#attributes' => [
+        'class' => "$data_selector-slider-wrapper",
+      ],
+    ];
+    $form["{$field_id}_wrapper"][$field_id]['min']['#weight'] = -1;
+    $form["{$field_id}_wrapper"][$field_id]['max']['#weight'] = 1;
+
+    // Attach the JS (@see /js/sliders.js).
+    $form["{$field_id}_wrapper"][$field_id]['#attached']['library'][] = 'better_exposed_filters/sliders';
 
     // Set the slider settings.
-    $form[$field_id]['#attached']['drupalSettings']['better_exposed_filters']['slider'] = TRUE;
-    $form[$field_id]['#attached']['drupalSettings']['better_exposed_filters']['slider_options'][$field_id] = [
+    $form["{$field_id}_wrapper"][$field_id]['#attached']['drupalSettings']['better_exposed_filters']['slider'] = TRUE;
+    $form["{$field_id}_wrapper"][$field_id]['#attached']['drupalSettings']['better_exposed_filters']['slider_options'][$field_id] = [
       'min' => $this->configuration['min'],
       'max' => $this->configuration['max'],
       'step' => $this->configuration['step'],
       'animate' => ($this->configuration['animate'] === self::ANIMATE_CUSTOM) ? $this->configuration['animate_ms'] : $this->configuration['animate'],
       'orientation' => $this->configuration['orientation'],
       'id' => Html::getUniqueId($field_id),
-      'dataSelector' => Html::getId($field_id),
+      'dataSelector' => $data_selector,
       'viewId' => $form['#id'],
+      'tooltips' => $this->configuration['enable_tooltips'],
+      'tooltips_value_prefix' => $this->configuration['tooltips_value_prefix'],
+      'tooltips_value_suffix' => $this->configuration['tooltips_value_suffix'],
     ];
   }
 

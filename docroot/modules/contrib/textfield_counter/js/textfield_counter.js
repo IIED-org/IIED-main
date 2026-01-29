@@ -3,151 +3,226 @@
  * Adds textfield counter JavaScript.
  */
 
-/*global jQuery, Drupal, window, once, CKEDITOR*/
-/*jslint white:true, this, browser:true*/
+/* global CKEDITOR */
 
-(function ($, Drupal, window, once) {
-
-  "use strict";
-
+((Drupal, once) => {
   function addClass(element, className) {
-    element.addClass(className);
+    element.classList.add(className);
   }
 
   function removeClass(element, className) {
-    element.removeClass(className);
+    const classes = className.split(' ');
+    classes.forEach((cls) => element.classList.remove(cls));
   }
 
   function checkClasses(element, remaining) {
     if (remaining <= 5 && remaining >= 0) {
-      removeClass(element, "textcount_over");
-      addClass(element, "textcount_warning");
-    }
-    else if (remaining < 0) {
-      removeClass(element, "textcount_warning");
-      addClass(element, "textcount_over");
-    }
-    else {
-      removeClass(element, "textcount_warning textcount_over");
+      removeClass(element, 'textcount_over');
+      addClass(element, 'textcount_warning');
+    } else if (remaining < 0) {
+      removeClass(element, 'textcount_warning');
+      addClass(element, 'textcount_over');
+    } else {
+      removeClass(element, 'textcount_warning textcount_over');
     }
   }
 
   function textWatcher(settings) {
-    $.each(settings.textfieldCounter, function (key) {
-      var fieldSettings = settings.textfieldCounter[key];
+    Object.keys(settings.textfieldCounter).forEach((key) => {
+      const fieldSettings = settings.textfieldCounter[key];
 
-      $.each(fieldSettings.key, function (index) {
-        $(once("textfield-counter-text-watcher", "." + fieldSettings.key[index])).filter("textarea, input[type=text]").each(function () {
-          var counter, maxlength, currentLength, remaining, countHTML;
+      fieldSettings.key.forEach((keyClass, index) => {
+        const elements = once(
+          'textfield-counter-text-watcher',
+          `.${fieldSettings.key[index]}`,
+        );
 
-          maxlength = fieldSettings.maxlength;
-          if (maxlength) {
-            countHTML = fieldSettings.countHTMLCharacters;
-            if (countHTML) {
-              currentLength = $(this).val().length;
-            }
-            else {
-              currentLength = $("<div/>").html($(this).val()).text().trim().replace(/(\r?\n|\r)+/g, "\n").length;
-            }
-            remaining = maxlength - currentLength;
-            counter = $("<div/>", {class:"textfield_counter_counter"}).html(Drupal.t(fieldSettings.textCountStatusMessage, {"@maxlength":maxlength , "@current_length":currentLength , "@remaining_count":remaining}));
+        elements
+          .filter((el) => {
+            return (
+              el.tagName === 'TEXTAREA' ||
+              (el.tagName === 'INPUT' && el.type === 'text')
+            );
+          })
+          .forEach((element) => {
+            let counter;
+            let currentLength;
+            let remaining;
+            let countHTML;
 
-            if (fieldSettings.counterPosition === "before") {
-              counter.insertBefore($(this));
-            }
-            else {
-              counter.insertAfter($(this));
-            }
-
-            checkClasses($(this).parent(), remaining);
-
-            $(this).keyup(function () {
+            const { maxlength } = fieldSettings;
+            if (maxlength) {
+              countHTML = fieldSettings.countHTMLCharacters;
               if (countHTML) {
-                currentLength = $(this).val().length;
+                currentLength = element.value.length;
+              } else {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = element.value;
+                currentLength = tempDiv.textContent
+                  .trim()
+                  .replace(/(\r?\n|\r)+/g, '\n').length;
               }
-              else {
-                currentLength = $("<div/>").html($(this).val()).text().trim().replace(/(\r?\n|\r)+/g, "\n").length;
+              remaining = maxlength - currentLength;
+
+              counter = document.createElement('div');
+              counter.className = 'textfield_counter_counter';
+              counter.innerHTML = Drupal.t(
+                fieldSettings.textCountStatusMessage,
+                {
+                  '@maxlength': maxlength,
+                  '@current_length': currentLength,
+                  '@remaining_count': remaining,
+                },
+              );
+
+              if (fieldSettings.counterPosition === 'before') {
+                element.parentNode.insertBefore(counter, element);
+              } else {
+                element.parentNode.insertBefore(counter, element.nextSibling);
               }
 
-              remaining = maxlength - currentLength;
-              counter.children(".remaining_count:first").text(remaining);
-              counter.children(".current_count:first").text(currentLength);
-              checkClasses($(this).parent(), remaining);
-            });
-          }
-        });
+              checkClasses(element.parentNode, remaining);
+
+              element.addEventListener('keyup', () => {
+                if (countHTML) {
+                  currentLength = element.value.length;
+                } else {
+                  const tempDiv = document.createElement('div');
+                  tempDiv.innerHTML = element.value;
+                  currentLength = tempDiv.textContent
+                    .trim()
+                    .replace(/(\r?\n|\r)+/g, '\n').length;
+                }
+
+                remaining = maxlength - currentLength;
+                const remainingEl = counter.querySelector('.remaining_count');
+                const currentEl = counter.querySelector('.current_count');
+
+                if (remainingEl) remainingEl.textContent = remaining;
+                if (currentEl) currentEl.textContent = currentLength;
+
+                checkClasses(element.parentNode, remaining);
+              });
+            }
+          });
       });
     });
   }
 
   function formSubmitListener(context, settings) {
-    $(once('textfield-counter-form-submit-listener','form', context)).filter("textarea, input[type=text]").each(function () {      $(this).submit(function (e) {
-        var errorElements = $(this).find(".textcount_over");
-        errorElements.each(function (elementIndex) {
-          $.each(settings.textfieldCounter, function (settingsIndex, fieldSettings) {
-            var wrapperElement = $(errorElements[elementIndex]);
-            if (fieldSettings.preventSubmit && settingsIndex === wrapperElement.find(".textfield-counter-element:first").data("field-definition-id")) {
-              e.preventDefault();
-              $("html, body").animate({
-                scrollTop:wrapperElement.offset().top
-              }, 300);
-            }
+    const forms = once(
+      'textfield-counter-form-submit-listener',
+      'form',
+      context,
+    );
+
+    Array.from(forms)
+      .filter((form) => {
+        // Only process forms that contain textarea or input[type=text] elements
+        return form.querySelector('textarea, input[type=text]') !== null;
+      })
+      .forEach((form) => {
+        form.addEventListener('submit', (e) => {
+          let hasScrolled = false;
+          const errorElements = form.querySelectorAll('.textcount_over');
+          errorElements.forEach((errorElement, elementIndex) => {
+            Object.keys(settings.textfieldCounter).forEach((settingsIndex) => {
+              const fieldSettings = settings.textfieldCounter[settingsIndex];
+              const wrapperElement = errorElement;
+              const textfieldElement = wrapperElement.querySelector(
+                '.textfield-counter-element',
+              );
+
+              if (
+                !hasScrolled &&
+                fieldSettings.preventSubmit &&
+                textfieldElement &&
+                textfieldElement.classList.contains(settingsIndex)
+              ) {
+                e.preventDefault();
+
+                // Smooth scroll to element
+                wrapperElement.scrollIntoView({ behavior: 'smooth' });
+
+                hasScrolled = true;
+              }
+            });
           });
         });
       });
-    });
   }
 
   /**
    * Add event listeners to ckeditors.
+   * @param {Object} settings - The Drupal settings object.
    */
   function ckEditorListener(settings) {
-    if (window.hasOwnProperty("CKEDITOR")) {
+    if (window.hasOwnProperty('CKEDITOR')) {
       // Wait until the editor is loaded.
-      CKEDITOR.on('instanceReady', function () {
+      CKEDITOR.on('instanceReady', () => {
         // Loop through each of the textfield settings.
-        $.each(settings.textfieldCounter ,function (fieldDefinitionKey, fieldSettings) {
+        Object.keys(settings.textfieldCounter).forEach((fieldDefinitionKey) => {
+          const fieldSettings = settings.textfieldCounter[fieldDefinitionKey];
+
           // Use the fieldDefinitionKey to get the HTML ID, which is used to
           // reference the editor.
-          var fieldID = $("." + fieldDefinitionKey + "[id]:first").attr("id");
-          if (CKEDITOR.instances[fieldID]) {
+          const fieldElement = document.querySelector(
+            `.${fieldDefinitionKey}[id]`,
+          );
+          const fieldID = fieldElement ? fieldElement.id : null;
+
+          if (fieldID && CKEDITOR.instances[fieldID]) {
             // Add keyup listener.
-            CKEDITOR.instances[fieldID].on("key", function () {
+            CKEDITOR.instances[fieldID].on('key', function onKey() {
               // The last key pressed isn't available in editor.getData() when
               // the key is pressed. A workaround is to use setTimeout(), with no
               // time set to it, as this moves it to the end of the process queue,
               // when the last pressed key will be available.
-              var editor = this;
-              window.setTimeout(function () {
-                var countHTML, maxlength, text, currentLength, remaining, textfield;
+              const editor = this;
+              window.setTimeout(() => {
+                let currentLength;
 
-                countHTML = fieldSettings.countHTMLCharacters;
-                maxlength = fieldSettings.maxlength;
-                text = $.trim(editor.getData());
+                const countHTML = fieldSettings.countHTMLCharacters;
+                const { maxlength } = fieldSettings;
+                const text = editor.getData().trim();
                 if (countHTML) {
                   currentLength = text.length;
-                }
-                else {
+                } else {
                   // The following is done to retrieve the current length:
                   // 1) The content is inserted into a DIV as HTML.
-                  // 2) $.text() is used to retrieve just the text of the element.
+                  // 2) textContent is used to retrieve just the text of the element.
                   // 3) The context is trimmed.
                   // 4) Multiple consecutive newlines are replaced with a single
                   // newline, so as to only count a linebreak as a single
                   // character.
-                  currentLength = $("<div/>").html(text).text().trim().replace(/(\r?\n|\r)+/g, "\n").length;
+                  const tempDiv = document.createElement('div');
+                  tempDiv.innerHTML = text;
+                  currentLength = tempDiv.textContent
+                    .trim()
+                    .replace(/(\r?\n|\r)+/g, '\n').length;
                 }
-                remaining = maxlength - currentLength;
-                var elementkey = "$";
+                const remaining = maxlength - currentLength;
+                const elementkey = '$';
                 // The editor.element.$ variable contains a reference to the HTML
-                // textfield. This is used to create a  jQuery object.
-                textfield = $(editor.element[elementkey]);
+                // textfield. This is used to create a reference.
+                const textfield = editor.element[elementkey];
+
                 // Set the current count on the counter.
-                textfield.siblings(".textfield_counter_counter:first").children(".current_count:first").text(currentLength);
-                // Set the remaining count on the counter.
-                textfield.siblings(".textfield_counter_counter:first").children(".remaining_count:first").text(remaining);
+                const counterEl = textfield.parentNode.querySelector(
+                  '.textfield_counter_counter',
+                );
+                if (counterEl) {
+                  const currentEl = counterEl.querySelector('.current_count');
+                  if (currentEl) currentEl.textContent = currentLength;
+
+                  // Set the remaining count on the counter.
+                  const remainingEl =
+                    counterEl.querySelector('.remaining_count');
+                  if (remainingEl) remainingEl.textContent = remaining;
+                }
+
                 // Set the classes on the parent.
-                checkClasses(textfield.parent(), remaining);
+                checkClasses(textfield.parentNode, remaining);
               });
             });
           }
@@ -155,65 +230,85 @@
       });
     }
 
-    if (window.hasOwnProperty("CKEditor5")) {
-      var ckeditor5Init = function() {
+    if (window.hasOwnProperty('CKEditor5')) {
+      const ckeditor5Init = () => {
         // Loop through each of the textfield settings.
-        $.each(settings.textfieldCounter ,function (fieldDefinitionKey, fieldSettings) {
+        Object.keys(settings.textfieldCounter).forEach((fieldDefinitionKey) => {
+          const fieldSettings = settings.textfieldCounter[fieldDefinitionKey];
+
           // Use the fieldDefinitionKey to get the HTML ID, which is used to
           // reference the editor.
-          var textfield = $("." + fieldDefinitionKey + "[id]:first");
-          var editor = Drupal.CKEditor5Instances.get($(textfield).attr('data-ckeditor5-id'));
+          const textfield = document.querySelector(
+            `.${fieldDefinitionKey}[id]`,
+          );
 
-          if (editor) {
-            var countOnKey = function(evt, data) {
-              var countHTML, maxlength, text, currentLength, remaining;
+          if (textfield && Drupal.CKEditor5Instances) {
+            const editor = Drupal.CKEditor5Instances.get(
+              textfield.dataset.ckeditor5Id,
+            );
 
-              countHTML = fieldSettings.countHTMLCharacters;
-              maxlength = fieldSettings.maxlength;
-              text = $.trim(editor.getData());
-              if (countHTML) {
-                currentLength = text.length;
-              }
-              else {
-                // The following is done to retrieve the current length:
-                // 1) The content is inserted into a DIV as HTML.
-                // 2) $.text() is used to retrieve just the text of the element.
-                // 3) The context is trimmed.
-                // 4) Multiple consecutive newlines are replaced with a single
-                // newline, so as to only count a linebreak as a single
-                // character.
-                currentLength = $("<div/>").html(text).text().trim().replace(/(\r?\n|\r)+/g, "\n").length;
-              }
-              remaining = maxlength - currentLength;
+            if (editor) {
+              const countOnKey = () => {
+                let currentLength;
 
-              // Set the current count on the counter.
-              textfield.siblings(".textfield_counter_counter:first").children(".current_count:first").text(currentLength);
-              // Set the remaining count on the counter.
-              textfield.siblings(".textfield_counter_counter:first").children(".remaining_count:first").text(remaining);
-              // Set the classes on the parent.
-              checkClasses(textfield.parent(), remaining);
-            };
+                const countHTML = fieldSettings.countHTMLCharacters;
+                const { maxlength } = fieldSettings;
+                const text = editor.getData().trim();
+                if (countHTML) {
+                  currentLength = text.length;
+                } else {
+                  // The following is done to retrieve the current length:
+                  // 1) The content is inserted into a DIV as HTML.
+                  // 2) textContent is used to retrieve just the text of the element.
+                  // 3) The context is trimmed.
+                  // 4) Multiple consecutive newlines are replaced with a single
+                  // newline, so as to only count a linebreak as a single
+                  // character.
+                  const tempDiv = document.createElement('div');
+                  tempDiv.innerHTML = text;
+                  currentLength = tempDiv.textContent
+                    .trim()
+                    .replace(/(\r?\n|\r)+/g, '\n').length;
+                }
+                const remaining = maxlength - currentLength;
 
-            editor.editing.view.document.on('keydown', countOnKey);
-            editor.editing.view.document.on('keyup', countOnKey);
+                // Set the current count on the counter.
+                const counterEl = textfield.parentNode.querySelector(
+                  '.textfield_counter_counter',
+                );
+                if (counterEl) {
+                  const currentEl = counterEl.querySelector('.current_count');
+                  if (currentEl) currentEl.textContent = currentLength;
+
+                  // Set the remaining count on the counter.
+                  const remainingEl =
+                    counterEl.querySelector('.remaining_count');
+                  if (remainingEl) remainingEl.textContent = remaining;
+                }
+
+                // Set the classes on the parent.
+                checkClasses(textfield.parentNode, remaining);
+              };
+
+              editor.editing.view.document.on('keydown', countOnKey);
+              editor.editing.view.document.on('keyup', countOnKey);
+            }
           }
         });
       };
 
-      var ckeditor5Timeout = setTimeout(function() {
+      const ckeditor5Timeout = setTimeout(() => {
         ckeditor5Init();
         clearTimeout(ckeditor5Timeout);
       }, 300);
     }
-
   }
 
   Drupal.behaviors.textfieldCounterTextarea = {
-    attach:function (context, settings) {
+    attach(context, settings) {
       textWatcher(settings);
       formSubmitListener(context, settings);
       ckEditorListener(settings);
-    }
+    },
   };
-
-}(jQuery, Drupal, window, once));
+})(Drupal, once);

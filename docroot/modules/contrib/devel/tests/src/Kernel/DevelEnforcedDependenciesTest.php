@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\devel\Kernel;
 
-use Drupal\block\Entity\Block;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\block\Entity\Block;
 use Drupal\system\Entity\Menu;
 
 /**

@@ -130,7 +130,7 @@ class NameItem extends FieldItemBase implements TrustedCallbackInterface {
     if (isset($this->values)) {
       foreach ($this->values as $name => $value) {
         // Title & generational have no meaning by themselves.
-        if ($name == 'title' || $name == 'generational') {
+        if ($name == 'title' || $name == 'generational' || !in_array($name, self::$components, TRUE)) {
           continue;
         }
         if (isset($value) && strlen($value) && !isset($this->properties[$name])) {

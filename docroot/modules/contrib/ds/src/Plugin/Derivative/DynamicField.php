@@ -23,11 +23,9 @@ abstract class DynamicField extends DeriverBase {
         foreach ($field['entities'] as $entity_type) {
           $key = $this->getKey($entity_type, $field);
           $this->derivatives[$key] = $base_plugin_definition;
-          $this->derivatives[$key] += [
-            'title' => \Drupal::translation()->translate(Html::escape($field['label'])),
-            'properties' => $field['properties'],
-            'entity_type' => $entity_type,
-          ];
+          $this->derivatives[$key]['title'] = \Drupal::translation()->translate(Html::escape($field['label']));
+          $this->derivatives[$key]['properties'] = $field['properties'];
+          $this->derivatives[$key]['entity_type'] = $entity_type;
           if (!empty($field['ui_limit'])) {
             $this->derivatives[$key]['ui_limit'] = explode("\n", $field['ui_limit']);
             // Ensure that all strings are trimmed, eg. don't have extra spaces,

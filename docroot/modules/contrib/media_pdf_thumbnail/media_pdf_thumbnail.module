@@ -78,6 +78,7 @@ function _media_pdf_thumbnail_form_views_ui_edit_display_submit(array $form, For
   $type = $values['options']['type'];
 
   if ($type == 'media_pdf_thumbnail_image_field_formatter') {
+    // Get the display options.
     foreach (_media_pdf_thumbnail_get_setting_values($form_state) as $field => $value) {
       // As those fields are in fieldsets,
       // values are not saved in settings storage.
@@ -102,6 +103,20 @@ function _media_pdf_thumbnail_form_views_ui_edit_display_submit(array $form, For
  */
 function _media_pdf_thumbnail_build_form(array $form, FormStateInterface $form_state) {
   $values = _media_pdf_thumbnail_get_setting_values($form_state);
+
+  // Set default value for image style.
+  $form['options']['settings']['default_bundle'] = [
+    '#type' => 'fieldset',
+    '#title' => t('@label', ['@label' => 'Default']),
+    '#collapsible' => FALSE,
+    '#collapsed' => FALSE,
+    '#weight' => -1,
+  ];
+  $form['options']['settings']['default_bundle']['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_IMAGE_STYLE] = $form['options']['settings']['image_style'];
+  $form['options']['settings']['default_bundle']['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_IMAGE_STYLE]['#default_value'] = $values['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_IMAGE_STYLE];
+  $form['options']['settings']['default_bundle']['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_LINK] = $form['options']['settings']['image_link'];
+  $form['options']['settings']['default_bundle']['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_LINK]['#default_value'] = $values['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_LINK];
+  unset($form['options']['settings']['default_bundle']['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_LINK]['#options']['pdf_file']);
 
   // Bundle options.
   foreach (_media_pdf_thumbnail_get_fields_list() as $bundleId => $infos) {
@@ -250,7 +265,10 @@ function _media_pdf_thumbnail_get_setting_values(FormStateInterface $form_state)
   $inputValues = $form_state->getUserInput();
   $displayOptions = $display->options['fields']['thumbnail__target_id']['settings'] ?? $display->default_display->options['fields']['thumbnail__target_id']['settings'];
 
-  $output = [];
+  $output = [
+    'default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_LINK => !empty($inputValues['options']['settings']['default_bundle']) ? $inputValues['options']['settings']['default_bundle']['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_LINK] ?? NULL : $displayOptions['default_bundle']['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_LINK] ?? NULL,
+    'default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_IMAGE_STYLE => !empty($inputValues['options']['settings']['default_bundle']) ? $inputValues['options']['settings']['default_bundle']['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_IMAGE_STYLE] ?? NULL : $displayOptions['default_bundle']['default_bundle' . MediaPdfThumbnailImageFieldFormatter::MEDIA_BUNDLE_IMAGE_STYLE] ?? NULL,
+  ];
 
   foreach (_media_pdf_thumbnail_get_fields_list() as $bundleId => $infos) {
     // Prepare fields names.
@@ -267,16 +285,16 @@ function _media_pdf_thumbnail_get_setting_values(FormStateInterface $form_state)
 
     // Determine values.
     $output = array_merge($output, [
-      $mediaBundleField => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleField] ?? NULL : $displayOptions[$mediaBundleField],
-      $mediaBundlePage => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundlePage] ?? NULL : $displayOptions[$mediaBundlePage],
-      $mediaBundleLink => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleLink] ?? NULL : $displayOptions[$mediaBundleLink],
-      $mediaBundleAttributesDownload => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesDownload] ?? NULL : $displayOptions[$mediaBundleAttributesDownload],
-      $mediaBundleAttributesTarget => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesTarget] ?? NULL : $displayOptions[$mediaBundleAttributesTarget],
-      $mediaBundleAttributesRel => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesRel] ?? NULL : $displayOptions[$mediaBundleAttributesRel],
-      $mediaBundleImageFormat => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleImageFormat] ?? NULL : $displayOptions[$mediaBundleImageFormat],
-      $mediaBundleImageStyle => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleImageStyle] ?? NULL : $displayOptions[$mediaBundleImageStyle],
-      $mediaBundleUseCron => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleUseCron] ?? NULL : $displayOptions[$mediaBundleUseCron],
-      $mediaBundleEnable => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleEnable] ?? NULL : $displayOptions[$mediaBundleEnable],
+      $mediaBundleField => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleField] ?? NULL : $displayOptions[$mediaBundleField] ?? NULL,
+      $mediaBundlePage => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundlePage] ?? NULL : $displayOptions[$mediaBundlePage] ?? NULL,
+      $mediaBundleLink => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleLink] ?? NULL : $displayOptions[$mediaBundleLink] ?? NULL,
+      $mediaBundleAttributesDownload => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesDownload] ?? NULL : $displayOptions[$mediaBundleAttributesDownload] ?? NULL,
+      $mediaBundleAttributesTarget => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesTarget] ?? NULL : $displayOptions[$mediaBundleAttributesTarget] ?? NULL,
+      $mediaBundleAttributesRel => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleAttributesRel] ?? NULL : $displayOptions[$mediaBundleAttributesRel] ?? NULL,
+      $mediaBundleImageFormat => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleImageFormat] ?? NULL : $displayOptions[$mediaBundleImageFormat] ?? NULL,
+      $mediaBundleImageStyle => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleImageStyle] ?? NULL : $displayOptions[$mediaBundleImageStyle] ?? NULL,
+      $mediaBundleUseCron => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleUseCron] ?? NULL : $displayOptions[$mediaBundleUseCron] ?? NULL,
+      $mediaBundleEnable => !empty($inputValues['options']['settings'][$bundleId]) ? $inputValues['options']['settings'][$bundleId][$mediaBundleEnable] ?? NULL : $displayOptions[$mediaBundleEnable] ?? NULL,
     ]);
   }
 

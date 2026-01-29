@@ -1,0 +1,45 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function configurable_views_filter_block_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+
+  if (isset($variables['element']['#filter_instance_id'])) {
+    $instance = $variables['element']['#filter_instance_id'];
+
+    foreach ($suggestions as $base) {
+      $suggestions[] = $base . '__' . $instance;
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_views_exposed_form_alter().
+ */
+function configurable_views_filter_block_theme_suggestions_views_exposed_form_alter(array &$suggestions, array $variables) {
+
+  if (!empty($variables['form']['#filter_instance_id'])) {
+    $instance = $variables['form']['#filter_instance_id'];
+    foreach ($suggestions as $base) {
+      $suggestions[] = $base . '__' . $instance;
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_block_alter().
+ */
+function configurable_views_filter_block_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+
+  $block = $variables['elements'];
+  $blockType = $block['#configuration']['provider'];
+  if ($blockType == "configurable_views_filter_block" && isset($block['content']['#filter_instance_id']) && $instance = $block['content']['#filter_instance_id']) {
+    foreach ($suggestions as $base) {
+      $suggestions[] = $base . '__' . $instance;
+    }
+  }
+}

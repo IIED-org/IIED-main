@@ -91,7 +91,7 @@ class RequireNonCapturingCatchSniff implements Sniff
 		$nextScopeEnd = count($tokens) - 1;
 
 		foreach (array_reverse($tokens[$tryEndPointer]['conditions'], true) as $conditionPointer => $conditionCode) {
-			if (in_array($conditionCode, TokenHelper::$functionTokenCodes, true)) {
+			if (in_array($conditionCode, TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 				$nextScopeEnd = $tokens[$conditionPointer]['scope_closer'];
 				break;
 			}
@@ -115,9 +115,7 @@ class RequireNonCapturingCatchSniff implements Sniff
 			$variablePointer + 1,
 			$tokens[$catchPointer]['parenthesis_closer'],
 		);
-		if ($fixEndPointer === null) {
-			$fixEndPointer = $tokens[$catchPointer]['parenthesis_closer'];
-		}
+		$fixEndPointer ??= $tokens[$catchPointer]['parenthesis_closer'];
 
 		$phpcsFile->fixer->beginChangeset();
 

@@ -37,6 +37,13 @@ class ClassesForm extends ConfigFormBase {
       '#description' => $this->t('Configure CSS classes which you can add to fields on the "manage display" screens. Add multiple CSS classes line by line.<br />If you want to have a friendly name, separate class and friendly name by |, but this is not required. eg:<br /><em>class_name_1<br />class_name_2|Friendly name<br />class_name_3</em>'),
     ];
 
+    $form['tokens']['help'] = [
+      '#theme' => 'token_tree_link',
+      '#token_types' => 'all',
+      '#global_types' => FALSE,
+      '#dialog' => TRUE,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 

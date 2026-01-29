@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\search_api_autocomplete\Unit;
 
-use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\search_api_autocomplete\Utility\AutocompleteHelper;
 use Drupal\Tests\UnitTestCase;
 
@@ -25,18 +24,17 @@ class AutocompleteHelperTest extends UnitTestCase {
    *
    * @covers ::splitKeys
    *
-   * @dataProvider providerTestSplitKeys
+   * @dataProvider splitKeysTestDataProvider
    */
-  public function testSplitKeys($keys, array $expected) {
-    $element_info = $this->createMock(ElementInfoManagerInterface::class);
-    $service = new AutocompleteHelper($element_info);
+  public function testSplitKeys(string $keys, array $expected): void {
+    $service = new AutocompleteHelper();
     $this->assertEquals($expected, $service->splitKeys($keys));
   }
 
   /**
    * Data provider for testSplitKeys().
    */
-  public function providerTestSplitKeys() {
+  public static function splitKeysTestDataProvider(): array {
     $data = [];
     $data['simple word'] = ['word', ['', 'word']];
     $data['simple word with dash'] = ['word-dash', ['', 'word-dash']];

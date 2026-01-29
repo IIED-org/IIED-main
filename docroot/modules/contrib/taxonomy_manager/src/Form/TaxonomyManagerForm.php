@@ -123,7 +123,7 @@ class TaxonomyManagerForm extends FormBase {
    *   The name of the vocabulary.
    *
    * @return string
-   *   The title, itself
+   *   The title, itself.
    */
   public function getTitle($taxonomy_vocabulary) {
     return $this->t("Taxonomy Manager - %voc_name", ["%voc_name" => $taxonomy_vocabulary->label()]);
@@ -133,20 +133,21 @@ class TaxonomyManagerForm extends FormBase {
    * Form constructor.
    *
    * Display a tree of all the terms in a vocabulary, with options to edit
-   * each one. The form implements the Taxonomy Manager intefrace.
+   * each one. The form implements the Taxonomy Manager interface.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
-   * @param \Drupal\taxonomy\VocabularyInterface $taxonomy_vocabulary
+   * @param \Drupal\taxonomy\VocabularyInterface|null $taxonomy_vocabulary
    *   The vocabulary being with worked with.
    *
    * @return array
    *   The form structure.
    */
-  public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?VocabularyInterface $taxonomy_vocabulary = NULL) {
     $current_user = $this->currentUser();
+    $voc_list = [];
     $form['voc'] = [
       '#type' => 'value',
       "#value" => $taxonomy_vocabulary,
@@ -161,6 +162,7 @@ class TaxonomyManagerForm extends FormBase {
       return $form;
     }
 
+    /* Toolbar */
     $form['toolbar'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Toolbar'),
@@ -207,6 +209,7 @@ class TaxonomyManagerForm extends FormBase {
       ],
     ];
 
+    // cspell:ignore miniexport
     $form['toolbar']['miniexport'] = [
       '#type' => 'submit',
       '#name' => 'export',
@@ -285,24 +288,16 @@ class TaxonomyManagerForm extends FormBase {
     $form['term-data']['#suffix'] = '</div>';
     $form['load-term-data'] = [
       '#type' => 'textfield',
-      '#ajax' => [
-        'callback' => '::termDataCallback',
-        'event' => 'change',
-      ],
+    ];
+
+    // Attach user permissions to drupalSettings for use in JavaScript.
+    $form['#attached']['drupalSettings']['taxonomy_manager']['permissions'] = [
+      'can_edit_terms' => $current_user->hasPermission(
+        'edit terms in ' . $taxonomy_vocabulary->id()
+      ) || $current_user->hasPermission('administer taxonomy'),
     ];
 
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function taxonomyTermSubmitHandler(array &$form, FormStateInterface $form_state) {
-    $tid = $form_state->getValue(['search_terms']);
-    $url = Url::fromRoute('entity.taxonomy_term.edit_form', [
-      'taxonomy_term' => $tid,
-    ]);
-    $form_state->setRedirectUrl($url);
   }
 
   /**
@@ -348,33 +343,38 @@ class TaxonomyManagerForm extends FormBase {
    * AJAX callback handler for export terms from a given vocabulary.
    */
   public function exportListFormCallback($form, FormStateInterface $form_state) {
+    // cspell:ignore exportlist
     return $this->modalHelper($form_state, 'Drupal\taxonomy_manager\Form\ExportTermsMiniForm', 'taxonomy_manager.admin_vocabulary.exportlist', $this->t('Export terms'));
   }
 
   /**
    * AJAX callback handler for the term data form.
    */
-  public function termDataCallback($form, FormStateInterface $form_state) {
-    $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($form_state->getValue('load-term-data'));
+  public function termDataCallback($tid) {
+    // Load the taxonomy term.
+    $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
+
+    // Check if the taxonomy term exists.
+    if (!$taxonomy_term) {
+      // Return an error response if the term does not exist.
+      $response = new AjaxResponse();
+      $response->addCommand(new ReplaceCommand('#taxonomy-term-data-form', [
+        '#markup' => t('The requested taxonomy term does not exist.'),
+      ]));
+      return $response;
+    }
+
+    // Get the taxonomy term edit form.
     $term_form = $this->entityFormBuilder->getForm($taxonomy_term, 'taxonomy_manager');
 
+    // Add prefix and suffix to the form.
     $term_form['#prefix'] = '<div id="taxonomy-term-data-form">';
     $term_form['#suffix'] = '</div>';
 
-    $term_form['#action'] = $this->urlGenerator
-      ->generateFromRoute(
-        'taxonomy_manager.taxonomy_term.edit',
-        [
-          'taxonomy_term' => $taxonomy_term->id(),
-        ],
-        [
-          'query' => [
-            'destination' => $this->urlGenerator->generateFromRoute('<current>'),
-          ],
-        ]
-      );
-
+    // Build an AJAX response to replace the placeholder container.
     $response = new AjaxResponse();
+
+    // Replace the content of the taxonomy term data form.
     $response->addCommand(new ReplaceCommand('#taxonomy-term-data-form', $term_form));
 
     return $response;
@@ -427,7 +427,6 @@ class TaxonomyManagerForm extends FormBase {
     $taxonomy_vocabulary = $form_state->getValue('voc');
     $selected_terms = $form_state->getValue(['taxonomy', 'manager', 'tree']);
 
-    // @phpstan-ignore-next-line
     $del_form = \Drupal::formBuilder()->getForm($class_name, $taxonomy_vocabulary, $selected_terms);
     $del_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 

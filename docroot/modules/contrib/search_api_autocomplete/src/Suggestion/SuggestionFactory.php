@@ -106,7 +106,7 @@ class SuggestionFactory {
    * @return \Drupal\search_api_autocomplete\Suggestion\SuggestionInterface
    *   An autocomplete suggestion.
    */
-  public function createUrlSuggestion(Url $url, $label = NULL, array $render = NULL) {
+  public function createUrlSuggestion(Url $url, $label = NULL, ?array $render = NULL) {
     $suggestion = new Suggestion(NULL, $url);
 
     if ($label !== NULL) {

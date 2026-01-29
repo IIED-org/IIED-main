@@ -2,14 +2,16 @@
 
 namespace Drupal\ds\Plugin\DsField;
 
+use Drupal\ds\Attribute\DsField;
+use Drupal\ds\Plugin\Derivative\DynamicTokenField as DynamicTokenFieldDerivative;
+
 /**
  * Defines a generic dynamic code field.
- *
- * @DsField(
- *   id = "dynamic_token_field",
- *   deriver = "Drupal\ds\Plugin\Derivative\DynamicTokenField"
- * )
  */
+#[DsField(
+  id: 'dynamic_token_field',
+  deriver: DynamicTokenFieldDerivative::class
+)]
 class DynamicTokenField extends TokenBase {
 
   /**

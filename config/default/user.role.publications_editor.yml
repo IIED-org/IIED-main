@@ -15,7 +15,6 @@ dependencies:
     - filter
     - form_mode_control
     - media
-    - media_pdf_thumbnail
     - media_revisions_ui
     - node
     - paragraphs
@@ -33,7 +32,6 @@ is_admin: null
 permissions:
   - 'access toolbar'
   - 'access user profiles'
-  - 'add pdf image entity entities'
   - 'create document media'
   - 'create image media'
   - 'create publication content'
@@ -44,7 +42,6 @@ permissions:
   - 'edit own document media'
   - 'edit own image media'
   - 'edit own publication content'
-  - 'edit pdf image entity entities'
   - 'edit terms in organisation'
   - 'edit terms in person'
   - 'link to any page'

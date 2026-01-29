@@ -6,7 +6,6 @@
     "homepage": "https://drupal.org/project/message_subscribe",
     "support": {
         "issues": "https://drupal.org/project/issues/message_subscribe",
-        "irc": "irc://irc.freenode.org/drupal",
         "source": "https://cgit.drupalcode.org/message_subscribe"
     },
     "require": {

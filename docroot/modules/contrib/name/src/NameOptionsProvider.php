@@ -16,7 +16,7 @@ class NameOptionsProvider {
    *
    * @var string
    */
-  const vocabularyRegExp = '/^\[vocabulary:([0-9a-z\_]{1,})\]/';
+  const VOCABULARY_REGEX = '/^\[vocabulary:([0-9a-z\_]{1,})\]/';
 
   /**
    * The entity type manager.
@@ -71,7 +71,7 @@ class NameOptionsProvider {
     $fs = $field->getSettings();
     $options = $fs[$component . '_options'];
     foreach ($options as $index => $opt) {
-      if (preg_match(self::vocabularyRegExp, trim($opt), $matches)) {
+      if (preg_match(self::VOCABULARY_REGEX, trim($opt), $matches)) {
         unset($options[$index]);
         if ($this->termStorage && $this->vocabularyStorage) {
           $vocabulary = $this->vocabularyStorage->load($matches[1]);
@@ -103,7 +103,7 @@ class NameOptionsProvider {
     $options = array_map('trim', $options);
     $options = array_combine($options, $options);
     if ($default !== FALSE) {
-      $options = ['' => $default] + $options;
+      $options = ['_none' => $default] + $options;
     }
     return $options;
   }

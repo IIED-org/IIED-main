@@ -2,8 +2,9 @@
 
 namespace Drupal\taxonomy_manager\Form;
 
+use Drupal\Core\Url;
+use Drupal\Core\Link;
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
@@ -61,6 +62,15 @@ class TaxonomyManagerTermForm extends TermForm {
     /** @var \Drupal\taxonomy\Entity\Term $term */
     $term = $this->getEntity();
     $form['#parents'] = [];
+    $form['vid'] = [
+      '#type' => 'value',
+      '#value' => $term->bundle(),
+    ];
+
+    $form['tid'] = [
+      '#type' => 'value',
+      '#value' => $term->id(),
+    ];
 
     $original_form = parent::form($form, $form_state);
     $original_fields = array_intersect_key($original_form, array_flip(Element::children($original_form)));
@@ -109,8 +119,9 @@ class TaxonomyManagerTermForm extends TermForm {
             if ($source_field !== 'description') {
               $element['#attributes']['name'] = $translated_field;
             }
-            // It is nessarry to provide default value to avoid element
-            // widget errors. It is aterm default value, that is easy to change.
+            // It is necessary to provide default value to avoid element
+            // widget errors. It is a term default value, that is easy to
+            // change.
             $value = $entity->get($source_field)->isEmpty() ? $term->get($source_field) : $entity->get($source_field);
             $form['translatable'][$langcode][$translated_field] = $display->getRenderer($source_field)
               ->formElement(
@@ -176,19 +187,24 @@ class TaxonomyManagerTermForm extends TermForm {
   }
 
   /**
-   * Generates a title for a fildset.
+   * Generates a title for a fieldset with link to the term page.
    *
    * @param string $title
-   *   The fieldset title.
-   * @param string $add
-   *   The string to add.
+   *   The fieldset title text (usually the term name).
+   * @param string $id
+   *   The taxonomy term ID to be included in parentheses and used in the URL.
    *
    * @return string
-   *   The escaped fieldset title.
+   *   HTML markup for the fieldset title, including a link to the term page.
+   *   The title will be formatted as "Title (ID)" with a link to
+   *   "/taxonomy/term/{id}".
    */
-  protected function fieldsetTitle($title, $add = '') {
-    $add && $title .= ' (' . $add . ')';
-    return Html::escape($title);
+  protected function fieldsetTitle($title, $id) {
+    $display_title = $title . ' (' . $id . ')';
+    // Link has its own XSS prevention mecanism, no Html::escape is required.
+    return Link::fromTextAndUrl($display_title, Url::fromUri('internal:/taxonomy/term/' . $id, [
+      'attributes' => ['title' => 'View term page'],
+    ]))->toString();
   }
 
   /**
@@ -219,6 +235,23 @@ class TaxonomyManagerTermForm extends TermForm {
     }
 
     return $info;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function save(array $form, FormStateInterface $form_state) {
+    // Save the term entity.
+    $result = parent::save($form, $form_state);
+
+    // Redirect to the taxonomy manager vocabulary page.
+    $form_state->setRedirect(
+      'taxonomy_manager.admin_vocabulary',
+      [
+        'taxonomy_vocabulary' => $this->entity->bundle(),
+      ]
+    );
+    return $result;
   }
 
 }

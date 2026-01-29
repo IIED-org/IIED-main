@@ -17,13 +17,12 @@
   "require-dev": {
     "drush/drush": "^13",
     "firephp/firephp-core": "^0.5.3",
-    "kint-php/kint": "^5.1"
+    "drupal/navigation_extra_tools": "1.0.x-dev"
   },
   "suggest": {
-    "kint-php/kint": "Kint provides an informative display of arrays/objects. Useful for debugging and developing."
+    "drupal/kint": "Kint provides an informative display of arrays/objects. Useful for debugging and developing."
   },
   "conflict": {
-    "kint-php/kint": "<3",
     "drush/drush": "<12.5.1",
     "drupal/core": "<10.3"
   },

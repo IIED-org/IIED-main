@@ -51,6 +51,11 @@ include:
 variables:
   SKIP_CSPELL: '1'
   _PHPUNIT_CONCURRENT: '1'
+  # Use these to test against other versions of Drupal:
+#  OPT_IN_TEST_PREVIOUS_MINOR: '1'
+#  OPT_IN_TEST_NEXT_MINOR: '1'
+#  OPT_IN_TEST_NEXT_MAJOR: '1'
+
 
 # Override the default pipeline to start chromedriver slightly differently.
 default:

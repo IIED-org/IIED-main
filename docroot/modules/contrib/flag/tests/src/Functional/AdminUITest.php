@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\flag\Functional;
 
 /**
@@ -230,6 +232,7 @@ class AdminUITest extends FlagTestBase {
     $this->submitForm($edit, 'Save');
 
     // Load the all the flags.
+    /** @var \Drupal\flag\FlagInterface[] $all_flags */
     $all_flags = $this->container
       ->get('entity_type.manager')
       ->getStorage('flag')
@@ -237,7 +240,7 @@ class AdminUITest extends FlagTestBase {
 
     // Check that the weights for each flag are saved in the database correctly.
     foreach ($all_flags as $id => $flag) {
-      $this->assertEquals($flag_weights_to_set[$id], $all_flags[$id]->get('weight'), 'The flag weight was changed.');
+      $this->assertEquals($flag_weights_to_set[$id], $all_flags[$id]->getWeight(), 'The flag weight was changed.');
     }
   }
 

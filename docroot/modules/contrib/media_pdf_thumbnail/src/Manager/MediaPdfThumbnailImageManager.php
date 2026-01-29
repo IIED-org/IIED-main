@@ -91,7 +91,7 @@ class MediaPdfThumbnailImageManager {
    *
    * @param \Drupal\media_pdf_thumbnail\Manager\MediaPdfThumbnailImagickManager $mediaPdfThumbnailImagickManager
    *   MediaPdfThumbnailManager.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManager|\Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   EntityTypeManager.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   FileSystem.
@@ -106,7 +106,7 @@ class MediaPdfThumbnailImageManager {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module handler.
    */
-  public function __construct(MediaPdfThumbnailImagickManager $mediaPdfThumbnailImagickManager, EntityTypeManagerInterface $entityTypeManager, FileSystemInterface $fileSystem, ConfigFactoryInterface $configFactory, Connection $connection, CacheTagsInvalidatorInterface $cache, LoggerChannelFactoryInterface $loggerChannelFactory, ModuleHandlerInterface $moduleHandler) {
+  public function __construct(MediaPdfThumbnailImagickManager $mediaPdfThumbnailImagickManager, EntityTypeManager|EntityTypeManagerInterface $entityTypeManager, FileSystemInterface $fileSystem, ConfigFactoryInterface $configFactory, Connection $connection, CacheTagsInvalidatorInterface $cache, LoggerChannelFactoryInterface $loggerChannelFactory, ModuleHandlerInterface $moduleHandler) {
     $this->mediaPdfThumbnailImagickManager = $mediaPdfThumbnailImagickManager;
     $this->entityTypeManager = $entityTypeManager;
     $this->fileSystem = $fileSystem;
@@ -137,15 +137,25 @@ class MediaPdfThumbnailImageManager {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function createThumbnail(EntityInterface $entity, string $fileFieldName, string $imageFormat, int $page = 1): bool | array | null {
+
+    // Check if entity has been created.
     if (empty($entity->id())) {
       $this->logger->error('Entity id is empty');
       return FALSE;
     }
 
+    // Get file entity from parent entity.
     $fileEntity = $this->getFileEntityFromField($entity, $fileFieldName);
 
+    // Check if file entity exists.
     if (empty($fileEntity)) {
-      $this->logger->error('File entity is empty');
+      $this->logger->error('File entity does not exist');
+      return FALSE;
+    }
+
+    // Check if file exists.
+    if (!$this->checkFileExists($fileEntity)) {
+      $this->logger->error('File does not exist in the system');
       return FALSE;
     }
 
@@ -196,13 +206,13 @@ class MediaPdfThumbnailImageManager {
    * @param string $fieldName
    *   Field name.
    *
-   * @return \Drupal\Core\Entity\EntityInterface|null
+   * @return \Drupal\file\FileInterface|\Drupal\Core\Entity\EntityInterface|null
    *   File entity.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getFileEntityFromField(EntityInterface $entity, string $fieldName): ?EntityInterface {
+  public function getFileEntityFromField(EntityInterface $entity, string $fieldName): NULL|FileInterface|EntityInterface {
     $fileEntity = NULL;
     if ($entity->hasField($fieldName) && !empty($entity->get($fieldName)
       ->getValue())) {
@@ -224,7 +234,7 @@ class MediaPdfThumbnailImageManager {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getFileEntity(string | int $fid) {
+  protected function getFileEntity(string | int $fid): ?EntityInterface {
     return $this->entityTypeManager->getStorage('file')->load($fid);
   }
 
@@ -425,13 +435,16 @@ class MediaPdfThumbnailImageManager {
   /**
    * Get generic thumbnail.
    *
-   * @return int|null
-   *   Return image id.
+   * @param bool $load
+   *   Load File entity.
+   *
+   * @return int|\Drupal\file\FileInterface|null
+   *   Return file id or File entity.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getGenericThumbnail(): ?int {
+  public function getGenericThumbnail(bool $load = FALSE): int | FileInterface | null {
     $uri = $this->configFactory->get('media.settings')->get('icon_base_uri');
     if (!file_exists($uri . '/' . self::GENERIC_FILENAME)) {
       $path = $this->moduleHandler->getModule('media')->getPath();
@@ -441,7 +454,10 @@ class MediaPdfThumbnailImageManager {
     }
     $files = $this->entityTypeManager->getStorage('file')
       ->loadByProperties(['uri' => $uri . '/' . self::GENERIC_FILENAME]);
-    return !empty($files) ? reset($files)->id() : NULL;
+    if (empty($files)) {
+      return NULL;
+    }
+    return $load ? reset($files) : reset($files)->id();
   }
 
   /**
@@ -487,6 +503,42 @@ class MediaPdfThumbnailImageManager {
   public function setCache(Cache | CacheTagsInvalidatorInterface $cache): MediaPdfThumbnailImageManager {
     $this->cache = $cache;
     return $this;
+  }
+
+  /**
+   * Set logger.
+   *
+   * @return \Drupal\Core\Logger\LoggerChannelInterface
+   *   Return MediaPdfThumbnail logger Channel.
+   */
+  public function getLogger(): LoggerChannelInterface {
+    return $this->logger;
+  }
+
+  /**
+   * Check file exists by file entity.
+   *
+   * @param \Drupal\file\FileInterface $file
+   *   File.
+   *
+   * @return bool
+   *   Return true if file exists.
+   */
+  public function checkFileExists(FileInterface $file): bool {
+    return $this->mediaPdfThumbnailImagickManager->checkFileExists($file);
+  }
+
+  /**
+   * Check file exists by uri.
+   *
+   * @param string $uri
+   *   File uri.
+   *
+   * @return bool
+   *   Return true if file exists.
+   */
+  public function checkFileExistsByUri(string $uri): bool {
+    return $this->mediaPdfThumbnailImagickManager->checkFileExistsByUri($uri);
   }
 
 }

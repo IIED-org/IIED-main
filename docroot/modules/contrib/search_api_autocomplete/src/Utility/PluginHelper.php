@@ -93,7 +93,7 @@ class PluginHelper implements PluginHelperInterface {
    * @throws \Drupal\search_api_autocomplete\SearchApiAutocompleteException
    *   Thrown if an unknown $type is given.
    */
-  protected function createPlugins(SearchInterface $search, $type, array $plugin_ids = NULL, array $configurations = []) {
+  protected function createPlugins(SearchInterface $search, $type, ?array $plugin_ids = NULL, array $configurations = []) {
     if (!isset($this->{$type . "PluginManager"})) {
       throw new SearchApiAutocompleteException("Unknown plugin type '$type'");
     }
@@ -140,7 +140,7 @@ class PluginHelper implements PluginHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function createSuggesterPlugins(SearchInterface $search, array $plugin_ids = NULL, array $configurations = []) {
+  public function createSuggesterPlugins(SearchInterface $search, ?array $plugin_ids = NULL, array $configurations = []) {
     return $this->createPlugins($search, 'suggester', $plugin_ids, $configurations);
   }
 

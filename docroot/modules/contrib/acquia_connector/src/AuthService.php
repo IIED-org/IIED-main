@@ -6,7 +6,6 @@ namespace Drupal\acquia_connector;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Http\ClientFactory;
 use Drupal\Core\KeyValueStore\KeyValueExpirableFactoryInterface;
@@ -15,6 +14,7 @@ use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\RequestOptions;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -22,16 +22,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 final class AuthService {
 
-  private const CSRF_TOKEN_KEY = 'acquia_connector_oauth_state';
   private const PKCE_KEY = 'acquia_connector_pkce_code';
 
-  /**
-   * Acquia Connector Client ID. Note, only valid for accounts.acquia.com
-   * 
-   * @var string
-   */
-  private $client_id = '38357830-bacd-4b4d-a356-f508c6ddecf8';
-  
   /**
    * The CSRF token generator.
    *
@@ -104,23 +96,13 @@ final class AuthService {
    *
    * @return \Drupal\Core\Url
    *   The URL.
+   * @deprecated in acquia_connector:4.1.1 and is removed from
+   * acquia_connector:5.0.0.
+   *
+   * @internal
    */
   public function getAuthUrl(): Url {
-    $params = [
-      'response_type' => 'code',
-      'client_id' => $this->client_id,
-      'redirect_uri' => Url::fromRoute('acquia_connector.auth.return')->setAbsolute()->toString(),
-      'state' => $this->getStateToken(),
-      'code_challenge' => Crypt::hashBase64($this->getPkceCode()),
-      'code_challenge_method' => 'S256',
-    ];
-    $uri = (new Uri())
-      ->withScheme('https')
-      ->withHost(self::getIdpHost())
-      ->withPath('/api/auth/oauth/authorize');
-    return Url::fromUri(
-      (string) Uri::withQueryValues($uri, $params)
-    );
+    return Url::fromRoute('acquia_connector.setup_oauth');
   }
 
   /**
@@ -128,30 +110,14 @@ final class AuthService {
    *
    * @return boolean
    *   The status of the client id against Acquia's IDP.
+   *
+   * @deprecated in acquia_connector:4.1.1 and is removed from
+   * acquia_connector:5.0.0.
+   *
+   * @internal
    */
   public function authorizeClientId(): bool {
-    $client = $this->clientFactory->fromOptions([
-      'base_uri' => (new Uri())
-        ->withScheme('https')
-        ->withHost(self::getIdpHost())
-    ]);
-    try {
-      $response = $client->get('/api/auth/oauth/authorize', [
-        'query' => [
-          'response_type' => 'code',
-          'client_id' => $this->client_id,
-          'redirect_uri' => Url::fromRoute('acquia_connector.auth.return')->setAbsolute()->toString(),
-          'state' => $this->getStateToken(),
-          'code_challenge' => Crypt::hashBase64($this->getPkceCode()),
-          'code_challenge_method' => 'S256',
-        ]
-      ]);
-      $code = $response->getStatusCode();
-      return $code == 200;
-    }
-    catch (RequestException $e) {
-      return FALSE;
-    }
+    return FALSE;
   }
 
   /**
@@ -161,30 +127,13 @@ final class AuthService {
    *   The authorization code.
    * @param string $state
    *   The state token.
+   *
+   * @deprecated in acquia_connector:4.1.1 and is removed from
+   * acquia_connector:5.0.0.
+   *
+   * @internal
    */
   public function finalize(string $code, string $state): void {
-    if ($state !== $this->getStateToken()) {
-      throw new \RuntimeException('Could not verify state');
-    }
-    $client = $this->clientFactory->fromOptions([
-      'base_uri' => (new Uri())
-        ->withScheme('https')
-        ->withHost(self::getIdpHost()),
-    ]);
-    $response = $client->post('/api/auth/oauth/token', [
-      'json' => [
-        'grant_type' => 'authorization_code',
-        'code' => $code,
-        'client_id' => $this->client_id,
-        'redirect_uri' => Url::fromRoute('acquia_connector.auth.return')->setAbsolute()->toString(),
-        'code_verifier' => $this->getPkceCode(),
-      ],
-    ]);
-    $this->keyValueExpirableFactory->get('acquia_connector')->setWithExpire(
-      'oauth',
-      Json::decode((string) $response->getBody()),
-      5400
-    );
     $this->session->remove(self::PKCE_KEY);
   }
 
@@ -200,13 +149,13 @@ final class AuthService {
     ]);
     try {
       $response = $client->post('/api/auth/oauth/token', [
-        'body' => json_encode([
+        RequestOptions::FORM_PARAMS => [
           'grant_type' => 'client_credentials',
           'client_id' => $api_key,
           'client_secret' => $api_secret,
-        ]),
+        ],
         'headers' => [
-          'Content-Type' => 'application/json, version=2',
+          'Content-Type' => 'application/x-www-form-urlencoded',
           'Accept' => 'application/json',
         ],
       ]);
@@ -228,33 +177,18 @@ final class AuthService {
 
   /**
    * Refreshes the access token.
+   *
+   * @deprecated in acquia_connector:4.1.1
+   *
+   * @internal
    */
   public function refreshAccessToken(): void {
-    $access_data = $this->getAccessToken();
-    $client = $this->clientFactory->fromOptions([
-      'base_uri' => (new Uri())
-        ->withScheme('https')
-        ->withHost(self::getIdpHost()),
-    ]);
-    $response = $client->post('/api/auth/oauth/token', [
-      'json' => [
-        'grant_type' => 'refresh_token',
-        'refresh_token' => $access_data['refresh_token'] ?? '',
-        'client_id' => $this->client_id,
-      ],
-    ]);
-    $access_data = Json::decode((string) $response->getBody());
-    $this->keyValueExpirableFactory->get('acquia_connector')->setWithExpire(
-      'oauth',
-      $access_data,
-      $access_data['expires_in'] ?? 300
-    );
+    $this->getAccessToken();
   }
-
   /**
    * Gets the access token data.
    *
-   * @phpstan-return array{access_token: string, refresh_token: string, expires: int}
+   * @phpstan-return array{access_token: string, expires: int}
    *
    * @return array|null
    *   The access token data, or NULL if not set.
@@ -276,41 +210,25 @@ final class AuthService {
 
   /**
    * Cron refresh of the access token.
+   *
+   * @deprecated in acquia_connector:4.1.1
+   *
+   * @internal
+   */
+  /**
+   * Cron refresh of the access token.
    */
   public function cronRefresh(): void {
     $last_refresh_timestamp = $this->state->get('acquia_connector.oauth_refresh.timestamp', 0);
     if ($this->time->getCurrentTime() - $last_refresh_timestamp > 1800) {
       try {
-        $this->refreshAccessToken();
+        $this->getAccessToken();
       }
       catch (RequestException $exception) {
       } finally {
         $this->state->set('acquia_connector.oauth_refresh.timestamp', $this->time->getRequestTime());
       }
     }
-  }
-
-  /**
-   * Gets the state token value used in OAuth authorization.
-   *
-   * @return string
-   *   The state token.
-   */
-  private function getStateToken(): string {
-    return Crypt::hashBase64($this->csrfToken->get(self::CSRF_TOKEN_KEY));
-  }
-
-  /**
-   * Get the PKCE code used in the OAuth authorization.
-   *
-   * @return string
-   *   The PKCE code.
-   */
-  private function getPkceCode(): string {
-    if (!$this->session->has(self::PKCE_KEY)) {
-      $this->session->set(self::PKCE_KEY, Crypt::randomBytesBase64(64));
-    }
-    return $this->session->get(self::PKCE_KEY);
   }
 
   /**

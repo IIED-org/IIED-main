@@ -144,7 +144,7 @@ class Photon extends GeocoderBase implements GeocoderInterface {
       $result = Json::decode(\Drupal::httpClient()->get($url->toString())->getBody());
     }
     catch (RequestException $e) {
-      watchdog_exception('geolocation', $e);
+      \Drupal::logger('geolocation')->warning($e->getMessage());
       return FALSE;
     }
 
@@ -192,7 +192,7 @@ class Photon extends GeocoderBase implements GeocoderInterface {
       $result = Json::decode(\Drupal::httpClient()->get($url->toString())->getBody());
     }
     catch (RequestException $e) {
-      watchdog_exception('geolocation', $e);
+      \Drupal::logger('geolocation')->warning($e->getMessage());
       return FALSE;
     }
 

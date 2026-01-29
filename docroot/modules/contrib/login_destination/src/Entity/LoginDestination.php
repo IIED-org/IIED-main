@@ -7,6 +7,8 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\login_destination\LoginDestinationInterface;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 
 /**
  * Defines a login destination configuration entity.
@@ -359,9 +361,12 @@ class LoginDestination extends ConfigEntityBase implements LoginDestinationInter
    * @return array
    *   List of system roles.
    */
-  public function getAllSystemRoles() {
+  public function getAllSystemRoles(): array {
     $role_options = [];
-    foreach (user_roles(TRUE) as $role) {
+    foreach (Role::loadMultiple() as $role) {
+      if ($role->id() === RoleInterface::ANONYMOUS_ID) {
+        continue;
+      }
       $role_options[$role->id()] = $role->label();
     }
     return $role_options;

@@ -8,6 +8,7 @@ docroot/sites/default/settings.local.php
 # Ignore IDE files
 .idea/
 .vscode/
+
 *.code-workspace
 
 # Ignore xdebug log file genearted by lando
@@ -29,10 +30,14 @@ xdebug.log
 node_modules
 
 # Ignore MacOS files
-.DS_Store
+*.DS_Store
 
-# Dev mode: don't include tailwind.css 
+# Dev mode: don't include output css 
 tailwind.css
+# styles.css
 
 # Remove flexslider pending review
 docroot/libraries/flexslider
+
+# Ignore environment-specific .htaccess
+docroot/.htaccess

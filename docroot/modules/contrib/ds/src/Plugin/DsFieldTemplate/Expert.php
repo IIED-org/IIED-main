@@ -2,15 +2,18 @@
 
 namespace Drupal\ds\Plugin\DsFieldTemplate;
 
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\ds\Attribute\DsFieldTemplate;
+
 /**
  * Plugin for the expert field template.
- *
- * @DsFieldTemplate(
- *   id = "expert",
- *   title = @Translation("Expert"),
- *   theme = "ds_field_expert",
- * )
  */
+#[DsFieldTemplate(
+  id: 'expert',
+  title: new TranslatableMarkup('Expert'),
+  theme: 'ds_field_expert'
+)]
 class Expert extends DsFieldTemplateBase {
 
   /**
@@ -236,22 +239,21 @@ class Expert extends DsFieldTemplateBase {
         $field_settings[$wrapper_key . '-cl'] = !(empty($values[$wrapper_key . '-cl'])) ? $values[$wrapper_key . '-cl'] : '';
         // Default Classes.
         if (in_array($wrapper_key, ['ow', 'lb'])) {
-          $field_settings[$wrapper_key . '-def-cl'] = !(empty($values[$wrapper_key . '-def-cl'])) ? TRUE : FALSE;
+          $field_settings[$wrapper_key . '-def-cl'] = !(empty($values[$wrapper_key . '-def-cl']));
         }
         // Attributes.
         $field_settings[$wrapper_key . '-at'] = !(empty($values[$wrapper_key . '-at'])) ? $values[$wrapper_key . '-at'] : '';
         // Default attributes.
-        $field_settings[$wrapper_key . '-def-at'] = !(empty($values[$wrapper_key . '-def-at'])) ? TRUE : FALSE;
-        // Token replacement.
+        $field_settings[$wrapper_key . '-def-at'] = !(empty($values[$wrapper_key . '-def-at']));
+
+        // Token replacement for the wrappers.
         /* @var \Drupal\Core\Entity\EntityInterface $entity */
         if ($entity = $this->getEntity()) {
           // Tokens.
           $apply_to = [
-            'prefix',
             $wrapper_key . '-el',
             $wrapper_key . '-cl',
             $wrapper_key . '-at',
-            'suffix',
           ];
 
           foreach ($apply_to as $identifier) {
@@ -259,10 +261,38 @@ class Expert extends DsFieldTemplateBase {
               $field_settings[$identifier] = \Drupal::token()->replace(
                 $field_settings[$identifier],
                 [$entity->getEntityTypeId() => $entity],
-                ['clear' => TRUE]
+                [
+                  'clear' => TRUE,
+                  'langcode' => \Drupal::languageManager()
+                    ->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
+                    ->getId()
+                ]
               );
             }
           }
+        }
+      }
+    }
+
+    // Token replacement for the prefix and suffix.
+    /* @var \Drupal\Core\Entity\EntityInterface $entity */
+    if ($entity = $this->getEntity()) {
+      $apply_to = [
+        'prefix',
+        'suffix',
+      ];
+      foreach ($apply_to as $identifier) {
+        if (!empty($field_settings[$identifier])) {
+          $field_settings[$identifier] = \Drupal::token()->replace(
+            $field_settings[$identifier],
+            [$entity->getEntityTypeId() => $entity],
+            [
+              'clear' => TRUE,
+              'langcode' => \Drupal::languageManager()
+                ->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
+                ->getId()
+            ]
+          );
         }
       }
     }

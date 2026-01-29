@@ -2,22 +2,23 @@
 
 namespace Drupal\better_exposed_filters\Plugin\better_exposed_filters\pager;
 
+use Drupal\better_exposed_filters\Attribute\PagerWidget;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Radio Buttons pager widget implementation.
- *
- * @BetterExposedFiltersPagerWidget(
- *   id = "bef_links",
- *   label = @Translation("Links"),
- * )
  */
+#[PagerWidget(
+  id: 'bef_links',
+  title: new TranslatableMarkup('Links'),
+)]
 class Links extends PagerWidgetBase {
 
   /**
    * {@inheritdoc}
    */
-  public function exposedFormAlter(array &$form, FormStateInterface $form_state) {
+  public function exposedFormAlter(array &$form, FormStateInterface $form_state): void {
     parent::exposedFormAlter($form, $form_state);
 
     if (!empty($form['items_per_page'] && count($form['items_per_page']['#options']) > 1)) {

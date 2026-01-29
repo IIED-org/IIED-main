@@ -106,10 +106,10 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
   public function getTitle() {
     /** @var \Drupal\taxonomy\Entity\Term. $link */
     $link = $this->entityTypeManager->getStorage('taxonomy_term')
-      ->load($this->pluginDefinition['metadata']['taxonomy_term_id']);
+      ->load($this->pluginDefinition['metadata']['taxonomy_term_id']) ?? NULL;
 
     $language = $this->languageManager->getCurrentLanguage()->getId();
-    if (!empty($link) && $link->hasTranslation($language)) {
+    if ($link && $link->hasTranslation($language)) {
       $translation = $link->getTranslation($language);
       return $translation->label();
     }
@@ -126,23 +126,28 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
   public function getDescription() {
     /** @var \Drupal\taxonomy\Entity\Term. $link */
     $link = $this->entityTypeManager->getStorage('taxonomy_term')
-      ->load($this->pluginDefinition['metadata']['taxonomy_term_id']);
+      ->load($this->pluginDefinition['metadata']['taxonomy_term_id']) ?? NULL;
 
     // Get the description field name.
-    $taxonomy_menu = $this->entityTypeManager->getStorage('taxonomy_menu')->load($this->pluginDefinition['metadata']['taxonomy_menu_id']);
-    $description_field_name = !empty($taxonomy_menu) ? $taxonomy_menu->getDescriptionFieldName() : '';
+    $taxonomy_menu = $this->entityTypeManager->getStorage('taxonomy_menu')
+      ->load($this->pluginDefinition['metadata']['taxonomy_menu_id']);
+    $description_field_name = !empty($taxonomy_menu)
+      ? $taxonomy_menu->getDescriptionFieldName()
+      : '';
 
     $language = $this->languageManager->getCurrentLanguage()->getId();
 
-    if (!empty($link) && $link->hasTranslation($language)) {
-      $translation = $link->getTranslation($language);
-      if (!empty($translation) && $translation->hasField($description_field_name)) {
+    if ($link && $link->hasTranslation($language)) {
+      $translation = $link->getTranslation($language) ?? NULL;
+      if ($translation && $translation->hasField($description_field_name)) {
         return $translation->{$description_field_name}->value;
       }
     }
-    elseif (!empty($link) && $link->hasField($description_field_name)) {
+    elseif ($link && $link->hasField($description_field_name)) {
       return $link->{$description_field_name}->value;
     }
+
+    return NULL;
   }
 
   /**
@@ -181,6 +186,25 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
   public function isResettable() {
     $override = $this->staticOverride->loadOverride($this->getPluginId());
     return $override !== NULL && !empty($override);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isEnabled() {
+    /* @var $link \Drupal\taxonomy\Entity\Term. */
+    $link = $this->entityTypeManager->getStorage('taxonomy_term')
+      ->load($this->pluginDefinition['metadata']['taxonomy_term_id']);
+
+    if (!empty($link)) {
+      $language = $this->languageManager->getCurrentLanguage()->getId();
+      if ($link->hasTranslation($language)) {
+        $translation = $link->getTranslation($language);
+        return (bool) $translation->get('status')->value;
+      }
+      return (bool) $link->get('status')->value;
+    }
+    return FALSE;
   }
 
 }

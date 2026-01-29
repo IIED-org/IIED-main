@@ -2,17 +2,18 @@
 
 namespace Drupal\ds\Plugin\DsField;
 
+use Drupal\ds\Attribute\DsField;
+use Drupal\ds\Plugin\Derivative\DynamicBlockField as DynamicBlockFieldDerivative;
 use Drupal\views\Plugin\Block\ViewsBlock;
 
 /**
  * Defines a generic dynamic block field.
- *
- * @DsField(
- *   id = "dynamic_block_field",
- *   deriver = "Drupal\ds\Plugin\Derivative\DynamicBlockField",
- *   provider = "block"
- * )
  */
+#[DsField(
+  id: 'dynamic_block_field',
+  deriver: DynamicBlockFieldDerivative::class,
+  provider: 'block'
+)]
 class DynamicBlockField extends BlockBase {
 
   /**

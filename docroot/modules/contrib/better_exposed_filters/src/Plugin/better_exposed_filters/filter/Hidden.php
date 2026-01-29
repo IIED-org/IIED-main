@@ -2,22 +2,23 @@
 
 namespace Drupal\better_exposed_filters\Plugin\better_exposed_filters\filter;
 
+use Drupal\better_exposed_filters\Attribute\FiltersWidget;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Default widget implementation.
- *
- * @BetterExposedFiltersFilterWidget(
- *   id = "bef_hidden",
- *   label = @Translation("Hidden"),
- * )
  */
+#[FiltersWidget(
+  id: 'bef_hidden',
+  title: new TranslatableMarkup('Hidden'),
+)]
 class Hidden extends FilterWidgetBase {
 
   /**
    * {@inheritdoc}
    */
-  public function exposedFormAlter(array &$form, FormStateInterface $form_state) {
+  public function exposedFormAlter(array &$form, FormStateInterface $form_state): void {
     $field_id = $this->getExposedFilterFieldId();
 
     parent::exposedFormAlter($form, $form_state);
@@ -40,7 +41,7 @@ class Hidden extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function isApplicable($filter = NULL, array $filter_options = []) {
+  public static function isApplicable(mixed $filter = NULL, array $filter_options = []): bool {
     $is_applicable = parent::isApplicable($filter, $filter_options);
 
     if ((is_a($filter, 'Drupal\views\Plugin\views\filter\Date') || !empty($filter->date_handler)) && !$filter->isAGroup()) {

@@ -75,11 +75,15 @@ class FieldValueExtension extends AbstractExtension {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
    */
-  public function __construct(LanguageManagerInterface $language_manager, EntityRepositoryInterface $entityRepository, ControllerResolverInterface $controllerResolver, LoggerChannelFactoryInterface $loggerFactory, RendererInterface $renderer) {
+  public function __construct(LanguageManagerInterface $language_manager, EntityRepositoryInterface $entityRepository, ControllerResolverInterface $controllerResolver, LoggerChannelFactoryInterface $loggerFactory, ?RendererInterface $renderer = NULL) {
     $this->languageManager = $language_manager;
     $this->entityRepository = $entityRepository;
     $this->controllerResolver = $controllerResolver;
     $this->loggerChannel = $loggerFactory->get('twig_field_value');
+    if (is_null($renderer)) {
+      @trigger_error('Calling ' . __METHOD__ . '() without the $renderer argument is deprecated in twig_value_field:2.0.5 and will be required in twig_value_field:3.0.0. See https://www.drupal.org/node/3478478', E_USER_DEPRECATED);
+      $renderer = \Drupal::service('renderer');
+    }
     $this->renderer = $renderer;
   }
 

@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\encrypt\Kernel;
 
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\encrypt\Entity\EncryptionProfile;
 use Drupal\encrypt\Exception\EncryptionMethodCanNotDecryptException;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\key\Entity\Key;
 
 /**
@@ -36,7 +36,7 @@ class AsymmetricalEncryptionMethod extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    // Create a 128bit testkey.
+    // Create a 128-bit test key.
     $key = Key::create([
       'id' => 'testing_key_128',
       'label' => 'Testing Key 128 bit',

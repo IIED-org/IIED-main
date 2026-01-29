@@ -9,7 +9,7 @@ use Drupal\node\Entity\Node;
  *
  * @group linkchecker
  */
-class LinkCheckerLinkExtractionStatusTest extends LinkCheckerBaseTest {
+class LinkCheckerLinkExtractionStatusTest extends LinkCheckerBase {
 
   /**
    * {@inheritdoc}

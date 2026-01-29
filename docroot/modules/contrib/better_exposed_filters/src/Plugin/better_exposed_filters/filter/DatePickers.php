@@ -2,17 +2,19 @@
 
 namespace Drupal\better_exposed_filters\Plugin\better_exposed_filters\filter;
 
+use Drupal\better_exposed_filters\Attribute\FiltersWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
+use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Date picker widget implementation.
- *
- * @BetterExposedFiltersFilterWidget(
- *   id = "bef_datepicker",
- *   label = @Translation("Date Picker"),
- * )
  */
+#[FiltersWidget(
+  id: 'bef_datepicker',
+  title: new TranslatableMarkup('Date Picker'),
+)]
 class DatePickers extends FilterWidgetBase {
 
   use LoggerChannelTrait;
@@ -20,7 +22,7 @@ class DatePickers extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function isApplicable($filter = NULL, array $filter_options = []) {
+  public static function isApplicable(mixed $filter = NULL, array $filter_options = []): bool {
     /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
     $is_applicable = FALSE;
 
@@ -32,9 +34,41 @@ class DatePickers extends FilterWidgetBase {
   }
 
   /**
+   * In case of date offsets as a default value, convert to dates.
+   *
+   * @param array $element
+   *   The form element to process.
+   */
+  protected function convertOffsets(array &$element): void {
+    $options = $this->handler->options;
+
+    if ($options['value']['type'] !== 'offset') {
+      return;
+    }
+    unset($options['value']['type']);
+
+    foreach (array_keys($options['value']) as $key) {
+      if (!array_key_exists($key, $element) || !array_key_exists('#default_value', $element[$key])) {
+        continue;
+      }
+
+      // Convert offset initial values to dates.
+      if ($element[$key]['#default_value'] === $options['value'][$key]) {
+        try {
+          $date = new \DateTime($element[$key]['#default_value']);
+          $element[$key]['#default_value'] = $date->format('Y-m-d');
+        }
+        catch (\Exception $e) {
+          $this->getLogger('better_exposed_filters')->log(RfcLogLevel::ERROR, $e->getMessage());
+        }
+      }
+    }
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function exposedFormAlter(array &$form, FormStateInterface $form_state) {
+  public function exposedFormAlter(array &$form, FormStateInterface $form_state): void {
     $field_id = $this->getExposedFilterFieldId();
 
     // Handle wrapper element added to exposed filters
@@ -61,9 +95,8 @@ class DatePickers extends FilterWidgetBase {
     $is_single_date = isset($element['value']['#type'])
       && 'date_text' == $element['value']['#type'];
     // Double Date-API-based input elements such as "in-between".
-    $is_double_date = isset($element['min']) && isset($element['max'])
-      && 'date_text' == $element['min']['#type']
-      && 'date_text' == $element['max']['#type'];
+    $is_double_date = isset($element['min']['#type']) && isset($element['max']['#type'])
+      && 'date_text' === $element['min']['#type'] && 'date_text' === $element['max']['#type'];
 
     if ($is_single_date || $is_double_date) {
       if (isset($element['value'])) {
@@ -108,6 +141,8 @@ class DatePickers extends FilterWidgetBase {
         $element['#attributes']['autocomplete'] = 'off';
       }
     }
+
+    $this->convertOffsets($element);
   }
 
 }

@@ -718,6 +718,9 @@ display:
               allow_secondary: false
               secondary_label: 'Advanced options'
               secondary_open: false
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_breakpoint: ''
+              auto_submit_sort_only: false
             pager:
               plugin_id: default
               advanced:
@@ -1480,6 +1483,9 @@ display:
               allow_secondary: false
               secondary_label: 'Advanced options'
               secondary_open: false
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_breakpoint: ''
+              auto_submit_sort_only: false
             pager:
               plugin_id: default
               advanced:
@@ -2220,6 +2226,9 @@ display:
               allow_secondary: false
               secondary_label: 'Advanced options'
               secondary_open: false
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_breakpoint: ''
+              auto_submit_sort_only: false
             pager:
               plugin_id: default
               advanced:
@@ -3147,6 +3156,9 @@ display:
               allow_secondary: false
               secondary_label: 'Advanced options'
               secondary_open: false
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_breakpoint: ''
+              auto_submit_sort_only: false
             pager:
               plugin_id: default
               advanced:
@@ -4242,6 +4254,9 @@ display:
               allow_secondary: false
               secondary_label: 'Advanced options'
               secondary_open: false
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_breakpoint: ''
+              auto_submit_sort_only: false
             pager:
               plugin_id: default
               advanced:
@@ -5888,6 +5903,9 @@ display:
               allow_secondary: false
               secondary_label: 'Advanced options'
               secondary_open: false
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_breakpoint: ''
+              auto_submit_sort_only: false
             pager:
               plugin_id: default
               advanced:
@@ -6993,6 +7011,9 @@ display:
               secondary_label: 'Advanced options'
               secondary_open: false
               reset_button_always_show: false
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_breakpoint: ''
+              auto_submit_sort_only: false
             filter:
               field_theme_s__target_id:
                 plugin_id: default
@@ -7004,12 +7025,18 @@ display:
                   collapsible: false
                   collapsible_disable_automatic_open: false
                   is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  open_by_default: false
               created:
                 plugin_id: bef_datepicker
                 advanced:
                   collapsible: false
                   collapsible_disable_automatic_open: false
                   is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  open_by_default: false
               type_1:
                 plugin_id: default
                 advanced:
@@ -7020,6 +7047,9 @@ display:
                   collapsible: false
                   collapsible_disable_automatic_open: false
                   is_secondary: false
+                  hide_label: false
+                  field_classes: ''
+                  open_by_default: false
       access:
         type: role
         options:
@@ -8130,6 +8160,9 @@ display:
               allow_secondary: false
               secondary_label: 'Advanced options'
               secondary_open: false
+              autosubmit_textfield_minimum_length: 3
+              autosubmit_breakpoint: ''
+              auto_submit_sort_only: false
             pager:
               plugin_id: default
               advanced:

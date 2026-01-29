@@ -17,7 +17,7 @@ class ViewFieldUITest extends UITestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'classy';
+  protected $defaultTheme = 'stark';
 
   /**
    * Modules to enable.
@@ -52,11 +52,11 @@ class ViewFieldUITest extends UITestBase {
   /**
    * Tests the UI of views_field_view.
    */
-  public function testViewsFieldUi() {
+  public function testViewsFieldUi(): void {
     $this->drupalGet('admin/structure/views/view/views_field_view_test_parent_normal/edit/default');
     $this->clickLink('Global: View (View)');
 
-    $result = $this->cssSelect('details#edit-options-available-tokens div.item-list li');
+    $result = $this->cssSelect('details#edit-options-available-tokens li');
     $this->assertEquals(10, count($result));
 
     $this->assertEquals('{{ raw_fields.id }} == Views test: ID (raw)', $result[0]->getText());

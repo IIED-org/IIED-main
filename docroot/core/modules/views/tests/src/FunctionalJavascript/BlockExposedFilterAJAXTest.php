@@ -95,4 +95,65 @@ class BlockExposedFilterAJAXTest extends WebDriverTestBase {
     $this->assertSession()->addressEquals('some-path');
   }
 
+  /**
+   * Test that AJAX works with two exposed blocks on the same page.
+   */
+  public function testExposedFilterWithDoubleExposedBlock(): void {
+    $node = $this->createNode();
+    $block1 = $this->drupalPlaceBlock('views_block:test_block_exposed_ajax-block_1');
+    $block2 = $this->drupalPlaceBlock('views_block:test_block_exposed_ajax-block_1');
+    $this->drupalGet($node->toUrl());
+
+    $page = $this->getSession()->getPage();
+
+    // Ensure that the Content we're testing for is present.
+    $this->assertCount(2, $page->findAll('xpath', '//*[text()="Page A"]'));
+    $this->assertCount(2, $page->findAll('xpath', '//*[text()="Page B"]'));
+    $this->assertCount(2, $page->findAll('xpath', '//*[text()="Article A"]'));
+
+    $form1 = $page->find('css', '#block-' . $block1->id() . ' form');
+    $form1_id = $form1->getAttribute('id');
+    // Filter by page type in the first form.
+    $this->submitForm(['type' => 'page'], 'Apply', $form1_id);
+    $this->waitForCount(1, 'xpath', '//*[text()="Article A"]');
+    $this->assertCount(2, $page->findAll('xpath', '//*[text()="Page A"]'));
+    $this->assertCount(2, $page->findAll('xpath', '//*[text()="Page B"]'));
+    $this->assertCount(1, $page->findAll('xpath', '//*[text()="Article A"]'));
+
+    $form2 = $page->find('css', '#block-' . $block2->id() . ' form');
+    $form2_id = $form2->getAttribute('id');
+    // Filter by page type in the second form.
+    $this->submitForm(['type' => 'page'], 'Apply', $form2_id);
+    $this->waitForCount(1, 'xpath', '//*[text()="Article A"]');
+    $this->assertCount(2, $page->findAll('xpath', '//*[text()="Page A"]'));
+    $this->assertCount(2, $page->findAll('xpath', '//*[text()="Page B"]'));
+    $this->assertCount(1, $page->findAll('xpath', '//*[text()="Article A"]'));
+  }
+
+  /**
+   * Looks for the selector and waits for the count to be matched.
+   *
+   * @param int $count
+   *   The count to match.
+   * @param string $selector
+   *   The selector engine name. See ElementInterface::findAll() for the
+   *   supported selectors.
+   * @param string|array $locator
+   *   The selector locator.
+   * @param int $timeout
+   *   (Optional) Timeout in milliseconds, defaults to 10000.
+   *
+   * @return bool
+   *   TRUE if count was matched, FALSE if not.
+   */
+  protected function waitForCount($count, $selector, $locator, $timeout = 10000) {
+    $page = $this->getSession()->getPage();
+
+    $result = $page->waitFor($timeout / 1000, function () use ($page, $count, $selector, $locator) {
+      return count($page->findAll($selector, $locator)) === $count;
+    });
+
+    return $result;
+  }
+
 }

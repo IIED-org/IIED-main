@@ -4,14 +4,14 @@ namespace Drupal\term_reference_tree\Element;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\CompositeFormElementTrait;
-use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Element\FormElementBase;
 
 /**
  * Provides a form element for term reference tree.
  *
  * @FormElement("checkbox_tree")
  */
-class CheckboxTree extends FormElement {
+class CheckboxTree extends FormElementBase {
 
   use CompositeFormElementTrait;
 

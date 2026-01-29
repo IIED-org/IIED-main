@@ -328,22 +328,8 @@
         );
       },
       removeMapMarkers: function () {
-        var that = this;
-        var shallowCopy = $.extend({}, this.mapMarkers);
-        $.each(
-          shallowCopy,
-
-          /**
-           * @param {integer} index - Current index.
-           * @param {GeolocationMapMarker} item - Current marker.
-           */
-          function (index, item) {
-            if (typeof item === "undefined") {
-              return;
-            }
-            that.removeMapMarker(item);
-          }
-        );
+        this.mapMarkers.filter(item => typeof item !== 'undefined')
+          .forEach(marker => this.removeMapMarker(marker));
       },
       addShape: function (shape) {
         this.mapShapes.push(shape);
@@ -365,22 +351,8 @@
         );
       },
       removeShapes: function () {
-        var that = this;
-        var shallowCopy = $.extend({}, this.mapShapes);
-        $.each(
-          shallowCopy,
-
-          /**
-           * @param {integer} index - Current index.
-           * @param {GeolocationShape} item - Current shape.
-           */
-          function (index, item) {
-            if (typeof item === "undefined") {
-              return;
-            }
-            that.removeShape(item);
-          }
-        );
+        this.mapShapes.filter(item => typeof item !== 'undefined')
+          .forEach(shape => this.removeShape(shape));
       },
       fitMapToMarkers: function (markers, identifier) {
         var boundaries = this.getMarkerBoundaries();

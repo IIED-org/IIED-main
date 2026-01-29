@@ -10,6 +10,25 @@ jquery.fancytree:
       /libraries/jquery.fancytree/dist/skin-lion/ui.fancytree.min.css: {}
   js:
     /libraries/jquery.fancytree/dist/jquery.fancytree.min.js: { minified: true }
+    /libraries/jquery.fancytree/dist/modules/jquery.fancytree.persist.js: { minified: true }
+  dependencies:
+    - core/jquery
+    - jquery_ui/core
+    - jquery_ui/widget
+
+jquery.fancytree.cdn:
+  remote: https://github.com/mar10/fancytree
+  version: 2.38.3
+  license:
+    name: MIT
+    url: https://github.com/mar10/fancytree/wiki/LicenseInfo
+    gpl-compatible: true
+  css:
+    component:
+      //cdn.jsdelivr.net/npm/jquery.fancytree@2.38.3/dist/skin-lion/ui.fancytree.min.css: {}
+  js:
+    //cdn.jsdelivr.net/npm/jquery.fancytree@2.38.3/dist/jquery.fancytree.min.js: { type: external, minified: true }
+    //cdn.jsdelivr.net/npm/jquery.fancytree@2.38.3/dist/modules/jquery.fancytree.persist.js: { type: external }
   dependencies:
     - core/jquery
     - jquery_ui/core
@@ -26,12 +45,6 @@ tree:
     - taxonomy_manager/jquery.fancytree
     - core/drupalSettings
     - core/once
-
-termData:
-  js:
-    js/termData.js: {}
-  dependencies:
-    - taxonomy_manager/jquery.fancytree
 
 form:
   css:

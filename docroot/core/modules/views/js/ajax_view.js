@@ -79,7 +79,7 @@
       // Remove the question mark and Drupal path component if any.
       queryString = queryString
         .slice(1)
-        .replace(/q=[^&]+&?|&?render=[^&]+/, '');
+        .replace(/q=[^&]+&?|page=[^&]+&?|&?render=[^&]+/, '');
       if (queryString !== '') {
         // If there is a '?' in ajaxPath, clean URL are on and & should be
         // used to add parameters.
@@ -101,14 +101,14 @@
 
     // Add the ajax to exposed forms.
     this.$exposed_form = $(
-      `form#views-exposed-form-${settings.view_name.replace(
+      `form[id^="views-exposed-form-${settings.view_name.replace(
         /_/g,
         '-',
-      )}-${settings.view_display_id.replace(/_/g, '-')}`,
+      )}-${settings.view_display_id.replace(/_/g, '-')}"]`,
     );
-    once('exposed-form', this.$exposed_form).forEach(
-      this.attachExposedFormAjax.bind(this),
-    );
+    if (once('exposed-form', this.$exposed_form).length) {
+      this.attachExposedFormAjax();
+    }
 
     // Add the ajax to pagers.
     once(
@@ -139,20 +139,24 @@
    */
   Drupal.views.ajaxView.prototype.attachExposedFormAjax = function () {
     const that = this;
-    this.exposedFormAjax = [];
+    const pendingForms = once('exposed-form-attach', this.$exposed_form);
+    if (!pendingForms.length) {
+      return;
+    }
+
+    this.exposedFormAjax = this.exposedFormAjax || [];
     // Exclude the reset buttons so no AJAX behaviors are bound. Many things
     // break during the form reset phase if using AJAX.
-    $(
-      'input[type=submit], button[type=submit], input[type=image]',
-      this.$exposed_form,
-    )
+    $(pendingForms)
+      .find('input[type=submit], button[type=submit], input[type=image]')
       .not('[data-drupal-selector=edit-reset]')
-      .each(function (index) {
+      .each(function () {
+        // Initialize the Drupal.ajax instance.
         const selfSettings = $.extend({}, that.element_settings, {
           base: $(this).attr('id'),
           element: this,
         });
-        that.exposedFormAjax[index] = Drupal.ajax(selfSettings);
+        that.exposedFormAjax.push(Drupal.ajax(selfSettings));
       });
   };
 

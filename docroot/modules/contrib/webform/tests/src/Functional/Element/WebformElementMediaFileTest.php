@@ -39,16 +39,16 @@ class WebformElementMediaFileTest extends WebformElementManagedFileTestBase {
     $this->drupalGet('/webform/test_element_media_file');
 
     // Check document file.
-    $assert_session->responseContains('<input data-drupal-selector="edit-document-file-upload" type="file" id="edit-document-file-upload" name="files[document_file]" size="22" class="js-form-file form-file" />');
+    $assert_session->responseContains('<input aria-describedby="edit-document-file--description" data-drupal-selector="edit-document-file-upload" type="file" id="edit-document-file-upload" name="files[document_file]" size="22" class="js-form-file form-file" />');
 
     // Check audio file.
-    $assert_session->responseContains('<input data-drupal-selector="edit-audio-file-upload" accept="audio/*" type="file" id="edit-audio-file-upload" name="files[audio_file]" size="22" class="js-form-file form-file" />');
+    $assert_session->responseContains('<input aria-describedby="edit-audio-file--description" data-drupal-selector="edit-audio-file-upload" accept="audio/*" type="file" id="edit-audio-file-upload" name="files[audio_file]" size="22" class="js-form-file form-file" />');
 
     // Check image file.
-    $assert_session->responseContains('<input data-drupal-selector="edit-image-file-upload" accept="image/*" type="file" id="edit-image-file-upload" name="files[image_file]" size="22" class="js-form-file form-file" />');
+    $assert_session->responseContains('<input aria-describedby="edit-image-file--description" data-drupal-selector="edit-image-file-upload" accept="image/*" type="file" id="edit-image-file-upload" name="files[image_file]" size="22" class="js-form-file form-file" />');
 
     // Check video file.
-    $assert_session->responseContains('<input data-drupal-selector="edit-video-file-upload" accept="video/mp4,video/x-m4v,video/*" type="file" id="edit-video-file-upload" name="files[video_file]" size="22" class="js-form-file form-file" />');
+    $assert_session->responseContains('<input aria-describedby="edit-video-file--description" data-drupal-selector="edit-video-file-upload" accept="video/mp4,video/x-m4v,video/*" type="file" id="edit-video-file-upload" name="files[video_file]" size="22" class="js-form-file form-file" />');
 
     /* Element processing */
 

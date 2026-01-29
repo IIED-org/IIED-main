@@ -25,3 +25,11 @@ Source: https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-t
 Source: https://www.drupal.org/files/issues/2024-01-23/drupal-revert-source-editing-validation-tightening-3410100-38.patch
 
 
+3062441
+Source: https://www.drupal.org/files/issues/2024-03-27/3062441-patch-41.patch
+
+
+2894747
+Source: https://git.drupalcode.org/project/drupal/-/merge_requests/10945.diff
+
+

@@ -142,7 +142,7 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
         ->getBody());
     }
     catch (RequestException $e) {
-      watchdog_exception('geolocation', $e);
+      \Drupal::logger('geolocation')->warning($e->getMessage());
       return FALSE;
     }
 
@@ -204,7 +204,7 @@ class GoogleGeocodingAPI extends GoogleGeocoderBase {
       $result = Json::decode(\Drupal::httpClient()->request('GET', $request_url)->getBody());
     }
     catch (RequestException $e) {
-      watchdog_exception('geolocation', $e);
+      \Drupal::logger('geolocation')->warning($e->getMessage());
       return FALSE;
     }
 

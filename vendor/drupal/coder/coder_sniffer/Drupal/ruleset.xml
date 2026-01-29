@@ -23,13 +23,14 @@
     <exclude-pattern>*.tpl.php</exclude-pattern>
   </rule>
 
-  <!-- Silence deprecated sniff that will be removed in Coder 9.x. -->
+  <!-- Silence deprecated sniffs that will be removed in Coder 9.x. -->
   <rule ref="Drupal.Functions.FunctionDeclaration.SpaceAfter">
     <severity>0</severity>
   </rule>
   <rule ref="Drupal.Functions.FunctionDeclaration.SpaceBeforeParenthesis">
     <severity>0</severity>
   </rule>
+
   <!-- Silence method name underscore warning which is covered already in
        Drupal.NamingConventions.ValidFunctionName.ScopeNotCamelCaps. -->
   <rule ref="Drupal.Methods.MethodDeclaration.Underscore">
@@ -62,12 +63,19 @@
   <rule ref="Generic.NamingConventions.ConstructorName"/>
   <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
   <rule ref="Generic.PHP.DeprecatedFunctions"/>
-  <rule ref="Generic.PHP.DisallowShortOpenTag"/>
+  <rule ref="Generic.PHP.DisallowShortOpenTag">
+    <!-- Do not run this sniff on .yml files -->
+    <exclude-pattern>*.yml</exclude-pattern>
+  </rule>
   <rule ref="Generic.PHP.LowerCaseKeyword"/>
   <rule ref="Generic.PHP.UpperCaseConstant"/>
+  <rule ref="Generic.Strings.UnnecessaryStringConcat">
+    <properties>
+      <property name="allowMultiline" value="true"/>
+    </properties>
+  </rule>
   <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
-
-  <rule ref="MySource.Debug.DebugCode"/>
+  <rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>
 
   <!-- PEAR sniffs -->
   <rule ref="PEAR.Files.IncludingFile"/>
@@ -119,6 +127,15 @@
 
   <!-- SlevomatCodingStandard sniffs -->
   <rule ref="SlevomatCodingStandard.Classes.BackedEnumTypeSpacing"/>
+  <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments">
+    <properties>
+       <property name="forbiddenCommentPatterns" type="array">
+         <!-- Catch comments ending in 2 dots, bot leave comments ending in 3
+         dots alone. -->
+         <element value="/(?&lt;!\.)\.\.(?!\.)$/"/>
+       </property>
+    </properties>
+  </rule>
   <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
   <rule ref="SlevomatCodingStandard.PHP.ShortList"/>
   <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
@@ -225,26 +242,6 @@
     <severity>0</severity>
   </rule>
 
-  <rule ref="Squiz.CSS.ClassDefinitionClosingBraceSpace"/>
-  <rule ref="Squiz.CSS.ClassDefinitionClosingBraceSpace.SpacingAfterClose">
-    <severity>0</severity>
-  </rule>
-  <rule ref="Squiz.CSS.ClassDefinitionOpeningBraceSpace"/>
-  <rule ref="Squiz.CSS.ClassDefinitionOpeningBraceSpace.AfterNesting">
-    <severity>0</severity>
-  </rule>
-  <rule ref="Squiz.CSS.ColonSpacing"/>
-  <rule ref="Squiz.CSS.DisallowMultipleStyleDefinitions"/>
-  <rule ref="Squiz.CSS.EmptyClassDefinition"/>
-  <rule ref="Squiz.CSS.EmptyStyleDefinition"/>
-  <rule ref="Squiz.CSS.Indentation">
-    <properties>
-      <property name="indent" value="2"/>
-    </properties>
-  </rule>
-  <rule ref="Squiz.CSS.MissingColon"/>
-  <rule ref="Squiz.CSS.SemicolonSpacing"/>
-
   <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
     <properties>
       <property name="equalsSpacing" value="1"/>
@@ -267,7 +264,6 @@
       <property name="spacing" value="1"/>
     </properties>
   </rule>
-  <rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
   <rule ref="Squiz.WhiteSpace.OperatorSpacing">
     <properties>
       <property name="ignoreNewlines" value="true"/>
@@ -287,7 +283,4 @@
   <exclude-pattern>*/\.svn/*</exclude-pattern>
   <exclude-pattern>*/\.hg/*</exclude-pattern>
   <exclude-pattern>*/\.bzr/*</exclude-pattern>
-
-  <!-- Ignore minified CSS files.-->
-  <exclude-pattern>*\.min\.css$</exclude-pattern>
 </ruleset>

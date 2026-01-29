@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\encrypt\Functional;
 
+use Drupal\Tests\BrowserTestBase;
 use Drupal\encrypt\Entity\EncryptionProfile;
 use Drupal\key\Entity\Key;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * Defines a base class for tests.
@@ -26,7 +26,7 @@ abstract class EncryptTestBase extends BrowserTestBase {
   protected $adminUser;
 
   /**
-   * A list of testkeys.
+   * A list of test keys.
    *
    * @var \Drupal\key\Entity\Key[]
    */
@@ -64,7 +64,7 @@ abstract class EncryptTestBase extends BrowserTestBase {
    * Creates test keys for usage in tests.
    */
   protected function createTestKeys() {
-    // Create a 128bit testkey.
+    // Create a 128-bit test key.
     $key_128 = Key::create([
       'id' => 'testing_key_128',
       'label' => 'Testing Key 128 bit',
@@ -76,7 +76,7 @@ abstract class EncryptTestBase extends BrowserTestBase {
     $key_128->save();
     $this->testKeys['testing_key_128'] = $key_128;
 
-    // Create a 256bit testkey.
+    // Create a 256-bit test key.
     $key_256 = Key::create([
       'id' => 'testing_key_256',
       'label' => 'Testing Key 256 bit',

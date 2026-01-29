@@ -129,6 +129,7 @@ class Problem
                 return implode('-', $rule->getLiterals());
         }
 
+        // @phpstan-ignore deadCode.unreachable
         throw new \LogicException('Unknown rule type: '.$rule->getReason());
     }
 
@@ -149,6 +150,7 @@ class Problem
                 return 0;
         }
 
+        // @phpstan-ignore deadCode.unreachable
         throw new \LogicException('Unknown rule type: '.$rule->getReason());
     }
 
@@ -330,7 +332,7 @@ class Problem
             $newConstraint = Preg::replace('{ +as +([^,\s|]+)$}', '', $constraint->getPrettyString());
             $packages = $repositorySet->findPackages($packageName, new MultiConstraint([
                 new Constraint(Constraint::STR_OP_EQ, $newConstraint),
-                new Constraint(Constraint::STR_OP_EQ, str_replace('#', '+', $newConstraint))
+                new Constraint(Constraint::STR_OP_EQ, str_replace('#', '+', $newConstraint)),
             ], false));
             if (\count($packages) > 0) {
                 return ["- Root composer.json requires $packageName".self::constraintToText($constraint) . ', ', 'found '.self::getPackageList($packages, $isVerbose, $pool, $constraint).'. The # character in branch names is replaced by a + character. Make sure to require it as "'.str_replace('#', '+', $constraint->getPrettyString()).'".'];
@@ -352,12 +354,14 @@ class Problem
             }
 
             $tempReqs = $repositorySet->getTemporaryConstraints();
-            if (isset($tempReqs[$packageName])) {
-                $filtered = array_filter($packages, static function ($p) use ($tempReqs, $packageName): bool {
-                    return $tempReqs[$packageName]->matches(new Constraint('==', $p->getVersion()));
-                });
-                if (0 === count($filtered)) {
-                    return ["- Root composer.json requires $packageName".self::constraintToText($constraint) . ', ', 'found '.self::getPackageList($packages, $isVerbose, $pool, $constraint).' but '.(self::hasMultipleNames($packages) ? 'these conflict' : 'it conflicts').' with your temporary update constraint ('.$packageName.':'.$tempReqs[$packageName]->getPrettyString().').'];
+            foreach (reset($packages)->getNames() as $name) {
+                if (isset($tempReqs[$name])) {
+                    $filtered = array_filter($packages, static function ($p) use ($tempReqs, $name): bool {
+                        return $tempReqs[$name]->matches(new Constraint('==', $p->getVersion()));
+                    });
+                    if (0 === count($filtered)) {
+                        return ["- Root composer.json requires $name".self::constraintToText($constraint) . ', ', 'found '.self::getPackageList($packages, $isVerbose, $pool, $constraint).' but '.(self::hasMultipleNames($packages) ? 'these conflict' : 'it conflicts').' with your temporary update constraint ('.$name.':'.$tempReqs[$name]->getPrettyString().').'];
+                    }
                 }
             }
 
@@ -377,6 +381,14 @@ class Problem
 
             if (0 === \count($nonLockedPackages)) {
                 return ["- Root composer.json requires $packageName".self::constraintToText($constraint) . ', ', 'found '.self::getPackageList($packages, $isVerbose, $pool, $constraint).' in the lock file but not in remote repositories, make sure you avoid updating this package to keep the one from the lock file.'];
+            }
+
+            if ($pool->isAbandonedRemovedPackageVersion($packageName, $constraint)) {
+                return ["- Root composer.json requires $packageName".self::constraintToText($constraint) . ', ', 'found '.self::getPackageList($packages, $isVerbose, $pool, $constraint).' but these were not loaded, because they are abandoned and you configured "block-abandoned" to true in your "audit" config.'];
+            }
+
+            if ($pool->isSecurityRemovedPackageVersion($packageName, $constraint)) {
+                return ["- Root composer.json requires $packageName".self::constraintToText($constraint) . ', ', 'found '.self::getPackageList($packages, $isVerbose, $pool, $constraint).' but these were not loaded, because they are affected by security advisories. To ignore the advisories, add ("' . implode('", "', $pool->getSecurityAdvisoryIdentifiersForPackageVersion($packageName, $constraint)). '") to the audit "ignore" config. To turn the feature off entirely, you can set "block-insecure" to false in your "audit" config.'];
             }
 
             return ["- Root composer.json requires $packageName".self::constraintToText($constraint) . ', ', 'found '.self::getPackageList($packages, $isVerbose, $pool, $constraint).' but these were not loaded, likely because '.(self::hasMultipleNames($packages) ? 'they conflict' : 'it conflicts').' with another require.'];

@@ -18,7 +18,6 @@ use Composer\Installer;
 use Composer\IO\IOInterface;
 use Composer\Package\BasePackage;
 use Composer\Package\Loader\RootPackageLoader;
-use Composer\Package\PackageInterface;
 use Composer\Package\Version\VersionSelector;
 use Composer\Pcre\Preg;
 use Composer\Plugin\CommandEvent;
@@ -32,7 +31,6 @@ use Composer\Semver\Constraint\MultiConstraint;
 use Composer\Semver\Intervals;
 use Composer\Util\HttpDownloader;
 use Composer\Advisory\Auditor;
-use Composer\Util\Platform;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Composer\Console\Input\InputOption;
@@ -47,10 +45,7 @@ class UpdateCommand extends BaseCommand
 {
     use CompletionTrait;
 
-    /**
-     * @return void
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('update')
@@ -83,7 +78,7 @@ class UpdateCommand extends BaseCommand
                 new InputOption('ignore-platform-reqs', null, InputOption::VALUE_NONE, 'Ignore all platform requirements (php & ext- packages).'),
                 new InputOption('prefer-stable', null, InputOption::VALUE_NONE, 'Prefer stable versions of dependencies (can also be set via the COMPOSER_PREFER_STABLE=1 env var).'),
                 new InputOption('prefer-lowest', null, InputOption::VALUE_NONE, 'Prefer lowest versions of dependencies (can also be set via the COMPOSER_PREFER_LOWEST=1 env var).'),
-                new InputOption('minimal-changes', 'm', InputOption::VALUE_NONE, 'During a partial update with -w/-W, only perform absolutely necessary changes to transitive dependencies (can also be set via the COMPOSER_MINIMAL_CHANGES=1 env var).'),
+                new InputOption('minimal-changes', 'm', InputOption::VALUE_NONE, 'Only perform absolutely necessary changes to dependencies. If packages cannot be kept at their currently locked version they are updated. For partial updates the allow-listed packages are always updated fully. (can also be set via the COMPOSER_MINIMAL_CHANGES=1 env var).'),
                 new InputOption('patch-only', null, InputOption::VALUE_NONE, 'Only allow patch version updates for currently installed dependencies.'),
                 new InputOption('interactive', 'i', InputOption::VALUE_NONE, 'Interactive interface with autocompletion to select the packages to update.'),
                 new InputOption('root-reqs', null, InputOption::VALUE_NONE, 'Restricts the update to your first degree dependencies.'),
@@ -173,6 +168,7 @@ EOT
             if (isset($rootRequirements[$package]) && !Intervals::haveIntersections($parsedConstraint, $rootRequirements[$package]->getConstraint())) {
                 $io->writeError('<error>The temporary constraint "'.$constraint.'" for "'.$package.'" must be a subset of the constraint in your composer.json ('.$rootRequirements[$package]->getPrettyConstraint().')</error>');
                 $io->write('<info>Run `composer require '.$package.'` or `composer require '.$package.':'.$constraint.'` instead to replace the constraint</info>');
+
                 return self::FAILURE;
             }
         }
@@ -242,6 +238,7 @@ EOT
         $authoritative = $input->getOption('classmap-authoritative') || $config->get('classmap-authoritative');
         $apcuPrefix = $input->getOption('apcu-autoloader-prefix');
         $apcu = $apcuPrefix !== null || $input->getOption('apcu-autoloader') || $config->get('apcu-autoloader');
+        $minimalChanges = $input->getOption('minimal-changes') || $config->get('update-with-minimal-changes');
 
         $updateAllowTransitiveDependencies = Request::UPDATE_ONLY_LISTED;
         if ($input->getOption('with-all-dependencies')) {
@@ -271,7 +268,7 @@ EOT
             ->setTemporaryConstraints($temporaryConstraints)
             ->setAudit(!$input->getOption('no-audit'))
             ->setAuditFormat($this->getAuditFormat($input))
-            ->setMinimalUpdate($input->getOption('minimal-changes'))
+            ->setMinimalUpdate($minimalChanges)
         ;
 
         if ($input->getOption('no-plugins')) {
@@ -280,7 +277,7 @@ EOT
 
         $result = $install->run();
 
-        if ($result === 0) {
+        if ($result === 0 && !$input->getOption('lock')) {
             $bumpAfterUpdate = $input->getOption('bump-after-update');
             if (false === $bumpAfterUpdate) {
                 $bumpAfterUpdate = $composer->getConfig()->get('bump-after-update');
@@ -295,10 +292,12 @@ EOT
                     $bumpAfterUpdate === 'dev',
                     $bumpAfterUpdate === 'no-dev',
                     $input->getOption('dry-run'),
-                    $input->getArgument('packages')
+                    $input->getArgument('packages'),
+                    '--bump-after-update=dev'
                 );
             }
         }
+
         return $result;
     }
 
@@ -379,7 +378,7 @@ EOT
     private function createVersionSelector(Composer $composer): VersionSelector
     {
         $repositorySet = new RepositorySet();
-        $repositorySet->addRepository(new CompositeRepository(array_filter($composer->getRepositoryManager()->getRepositories(), function (RepositoryInterface $repository) {
+        $repositorySet->addRepository(new CompositeRepository(array_filter($composer->getRepositoryManager()->getRepositories(), static function (RepositoryInterface $repository) {
             return !$repository instanceof PlatformRepository;
         })));
 
