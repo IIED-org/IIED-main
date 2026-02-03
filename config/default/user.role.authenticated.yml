@@ -12,6 +12,7 @@ dependencies:
     - file
     - filter
     - klaro
+    - matomo
     - media
     - search_api_autocomplete
     - shortcut
@@ -29,6 +30,7 @@ permissions:
   - 'access shortcuts'
   - 'access site-wide contact form'
   - 'delete own files'
+  - 'opt-in or out of matomo tracking'
   - 'post comments'
   - 'setup own tfa'
   - 'skip comment approval'

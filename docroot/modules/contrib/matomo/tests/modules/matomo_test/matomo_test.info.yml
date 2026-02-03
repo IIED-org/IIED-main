@@ -1,0 +1,9 @@
+name: 'Matomo test'
+description: 'Support module for Matomo testing.'
+type: module
+package: Testing
+
+# Information added by Drupal.org packaging script on 2025-12-22
+version: '8.x-1.26'
+project: 'matomo'
+datestamp: 1766442493

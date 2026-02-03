@@ -1,0 +1,8 @@
+matomo_test.drupal_messenger_add_message:
+  path: '/matomo-test/drupal-messenger-add-message'
+  defaults:
+    _title: 'Add messages with Drupal::messenger()'
+    _controller: '\Drupal\matomo_test\Controller\MatomoTestController::drupalAddMessageTest'
+  requirements:
+    # Open page callback because used only for tests.
+    _access: 'TRUE'

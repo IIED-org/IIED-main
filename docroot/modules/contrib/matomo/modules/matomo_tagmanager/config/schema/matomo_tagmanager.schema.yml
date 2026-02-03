@@ -1,0 +1,16 @@
+matomo_tagmanager.container.*:
+  type: config_entity
+  label: 'Container settings'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    weight:
+      type: integer
+      label: 'Weight'
+    container_url:
+      type: string
+      label: 'Container URL'

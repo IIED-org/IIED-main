@@ -1,0 +1,5 @@
+matomo.admin_settings_form:
+  title: 'Matomo Analytics'
+  parent: system.admin_config_system
+  description: 'Configure the settings used to generate your Matomo tracking code.'
+  route_name: matomo.admin_settings_form

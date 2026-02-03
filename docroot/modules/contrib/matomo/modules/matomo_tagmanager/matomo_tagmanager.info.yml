@@ -1,0 +1,13 @@
+name: 'Matomo Analytics Tag Manager'
+type: module
+description: 'Matomo Tag Manager integration.'
+core_version_requirement: ^10.3 || ^11
+package: 'Statistics'
+configure: entity.matomo_tagmanager_container.collection
+dependencies:
+  - matomo:matomo
+
+# Information added by Drupal.org packaging script on 2025-12-22
+version: '8.x-1.26'
+project: 'matomo'
+datestamp: 1766442493

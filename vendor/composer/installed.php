@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '6ceca5c06d6d9ad9eb9b0b0758b274cf0456a915',
+        'reference' => 'b05d158a76796f146261acd4e42df6dcca07711f',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1363,6 +1363,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/matomo' => array(
+            'pretty_version' => '1.26.0',
+            'version' => '1.26.0.0',
+            'reference' => '8.x-1.26',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../docroot/modules/contrib/matomo',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/media_entity_file_replace' => array(
             'pretty_version' => '1.3.0',
             'version' => '1.3.0.0',
@@ -1645,7 +1654,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '6ceca5c06d6d9ad9eb9b0b0758b274cf0456a915',
+            'reference' => 'b05d158a76796f146261acd4e42df6dcca07711f',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

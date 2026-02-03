@@ -1,0 +1,77 @@
+id: d7_matomo_settings
+label: Matomo 7 configuration
+migration_tags:
+  - Drupal 7
+  - Configuration
+source:
+  plugin: variable
+  variables:
+    - matomo_cache
+    - matomo_codesnippet_after
+    - matomo_codesnippet_before
+    - matomo_custom
+    - matomo_custom_var
+    - matomo_domain_mode
+    - matomo_pages
+    - matomo_privacy_donottrack
+    - matomo_roles
+    - matomo_site_id
+    - matomo_site_search
+    - matomo_track
+    - matomo_trackcolorbox
+    - matomo_trackfiles_extensions
+    - matomo_trackmailto
+    - matomo_trackmessages
+    - matomo_trackuserid
+    - matomo_translation_set
+    - matomo_url_http
+    - matomo_url_https
+    - matomo_visibility_pages
+    - matomo_visibility_roles
+    - matomo_page_title_hierarchy
+    - matomo_page_title_hierarchy_exclude_home
+  source_module: matomo
+process:
+  cache: matomo_cache
+  'codesnippet/after': matomo_codesnippet_after
+  'codesnippet/before': matomo_codesnippet_before
+  'custom/variable':
+    plugin: matomo_custom_vars
+    source:
+      - matomo_custom_var
+  domain_mode: matomo_domain_mode
+  'privacy/donottrack': matomo_privacy_donottrack
+  site_id: matomo_site_id
+  'track/colorbox': matomo_trackcolorbox
+  'track/files': matomo_track
+  'track/files_extensions': matomo_trackfiles_extensions
+  'track/mailto': matomo_trackmailto
+  'track/messages': matomo_trackmessages
+  'track/site_search': matomo_site_search
+  'track/userid': matomo_trackuserid
+  'translation_set': matomo_translation_set
+  url_http: matomo_url_http
+  url_https: matomo_url_https
+  'visibility/user_account_mode': matomo_custom
+  'visibility/request_path_mode': matomo_visibility_pages
+  'visibility/request_path_pages':
+    plugin: matomo_visibility_pages
+    source:
+      - matomo_visibility_pages
+      - matomo_pages
+    # If Matomo uses PHP visibility, don't migrate it unless the PHP module is
+    # enabled.
+    skip_php: true
+  'visibility/user_role_mode': matomo_visibility_roles
+  'visibility/user_role_roles':
+    plugin: matomo_visibility_roles
+    source:
+      - matomo_roles
+  page_title_hierarchy: matomo_page_title_hierarchy
+  page_title_hierarchy_exclude_home: matomo_page_title_hierarchy_exclude_home
+destination:
+  plugin: config
+  config_name: matomo.settings
+migration_dependencies:
+  optional:
+    - d7_user_role

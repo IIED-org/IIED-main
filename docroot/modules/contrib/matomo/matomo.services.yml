@@ -1,0 +1,7 @@
+services:
+  matomo.csp_subscriber:
+    class: Drupal\matomo\EventSubscriber\CspSubscriber
+    arguments:
+      - '@config.factory'
+    tags:
+      - { name: event_subscriber }

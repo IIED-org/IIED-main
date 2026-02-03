@@ -1,0 +1,5 @@
+entity.matomo_tagmanager_container.add_form:
+  title: 'Add container'
+  route_name: entity.matomo_tagmanager_container.add_form
+  appears_on:
+    - entity.matomo_tagmanager_container.collection

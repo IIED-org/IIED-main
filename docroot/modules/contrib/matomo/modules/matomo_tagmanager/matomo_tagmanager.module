@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for Matomo Tag Manager.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Cache\Cache;
+use Drupal\matomo\Component\Render\MatomoJavaScriptSnippet;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function matomo_tagmanager_page_attachments(array &$page): void {
+  $account = \Drupal::currentUser();
+  $config = \Drupal::config('matomo.settings');
+
+  /** @var Drupal\matomo_tagmanager\ContainerStorageInterface $container_storage */
+  $container_storage = \Drupal::entityTypeManager()->getStorage('matomo_tagmanager_container');
+  $containers = $container_storage->loadEnabled();
+  if (empty($containers)) {
+    return;
+  }
+
+  $request = \Drupal::request();
+
+  // Get page http status code for visibility filtering.
+  $status = NULL;
+  $exception = $request->attributes->get('exception');
+  if ($exception && $exception instanceof HttpExceptionInterface) {
+    $status = $exception->getStatusCode();
+  }
+  $trackable_status_codes = [
+    // "Forbidden" status code.
+    '403',
+    // "Not Found" status code.
+    '404',
+  ];
+
+  if (!(\_matomo_visibility_pages() || \in_array($status, $trackable_status_codes, TRUE)) || !\_matomo_visibility_user($account)) {
+    // Stop early.
+    return;
+  }
+
+  // Build tracker code.
+  // @see https://developer.matomo.org/guides/tagmanager/integration-plugin
+  $script = 'var _mtm = window._mtm = window._mtm || [];';
+  $script .= '_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});';
+  $script .= 'var d = document, g = d.createElement("script"), s = d.getElementsByTagName("script")[0];';
+  $script .= 'g.type = "text/javascript";';
+  $script .= 'g.async = true;';
+  $script .= 'g.src="${CONTAINERURL}";';
+  $script .= 's.parentNode.insertBefore(g, s);';
+
+  $cache_tags = $page['#cache']['tags'] ?? [];
+  $cache_tags = Cache::mergeTags($cache_tags, $config->getCacheTags());
+  foreach ($containers as $container) {
+    // Add cache tags per container.
+    $cache_tags = Cache::mergeTags($cache_tags, $container->getCacheTags());
+
+    // Build script.
+    $replacements = [
+      '${CONTAINERURL}' => \trim($container->containerUrl()),
+    ];
+    $container_script = \strtr($script, $replacements);
+    $page['#attached']['html_head'][] = [
+      [
+        '#tag' => 'script',
+        '#value' => new MatomoJavaScriptSnippet($container_script),
+      ],
+      'matomo_tagmanager_tracking_script__' . $container->id(),
+    ];
+  }
+
+  // Set cache tags.
+  $page['#cache']['tags'] = $cache_tags;
+}

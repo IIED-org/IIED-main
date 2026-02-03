@@ -1,0 +1,50 @@
+# Container management.
+entity.matomo_tagmanager_container.collection:
+  path: '/admin/config/system/matomo/tagmanager'
+  defaults:
+    _entity_list: 'matomo_tagmanager_container'
+    _title: 'Matomo Tag Manager containers'
+  requirements:
+    _permission: 'administer matomo tag manager'
+
+entity.matomo_tagmanager_container.add_form:
+  path: '/admin/config/system/matomo/tagmanager/add'
+  defaults:
+    _entity_form: 'matomo_tagmanager_container'
+    _title_callback: '\Drupal\matomo_tagmanager\Controller\ContainerController::addTitle'
+    entity_type_id: 'matomo_tagmanager_container'
+  requirements:
+    _permission: 'administer matomo tag manager'
+
+entity.matomo_tagmanager_container.enable:
+  path: '/admin/config/system/matomo/tagmanager/manage/{matomo_tagmanager_container}/enable'
+  defaults:
+    _controller: '\Drupal\matomo_tagmanager\Controller\ContainerController::enable'
+    entity_type: 'matomo_tagmanager_container'
+  requirements:
+    _permission: 'administer matomo tag manager'
+    _csrf_token: 'TRUE'
+
+entity.matomo_tagmanager_container.disable:
+  path: '/admin/config/system/matomo/tagmanager/manage/{matomo_tagmanager_container}/disable'
+  defaults:
+    _controller: '\Drupal\matomo_tagmanager\Controller\ContainerController::disable'
+    entity_type: 'matomo_tagmanager_container'
+  requirements:
+    _permission: 'administer matomo tag manager'
+    _csrf_token: 'TRUE'
+
+entity.matomo_tagmanager_container.edit_form:
+  path: '/admin/config/system/matomo/tagmanager/manage/{matomo_tagmanager_container}'
+  defaults:
+    _entity_form: matomo_tagmanager_container
+    _title_callback: '\Drupal\matomo_tagmanager\Controller\ContainerController::editTitle'
+  requirements:
+    _permission: 'administer matomo tag manager'
+
+entity.matomo_tagmanager_container.delete_form:
+  path: '/admin/config/system/matomo/tagmanager/manage/{matomo_tagmanager_container}/delete'
+  defaults:
+    _entity_form: 'matomo_tagmanager_container.delete'
+  requirements:
+    _permission: 'administer matomo tag manager'

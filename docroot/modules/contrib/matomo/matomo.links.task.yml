@@ -1,0 +1,4 @@
+matomo.admin_settings_form_tab:
+  route_name: matomo.admin_settings_form
+  title: Settings
+  base_route: matomo.admin_settings_form
