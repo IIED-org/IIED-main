@@ -36,7 +36,7 @@ info_url: 'https://matomo.org'
 privacy_policy_url: 'https://matomo.org/privacy-policy'
 javascripts:
   - matomo.js
-callback_code: "if (window._paq !== 'undefined') {\r\n             if (consent){\r\n                  window._paq.push(['rememberConsentGiven']);\r\n                  window._paq.push(['setConsentGiven']);\r\n             } else {\r\n                  window._paq.push(['forgetConsentGiven'])\r\n                  window._paq.push(['deleteCookies']);\r\n             }\r\n          }"
+callback_code: "if (window._paq) {\r\n             if (consent){\r\n                  window._paq.push(['rememberConsentGiven']);\r\n                  window._paq.push(['setConsentGiven']);\r\n             } else {\r\n                  window._paq.push(['forgetConsentGiven'])\r\n                  window._paq.push(['deleteCookies']);\r\n             }\r\n          }"
 wrapper_identifier: {  }
 attachments:
   - matomo_tracking_script
