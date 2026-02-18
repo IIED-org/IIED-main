@@ -37,5 +37,5 @@ tailwind.css
 docroot/libraries/flexslider
 
 # Ignore environment-specific .htaccess
-docroot/.htaccess
+.htaccess
 .DS_Store
