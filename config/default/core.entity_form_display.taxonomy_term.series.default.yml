@@ -4,12 +4,17 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.series.field_code
+    - field.field.taxonomy_term.series.field_logo
     - field.field.taxonomy_term.series.field_purpose
     - field.field.taxonomy_term.series.field_status
+    - field.field.taxonomy_term.series.field_url
     - field.field.taxonomy_term.series.layout_builder__layout
+    - image.style.thumbnail
     - taxonomy.vocabulary.series
   module:
+    - link
     - path
+    - svg_image
     - text
 id: taxonomy_term.series.default
 targetEntityType: taxonomy_term
@@ -32,6 +37,14 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_logo:
+    type: image_image
+    weight: 2
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
   field_purpose:
     type: text_textarea
     weight: 4
@@ -45,6 +58,14 @@ content:
     weight: 2
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_url:
+    type: link_default
+    weight: 5
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   langcode:
     type: language_select

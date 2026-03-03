@@ -1,23 +1,26 @@
-uuid: c3eeed3e-0f82-4399-826b-e4bde687e20c
+uuid: fb5eb2f1-4f6e-43a5-961c-c62dcfd05466
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.taxonomy_term.icon
     - field.field.taxonomy_term.series.field_code
     - field.field.taxonomy_term.series.field_logo
     - field.field.taxonomy_term.series.field_purpose
     - field.field.taxonomy_term.series.field_status
     - field.field.taxonomy_term.series.field_url
     - field.field.taxonomy_term.series.layout_builder__layout
+    - image.style.small_160
     - taxonomy.vocabulary.series
   module:
+    - ds
     - link
-    - options
+    - svg_image
     - text
-id: taxonomy_term.series.default
+id: taxonomy_term.series.icon
 targetEntityType: taxonomy_term
 bundle: series
-mode: default
+mode: icon
 content:
   description:
     type: text_default
@@ -26,31 +29,31 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  field_code:
-    type: string
-    label: above
+  field_logo:
+    type: image
+    label: hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  field_purpose:
-    type: text_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 3
-    region: content
-  field_status:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 2
+      image_link: ''
+      image_style: small_160
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    weight: 0
     region: content
   field_url:
     type: link
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -58,10 +61,12 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 4
+    weight: 1
     region: content
 hidden:
-  field_logo: true
+  field_code: true
+  field_purpose: true
+  field_status: true
   langcode: true
   layout_builder__layout: true
   search_api_excerpt: true
