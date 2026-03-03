@@ -1,0 +1,23 @@
+uuid: ff633422-a35b-4c81-b879-496b8e3d3d0a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_url
+    - taxonomy.vocabulary.series
+  module:
+    - link
+id: taxonomy_term.series.field_url
+field_name: field_url
+entity_type: taxonomy_term
+bundle: series
+label: 'Website address'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

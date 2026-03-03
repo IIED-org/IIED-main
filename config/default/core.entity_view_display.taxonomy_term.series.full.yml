@@ -5,9 +5,12 @@ dependencies:
   config:
     - core.entity_view_mode.taxonomy_term.full
     - field.field.taxonomy_term.series.field_code
+    - field.field.taxonomy_term.series.field_logo
     - field.field.taxonomy_term.series.field_purpose
     - field.field.taxonomy_term.series.field_status
+    - field.field.taxonomy_term.series.field_url
     - field.field.taxonomy_term.series.layout_builder__layout
+    - image.style.page
     - taxonomy.vocabulary.series
     - views.view.term_publications
   module:
@@ -15,6 +18,7 @@ dependencies:
     - layout_builder
     - layout_builder_restrictions
     - options
+    - svg_image
     - text
     - views
   theme:
@@ -29,20 +33,20 @@ third_party_settings:
         layout_settings:
           label: ''
           context_mapping: {  }
-          classes:
-            layout_class: {  }
-            first: {  }
           wrappers:
             first: div
           outer_wrapper: div
           attributes: ''
           link_attribute: ''
           link_custom: ''
+          classes:
+            layout_class: {  }
+            first: {  }
           layout_builder_styles_style:
             - ''
         components:
-          1f022be8-e036-45d6-8d90-629551081c61:
-            uuid: 1f022be8-e036-45d6-8d90-629551081c61
+          099aeff1-451f-4a40-96ff-94dba80623f9:
+            uuid: 099aeff1-451f-4a40-96ff-94dba80623f9
             region: first
             configuration:
               id: 'views_block:term_publications-block_1'
@@ -106,6 +110,49 @@ content:
             suffix: ''
     weight: 2
     region: content
+  field_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: page
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            lbw: false
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            lb-col: false
+            ow: true
+            ow-el: a
+            ow-cl: float-right
+            ow-at: 'href="[term:field_url]"'
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fis-def-at: false
+            fi: false
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            fi-def-at: false
+            prefix: ''
+            suffix: ''
+    weight: 2
+    region: content
   field_status:
     type: list_default
     label: hidden
@@ -144,6 +191,7 @@ content:
 hidden:
   field_code: true
   field_purpose: true
+  field_url: true
   langcode: true
   layout_builder__layout: true
   search_api_excerpt: true
