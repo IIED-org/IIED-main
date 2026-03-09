@@ -41,3 +41,14 @@ clickdimensions:
 mailchimp:
   js:
     https://s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js: { type: external }
+advanced_charts:
+  js:
+    /libraries/highcharts/highcharts.js: { minified: true }
+    /libraries/highcharts/modules/map.js: { minified: true }
+    /libraries/highcharts/modules/accessibility.js: { minified: true }
+    dist/js/advanced-charts.js: {}
+    dist/js/charts/fsi-world-baseline.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/drupalSettings
