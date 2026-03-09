@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_content
     - node.type.page
     - paragraphs.paragraphs_type.accordion_box
+    - paragraphs.paragraphs_type.advanced_chart
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.boxed_quote
@@ -73,6 +74,7 @@ settings:
       in_page_menu: in_page_menu
       logo_block: logo_block
       highchart: highchart
+      advanced_chart: advanced_chart
       form: form
       boxed_quote: boxed_quote
       related_content: related_content
@@ -92,6 +94,9 @@ settings:
       accordion_section:
         weight: 40
         enabled: false
+      advanced_chart:
+        weight: 49
+        enabled: true
       basic_text:
         weight: -69
         enabled: true

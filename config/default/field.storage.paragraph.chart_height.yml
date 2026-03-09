@@ -1,0 +1,20 @@
+uuid: fcb83a26-ffc9-4ed0-b82c-f631ce0e0446
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.chart_height
+field_name: chart_height
+entity_type: paragraph
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

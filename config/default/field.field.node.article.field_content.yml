@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_content
     - node.type.article
     - paragraphs.paragraphs_type.accordion_box
+    - paragraphs.paragraphs_type.advanced_chart
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
     - paragraphs.paragraphs_type.boxed_quote
@@ -78,6 +79,7 @@ settings:
       tab_box: tab_box
       timeline: timeline
       video_embed: video_embed
+      advanced_chart: advanced_chart
       form: form
       boxed_quote: boxed_quote
       related_content_no_image: related_content_no_image
@@ -94,6 +96,9 @@ settings:
       accordion_section:
         weight: -64
         enabled: false
+      advanced_chart:
+        weight: 49
+        enabled: true
       basic_text:
         weight: -74
         enabled: true
