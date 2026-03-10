@@ -7,6 +7,7 @@ dependencies:
     - node.type.hidden_page
     - paragraphs.paragraphs_type.basic_text
     - paragraphs.paragraphs_type.box
+    - paragraphs.paragraphs_type.form
     - paragraphs.paragraphs_type.gallery
     - paragraphs.paragraphs_type.highchart
     - paragraphs.paragraphs_type.image
@@ -18,6 +19,7 @@ dependencies:
     - paragraphs.paragraphs_type.section
     - paragraphs.paragraphs_type.stories_block
     - paragraphs.paragraphs_type.stories_text
+    - paragraphs.paragraphs_type.unstyled
     - paragraphs.paragraphs_type.video_embed
   module:
     - entity_reference_revisions
@@ -42,6 +44,7 @@ settings:
       image: image
       image_small: image_small
       image_wide: image_wide
+      form: form
       media_embed: media_embed
       media_list: media_list
       quote: quote
@@ -49,6 +52,7 @@ settings:
       stories_block: stories_block
       stories_text: stories_text
       video_embed: video_embed
+      unstyled: unstyled
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -60,15 +64,24 @@ settings:
       accordion_section:
         weight: 41
         enabled: false
+      advanced_chart:
+        weight: 49
+        enabled: false
       basic_text:
         weight: 42
         enabled: true
       box:
         weight: 43
         enabled: true
+      boxed_quote:
+        weight: 52
+        enabled: false
       file_upload:
         weight: 44
         enabled: false
+      form:
+        weight: 54
+        enabled: true
       gallery:
         weight: 45
         enabled: true
@@ -90,6 +103,9 @@ settings:
       info_box:
         weight: 51
         enabled: false
+      key_figure:
+        weight: 62
+        enabled: false
       linked_person:
         weight: 52
         enabled: false
@@ -108,8 +124,14 @@ settings:
       quote:
         weight: 57
         enabled: true
+      related_card:
+        weight: 69
+        enabled: false
       related_content:
         weight: 58
+        enabled: false
+      related_content_no_image:
+        weight: 71
         enabled: false
       related_link:
         weight: 59
@@ -123,12 +145,12 @@ settings:
       researcher_profiles:
         weight: 62
         enabled: false
-      row_of_4:
-        weight: 63
-        enabled: false
       section:
         weight: 64
         enabled: true
+      sticky_box:
+        weight: 77
+        enabled: false
       stories_block:
         weight: 65
         enabled: true
@@ -162,6 +184,9 @@ settings:
       timeline:
         weight: 75
         enabled: false
+      unstyled:
+        weight: 89
+        enabled: true
       video_embed:
         weight: 76
         enabled: true
