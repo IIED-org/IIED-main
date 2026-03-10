@@ -10,7 +10,7 @@ field_name: chart_height
 entity_type: paragraph
 bundle: advanced_chart
 label: 'Chart height'
-description: 'optional, default for maps 520, or 600 for other charts'
+description: 'Height of the chart in pixels. Leave blank to use the default (540 for maps, 600 for other charts)'
 required: false
 translatable: false
 default_value: {  }

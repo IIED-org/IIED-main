@@ -12,7 +12,7 @@ field_name: chart_data_file
 entity_type: paragraph
 bundle: advanced_chart
 label: 'Chart data file'
-description: 'Upload data .csv'
+description: 'Upload data .csv. Format depends on the chart implementation. Headers should be lowercase, avoid commas in values. '
 required: false
 translatable: false
 default_value: {  }

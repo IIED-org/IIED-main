@@ -10,7 +10,7 @@ field_name: chart_payload_json
 entity_type: paragraph
 bundle: advanced_chart
 label: 'Chart payload JSON'
-description: 'The data/settings, or Highcharts options object'
+description: 'Optional JSON for small chart settings such as title, subtitle, default scenario, or axis labels.'
 required: false
 translatable: false
 default_value: {  }
