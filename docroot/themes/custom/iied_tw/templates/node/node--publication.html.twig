@@ -198,9 +198,9 @@
 
 	</article>
 
-	{# related project #}
+	{# related project (only if no series link) #}
 
-	{% if content.field_project[0] %}
+	{% if content.field_project[0] and not series_term.field_url.uri %}
 		<section class="bg-gray-100">
 			<div class="container py-8 mx-auto">
 				<h2 class="mb-4">Related project</h2>
