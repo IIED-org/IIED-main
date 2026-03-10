@@ -1,37 +1,22 @@
 (function () {
   async function loadText(url) {
-    console.log('Fetching text URL:', url);
     const response = await fetch(url);
-    console.log('Text response status:', response.status, 'ok:', response.ok, 'url:', response.url);
 
     if (!response.ok) {
       throw new Error(`Failed to load ${url} (${response.status})`);
     }
 
-    const text = await response.text();
-    console.log('Text loaded successfully');
-    return text;
+    return await response.text();
   }
 
   async function loadJson(url) {
-    console.log('Fetching JSON URL:', url);
     const response = await fetch(url);
-    console.log('JSON response status:', response.status, 'ok:', response.ok, 'url:', response.url);
 
     if (!response.ok) {
       throw new Error(`Failed to load ${url} (${response.status})`);
     }
 
-    const text = await response.text();
-    console.log('JSON raw text length:', text.length);
-
-    try {
-      return JSON.parse(text);
-    }
-    catch (e) {
-      console.error('JSON parse failed. First 500 chars:', text.slice(0, 500));
-      throw e;
-    }
+    return await response.json();
   }
 
   function parseCSV(text) {
@@ -65,17 +50,12 @@
 
   window.AdvancedCharts.register('fsi_world_baseline', {
     render: async function (el, settings) {
-      console.log('fsi_world_baseline render start', settings);
-
       if (!settings.dataUrl) {
         throw new Error('fsi_world_baseline requires a dataUrl');
       }
 
       const payload = settings.payload || {};
       const topologyUrl = payload.topologyUrl || '/libraries/highcharts/mapdata/world.topo.json';
-
-      console.log('Loading topology:', topologyUrl);
-      console.log('Loading CSV:', settings.dataUrl);
 
       const wrapper = el.closest('.advanced-chart-wrapper');
       const controlsEl = wrapper ? wrapper.querySelector('.js-advanced-chart-controls') : null;
@@ -86,11 +66,7 @@
         loadText(settings.dataUrl)
       ]);
 
-      console.log('Topology loaded', topology);
-      console.log('CSV loaded', csvText);
-
       const data = parseCSV(csvText);
-      console.log('Parsed CSV data', data);
 
       const chart = Highcharts.mapChart(el.id, {
         chart: {
@@ -166,7 +142,7 @@
       if (controlsEl) {
         controlsEl.innerHTML = `
           <label class="inline-flex items-center gap-2 text-gray-700 mb-2">
-            <input type="checkbox" class="js-advanced-chart-labels-toggle border border-gray-300 rounded shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-200 focus:ring-opacity-50" />
+            <input type="checkbox" class="js-advanced-chart-labels-toggle border border-gray-300 rounded shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-200 focus:ring-opacity-50" aria-label="Show country labels" />
             Show country labels
           </label>
         `;
@@ -190,8 +166,6 @@
         const colored = data.filter(d => d.value !== null).length;
         statusEl.textContent = `Loaded ${data.length} records; colored ${colored} countries. Countries without data are grey.`;
       }
-
-      console.log('Highcharts.mapChart complete');
     }
   });
 })();
