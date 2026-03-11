@@ -1,0 +1,23 @@
+uuid: 8aaac912-e3b6-48a0-8780-d6d4692a5a72
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.chart_height
+    - paragraphs.paragraphs_type.advanced_chart
+id: paragraph.advanced_chart.chart_height
+field_name: chart_height
+entity_type: paragraph
+bundle: advanced_chart
+label: 'Chart height'
+description: 'Height of the chart in pixels. Leave blank to use the default (540 for maps, 600 for other charts)'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer
