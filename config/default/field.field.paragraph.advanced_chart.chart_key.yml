@@ -1,0 +1,19 @@
+uuid: 05ba82ea-51f6-4192-b6be-85fc167774f9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.chart_key
+    - paragraphs.paragraphs_type.advanced_chart
+id: paragraph.advanced_chart.chart_key
+field_name: chart_key
+entity_type: paragraph
+bundle: advanced_chart
+label: 'Chart key'
+description: 'A machine name for the chart implementation (lowercase and underscores, e.g. fsi_world_baseline)'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

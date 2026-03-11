@@ -1,0 +1,19 @@
+uuid: 0b2eeef8-9ef0-4d70-80e6-d8c28ba98e2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.chart_payload_json
+    - paragraphs.paragraphs_type.advanced_chart
+id: paragraph.advanced_chart.chart_payload_json
+field_name: chart_payload_json
+entity_type: paragraph
+bundle: advanced_chart
+label: 'Chart payload JSON'
+description: 'Optional JSON for small chart settings such as title, subtitle, default scenario, or axis labels.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

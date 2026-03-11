@@ -1,0 +1,22 @@
+uuid: 3cc9a241-f252-4aec-9c78-072838bd5f0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_chart_description
+    - paragraphs.paragraphs_type.advanced_chart
+  module:
+    - text
+id: paragraph.advanced_chart.field_chart_description
+field_name: field_chart_description
+entity_type: paragraph
+bundle: advanced_chart
+label: 'Chart description'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

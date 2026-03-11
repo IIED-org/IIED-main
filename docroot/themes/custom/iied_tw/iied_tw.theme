@@ -105,6 +105,42 @@ function iied_tw_preprocess_page(&$variables)
 }
 
 /**
+ * Implements hook_preprocess_HOOK(). OLD CODE
+ */
+// function iied_tw_preprocess_paragraph(&$variables)
+// {
+
+//   $paragraph = $variables['paragraph'];
+//   $paragraph_bundle = $paragraph->bundle();
+
+//   // For tab_box paragraph we want to assemble some simpler arrays to iterate
+//   // over in the paragraph template.
+//   if ($paragraph_bundle == 'tab_box') {
+//     // Attach the theme alpine library, as we're on the tab_box paragraph.
+//     $variables['#attached']['library'][] =  'iied_tw/alpine';
+//     foreach ($variables['content']['field_tabs'] as $key => $tab) {
+//       if (is_numeric($key)) {
+//         $variables['tab_titles'][] = $tab['#paragraph']->field_tab_title->value;
+//         $variables['tab_bodies'][] = $tab['#paragraph']->field_tab_body->value;
+//       }
+//     }
+//   }
+//   if ($paragraph_bundle == 'accordion_box') {
+
+//     // Attach the theme alpine library, the accordion_box paragraph needs it!
+//     $variables['#attached']['library'][] =  'iied_tw/alpine-collapse';
+//     $variables['#attached']['library'][] =  'iied_tw/alpine';
+
+//     foreach ($variables['content']['field_accordion_section'] as $key => $tab) {
+//       if (is_numeric($key)) {
+//         $variables['accordion_titles'][$key] = $tab['#paragraph']->field_accordion_section_title->value;
+//         $variables['accordion_bodies'][$key] = $tab['#paragraph']->field_accordion_section_body->value;
+//       }
+//     }
+//   }
+// }
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function iied_tw_preprocess_paragraph(&$variables)
@@ -125,6 +161,7 @@ function iied_tw_preprocess_paragraph(&$variables)
       }
     }
   }
+
   if ($paragraph_bundle == 'accordion_box') {
 
     // Attach the theme alpine library, the accordion_box paragraph needs it!
@@ -138,7 +175,70 @@ function iied_tw_preprocess_paragraph(&$variables)
       }
     }
   }
+
+  if ($paragraph_bundle == 'advanced_chart') {
+    $chart_id = 'advanced-chart-' . $paragraph->id();
+
+    $chart_key = '';
+    $payload = NULL;
+    $data_url = NULL;
+    $height = 520;
+
+    if ($paragraph->hasField('chart_key') && !$paragraph->get('chart_key')->isEmpty()) {
+      $chart_key = trim($paragraph->get('chart_key')->value);
+    }
+
+    if ($paragraph->hasField('chart_height') && !$paragraph->get('chart_height')->isEmpty()) {
+      $height_value = (int) $paragraph->get('chart_height')->value;
+      if ($height_value > 0) {
+        $height = $height_value;
+      }
+    }
+
+    if ($paragraph->hasField('chart_payload_json') && !$paragraph->get('chart_payload_json')->isEmpty()) {
+      $raw_payload = trim($paragraph->get('chart_payload_json')->value);
+
+      if ($raw_payload !== '') {
+        $decoded = json_decode($raw_payload, TRUE);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+          $payload = $decoded;
+        }
+        else {
+          $payload = [
+            '_json_error' => json_last_error_msg(),
+            '_raw' => $raw_payload,
+          ];
+        }
+      }
+    }
+
+    if ($paragraph->hasField('chart_data_file') && !$paragraph->get('chart_data_file')->isEmpty()) {
+      $file = $paragraph->get('chart_data_file')->entity;
+
+      if ($file instanceof \Drupal\file\Entity\File) {
+        $data_url = \Drupal::service('file_url_generator')->generateString($file->getFileUri());
+      }
+    }
+
+    $variables['advanced_chart'] = [
+      'id' => $chart_id,
+      'chart_key' => $chart_key,
+      'height' => $height,
+    ];
+
+    $variables['#attached']['library'][] = 'iied_tw/advanced_charts';
+    $variables['#attached']['drupalSettings']['advancedCharts']['instances'][$chart_id] = [
+      'id' => $chart_id,
+      'chartKey' => $chart_key,
+      'height' => $height,
+      'dataUrl' => $data_url,
+      'payload' => $payload,
+    ];
+  }
 }
+
+
 
 /**
  * Implements hook_preprocess_HOOK().

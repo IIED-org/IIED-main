@@ -273,13 +273,17 @@
     @apply mb-4;
   }
 
-  /*-- highcharts title override --*/
+  /*-- highcharts --*/
   .highcharts-title {
     @apply text-xl font-headline !important;
   }
 
   .highcharts-subtitle {
-    @apply text-lg;
+    @apply text-lg !important;
+  }
+
+  .hc-dimmed {
+  opacity: 0.15 !important;
   }
 
   /*-- eu-cookie-compliance-message --*/
@@ -469,34 +473,34 @@
 
  .bef--secondary fieldset {
     @apply flex justify-between w-full rounded-t-xl;
-}
+  }
 
-.off-canvas details {
+  .off-canvas details {
   @apply block lg:hidden;
-}
+  }
 
-details {
-    @apply lg:block hidden rounded-xl p-4 my-1 border border-gray-300 bg-gray-100;
-    summary {
-      @apply text-xl font-serif text-iiedpink-900;
+  details {
+      @apply lg:block hidden rounded-xl p-4 my-1 border border-gray-300 bg-gray-100;
+      summary {
+        @apply text-xl font-serif text-iiedpink-900;
+      }
+  }
+
+  details details {
+      @apply -mx-1 mt-4 border-none bg-white lg:block rounded-xl hidden p-3 text-gray-700;
+          summary {
+        @apply text-base text-gray-500 font-sans;
+      }
+  }
+  summary::after {
+      content: url(/themes/custom/iied_tw/templates/layout/icons/chevron-right.svg);
+      @apply w-6 h-6;
     }
-}
 
-details details {
-    @apply -mx-1 mt-4 border-none bg-white lg:block rounded-xl hidden p-3 text-gray-700;
-        summary {
-      @apply text-base text-gray-500 font-sans;
+  details[open] > summary::after {
+      content: url(/themes/custom/iied_tw/templates/layout/icons/chevron-down.svg);
+      @apply mb-2;
     }
-}
-summary::after {
-    content: url(/themes/custom/iied_tw/templates/layout/icons/chevron-right.svg);
-    @apply w-6 h-6;
-   }
-
-details[open] > summary::after {
-    content: url(/themes/custom/iied_tw/templates/layout/icons/chevron-down.svg);
-    @apply mb-2;
-   }
 
   .search-page .filter-chip, .views-filters-summary {
     @apply text-balance my-1 flex inline-flex;
@@ -509,7 +513,7 @@ details[open] > summary::after {
         @apply leading-[1.5]  mr-1 pl-0 pb-2 bg-transparent text-2xl hover:text-link-hover text-iiedblue-500 font-light;
       }
   }
-}
+  }
 
   /*-- animations --*/
   @keyframes bounce-x {
@@ -622,18 +626,18 @@ details[open] > summary::after {
       @apply rounded-xl;
     }
   }
-button.cn-decline.klaro-close {
-visibility: hidden;
-}
-
-#klaro-cookie-notice button.cn-decline.klaro-close {
-  visibility: inherit;
-}
-
-/* responsive table */
-.tablefield-wrapper {
-    @apply overflow-x-auto;
+  button.cn-decline.klaro-close {
+  visibility: hidden;
   }
+
+  #klaro-cookie-notice button.cn-decline.klaro-close {
+    visibility: inherit;
+  }
+
+  /* responsive table */
+  .tablefield-wrapper {
+      @apply overflow-x-auto;
+    }
 
 }
 

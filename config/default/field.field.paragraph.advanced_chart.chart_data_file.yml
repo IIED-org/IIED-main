@@ -1,0 +1,27 @@
+uuid: ad7e3730-a886-48ad-8739-ef22c0458c3e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.chart_data_file
+    - paragraphs.paragraphs_type.advanced_chart
+  module:
+    - file
+id: paragraph.advanced_chart.chart_data_file
+field_name: chart_data_file
+entity_type: paragraph
+bundle: advanced_chart
+label: 'Chart data file'
+description: 'Upload data .csv. Format depends on the chart implementation. Headers should be lowercase, avoid commas in values. '
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: csv
+  max_filesize: ''
+  description_field: false
+field_type: file
