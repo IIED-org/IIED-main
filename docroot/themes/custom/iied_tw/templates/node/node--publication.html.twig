@@ -78,115 +78,126 @@
   ]
 %}
 {% if (node.field_short_title.value) %}
-  {% set title_text = node.field_short_title.value %}
+	{% set title_text = node.field_short_title.value %}
 {% else %}
-  {% set title_text = node.label %}
+	{% set title_text = node.label %}
 {% endif %}
-<article{{ attributes.addClass(classes) }}>
-    <div{{ content_attributes.addClass('node-content') }}>
-    <div class="md:grid md:grid-flow-row-dense md:grid-cols-3 container py-8 mx-auto">
-{#  order 2  #}    
-      <div class="md:col-span-2 md:order-2">
-        <nav aria-label="themes">
-          <div class="flex flex-wrap mb-6 space-x-3">
-            {{ content.field_theme_s_}}
-          </div>
-        </nav>
-        <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
-        <div class="mb-4">
-          {{ content.field_author_s_}} 
-          {% if node.field_editor_s_.value %}
-            {% if node.field_author_s_.value %}
-            {% endif %}
-            {{ content.field_editor_s_ }} 
-            {% if node.field_editor_s_[1].value %}
-              &nbsp;(eds)
-            {% else %}
-              &nbsp;(ed)
-            {% endif %}
-          {% endif %}
-          {% if node.field_translator.value %} 
-            {% if content.field_editor_s_ is not empty %}
-            {% endif %}
-          {{ content.field_translator }}&nbsp;(translator)
-          {% endif %}
-        </div>
-        <div class="flex mb-6">
-          {{ content.field_document_type }}
-              {% if node.field_pdf_pages.value > 0 %} 
-              , {{ content.field_pdf_pages.0 }} pages
-              {% endif %}  
-        </div>
-        {% if node.field_lit_code.0.value != 'X' %}
-          <div class="mb-6">
-            <div class="md:flex">
-              <div class="flex flex-col items-center justify-center">
-                {% set size = content.field_media[0]["field_size"][0]["#markup"] %}
-                {% if size and (node.field_media[0] | file_url) %}
-                  {% include '@iied_tw/partials/_button.html.twig' with {'button_title':'Download', 'url': node.field_media[0] | file_url} %}
-                   <div class="-mt-4">PDF ({{ size | format_bytes }})
-                  </div>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        {% endif %}
-      </div>
-     
+<article{{attributes.addClass(classes)}}>
+	<div{{content_attributes.addClass('node-content')}}>
+		<div
+			class="md:grid md:grid-flow-row-dense md:grid-cols-3 container py-8 mx-auto">
+			{#  order 2 (themes, authors, download) #}
+			<div class="md:col-span-2 md:order-2">
+				<nav aria-label="themes">
+					<div class="flex flex-wrap mb-6 space-x-3">
+						{{ content.field_theme_s_}}
+					</div>
+				</nav>
+				<h1 class="mb-6 text-4xl">{{ node.label }}</h1>
+				<div class="mb-4">
+					{{ content.field_author_s_}}
+					{% if node.field_editor_s_.value %}
+						{% if node.field_author_s_.value %}{% endif %}
+						{{ content.field_editor_s_ }}
+						{% if node.field_editor_s_[1].value %}
+							&nbsp;(eds)
+						{% else %}
+							&nbsp;(ed)
+						{% endif %}
+					{% endif %}
+					{% if node.field_translator.value %}
+						{% if content.field_editor_s_ is not empty %}{% endif %}
+						{{ content.field_translator }}&nbsp;(translator)
+					{% endif %}
+				</div>
+				<div class="flex mb-6">
+					{{ content.field_document_type }}
+					{% if node.field_pdf_pages.value > 0 %}
+						,
+						{{ content.field_pdf_pages.0 }}
+						pages
+					{% endif %}
+				</div>
+				{% if node.field_lit_code.0.value != 'X' %}
+					<div class="mb-6">
+						<div class="md:flex">
+							<div class="flex flex-col items-center justify-center">
+								{% set size = content.field_media[0]["field_size"][0]["#markup"] %}
+								{% if size and (node.field_media[0] | file_url) %}
+									{% include '@iied_tw/partials/_button.html.twig' with {'button_title':'Download', 'url': node.field_media[0] | file_url} %}
+									<div class="-mt-4">PDF ({{ size | format_bytes }})
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				{% endif %}
+			</div>
 
-{#  order 1  #}  
-      <div class="md:order-1 md:row-span-2 md:mr-4">
-        <div class="md:flex w-full my-3">
-          {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'embedded', 'img_style':'card_370', 'alt_text': title_text|striptags  } %}
-        </div>
-        {% include '@iied_tw/partials/_publication_details.html.twig' %}
-        <div class="md:items-start md:flex-col flex flex-row items-center">
-          <div class="mb-6">
-            {% include '@iied_tw/partials/_share_links.html.twig' %}
-          </div>
-          <div class="mb-6"><a href="/about-publications">About IIED's publications</a></div>
-          </div>
-      </div>
-{#  order 3  #}  
-      <div class="md:col-span-2 md:order-3">
-        <div class="prose-base lg:prose-lg lg:max-w-max prose">
-          {{ content.body }}
-      
-          {{ content.field_external_url }}
-          {{ content.field_iied_url }}
-          
-        </div>
-        {# cite #}
-       
-        {# {% if drupal_view_result('citation', 'block_1') is not empty %}
-        <div class="border-iiedblue-500 pl-4 my-8 border-l-2">
-          <span class="font-bold">How to cite:</span><br />
-          {{- drupal_view('citation', 'block_1') -}}
-        </div>
-        {% endif %} #}
+			{#  order 1 (image and detail metadata) #}
+			<div class="md:order-1 md:row-span-2 md:mr-4">
+				<div class="md:flex w-full my-3">
+					{% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'embedded', 'img_style':'card_370', 'alt_text': title_text|striptags  } %}
+				</div>
+				{% include '@iied_tw/partials/_publication_details.html.twig' %}
+				<div class="md:items-start md:flex-col flex flex-row items-center">
+					<div class="mb-6">
+						{% include '@iied_tw/partials/_share_links.html.twig' %}
+					</div>
+					<div class="mb-6">
+						<a href="/about-publications">About IIED's publications</a>
+					</div>
+				</div>
+			</div>
 
-        {# cite twig update #}
-        {% include '@iied_tw/partials/_publication_citation.html.twig' %}
+			{#  order 3 (abstract, citation and links) #}
+			<div class="md:col-span-2 md:order-3">
+				<div class="prose-base lg:prose-lg lg:max-w-max prose">
+					{{ content.body }}
+					{{ content.field_external_url }}
+					{{ content.field_iied_url }}
+				</div>
 
-      </div>
+				{# citation twig #}
+				{% include '@iied_tw/partials/_publication_citation.html.twig' %}
 
- 
-{# {{ drupal_entity('node', node.field_media.0.target_id, 'card') }} this sort of works to print a view mode #}
-{# {{ node.content.field_media.entity.name.value }} this prints the whole thing #}
+				{# Series banner if has URL and logo #}
+				{% if node.field_series is not empty and node.field_series.entity is not empty %}
+					{% set series_term = node.field_series.entity %}
+					{% if series_term.field_url.uri and series_term.field_logo %}
+						<section>
+							<a href="{{ series_term.field_url.uri }}">
+								<div class="bg-iiedorange-5 rounded-xl md:flex container flex-row px-6 py-2 border border-gray-500">
+									{% if series_term.field_logo %}
+										<img title="{{ series_term.field_logo.title }}" alt="{{ series_term.field_logo.alt }}" class="md:w-2/12 object-contain h-auto pr-4" src="{{ series_term.field_logo|file_uri|image_style('search_cover') }}"/>
+									{% endif %}
+									<div class="md:w-10/12 leading-6">{{ series_term.description.0.value | striptags }}</div>
+								</div>
+							</a>
+						</section>
+					{% endif %}
+				{% endif %}
 
-    </div>
-  </div>
+			</div>
+		</div>
 
-</article>
+		{# Add series banner if exists and has URL and logo #}
 
-{# related project #}
 
-     {% if content.field_project[0] %}
-      <section class="bg-gray-100">
-        <div class="container py-8 mx-auto">
-        <h2 class="mb-4">Related project</h2>    
-        {{ node.field_project[0].entity|view('card_ext') }}
-        </div>
-        {{ drupal_view('related_pubs', 'block_1') }}
-      </section>
-      {% endif %}
+	</article>
+
+	{# related project (only if no series link) #}
+
+	{% if content.field_project[0] %}
+		<section class="bg-gray-100">
+			<div class="container py-8 mx-auto">
+				{% if not series_term.field_url.uri %}
+					<h2 class="mb-4">Related project</h2>
+					{{ node.field_project[0].entity|view('card_ext') }}
+				</div>
+			{% else %}
+				<h2 class="mb-4">Related publications</h2>
+			{% endif %}
+			{{ drupal_view('related_pubs', 'block_1') }}
+		</section>
+	{% endif %}
