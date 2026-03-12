@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   default_thumbnail_filename = "video.png"
  * )
  */
-class VideoEmbedField extends MediaSourceBase implements VideoEmbedFieldInterface {
+class VideoEmbedField extends MediaSourceBase {
 
   /**
    * The video provider manager.
@@ -47,7 +47,7 @@ class VideoEmbedField extends MediaSourceBase implements VideoEmbedFieldInterfac
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration(): array {
+  public function defaultConfiguration() {
     return [
       'source_field' => 'field_media_video_embed_field',
     ];
@@ -105,7 +105,7 @@ class VideoEmbedField extends MediaSourceBase implements VideoEmbedFieldInterfac
   /**
    * {@inheritdoc}
    */
-  public function getMetadataAttributes(): array {
+  public function getMetadataAttributes() {
     return [
       'id' => $this->t('Video ID.'),
       'source' => $this->t('Video source machine name.'),
@@ -144,7 +144,7 @@ class VideoEmbedField extends MediaSourceBase implements VideoEmbedFieldInterfac
   /**
    * {@inheritdoc}
    */
-  public function getSourceFieldDefinition(MediaTypeInterface $type): ?FieldDefinitionInterface {
+  public function getSourceFieldDefinition(MediaTypeInterface $type) {
     // video_embed_media has not historically had a value in
     // $this->configuration['source_field'], instead just creating
     // field_media_video_embed_field on install and treating that as the source.

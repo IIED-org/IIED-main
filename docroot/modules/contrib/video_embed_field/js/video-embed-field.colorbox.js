@@ -3,7 +3,7 @@
  * The video_embed_field colorbox integration.
  */
 
-(($, once) => {
+(($, Drupal, once) => {
   Drupal.behaviors.video_embed_field_colorbox = {
     attach(context, settings) {
       $(
@@ -23,6 +23,17 @@
           }),
         );
       });
+      // Reattach Drupal Behaviors when cbox is ready.
+      once('video-embed-field-responsive-modal', 'html').forEach(function () {
+        $(this).on('cbox_complete', () => {
+          const $modalContent = $(
+            '.video-embed-field-responsive-modal',
+          ).parent();
+          if ($modalContent.length) {
+            Drupal.attachBehaviors($modalContent[0], settings);
+          }
+        });
+      });
     },
   };
-})(jQuery, once);
+})(jQuery, Drupal, once);

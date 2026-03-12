@@ -110,6 +110,7 @@ class LazyLoad extends FormatterBase implements ContainerFactoryPluginInterface 
         '#tag' => 'button',
         '#attributes' => [
           'class' => ['video-embed-field-lazy-play'],
+          'aria-label' => $this->t('Play video'),
         ],
       ];
       $element[$delta] = [

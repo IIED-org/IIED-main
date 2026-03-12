@@ -79,6 +79,7 @@ class FieldOutputTest extends KernelTestBase {
               'height' => '100',
               'frameborder' => '0',
               'allowfullscreen' => 'allowfullscreen',
+              'referrerpolicy' => 'strict-origin-when-cross-origin',
               'title' => 'YouTube | fdbFVWupSsw',
             ],
             '#cache' => [
@@ -122,6 +123,7 @@ class FieldOutputTest extends KernelTestBase {
               'height' => '100',
               'frameborder' => '0',
               'allowfullscreen' => 'allowfullscreen',
+              'referrerpolicy' => 'strict-origin-when-cross-origin',
               'title' => 'YouTube | fdbFVWupSsw',
             ],
             '#cache' => [
@@ -166,6 +168,7 @@ class FieldOutputTest extends KernelTestBase {
               'height' => '100',
               'frameborder' => '0',
               'allowfullscreen' => 'allowfullscreen',
+              'referrerpolicy' => 'strict-origin-when-cross-origin',
               'title' => 'YouTube | fdbFVWupSsw',
             ],
             '#cache' => [
@@ -428,6 +431,7 @@ class FieldOutputTest extends KernelTestBase {
                 'class' => [
                   'video-embed-field-lazy-play',
                 ],
+                'aria-label' => 'Play video',
               ],
             ],
           ],
