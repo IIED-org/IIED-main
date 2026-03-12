@@ -1,3 +1,4 @@
+cbox
 ckeditor
 colorbox
 autoplay

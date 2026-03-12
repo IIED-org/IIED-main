@@ -12,6 +12,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Utility\UnroutedUrlAssembler;
 use Drupal\Tests\UnitTestCase;
 use Drupal\Tests\video_embed_field\Kernel\MockHttpClient;
+use Drupal\TestTools\Random;
 use Drupal\video_embed_field\Plugin\video_embed_field\Provider\Vimeo;
 use Drupal\video_embed_field\Plugin\video_embed_field\Provider\YouTube;
 
@@ -70,7 +71,7 @@ class ProviderUrlParseTest extends UnitTestCase {
    * @return array
    *   An array of test cases.
    */
-  public function urlsWithExpectedIds() {
+  public static function urlsWithExpectedIds() {
     return [
       // Youtube passing cases.
       'YouTube: Standard URL' => [
@@ -141,7 +142,7 @@ class ProviderUrlParseTest extends UnitTestCase {
       ],
       'YouTube: Malformed String' => [
         'Drupal\video_embed_field\Plugin\video_embed_field\Provider\YouTube',
-        $this->randomMachineName(),
+        Random::machineName(),
         FALSE,
       ],
       'YouTube: Playlist URL' => [
@@ -240,7 +241,7 @@ class ProviderUrlParseTest extends UnitTestCase {
       // Vimeo failing cases.
       'Vimeo: Malformed String' => [
         'Drupal\video_embed_field\Plugin\video_embed_field\Provider\Vimeo',
-        $this->randomMachineName(),
+        Random::machineName(),
         FALSE,
       ],
       'Vimeo: Non numeric channel page' => [
@@ -363,7 +364,7 @@ class ProviderUrlParseTest extends UnitTestCase {
   }
 
   /**
-   * Test the Vimeo time index integration.
+   * Tests the Vimeo time index integration.
    *
    * @dataProvider vimeoTimeIndexTestCases
    */

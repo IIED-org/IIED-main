@@ -114,6 +114,15 @@ class ProvidedFieldsTest extends MediaKernelTestBase {
   /**
    * {@inheritdoc}
    */
+  protected function setUpFilesystem() {
+    parent::setUpFilesystem();
+    // Create the styles directory to prevent errors during plugin discovery.
+    mkdir($this->siteDirectory . '/files/styles', 0775, TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function setUp(): void {
     parent::setUp();
     $this->entityType = $this->createMediaType('video_embed_field');

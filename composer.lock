@@ -11216,17 +11216,17 @@
         },
         {
             "name": "drupal/video_embed_field",
-            "version": "3.0.0-beta2",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/video_embed_field.git",
-                "reference": "3.0.0-beta2"
+                "reference": "3.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/video_embed_field-3.0.0-beta2.zip",
-                "reference": "3.0.0-beta2",
-                "shasum": "489fc2e4fc9d4407bf52cae1486d83153fd56e15"
+                "url": "https://ftp.drupal.org/files/projects/video_embed_field-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "38b2de905e93cccdaf21b0c2d8e9678b98801923"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11"
@@ -11238,11 +11238,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-beta2",
-                    "datestamp": "1747128838",
+                    "version": "3.0.0",
+                    "datestamp": "1765309708",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },

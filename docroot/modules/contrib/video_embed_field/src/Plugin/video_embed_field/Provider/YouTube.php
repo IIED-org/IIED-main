@@ -35,6 +35,7 @@ class YouTube extends ProviderPluginBase {
         'height' => $height,
         'frameborder' => '0',
         'allowfullscreen' => 'allowfullscreen',
+        'referrerpolicy' => 'strict-origin-when-cross-origin',
       ],
     ];
     $title = $this->getName($title_format, $use_title_fallback);
