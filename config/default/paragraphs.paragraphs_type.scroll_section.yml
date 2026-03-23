@@ -1,0 +1,10 @@
+uuid: 4c47ba69-ec22-4394-afda-d8bfe9515c09
+langcode: en
+status: true
+dependencies: {  }
+id: scroll_section
+label: 'Scroll section'
+icon_uuid: null
+icon_default: null
+description: 'Scroll-driven explainer section'
+behavior_plugins: {  }

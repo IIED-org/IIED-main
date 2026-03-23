@@ -1,0 +1,23 @@
+uuid: b6498694-df31-40fc-ab90-4b3ee355c154
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.scroll_section.field_basic_text
+    - paragraphs.paragraphs_type.scroll_section
+  module:
+    - text
+id: paragraph.scroll_section.default
+targetEntityType: paragraph
+bundle: scroll_section
+mode: default
+content:
+  field_basic_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

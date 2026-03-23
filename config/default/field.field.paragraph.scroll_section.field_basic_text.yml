@@ -1,0 +1,26 @@
+uuid: 5cc42b24-4e56-444f-b98d-a0d46a73fb70
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_basic_text
+    - filter.format.full_html
+    - filter.format.restricted_html
+    - paragraphs.paragraphs_type.scroll_section
+  module:
+    - text
+id: paragraph.scroll_section.field_basic_text
+field_name: field_basic_text
+entity_type: paragraph
+bundle: scroll_section
+label: 'Basic text'
+description: 'HTML field for all markup and Tailwind classes'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - full_html
+    - restricted_html
+field_type: text_long

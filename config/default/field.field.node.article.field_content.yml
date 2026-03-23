@@ -29,6 +29,7 @@ dependencies:
     - paragraphs.paragraphs_type.related_content_no_image
     - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.related_publication_inline
+    - paragraphs.paragraphs_type.scroll_section
     - paragraphs.paragraphs_type.section
     - paragraphs.paragraphs_type.sticky_box
     - paragraphs.paragraphs_type.stories_block
@@ -85,6 +86,7 @@ settings:
       related_content_no_image: related_content_no_image
       related_card: related_card
       sticky_box: sticky_box
+      scroll_section: scroll_section
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -177,6 +179,9 @@ settings:
       researcher_profiles:
         weight: -43
         enabled: false
+      scroll_section:
+        weight: 77
+        enabled: true
       section:
         weight: -75
         enabled: true

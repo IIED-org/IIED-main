@@ -28,6 +28,7 @@ dependencies:
     - paragraphs.paragraphs_type.related_content_no_image
     - paragraphs.paragraphs_type.related_project
     - paragraphs.paragraphs_type.related_publication_inline
+    - paragraphs.paragraphs_type.scroll_section
     - paragraphs.paragraphs_type.section
     - paragraphs.paragraphs_type.stories_cta
     - paragraphs.paragraphs_type.stories_table
@@ -79,6 +80,7 @@ settings:
       form: form
       boxed_quote: boxed_quote
       related_content_no_image: related_content_no_image
+      scroll_section: scroll_section
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -89,6 +91,9 @@ settings:
         enabled: true
       accordion_section:
         weight: -52
+        enabled: false
+      advanced_chart:
+        weight: 50
         enabled: false
       basic_text:
         weight: -77
@@ -168,6 +173,9 @@ settings:
       researcher_profiles:
         weight: -46
         enabled: false
+      scroll_section:
+        weight: 77
+        enabled: true
       section:
         weight: -70
         enabled: true
