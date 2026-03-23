@@ -638,6 +638,43 @@
   .tablefield-wrapper {
       @apply overflow-x-auto;
     }
+  /* Scroll-driven section spacing */
+    /* Positions all layer images */
+    .graphic-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: opacity, transform;
+    }
+
+    /* Outgoing layer: shrinks and fades  */
+    .graphic-layer.is-exiting {
+      transition: opacity 600ms ease, transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Incoming layer fades in */
+    .graphic-layer.is-entering {
+      transition: opacity 600ms ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .graphic-layer,
+      .graphic-layer.is-exiting,
+      .graphic-layer.is-entering {
+        transition: none !important;
+      }
+    }
+    /* Desktop only: hide layers until JS initialises state */
+    @media (min-width: 1024px) {
+      .framework-scroll .graphic-layer {
+        opacity: 0;
+        transform: scale(1);
+      }
+      .framework-scroll.is-ready .graphic-layer {
+        /* JS will set actual per-layer opacity/scale inline */
+      }
+    }
 
 }
 

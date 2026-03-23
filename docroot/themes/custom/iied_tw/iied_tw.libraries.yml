@@ -57,3 +57,6 @@ advanced_charts:
     - core/drupal
     - core/once
     - core/drupalSettings
+scroll-driven:
+  js:
+    dist/js/scroll-driven.js: {}
