@@ -5,4 +5,4 @@ logo:
   path: 'themes/custom/iied_tw/images/logo-512x512.png'
 brand_image:
   use_default: false
-  path: 'public://2024-05/manifesto_collage.jpg
+  path: 'public://2024-05/manifesto_collage.jpg'
