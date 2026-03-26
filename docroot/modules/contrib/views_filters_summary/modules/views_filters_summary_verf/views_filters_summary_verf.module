@@ -5,27 +5,13 @@
  * Hook implementations for views_filters_summary_verf module.
  */
 
+use Drupal\Core\Hook\Attribute\LegacyHook;
+use Drupal\views_filters_summary_verf\Hook\ViewsFiltersSummaryVerfHooks;
+
 /**
  * Implements hook_views_filters_summary_info_alter().
  */
+#[LegacyHook]
 function views_filters_summary_verf_views_filters_summary_info_alter(&$info, $filter) {
-  if ($filter->getPluginId() === 'verf') {
-    $values = [];
-    $configuration = $filter->configuration;
-    $target_entity_type_id = $configuration['verf_target_entity_type_id'];
-    $storage = \Drupal::entityTypeManager()->getStorage($target_entity_type_id);
-    foreach ($filter->value as $index => $index_value) {
-      if (empty($index_value)) {
-        continue;
-      }
-      if ($referenced_entity = $storage->load($index)) {
-        $values[] = [
-          'id' => $index,
-          'raw' => $referenced_entity->id(),
-          'value' => $referenced_entity->label(),
-        ];
-      }
-    }
-    $info['value'] = $values;
-  }
+  \Drupal::service(ViewsFiltersSummaryVerfHooks::class)->infoAlter($info, $filter);
 }

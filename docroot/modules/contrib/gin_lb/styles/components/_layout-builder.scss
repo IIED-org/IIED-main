@@ -212,7 +212,7 @@
     bottom: calc(var(--gin-spacing-s) * -1);
     left: -2rem;
     display: block;
-    width: calc(100% + 4rem);
+    width: calc(100% + 20px);
     height: 1px;
     content: "";
     opacity: 0.75;
@@ -235,7 +235,7 @@
     color: #eee;
     border-bottom: 1px solid #333;
     background: url("/core/misc/icons/bebebe/plus.svg") transparent 16px
-      no-repeat;
+    no-repeat;
     font-size: 16px;
   }
 }

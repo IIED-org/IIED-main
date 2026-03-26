@@ -41,6 +41,7 @@ class Sliders extends FilterWidgetBase {
       'enable_tooltips' => FALSE,
       'tooltips_value_prefix' => '',
       'tooltips_value_suffix' => '',
+      'placement_location' => 'end',
     ];
   }
 
@@ -159,6 +160,18 @@ class Sliders extends FilterWidgetBase {
       ],
     ];
 
+    $form['placement_location'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Placement Location'),
+      '#options' => [
+        'start' => $this->t('Start'),
+        'middle' => $this->t('Middle'),
+        'end' => $this->t('End'),
+      ],
+      '#default_value' => $this->configuration['placement_location'],
+      '#description' => $this->t('The placement of the slider.'),
+    ];
+
     return $form;
   }
 
@@ -222,6 +235,7 @@ class Sliders extends FilterWidgetBase {
       'step' => $this->configuration['step'],
       'animate' => ($this->configuration['animate'] === self::ANIMATE_CUSTOM) ? $this->configuration['animate_ms'] : $this->configuration['animate'],
       'orientation' => $this->configuration['orientation'],
+      'placement_location' => $this->configuration['placement_location'],
       'id' => Html::getUniqueId($field_id),
       'dataSelector' => $data_selector,
       'viewId' => $form['#id'],

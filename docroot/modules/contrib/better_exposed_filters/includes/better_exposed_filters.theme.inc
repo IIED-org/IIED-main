@@ -219,6 +219,12 @@ function template_preprocess_bef_links(array &$variables): void {
   // not needed.
   $keys_to_remove = ['size', 'name', 'multiple'];
 
+  foreach ($keys_to_remove as $key) {
+    if (isset($variables['attributes'][$key])) {
+      // Add the attribute as a data-* attribute for easier JS access.
+      $variables['attributes']["data-$key"] = $variables['attributes'][$key];
+    }
+  }
   $variables['attributes'] = array_diff_key($variables['attributes'], array_flip($keys_to_remove));
 
   // Get the query string arguments from the current request.

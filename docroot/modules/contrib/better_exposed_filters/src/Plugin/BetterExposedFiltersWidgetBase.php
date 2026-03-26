@@ -215,15 +215,21 @@ abstract class BetterExposedFiltersWidgetBase extends PluginBase implements Bett
    *   Url object.
    */
   protected function getExposedFormActionUrl(FormStateInterface $form_state): Url {
+
     $request = $this->request;
-    try {
-      $url = Url::createFromRequest(clone $request);
+    if ($this->view->hasUrl()) {
+      $url = $this->view->getUrl();
     }
-    catch (ResourceNotFoundException) {
-      // If the route is not found or a route parameter is not valid,
-      // fallback to the 404-page URL.
-      $uri = $this->configFactory->get('system.site')->get('page.404') ?: $request->getRequestUri();
-      $url = Url::fromUserInput($uri);
+    else {
+      try {
+        $url = Url::createFromRequest(clone $request);
+      }
+      catch (ResourceNotFoundException) {
+        // If the route is not found or a route parameter is not valid,
+        // fallback to the 404-page URL.
+        $uri = $this->configFactory->get('system.site')->get('page.404') ?: $request->getRequestUri();
+        $url = Url::fromUserInput($uri);
+      }
     }
 
     $url->setAbsolute();

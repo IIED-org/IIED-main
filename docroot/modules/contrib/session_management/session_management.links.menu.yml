@@ -1,0 +1,29 @@
+session_management.config_form:
+  route_name: session_management.config_form
+  title: 'User Session Management'
+  description: 'Manage the user session.'
+  parent: user.admin_index
+
+session_management.autologout_form:
+  route_name: session_management.autologout_form
+  title: 'Auto Logout Settings'
+  description: 'Auto logout the user upon inactivity.'
+  parent: session_management.config_form
+
+session_management.login_protection_form:
+  route_name: session_management.login_protection_form
+  title: 'Login Settings'
+  description: 'Manage the user login settings.'
+  parent: session_management.config_form
+
+session_management.login_report:
+  route_name: session_management.login_report
+  title: 'User Session Report'
+  description: 'User login logout report.'
+  parent: session_management.config_form
+
+session_management.licensing_form:
+  route_name: session_management.licensing_form
+  title: 'Upgrade Now'
+  description: 'Upgrade your modules'
+  parent: session_management.config_form

@@ -420,6 +420,8 @@ class Preprocess implements ContainerInjectionInterface {
       }
     }
     $variables['preview_region'] = [
+      '#prefix' => '<div class="glb-toolbar-menu-preview">',
+      '#suffix' => '</div>',
       '#type' => 'checkbox',
       '#title' => $this->t('Preview Regions'),
       '#gin_lb_form' => TRUE,
@@ -427,6 +429,8 @@ class Preprocess implements ContainerInjectionInterface {
       '#default_value' => $this->configFactory->get('gin_lb.settings')->get('enable_preview_regions'),
     ];
     $variables['preview_content'] = [
+      '#prefix' => '<div class="glb-toolbar-menu-preview">',
+      '#suffix' => '</div>',
       '#type' => 'checkbox',
       '#title' => $this->t('Preview Content'),
       '#value' => TRUE,
@@ -435,6 +439,40 @@ class Preprocess implements ContainerInjectionInterface {
     ];
 
     $variables['#cache']['tags'] = $this->configFactory->get('gin_lb.settings')->getCacheTags();
+  }
+
+  /**
+   * Hook implementation.
+   *
+   * @param array $variables
+   *   The preprocessed variables.
+   */
+  public function preprocessTopBar(&$variables): void {
+    // If layout builder path.
+    if ($this->contextValidator->isLayoutBuilderRoute()) {
+      $variables['preview_region'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Preview Regions'),
+        '#gin_lb_form' => TRUE,
+        '#id' => 'glb-toolbar-preview-regions',
+        '#default_value' => $this->configFactory->get('gin_lb.settings')->get('enable_preview_regions'),
+      ];
+      $variables['preview_content'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Preview Content'),
+        '#value' => TRUE,
+        '#gin_lb_form' => TRUE,
+        '#id' => 'glb-toolbar-preview-content',
+      ];
+
+      $variables['#cache']['tags'] = $this->configFactory->get('gin_lb.settings')->getCacheTags();
+
+      $variables['gin_form_actions']['gin_lb'] = [
+        '#theme' => 'gin_lb_form_actions',
+        '#preview_region' => $variables['preview_region'],
+        '#preview_content' => $variables['preview_content'],
+      ];
+    }
   }
 
   /**

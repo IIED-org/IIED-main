@@ -11,6 +11,7 @@ const autoprefixer = require('autoprefixer');
 module.exports = {
   entry: {
     gin_lb: ['./styles/gin_lb.scss'],
+    olivero: ['./styles/olivero.scss'],
     gin_lb_10: ['./styles/gin_lb_10.scss'],
   },
   output: {

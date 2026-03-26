@@ -6,6 +6,8 @@ namespace Drupal\gin_lb\HookHandler;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Extension\ThemeExtensionList;
+use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\gin_lb\Service\ContextValidatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -32,6 +34,7 @@ class PageAttachments implements ContainerInjectionInterface {
   public function __construct(
     ContextValidatorInterface $contextValidator,
     protected ConfigFactoryInterface $configFactory,
+    protected ThemeManagerInterface $themeManager,
   ) {
     $this->contextValidator = $contextValidator;
   }
@@ -44,6 +47,7 @@ class PageAttachments implements ContainerInjectionInterface {
     return new static(
       $container->get('gin_lb.context_validator'),
       $container->get('config.factory'),
+      $container->get('theme.manager'),
     );
   }
 
@@ -68,6 +72,12 @@ class PageAttachments implements ContainerInjectionInterface {
     $attachments['#attached']['library'][] = 'claro/global-styling';
     if (\Drupal::VERSION >= '10.0.0') {
       $attachments['#attached']['library'][] = 'gin_lb/gin_lb_10';
+    }
+
+    $active_theme = $this->themeManager->getActiveTheme();
+    $theme_name = $active_theme->getName();
+    if (str_contains($theme_name, 'olivero')) {
+      $attachments['#attached']['library'][] = 'gin_lb/olivero';
     }
 
     if ($this->configFactory->get('gin_lb.settings')->get('toastify_loading') !== 'custom') {

@@ -12,6 +12,14 @@ gin_lb_10:
   dependencies:
     - gin_lb/gin_lb
 
+olivero:
+  version: VERSION
+  css:
+    theme:
+      dist/css/olivero.css: { minified: true }
+  dependencies:
+    - gin_lb/gin_lb
+
 gin_lb_init:
   version: VERSION
   js:

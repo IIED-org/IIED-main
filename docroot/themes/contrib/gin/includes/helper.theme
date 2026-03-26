@@ -68,7 +68,7 @@ function _gin_user_form_submit(&$form, FormStateInterface $form_state) {
 
   // Clear render cache to ensure the correct
   // templates are loaded for our toolbar options.
-  \Drupal::service('cache.render')->invalidateAll();
+  \Drupal::service('cache.render')->deleteAll();
 }
 
 /**
@@ -119,5 +119,20 @@ function _gin_module_is_active($module) {
     return TRUE;
   }
 
+  return FALSE;
+}
+
+/**
+ * Helper function for check for the module version installed.
+ */
+function _gin_module_version($module) {
+  $extensionList = \Drupal::service('extension.list.module');
+  $extension_info = $extensionList->getExtensionInfo($module);
+
+  if (!empty($extension_info['version'])) {
+    return $extension_info['version'];
+  }
+
+  // Module not found or version unavailable.
   return FALSE;
 }

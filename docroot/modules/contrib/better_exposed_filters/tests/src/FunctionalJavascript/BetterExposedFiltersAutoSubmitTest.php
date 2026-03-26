@@ -13,9 +13,19 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function setUp(): void {
     parent::setUp();
+
+    $view = Views::getView('bef_test');
+    $this->setBetterExposedOptions($view, [
+      'general' => [
+        'autosubmit' => TRUE,
+        'autosubmit_exclude_textfield' => TRUE,
+      ],
+    ]);
 
     // Create a few test nodes.
     $this->createNode([
@@ -35,9 +45,10 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
   }
 
   /**
-   * Tests if filtering via auto-submit works with selected breakpoint.
+   * Tests if filtering via auto-submit works with a selected breakpoint.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Behat\Mink\Exception\ResponseTextException
    */
   public function testAutoSubmitBreakpoint(): void {
     $view = Views::getView('bef_test');
@@ -51,41 +62,37 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
       ],
     ]);
 
-    // Visit the bef-test page.
-    $this->drupalGet('bef-test');
-
     $session = $this->getSession();
-    $page = $session->getPage();
-
     // Prepare window.
     $session->resizeWindow(500, 500);
 
-    // Ensure that the content we're testing for is present.
-    $html = $page->getHtml();
-    $this->assertStringContainsString('Page One', $html);
-    $this->assertStringContainsString('Page Two', $html);
+    // Visit the bef-test page.
+    $this->drupalGet('bef-test');
+    $page = $session->getPage();
 
-    // Enter value in email field.
+    // Ensure that the content we're testing for is present.
+    $this->assertSession()->pageTextContains('Page One');
+    $this->assertSession()->pageTextContains('Page Two');
+
+    // Enter value in the email field.
     $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
     /* Assert exposed operator field does not have attribute to exclude it from
     auto-submit. */
-    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value-1 input');
+    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value input');
     $this->assertFalse($field_bef_exposed_operator_email->hasAttribute('data-bef-auto-submit-exclude'));
     $field_bef_email->setValue('1bef');
+
     // Verify that auto submit didn't run, due to breakpoint.
-    $html = $page->getHtml();
-    $this->assertStringContainsString('Page One', $html);
-    $this->assertStringContainsString('Page Two', $html);
+    $this->assertSession()->pageTextContains('Page One');
+    $this->assertSession()->pageTextContains('Page Two');
 
     // Prepare window.
     $session->resizeWindow(1000, 1000);
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
     $field_bef_email->setValue('1bef');
-    $html = $page->getHtml();
-    $this->assertStringContainsString('Page One', $html);
-    $this->assertStringNotContainsString('Page Two', $html);
+    $this->assertSession()->pageTextContains('Page One');
+    $this->assertSession()->pageTextNotContains('Page Two');
   }
 
   /**
@@ -99,7 +106,6 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
     // Enable auto-submit, but disable for text fields.
     $this->setBetterExposedOptions($view, [
       'general' => [
-        'autosubmit' => TRUE,
         'autosubmit_exclude_textfield' => FALSE,
         'autosubmit_textfield_minimum_length' => 3,
       ],
@@ -120,7 +126,7 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
     $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
     /* Assert exposed operator field does not have attribute to exclude it from
     auto-submit. */
-    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value-1 input');
+    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value input');
     $this->assertFalse($field_bef_exposed_operator_email->hasAttribute('data-bef-auto-submit-exclude'));
     $field_bef_email->setValue('1');
     // Verify that auto submit didn't run, due to less than 4 characters.
@@ -130,7 +136,6 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
 
     $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
     $field_bef_email->setValue('1bef');
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $html = $page->getHtml();
     $this->assertStringContainsString('Page One', $html);
     $this->assertStringNotContainsString('Page Two', $html);
@@ -138,20 +143,8 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
 
   /**
    * Tests if filtering via auto-submit works.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testAutoSubmit(): void {
-    $view = Views::getView('bef_test');
-
-    // Enable auto-submit, but disable for text fields.
-    $this->setBetterExposedOptions($view, [
-      'general' => [
-        'autosubmit' => TRUE,
-        'autosubmit_exclude_textfield' => TRUE,
-      ],
-    ]);
-
     // Visit the bef-test page.
     $this->drupalGet('bef-test');
 
@@ -166,7 +159,6 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
     // Search for "Page One".
     $field_bef_integer = $page->findField('field_bef_integer_value');
     $field_bef_integer->setValue('1');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Verify that only the "Page One" Node is present.
     $html = $page->getHtml();
@@ -178,7 +170,7 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
     $field_bef_email->setValue('qwerty@test.com');
 
     // Enter value in exposed operator email field.
-    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value-1 input');
+    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value input');
     $field_bef_exposed_operator_email->setValue('qwerty@test.com');
 
     // Verify nothing has changed.
@@ -188,7 +180,6 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
 
     // Submit form.
     $this->submitForm([], 'Apply');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Verify no results are visible.
     $html = $page->getHtml();
@@ -198,20 +189,9 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
 
   /**
    * Tests if filtering via auto-submit works if exposed form is a block.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testAutoSubmitWithExposedFormBlock() {
-    $view = Views::getView('bef_test');
     $this->drupalPlaceBlock('views_exposed_filter_block:bef_test-page_2');
-
-    // Enable auto-submit, but disable for text fields.
-    $this->setBetterExposedOptions($view, [
-      'general' => [
-        'autosubmit' => TRUE,
-        'autosubmit_exclude_textfield' => TRUE,
-      ],
-    ]);
 
     // Visit the bef-test page.
     $this->drupalGet('bef-test-with-block');
@@ -228,7 +208,6 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
     $field_bef_integer = $page->findField('field_bef_integer_value');
     $field_bef_integer->setValue('1');
     $field_bef_integer->blur();
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Verify that only the "Page One" Node is present.
     $html = $page->getHtml();
@@ -240,7 +219,7 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
     $field_bef_email->setValue('qwerty@test.com');
 
     // Enter value in exposed operator email field.
-    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value-1 input');
+    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value input');
     $field_bef_exposed_operator_email->setValue('qwerty@test.com');
 
     // Verify nothing has changed.
@@ -250,7 +229,6 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
 
     // Submit form.
     $this->submitForm([], 'Apply');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Verify no results are visible.
     $html = $page->getHtml();
@@ -263,10 +241,21 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    * @throws \Behat\Mink\Exception\ResponseTextException
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testAutoSubmitWithCheckboxes(): void {
+    $view = Views::getView('bef_test');
+
+    $this->setBetterExposedOptions($view, [
+      'filter' => [
+        'field_bef_letters_value' => [
+          'plugin_id' => 'bef',
+        ],
+      ],
+    ]);
+
     // Visit the bef-test page.
-    $this->drupalGet('bef-test-checkboxes');
+    $this->drupalGet('/bef-test');
 
     $session = $this->getSession();
     $page = $session->getPage();
@@ -276,10 +265,33 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
 
     $page->checkField('edit-field-bef-letters-value-a');
     $page->pressButton('Apply');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $this->assertSession()->pageTextContains('Page One');
     $this->assertSession()->pageTextNotContains('Page Two');
+  }
+
+  /**
+   * Tests that auto submit select elements work and gain focus on ajax reload.
+   *
+   * @throws \Behat\Mink\Exception\ResponseTextException
+   */
+  public function testAutoSubmitWithSelect(): void {
+    $this->turnAjaxOn();
+
+    // Visit the bef-test page.
+    $this->drupalGet('bef-test');
+
+    $session = $this->getSession();
+    $page = $session->getPage();
+
+    $field_bef_select = $page->find('css', 'select#edit-term-node-tid-depth');
+    $field_bef_select->setValue('15');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $this->assertSession()->pageTextContains('Page Two');
+    $this->assertSession()->pageTextNotContains('Page One');
+    $active_selector = $this->getSession()->evaluateScript('document.activeElement.getAttribute("data-drupal-selector")');
+    $this->assertEquals('edit-term-node-tid-depth', $active_selector, 'Element with correct data-drupal-selector has focus.');
   }
 
   /**
@@ -321,7 +333,6 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
 
     // Change sort.
     $page->selectFieldOption('sort_order', 'ASC');
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $cells = $this->xpath('//table/tbody/tr/td[1]');
     $values = array_map(fn($cell) => $cell->getText(), $cells);
 

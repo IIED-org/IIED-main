@@ -1,0 +1,6 @@
+session_management.settings:
+  type: config_object
+  label: 'Session Management Settings'
+  mapping:
+    enable_session_monitor:
+      type: integer

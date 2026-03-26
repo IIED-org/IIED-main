@@ -1,0 +1,29 @@
+_core:
+  default_config_hash: 5F5KiPRW6E8pvmWdw6qAJzAXW6X-fLCRRKiGhdQIcsc
+enabled: true
+timeout: 28000
+max_timeout: 172800
+padding: 20
+logout_regardless_of_activity: true
+no_individual_logout_threshold: true
+role_logout: false
+role_logout_max: false
+redirect_url: /user/login
+include_destination: true
+no_dialog: true
+message: 'You have been logged out for security, due to exceeding the maximum session duration of 8 hours'
+inactivity_message: 'You have been logged out for security, due to exceeding the maximum session duration of 8 hours'
+inactivity_message_type: status
+modal_width: 450
+enforce_admin: true
+jstimer_format: '%hours%:%mins%:%secs%'
+jstimer_js_load_option: false
+use_alt_logout_method: false
+use_watchdog: false
+dialog_title: 'Logout alert'
+disable_buttons: true
+yes_button: ''
+no_button: ''
+whitelisted_ip_addresses: ''
+cookie_secure: true
+cookie_httponly: false

@@ -21,6 +21,8 @@ class NumberWidgetTest extends BetterExposedFiltersKernelTestBase {
 
   /**
    * Tests hiding element with single option.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testNumberWidgetMinAndMax() {
     $view = Views::getView('bef_test');

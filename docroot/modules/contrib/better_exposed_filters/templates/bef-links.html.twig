@@ -6,7 +6,7 @@
 %}
 {% set is_nested = true %}
 {% for name, value in hiddens %}
-<input type="hidden" name="{{ name }}" value="{{ value }}" />
+  <input type="hidden" name="{{ name }}" value="{{ value }}" id="edit-{{ name }}" />
 {% endfor %}
 <div{{ attributes.removeClass('form-select').addClass(classes) }}>
   {% set current_nesting_level = 0 %}

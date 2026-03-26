@@ -1,7 +1,7 @@
 preset_accent_color: 'blue'
 preset_focus_color: 'gin'
 enable_darkmode: '0'
-classic_toolbar: 'vertical'
+classic_toolbar: 'new'
 secondary_toolbar_frontend: true
 logo:
   use_default: true

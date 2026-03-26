@@ -245,6 +245,15 @@ function gin_lb_preprocess_toolbar__gin_lb(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess() for 'top_bar'.
+ */
+function gin_lb_preprocess_top_bar(array &$variables): void {
+  /** @var \Drupal\gin_lb\HookHandler\Preprocess $instance */
+  $instance = \Drupal::service('class_resolver')->getInstanceFromDefinition(Preprocess::class);
+  $instance->preprocessTopBar($variables);
+}
+
+/**
  * Implements hook_theme().
  */
 function gin_lb_theme(): array {

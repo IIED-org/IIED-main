@@ -22,11 +22,12 @@ styles:
   - wide
 process_descriptions: true
 override_css: false
+show_notice_title: false
 library:
   element_id: klaro
   storage_method: cookie
   cookie_name: klaro
-  cookie_expires_after_days: 365
+  cookie_expires_after_days: 180
   cookie_domain: ''
   group_by_purpose: true
   accept_all: true
@@ -34,5 +35,6 @@ library:
   hide_learn_more: false
   learn_more_as_button: false
   additional_class: ''
+  disable_powered_by: true
   html_texts: true
   auto_focus: true

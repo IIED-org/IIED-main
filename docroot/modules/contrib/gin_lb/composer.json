@@ -4,8 +4,8 @@
     "license": "GPL-2.0-or-later",
     "type": "drupal-module",
     "require": {
-        "drupal/gin": "^3.0-rc11",
-        "drupal/gin_toolbar": "^1.0"
+        "drupal/gin": "^4.0",
+        "drupal/gin_toolbar": "^2.0"
     },
     "conflict": {
         "drupal/lb_claro": "*"

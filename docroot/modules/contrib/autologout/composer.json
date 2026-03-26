@@ -1,0 +1,11 @@
+{
+  "name": "drupal/autologout",
+  "description": "Adds automated timed logout.",
+  "type": "drupal-module",
+  "homepage": "http://drupal.org/project/autologout",
+  "license": "GPL-2.0-or-later",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/autologout",
+    "source": "https://git.drupalcode.org/project/autologout"
+  }
+}

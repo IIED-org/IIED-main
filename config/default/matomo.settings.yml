@@ -1,8 +1,8 @@
 _core:
   default_config_hash: mKwnhF-0ryfftZZP6jyqW8q9MEo9glyRkvRzSddrc0k
 site_id: '1'
-url_http: 'https://iied.matomo.cloud/'
-url_https: 'https://iied.matomo.cloud/'
+url_http: 'https://matomo.iied.org/'
+url_https: 'https://matomo.iied.org/'
 domain_mode: 0
 visibility:
   request_path_mode: 0

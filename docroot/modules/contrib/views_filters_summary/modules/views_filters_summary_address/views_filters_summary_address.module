@@ -5,22 +5,21 @@
  * Hook implementations for views_filters_summary_address module.
  */
 
+use Drupal\Core\Hook\Attribute\LegacyHook;
+use Drupal\views_filters_summary_address\Hook\ViewsFiltersSummaryAddressHooks;
+
 /**
  * Implements hook_views_filters_summary_plugin_alias().
  */
+#[LegacyHook]
 function views_filters_summary_address_views_filters_summary_plugin_alias($filter) {
-  if ($filter->getPluginId() === 'administrative_area') {
-    // The administrative_area plugin behaves like the list_field plugin.
-    return 'list_field';
-  }
+  return \Drupal::service(ViewsFiltersSummaryAddressHooks::class)->pluginAlias($filter);
 }
 
 /**
  * Implements hook_views_filters_summary_valid_index().
  */
+#[LegacyHook]
 function views_filters_summary_address_views_filters_summary_valid_index($index, $filter) {
-  if ($filter->getPluginId() === 'administrative_area') {
-    // Array is similar to: ['AL' => 'AL', 'AK' => 'AK'].
-    return is_string($index);
-  }
+  return \Drupal::service(ViewsFiltersSummaryAddressHooks::class)->validIndex($index, $filter);
 }

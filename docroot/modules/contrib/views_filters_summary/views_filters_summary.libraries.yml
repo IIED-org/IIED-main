@@ -7,3 +7,4 @@ views_filters_summary:
   dependencies:
     - core/jquery
     - core/drupal
+    - core/once

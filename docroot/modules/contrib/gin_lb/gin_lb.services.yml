@@ -5,7 +5,7 @@ services:
       - { name: twig.extension }
   gin_lb.layout_choose_controller_alter:
     class: Drupal\gin_lb\EventSubscriber\LayoutBuilderBrowserEventSubscriber
-    arguments: []
+    arguments: [ '@module_handler' ]
     tags:
       - { name: event_subscriber }
   gin_lb.context_validator:

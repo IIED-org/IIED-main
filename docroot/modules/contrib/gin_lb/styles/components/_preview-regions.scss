@@ -1,6 +1,9 @@
 #toolbar-item-display-options::before {
   mask-image: icon("eye") !important;
 }
+.glb-toolbar-menu-preview {
+  padding: 0 10px;
+}
 
 .glb-preview-regions--enable {
   .layout-builder__region {

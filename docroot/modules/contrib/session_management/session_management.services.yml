@@ -1,0 +1,12 @@
+services:
+  mo_session_monitor:
+    class: Drupal\session_management\SessionMonitor
+    arguments: ['@database','@session_manager']
+  mo_session_limit:
+    class: Drupal\session_management\EventSubscriber\SessionLimitSubscriber
+    arguments: ['@config.factory','@messenger','@mo_session_monitor','@current_user','@event_dispatcher']
+    tags:
+      - {name: 'event_subscriber'}
+  mo_login_restriction:
+    class: Drupal\session_management\LoginRestriction
+    arguments: [ '@config.factory' ]

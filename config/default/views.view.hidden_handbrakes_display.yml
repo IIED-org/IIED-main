@@ -117,6 +117,8 @@ display:
                   hide_label: false
                   field_classes: ''
                   open_by_default: false
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
               field_region_affected_target_id:
                 plugin_id: default
                 advanced:
@@ -130,6 +132,8 @@ display:
                   hide_label: false
                   field_classes: ''
                   open_by_default: false
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
       access:
         type: perm
         options:

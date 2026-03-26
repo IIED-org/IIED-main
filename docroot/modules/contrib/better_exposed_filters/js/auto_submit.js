@@ -54,12 +54,17 @@
         selectors = 'form[data-bef-auto-submit-full-form], [data-bef-auto-submit-full-form] form, [data-bef-auto-submit]';
       }
 
-      $(selectors, context).addBack(selectors).find('input:text:not(.hasDatepicker), textarea').each(function () {
+      $(selectors, context).addBack(selectors).find('input:text:not(.hasDatepicker), textarea, select').each(function () {
         const $el = $(this);
         const $valueLength = $el.val().length * 2;
-
-        $el[0].setSelectionRange($valueLength, $valueLength);
-        setFocus($el, $valueLength);
+        const $tagName = $el[0].tagName;
+        if ($tagName === 'SELECT') {
+          setFocus($el);
+        }
+        else {
+          $el[0].setSelectionRange($valueLength, $valueLength);
+          setFocus($el, $valueLength);
+        }
       });
 
       function setFocus($el) {

@@ -39,3 +39,9 @@
 .views-filters-summary a.reset {
   margin-left: 0.5em;
 }
+
+.views-filters-summary a.remove-filter.disabled,
+.views-filters-summary a.reset.disabled {
+  cursor: default;
+  pointer-events: none;
+}

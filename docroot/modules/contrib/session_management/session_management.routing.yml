@@ -1,0 +1,84 @@
+session_management.config_form:
+  path: /admin/config/people/session-management/session-management
+  defaults:
+    _form: '\Drupal\session_management\Form\SessionSettingsForm'
+    _title: 'User Session Management &nbsp;&nbsp;&nbsp;  <a class="button button--primary js-form-submit form-submit use-ajax mo_top_bar_button"  data-dialog-options="{&quot;width&quot;:&quot;40%&quot;}" data-dialog-type="modal"  href="requestTrial">Test Premium Features</a>'
+  requirements:
+    _permission: 'administer site configuration'
+
+session_management.autologout_form:
+  path: /admin/config/people/session-management/mo-autologout
+  defaults:
+    _form: '\Drupal\session_management\Form\AutoLogoutSettingsForm'
+    _title: 'User Session Management &nbsp;&nbsp;&nbsp;  <a class="button button--primary js-form-submit form-submit use-ajax mo_top_bar_button"  data-dialog-options="{&quot;width&quot;:&quot;40%&quot;}" data-dialog-type="modal"  href="requestTrial">Test Premium Features</a>'
+  requirements:
+    _permission: 'administer site configuration'
+
+session_management.login_protection_form:
+  path: /admin/config/people/session-management/login-settings
+  defaults:
+    _form: '\Drupal\session_management\Form\LoginSettingsForm'
+    _title: 'User Session Management &nbsp;&nbsp;&nbsp;  <a class="button button--primary js-form-submit form-submit use-ajax mo_top_bar_button"  data-dialog-options="{&quot;width&quot;:&quot;40%&quot;}" data-dialog-type="modal"  href="requestTrial">Test Premium Features</a>'
+  requirements:
+    _permission: 'administer site configuration'
+
+session_management.login_report:
+  path: /admin/config/people/session-management/mo-audits-and-logs
+  defaults:
+    _form: '\Drupal\session_management\Form\UserLoginReport'
+    _title: 'User Session Management &nbsp;&nbsp;&nbsp;  <a class="button button--primary js-form-submit form-submit use-ajax mo_top_bar_button"  data-dialog-options="{&quot;width&quot;:&quot;40%&quot;}" data-dialog-type="modal"  href="requestTrial">Test Premium Features</a>'
+  requirements:
+    _permission: 'administer site configuration'
+
+session_management.licensing_form:
+  path: /admin/config/people/session-management/licensing
+  defaults:
+#    _form: '\Drupal\session_management\Form\LicensingForm'
+    _form: '\Drupal\session_management\Form\MiniorangeSupport'
+    _title: 'User Session Management &nbsp;&nbsp;&nbsp;  <a class="button button--primary js-form-submit form-submit use-ajax mo_top_bar_button"  data-dialog-options="{&quot;width&quot;:&quot;40%&quot;}" data-dialog-type="modal"  href="requestTrial">Test Premium Features</a>'
+  requirements:
+    _permission: 'administer site configuration'
+
+session_management.session_manage:
+  path: '/user/{user}/mo_sessions'
+  defaults:
+    _form: '\Drupal\session_management\Form\SessionMonitorForm'
+  requirements:
+    _custom_access: '\Drupal\session_management\Controller\UserSessionMonitor::access'
+  options:
+    parameters:
+      user:
+        type: entity:user
+      _admin_route: TRUE
+      
+session_management.support_form:
+  path: /admin/config/people/session-management/support
+  defaults:
+    _title: 'Contact miniOrange Support'
+    _form: '\Drupal\session_management\Form\MoSupportTrialForm'
+  requirements:
+    _permission: 'administer site configuration'
+
+session_management.logout:
+  path: '/session_management/logout'
+  defaults:
+    _controller: '\Drupal\session_management\Controller\UserSessionMonitor::logout'
+    _title: 'User logout'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+session_management.request_trial:
+  path: /admin/config/people/session-management/requestTrial
+  defaults:
+    _title: 'Request 7 Days Free Trial'
+    _form: '\Drupal\session_management\Form\MoSupportTrialForm'
+  requirements:
+    _permission: 'administer site configuration'
+
+session_management.modal_info:
+  path: /admin/config/people/session-management/modal-info
+  defaults:
+    _form: '\Drupal\session_management\Form\ModalInfoForm'
+    _title: 'Modal Dialog Configuration'
+  requirements:
+    _permission: 'administer site configuration'

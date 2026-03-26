@@ -1,5 +1,5 @@
-body[data-meta-sidebar="closed"] .glb-sidebar {
-  transform: translateX(var(--gin-sidebar-width));
+body[data-meta-sidebar="open"] .glb-sidebar {
+  transform: translateX(0);
 }
 .gin-secondary-toolbar--frontend .glb-region-sticky__items__inner {
   margin: 0 !important;
@@ -12,13 +12,14 @@ body[data-meta-sidebar="closed"] .glb-sidebar {
 
 .glb-sidebar {
   position: fixed;
-  z-index: 103;
-  top: var(--gin-toolbar-y-offset) !important;
+  transform: translateX(var(--gin-sidebar-width));
+  z-index: 101;
+  top: var(--drupal-displace-offset-top) !important;
   right: 0;
   overflow-x: hidden;
   overflow-y: auto;
   width: var(--gin-sidebar-width);
-  height: calc(100% - var(--gin-toolbar-y-offset));
+  height: calc(100% - var(--drupal-displace-offset-top));
   margin: 0;
   transition: all var(--gin-transition-fast);
   color: var(--gin-color-text);
@@ -47,17 +48,17 @@ body[data-meta-sidebar="closed"] .glb-sidebar {
   }
 
   .gin--vertical-toolbar & {
-    top: var(--gin-toolbar-secondary-height);
-    height: calc(100% - var(--gin-toolbar-secondary-height));
+    top: var(--gin-toolbar-secondary-height) !important;
+    height: calc(100% - var(--gin-toolbar-secondary-height)) !important;
   }
 
   .gin--horizontal-toolbar & {
     top: calc(
-      var(--gin-toolbar-y-offset) + var(--gin-toolbar-secondary-height)
-    );
+      var(--drupal-displace-offset-top) + var(--gin-toolbar-secondary-height)
+    ) !important;
     height: calc(
-      100% - var(--gin-toolbar-y-offset) - var(--gin-toolbar-secondary-height)
-    );
+      100% - var(--drupal-displace-offset-top) - var(--gin-toolbar-secondary-height)
+    ) !important;
   }
 
   .form-actions {

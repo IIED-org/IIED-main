@@ -1,0 +1,9 @@
+drupal.autologout:
+  js:
+    js/autologout.js: {}
+
+  dependencies:
+    - core/drupal.dialog
+    - core/drupal.ajax
+    - core/drupalSettings
+    - core/once
