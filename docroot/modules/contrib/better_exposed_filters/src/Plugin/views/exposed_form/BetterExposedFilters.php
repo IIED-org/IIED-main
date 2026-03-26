@@ -252,10 +252,11 @@ class BetterExposedFilters extends InputRequired {
     $autosubmit_breakpoint_description = $this->t('Breakpoint to determinate whether auto-submit should be enabled for the current screen dimensions.');
     if ($this->breakpointManager instanceof BreakpointManagerInterface) {
       foreach ($this->breakpointManager->getGroups() as $group => $group_label) {
+        $group_label_str = (string) $group_label;
         $group_breakpoints = $this->breakpointManager->getBreakpointsByGroup($group);
         /** @var \Drupal\breakpoint\Breakpoint $breakpoint */
         foreach ($group_breakpoints as $breakpoint_id => $breakpoint) {
-          $breakpoints[$group_label]["$group:$breakpoint_id"] = $breakpoint->getLabel();
+          $breakpoints[$group_label_str]["$group:$breakpoint_id"] = (string) $breakpoint->getLabel();
         }
       }
     }
@@ -412,7 +413,9 @@ class BetterExposedFilters extends InputRequired {
       $options = [];
       foreach ($this->sortWidgetManager->getDefinitions() as $plugin_id => $definition) {
         if ($definition['class']::isApplicable()) {
-          $options[$plugin_id] = $definition['title'];
+          // Definition['label'] is a fallback for older plugins.
+          // @todo remove in 8.0.x of bef.
+          $options[$plugin_id] = $definition['title'] ?? $definition['label'];
         }
       }
 
@@ -484,7 +487,9 @@ class BetterExposedFilters extends InputRequired {
 
       foreach ($this->pagerWidgetManager->getDefinitions() as $plugin_id => $definition) {
         if ($definition['class']::isApplicable()) {
-          $options[$plugin_id] = $definition['title'];
+          // Definition['label'] is a fallback for older plugins.
+          // @todo remove in 8.0.x of bef.
+          $options[$plugin_id] = $definition['title'] ?? $definition['label'];
         }
       }
 
@@ -546,7 +551,9 @@ class BetterExposedFilters extends InputRequired {
       $options = [];
       foreach ($this->filterWidgetManager->getDefinitions() as $plugin_id => $definition) {
         if ($definition['class']::isApplicable($filter, $this->displayHandler->handlers['filter'][$filter_id]->options)) {
-          $options[$plugin_id] = $definition['title'];
+          // Definition['label'] is a fallback for older plugins.
+          // @todo remove in 8.0.x of bef.
+          $options[$plugin_id] = $definition['title'] ?? $definition['label'];
         }
       }
 
@@ -1040,7 +1047,13 @@ class BetterExposedFilters extends InputRequired {
       $this->view->exposed_data = $form_state->getValues();
     }
 
-    $form_state->setRedirect('<current>');
+    if ($this->view->hasUrl()) {
+      $form_state->setRedirectUrl($this->view->getUrl());
+    }
+    else {
+      // Fallback if the view does not have a URL (embedded or block views?)
+      $form_state->setRedirect('<current>');
+    }
   }
 
   /**

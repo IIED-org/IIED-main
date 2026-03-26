@@ -382,6 +382,8 @@ display:
                   hide_label: false
                   field_classes: ''
                   open_by_default: false
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
       filters:
         status:
           id: status

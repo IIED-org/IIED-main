@@ -2,7 +2,7 @@ name: Gin
 type: theme
 base theme: claro
 description: 'Admin theme with a strong focus on improving the Editorial Experience. Learn more about Gin’s <a href="https://www.drupal.org/docs/contributed-themes/gin-admin-theme/specific-settings-within-gin" target="_blank">Settings</a> and how to customize Gin in our <a href="https://www.drupal.org/docs/contributed-themes/gin-admin-theme/custom-theming" target="_blank">Custom theming guide</a>.'
-core_version_requirement: ^9 || ^10 || ^11 <11.2
+core_version_requirement: ^10.3 || ^11 <11.2
 
 # These dependencies will not allow the installation of Gin at all if gin_toolbar is not activated.
 # A bit harsh, so we'll continue to just rely on the composer requirement for now.
@@ -136,8 +136,6 @@ libraries-extend:
     - gin/responsive_preview
   workspaces/drupal.workspaces.overview:
     - gin/workspaces
-  project_browser/project_browser:
-    - gin/project_browser
 
 ckeditor_stylesheets:
   - dist/css/theme/accent.css
@@ -160,7 +158,7 @@ regions:
 regions_hidden:
   - sidebar_first
 
-# Information added by Drupal.org packaging script on 2025-06-18
-version: '8.x-3.1'
+# Information added by Drupal.org packaging script on 2026-01-16
+version: '4.1.3'
 project: 'gin'
-datestamp: 1750246437
+datestamp: 1768553444

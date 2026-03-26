@@ -29,10 +29,10 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         '8e92226780215d0ec758aa7b73e0ede9' => __DIR__ . '/..' . '/open-telemetry/context/fiber/initialize_fiber_handler.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
         'c7b4a5d8b94d270f0f9a84f81e1dd63d' => __DIR__ . '/..' . '/open-telemetry/api/Trace/functions.php',
+        '9d2b9fc6db0f153a0a149fefb182415e' => __DIR__ . '/..' . '/symfony/polyfill-php84/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
         'ace6d88241f812b4accb2d847454aef6' => __DIR__ . '/..' . '/halaxa/json-machine/src/functions.php',
-        '9e4824c5afbdc1482b6025ce3d4dfde8' => __DIR__ . '/..' . '/league/csv/src/functions_include.php',
         'c695cb998ba36e4bafc3d028efc7d113' => __DIR__ . '/..' . '/open-telemetry/sdk/Common/Util/functions.php',
         'd991bdbfe253499825156f17c4a721db' => __DIR__ . '/..' . '/open-telemetry/sdk/Logs/Exporter/_register.php',
         '01d424d2624f29a2eef00b09eb00935e' => __DIR__ . '/..' . '/open-telemetry/sdk/Metrics/MetricExporter/_register.php',
@@ -41,7 +41,7 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         '062120a429d7568eacd495a8c34fcf09' => __DIR__ . '/..' . '/open-telemetry/sdk/Common/Dev/Compatibility/_load.php',
         '88e3b63cfb48eb8ea316a8a85a5f5c5f' => __DIR__ . '/..' . '/open-telemetry/sdk/_autoload.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
-        '9d2b9fc6db0f153a0a149fefb182415e' => __DIR__ . '/..' . '/symfony/polyfill-php84/bootstrap.php',
+        '9e4824c5afbdc1482b6025ce3d4dfde8' => __DIR__ . '/..' . '/league/csv/src/functions_include.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -258,7 +258,6 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
             'Doctrine\\Deprecations\\' => 22,
             'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Collections\\' => 28,
-            'Doctrine\\Common\\Annotations\\' => 28,
             'Doctrine\\Common\\' => 16,
             'Dflydev\\DotAccessData\\' => 22,
             'Defuse\\Crypto\\' => 14,
@@ -852,10 +851,6 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         'Doctrine\\Common\\Collections\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/collections/src',
-        ),
-        'Doctrine\\Common\\Annotations\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
         ),
         'Doctrine\\Common\\' =>
         array (

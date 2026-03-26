@@ -96,3 +96,25 @@ function better_exposed_filters_post_update_autosubmit_sort_only_key(?array &$sa
     return $config_updater->updateAutoSubmitSortOnlyKey($view);
   });
 }
+
+/**
+ * Set default values for new sort options settings.
+ */
+function better_exposed_filters_post_update_sort_options_defaults(?array &$sandbox = NULL): void {
+  /** @var \Drupal\better_exposed_filters\BetterExposedFiltersConfigUpdater $config_updater */
+  $config_updater = \Drupal::classResolver(BetterExposedFiltersConfigUpdater::class);
+  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'view', function (ViewEntityInterface $view) use ($config_updater): bool {
+    return $config_updater->updateSortOptionsDefaults($view);
+  });
+}
+
+/**
+ * Add new placement_location key.
+ */
+function better_exposed_filters_post_update_slider_placement_key(?array &$sandbox = NULL): void {
+  /** @var \Drupal\better_exposed_filters\BetterExposedFiltersConfigUpdater $config_updater */
+  $config_updater = \Drupal::classResolver(BetterExposedFiltersConfigUpdater::class);
+  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'view', function (ViewEntityInterface $view) use ($config_updater): bool {
+    return $config_updater->updateSliderPlacementKey($view);
+  });
+}

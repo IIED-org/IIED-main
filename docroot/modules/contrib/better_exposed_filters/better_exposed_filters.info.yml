@@ -6,7 +6,7 @@ package: Views
 dependencies:
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2025-09-15
-version: '7.1.0-beta3'
+# Information added by Drupal.org packaging script on 2025-11-20
+version: '7.1.1'
 project: 'better_exposed_filters'
-datestamp: 1757966907
+datestamp: 1763681623

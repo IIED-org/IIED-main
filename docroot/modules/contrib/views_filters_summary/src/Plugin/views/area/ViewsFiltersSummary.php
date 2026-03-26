@@ -109,7 +109,7 @@ class ViewsFiltersSummary extends Result {
     $plugin_id,
     $plugin_definition,
   ) {
-    return new self(
+    return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
@@ -375,7 +375,7 @@ class ViewsFiltersSummary extends Result {
     string|int|null $value_raw = NULL,
   ): array {
     $input = $value_raw ?? $value;
-    return [
+    $item = [
       'id' => $id,
       'label' => $label,
       'value' => $value,
@@ -384,12 +384,15 @@ class ViewsFiltersSummary extends Result {
         '#title' => $this->t('X'),
         '#url' => Url::fromUserInput('/'),
         '#attributes' => [
-          'class' => ['remove-filter'],
+          'class' => ['remove-filter', 'disabled'],
           'data-remove-selector' => "$id:$input",
           'aria-label' => $this->t("Clear @value", ['@value' => $value]),
         ],
       ],
     ];
+    // Invoke hook_views_filters_summary_item_alter().
+    $this->moduleHandler->alter('views_filters_summary_item', $item);
+    return $item;
   }
 
   /**
@@ -474,6 +477,45 @@ class ViewsFiltersSummary extends Result {
   }
 
   /**
+   * Checks if the view is in preview mode.
+   *
+   * @return bool
+   *   TRUE if the view is in preview mode, FALSE otherwise.
+   */
+  protected function isPreviewMode() {
+    return $this->view->live_preview ?? FALSE;
+  }
+
+  /**
+   * Gets the exposed form ID for the current view display.
+   *
+   * Allows other modules to alter the form ID via
+   * hook_views_filters_summary_exposed_form_id_alter().
+   *
+   * @return string
+   *   The exposed form ID.
+   */
+  protected function getExposedFormId() {
+    if ($this->isPreviewMode()) {
+      $exposed_form_id = 'views-ui-preview-form';
+    }
+    else {
+      // By default, (for example, on a Page display), a View’s exposed filters
+      // are rendered inside a form with an ID of the form:
+      // <form id="views-exposed-form-<VIEW_ID>-<DISPLAY_ID>...">.
+      $exposed_form_id = 'views-exposed-form-' . $this->view->id() . '-' . $this->view->current_display;
+
+      $this->moduleHandler->alter(
+        'views_filters_summary_exposed_form_id',
+        $exposed_form_id,
+        $this->view,
+        $this->displayHandler,
+      );
+    }
+    return $exposed_form_id;
+  }
+
+  /**
    * Build the filter summary markup.
    *
    * @return \Drupal\Component\Render\MarkupInterface|null
@@ -495,15 +537,14 @@ class ViewsFiltersSummary extends Result {
           'has_group_values' => $this->options['group_values'],
           'reset_link' => [
             'title' => $this->options['filters_reset_link_title'],
+            'filter_ids' => array_unique(array_map(fn ($item) => $item['id'], $summary)),
           ],
           'filters_summary' => [
             'prefix' => $this->options['filters_summary_prefix'],
             'separator' => $this->options['filters_summary_separator'],
           ],
         ],
-        '#exposed_form_id' => Html::cleanCssIdentifier(
-          'views-exposed-form-' . $this->view->id() . '-' . $this->view->current_display
-        ),
+        '#exposed_form_id' => Html::cleanCssIdentifier($this->getExposedFormId()),
       ];
       // Handle backward compatibility.
       if (version_compare(\Drupal::VERSION, '10.3', '>=')) {
@@ -589,16 +630,18 @@ class ViewsFiltersSummary extends Result {
    * @param string $value
    *   The filter value.
    *
-   * @return string
-   *   The operator prefix.
+   * @return string|null
+   *   The filter value label.
    */
-  protected function getFilterValueLabel(FilterPluginBase $filter, string $value): string {
+  protected function getFilterValueLabel(FilterPluginBase $filter, string $value): ?string {
     $label = match ($filter->getPluginId()) {
       'boolean' => $filter->valueOptions[$value] ?? $value,
       default => $value,
     };
-
-    return $this->getValueLabelFromOperator($filter->operator, $label);
+    $label = $this->getValueLabelFromOperator($filter->operator, $label);
+    // Invoke hook_views_filters_summary_filter_value_label_alter().
+    $this->moduleHandler->alter('views_filters_summary_filter_value_label', $label, $value, $filter);
+    return $label;
   }
 
   /**
@@ -642,178 +685,157 @@ class ViewsFiltersSummary extends Result {
   protected function buildFilterDefinition(FilterPluginBase $filter): array {
 
     $original_value = $filter->value['value'] ?? $filter->value;
+
+    // Invoke hook_views_filters_summary_filter_value_alter().
+    $this->moduleHandler->alter('views_filters_summary_filter_value', $original_value, $filter);
+
     $processed_value = NULL;
 
-    $plugin_alias = $filter->getPluginId();
+    // Special handling of grouped filters.
+    if ($filter->options['is_grouped']) {
 
-    // Invoke hook_views_filters_summary_plugin_alias().
-    $aliases = $this->moduleHandler->invokeAll('views_filters_summary_plugin_alias', [$filter]);
-    // Check if some module has provided an alias for that filter plugin.
-    foreach ($aliases as $alias) {
-      if (is_string($alias)) {
-        $plugin_alias = $alias;
-        break;
+      // The Views module does not properly populate the grouped filter values.
+      // So we have to use the exposed input values.
+      $exposed_inputs = $filter->view->getExposedInput();
+      $filter_input = $exposed_inputs[$filter->options['group_info']['identifier']];
+      $original_value = is_array($filter_input) ? $filter_input : [$filter_input];
+
+      $values = [];
+      $filter_group_items = $filter->options['group_info']['group_items'];
+      foreach ($original_value as $index => $value) {
+        if (isset($filter_group_items[$value])) {
+          $group_item = $filter_group_items[$value];
+          $values[] = [
+            'id' => $index,
+            'raw' => $value,
+            'value' => $group_item['title'],
+          ];
+        }
       }
+      $processed_value = $values;
+
     }
+    else {
 
-    switch ($plugin_alias) {
-      case 'taxonomy_index_tid':
-      case 'taxonomy_index_tid_depth':
-        if (is_array($original_value)) {
-          $values = [];
-          $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-          // Get the current user's language.
-          $current_language = $this->languageManager->getCurrentLanguage()->getId();
-          foreach ($original_value as $index => $term) {
-            if ($term = $storage->load($term)) {
-              // Get the term translation in the current user's language.
-              if ($term->hasTranslation($current_language)) {
-                $translated_term = $term->getTranslation($current_language);
-              }
-              else {
-                // Fallback to the default language if no translation exists.
-                $translated_term = $term;
-              }
-              $values[] = [
-                'id' => $index,
-                'raw' => $term->id(),
-                'value' => $translated_term->label(),
-              ];
-            }
-          }
-          $processed_value = $values;
+      $plugin_alias = $filter->getPluginId();
+
+      // Invoke hook_views_filters_summary_plugin_alias().
+      $aliases = $this->moduleHandler->invokeAll('views_filters_summary_plugin_alias', [$filter]);
+      // Check if some module has provided an alias for that filter plugin.
+      foreach ($aliases as $alias) {
+        if (is_string($alias)) {
+          $plugin_alias = $alias;
+          break;
         }
-        break;
+      }
 
-      case 'bundle':
-        if (is_array($original_value)) {
-          if ($entity_type = $filter->getEntityType()) {
+      switch ($plugin_alias) {
+        case 'taxonomy_index_tid':
+        case 'taxonomy_index_tid_depth':
+          if (is_array($original_value)) {
             $values = [];
-            $types = $this->entityTypeBundleInfo->getBundleInfo($entity_type);
-            foreach ($original_value as $index => $value) {
-              if (!isset($types[$value])) {
-                continue;
-              }
-              $values[] = [
-                'id' => $index,
-                'raw' => $value,
-                'value' => $types[$value]['label'],
-              ];
-            }
-            $processed_value = $values;
-          }
-        }
-        break;
-
-      case 'user_name':
-        if (is_array($original_value)) {
-          $values = [];
-          foreach ($original_value as $index => $value) {
-            if (!$this->isValidArrayValue($filter, $index, $value)) {
-              continue;
-            }
-            $user = User::load($value);
-            if ($user) {
-              $values[] = [
-                'id' => $index,
-                'raw' => (string) $value,
-                'value' => (string) $user->getDisplayName(),
-              ];
-            }
-          }
-          $processed_value = $values;
-        }
-        break;
-
-      case 'list_field':
-        if (is_array($original_value)) {
-          if (method_exists($filter, 'getValueOptions')) {
-            $values = [];
-            $value_options = $filter->getValueOptions();
-            if (!empty($value_options) && is_array($value_options)) {
-              foreach ($original_value as $index => $value) {
-                if (!$this->isValidArrayValue($filter, $index, $value)
-                  || !isset($value_options[$value])) {
-                  continue;
+            $storage = $this->entityTypeManager->getStorage('taxonomy_term');
+            // Get the current user's language.
+            $current_language = $this->languageManager->getCurrentLanguage()->getId();
+            foreach ($original_value as $index => $term) {
+              if ($term = $storage->load($term)) {
+                // Get the term translation in the current user's language.
+                if ($term->hasTranslation($current_language)) {
+                  $translated_term = $term->getTranslation($current_language);
+                }
+                else {
+                  // Fallback to the default language if no translation exists.
+                  $translated_term = $term;
                 }
                 $values[] = [
                   'id' => $index,
-                  'raw' => $value,
-                  'value' => $value_options[$value],
+                  'raw' => $term->id(),
+                  'value' => $translated_term->label(),
                 ];
               }
             }
             $processed_value = $values;
           }
-        }
-        break;
+          break;
 
-      default:
-        if ($filter->options['is_grouped']) {
-          if ($filter->operator === 'between' || $filter->operator === 'not between') {
-            $min_value = $filter->value['min'] ?? NULL;
-            $max_value = $filter->value['max'] ?? NULL;
-            if ($this->isValidValue($min_value) && $this->isValidValue($max_value)) {
-              $filter_group_items = $filter->options['group_info']['group_items'];
-              foreach ($filter_group_items as $group_index => $group_item) {
-                $item_operator = $group_item['operator'];
-                $item_min_value = $group_item['value']['min'] ?? NULL;
-                $item_max_value = $group_item['value']['max'] ?? NULL;
-                if ($filter->operator === $item_operator
-                  && $min_value === $item_min_value
-                  && $max_value === $item_max_value) {
-                  $values[] = [
-                    'id' => 0,
-                    'raw' => $group_index,
-                    'value' => $group_item['title'] ?? $min_value . '-' . $max_value,
-                  ];
-                  $processed_value = $values;
-                  break;
-                }
-              }
-            }
-          }
-          else {
-            if (is_array($original_value)) {
+        case 'bundle':
+          if (is_array($original_value)) {
+            if ($entity_type = $filter->getEntityType()) {
               $values = [];
-              $filter_group_items = $filter->options['group_info']['group_items'];
+              $types = $this->entityTypeBundleInfo->getBundleInfo($entity_type);
               foreach ($original_value as $index => $value) {
-                if (!$this->isValidArrayValue($filter, $index, $value)) {
+                if (!isset($types[$value])) {
                   continue;
                 }
-                foreach ($filter_group_items as $group_item) {
-                  if ($filter->operator === $group_item['operator']
-                    && $value == $group_item['value']) {
-                    $values[] = [
-                      'id' => $index,
-                      'raw' => $group_item['value'],
-                      'value' => $group_item['title'],
-                    ];
-                    break;
-                  }
-                }
+                $values[] = [
+                  'id' => $index,
+                  'raw' => $value,
+                  'value' => $types[$value]['label'],
+                ];
               }
               $processed_value = $values;
             }
-            else {
-              $filter_group_items = $filter->options['group_info']['group_items'];
-              foreach ($filter_group_items as $group_index => $group_item) {
-                $group_item_value = $group_item['value']['value'] ?? $group_item['value'];
-                if ($filter->operator === $group_item['operator']
-                  && $original_value == $group_item_value) {
-                  $values[] = [
-                    'id' => 0,
-                    'raw' => $group_index,
-                    'value' => $group_item['title'],
-                  ];
-                  $processed_value = $values;
-                  break;
-                }
+          }
+          break;
+
+        case 'user_name':
+          if (is_array($original_value)) {
+            $values = [];
+            foreach ($original_value as $index => $value) {
+              if (!$this->isValidArrayValue($filter, $index, $value)) {
+                continue;
+              }
+              $user = User::load($value);
+              if ($user) {
+                $values[] = [
+                  'id' => $index,
+                  'raw' => (string) $value,
+                  'value' => (string) $user->getDisplayName(),
+                ];
               }
             }
+            $processed_value = $values;
           }
-        }
-        else {
+          break;
+
+        case 'list_field':
+          $original_value = is_array($original_value) ? $original_value : [$original_value];
+          if (method_exists($filter, 'getValueOptions')) {
+            $values = [];
+            $value_options = $filter->getValueOptions();
+            if (!empty($value_options) && is_array($value_options)) {
+              // Support both flat arrays and 2D grouped arrays of options.
+              // If $value_options is grouped (contains subarrays), flatten it.
+              // Since list field keys must be unique (regardless of grouping),
+              // this is safe.
+              $flattened_value_options = [];
+              foreach ($value_options as $key => $value) {
+                if (is_array($value)) {
+                  foreach ($value as $group_value_key => $group_value) {
+                    $flattened_value_options[$group_value_key] = $group_value;
+                  }
+                }
+                else {
+                  $flattened_value_options[$key] = $value;
+                }
+              }
+              foreach ($original_value as $index => $value) {
+                if (!$this->isValidArrayValue($filter, $index, $value)
+                  || !isset($flattened_value_options[$value])) {
+                  continue;
+                }
+                $values[] = [
+                  'id' => $index,
+                  'raw' => $value,
+                  'value' => $flattened_value_options[$value],
+                ];
+              }
+            }
+            $processed_value = $values;
+          }
+          break;
+
+        default:
           if ($filter->operator === 'between' || $filter->operator === 'not between') {
             $min_value = $filter->value['min'] ?? NULL;
             $max_value = $filter->value['max'] ?? NULL;
@@ -836,35 +858,26 @@ class ViewsFiltersSummary extends Result {
             }
           }
           else {
-            if (is_array($original_value)) {
-              $values = [];
-              foreach ($original_value as $index => $value) {
-                if (!$this->isValidArrayValue($filter, $index, $value)) {
-                  continue;
-                }
+            $original_value = is_array($original_value) ? $original_value : [$original_value];
+            $values = [];
+            foreach ($original_value as $index => $item_value) {
+              if (!$this->isValidArrayValue($filter, $index, $item_value)) {
+                continue;
+              }
+              $value = (string) $item_value;
+              $value_label = $this->getFilterValueLabel($filter, $value);
+              if (!empty($value_label)) {
                 $values[] = [
                   'id' => $index,
-                  'raw' => (string) $value,
-                  'value' => (string) $value,
-                ];
-              }
-              $processed_value = $values;
-            }
-            else {
-              if ($this->isValidValue($original_value)) {
-                $value = (string) $original_value;
-                $value_label = $this->getFilterValueLabel($filter, $value);
-                $values[] = [
-                  'id' => 0,
                   'raw' => $value,
                   'value' => $value_label,
                 ];
-                $processed_value = $values;
               }
             }
+            $processed_value = $values;
           }
-        }
-        break;
+          break;
+      }
     }
 
     $info = [
@@ -1000,8 +1013,14 @@ class ViewsFiltersSummary extends Result {
   protected function isValidIndex(FilterPluginBase $filter, int|string $index): bool {
     switch ($filter->pluginId) {
       case 'language':
-        // Language filter array are similar to: ['fr' => 'fr', 'en' => 'en'].
+        // Language filter arrays are similar to: ['fr' => 'fr', 'en' => 'en'].
         $is_valid = TRUE;
+        break;
+
+      case 'list_field':
+        // Text list filter arrays can be similar to:
+        // ['cat' => 'Cat', 'dog' => 'Dog'].
+        $is_valid = is_numeric($index) || $index !== '';
         break;
 
       default:

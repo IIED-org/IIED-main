@@ -21,61 +21,9 @@ class FilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
   public static $testViews = ['bef_test'];
 
   /**
-   * Tests grouping filter options.
-   *
-   * There is a bug in views where changing the identifier of an exposed
-   * grouped filter will cause an undefined index notice.
-   *
-   * @todo Enable test once https://www.drupal.org/project/drupal/issues/2884296
-   *   is fixed
-   */
-  /*public function testGroupedFilters() {
-  $view = Views::getView('bef_test');
-  $display = &$view->storage->getDisplay('default');
-
-  // Ensure our filter "field_bef_boolean_value" is grouped.
-  $display['display_options']['filters']['field_bef_boolean_value']
-  ['is_grouped'] = TRUE;
-  $display['display_options']['filters']['field_bef_boolean_value']
-  ['group_info'] = [
-  'plugin_id' => 'boolean',
-  'label' => 'bef_boolean (field_bef_boolean)',
-  'description' => '',
-  'identifier' => 'field_bef_boolean_value2',
-  'optional' => TRUE,
-  'widget' => 'select',
-  'multiple' => FALSE,
-  'remember' => FALSE,
-  'default_group' => 'All',
-  'default_group_multiple' => [],
-  'group_items' => [
-  1 => [
-  'title' => 'YES',
-  'operator' => '=',
-  'value' => '1',
-  ],
-  2 => [
-  'title' => 'NO',
-  'operator' => '=',
-  'value' => '0',
-  ],
-  ],
-  ];
-
-  // Render the exposed form.
-  $output = $this->getExposedFormRenderArray($view);
-
-  // Check our "FIELD_BEF_BOOLEAN" filter is rendered with id
-  // "field_bef_boolean_value2".
-  $this->assertTrue(isset($output['field_bef_boolean_value2']),
-  'Exposed filter "FIELD_BEF_BOOLEAN" is exposed with id
-  "field_bef_boolean_value2".');
-
-  $view->destroy();
-  }*/
-
-  /**
    * Tests sorting filter options alphabetically.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testSortFilterOptions() {
     $view = Views::getView('bef_test');
@@ -113,13 +61,15 @@ class FilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
     asort($sorted_options);
 
     // Assert our "collapsible" options detail is visible.
-    $this->assertEquals(array_keys($options), array_keys($sorted_options), '"Field BEF integer" options are sorted alphabetically.');
+    $this->assertEquals(array_keys($options), array_keys($sorted_options));
 
     $view->destroy();
   }
 
   /**
    * Tests moving filter option into collapsible fieldset.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testCollapsibleOption() {
     $view = Views::getView('bef_test');
@@ -142,7 +92,7 @@ class FilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
 
     // Assert our "collapsible" options detail is visible.
     $actual = $this->xpath("//form//details[@data-drupal-selector='edit-field-bef-email-value-collapsible']");
-    $this->assertCount(1, $actual, '"Field BEF Email" option is displayed as collapsible fieldset.');
+    $this->assertCount(1, $actual);
 
     $view->destroy();
   }
@@ -156,6 +106,8 @@ class FilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
    *
    * This test uses BEF's option rewriting on an existing filter to simulate
    * an initial non-alphabetical order.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testFirstNonAnyOptionIsSortedWithMultipleSelections() {
     $view_id = 'bef_test';
@@ -195,7 +147,7 @@ class FilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
 
     // Re-initialize the view to apply BEF settings.
     $view = Views::getView($view_id);
-    $output = $this->getExposedFormRenderArray($view, $display_id);
+    $output = $this->getExposedFormRenderArray($view);
 
     $this->assertArrayHasKey($filter_id, $output, "Filter '$filter_id' not found in the rendered exposed form.");
     if (!isset($output[$filter_id]['#options'])) {
@@ -217,7 +169,7 @@ class FilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
       return $option_label;
     }, array_values($options_from_form));
 
-    $this->assertEquals($expected_labels_order, $actual_labels_order, 'With "Allow multiple selections" and no "- Any-" option, the first rewritten option ("Mango") should be sorted alphabetically by label, not preserved.');
+    $this->assertEquals($expected_labels_order, $actual_labels_order);
 
     $view->destroy();
   }
@@ -227,6 +179,8 @@ class FilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
    *
    * When alphabetical sorting is enabled, even if "Allow multiple selections"
    * is true.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testRewrittenAnyOptionIsPreservedWithSorting() {
     $view_id = 'bef_test';
@@ -299,7 +253,7 @@ class FilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
       'Orange',
     ];
 
-    $this->assertEquals($expected_remaining_labels_sorted, $actual_remaining_labels, 'Options after the rewritten "- Any -" should be sorted alphabetically by label.');
+    $this->assertEquals($expected_remaining_labels_sorted, $actual_remaining_labels);
 
     $view->destroy();
   }

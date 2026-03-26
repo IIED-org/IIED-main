@@ -21,6 +21,8 @@ class RadioButtonsFilterWidgetKernelTest extends BetterExposedFiltersKernelTestB
 
   /**
    * Tests the exposed checkboxes filter widget.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testExposedCheckboxes() {
     $view = Views::getView('bef_test');
@@ -50,26 +52,28 @@ class RadioButtonsFilterWidgetKernelTest extends BetterExposedFiltersKernelTestB
 
     // Check our "FIELD_BEF_INTEGER" filter is rendered as checkboxes.
     $actual = $this->xpath('//form//input[@type="checkbox" and starts-with(@name, "field_bef_integer_value")]');
-    $this->assertCount(5, $actual, 'Exposed filter "FIELD_BEF_INTEGER" has correct number of exposed checkboxes.');
+    $this->assertCount(5, $actual);
 
     // Check our "TERM_NODE_TID_DEPTH" filter is rendered as nested checkboxes.
     $actual = $this->xpath("//form//div[contains(concat(' ',normalize-space(@class),' '),' bef-nested ')]");
-    $this->assertCount(1, $actual, 'Exposed filter "TERM_NODE_TID_DEPTH" has bef-nested class');
+    $this->assertCount(1, $actual);
 
     $actual = $this->xpath('//form//div[@id="edit-term-node-tid-depth--2"]/div/ul/li/div/input[@type="checkbox" and starts-with(@name, "term_node_tid_depth")]');
-    $this->assertCount(3, $actual, 'Exposed filter "TERM_NODE_TID_DEPTH" has correct number of exposed top-level checkboxes.');
+    $this->assertCount(3, $actual);
 
     $actual = $this->xpath('//form//div[@id="edit-term-node-tid-depth--2"]/div/ul/li/ul/li/div/input[@type="checkbox" and starts-with(@name, "term_node_tid_depth")]');
-    $this->assertCount(5, $actual, 'Exposed filter "TERM_NODE_TID_DEPTH" has correct number of exposed second-level checkboxes.');
+    $this->assertCount(5, $actual);
 
     $actual = $this->xpath('//form//div[@id="edit-term-node-tid-depth--2"]/div/ul/li/ul/li/ul/li/div/input[@type="checkbox" and starts-with(@name, "term_node_tid_depth")]');
-    $this->assertCount(14, $actual, 'Exposed filter "TERM_NODE_TID_DEPTH" has correct number of exposed third-level checkboxes.');
+    $this->assertCount(14, $actual);
 
     $view->destroy();
   }
 
   /**
    * Tests the exposed radio buttons filter widget.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testExposedRadioButtons() {
     $view = Views::getView('bef_test');
@@ -96,23 +100,23 @@ class RadioButtonsFilterWidgetKernelTest extends BetterExposedFiltersKernelTestB
 
     // Check our filter is rendered as radio buttons (i.e. Any, true, false).
     $actual = $this->xpath('//form//input[@type="radio" and @name="field_bef_boolean_value"]');
-    $this->assertCount(3, $actual, 'Exposed filter "FIELD_BEF_BOOLEAN" renders as radio buttons.');
+    $this->assertCount(3, $actual);
 
     // Check our "TERM_NODE_TID_DEPTH" filter is rendered as nested radio
     // buttons.
     $actual = $this->xpath("//form//div[contains(concat(' ',normalize-space(@class),' '),' bef-nested ')]");
-    $this->assertCount(1, $actual, 'Exposed filter "TERM_NODE_TID_DEPTH" has bef-nested class');
+    $this->assertCount(1, $actual);
 
     // The difference with checkboxes is that radio buttons render an additional
     // top level option (i.e. any).
     $actual = $this->xpath('//form//div[@id="edit-term-node-tid-depth--2"]/div/ul/li/div/input[@type="radio" and starts-with(@name, "term_node_tid_depth")]');
-    $this->assertCount(4, $actual, 'Exposed filter "TERM_NODE_TID_DEPTH" has correct number of exposed top-level radio buttons.');
+    $this->assertCount(4, $actual);
 
     $actual = $this->xpath('//form//div[@id="edit-term-node-tid-depth--2"]/div/ul/li/ul/li/div/input[@type="radio" and starts-with(@name, "term_node_tid_depth")]');
-    $this->assertCount(5, $actual, 'Exposed filter "TERM_NODE_TID_DEPTH" has correct number of exposed second-level radio buttons.');
+    $this->assertCount(5, $actual);
 
     $actual = $this->xpath('//form//div[@id="edit-term-node-tid-depth--2"]/div/ul/li/ul/li/ul/li/div/input[@type="radio" and starts-with(@name, "term_node_tid_depth")]');
-    $this->assertCount(14, $actual, 'Exposed filter "TERM_NODE_TID_DEPTH" has correct number of exposed third-level radio buttons.');
+    $this->assertCount(14, $actual);
 
     $view->destroy();
   }

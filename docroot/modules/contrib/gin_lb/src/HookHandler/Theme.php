@@ -81,6 +81,15 @@ class Theme {
       'template' => 'form/form--layout-builder-form--gin-lb',
       'base hook' => 'form',
     ];
+
+    $themes['gin_lb_form_actions'] = [
+      'variables' => [
+        'preview_region' => FALSE,
+        'preview_content' => TRUE,
+      ],
+      'template' => 'top_bar/gin-lb-form-actions',
+    ];
+
     return $themes;
   }
 

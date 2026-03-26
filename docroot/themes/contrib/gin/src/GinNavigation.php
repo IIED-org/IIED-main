@@ -2,11 +2,15 @@
 
 namespace Drupal\gin;
 
-use Drupal\block_content\Entity\BlockContentType;
+use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
-use Drupal\taxonomy\Entity\Vocabulary;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -14,11 +18,42 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GinNavigation implements ContainerInjectionInterface {
 
+  use StringTranslationTrait;
+
+  /**
+   * Settings constructor.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
+   *   The current user.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param \Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface $breadcrumbBuilder
+   *   The breadcrumb builder.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
+   *   The current route match.
+   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menuLinkTree
+   *   The menu link tree.
+   */
+  public function __construct(
+    protected AccountInterface $currentUser,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected BreadcrumbBuilderInterface $breadcrumbBuilder,
+    protected RouteMatchInterface $routeMatch,
+    protected MenuLinkTreeInterface $menuLinkTree,
+  ) {
+  }
+
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static();
+    return new static(
+      $container->get('current_user'),
+      $container->get('entity_type.manager'),
+      $container->get('breadcrumb'),
+      $container->get('current_route_match'),
+      $container->get('menu.link_tree'),
+    );
   }
 
   /**
@@ -27,16 +62,14 @@ class GinNavigation implements ContainerInjectionInterface {
   public function getNavigationAdminMenuItems(): array {
     $parameters = new MenuTreeParameters();
     $parameters->setMinDepth(2)->setMaxDepth(4)->onlyEnabledLinks();
-    /** @var Drupal\Core\Menu\MenuLinkTree $menu_tree */
-    $menu_tree = \Drupal::service('menu.link_tree');
-    $tree = $menu_tree->load('admin', $parameters);
+    $tree = $this->menuLinkTree->load('admin', $parameters);
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
       ['callable' => 'toolbar_menu_navigation_links'],
     ];
-    $tree = $menu_tree->transform($tree, $manipulators);
-    $build = $menu_tree->build($tree);
+    $tree = $this->menuLinkTree->transform($tree, $manipulators);
+    $build = $this->menuLinkTree->build($tree);
     /** @var \Drupal\Core\Menu\MenuLinkInterface $link */
     $first_link = reset($tree)->link;
     // Get the menu name of the first link.
@@ -46,15 +79,17 @@ class GinNavigation implements ContainerInjectionInterface {
 
     // Loop through menu items and add the plugin id as a class.
     foreach ($tree as $item) {
-      $plugin_id = $item->link->getPluginId();
-      $plugin_class = str_replace('.', '_', $plugin_id);
-      $build['#items'][$plugin_id]['class'] = $plugin_class;
+      if ($item->access->isAllowed()) {
+        $plugin_id = $item->link->getPluginId();
+        $plugin_class = str_replace('.', '_', $plugin_id);
+        $build['#items'][$plugin_id]['class'] = $plugin_class;
+      }
     }
 
     // Remove content and help from admin menu.
     unset($build['#items']['system.admin_content']);
     unset($build['#items']['help.main']);
-    $build['#title'] = t('Administration');
+    $build['#title'] = $this->t('Administration');
 
     return $build;
   }
@@ -64,11 +99,15 @@ class GinNavigation implements ContainerInjectionInterface {
    */
   public function getNavigationBookmarksMenuItems(): array {
     // Check if the shortcut module is installed.
+    // phpcs:disable
+    // @phpstan-ignore-next-line
     if (\Drupal::hasService('shortcut.lazy_builders') === TRUE) {
+      // @phpstan-ignore-next-line
       $shortcuts = \Drupal::service('shortcut.lazy_builders')->lazyLinks()['shortcuts'];
+      // phpcs:enable
       $shortcuts['#theme'] = 'menu_region__top';
       $shortcuts['#menu_name'] = 'bookmarks';
-      $shortcuts['#title'] = t('Bookmarks');
+      $shortcuts['#title'] = $this->t('Bookmarks');
       return $shortcuts;
     }
     else {
@@ -80,107 +119,123 @@ class GinNavigation implements ContainerInjectionInterface {
    * Get Navigation Create menu.
    */
   public function getNavigationCreateMenuItems(): array {
-    // Get the Entity Type Manager service.
-    $entity_type_manager = \Drupal::entityTypeManager();
 
     // Needs to be this syntax to
     // support older PHP versions
-    // for Druapl 9.0+.
+    // for Drupal 9.0+.
     $create_type_items = [];
     $create_item_url = '';
 
     // Get node types.
-    if ($entity_type_manager->hasDefinition('node')) {
-      $content_types = $entity_type_manager->getStorage('node_type')->loadMultiple();
+    if ($this->entityTypeManager->hasDefinition('node')) {
+      $content_types = $this->entityTypeManager->getStorage('node_type')->loadMultiple();
       $content_type_items = [];
 
       foreach ($content_types as $item) {
-        $content_type_items[] = [
-          'title' => $item->label(),
-          'class' => $item->id(),
-          'url' => Url::fromRoute('node.add', ['node_type' => $item->id()]),
-        ];
+        if ($this->hasLinkAccessPermission('node.add', ['node_type' => $item->id()])) {
+          $content_type_items[] = [
+            'title' => $item->label(),
+            'class' => $item->id(),
+            'url' => Url::fromRoute('node.add', ['node_type' => $item->id()]),
+          ];
+        }
       }
 
       $create_type_items = array_merge($content_type_items);
     }
 
     // Get block types.
-    if ($entity_type_manager->hasDefinition('block_content')) {
-      $block_content_types = BlockContentType::loadMultiple();
+    if ($this->entityTypeManager->hasDefinition('block_content')) {
+      $block_content_types = $this->entityTypeManager
+        ->getStorage('block_content_type')
+        ->loadMultiple();
       $block_type_items = [];
 
       foreach ($block_content_types as $item) {
-        $block_type_items[] = [
-          'title' => $item->label(),
-          'class' => $item->id(),
-          'url' => Url::fromRoute('block_content.add_form', ['block_content_type' => $item->id()]),
-        ];
+        if ($this->hasLinkAccessPermission('block_content.add_form', ['block_content_type' => $item->id()])) {
+          $block_type_items[] = [
+            'title' => $item->label(),
+            'class' => $item->id(),
+            'url' => Url::fromRoute('block_content.add_form', ['block_content_type' => $item->id()]),
+          ];
+        }
       }
 
-      $create_type_items = array_merge(
-        $create_type_items,
-        [
+      if ($block_type_items) {
+        $create_type_items = array_merge(
+          $create_type_items,
           [
-            'title' => t('Blocks'),
-            'class' => 'blocks',
-            'url' => '',
-            'below' => $block_type_items,
-          ],
-        ]
-      );
+            [
+              'title' => $this->t('Blocks'),
+              'class' => 'blocks',
+              'url' => '',
+              'below' => $block_type_items,
+            ],
+          ]
+        );
+      }
     }
 
     // Get media types.
-    if ($entity_type_manager->hasDefinition('media')) {
-      $media_types = $entity_type_manager->getStorage('media_type')->loadMultiple();
+    if ($this->entityTypeManager->hasDefinition('media')) {
+      $media_types = $this->entityTypeManager->getStorage('media_type')->loadMultiple();
       $media_type_items = [];
 
       foreach ($media_types as $item) {
-        $media_type_items[] = [
-          'title' => $item->label(),
-          'class' => $item->label(),
-          'url' => Url::fromRoute('entity.media.add_form', ['media_type' => $item->id()]),
-        ];
+        if ($this->hasLinkAccessPermission('entity.media.add_form', ['media_type' => $item->id()])) {
+          $media_type_items[] = [
+            'title' => $item->label(),
+            'class' => $item->label(),
+            'url' => Url::fromRoute('entity.media.add_form', ['media_type' => $item->id()]),
+          ];
+        }
       }
 
-      $create_type_items = array_merge(
-        $create_type_items,
-        [
+      if ($media_type_items) {
+        $create_type_items = array_merge(
+          $create_type_items,
           [
-            'title' => t('Media'),
-            'class' => 'media',
-            'url' => '',
-            'below' => $media_type_items,
-          ],
-        ]
-      );
+            [
+              'title' => $this->t('Media'),
+              'class' => 'media',
+              'url' => '',
+              'below' => $media_type_items,
+            ],
+          ]
+        );
+      }
     }
 
-    // Get taxomony types.
-    if ($entity_type_manager->hasDefinition('taxonomy_term')) {
-      $taxonomy_types = Vocabulary::loadMultiple();
+    // Get taxonomy types.
+    if ($this->entityTypeManager->hasDefinition('taxonomy_term')) {
+      $taxonomy_types = $this->entityTypeManager
+        ->getStorage('taxonomy_vocabulary')
+        ->loadMultiple();
       $taxonomy_type_items = [];
 
       foreach ($taxonomy_types as $item) {
-        $taxonomy_type_items[] = [
-          'title' => $item->label(),
-          'class' => $item->id(),
-          'url' => Url::fromRoute('entity.taxonomy_term.add_form', ['taxonomy_vocabulary' => $item->id()]),
-        ];
+        if ($this->hasLinkAccessPermission('entity.taxonomy_term.add_form', ['taxonomy_vocabulary' => $item->id()])) {
+          $taxonomy_type_items[] = [
+            'title' => $item->label(),
+            'class' => $item->id(),
+            'url' => Url::fromRoute('entity.taxonomy_term.add_form', ['taxonomy_vocabulary' => $item->id()]),
+          ];
+        }
       }
 
-      $create_type_items = array_merge(
-        $create_type_items,
-        [
+      if ($taxonomy_type_items) {
+        $create_type_items = array_merge(
+          $create_type_items,
           [
-            'title' => t('Taxonomy'),
-            'class' => 'taxonomy',
-            'url' => '',
-            'below' => $taxonomy_type_items,
-          ],
-        ]
-      );
+            [
+              'title' => $this->t('Taxonomy'),
+              'class' => 'taxonomy',
+              'url' => '',
+              'below' => $taxonomy_type_items,
+            ],
+          ]
+        );
+      }
     }
 
     if (!$create_type_items && !$create_item_url) {
@@ -189,7 +244,7 @@ class GinNavigation implements ContainerInjectionInterface {
 
     // Generate menu items.
     $create_items['create'] = [
-      'title' => t('Create'),
+      'title' => $this->t('Create'),
       'class' => 'create',
       'url' => $create_item_url,
       'below' => $create_type_items,
@@ -199,7 +254,7 @@ class GinNavigation implements ContainerInjectionInterface {
       '#theme' => 'menu_region__middle',
       '#items' => $create_items,
       '#menu_name' => 'create',
-      '#title' => t('Create Navigation'),
+      '#title' => $this->t('Create Navigation'),
     ];
   }
 
@@ -207,51 +262,57 @@ class GinNavigation implements ContainerInjectionInterface {
    * Get Navigation Content menu.
    */
   public function getNavigationContentMenuItems(): array {
-    $entity_type_manager = \Drupal::entityTypeManager();
-
     $create_content_items = [];
 
     // Get Content menu item.
-    if ($entity_type_manager->hasDefinition('node')) {
-      $create_content_items['content'] = [
-        'title' => t('Content'),
-        'class' => 'content',
-        'url' => Url::fromRoute('system.admin_content')->toString(),
-      ];
+    if ($this->entityTypeManager->hasDefinition('node')) {
+      if ($this->hasLinkAccessPermission('system.admin_content')) {
+        $create_content_items['content'] = [
+          'title' => $this->t('Content'),
+          'class' => 'content',
+          'url' => Url::fromRoute('system.admin_content')->toString(),
+        ];
+      }
     }
 
     // Get Blocks menu item.
-    if ($entity_type_manager->hasDefinition('block_content')) {
-      $create_content_items['blocks'] = [
-        'title' => t('Blocks'),
-        'class' => 'blocks',
-        'url' => Url::fromRoute('entity.block_content.collection')->toString(),
-      ];
+    if ($this->entityTypeManager->hasDefinition('block_content')) {
+      if ($this->hasLinkAccessPermission('entity.block_content.collection')) {
+        $create_content_items['blocks'] = [
+          'title' => $this->t('Blocks'),
+          'class' => 'blocks',
+          'url' => Url::fromRoute('entity.block_content.collection')->toString(),
+        ];
+      }
     }
 
     // Get File menu item.
-    if ($entity_type_manager->hasDefinition('file')) {
-      $create_content_items['files'] = [
-        'title' => t('Files'),
-        'class' => 'files',
-        'url' => '/admin/content/files',
-      ];
+    if ($this->entityTypeManager->hasDefinition('file')) {
+      if ($this->hasLinkAccessPermission('view.files.page_1')) {
+        $create_content_items['files'] = [
+          'title' => $this->t('Files'),
+          'class' => 'files',
+          'url' => Url::fromRoute('view.files.page_1')->toString(),
+        ];
+      }
     }
 
     // Get Media menu item.
-    if ($entity_type_manager->hasDefinition('media')) {
-      $create_content_items['media'] = [
-        'title' => t('Media'),
-        'class' => 'media',
-        'url' => '/admin/content/media',
-      ];
+    if ($this->entityTypeManager->hasDefinition('media')) {
+      if ($this->hasLinkAccessPermission('view.media.media_page_list')) {
+        $create_content_items['media'] = [
+          'title' => $this->t('Media'),
+          'class' => 'media',
+          'url' => Url::fromRoute('view.media.media_page_list')->toString(),
+        ];
+      }
     }
 
     return [
       '#theme' => 'menu_region__middle',
       '#items' => $create_content_items,
       '#menu_name' => 'content',
-      '#title' => t('Content Navigation'),
+      '#title' => $this->t('Content Navigation'),
     ];
   }
 
@@ -261,17 +322,17 @@ class GinNavigation implements ContainerInjectionInterface {
   public function getMenuNavigationUserItems(): array {
     $user_items = [
       [
-        'title' => t('Profile'),
+        'title' => $this->t('Profile'),
         'class' => 'profile',
         'url' => Url::fromRoute('user.page')->toString(),
       ],
       [
-        'title' => t('Settings'),
+        'title' => $this->t('Settings'),
         'class' => 'settings',
         'url' => Url::fromRoute('entity.user.admin_form')->toString(),
       ],
       [
-        'title' => t('Log out'),
+        'title' => $this->t('Log out'),
         'class' => 'logout',
         'url' => Url::fromRoute('user.logout')->toString(),
       ],
@@ -280,7 +341,7 @@ class GinNavigation implements ContainerInjectionInterface {
       '#theme' => 'menu_region__bottom',
       '#items' => $user_items,
       '#menu_name' => 'user',
-      '#title' => t('User'),
+      '#title' => $this->t('User'),
     ];
   }
 
@@ -304,7 +365,7 @@ class GinNavigation implements ContainerInjectionInterface {
           'gin/navigation',
         ],
       ],
-      '#access' => \Drupal::currentUser()->hasPermission('access toolbar'),
+      '#access' => $this->currentUser->hasPermission('access toolbar'),
     ];
   }
 
@@ -313,13 +374,30 @@ class GinNavigation implements ContainerInjectionInterface {
    */
   public function getNavigationActiveTrail() {
     // Get the breadcrumb paths to maintain active trail in the toolbar.
-    $links = \Drupal::service('breadcrumb')->build(\Drupal::routeMatch())->getLinks();
+    $links = $this->breadcrumbBuilder->build($this->routeMatch)->getLinks();
     $paths = [];
     foreach ($links as $link) {
       $paths[] = $link->getUrl()->getInternalPath();
     }
 
     return $paths;
+  }
+
+  /**
+   * Check the current user's access permission for provided links.
+   *
+   * @param string $route_name
+   *   The name of the route.
+   * @param array $route_parameters
+   *   (optional) The route parameter value.
+   *
+   * @return bool
+   *   Return true if the user has the access to link or false if not.
+   */
+  public function hasLinkAccessPermission($route_name, ?array $route_parameters = []) {
+    $url = Url::fromRoute($route_name, $route_parameters);
+    $has_access = $url->access($this->currentUser);
+    return $has_access;
   }
 
 }

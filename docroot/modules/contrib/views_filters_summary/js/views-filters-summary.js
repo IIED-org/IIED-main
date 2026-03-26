@@ -43,10 +43,22 @@
      *
      * @param {Element} exposedForm
      *   The exposed form jQuery object.
+     * @param {Array} filterIds
+     *  (optional) An array of filter IDs to reset. If not provided, all inputs
+     *   will be reset.
      */
-    reset(exposedForm) {
+    reset(exposedForm, filterIds) {
       const inputs = this.getFormInputsToReset(exposedForm);
+      // A function to check should this element be handled.
+      const isSummaryElement = (element) => {
+        // Remove array part from the name, mostly for checkboxes and radios.
+        const nameClean = element.name.replace(/\[.*?\]/, '');
+        return filterIds && filterIds.includes(nameClean);
+      };
       inputs.forEach((input) => {
+        if (!isSummaryElement(input)) {
+          return;
+        }
         switch (input.type) {
           case 'password':
           case 'select-multiple':
@@ -54,6 +66,7 @@
           case 'text':
           case 'textarea':
           case 'date':
+          case 'search':
             input.value = '';
             break;
           case 'checkbox':
@@ -70,6 +83,9 @@
       });
       const selects = this.getFormSelectsToReset(exposedForm);
       selects.forEach((select) => {
+        if (!isSummaryElement(select)) {
+          return;
+        }
         Array.from(select.options).forEach((option) => {
           option.selected = false;
         });
@@ -83,6 +99,10 @@
      *   true if Ajax is used, false otherwise.
      */
     usesAjax() {
+      // Views preview mode uses Ajax.
+      if (this.exposedForm && this.exposedForm.id === 'views-ui-preview-form') {
+        return true;
+      }
       const summary = this.context.querySelector('.views-filters-summary');
       return summary.classList.contains('views-filters-summary--use-ajax');
     }
@@ -119,10 +139,61 @@
      *   The exposed form filter button.
      */
     getFilterSubmit(exposedForm) {
+      // In preview mode, try to use the "Update preview" button first.
+      if (exposedForm.id === 'views-ui-preview-form') {
+        const previewSubmit = exposedForm.querySelector('#preview-submit');
+        if (previewSubmit) {
+          return previewSubmit;
+        }
+      }
       // Some exposed forms can have multiple "filter" buttons.
-      return exposedForm.querySelector(
-        ':is(button, input)[type="submit"]:first-of-type',
+      // Collect all "submit" buttons/inputs within the exposed form.
+      const candidates = Array.from(
+        exposedForm.querySelectorAll(':is(button, input)[type="submit"]'),
       );
+
+      // Helper to determine element visibility (no jQuery :visible).
+      const isVisible = (el) => {
+        if (!el) return false;
+        const style = window.getComputedStyle(el);
+        if (
+          style.display === 'none' ||
+          style.visibility === 'hidden' ||
+          style.opacity === '0'
+        ) {
+          return false;
+        }
+        // offsetParent is null for display:none or detached. Allow
+        // fixed-position too.
+        return el.offsetParent !== null || style.position === 'fixed';
+      };
+
+      // Filter out disabled or hidden elements.
+      const enabledVisible = candidates.filter(
+        (el) => !el.disabled && isVisible(el),
+      );
+
+      // Preference 1: explicit views submit - data-drupal-selector ID begin
+      // with edit-submit.
+      const primaryBySelector = enabledVisible.find(
+        (el) =>
+          (el.getAttribute('data-drupal-selector') || '').startsWith(
+            'edit-submit',
+          ) || (el.id || '').startsWith('edit-submit'),
+      );
+      if (primaryBySelector) return primaryBySelector;
+
+      // Preference 2: select visually primary button.
+      const primaryByClass = enabledVisible.find(
+        (el) =>
+          el.classList.contains('button--primary') ||
+          el.classList.contains('btn-primary'),
+      );
+      if (primaryByClass) return primaryByClass;
+
+      // Fallback: select the first "submit" button or input.
+      if (enabledVisible.length > 0) return enabledVisible[0];
+      return candidates[0] || null;
     }
 
     /**
@@ -202,7 +273,9 @@
      */
     onRemoveClick(event) {
       event.preventDefault();
-      const removeSelector = event.target.getAttribute('data-remove-selector');
+      const removeSelector = event.currentTarget.getAttribute(
+        'data-remove-selector',
+      );
       const colonIndex = removeSelector.indexOf(':');
       const selector = removeSelector.substring(0, colonIndex);
       const value = removeSelector.substring(colonIndex + 1);
@@ -291,8 +364,11 @@
      */
     onResetClick(event) {
       event.preventDefault();
-      const exposedForm = this.getExposedFormToReset(event.target);
-      this.reset(exposedForm);
+      const exposedForm = this.getExposedFormToReset(event.currentTarget);
+      const summaryFilterIds = event.currentTarget
+        .getAttribute('data-filter-ids')
+        .split(',');
+      this.reset(exposedForm, summaryFilterIds);
       this.submit(exposedForm);
     }
 
@@ -305,9 +381,11 @@
     addEventListeners(element) {
       element.querySelectorAll('a.remove-filter').forEach((elt) => {
         elt.addEventListener('click', this.onRemoveClick);
+        elt.classList.remove('disabled');
       });
       element.querySelectorAll('a.reset').forEach((elt) => {
         elt.addEventListener('click', this.onResetClick);
+        elt.classList.remove('disabled');
       });
     }
   }

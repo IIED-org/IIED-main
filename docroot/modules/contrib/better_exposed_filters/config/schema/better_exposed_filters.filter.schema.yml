@@ -13,6 +13,12 @@ better_exposed_filters_filter_widget:
         sort_options:
           type: boolean
           label: 'Sort filter options alphabetically'
+        sort_options_method:
+          type: string
+          label: 'Sort method for filter options'
+        sort_options_natural:
+          type: boolean
+          label: 'Use natural sorting algorithm'
         placeholder_text:
           type: label
           label: 'Placeholder text for the filter'
@@ -135,6 +141,14 @@ better_exposed_filters.filter.bef_sliders:
     tooltips_value_suffix:
       type: label
       label: 'Tooltip value suffix'
+    placement_location:
+      type: string
+      label: 'Placement location of slider'
+      constraints:
+        Choice:
+          - start
+          - middle
+          - end
 
 better_exposed_filters.filter.bef_datepickers:
   label: 'jQuery UI Date Picker'

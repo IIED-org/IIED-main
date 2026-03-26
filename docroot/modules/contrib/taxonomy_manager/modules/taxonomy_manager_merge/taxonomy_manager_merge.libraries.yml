@@ -1,4 +1,0 @@
-tree:
-  version: 1.x
-  js:
-    js/tree.js: {}

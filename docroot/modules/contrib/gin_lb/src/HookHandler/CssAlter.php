@@ -125,6 +125,22 @@ class CssAlter implements ContainerInjectionInterface {
     unset($css['core/misc/dialog/off-canvas/css/button.css']);
     unset($css['core/misc/dialog/off-canvas/css/base.css']);
     unset($css['core/misc/dialog/off-canvas/css/table.css']);
+
+    $whitelist = [
+      'core/themes/claro/css/components/fieldset.css',
+      'core/themes/claro/css/components/entity-meta.css',
+      'core/themes/claro/css/components/jquery.ui/theme.css'
+    ];
+    // Gin 4.
+    foreach ($css as $name => $config) {
+      if (str_contains( $name, 'core/themes/claro/css/components') &&
+      !in_array($name, $whitelist)
+      ) {
+        unset($css[$name]);
+      }
+    }
+    unset($css['core/themes/claro/css/base/elements.css']);
+    unset($css['core/themes/claro/css/base/typography.css']);
   }
 
 }

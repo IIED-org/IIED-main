@@ -33,42 +33,13 @@
       </span>
     {% endif %}
 
-    <span class="items">
-      {%- for item in summary -%}
-        <span class="item">
-          {% if options.show_label %}
-            <span class="label">{{ item.label }}:</span>
-          {% endif %}
-
-          {% if options.has_group_values %}
-            <span class="values">
-              {%- for value in item.groups -%}
-                <span class="value-container">
-                  <strong class="value">{{ value.value }}</strong>
-                  {% if value.link and options.show_remove_link %}
-                    {{ value.link }}
-                  {% endif %}
-                </span>
-              {% endfor %}
-             </span>
-          {% else %}
-            <span class="value-container">
-              <strong class="value">{{ item.value }}</strong>
-              {% if item.link and options.show_remove_link %}
-                  {{ item.link }}
-              {% endif %}
-            </span>
-          {% endif %}
-
-          {% if loop.last == false %}
-            {{- options.filters_summary.separator -}}
-          {% endif %}
-        </span>
-      {%- endfor -%}
-    </span>
+    {% include 'views-filters-summary-items.html.twig' with {
+      summary: summary,
+      options: options
+    } %}
 
     {% if summary and options.show_reset_link and options.reset_link.title %}
-      <a class="reset" href='/'>{{ options.reset_link.title }}</a>
+      <a class="reset disabled" href='#' data-filter-ids="{{ options.reset_link.filter_ids|join(',') }}">{{ options.reset_link.title }}</a>
     {% endif %}
   </div>
 {% endapply %}

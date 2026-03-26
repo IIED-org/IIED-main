@@ -56,9 +56,11 @@
           if ($(item).hasClass('toastify')) {
             return;
           }
+
           if ($(item).parents('.glb-sidebar__content').length >= 1) {
             return;
           }
+
           Toastify({
             text: $(item).html(),
             escapeMarkup: false,

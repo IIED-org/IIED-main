@@ -443,6 +443,8 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
       cache:
         type: search_api_none
       empty:
@@ -678,6 +680,8 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                 select_all_none: false
                 select_all_none_nested: false
                 display_inline: false
@@ -696,6 +700,8 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                 select_all_none: false
                 select_all_none_nested: true
                 display_inline: false
@@ -714,6 +720,8 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                 select_all_none: false
                 select_all_none_nested: false
                 display_inline: false
@@ -732,6 +740,8 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                 select_all_none: false
                 select_all_none_nested: false
                 display_inline: false
@@ -751,6 +761,8 @@ display:
                   is_secondary: false
                   hide_label: true
                   field_classes: ''
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
       cache:
         type: search_api_none
       empty:

@@ -117,6 +117,28 @@ class RadioButtons extends FilterWidgetBase {
     // configurable.
     $field_id = $filter->options['is_grouped'] ? $filter->options['group_info']['identifier'] : $filter->options['expose']['identifier'];
 
+    $input = $form_state->getUserInput();
+    foreach ($input as $key => $value) {
+      if (is_array($value)) {
+        $value = array_filter($value, function ($item) {
+          return !($item === '' || $item === NULL || $item === 0 || $item === '0');
+        });
+
+        if (empty($value)) {
+          unset($input[$key]);
+        }
+        else {
+          $input[$key] = $value;
+        }
+      }
+      else {
+        if (is_null($value)) {
+          unset($input[$key]);
+        }
+      }
+    }
+    $form_state->setUserInput($input);
+
     parent::exposedFormAlter($form, $form_state);
     // If expose filters with operator enable.
     if (!empty($form[$field_id . '_wrapper'][$field_id])) {

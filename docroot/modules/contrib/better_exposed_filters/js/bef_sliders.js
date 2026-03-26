@@ -156,8 +156,25 @@
               $(slider).parents('form').find('[data-bef-auto-submit-click]').click();
             });
 
-            const $slider_wrapper = $(`.${sliderOptions.dataSelector}-slider-wrapper`);
-            $slider_wrapper.append(slider);
+            const placement = sliderOptions.placement_location;
+            const $minFieldWrapper = $min.parent('.form-item');
+            const $maxFieldWrapper = $max.parent('.form-item');
+            if (placement === 'start') {
+              if ($minFieldWrapper.length) {
+                $minFieldWrapper.before(slider);
+              }
+            }
+            else if (placement === 'end') {
+              $maxFieldWrapper.after(slider);
+            }
+            else {
+              if ($minFieldWrapper.length) {
+                $minFieldWrapper.after(slider);
+              }
+              else {
+                $maxFieldWrapper.after(slider);
+              }
+            }
 
             // Update the slider when the fields are updated.
             $min.blur(function () {

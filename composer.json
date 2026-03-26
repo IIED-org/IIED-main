@@ -73,6 +73,7 @@
     "drupal/admin_toolbar": "^3.1",
     "drupal/allowed_formats": "^3.0",
     "drupal/asset_injector": "^2.10",
+    "drupal/autologout": "^2.0",
     "drupal/better_exposed_filters": "^7.1@beta",
     "drupal/better_passwords": "^2.2",
     "drupal/block_class": "^3.0",
@@ -109,10 +110,10 @@
     "drupal/formdazzle": "^3.0",
     "drupal/geofield": "^1.64",
     "drupal/geolocation": "^3.2",
-    "drupal/gin": "^3.0@RC",
-    "drupal/gin_lb": "^1.0@beta",
+    "drupal/gin": "^4.1",
+    "drupal/gin_lb": "^2.0@beta",
     "drupal/gin_login": "^2.0",
-    "drupal/gin_toolbar": "^1.0@RC",
+    "drupal/gin_toolbar": "^2.0",
     "drupal/google_tag": "^2",
     "drupal/hal": "^2.0",
     "drupal/honeypot": "^2.1",
@@ -167,13 +168,13 @@
     "drupal/search_api_sorts_widget": "^1.0",
     "drupal/serial": "^2.0",
     "drupal/session_limit": "^2.0",
+    "drupal/session_management": "^1.0",
     "drupal/sophron": "^2.2",
     "drupal/stage_file_proxy": "^3.1",
     "drupal/stories": "^3.0.0-alpha3",
     "drupal/svg_image": "^3.0",
     "drupal/tablefield": "^3.0",
     "drupal/taxonomy_import": "^2.0",
-    "drupal/taxonomy_manager": "^2.0",
     "drupal/taxonomy_menu": "^3.4",
     "drupal/term_merge": "^2.0@beta",
     "drupal/term_reference_tree": "^2.0",
@@ -209,11 +210,9 @@
     "woocommerce/flexslider": "~2.0"
   },
   "require-dev": {
-    "drupal/config_devel": "^1.7",
     "drupal/core-dev": "^10",
     "drupal/devel": "^5.1",
     "drupal/devel_kint_extras": "^1.0",
-    "drupal/migrate_source_csv": "^3.4",
     "drupal/twig_xdebug": "^1.2",
     "palantirnet/drupal-rector": "^0.15.1"
   },
@@ -356,6 +355,9 @@
         "3344262 Add alt text": "https://www.drupal.org/files/issues/2025-08-15/pdfpreview-missing-alt-text.patch",
         "3344262 test for empty alt": "patches/3344262-pdfpreview-missing-alt-text.patch",
         "3344262 remove title": "patches/3344262-pdfpreview-remove-title.patch"
+      },
+      "drupal/autologout": {
+        "3580058 array warning": "https://www.drupal.org/files/issues/2026-03-23/3580058-autologout-undefined-array-key-cookie_samepath.patch"
       }
     },
     "drupal-lenient": {
