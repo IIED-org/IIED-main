@@ -1,0 +1,80 @@
+{#
+/**
+ * @file
+ * Theme override to display a taxonomy term.
+ *
+ * Available variables:
+ * - url: URL of the current term.
+ * - name: (optional) Name of the current term.
+ * - content: Items for the content of the term (fields and description).
+ *   Use 'content' to print them all, or print a subset such as
+ *   'content.description'. Use the following code to exclude the
+ *   printing of a given child element:
+ *   @code
+ *   {{ content|without('description') }}
+ *   @endcode
+ * - attributes: HTML attributes for the wrapper.
+ * - page: Flag for the full page state.
+ * - term: The taxonomy term entity, including:
+ *   - id: The ID of the taxonomy term.
+ *   - bundle: Machine name of the current vocabulary.
+ * - view_mode: View mode, e.g. 'full', 'teaser', etc.
+ *
+ * @see template_preprocess_taxonomy_term()
+ */
+#}
+          
+<div class="xl:pb-6">
+  <div class="mb-3">
+    <a class="inline-flex items-start gap-2 rounded-sm underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40" href="{{ url }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+        <path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd" />
+      </svg>
+      {{ content.link_back_text }}
+      </a>
+  </div>
+
+  <div class="mb-3 prose text-gray-500">
+      <a class="text-lg leading-tight text-gray-900 border-b border-gray-300 rounded-sm font-headline hover:border-iiedblue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40" href="{{ url }}">{{ name.0 }}
+      </a>
+  </div>
+          
+  <div class="flex flex-col items-start justify-between gap-4 md:items-center xl:items-end md:flex-row">      
+      
+      <div class="prose text-gray-500">{{ content.field_short_description }}</div>
+
+      {% if content.field_badge|render %}
+      <div class="not-prose shrink-0">
+        <div class="w-16 h-auto">{{ content.field_badge }}</div>
+      </div>  
+      {% endif %}
+
+  </div>
+
+</div>
+
+
+
+
+{#
+
+{% if content.field_url %}
+<a class="flex items-center justify-center pb-6" href="{{ content.field_url[0]['#url'] }}">{{ content.field_logo.0 }}</a>
+{% endif %}
+
+
+{% set url = {{ content.field_url[0]['#url'] }} %}
+<a class="block object-contain h-12" href="{{ url }}">
+  {% for item in items %}
+
+      <div class="flex items-center justify-center">
+    <a class="m-1 btn btn-secondary btn-lg" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
+  {% endfor %}
+  <div class="1">{{ content.field_url.0.value }}</div>
+<div class="2">{{ content.field_url.uri }}</div>
+<div class="3">{{ content.field_url.0.url }}</div>
+<div class="4">{{ content.field_url[0]['#url'] }}</div>
+<div class="5">{{ node.field_url.uri }}</div>
+<div class="6">{{ node.field_url.0.url }}</div>
+<div class="7">{{ node.field_url[0]['#url'] }}</div>
+  #}
