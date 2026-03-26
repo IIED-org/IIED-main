@@ -1,0 +1,16 @@
+uuid: 30897b16-2ddc-4244-a927-8a62a468cadf
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.series_page
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: node.series_page
+target_entity_type_id: node
+target_bundle: series_page
+default_langcode: site_default
+language_alterable: true

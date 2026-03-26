@@ -1,0 +1,24 @@
+uuid: 414fb819-5928-47ee-bd98-37fa27749626
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_contact
+    - filter.format.basic_html
+    - node.type.series_page
+  module:
+    - text
+id: node.series_page.field_contact
+field_name: field_contact
+entity_type: node
+bundle: series_page
+label: 'Contact or author'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - basic_html
+field_type: text_long

@@ -1,0 +1,24 @@
+uuid: 79f9307e-b8f6-426e-8078-08be5cdbf46c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_image_caption
+    - filter.format.basic_html
+    - node.type.series_page
+  module:
+    - text
+id: node.series_page.field_image_caption
+field_name: field_image_caption
+entity_type: node
+bundle: series_page
+label: 'Image caption'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - basic_html
+field_type: text_long

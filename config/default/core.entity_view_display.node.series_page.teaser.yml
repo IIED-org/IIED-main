@@ -1,0 +1,52 @@
+uuid: b15b1032-8c10-4c05-b88a-bbf2d98853fa
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.series_page.body
+    - field.field.node.series_page.field_alternative_label
+    - field.field.node.series_page.field_collections
+    - field.field.node.series_page.field_contact
+    - field.field.node.series_page.field_content
+    - field.field.node.series_page.field_display_image
+    - field.field.node.series_page.field_hide_date
+    - field.field.node.series_page.field_image_caption
+    - field.field.node.series_page.field_main_image
+    - field.field.node.series_page.field_standfirst
+    - field.field.node.series_page.field_tagline
+    - node.type.series_page
+  module:
+    - text
+    - user
+id: node.series_page.teaser
+targetEntityType: node
+bundle: series_page
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_alternative_label: true
+  field_collections: true
+  field_contact: true
+  field_content: true
+  field_display_image: true
+  field_hide_date: true
+  field_image_caption: true
+  field_main_image: true
+  field_standfirst: true
+  field_tagline: true
+  langcode: true
+  search_api_excerpt: true

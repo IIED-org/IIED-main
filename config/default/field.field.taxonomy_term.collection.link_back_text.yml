@@ -1,0 +1,19 @@
+uuid: c2a0f3a6-909b-42aa-903a-cda94cc34418
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.link_back_text
+    - taxonomy.vocabulary.collection
+id: taxonomy_term.collection.link_back_text
+field_name: link_back_text
+entity_type: taxonomy_term
+bundle: collection
+label: 'Link back text'
+description: 'Optionally appears on child pages'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

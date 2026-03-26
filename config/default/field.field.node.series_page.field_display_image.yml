@@ -1,0 +1,23 @@
+uuid: 0906ef52-b02a-4df1-aa25-c2476bdddfed
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_display_image
+    - node.type.series_page
+id: node.series_page.field_display_image
+field_name: field_display_image
+entity_type: node
+bundle: series_page
+label: 'Display image'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

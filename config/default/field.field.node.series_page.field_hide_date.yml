@@ -1,0 +1,23 @@
+uuid: 8d853101-6bca-41c9-8849-f4c71ae2ccda
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_hide_date
+    - node.type.series_page
+id: node.series_page.field_hide_date
+field_name: field_hide_date
+entity_type: node
+bundle: series_page
+label: 'Hide date'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
