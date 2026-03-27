@@ -12,6 +12,8 @@ dependencies:
     - field.field.taxonomy_term.collection.field_overview
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
+    - field.field.taxonomy_term.collection.field_tab_collection_label
+    - field.field.taxonomy_term.collection.field_tab_overview_label
     - field.field.taxonomy_term.collection.field_tags
     - field.field.taxonomy_term.collection.field_term_image
     - field.field.taxonomy_term.collection.field_theme
@@ -59,6 +61,8 @@ hidden:
   field_downloads: true
   field_overview: true
   field_publications_more_link: true
+  field_tab_collection_label: true
+  field_tab_overview_label: true
   field_tags: true
   field_term_image: true
   field_theme: true

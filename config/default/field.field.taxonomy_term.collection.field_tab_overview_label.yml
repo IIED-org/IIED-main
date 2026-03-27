@@ -1,0 +1,19 @@
+uuid: 7d03a7d4-66c6-4a17-adef-baabdfd44383
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_tab_overview_label
+    - taxonomy.vocabulary.collection
+id: taxonomy_term.collection.field_tab_overview_label
+field_name: field_tab_overview_label
+entity_type: taxonomy_term
+bundle: collection
+label: 'Overview label'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

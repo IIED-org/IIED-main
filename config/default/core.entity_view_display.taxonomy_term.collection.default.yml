@@ -11,6 +11,8 @@ dependencies:
     - field.field.taxonomy_term.collection.field_overview
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
+    - field.field.taxonomy_term.collection.field_tab_collection_label
+    - field.field.taxonomy_term.collection.field_tab_overview_label
     - field.field.taxonomy_term.collection.field_tags
     - field.field.taxonomy_term.collection.field_term_image
     - field.field.taxonomy_term.collection.field_theme
@@ -101,6 +103,22 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_tab_collection_label:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 15
+    region: content
+  field_tab_overview_label:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 14
     region: content
   field_tags:
     type: entity_reference_label
