@@ -1,0 +1,29 @@
+uuid: dd79d7d9-fab8-4750-9bdb-de33f728fd9b
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.logo_block
+    - field.storage.block_content.field_organisation_logo
+    - taxonomy.vocabulary.organisation
+id: block_content.logo_block.field_organisation_logo
+field_name: field_organisation_logo
+entity_type: block_content
+bundle: logo_block
+label: 'Organisation logo'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      organisation: organisation
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

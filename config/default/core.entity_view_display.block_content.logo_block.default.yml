@@ -1,0 +1,24 @@
+uuid: fc808304-819c-4c3d-af5d-e43c3cd9fa18
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.logo_block
+    - field.field.block_content.logo_block.field_organisation_logo
+id: block_content.logo_block.default
+targetEntityType: block_content
+bundle: logo_block
+mode: default
+content:
+  field_organisation_logo:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: icon
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true
