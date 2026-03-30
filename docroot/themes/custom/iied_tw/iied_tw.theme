@@ -277,31 +277,169 @@ function iied_tw_form_user_login_form_alter(&$form, FormStateInterface $form_sta
 /**
  * Implements hook_preprocess_node() for Impact story nodes.
  */
+// function iied_tw_preprocess_node(&$variables)
+// {
+//   if ($variables['node']->bundle() == 'impact_story' && !$variables['node']->field_global_term->isEmpty()) {
+//     // Load the taxonomy term entity.
+//     $term = $variables['node']->field_global_term->entity;
+
+//     if ($term) {
+//       $parent_ids = $term->parent->getValue();
+//       // Since parent field can be multiple, we take the first one if it exists
+//       $parent_tid = !empty($parent_ids) ? reset($parent_ids)['target_id'] : NULL;
+
+//       if ($parent_tid && $parent_tid !== '0') {
+//         // Load the parent term.
+//         $parent_term = \Drupal\taxonomy\Entity\Term::load($parent_tid);
+
+//         if ($parent_term) {
+//           // Add the parent term name to the variable array.
+//           $variables['parent_term_name'] = $parent_term->label();
+//           // Add the parent term URL to the variable array.
+//           $variables['parent_term_url'] = \Drupal\Core\Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $parent_tid])->toString();
+//         }
+//       }
+//     }
+//   }
+// }
+
+/**
+ * Implements hook_preprocess_node().
+ */
 function iied_tw_preprocess_node(&$variables)
 {
-  if ($variables['node']->bundle() == 'impact_story' && !$variables['node']->field_global_term->isEmpty()) {
-    // Load the taxonomy term entity.
-    $term = $variables['node']->field_global_term->entity;
+  $node = $variables['node'];
+
+  /**
+   * Impact story parent term context.
+   *
+   * For impact_story nodes, expose the parent term name and URL where the
+   * selected global term has a parent term.
+   */
+  if ($node->bundle() == 'impact_story' && !$node->field_global_term->isEmpty()) {
+    $term = $node->field_global_term->entity;
 
     if ($term) {
       $parent_ids = $term->parent->getValue();
-      // Since parent field can be multiple, we take the first one if it exists
       $parent_tid = !empty($parent_ids) ? reset($parent_ids)['target_id'] : NULL;
 
       if ($parent_tid && $parent_tid !== '0') {
-        // Load the parent term.
         $parent_term = \Drupal\taxonomy\Entity\Term::load($parent_tid);
 
         if ($parent_term) {
-          // Add the parent term name to the variable array.
           $variables['parent_term_name'] = $parent_term->label();
-          // Add the parent term URL to the variable array.
-          $variables['parent_term_url'] = \Drupal\Core\Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $parent_tid])->toString();
+          $variables['parent_term_url'] = \Drupal\Core\Url::fromRoute(
+            'entity.taxonomy_term.canonical',
+            ['taxonomy_term' => $parent_tid]
+          )->toString();
         }
       }
     }
   }
+
+  /**
+   * Series page previous/next navigation.
+   *
+   * For series_page nodes, build previous/next links from the
+   * series_navigation view. Sibling set = published series_page nodes sharing
+   * the same field_collections term, ordered by the view sort.
+   *
+   * Exposes:
+   * - series_parent: ['title', 'url']
+   * - series_prev: ['title', 'url'] or NULL
+   * - series_next: ['title', 'url'] or NULL
+   */
+  if ($node->bundle() == 'series_page') {
+    // Safe defaults for Twig.
+    $variables['series_parent'] = NULL;
+    $variables['series_prev'] = NULL;
+    $variables['series_next'] = NULL;
+
+    if (!$node->hasField('field_collections') || $node->get('field_collections')->isEmpty()) {
+      return;
+    }
+
+    $term = $node->get('field_collections')->entity;
+    if (!$term) {
+      return;
+    }
+
+    $current_nid = (int) $node->id();
+    $current_langcode = $node->language()->getId();
+    $collection_tid = (int) $term->id();
+
+    // Use the translated collection term where available.
+    if ($term->hasTranslation($current_langcode)) {
+      $term = $term->getTranslation($current_langcode);
+    }
+
+    $variables['series_parent'] = [
+      'title' => $term->label(),
+      'url' => $term->toUrl()->toString(),
+    ];
+
+    $view = \Drupal\views\Views::getView('series_navigation');
+    if (!$view) {
+      return;
+    }
+
+    $view->setDisplay('block_1');
+    $view->setArguments([$collection_tid]);
+    $view->execute();
+
+    if (empty($view->result)) {
+      return;
+    }
+
+    $items = [];
+
+    foreach ($view->result as $row) {
+      if (empty($row->_entity) || !$row->_entity instanceof \Drupal\node\NodeInterface) {
+        continue;
+      }
+
+      $entity = $row->_entity;
+
+      // Use the translated node where available.
+      if ($entity->hasTranslation($current_langcode)) {
+        $entity = $entity->getTranslation($current_langcode);
+      }
+
+      $items[] = $entity;
+    }
+
+    $current_index = NULL;
+
+    foreach ($items as $index => $item) {
+      if ((int) $item->id() === $current_nid) {
+        $current_index = $index;
+        break;
+      }
+    }
+
+    if ($current_index === NULL) {
+      return;
+    }
+
+    $prev = $items[$current_index - 1] ?? NULL;
+    $next = $items[$current_index + 1] ?? NULL;
+
+    if ($prev) {
+      $variables['series_prev'] = [
+        'title' => $prev->label(),
+        'url' => $prev->toUrl()->toString(),
+      ];
+    }
+
+    if ($next) {
+      $variables['series_next'] = [
+        'title' => $next->label(),
+        'url' => $next->toUrl()->toString(),
+      ];
+    }
+  }
 }
+
 
 /**
  * Implements hook__theme_suggestions_block_alter().
