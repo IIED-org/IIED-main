@@ -25,15 +25,20 @@
 #}
           
 <div class="xl:pb-6">
-  {% if node.field_link_back_text.value is not empty %}
+
+  {% set link_back_text = content.link_back_text|render %}
+
+  {% if link_back_text %}
     <div class="mb-3">
       <a class="inline-flex items-start gap-2 rounded-sm underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40" href="{{ url }}">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
           <path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd" />
         </svg>
-        {{ content.link_back_text }}
+         {{ link_back_text }}
         </a>
     </div>
+  {% else %}
+    <div class="mb-3 text-base font-medium leading-tight tracking-wider text-gray-500 uppercase text-mute">{{ content.field_collection_type }}</div>
   {% endif %}
 
   <div class="mb-3 prose text-gray-500">
