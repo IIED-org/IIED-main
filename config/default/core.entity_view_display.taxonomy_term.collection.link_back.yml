@@ -25,6 +25,7 @@ dependencies:
   module:
     - ds
     - layout_builder
+    - options
     - svg_image
 third_party_settings:
   layout_builder:
@@ -55,7 +56,14 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 2
+    weight: 3
+    region: content
+  field_collection_type:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
   field_short_description:
     type: string
@@ -70,7 +78,7 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 1
+    weight: 2
     region: content
   flag_subscribe_term:
     settings: {  }
@@ -88,7 +96,6 @@ content:
 hidden:
   description: true
   field_about: true
-  field_collection_type: true
   field_containers: true
   field_downloads: true
   field_overview: true
