@@ -1,0 +1,21 @@
+uuid: 171cf93d-3725-4e8c-a789-06b0ae885027
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_rounded_corners
+    - paragraphs.paragraphs_type.image_wide
+id: paragraph.image_wide.field_rounded_corners
+field_name: field_rounded_corners
+entity_type: paragraph
+bundle: image_wide
+label: 'Rounded corners'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
