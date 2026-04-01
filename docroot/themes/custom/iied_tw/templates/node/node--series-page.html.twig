@@ -31,11 +31,13 @@ Series page node template.
         <h1 class="mb-6 text-4xl">{{ node.label }}</h1>
 
         {#-- standfirst --#}
-        <div
-          class="mb-4 prose prose-lg border-b border-gray-300 lg:prose-xl"
-        >
-          {{ content.field_standfirst }}
-        </div>
+        {% if node.field_standfirst.value %}
+          <div
+            class="mb-4 prose prose-lg border-b border-gray-300 lg:prose-xl"
+          >
+            {{ content.field_standfirst }}
+          </div>
+        {% endif %}
 
         {# attribution #} 
 
@@ -68,9 +70,9 @@ Series page node template.
         class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
         {#-- image if field_display_image --#}
 
-        {% if node.field_display_image.value %}
+        {% if node.field_main_image.target_id %}
         <figure class="mb-6 -mx-4 sm:mx-0">
-          <div class="overflow-hidden bg-gray-200 border border-gray-300 rounded-xl">
+          <div class="overflow-hidden bg-gray-300 border rounded-xl">
             {{ content.field_main_image[0] }}
           </div>
           <figcaption
