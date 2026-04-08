@@ -1,7 +1,7 @@
 _core:
   default_config_hash: 5F5KiPRW6E8pvmWdw6qAJzAXW6X-fLCRRKiGhdQIcsc
 enabled: true
-timeout: 28000
+timeout: 43200
 max_timeout: 172800
 padding: 20
 logout_regardless_of_activity: true
@@ -11,8 +11,8 @@ role_logout_max: false
 redirect_url: /user/login
 include_destination: true
 no_dialog: true
-message: 'You have been logged out for security, due to exceeding the maximum session duration of 8 hours'
-inactivity_message: 'You have been logged out for security, due to exceeding the maximum session duration of 8 hours'
+message: 'You have been logged out for security, due to exceeding the maximum session duration of 12 hours'
+inactivity_message: 'You have been logged out for security, due to exceeding the maximum session duration of 12 hours'
 inactivity_message_type: status
 modal_width: 450
 enforce_admin: true
