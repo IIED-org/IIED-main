@@ -1,0 +1,14 @@
+uuid: 169431b7-84e3-4a03-97b0-33b2f5e6d2a8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.series_page
+id: node_type_series_page
+entity_type_id: node_type
+entity_id: series_page
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied

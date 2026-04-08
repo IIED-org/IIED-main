@@ -1,0 +1,24 @@
+uuid: b6d6810a-03ac-41cb-ba1a-6bf505b12d1a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.series_page
+  module:
+    - text
+id: node.series_page.body
+field_name: body
+entity_type: node
+bundle: series_page
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

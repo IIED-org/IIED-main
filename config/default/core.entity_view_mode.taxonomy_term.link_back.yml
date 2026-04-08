@@ -1,0 +1,11 @@
+uuid: dfeae67f-89b7-4e94-82ca-6353b9e0f847
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.link_back
+label: 'Link back'
+description: ''
+targetEntityType: taxonomy_term
+cache: true

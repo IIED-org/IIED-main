@@ -1,0 +1,19 @@
+uuid: a3bb7e70-7ae5-44f9-b1ba-153befbd3659
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tagline
+    - node.type.series_page
+id: node.series_page.field_tagline
+field_name: field_tagline
+entity_type: node
+bundle: series_page
+label: Tagline
+description: 'Appears on the card only. '
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,8 @@
+uuid: 4ed28f52-44eb-4e18-904b-705363359b7a
+langcode: en
+status: true
+dependencies: {  }
+id: logo_block
+label: 'Logo block'
+revision: false
+description: 'Add a series of partner logos'

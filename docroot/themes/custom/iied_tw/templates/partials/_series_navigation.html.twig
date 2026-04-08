@@ -1,0 +1,80 @@
+{#
+/**
+ * @file
+ * Series page previous/next navigation.
+ *
+ * Available variables:
+ * - series_parent: Array with:
+ *   - title: Parent collection title.
+ *   - url: Parent collection URL.
+ * - series_prev: Array with:
+ *   - title: Previous node title.
+ *   - url: Previous node URL.
+ * - series_next: Array with:
+ *   - title: Next node title.
+ *   - url: Next node URL.
+ */
+#}
+
+{% if series_prev or series_next or series_parent %}
+  <div class="container xl:grid xl:grid-cols-12 lg:gap-x-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+    <div class="py-6 border-t border-bg-iiedbg-10 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+
+      {% if series_parent %}
+        <div class="flex items-center justify-center gap-1 text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-gray-500 size-5 shrink-0" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+          </svg>
+
+          <a href="{{ series_parent.url }}" class="text-base leading-snug text-gray-700 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400">
+            {{ series_parent.title }}
+          </a>
+        </div>
+      {% endif %}
+
+      {% if series_prev or series_next %}
+        <nav class="pt-6" aria-label="Previous and next pages">
+          <div class="grid items-start gap-8 sm:grid-cols-2">
+
+            <div class="min-w-0">
+              {% if series_prev %}
+                <a href="{{ series_prev.url }}" class="block no-underline group">
+                  <span class="flex items-center mb-2 text-base leading-snug text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 shrink-0" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Previous</span>
+                  </span>
+
+                  <span class="block leading-tight text-gray-900 font-headline group-hover:underline underline-offset-4">
+                    {{ series_prev.title }}
+                  </span>
+                </a>
+              {% endif %}
+            </div>
+
+            <div class="min-w-0 md:text-right">
+              {% if series_next %}
+                <a href="{{ series_next.url }}" class="block no-underline group">
+                  <span class="inline-flex items-center mb-2 text-base leading-snug text-gray-500 sm:justify-end">
+                    <span>Next</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 shrink-0" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+
+                  <span class="block leading-tight text-gray-900 font-headline group-hover:underline underline-offset-4">
+                    {{ series_next.title }}
+                  </span>
+                </a>
+              {% endif %}
+            </div>
+
+          </div>
+        </nav>
+      {% endif %}
+
+    </div>
+  </div>
+{% endif %}
+

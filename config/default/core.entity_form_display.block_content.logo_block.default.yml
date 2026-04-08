@@ -1,0 +1,38 @@
+uuid: 04bfa0b0-406a-4f17-999e-a7dc0d0d914e
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.logo_block
+    - field.field.block_content.logo_block.field_organisation_logo
+id: block_content.logo_block.default
+targetEntityType: block_content
+bundle: logo_block
+mode: default
+content:
+  field_organisation_logo:
+    type: entity_reference_autocomplete
+    weight: 26
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+hidden: {  }

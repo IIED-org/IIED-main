@@ -85,7 +85,7 @@
 <article{{attributes.addClass(classes)}}>
 	<div{{content_attributes.addClass('node-content')}}>
 		<div
-			class="md:grid md:grid-flow-row-dense md:grid-cols-3 container py-8 mx-auto">
+			class="container py-8 mx-auto md:grid md:grid-flow-row-dense md:grid-cols-3">
 			{#  order 2 (themes, authors, download) #}
 			<div class="md:col-span-2 md:order-2">
 				<nav aria-label="themes">
@@ -136,11 +136,11 @@
 
 			{#  order 1 (image and detail metadata) #}
 			<div class="md:order-1 md:row-span-2 md:mr-4">
-				<div class="md:flex w-full my-3">
+				<div class="w-full my-3 md:flex">
 					{% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'embedded', 'img_style':'card_370', 'alt_text': title_text|striptags  } %}
 				</div>
 				{% include '@iied_tw/partials/_publication_details.html.twig' %}
-				<div class="md:items-start md:flex-col flex flex-row items-center">
+				<div class="flex flex-row items-center md:items-start md:flex-col">
 					<div class="mb-6">
 						{% include '@iied_tw/partials/_share_links.html.twig' %}
 					</div>
@@ -152,7 +152,7 @@
 
 			{#  order 3 (abstract, citation and links) #}
 			<div class="md:col-span-2 md:order-3">
-				<div class="prose-base lg:prose-lg lg:max-w-max prose">
+				<div class="prose prose-base lg:prose-lg lg:max-w-max">
 					{{ content.body }}
 					{{ content.field_external_url }}
 					{{ content.field_iied_url }}
@@ -165,13 +165,13 @@
 				{% if node.field_series is not empty and node.field_series.entity is not empty %}
 					{% set series_term = node.field_series.entity %}
 					{% if series_term.field_url.uri and series_term.field_logo %}
-						<section>
+						<section class="py-6">
 							<a href="{{ series_term.field_url.uri }}">
-								<div class="bg-iiedorange-5 rounded-xl md:flex container flex-row px-6 py-2 border border-gray-500">
+								<div class="container flex-row px-6 py-2 border border-gray-300 bg-iiedorange-5 hover:bg-iiedorange-10 rounded-xl md:flex">
 									{% if series_term.field_logo %}
-										<img title="{{ series_term.field_logo.title }}" alt="{{ series_term.field_logo.alt }}" class="md:w-2/12 object-contain h-auto pr-4" src="{{ series_term.field_logo|file_uri|image_style('search_cover') }}"/>
+										<img title="{{ series_term.field_logo.title }}" alt="{{ series_term.field_logo.alt }}" class="object-contain h-auto pr-4 md:w-2/12" src="{{ series_term.field_logo|file_uri|image_style('search_cover') }}"/>
 									{% endif %}
-									<div class="md:w-10/12 leading-6">{{ series_term.description.0.value | striptags }}</div>
+									<div class="prose md:w-10/12 max-w-max">{{ series_term.description.0.value | striptags }}</div>
 								</div>
 							</a>
 						</section>

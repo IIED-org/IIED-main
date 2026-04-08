@@ -1,0 +1,69 @@
+uuid: 940fcd99-ebc6-4548-b686-f14b4fd5c0bf
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card
+    - field.field.node.series_page.body
+    - field.field.node.series_page.field_alternative_label
+    - field.field.node.series_page.field_collections
+    - field.field.node.series_page.field_contact
+    - field.field.node.series_page.field_content
+    - field.field.node.series_page.field_display_image
+    - field.field.node.series_page.field_hide_date
+    - field.field.node.series_page.field_image_caption
+    - field.field.node.series_page.field_main_image
+    - field.field.node.series_page.field_standfirst
+    - field.field.node.series_page.field_tagline
+    - node.type.series_page
+  module:
+    - user
+id: node.series_page.card
+targetEntityType: node
+bundle: series_page
+mode: card
+content:
+  field_alternative_label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_hide_date:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_main_image:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_tagline:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  body: true
+  field_collections: true
+  field_contact: true
+  field_content: true
+  field_display_image: true
+  field_image_caption: true
+  field_standfirst: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

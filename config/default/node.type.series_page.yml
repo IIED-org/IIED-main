@@ -1,0 +1,17 @@
+uuid: fb272742-5909-45d0-bf29-befda132d21a
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Series page'
+type: series_page
+description: 'Entry for a limited-series of content.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false
