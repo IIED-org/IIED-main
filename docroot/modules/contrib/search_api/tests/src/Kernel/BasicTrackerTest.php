@@ -9,6 +9,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Utility\Utility;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the "default" tracker plugin.
@@ -17,6 +18,7 @@ use Psr\Log\LoggerInterface;
  *
  * @coversDefaultClass \Drupal\search_api\Plugin\search_api\tracker\Basic
  */
+#[RunTestsInSeparateProcesses]
 class BasicTrackerTest extends KernelTestBase {
 
   /**

@@ -22,6 +22,7 @@ use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 
 // cspell:ignore knoten körper titel zusammenfassung
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the "Rendered item" processor.
@@ -30,6 +31,7 @@ use Drupal\user\UserInterface;
  *
  * @see \Drupal\search_api\Plugin\search_api\processor\RenderedItem
  */
+#[RunTestsInSeparateProcesses]
 class RenderedItemTest extends ProcessorTestBase {
 
   use ContentTypeCreationTrait;

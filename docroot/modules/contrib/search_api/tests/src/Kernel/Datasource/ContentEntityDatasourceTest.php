@@ -8,6 +8,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\search_api\Entity\Index;
 use Drupal\Tests\search_api\Functional\ExampleContentTrait;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests correct functionality of the content entity datasource.
@@ -16,6 +17,7 @@ use Drupal\Tests\search_api\Functional\ExampleContentTrait;
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class ContentEntityDatasourceTest extends KernelTestBase {
 
   use ExampleContentTrait;

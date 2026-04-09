@@ -8,12 +8,14 @@ use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\SearchApiException;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Provides tests for the "index_directly" functionality.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class DirectIndexingTest extends KernelTestBase {
 
   use PostRequestIndexingTrait;

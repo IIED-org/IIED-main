@@ -4,8 +4,10 @@ namespace Drupal\search_api_autocomplete_test\Plugin\search_api_autocomplete\sug
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\search_api\Query\QueryInterface;
+use Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSuggester;
 use Drupal\search_api_autocomplete\SearchInterface;
 use Drupal\search_api_autocomplete\Suggester\SuggesterPluginBase;
 use Drupal\search_api_autocomplete\Suggestion\SuggestionFactory;
@@ -13,13 +15,12 @@ use Drupal\search_api_test\TestPluginTrait;
 
 /**
  * Defines a test suggester class.
- *
- * @SearchApiAutocompleteSuggester(
- *   id = "search_api_autocomplete_test",
- *   label = @Translation("Test suggester"),
- *   description = @Translation("Suggester used for tests."),
- * )
  */
+#[SearchApiAutocompleteSuggester(
+  id: 'search_api_autocomplete_test',
+  label: new TranslatableMarkup('Test suggester'),
+  description: new TranslatableMarkup('Suggester used for tests.'),
+)]
 class TestSuggester extends SuggesterPluginBase implements PluginFormInterface {
 
   use TestPluginTrait;

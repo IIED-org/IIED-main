@@ -4,8 +4,10 @@ namespace Drupal\search_api_autocomplete\Entity;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\Core\Entity\Attribute\ConfigEntityType;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api_autocomplete\SearchApiAutocompleteException;
 use Drupal\search_api_autocomplete\SearchInterface;
@@ -61,6 +63,52 @@ use Drupal\search_api_autocomplete\Suggester\SuggesterInterface;
  *   }
  * )
  */
+#[ConfigEntityType(
+  id: 'search_api_autocomplete_search',
+  label: new TranslatableMarkup('Autocomplete search'),
+  label_collection: new TranslatableMarkup('Autocomplete searches'),
+  label_singular: new TranslatableMarkup('autocomplete search'),
+  label_plural: new TranslatableMarkup('autocomplete searches'),
+  config_prefix: 'search',
+  entity_keys: [
+    'id' => 'id',
+    'label' => 'label',
+    'uuid' => 'uuid',
+    'status' => 'status',
+  ],
+  handlers: [
+    'storage' => 'Drupal\search_api_autocomplete\Entity\SearchStorage',
+    'form' => [
+      'default' => '\Drupal\search_api_autocomplete\Form\SearchEditForm',
+      'edit' => '\Drupal\search_api_autocomplete\Form\SearchEditForm',
+      'delete' => '\Drupal\Core\Entity\EntityDeleteForm',
+    ],
+    'list_builder' => '\Drupal\Core\Entity\EntityListBuilder',
+    'route_provider' => [
+    'default' => '\Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider',
+    ],
+  ],
+  links: [
+    'edit-form' => '/admin/config/search/search-api/index/{search_api_index}/autocomplete/{search_api_autocomplete_search}/edit',
+    'delete-form' => '/admin/config/search/search-api/index/{search_api_index}/autocomplete/{search_api_autocomplete_search}/delete'
+  ],
+  admin_permission: 'administer search_api_autocomplete',
+  label_count: [
+    'singular' => '@count autocomplete search',
+    'plural' => '@count autocomplete searches',
+  ],
+  config_export: [
+    'id',
+    'label',
+    'status',
+    'index_id',
+    'suggester_settings',
+    'suggester_weights',
+    'suggester_limits',
+    'search_settings',
+    'options',
+  ]
+)]
 class Search extends ConfigEntityBase implements SearchInterface {
 
   /**

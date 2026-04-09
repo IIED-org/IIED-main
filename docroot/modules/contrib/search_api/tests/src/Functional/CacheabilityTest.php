@@ -6,12 +6,14 @@ use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Task;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the cacheability metadata of Search API.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class CacheabilityTest extends SearchApiBrowserTestBase {
 
   use ExampleContentTrait;

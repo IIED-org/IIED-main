@@ -589,6 +589,10 @@ class Highlight extends ProcessorPluginBase implements PluginFormInterface {
         break;
       }
 
+      if ($value === NULL) {
+        continue;
+      }
+
       $text = $this->prepareTextForExcerpt($value);
       if (!$text) {
         continue;
@@ -887,6 +891,10 @@ class Highlight extends ProcessorPluginBase implements PluginFormInterface {
     // Take text from the first available field/value.
     foreach ($field_data as $field_info) {
       foreach ($field_info['values'] as $value) {
+        if ($value === NULL) {
+          continue;
+        }
+
         $text = $this->prepareTextForExcerpt($value);
         if ($text) {
           $snippet = mb_substr($text, 0, $excerpt_length);

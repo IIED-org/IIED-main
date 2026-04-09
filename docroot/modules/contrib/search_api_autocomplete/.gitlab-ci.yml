@@ -56,6 +56,15 @@ variables:
 #  OPT_IN_TEST_NEXT_MINOR: '1'
 #  OPT_IN_TEST_NEXT_MAJOR: '1'
 
+# Use the latest version of Search API for testing.
+composer:
+  after_script:
+    - composer require drupal/search_api:1.x-dev
+
+# Enable deprecation warnings during tests.
+phpunit:
+  variables:
+    SYMFONY_DEPRECATIONS_HELPER: "ignoreFile=$CI_PROJECT_DIR/.ignored-deprecations.txt"
 
 # Override the default pipeline to start chromedriver slightly differently.
 default:

@@ -1278,7 +1278,14 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
   }
 
   /**
-   * {@inheritdoc}
+   * Retrieves all indexes that are configured to index the given entity.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity for which to check.
+   *
+   * @return \Drupal\search_api\IndexInterface[]
+   *   All indexes that are configured to index the given entity (using this
+   *   datasource class).
    */
   public static function getIndexesForEntity(ContentEntityInterface $entity) {
     return \Drupal::getContainer()

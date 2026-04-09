@@ -95,10 +95,19 @@ class SearchApiSortsManagerTest extends UnitTestCase {
    * @covers ::getActiveSort
    */
   public function testGetActiveSort($order_argument, $expected) {
-    $this->request->query = new ParameterBag([
+    $parameters = [
       'sort' => 'sort_field',
       'order' => $order_argument,
-    ]);
+    ];
+    if (version_compare(\Drupal::VERSION, '10', '>=')) {
+      // InputBag does not exist in Symfony 4, using fully qualified class name
+      // instead of use for backward compatibility.
+      // phpcs:ignore Drupal.Classes.FullyQualifiedNamespace.UseStatementMissing
+      $this->request->query = new \Symfony\Component\HttpFoundation\InputBag($parameters);
+    }
+    else {
+      $this->request->query = new ParameterBag($parameters);
+    }
     $this->requestStack->push($this->request);
 
     $manager = $this->entityTypeManagerProphecy->reveal();
@@ -148,7 +157,7 @@ class SearchApiSortsManagerTest extends UnitTestCase {
    * @return array
    *   An array of mockable data.
    */
-  public function provideSortOrders() {
+  public static function provideSortOrders() {
     return [
       ['asc', 'asc'],
       ['desc', 'desc'],

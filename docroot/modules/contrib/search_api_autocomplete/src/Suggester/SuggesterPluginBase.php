@@ -8,27 +8,20 @@ use Drupal\search_api_autocomplete\SearchInterface;
 /**
  * Provides a base class for suggester plugins.
  *
- * Plugins extending this class need to define a plugin definition array through
- * annotation. The definition includes the following keys:
- * - id: The unique, system-wide identifier of the suggester plugin.
- * - label: The human-readable name of the suggester plugin, translated.
- * - description: A human-readable description for the suggester plugin,
- *   translated.
- * - default_weight: (optional) The default weight to assign to the suggester.
- *   Defaults to 0.
+ * Plugins extending this class need to define a plugin definition array using the SearchApiAutocompleteSuggester attribute.
  *
  * A complete plugin definition should be written as in this example:
  *
  * @code
- * @SearchApiAutocompleteSuggester(
- *   id = "my_suggester",
- *   label = @Translation("My Suggester"),
- *   description = @Translation("Creates suggestions based on internet memes."),
- *   default_weight = -10,
- * )
+ * #[SearchApiAutocompleteSuggester(
+ *   id: 'my_suggester',
+ *   label: new TranslatableMarkup('My Suggester'),
+ *   description: new TranslatableMarkup('Creates suggestions based on internet memes.'),
+ *   default_weight: -10,
+ * )]
  * @endcode
  *
- * @see \Drupal\search_api_autocomplete\Annotation\SearchApiAutocompleteSuggester
+ * @see \Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSuggester
  * @see \Drupal\search_api_autocomplete\Suggester\SuggesterInterface
  * @see \Drupal\search_api_autocomplete\Suggester\SuggesterManager
  * @see plugin_api

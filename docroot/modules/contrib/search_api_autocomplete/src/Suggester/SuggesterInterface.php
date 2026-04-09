@@ -9,7 +9,7 @@ use Drupal\search_api_autocomplete\SearchInterface;
 /**
  * Represents a plugin for creating autocomplete suggestions.
  *
- * @see \Drupal\search_api_autocomplete\Annotation\SearchApiAutocompleteSuggester
+ * @see \Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSuggester
  * @see \Drupal\search_api_autocomplete\Suggester\SuggesterManager
  * @see \Drupal\search_api_autocomplete\Suggester\SuggesterPluginBase
  * @see plugin_api

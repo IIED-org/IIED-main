@@ -10,7 +10,6 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\search_api\ConsoleException;
 use Drupal\search_api\Event\ReindexScheduledEvent;
 use Drupal\search_api\Event\SearchApiEvents;
-use Drupal\search_api\IndexBatchHelper;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\SearchApiException;
 use Drush\Log\SuccessInterface;
@@ -347,7 +346,8 @@ class CommandHelper implements LoggerAwareInterface {
 
       // Create the batch.
       try {
-        IndexBatchHelper::create($index, $currentBatchSize, $current_limit, $timeLimit);
+        \Drupal::getContainer()->get('search_api.indexing_batch_helper')
+          ->createBatch($index, $currentBatchSize, $current_limit, $timeLimit);
         $batchSet = TRUE;
       }
       catch (SearchApiException) {

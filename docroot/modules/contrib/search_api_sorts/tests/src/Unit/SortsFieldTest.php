@@ -60,7 +60,7 @@ class SortsFieldTest extends UnitTestCase {
    * @return array
    *   An array of mocked data.
    */
-  public function provideSortOrders() {
+  public static function provideSortOrders() {
     return [
       ['asc', 'asc'],
       ['desc', 'desc'],

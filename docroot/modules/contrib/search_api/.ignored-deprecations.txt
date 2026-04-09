@@ -128,6 +128,9 @@
 %^\\Drupal\\search_api\\Entity\\TaskStorageSchema is deprecated%
 %^\\Drupal\\search_api\\Plugin\\search_api\\datasource\\EntityDatasourceInterface is deprecated%
 
+# Temporary fix for new deprecations.
+%^Providing template_preprocess_search_api_%
+
 # Deprecations in other contrib modules used in tests.
 %^Using @EntityType annotation for plugin with ID search_api_autocomplete_search is deprecated%
 %^Not supporting attribute discovery in Drupal\\search_api_autocomplete\\%

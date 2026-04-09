@@ -8,12 +8,14 @@ use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\Utility\Utility;
 use Drupal\Tests\search_api\Kernel\PostRequestIndexingTrait;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests Search API functionality when executed in the CLI.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class CliTest extends KernelTestBase {
 
   use PostRequestIndexingTrait;

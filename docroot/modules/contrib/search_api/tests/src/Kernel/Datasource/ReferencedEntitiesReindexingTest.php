@@ -14,12 +14,14 @@ use Drupal\search_api\Utility\TrackingHelper;
 use Drupal\search_api\Utility\Utility;
 use Drupal\Tests\search_api\Kernel\PostRequestIndexingTrait;
 use Drupal\Tests\search_api\Kernel\TestLogger;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests that changes in related entities are correctly tracked.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class ReferencedEntitiesReindexingTest extends KernelTestBase {
 
   use PostRequestIndexingTrait;

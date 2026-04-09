@@ -19,12 +19,14 @@ use Drupal\search_api\Utility\Utility;
 use Drupal\search_api_test\Plugin\search_api\tracker\TestTracker;
 use Drupal\search_api_test\PluginTestTrait;
 use Drupal\Tests\search_api\Kernel\PostRequestIndexingTrait;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the overall functionality of the Search API framework and admin UI.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class IntegrationTest extends SearchApiBrowserTestBase {
 
   use PluginTestTrait;
@@ -85,6 +87,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
       'bypass node access',
       'administer content types',
       'administer node fields',
+      'administer site configuration',
     ];
     $this->adminUser = $this->drupalCreateUser($permissions);
     $this->adminUser2 = $this->drupalCreateUser($permissions);
@@ -124,6 +127,8 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->changeIndexServer();
     $this->checkIndexing();
     $this->checkIndexActions();
+
+    $this->checkAdminStatusPage();
 
     $this->deleteServer();
   }
@@ -190,6 +195,10 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->changeIndexServer();
     $this->checkIndexing();
     $this->checkIndexActions();
+
+    $this->checkAdminStatusPage();
+
+    $this->deleteServer();
   }
 
   /**
@@ -1490,6 +1499,14 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains('The index was successfully saved.');
 
+    // Make sure the index's dependencies were updated correctly.
+    $index_dependencies = $this->getIndex(TRUE)->getDependencies();
+    $server_dependencies = array_values(array_filter(
+      $index_dependencies['config'],
+      fn ($config_name) => str_starts_with($config_name, 'search_api.server.'),
+    ));
+    $this->assertEquals(["search_api.server.{$this->serverId}"], $server_dependencies);
+
     // After saving the new index, we should have called reindex.
     $remaining_items = $this->countRemainingItems();
     $this->assertEquals($node_count, $remaining_items, 'All items still need to be indexed.');
@@ -1549,6 +1566,32 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->assertSession()->pageTextNotContains('Number of indexed items is less than expected');
     $this->assertSession()->pageTextNotContains("Couldn't index items.");
     $this->assertSession()->pageTextNotContains('An error occurred');
+
+    // Test indexing of just some items, but with unlimited batch size.
+    $this->getIndex()->reindex();
+    $this->drupalGet($this->getIndexPath());
+    $this->submitForm([
+      'limit' => '2',
+      'batch_size' => 'all',
+    ], 'Index now');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->checkForMetaRefresh();
+    $this->assertSession()->pageTextContains("Successfully indexed 2 items.");
+    $this->assertSession()->pageTextNotContains('Number of indexed items is less than expected');
+    $this->assertSession()->pageTextNotContains("Couldn't index items.");
+    $this->assertSession()->pageTextNotContains('An error occurred');
+    $this->drupalGet($this->getIndexPath());
+    $this->submitForm([
+      'limit' => 'all',
+      'batch_size' => 'all',
+    ], 'Index now');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->checkForMetaRefresh();
+    --$count;
+    $this->assertSession()->pageTextContains("Successfully indexed $count items.");
+    $this->assertSession()->pageTextNotContains('Number of indexed items is less than expected');
+    $this->assertSession()->pageTextNotContains("Couldn't index items.");
+    $this->assertSession()->pageTextNotContains('An error occurred');
   }
 
   /**
@@ -1600,6 +1643,15 @@ class IntegrationTest extends SearchApiBrowserTestBase {
     $this->assertEquals($manipulated_items_count + 1, $tracker->getTotalItemsCount());
     $this->assertEquals($manipulated_items_count, $this->countItemsOnServer());
     $this->indexItems();
+  }
+
+  /**
+   * Verifies that there are no warnings or errors in the Status Report.
+   */
+  protected function checkAdminStatusPage(): void {
+    $this->drupalGet('admin/reports/status');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->pageTextNotContains('Search API');
   }
 
   /**

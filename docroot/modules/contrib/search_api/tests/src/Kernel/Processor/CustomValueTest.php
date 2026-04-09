@@ -6,6 +6,7 @@ use Drupal\comment\Entity\Comment;
 use Drupal\node\Entity\Node;
 use Drupal\search_api\Item\Field;
 use Drupal\search_api\Utility\Utility;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the "Custom value" processor.
@@ -14,6 +15,7 @@ use Drupal\search_api\Utility\Utility;
  *
  * @coversDefaultClass \Drupal\search_api\Plugin\search_api\processor\CustomValue
  */
+#[RunTestsInSeparateProcesses]
 class CustomValueTest extends ProcessorTestBase {
 
   /**

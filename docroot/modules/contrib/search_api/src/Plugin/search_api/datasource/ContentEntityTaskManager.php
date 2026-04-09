@@ -69,7 +69,7 @@ class ContentEntityTaskManager implements EventSubscriberInterface {
     $reschedule = FALSE;
     if ($index->isValidDatasource($datasource_id)) {
       /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntity $datasource */
-      $datasource = $index->getDatasource($datasource_id);
+      $datasource = $index->getDatasourceIfAvailable($datasource_id);
       $raw_ids = $datasource->getPartialItemIds($data['page'], $data['bundles'], $data['languages']);
       if ($raw_ids !== NULL) {
         $reschedule = TRUE;

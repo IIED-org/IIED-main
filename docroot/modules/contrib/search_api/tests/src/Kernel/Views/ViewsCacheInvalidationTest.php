@@ -12,12 +12,14 @@ use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\views\Tests\AssertViewsCacheTagsTrait;
 
 // cspell:ignore angua littlebottom überwald
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests that cached Search API views get invalidated at the right occasions.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class ViewsCacheInvalidationTest extends KernelTestBase {
 
   use AssertViewsCacheTagsTrait;

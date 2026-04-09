@@ -8,6 +8,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\IndexInterface;
 use Drupal\Tests\search_api\Functional\ExampleContentTrait;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests keyword searches with the Complex parse mode on the DB backend.
@@ -17,6 +18,7 @@ use Drupal\Tests\search_api\Functional\ExampleContentTrait;
  * @see \Drupal\search_api\Plugin\search_api\parse_mode\Complex
  * @see \Drupal\search_api_db\Plugin\search_api\backend\Database
  */
+#[RunTestsInSeparateProcesses]
 class ComplexParseModeSearchTest extends KernelTestBase {
 
   use ExampleContentTrait;

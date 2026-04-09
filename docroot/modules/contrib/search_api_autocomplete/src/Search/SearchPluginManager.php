@@ -5,12 +5,13 @@ namespace Drupal\search_api_autocomplete\Search;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
-use Drupal\search_api_autocomplete\Annotation\SearchApiAutocompleteSearch;
+use Drupal\search_api_autocomplete\Annotation\SearchApiAutocompleteSearch as SearchAnnotation;
+use Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSearch as SearchAttribute;
 
 /**
  * Provides a plugin manager for autocomplete search plugins.
  *
- * @see \Drupal\search_api_autocomplete\Annotation\SearchApiAutocompleteSearch
+ * @see \Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSearch
  * @see \Drupal\search_api_autocomplete\Search\SearchPluginInterface
  * @see \Drupal\search_api_autocomplete\Search\SearchPluginBase
  * @see plugin_api
@@ -29,7 +30,14 @@ class SearchPluginManager extends DefaultPluginManager {
    *   The module handler to invoke the alter hook with.
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
-    parent::__construct('Plugin/search_api_autocomplete/search', $namespaces, $module_handler, SearchPluginInterface::class, SearchApiAutocompleteSearch::class);
+    parent::__construct(
+      'Plugin/search_api_autocomplete/search',
+      $namespaces,
+      $module_handler,
+      SearchPluginInterface::class,
+      SearchAttribute::class,
+      SearchAnnotation::class,
+    );
 
     $this->setCacheBackend($cache_backend, 'search_api_autocomplete_search_plugin');
     $this->alterInfo('search_api_autocomplete_search_info');

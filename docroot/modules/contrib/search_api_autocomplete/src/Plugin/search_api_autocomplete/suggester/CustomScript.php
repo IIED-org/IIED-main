@@ -5,9 +5,11 @@ namespace Drupal\search_api_autocomplete\Plugin\search_api_autocomplete\suggeste
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\search_api\Plugin\PluginFormTrait;
 use Drupal\search_api\Query\QueryInterface;
+use Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSuggester;
 use Drupal\search_api_autocomplete\SearchInterface;
 use Drupal\search_api_autocomplete\Suggester\SuggesterPluginBase;
 
@@ -15,13 +17,12 @@ use Drupal\search_api_autocomplete\Suggester\SuggesterPluginBase;
  * Uses a custom (non-Drupal) script for generating autocomplete suggestions.
  *
  * @see custom_autocomplete_script.php
- *
- * @SearchApiAutocompleteSuggester(
- *   id = "custom_script",
- *   label = @Translation("Use custom script"),
- *   description = @Translation("Specify the path to a PHP script file (or Drupal route) which should be used to generate autocomplete suggestions. This can be used to completely bypass Drupal for improved performance.<br />(<strong>Caution:</strong> If a non-Drupal script is used, Drupal's access restrictions will also be bypassed.)<br />(Note: Due to the nature of this suggester, some of the other settings for this search will be ignored (including other enabled suggesters).)"),
- * )
  */
+#[SearchApiAutocompleteSuggester(
+  id: 'custom_script',
+  label: new TranslatableMarkup('Use custom script'),
+  description: new TranslatableMarkup("Specify the path to a PHP script file (or Drupal route) which should be used to generate autocomplete suggestions. This can be used to completely bypass Drupal for improved performance.<br />(<strong>Caution:</strong> If a non-Drupal script is used, Drupal's access restrictions will also be bypassed.)<br />(Note: Due to the nature of this suggester, some of the other settings for this search will be ignored (including other enabled suggesters).)"),
+)]
 class CustomScript extends SuggesterPluginBase implements PluginFormInterface {
 
   use PluginFormTrait;

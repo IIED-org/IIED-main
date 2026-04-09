@@ -9,12 +9,14 @@ use Drupal\search_api\Processor\ProcessorInterface;
 use Drupal\search_api\Utility\Utility;
 use Drupal\search_api_test\MethodOverrides;
 use Drupal\search_api_test\PluginTestTrait;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Contains tests for config entities with overrides.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class ConfigOverrideKernelTest extends KernelTestBase {
 
   use PluginTestTrait;

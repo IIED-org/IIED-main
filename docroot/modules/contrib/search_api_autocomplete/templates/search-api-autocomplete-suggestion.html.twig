@@ -27,24 +27,22 @@
 #}
 
 <div class="search-api-autocomplete-suggestion">
-  {% if note %}
+  {% if note is not empty %}
     <span class="autocomplete-suggestion-note">{{ note }}</span>
   {% endif %}
-  {% if label %}
+  {% if label is not empty %}
     <span class="autocomplete-suggestion-label">{{ label }}</span>
   {% endif %}
-  {% apply spaceless %}
-    {% if suggestion_prefix %}
-      <span class="autocomplete-suggestion-suggestion-prefix">{{ suggestion_prefix }}</span>
-    {% endif %}
-    {% if user_input %}
-      <span class="autocomplete-suggestion-user-input">{{ user_input }}</span>
-    {% endif %}
-    {% if suggestion_suffix %}
-      <span class="autocomplete-suggestion-suggestion-suffix">{{ suggestion_suffix }}</span>
-    {% endif %}
-  {% endapply %}
-  {% if results_count %}
+  {% if suggestion_prefix is not empty %}
+    <span class="autocomplete-suggestion-suggestion-prefix">{{ suggestion_prefix }}</span>
+  {%- endif -%}
+  {%- if user_input is not empty -%}
+    <span class="autocomplete-suggestion-user-input">{{ user_input }}</span>
+  {%- endif -%}
+  {%- if suggestion_suffix is not empty -%}
+    <span class="autocomplete-suggestion-suggestion-suffix">{{ suggestion_suffix }}</span>
+  {%- endif %}
+  {% if results_count is not empty %}
     <span class="autocomplete-suggestion-results-count">{{ results_count }}</span>
   {% endif %}
 </div>

@@ -10,6 +10,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\ServerInterface;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests that the "add datasource to index" config action works correctly.
@@ -18,6 +19,7 @@ use Drupal\search_api\ServerInterface;
  * @group search_api
  * @group Recipe
  */
+#[RunTestsInSeparateProcesses]
 class AddDatasourceToIndexTest extends KernelTestBase {
 
   /**

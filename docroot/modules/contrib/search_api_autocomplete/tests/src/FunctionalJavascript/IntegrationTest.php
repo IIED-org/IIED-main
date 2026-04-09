@@ -115,6 +115,8 @@ class IntegrationTest extends IntegrationTestBase {
     $assert_session->pageTextContains('Search API Autocomplete Test view');
     $assert_session->pageTextContains('Test search');
     $assert_session->pageTextContains('Autocomplete test module search');
+    $assert_session->pageTextNotContains('Hidden search');
+    $assert_session->pageTextNotContains('Hidden group');
 
     // Enable all Views searches (just one).
     $assert_session->checkboxNotChecked("searches[{$this->searchId}]");
@@ -138,6 +140,7 @@ class IntegrationTest extends IntegrationTestBase {
 
     // The "Server" suggester shouldn't be available at that point.
     $assert_session->elementExists('css', 'input[name="suggesters[enabled][search_api_autocomplete_test]"]');
+    $assert_session->elementNotExists('css', 'input[name="suggesters[enabled][search_api_autocomplete_test_hidden]"]');
     $assert_session->elementNotExists('css', 'input[name="suggesters[enabled][server]"]');
     $assert_session->elementNotExists('css', 'input[name="suggesters[enabled][custom_script]"]');
 
@@ -427,6 +430,7 @@ class IntegrationTest extends IntegrationTestBase {
     $this->drupalGet($this->getAdminPath('edit'));
     $assert_session->pageTextContains('Wish I Had an Angel');
     $assert_session->pageTextNotContains('Test suggester');
+    $assert_session->pageTextNotContains('Hidden suggester');
 
     $this->drupalGet('search-api-autocomplete-test');
     $assert_session->pageTextContains("Creek Mary's Blood");

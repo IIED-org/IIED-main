@@ -24,6 +24,7 @@ use Drupal\Tests\search_api\Kernel\BackendTestBase;
 use Drupal\Tests\search_api\Kernel\TestLogger;
 
 // cspell:ignore foob fooblob
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests index and search capabilities using the Database search backend.
@@ -32,6 +33,7 @@ use Drupal\Tests\search_api\Kernel\TestLogger;
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class BackendTest extends BackendTestBase {
 
   use DatabaseTestsTrait;

@@ -17,12 +17,14 @@ use Drupal\user\Entity\User;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\Render\ViewsRenderPipelineMarkup;
 use Drupal\views\ViewExecutable;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests whether Views pages correctly create search display plugins.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class ViewsPropertyExtractionTest extends KernelTestBase {
 
   /**

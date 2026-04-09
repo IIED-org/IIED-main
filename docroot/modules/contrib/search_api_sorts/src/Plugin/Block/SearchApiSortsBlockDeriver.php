@@ -29,11 +29,19 @@ class SearchApiSortsBlockDeriver implements ContainerDeriverInterface {
   protected $indexStorage;
 
   /**
+   * The search_api display manager.
+   *
+   * @var \Drupal\search_api\Display\DisplayPluginManagerInterface
+   */
+  protected $sapiDisplayManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, $base_plugin_id) {
     $deriver = new static($container, $base_plugin_id);
     $deriver->indexStorage = $container->get('entity_type.manager')->getStorage('search_api_index');
+    $deriver->sapiDisplayManager = $container->get('plugin.manager.search_api.display');
     return $deriver;
   }
 
@@ -54,9 +62,7 @@ class SearchApiSortsBlockDeriver implements ContainerDeriverInterface {
     if (!isset($this->derivatives[$base_plugin_id])) {
       $plugin_derivatives = [];
 
-      /** @var \Drupal\search_api\Display\DisplayPluginManagerInterface $sapi_display_manager */
-      $sapi_display_manager = \Drupal::service('plugin.manager.search_api.display');
-      foreach ($sapi_display_manager->getInstances() as $display) {
+      foreach ($this->sapiDisplayManager->getInstances() as $display) {
         $machine_name = $display->getPluginId();
 
         $plugin_derivatives[$machine_name] = [

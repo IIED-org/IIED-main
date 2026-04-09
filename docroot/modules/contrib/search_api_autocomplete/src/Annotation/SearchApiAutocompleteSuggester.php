@@ -5,7 +5,7 @@ namespace Drupal\search_api_autocomplete\Annotation;
 use Drupal\Component\Annotation\Plugin;
 
 /**
- * Defines a autocomplete suggester plugin.
+ * Defines an autocomplete suggester plugin.
  *
  * @see \Drupal\search_api_autocomplete\Suggester\SuggesterInterface
  * @see \Drupal\search_api_autocomplete\Suggester\SuggesterManager

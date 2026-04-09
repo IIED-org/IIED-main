@@ -309,6 +309,9 @@ views.filter.search_api_fulltext:
         value_maxlength:
           type: integer
           label: 'Search field character limit'
+        value_max_words:
+          type: integer
+          label: 'Maximum number of words'
 
 views.filter.search_api_language:
   type: views.filter.language

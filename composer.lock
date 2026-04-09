@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d8d428426b2277d5d77748440436781e",
+    "content-hash": "bc7023c0440e3d7f1af77fdac2f82df8",
     "packages": [
         {
             "name": "acquia/http-hmac-php",
@@ -9482,17 +9482,17 @@
         },
         {
             "name": "drupal/search_api",
-            "version": "1.39.0",
+            "version": "1.40.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api.git",
-                "reference": "8.x-1.39"
+                "reference": "8.x-1.40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.39.zip",
-                "reference": "8.x-1.39",
-                "shasum": "faaf441950b7357203d3fa9ce92f3e59b55c0837"
+                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.40.zip",
+                "reference": "8.x-1.40",
+                "shasum": "64ac71887786da63ced27a43e37342ea3b765a88"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11"
@@ -9514,8 +9514,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.39",
-                    "datestamp": "1758968162",
+                    "version": "8.x-1.40",
+                    "datestamp": "1762031191",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9553,17 +9553,17 @@
         },
         {
             "name": "drupal/search_api_autocomplete",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_autocomplete.git",
-                "reference": "8.x-1.10"
+                "reference": "8.x-1.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_autocomplete-8.x-1.10.zip",
-                "reference": "8.x-1.10",
-                "shasum": "bd7d4a35a595efb866f6f5e2230d62d93b074927"
+                "url": "https://ftp.drupal.org/files/projects/search_api_autocomplete-8.x-1.11.zip",
+                "reference": "8.x-1.11",
+                "shasum": "9c1d287cde328511f4e84dfd49bea401f5eddc6a"
             },
             "require": {
                 "drupal/core": "^10.2 || ^11",
@@ -9575,8 +9575,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.10",
-                    "datestamp": "1736941746",
+                    "version": "8.x-1.11",
+                    "datestamp": "1762031747",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9715,7 +9715,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_sorts.git",
-                "reference": "936c4396a6d4e51f526a930897ed1dfca4f796bc"
+                "reference": "1c531bbb53523f852d7e58ad69396dba2844cedb"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10 || ^11",
@@ -9727,8 +9727,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.1+6-dev",
-                    "datestamp": "1726240581",
+                    "version": "8.x-1.2+1-dev",
+                    "datestamp": "1760605057",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -9955,70 +9955,6 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/session_limit",
                 "issues": "https://www.drupal.org/project/issues/session_limit"
-            }
-        },
-        {
-            "name": "drupal/session_management",
-            "version": "1.0.7",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/session_management.git",
-                "reference": "1.0.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/session_management-1.0.7.zip",
-                "reference": "1.0.7",
-                "shasum": "5bb1e3ff774b89ae35e83803dd88201291540b6f"
-            },
-            "require": {
-                "drupal/core": "^9.3 || ^10 || ^11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.7",
-                    "datestamp": "1768392300",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "gauravsood91",
-                    "homepage": "https://www.drupal.org/user/3288491"
-                },
-                {
-                    "name": "nitesh_jain",
-                    "homepage": "https://www.drupal.org/user/3858913"
-                },
-                {
-                    "name": "pankaj_bit",
-                    "homepage": "https://www.drupal.org/user/3723913"
-                },
-                {
-                    "name": "purva_shende",
-                    "homepage": "https://www.drupal.org/user/3723921"
-                },
-                {
-                    "name": "singh_ankit",
-                    "homepage": "https://www.drupal.org/user/3723914"
-                },
-                {
-                    "name": "sudhanshu0542",
-                    "homepage": "https://www.drupal.org/user/3723916"
-                }
-            ],
-            "description": "Allows administrators to control user sessions while enabling users to inspect and manage their own sessions. Features include simultaneous session limitation and detailed login/logout reports and many more. <a href=\"https://plugins.miniorange.com/drupal-session-management\" target=\"_blank\">Know more</a>",
-            "homepage": "https://www.drupal.org/project/session_management",
-            "support": {
-                "source": "https://git.drupalcode.org/project/session_management"
             }
         },
         {

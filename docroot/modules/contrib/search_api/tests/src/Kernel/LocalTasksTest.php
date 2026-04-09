@@ -3,12 +3,14 @@
 namespace Drupal\Tests\search_api\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests whether Search API's local tasks work correctly.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class LocalTasksTest extends KernelTestBase {
 
   /**

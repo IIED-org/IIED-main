@@ -5,8 +5,10 @@ namespace Drupal\search_api_sorts\Plugin\Block;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Drupal\search_api_sorts\ConfigIdEscapeTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Exposes a search api sorts rendered as a block.
@@ -16,8 +18,32 @@ use Drupal\search_api_sorts\ConfigIdEscapeTrait;
  *   deriver = "Drupal\search_api_sorts\Plugin\Block\SearchApiSortsBlockDeriver"
  * )
  */
-class SearchApiSortsBlock extends BlockBase {
+class SearchApiSortsBlock extends BlockBase implements ContainerFactoryPluginInterface {
   use ConfigIdEscapeTrait;
+
+  /**
+   * The search_api sorts manager.
+   *
+   * @var \Drupal\search_api_sorts\SearchApiSortsManagerInterface
+   */
+  protected $searchApiSortsManager;
+
+  /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = new static($configuration, $plugin_id, $plugin_definition);
+    $instance->searchApiSortsManager = $container->get('search_api_sorts.manager');
+    $instance->requestStack = $container->get('request_stack');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -32,20 +58,17 @@ class SearchApiSortsBlock extends BlockBase {
       return [];
     }
 
-    /** @var \Drupal\search_api_sorts\SearchApiSortsManagerInterface $search_api_sorts_manager */
-    $search_api_sorts_manager = \Drupal::service('search_api_sorts.manager');
-
-    $enabled_sorts = $search_api_sorts_manager->getEnabledSorts($search_api_display);
+    $enabled_sorts = $this->searchApiSortsManager->getEnabledSorts($search_api_display);
     if (!$enabled_sorts) {
       // No fields are enabled for sorting, hide block.
       return [];
     }
 
-    $active_sort = $search_api_sorts_manager->getActiveSort($search_api_display);
+    $active_sort = $this->searchApiSortsManager->getActiveSort($search_api_display);
     $current_sort_field = $active_sort->getFieldName();
     $current_sort_order = $active_sort->getOrder();
     if ($active_sort->getFieldName() == NULL) {
-      $default_sort = $search_api_sorts_manager->getDefaultSort($search_api_display);
+      $default_sort = $this->searchApiSortsManager->getDefaultSort($search_api_display);
       $current_sort_field = $default_sort->getFieldName();
       $current_sort_order = $default_sort->getOrder();
     }
@@ -66,8 +89,8 @@ class SearchApiSortsBlock extends BlockBase {
     ]);
 
     // @todo fetch path by configuration (data source?) instead of current path.
-    $url = \Drupal::request()->getRequestUri();
-    $base_path = \Drupal::request()->getBasePath();
+    $url = $this->requestStack->getCurrentRequest()->getRequestUri();
+    $base_path = $this->requestStack->getCurrentRequest()->getBasePath();
     $url = str_replace($base_path, '', $url);
     $url_array = UrlHelper::parse($url);
 
