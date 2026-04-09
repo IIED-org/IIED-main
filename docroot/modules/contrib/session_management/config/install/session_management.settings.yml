@@ -1,4 +1,0 @@
-# Default configuration for session_management module
-enable_session_monitor: true
-date_time_format: 'Y-m-d H:i:s'
-session_limit_count: 1

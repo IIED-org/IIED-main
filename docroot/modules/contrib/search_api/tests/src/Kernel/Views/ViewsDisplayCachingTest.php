@@ -12,12 +12,14 @@ use Drupal\search_api\Entity\Index;
 use Drupal\Tests\search_api\Kernel\TestTimeService;
 use Drupal\views\Tests\AssertViewsCacheTagsTrait;
 use Drupal\views\ViewExecutable;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Search API caching plugins for Views.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class ViewsDisplayCachingTest extends KernelTestBase {
 
   use AssertViewsCacheTagsTrait;

@@ -160,6 +160,9 @@ class IndexOverviewForm extends FormBase {
 
     $plugins = $this->pluginHelper->createSearchPluginsForIndex($index_id);
     foreach ($plugins as $plugin_id => $plugin) {
+      if ($plugin->isHidden()) {
+        continue;
+      }
       $group_label = (string) $plugin->getGroupLabel();
       if (empty($form[$group_label])) {
         $form[$group_label] = [
@@ -276,14 +279,23 @@ class IndexOverviewForm extends FormBase {
     ]);
 
     // Find a supported suggester and set it as the default for the search.
+    $suggester_definitions = $this->suggesterManager->getDefinitions();
     $suggesters = array_map(function ($suggester_info) {
       return $suggester_info['class'];
-    }, $this->suggesterManager->getDefinitions());
+    }, $suggester_definitions);
     $filter_suggesters = function ($suggester_class) use ($search) {
       return $suggester_class::supportsSearch($search);
     };
     $available_suggesters = array_filter($suggesters, $filter_suggesters);
     if ($available_suggesters) {
+      // Do not use a hidden suggester, unless it is the only one available.
+      $is_visible = function ($suggester_id) use ($suggester_definitions) {
+        return empty($suggester_definitions[$suggester_id]['no_ui']);
+      };
+      $visible_suggesters = array_filter($available_suggesters, $is_visible, ARRAY_FILTER_USE_KEY);
+      if ($visible_suggesters) {
+        $available_suggesters = $visible_suggesters;
+      }
       reset($available_suggesters);
       $suggester_id = key($available_suggesters);
       $suggester = $this->pluginHelper

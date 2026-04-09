@@ -11,6 +11,7 @@ use Drupal\search_api\Utility\Utility;
 use Drupal\Tests\search_api\Functional\ExampleContentTrait;
 use Drupal\user\Entity\Role;
 use Psr\Log\NullLogger;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests Search API functionality that gets executed by console utilities.
@@ -18,6 +19,7 @@ use Psr\Log\NullLogger;
  * @group search_api
  * @coversDefaultClass \Drupal\search_api\Utility\CommandHelper
  */
+#[RunTestsInSeparateProcesses]
 class CommandHelperTest extends KernelTestBase {
 
   use ExampleContentTrait;

@@ -19,7 +19,7 @@ class AcquiaSearchIndex extends Config {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration = NULL) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, ?MigrationInterface $migration = NULL) {
     return parent::create($container, ['config_name' => 'search_api.index.acquia_search_index'], $plugin_id, $plugin_definition, $migration);
   }
 
@@ -53,7 +53,7 @@ class AcquiaSearchIndex extends Config {
   /**
    * {@inheritdoc}
    */
-  public function fields(MigrationInterface $migration = NULL) {
+  public function fields(?MigrationInterface $migration = NULL) {
     return [];
   }
 

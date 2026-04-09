@@ -16,12 +16,14 @@ use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Utility\Utility;
 use Drupal\search_api_test_views\EventListener;
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Views integration of the Search API.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class ViewsTest extends SearchApiBrowserTestBase {
 
   use ExampleContentTrait;
@@ -113,6 +115,29 @@ class ViewsTest extends SearchApiBrowserTestBase {
     $label = 'Fulltext search including short word';
     $this->checkResults($query, [1, 2, 4], $label);
     $this->assertSession()->pageTextNotContains('You must include at least one keyword to match in the content. Keywords must be at least 3 characters, and punctuation is ignored.');
+
+    // Enable the "Maximum number of words" setting.
+    $view = View::load('search_api_test_view');
+    $displays = $view->get('display');
+    $displays['default']['display_options']['filters']['search_api_fulltext']['expose']['value_max_words'] = 2;
+    $view->set('display', $displays);
+    $view->save();
+
+    $this->checkResults(['search_api_fulltext' => 'foo test'], [1, 2, 4], 'Search with multiple words should now work again');
+    $this->assertSession()->pageTextNotContains('Maximum number of words exceeded.');
+
+    $query = ['search_api_fulltext' => 'foo to test'];
+    $this->checkResults($query, [], 'Search with too many words');
+    $this->assertSession()->pageTextContains('Maximum number of words exceeded. You may enter a maximum of 2 words.');
+
+    // Revert the view change to the "Maximum number of words" setting.
+    $displays['default']['display_options']['filters']['search_api_fulltext']['expose']['value_max_words'] = '';
+    $view->set('display', $displays);
+    $view->save();
+
+    // Use the same search query to confirm the limit is no longer enforced.
+    $this->checkResults($query, [1, 2, 4], 'Search with multiple words should now work again');
+    $this->assertSession()->pageTextNotContains('Maximum number of words exceeded.');
 
     $this->checkResults(['id[value]' => 2], [2], 'Search with ID filter');
     $query = [

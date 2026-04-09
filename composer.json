@@ -169,7 +169,6 @@
     "drupal/search_api_sorts_widget": "^1.0",
     "drupal/serial": "^2.0",
     "drupal/session_limit": "^2.0",
-    "drupal/session_management": "^1.0",
     "drupal/sophron": "^2.2",
     "drupal/stage_file_proxy": "^3.1",
     "drupal/stories": "^3.0.0-alpha3",

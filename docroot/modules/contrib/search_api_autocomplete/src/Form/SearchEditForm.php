@@ -231,6 +231,11 @@ class SearchEditForm extends EntityForm {
     $suffix .= '</div>';
 
     foreach ($available_suggesters as $suggester_id => $suggester) {
+      // Do not show hidden suggester plugins, unless they are currently
+      // selected.
+      if ($suggester->isHidden() && !$search->isValidSuggester($suggester_id)) {
+        continue;
+      }
       $label = $suggester->label();
 
       // Option (with additional description) for the "Enabled" checkboxes.

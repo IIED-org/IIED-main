@@ -4,8 +4,10 @@ namespace Drupal\search_api_autocomplete\Plugin\search_api_autocomplete\search;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\search_api\Plugin\PluginFormTrait;
 use Drupal\search_api\Plugin\views\query\SearchApiQuery;
+use Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSearch;
 use Drupal\search_api_autocomplete\SearchApiAutocompleteException;
 use Drupal\search_api_autocomplete\Search\SearchPluginBase;
 use Drupal\views\ViewEntityInterface;
@@ -14,17 +16,15 @@ use Drupal\views\Views as ViewsViews;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides autocomplete support for Views search.
- *
- * @SearchApiAutocompleteSearch(
- *   id = "views",
- *   group_label = @Translation("Search views"),
- *   group_description = @Translation("Searches provided by Views"),
- *   provider = "views",
- *   deriver =
- *   "Drupal\search_api_autocomplete\Plugin\search_api_autocomplete\search\ViewsDeriver"
- * )
+ * Provides autocomplete support for Views searches.
  */
+#[SearchApiAutocompleteSearch(
+  id: 'views',
+  group_label: new TranslatableMarkup('Search views'),
+  group_description: new TranslatableMarkup('Searches provided by Views'),
+  provider: 'views',
+  deriver: ViewsDeriver::class,
+)]
 class Views extends SearchPluginBase implements PluginFormInterface {
 
   use PluginFormTrait;

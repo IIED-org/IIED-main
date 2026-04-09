@@ -105,7 +105,7 @@ class ManageSortFieldsForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, IndexInterface $search_api_index = NULL, $search_api_display = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?IndexInterface $search_api_index = NULL, $search_api_display = NULL) {
     $original_search_api_display = $this->getOriginalConfigId($search_api_display);
     $this->display = $this->displayPluginManager->createInstance($original_search_api_display);
     $this->index = $search_api_index;

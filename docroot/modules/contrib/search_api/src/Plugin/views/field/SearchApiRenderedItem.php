@@ -144,7 +144,7 @@ class SearchApiRenderedItem extends FieldPluginBase {
     }
     // Always use the default view mode if it was not set explicitly in the
     // options.
-    $bundle = $this->index->getDatasource($datasource_id)->getItemBundle($row->_object);
+    $bundle = $this->index->getDatasourceIfAvailable($datasource_id)->getItemBundle($row->_object);
     $view_mode = $this->options['view_modes'][$datasource_id][$bundle] ?? 'default';
     if ($view_mode === '') {
       return '';

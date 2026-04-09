@@ -4,21 +4,22 @@ namespace Drupal\search_api_autocomplete_test\Plugin\search_api_autocomplete\sea
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSearch;
 use Drupal\search_api_autocomplete\Search\SearchPluginBase;
 use Drupal\search_api_test\TestPluginTrait;
 
 /**
  * Defines a test search plugin class.
- *
- * @SearchApiAutocompleteSearch(
- *   id = "search_api_autocomplete_test",
- *   label = @Translation("Autocomplete test module search"),
- *   description = @Translation("Test autocomplete search"),
- *   group_label = @Translation("Test search"),
- *   group_description = @Translation("Search used for tests."),
- *   index = "autocomplete_search_index",
- * )
  */
+#[SearchApiAutocompleteSearch(
+  id: 'search_api_autocomplete_test',
+  label: new TranslatableMarkup('Autocomplete test module search'),
+  description: new TranslatableMarkup('Test autocomplete search'),
+  group_label: new TranslatableMarkup('Test search'),
+  group_description: new TranslatableMarkup('Search used for tests.'),
+  index: 'autocomplete_search_index',
+)]
 class TestSearch extends SearchPluginBase implements PluginFormInterface {
 
   use TestPluginTrait;

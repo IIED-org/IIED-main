@@ -8,11 +8,17 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\TypedData\ComplexDataInterface;
+use Drupal\Core\Url;
+use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\LoggerTrait;
 use Drupal\search_api\Plugin\PluginFormTrait;
 use Drupal\search_api\Processor\ProcessorPluginManager;
 use Drupal\search_api\Query\QueryInterface;
+use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
+use Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSuggester;
 use Drupal\search_api_autocomplete\SearchApiAutocompleteException;
 use Drupal\search_api_autocomplete\Suggester\SuggesterPluginBase;
 use Drupal\search_api_autocomplete\Suggestion\SuggestionFactory;
@@ -20,13 +26,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a suggester plugin that displays live results.
- *
- * @SearchApiAutocompleteSuggester(
- *   id = "live_results",
- *   label = @Translation("Display live results"),
- *   description = @Translation("Display live results to visitors as they type. (Unless the server is configured to find partial matches, this will most likely only produce results once the visitor has finished typing.)"),
- * )
  */
+#[SearchApiAutocompleteSuggester(
+  id: 'live_results',
+  label: new TranslatableMarkup('Display live results'),
+  description: new TranslatableMarkup('Display live results to visitors as they type. (Unless the server is configured to find partial matches, this will most likely only produce results once the visitor has finished typing.)'),
+)]
 class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
 
   use LoggerTrait;
@@ -324,8 +329,24 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
     }
 
     // Pre-load the result items for performance reasons.
-    $item_ids = array_keys($results->getResultItems());
-    $objects = $index->loadItemsMultiple($item_ids);
+    $objects = $to_load = [];
+    foreach ($results->getResultItems() as $item_id => $item) {
+      try {
+        $object = $item->getOriginalObject(FALSE);
+        if ($object) {
+          $objects[$item_id] = $object;
+        }
+        else {
+          $to_load[$item_id] = $item_id;
+        }
+      }
+      catch (SearchApiException) {
+        // Impossible.
+      }
+    }
+    if ($to_load) {
+      $objects += $index->loadItemsMultiple($to_load);
+    }
     $factory = new SuggestionFactory($user_input);
 
     $suggestions = [];
@@ -343,7 +364,9 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
       }
 
       $object = $objects[$item_id];
-      $item->setOriginalObject($object);
+      if (isset($to_load[$item_id])) {
+        $item->setOriginalObject($object);
+      }
       try {
         $datasource = $item->getDatasource();
       }
@@ -359,7 +382,7 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
       }
 
       // Can't include results that don't have a URL.
-      $url = $datasource->getItemUrl($object);
+      $url = $this->getItemUrl($object, $datasource, $results);
       if (!$url) {
         continue;
       }
@@ -407,6 +430,29 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
   }
 
   /**
+   * Retrieves a result item's URL.
+   *
+   * Extracted into a separate method for easier overriding.
+   *
+   * @param \Drupal\Core\TypedData\ComplexDataInterface $object
+   *   The result item.
+   * @param \Drupal\search_api\Datasource\DatasourceInterface $datasource
+   *   The datasource to which the item belongs.
+   * @param \Drupal\search_api\Query\ResultSetInterface $results
+   *   The search results.
+   *
+   * @return \Drupal\Core\Url|null
+   *   The item's URL, if any.
+   */
+  protected function getItemUrl(
+    ComplexDataInterface $object,
+    DatasourceInterface $datasource,
+    ResultSetInterface $results,
+  ): ?Url {
+    return $datasource->getItemUrl($object);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function calculateDependencies() {
@@ -414,14 +460,19 @@ class LiveResults extends SuggesterPluginBase implements PluginFormInterface {
 
     $index = $this->getSearch()->getIndex();
     foreach ($this->configuration['view_modes'] as $datasource_id => $bundles) {
-      $datasource = $index->getDatasource($datasource_id);
+      try {
+        $datasource = $index->getDatasource($datasource_id);
+      }
+      catch (SearchApiException) {
+        continue;
+      }
       $entity_type_id = $datasource->getEntityTypeId();
       // If the datasource doesn't represent an entity type, we unfortunately
       // can't know what dependencies its view modes might have.
       if (!$entity_type_id) {
         continue;
       }
-      foreach ($bundles as $bundle => $view_mode) {
+      foreach ($bundles as $view_mode) {
         if ($view_mode === '') {
           continue;
         }

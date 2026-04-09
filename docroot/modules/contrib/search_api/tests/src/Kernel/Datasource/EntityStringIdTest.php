@@ -7,6 +7,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\Utility\Utility;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests indexing entities that use string IDs.
@@ -16,6 +17,7 @@ use Drupal\search_api\Utility\Utility;
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class EntityStringIdTest extends KernelTestBase {
 
   /**

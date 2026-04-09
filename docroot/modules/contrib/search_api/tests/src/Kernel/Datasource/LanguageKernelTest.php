@@ -11,12 +11,14 @@ use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\Utility\Utility;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests translation handling of the content entity datasource.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class LanguageKernelTest extends KernelTestBase {
 
   /**

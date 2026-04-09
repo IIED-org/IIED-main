@@ -4,12 +4,14 @@ namespace Drupal\Tests\search_api\Functional;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Utility\Utility;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Verifies that the "Search excerpt" field in entity displays works correctly.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class ExcerptFieldTest extends SearchApiBrowserTestBase {
 
   use ExampleContentTrait;

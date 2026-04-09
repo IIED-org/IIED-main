@@ -41,7 +41,7 @@ function hook_search_api_autocomplete_suggestions_alter(array &$suggestions, arr
  *
  * Modules may implement this hook to alter the information that defines
  * suggesters. All properties that are available in
- * \Drupal\search_api_autocomplete\Annotation\SearchApiAutocompleteSuggester can
+ * \Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSuggester can
  * be altered here, with the addition of the "class" and "provider" keys, and
  * any custom keys used by specific plugins.
  *
@@ -61,9 +61,9 @@ function hook_search_api_autocomplete_suggester_info_alter(array &$suggesters) {
  *
  * Modules may implement this hook to alter the information that defines
  * searches. All properties that are available in
- * \Drupal\search_api_autocomplete\Annotation\SearchApiAutocompleteSearch can
- * be altered here, with the addition of the "class" and "provider" keys, and
- * any custom keys used by specific plugins.
+ * \Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSearch can
+ * be altered here, with the addition of the "class" key, and any custom keys
+ * used by specific plugins.
  *
  * @param array[] $searches
  *   The definitions of all known search plugins, keyed by plugin ID.

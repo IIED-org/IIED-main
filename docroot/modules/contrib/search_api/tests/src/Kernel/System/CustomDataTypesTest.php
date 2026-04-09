@@ -7,12 +7,14 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\Utility\Utility;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests custom data types integration.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class CustomDataTypesTest extends KernelTestBase {
 
   /**

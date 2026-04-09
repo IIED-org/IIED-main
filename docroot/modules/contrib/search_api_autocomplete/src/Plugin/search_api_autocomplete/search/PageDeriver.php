@@ -6,7 +6,7 @@ use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\search_api_autocomplete\Search\SearchPluginDeriverBase;
 
 /**
- * Derives a search plugin definition for every view.
+ * Derives a search plugin definition for every search page.
  *
  * @see \Drupal\search_api_autocomplete\Plugin\search_api_autocomplete\search\Page
  */

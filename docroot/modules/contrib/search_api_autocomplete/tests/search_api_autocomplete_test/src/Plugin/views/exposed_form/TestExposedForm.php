@@ -2,9 +2,14 @@
 
 namespace Drupal\search_api_autocomplete_test\Plugin\views\exposed_form;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Render\Element\RenderElement;
+use Drupal\Core\Render\Element\RenderElementBase;
 use Drupal\Core\Render\ElementInfoManagerInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\views\Attribute\ViewsExposedForm;
 use Drupal\views\Plugin\views\exposed_form\Basic;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -12,13 +17,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Exposed form plugin that provides a basic exposed form.
  *
  * @ingroup views_exposed_form_plugins
- *
- * @ViewsExposedForm(
- *   id = "search_api_autocomplete_test",
- *   title = @Translation("Search API Autocomplete Test Exposed Form"),
- *   help = @Translation("Provides an exposed form plugin to simulate the one provided by the ""better_exposed_filters"" module."),
- * )
  */
+#[ViewsExposedForm(
+  id: 'search_api_autocomplete_test',
+  title: new TranslatableMarkup('Search API Autocomplete Test Exposed Form'),
+  help: new TranslatableMarkup('Provides an exposed form plugin to simulate the one provided by the ""better_exposed_filters"" module.'),
+)]
 class TestExposedForm extends Basic {
 
   /**
@@ -86,8 +90,14 @@ class TestExposedForm extends Basic {
       // Workaround to add support for #group FAPI to all elements currently not
       // supported.
       if (!in_array('processGroup', array_column($element['#process'], 1))) {
-        $element['#process'][] = ['\Drupal\Core\Render\Element\RenderElement', 'processGroup'];
-        $element['#pre_render'][] = ['\Drupal\Core\Render\Element\RenderElement', 'preRenderGroup'];
+        $class = DeprecationHelper::backwardsCompatibleCall(
+          \Drupal::VERSION,
+          '10.3.0',
+          fn () => RenderElementBase::class,
+          fn () => RenderElement::class,
+        );
+        $element['#process'][] = [$class, 'processGroup'];
+        $element['#pre_render'][] = [$class, 'preRenderGroup'];
       }
     }
 

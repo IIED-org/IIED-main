@@ -27,7 +27,7 @@ parameters:
       # want to report an error if this message was not matched.
       reportUnmatched: false
 
-    - # Defined in the Search API Solr module, which we don't depend on.
-      message: "#^Return type of method Drupal\\\\search_api_autocomplete\\\\Plugin\\\\search_api_autocomplete\\\\suggester\\\\Server::getBackend\\(\\) has typehint with deprecated interface Drupal\\\\search_api_autocomplete\\\\AutocompleteBackendInterface:#"
+    - # We want to keep supporting the old interface, too, for now.
+      message: "#^Instanceof references deprecated interface Drupal\\\\search_api_autocomplete\\\\AutocompleteBackendInterface:#"
       count: 1
       path: src/Plugin/search_api_autocomplete/suggester/Server.php

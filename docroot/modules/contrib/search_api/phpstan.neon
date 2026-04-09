@@ -24,10 +24,25 @@ parameters:
 
     # Specific errors we don't want to or cannot fix.
 
+    - # Tests in Drupal 10 still use PHPUnit 9 which does not support
+      # attributes.
+      # @todo Remove once we depend on Drupal 11.0+.
+      message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\RunTestsInSeparateProcesses does not exist\\.$#"
+      reportUnmatched: false
+
     - # The enum was newly introduced in Drupal 11.2.
       # @todo Remove once we depend on Drupal 11.2+.
       message: "#^Access to constant Error on an unknown class Drupal\\\\Core\\\\Extension\\\\Requirement\\\\RequirementSeverity\\.#"
       path: modules/search_api_db/search_api_db_defaults/search_api_db_defaults.install
+      reportUnmatched: false
+
+    - # OOP hooks were not introduced until Drupal 11.1.
+      # @todo Remove once we depend on Drupal 11.1+.
+      message: "#^Attribute class Drupal\\\\Core\\\\Hook\\\\Attribute\\\\(Legacy)?Hook does not exist\\.$#"
+      paths:
+        - search_api.module
+        - search_api.views_hooks.inc
+        - src/Hook/
       reportUnmatched: false
 
     - # Since we don't depend on the VBO module, it isn't available for PhpStan.

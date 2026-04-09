@@ -7,7 +7,7 @@ use Drupal\search_api_autocomplete\Plugin\PluginInterface;
 /**
  * Defines the autocomplete search plugin type.
  *
- * @see \Drupal\search_api_autocomplete\Annotation\SearchApiAutocompleteSearch
+ * @see \Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSearch
  * @see \Drupal\search_api_autocomplete\Search\SearchPluginManager
  * @see \Drupal\search_api_autocomplete\Search\SearchPluginBase
  * @see plugin_api

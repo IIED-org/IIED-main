@@ -164,6 +164,7 @@ class SearchApiSortsField extends ConfigEntityBase {
    */
   public function setStatus($status) {
     $this->status = $status;
+    return $this;
   }
 
   /**

@@ -27,10 +27,7 @@ class AcquiaGuzzle extends Client implements ClientInterface {
 
     $config = [
       'http_errors' => FALSE,
-      // Putting `?debug=true` at the end of any Solr url will show you the
-      // low-level debugging from guzzle.
-      // phpcs:ignore
-      'debug' => (getenv('ACQUIA_GUZZLE_DEBUG') !== FALSE) || isset($_GET['debug']),
+      'debug' => (getenv('ACQUIA_GUZZLE_DEBUG') !== FALSE),
       'verify' => FALSE,
       'handler' => $stack,
       'allow_redirects' => FALSE,

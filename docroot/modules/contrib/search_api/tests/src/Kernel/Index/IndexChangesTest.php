@@ -14,12 +14,14 @@ use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Utility\Utility;
 use Drupal\search_api_test\PluginTestTrait;
 use Drupal\user\Entity\User;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests correct reactions to changes for the index.
  *
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class IndexChangesTest extends KernelTestBase {
 
   use PluginTestTrait;

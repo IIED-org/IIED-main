@@ -5,24 +5,25 @@ namespace Drupal\search_api_autocomplete\Plugin\search_api_autocomplete\search;
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\search_api\LoggerTrait;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
 use Drupal\search_api\Utility\QueryHelperInterface;
+use Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSearch;
 use Drupal\search_api_autocomplete\Search\SearchPluginBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides autocomplete support for the search_api_page module.
- *
- * @SearchApiAutocompleteSearch(
- *   id = "page",
- *   group_label = @Translation("Search pages"),
- *   group_description = @Translation("Searches provided by the <em>Search pages</em> module"),
- *   provider = "search_api_page",
- *   deriver = "Drupal\search_api_autocomplete\Plugin\search_api_autocomplete\search\PageDeriver",
- * )
  */
+#[SearchApiAutocompleteSearch(
+  id: 'page',
+  group_label: new TranslatableMarkup('Search pages'),
+  group_description: new TranslatableMarkup('Searches provided by the <em>Search pages</em> module'),
+  provider: 'search_api_page',
+  deriver: PageDeriver::class,
+)]
 class Page extends SearchPluginBase implements ContainerFactoryPluginInterface {
 
   use LoggerTrait;

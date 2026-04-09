@@ -1,3 +1,18 @@
+Search API Autocomplete 1.11 (2025-11-01):
+------------------------------------------
+- [#3542804] ci: Enabled deprecation testing.
+- [#3541725] fix: Made sure our UI respects the "no_ui" plugin key.
+- [#3529145] chore: Fixed our Twig template to not use the "spaceless" filter.
+- [#3539576] feat: Added attribute discovery support for our plugin types.
+- [#3500338] fix: Fixed error in post-update hook when upgrading to version
+  1.10.
+- [#3500721] fix: Fixed unnecessary item loads in
+  LiveResults::getAutocompleteSuggestions().
+- [#3493327] fix: Fixed suggestion template to not skip "0" string values.
+- [#3496743] chore: Refactored LiveResults to have a separate getItemUrl()
+  method for easier overriding.
+- [#3500723] fix: Fixed deprecated methods referenced in TestExposedForm.
+
 Search API Autocomplete 1.10 (2025-01-15):
 ------------------------------------------
 - #3487349 by recrit, drunken monkey: Fixed AutocompleteHelper::alterElement()

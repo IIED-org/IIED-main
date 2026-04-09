@@ -6,7 +6,7 @@ dependencies:
 type: module
 package: Testing
 
-# Information added by Drupal.org packaging script on 2025-01-15
-version: '8.x-1.10'
+# Information added by Drupal.org packaging script on 2025-11-01
+version: '8.x-1.11'
 project: 'search_api_autocomplete'
-datestamp: 1736941749
+datestamp: 1762031749

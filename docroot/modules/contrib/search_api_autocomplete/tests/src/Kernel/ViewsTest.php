@@ -256,7 +256,11 @@ class ViewsTest extends KernelTestBase {
     $searches = $this->container
       ->get('plugin.manager.search_api_autocomplete.search')
       ->getDefinitions();
-    $expected = ['search_api_autocomplete_test'];
+    ksort($searches);
+    $expected = [
+      'search_api_autocomplete_test',
+      'search_api_autocomplete_test_hidden',
+    ];
     $this->assertEquals($expected, array_keys($searches));
 
     $this->installConfig('search_api_autocomplete_test');
@@ -267,6 +271,7 @@ class ViewsTest extends KernelTestBase {
     ksort($searches);
     $expected = [
       'search_api_autocomplete_test',
+      'search_api_autocomplete_test_hidden',
       'views:search_api_autocomplete_test_view',
     ];
     $this->assertEquals($expected, array_keys($searches));
@@ -297,6 +302,7 @@ class ViewsTest extends KernelTestBase {
     ksort($searches);
     $expected = [
       'search_api_autocomplete_test',
+      'search_api_autocomplete_test_hidden',
       'views:search_api_autocomplete_test_view',
       'views:second_test_view',
     ];

@@ -8,6 +8,7 @@ use Drupal\entity_test\Entity\EntityTestStringId;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api_test_bulk_form\TypedData\FooDataDefinition;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Search API bulk form Views field plugin.
@@ -15,6 +16,7 @@ use Drupal\Tests\BrowserTestBase;
  * @coversDefaultClass \Drupal\search_api\Plugin\views\field\SearchApiBulkForm
  * @group search_api
  */
+#[RunTestsInSeparateProcesses]
 class SearchApiBulkFormTest extends BrowserTestBase {
 
   /**

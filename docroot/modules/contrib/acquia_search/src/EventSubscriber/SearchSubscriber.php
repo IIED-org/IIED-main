@@ -91,7 +91,7 @@ class SearchSubscriber extends AbstractPlugin implements EventSubscriberInterfac
    * @param array|null $options
    *   Options passed from Solarium.
    */
-  public function __construct(Subscription $subscription, AcquiaSearchApiClient $acquia_search_api_client, Flood $flood, array $options = NULL) {
+  public function __construct(Subscription $subscription, AcquiaSearchApiClient $acquia_search_api_client, Flood $flood, ?array $options = NULL) {
     $this->subscription = $subscription;
     $this->flood = $flood;
     $this->acquiaSearchApiClient = $acquia_search_api_client;

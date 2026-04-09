@@ -6,11 +6,13 @@ use Drupal\Component\Transliteration\TransliterationInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\search_api\Contrib\AutocompleteBackendInterface as NewAutocompleteBackendInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Plugin\PluginFormTrait;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\SearchApiException;
+use Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSuggester;
 use Drupal\search_api_autocomplete\AutocompleteBackendInterface as OldAutocompleteBackendInterface;
 use Drupal\search_api_autocomplete\SearchInterface;
 use Drupal\search_api_autocomplete\Suggester\SuggesterPluginBase;
@@ -21,13 +23,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * The server needs to support the "search_api_autocomplete" feature for this to
  * work.
- *
- * @SearchApiAutocompleteSuggester(
- *   id = "server",
- *   label = @Translation("Retrieve from server"),
- *   description = @Translation("Make suggestions based on the data indexed on the server."),
- * )
  */
+#[SearchApiAutocompleteSuggester(
+  id: 'server',
+  label: new TranslatableMarkup('Retrieve from server'),
+  description: new TranslatableMarkup('Make suggestions based on the data indexed on the server.'),
+)]
 class Server extends SuggesterPluginBase implements PluginFormInterface {
 
   use PluginFormTrait;
@@ -185,7 +186,7 @@ class Server extends SuggesterPluginBase implements PluginFormInterface {
    * @param \Drupal\search_api\IndexInterface $index
    *   The search index.
    *
-   * @return \Drupal\search_api_autocomplete\AutocompleteBackendInterface|null
+   * @return \Drupal\search_api\Contrib\AutocompleteBackendInterface|null
    *   The backend plugin of the index's server, if it exists and supports
    *   autocomplete; NULL otherwise.
    */

@@ -9,25 +9,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a base class for search plugins.
  *
- * Plugins extending this class need to define a plugin definition array through
- * annotation. The definition includes the following keys:
- * - id: The unique, system-wide identifier of the search plugin.
- * - label: The human-readable name of the search plugin, translated.
- * - description: A human-readable description for the search plugin,
- *   translated.
+ * Plugins extending this class need to define a plugin definition array using the SearchApiAutocompleteSearch attribute.
  *
  * A complete plugin definition should be written as in this example:
  *
  * @code
- * @SearchApiAutocompleteSearch(
- *   id = "my_search",
- *   label = @Translation("Custom Search"),
- *   description = @Translation("Custom-defined site-specific search."),
- *   index = "my_index",
- * )
+ * #[SearchApiAutocompleteSearch(
+ *   id: 'my_search',
+ *   label: new TranslatableMarkup('Custom Search'),
+ *   description: new TranslatableMarkup('Custom-defined site-specific search.'),
+ *   index: 'my_index',
+ * )]
  * @endcode
  *
- * @see \Drupal\search_api_autocomplete\Annotation\SearchApiAutocompleteSearch
+ * @see \Drupal\search_api_autocomplete\Attribute\SearchApiAutocompleteSearch
  * @see \Drupal\search_api_autocomplete\Search\SearchPluginInterface
  * @see \Drupal\search_api_autocomplete\Search\SearchPluginManager
  * @see plugin_api

@@ -1,3 +1,36 @@
+Search API 1.40 (2025-11-01):
+-----------------------------
+- [#2891393] fix: Fixed wrong base language used for transliteration on
+  multilingual sites.
+- [#3552849] fix: Fixed bug when a processor defines both datasource-independent
+  and datasource-specific properties.
+- [#3489482] chore: Switched to OOP hook implementations.
+- [#3547428] feat: Added a token browser link for the “Custom value” field.
+- [#3551144] feat: Made IndexBatchHelper a service so it can be overridden.
+- [#3552912] fix: Fixed use of deprecated REQUIREMENT_* constants.
+- [#3552821] chore: Added the #[RunTestsInSeparateProcesses] attribute to all
+  non-Unit tests.
+- [#3552650] fix: Fixed missing dependencies of the
+  "drupal.search_api.processors" library.
+- [#3550113] fix: Fixed warning when adding the NumberFieldBoost processor.
+- [#3549688] fix: Fixed TypeError when creating excerpts.
+- [#3542808] feat: Added variants of plugin getters to our entity classes that
+  don’t throw exceptions.
+- [#3547098] fix: Fixed the config schema of the HTML Filter processor.
+- [#3549460] fix: Fixed hidden bug when entity properties are updated via
+  ConfigEntityBase::set().
+- [#3528597] feat: Added Views option to not sanitize indexed data on display.
+- [#3542807] chore: Moved all methods from the Basic tracker plugin to
+  TrackerPluginBase.
+- [#3546439] feat: Added an option to restrict the number of words in Views
+  fulltext searches.
+- [#3545235] fix: Fixed indexing when batch size -1 ("all") is selected.
+- [#3543230] fix: Fixed infinite loop for some backends after updateIndex()
+  fails.
+- [#3543806] feat: Added Option attributes to our Drush commands.
+- [#3542573] fix: Fixed the “Rendered entity” Views row style to properly handle
+  datasources that do not support viewing items.
+
 Search API 1.39 (2025-09-27):
 -----------------------------
 - [#3547811] fix: Fixed complex keywords queries in Postgres.
