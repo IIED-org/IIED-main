@@ -16,4 +16,4 @@ session_limit_roles:
   manager: 0
   administrator: 2
 session_limit_logged_out_display_message: 'You have been automatically logged out. Someone else has logged in with your username and password and the maximum number of @number simultaneous session(s) was exceeded. This may indicate that your account has been compromised or that account sharing is not allowed on this site. Please contact the site administrator if you suspect your account has been compromised.'
-session_limit_log_events: true
+session_limit_log_events: 0
