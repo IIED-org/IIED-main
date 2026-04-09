@@ -103,7 +103,7 @@ class AcquiaSearchApiClient {
    * @param \Acquia\Hmac\Digest\DigestInterface|null $digest
    *   The message digest to use when signing requests.
    */
-  public function __construct(LoggerChannelInterface $logger_channel, Subscription $subscription, ClientFactory $http_client_factory, CacheBackendInterface $cache, TimeInterface $date_time, LockBackendInterface $lock, DigestInterface $digest = NULL) {
+  public function __construct(LoggerChannelInterface $logger_channel, Subscription $subscription, ClientFactory $http_client_factory, CacheBackendInterface $cache, TimeInterface $date_time, LockBackendInterface $lock, ?DigestInterface $digest = NULL) {
     $this->logger = $logger_channel;
     $this->subscription = $subscription;
     $this->clientFactory = $http_client_factory;
