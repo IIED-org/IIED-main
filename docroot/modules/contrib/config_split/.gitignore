@@ -1,26 +1,20 @@
 /vendor/
-vendor
 /web/
-web
 /node_modules/
-.env
-composer.lock
-composer.dev.lock
-yarn.lock
 /.editorconfig
+/.ddev/
+/.idea/
 
 #PHPUnit output
 junit.xml
+phpunit.xml
 .phpunit.result.cache
 
-# Ignore local overrides.
-docker-compose.override.yml
+# We symlink docker-compsoe for docker-relay to work with ddev
+docker-compose.yml
 
 # ignore patches for easier contrib workflow
 *.patch
-/.env
 .envrc
 .envrc.local
 .composer-plugin.env
-/composer.spoons.json
-/composer.spoons.lock

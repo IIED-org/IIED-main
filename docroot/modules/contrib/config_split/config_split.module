@@ -5,6 +5,7 @@
  * Configuration split module functions.
  */
 
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -16,27 +17,18 @@ function config_split_form_config_admin_import_form_alter(&$form, FormStateInter
 
   $enabled = [];
   $used_config_split_text = t('You are not using any config split configuration');
-  $config_split_entities = \Drupal::entityTypeManager()->getStorage('config_split')->loadMultiple();
-  $active_filters = \Drupal::service('plugin.manager.config_filter')->getDefinitions();
-  $active_filters = array_filter($active_filters, function ($filter) {
-    return $filter['status'];
-  });
-  /** @var \Drupal\config_split\Entity\ConfigSplitEntityInterface $config_split_entity */
-  foreach ($config_split_entities as $config_split_entity) {
-    if (in_array('config_split:' . $config_split_entity->id(), array_keys($active_filters))) {
-      $enabled[] = Link::fromTextAndUrl($config_split_entity->label(), $config_split_entity->toUrl())->toString();
-
-      // Read the configuration and check differences in important fields.
-      $config_name = $config_split_entity->getConfigDependencyName();
-      $active = \Drupal::getContainer()->get('config.storage')->read($config_name);
-      $staged = \Drupal::getContainer()->get('config.storage.sync')->read($config_name);
-      $fields = ['status', 'weight', 'folder'];
-      $warnings = array_sum(array_map(function ($filed) use ($active, $staged) {
-        return $active[$filed] != $staged[$filed];
-      }, $fields));
-      if ($warnings) {
-        \Drupal::messenger()
-          ->addWarning(t('The configuration for @split has changed, consider a single import for it first.', ['@split' => $config_split_entity->label()]));
+  /** @var \Drupal\config_split\ConfigSplitManager $manager */
+  $manager = \Drupal::service('config_split.manager');
+  $sync = \Drupal::service('config.storage.sync');
+  $splits = $manager->loadMultiple($manager->listAll($sync), $sync);
+  foreach ($splits as $split) {
+    if ($split->get('status')) {
+      $entity = $manager->getSplitEntity($split->getName());
+      if ($entity instanceof ConfigEntityInterface) {
+        $enabled[] = Link::fromTextAndUrl($entity->label(), $entity->toUrl())->toString();
+      }
+      else {
+        $enabled[] = $split->get('label') . ' (new)';
       }
     }
   }
@@ -61,9 +53,9 @@ function config_split_help($route_name, RouteMatchInterface $route_match) {
 The Drupal 8 configuration management works best when importing and exporting
 the whole set of the sites configuration. However, sometimes developers like to
 opt out of the robustness of CM and have a super-set of configuration active on
-their development machine. The canonical example for this is to have the 
+their development machine. The canonical example for this is to have the
 <code>devel</code> module enabled or having a few block placements or views in
-the development environment and then not export them into the set of 
+the development environment and then not export them into the set of
 configuration to be deployed, yet still being able to share the development
 configuration with colleagues.
 
@@ -71,7 +63,7 @@ This module allows to define sets of configuration that will get exported to
 separate directories when exporting, and get merged together when importing.
 It is possible to define in settings.php which of these sets should be active
 and considered for the export and import.
-  
+
 For more information, see the <a href=":online-documentation">online documentation for the Config Split module</a>.',
           [
             ':online-documentation' => 'https://www.drupal.org/docs/8/modules/configuration-split',
@@ -83,12 +75,11 @@ For more information, see the <a href=":online-documentation">online documentati
       $output .= '<dd>' . t('
 Let us assume that you configured your sync directory as follows:
 <code>
-$config_directories[CONFIG_SYNC_DIRECTORY] = \'../config/sync\';
+$settings["config_sync_directory"] = \'../config/sync\';
 </code>
 Create a split with the folder `../config/my-split-folder` and create that
 directory. Now add a module that is currently active that you wish not to
-export, say `devel`. Next export all the configuration (with `drush cex` for
-drush >= 8.1.10 and `drush csex` for older versions of drush).
+export, say `devel`. Next export all the configuration.
 This should have removed devel from `core.extensions` and moved the devel
 configuration to the split folder.') . '</dd>';
       $output .= '<dt>' . t('Deploy splits') . '</dt>';
@@ -108,9 +99,9 @@ exporting the configuration.') . '</dd>';
       $output = '';
       $output .= '<p>' . t('Config Split Help') . '</p>';
       $output .= '<p>' . t('The configuration listed as part of a split
-      are exported to the split directory rather than the usual sync directory
-      when exporting the whole configuration. When importing the whole 
-      configuration, the configuration in the split directories is merged with
+      are exported to the split storage rather than the usual sync directory
+      when exporting the whole configuration. When importing the whole
+      configuration, the configuration in the split storages is merged with
       the default sync directory and overrides the configuration.
       The configuration does not end up being overwritten in the sense of
       configuration overrides such as the overrides from settings.php.') . '</p>';
@@ -124,14 +115,15 @@ exporting the configuration.') . '</dd>';
 /**
  * Implements hook_config_readonly_whitelist_patterns().
  *
- * Automatically add any enabled database config splits' graylist and blacklist
+ * Automatically add any enabled database config splits' partial and complete
  * entries as whitelisted patterns for config_readonly.
  */
 function config_split_config_readonly_whitelist_patterns() {
   $patterns = [];
-  $splits = \Drupal::entityTypeManager()->getStorage('config_split')->loadByProperties(['folder' => '', 'status' => TRUE]);
+  /** @var \Drupal\config_split\Entity\ConfigSplitEntityInterface[] $splits */
+  $splits = \Drupal::entityTypeManager()->getStorage('config_split')->loadByProperties(['storage' => 'database', 'status' => TRUE]);
   foreach ($splits as $split) {
-    $patterns = array_merge($patterns, $split->get('graylist'), $split->get('blacklist'));
+    $patterns = array_merge($patterns, $split->get('partial_list'), $split->get('complete_list'));
   }
   return $patterns;
 }

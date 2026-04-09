@@ -1,11 +1,11 @@
-/* Checkbox list overflow*/
+/* Checkbox list overflow */
 .form-checkboxes {
-  height: 200px;
+  overflow-y: scroll;
   width: 99%;
   min-width: 300px;
-  overflow-y: scroll;
-  border: 1px solid #d2cdcd;
+  height: 200px;
   padding: 0 10px 0;
+  border: 1px solid #d2cdcd;
 }
 
 .form-checkboxes input[type="checkbox"] {

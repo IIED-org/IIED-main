@@ -1,13 +1,11 @@
-name: Configuration Split
+name: Config Split
 type: module
-description: Configuration filter for importing and exporting split config
-core_version_requirement: ^9.3 || ^10
+description: Configuration transformer for importing and exporting split config
+core_version_requirement: ^8.8 || ^9 || ^10 || ^11
 package: Config
 configure: entity.config_split.collection
-dependencies:
-  - config_filter:config_filter
 
 # Information added by Drupal.org packaging script on 2025-02-12
-version: '8.x-1.10'
+version: '2.0.2'
 project: 'config_split'
-datestamp: 1739356049
+datestamp: 1739356082

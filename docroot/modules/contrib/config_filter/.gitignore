@@ -15,9 +15,9 @@ junit.xml
 
 # Ignore local overrides.
 docker-compose.override.yml
+/composer.spoons.json
+/composer.spoons.lock
 /.env
 .envrc
 .envrc.local
 .composer-plugin.env
-/composer.spoons.json
-/composer.spoons.lock
