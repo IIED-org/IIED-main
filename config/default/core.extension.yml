@@ -32,7 +32,6 @@ module:
   components: 0
   computed_field: 0
   config: 0
-  config_filter: 0
   config_split: 0
   configurable_views_filter_block: 0
   contact: 0

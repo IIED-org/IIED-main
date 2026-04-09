@@ -2,9 +2,11 @@
 
 namespace Drupal\Tests\config_split\Kernel;
 
+use Drupal\config_split\Config\ConfigPatch;
+use Drupal\config_split\Config\SplitCollectionStorage;
 use Drupal\Core\Config\MemoryStorage;
+use Drupal\Core\Config\StorageCopyTrait;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\Tests\config_filter\Kernel\ConfigStorageTestTrait;
@@ -12,21 +14,22 @@ use Drupal\Tests\config_filter\Kernel\ConfigStorageTestTrait;
 /**
  * Test the splitting and merging.
  *
- * These are the integration tests to assert that the module has the behaviour
+ * These are the integration tests to assert that the module has the behavior
  * on import and export that we expect. This is supposed to not go into internal
  * details of how config split achieves this.
  *
- * @group config_split_new
+ * @group config_split
  */
 class SplitMergeTest extends KernelTestBase {
 
   use ConfigStorageTestTrait;
   use SplitTestTrait;
+  use StorageCopyTrait;
 
   /**
    * Modules to enable.
    *
-   * @var array
+   * @var string[]
    */
   protected static $modules = [
     'system',
@@ -61,12 +64,24 @@ class SplitMergeTest extends KernelTestBase {
   }
 
   /**
-   * Test a simple export split.
+   * Data provider to test with all storages.
+   *
+   * @return string[][]
+   *   The different storage types.
    */
-  public function testSimpleSplitExport() {
+  public static function storageAlternativesProvider(): array {
+    return [['folder'], ['collection'], ['database']];
+  }
+
+  /**
+   * Test a simple export split.
+   *
+   * @dataProvider storageAlternativesProvider
+   */
+  public function testSimpleSplitExport($storage) {
     // Simple split with default configuration.
     $config = $this->createSplitConfig('test_split', [
-      'folder' => Settings::get('file_public_path') . '/config/split',
+      'storage' => $storage,
       'module' => ['config_test' => 0],
     ]);
 
@@ -96,9 +111,14 @@ class SplitMergeTest extends KernelTestBase {
         }
       }
     }
+    if ($storage === 'collection') {
+      $temp = new SplitCollectionStorage($expectedExport, $config->get('id'));
+      self::replaceStorageContents($expectedSplit, $temp);
+    }
 
-    static::assertStorageEquals($expectedExport, $this->getExportStorage());
-    static::assertStorageEquals($expectedSplit, $this->getSplitPreviewStorage($config));
+    $export = $this->getExportStorage();
+    static::assertStorageEquals($expectedExport, $export);
+    static::assertStorageEquals($expectedSplit, $this->getSplitPreviewStorage($config, $export));
 
     // Write the export to the file system and assert the import to work.
     $this->copyConfig($expectedExport, $this->getSyncFileStorage());
@@ -108,14 +128,15 @@ class SplitMergeTest extends KernelTestBase {
 
   /**
    * Test complete and conditional split export.
+   *
+   * @dataProvider storageAlternativesProvider
    */
-  public function testCompleteAndConditionalSplitExport() {
+  public function testCompleteAndConditionalSplitExport($storage) {
 
     $config = $this->createSplitConfig('test_split', [
-      'folder' => Settings::get('file_public_path') . '/config/split',
-      'blacklist' => ['config_test.types'],
-      'graylist' => ['config_test.system'],
-      'graylist_skip_equal' => TRUE,
+      'storage' => $storage,
+      'complete_list' => ['config_test.types'],
+      'partial_list' => ['config_test.system'],
     ]);
 
     $active = $this->getActiveStorage();
@@ -125,6 +146,10 @@ class SplitMergeTest extends KernelTestBase {
     // Change the gray listed config to see if it is exported the same.
     $originalSystem = $this->config('config_test.system')->getRawData();
     $this->config('config_test.system')->set('foo', 'baz')->save();
+    $systemPatch = ConfigPatch::fromArray([
+      'added' => ['foo' => 'bar'],
+      'removed' => ['foo' => 'baz'],
+    ])->toArray();
 
     $expectedExport = new MemoryStorage();
     $expectedSplit = new MemoryStorage();
@@ -142,11 +167,10 @@ class SplitMergeTest extends KernelTestBase {
         elseif ($name === 'config_test.system') {
           // We only changed the config in the default collection.
           if ($collection === StorageInterface::DEFAULT_COLLECTION) {
-            $expectedSplit->write($name, $data);
+            $expectedSplit->write('config_split.patch.' . $name, $systemPatch);
             $expectedExport->write($name, $originalSystem);
           }
           else {
-            // The option "skip equal" is false, write to export only.
             $expectedExport->write($name, $data);
           }
         }
@@ -156,16 +180,26 @@ class SplitMergeTest extends KernelTestBase {
       }
     }
 
-    static::assertStorageEquals($expectedExport, $this->getExportStorage());
-    static::assertStorageEquals($expectedSplit, $this->getSplitPreviewStorage($config));
+    if ($storage === 'collection') {
+      $temp = new SplitCollectionStorage($expectedExport, $config->get('id'));
+      self::replaceStorageContents($expectedSplit, $temp);
+    }
+
+    $export = $this->getExportStorage();
+    static::assertStorageEquals($expectedExport, $export);
+    static::assertStorageEquals($expectedSplit, $this->getSplitPreviewStorage($config, $export));
 
     // Change the config.
-    $config->set('blacklist', ['config_test.system'])->set('graylist', [])->save();
+    $config->set('complete_list', ['config_test.system'])->set('partial_list', [])->save();
+    $active = $this->getActiveStorage();
 
     // Update expectations.
     $expectedExport->write($config->getName(), $config->getRawData());
     $expectedExport->write('config_test.types', $active->read('config_test.types'));
     $expectedSplit->delete('config_test.types');
+    $expectedSplit->delete('config_split.patch.config_test.system');
+    $expectedExport->delete('config_test.system');
+    $expectedSplit->write('config_test.system', $active->read('config_test.system'));
     // Update multilingual expectations.
     foreach (array_merge($active->getAllCollectionNames(), [StorageInterface::DEFAULT_COLLECTION]) as $collection) {
       $active = $active->createCollection($collection);
@@ -175,9 +209,14 @@ class SplitMergeTest extends KernelTestBase {
       $expectedExport->delete('config_test.system');
       $expectedSplit->write('config_test.system', $active->read('config_test.system'));
     }
+    if ($storage === 'collection') {
+      $temp = new SplitCollectionStorage($expectedExport, $config->get('id'));
+      self::replaceStorageContents($expectedSplit, $temp);
+    }
 
-    static::assertStorageEquals($expectedExport, $this->getExportStorage());
-    static::assertStorageEquals($expectedSplit, $this->getSplitPreviewStorage($config));
+    $export = $this->getExportStorage();
+    static::assertStorageEquals($expectedExport, $export);
+    static::assertStorageEquals($expectedSplit, $this->getSplitPreviewStorage($config, $export));
 
     // Write the export to the file system and assert the import to work.
     $this->copyConfig($expectedExport, $this->getSyncFileStorage());
@@ -187,29 +226,29 @@ class SplitMergeTest extends KernelTestBase {
 
   /**
    * Test complete and conditional split export with modules.
+   *
+   * @dataProvider storageAlternativesProvider
    */
-  public function testConditionalSplitWithModuleConfig() {
+  public function testConditionalSplitWithModuleConfig($storage) {
 
     $config = $this->createSplitConfig('test_split', [
-      'folder' => Settings::get('file_public_path') . '/config/split',
+      'storage' => $storage,
       'module' => ['config_test' => 0],
-      'graylist' => ['config_test.system'],
-      'graylist_skip_equal' => FALSE,
+      'partial_list' => ['config_test.system'],
     ]);
 
     $active = $this->getActiveStorage();
     // Export the configuration to sync without filtering.
     $this->copyConfig($active, $this->getSyncFileStorage());
 
-    // Change the gray listed config to see if it is exported the same.
-    $originalSystem = $this->config('config_test.system')->getRawData();
+    // Change the config which is partially split to see how it is exported.
     $this->config('config_test.system')->set('foo', 'baz')->save();
 
     $expectedExport = new MemoryStorage();
     $expectedSplit = new MemoryStorage();
 
     // Set up the expected data.
-    foreach (array_merge($active->getAllCollectionNames(), [StorageInterface::DEFAULT_COLLECTION]) as $collection) {
+    foreach (array_merge([StorageInterface::DEFAULT_COLLECTION], $active->getAllCollectionNames()) as $collection) {
       $active = $active->createCollection($collection);
       $expectedExport = $expectedExport->createCollection($collection);
       $expectedSplit = $expectedSplit->createCollection($collection);
@@ -219,20 +258,9 @@ class SplitMergeTest extends KernelTestBase {
           unset($data['module']['config_test']);
         }
 
-        if ($name === 'config_test.system') {
-          // We only changed the config in the default collection.
-          if ($collection === StorageInterface::DEFAULT_COLLECTION) {
-            // The unchanged config is exported, the changed one is split.
-            $expectedSplit->write($name, $data);
-            $expectedExport->write($name, $originalSystem);
-          }
-          else {
-            // The option "skip equal" is false, write to both.
-            $expectedSplit->write($name, $data);
-            $expectedExport->write($name, $data);
-          }
-        }
-        elseif (strpos($name, 'config_test') !== FALSE || in_array($name, ['system.menu.exclude-test', 'system.menu.indirect-exclude-test'])) {
+        // The partial config does not take effect because it still depends
+        // explicitly on the module which is split off.
+        if (strpos($name, 'config_test') !== FALSE || in_array($name, ['system.menu.exclude-test', 'system.menu.indirect-exclude-test'])) {
           // Expect config that depends on config_test directly and indirectly
           // to be split off.
           $expectedSplit->write($name, $data);
@@ -242,9 +270,14 @@ class SplitMergeTest extends KernelTestBase {
         }
       }
     }
+    if ($storage === 'collection') {
+      $temp = new SplitCollectionStorage($expectedExport, $config->get('id'));
+      self::replaceStorageContents($expectedSplit, $temp);
+    }
 
-    static::assertStorageEquals($expectedExport, $this->getExportStorage());
-    static::assertStorageEquals($expectedSplit, $this->getSplitPreviewStorage($config));
+    $export = $this->getExportStorage();
+    static::assertStorageEquals($expectedExport, $export);
+    static::assertStorageEquals($expectedSplit, $this->getSplitPreviewStorage($config, $export));
 
     // Write the export to the file system and assert the import to work.
     $this->copyConfig($expectedExport, $this->getSyncFileStorage());
@@ -254,63 +287,54 @@ class SplitMergeTest extends KernelTestBase {
 
   /**
    * Test that dependencies are split too.
+   *
+   * @dataProvider storageAlternativesProvider
    */
-  public function testIncludeDependency() {
+  public function testIncludeDependency($storage) {
     $config = $this->createSplitConfig('test_split', [
-      'graylist' => ['system.menu.exclude-test'],
-      'graylist_dependents' => TRUE,
-      'graylist_skip_equal' => TRUE,
+      'storage' => $storage,
+      'complete_list' => ['system.menu.exclude-test'],
     ]);
 
-    $active = $this->getActiveStorage();
     // Export the configuration to sync without filtering.
-    $this->copyConfig($active, $this->getSyncFileStorage());
+    $this->copyConfig($this->getActiveStorage(), $this->getSyncFileStorage());
 
-    // Change only the indirectly dependent config.
-    $originalSystem = $this->config('system.menu.indirect-exclude-test')->getRawData();
+    // Change some config.
     $this->config('system.menu.indirect-exclude-test')->set('label', 'Split Test')->save();
 
+    $active = $this->getActiveStorage();
     $expectedExport = new MemoryStorage();
     $expectedSplit = new MemoryStorage();
 
     // Set up the expected data.
-    foreach (array_merge($active->getAllCollectionNames(), [StorageInterface::DEFAULT_COLLECTION]) as $collection) {
+    foreach (array_merge([StorageInterface::DEFAULT_COLLECTION], $active->getAllCollectionNames()) as $collection) {
       $active = $active->createCollection($collection);
       $expectedExport = $expectedExport->createCollection($collection);
       $expectedSplit = $expectedSplit->createCollection($collection);
       foreach ($active->listAll() as $name) {
         $data = $active->read($name);
 
-        if ($name === 'system.menu.indirect-exclude-test') {
-          // We only changed the config in the default collection.
-          if ($collection === StorageInterface::DEFAULT_COLLECTION) {
-            // The unchanged value is in export, the changed value is split.
-            $expectedSplit->write($name, $data);
-            $expectedExport->write($name, $originalSystem);
-          }
-          else {
-            // The option "skip equal" is false, write to export only.
-            $expectedExport->write($name, $data);
-          }
+        if (in_array($name, ['system.menu.exclude-test', 'system.menu.indirect-exclude-test'])) {
+          $expectedSplit->write($name, $data);
         }
         else {
           $expectedExport->write($name, $data);
         }
       }
     }
+    if ($storage === 'collection') {
+      $temp = new SplitCollectionStorage($expectedExport, $config->get('id'));
+      self::replaceStorageContents($expectedSplit, $temp);
+    }
 
-    static::assertStorageEquals($expectedExport, $this->getExportStorage());
-    static::assertStorageEquals($expectedSplit, $this->getSplitPreviewStorage($config));
+    $export = $this->getExportStorage();
+    static::assertStorageEquals($expectedExport, $export);
+    static::assertStorageEquals($expectedSplit, $this->getSplitPreviewStorage($config, $export));
 
     // Write the export to the file system and assert the import to work.
     $this->copyConfig($expectedExport, $this->getSyncFileStorage());
     $this->copyConfig($expectedSplit, $this->getSplitSourceStorage($config));
     static::assertStorageEquals($active, $this->getImportStorage());
-
-    // If we don't include the dependants then the split will be empty.
-    $config->set('graylist_dependents', FALSE)->save();
-    static::assertStorageEquals($active, $this->getExportStorage());
-    static::assertStorageEquals(new MemoryStorage(), $this->getSplitPreviewStorage($config));
   }
 
 }

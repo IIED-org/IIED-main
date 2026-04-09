@@ -1,26 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\config_split;
 
-use Drupal\config_filter\Config\FilteredStorage;
-use Drupal\config_filter\Config\FilteredStorageInterface;
-use Drupal\config_filter\ConfigFilterManagerInterface;
-use Drupal\config_filter\ConfigFilterStorageFactory;
-use Drupal\config_split\Config\GhostStorage;
-use Drupal\Core\Config\ConfigImporter;
+use Drupal\config_split\Config\ConfigImporterTrait;
+use Drupal\config_split\Config\StatusOverride;
 use Drupal\Core\Config\ConfigImporterException;
-use Drupal\Core\Config\ConfigManagerInterface;
-use Drupal\Core\Config\FileStorageFactory;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Config\StorageComparer;
+use Drupal\Core\Config\StorageCopyTrait;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\Core\Config\TypedConfigManagerInterface;
-use Drupal\Core\Extension\ModuleExtensionList;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Extension\ModuleInstallerInterface;
-use Drupal\Core\Extension\ThemeHandlerInterface;
-use Drupal\Core\Lock\LockBackendInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The CLI service class for interoperability.
@@ -28,6 +18,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @internal This service is not an api and may change at any time.
  */
 class ConfigSplitCliService {
+
+  use StorageCopyTrait;
+  use ConfigImporterTrait;
 
   /**
    * The return value indicating no changes were imported.
@@ -45,95 +38,32 @@ class ConfigSplitCliService {
   const COMPLETE = 'complete';
 
   /**
-   * The filter manager.
+   * The split manager.
    *
-   * @var \Drupal\config_filter\ConfigFilterManagerInterface
+   * @var \Drupal\config_split\ConfigSplitManager
    */
-  protected $configFilterManager;
-
-  /**
-   * The config filter storage factory.
-   *
-   * @var \Drupal\config_filter\ConfigFilterStorageFactory
-   */
-  protected $storageFactory;
-
-  /**
-   * Drupal\Core\Config\ConfigManager definition.
-   *
-   * @var \Drupal\Core\Config\ConfigManager
-   */
-  protected $configManager;
+  private $manager;
 
   /**
    * Active Config Storage.
    *
    * @var \Drupal\Core\Config\StorageInterface
    */
-  protected $activeStorage;
+  private $activeStorage;
 
   /**
    * Sync Config Storage.
    *
    * @var \Drupal\Core\Config\StorageInterface
    */
-  protected $syncStorage;
+  private $syncStorage;
 
   /**
-   * Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher definition.
+   * The split status override service.
    *
-   * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
+   * @var \Drupal\config_split\Config\StatusOverride
    */
-  protected $eventDispatcher;
-
-  /**
-   * Drupal\Core\ProxyClass\Lock\DatabaseLockBackend definition.
-   *
-   * @var \Drupal\Core\ProxyClass\Lock\DatabaseLockBackend
-   */
-  protected $lock;
-
-  /**
-   * Drupal\Core\Config\TypedConfigManager definition.
-   *
-   * @var \Drupal\Core\Config\TypedConfigManager
-   */
-  protected $configTyped;
-
-  /**
-   * Drupal\Core\Extension\ModuleHandler definition.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandler
-   */
-  protected $moduleHandler;
-
-  /**
-   * Drupal\Core\ProxyClass\Extension\ModuleInstaller definition.
-   *
-   * @var \Drupal\Core\ProxyClass\Extension\ModuleInstaller
-   */
-  protected $moduleInstaller;
-
-  /**
-   * Drupal\Core\Extension\ThemeHandler definition.
-   *
-   * @var \Drupal\Core\Extension\ThemeHandler
-   */
-  protected $themeHandler;
-
-  /**
-   * Drupal\Core\StringTranslation\TranslationManager definition.
-   *
-   * @var \Drupal\Core\StringTranslation\TranslationManager
-   */
-  protected $stringTranslation;
-
-  /**
-   * The ModuleExtensionList to be passed to the config importer.
-   *
-   * @var \Drupal\Core\Extension\ModuleExtensionList
-   */
-  protected $moduleExtensionList;
+  protected $statusOverride;
 
   /**
    * List of messages.
@@ -146,160 +76,202 @@ class ConfigSplitCliService {
    * Constructor.
    */
   public function __construct(
-    ConfigFilterManagerInterface $config_filter_manager,
-    ConfigFilterStorageFactory $storageFactory,
-    ConfigManagerInterface $config_manager,
-    StorageInterface $active_storage,
-    StorageInterface $sync_storage,
-    EventDispatcherInterface $event_dispatcher,
-    LockBackendInterface $lock,
-    TypedConfigManagerInterface $config_typed,
-    ModuleHandlerInterface $module_handler,
-    ModuleInstallerInterface $module_installer,
-    ThemeHandlerInterface $theme_handler,
-    TranslationInterface $string_translation,
-    ModuleExtensionList $moduleExtensionList
+    ConfigSplitManager $manager,
+    StorageInterface $activeStorage,
+    StorageInterface $syncStorage,
+    StatusOverride $statusOverride,
   ) {
-    $this->configFilterManager = $config_filter_manager;
-    $this->storageFactory = $storageFactory;
-    $this->configManager = $config_manager;
-    $this->activeStorage = $active_storage;
-    $this->syncStorage = $sync_storage;
-    $this->eventDispatcher = $event_dispatcher;
-    $this->lock = $lock;
-    $this->configTyped = $config_typed;
-    $this->moduleHandler = $module_handler;
-    $this->moduleInstaller = $module_installer;
-    $this->themeHandler = $theme_handler;
-    $this->stringTranslation = $string_translation;
-    $this->moduleExtensionList = $moduleExtensionList;
+    $this->manager = $manager;
+    $this->activeStorage = $activeStorage;
+    $this->syncStorage = $syncStorage;
+    $this->statusOverride = $statusOverride;
     $this->errors = [];
   }
 
   /**
    * Handle the export interaction.
    *
-   * @param string|null $split
-   *   The split name to export, null for standard export.
-   * @param \Symfony\Component\Console\Style\StyleInterface|\ConfigSplitDrush8Io $io
+   * @param string $split
+   *   The split name to export.
+   * @param \Symfony\Component\Console\Style\StyleInterface|object $io
    *   The io interface of the cli tool calling the method.
    * @param callable $t
    *   The translation function akin to t().
    * @param bool $confirmed
    *   Whether the export is already confirmed by the console input.
    */
-  public function ioExport($split, $io, callable $t, $confirmed = FALSE) {
-    if (!$split) {
-      $io->warning('Please consider using `drush config:export` instead for exporting all config.');
-      $message = $t('Do a normal (including filters) config export?');
-      $storage = $this->syncStorage;
-      if (!$storage instanceof FilteredStorageInterface) {
-        throw new \RuntimeException('Only exporting splits is supported when not using Config Filter 8.x-1.x');
-      }
-    }
-    else {
-      $config_name = $this->getSplitName($split);
-
-      $plugin_id = $this->getPluginIdFromConfigName($config_name);
-      $filter = $this->configFilterManager->getFilterInstance($plugin_id);
-
-      // Use a GhostStorage so that we only export the split.
-      $storage = $this->storageFactory->getFilteredStorage(FileStorageFactory::getSync(), ['config.storage.sync'], [$plugin_id]);
-      $storage = new FilteredStorage(new GhostStorage($storage), [$filter]);
-
-      $message = $t('The following directories will be purged and used for exporting configuration:');
-      $message .= "\n";
-      $message .= $this->getDestination($config_name);
-      $message .= "\n";
-      $message .= $t('Export the configuration?');
+  public function ioExport(string $split, $io, callable $t, bool $confirmed = FALSE): bool {
+    $config = $this->getSplitFromArgument($split, $io, $t);
+    if ($config === NULL) {
+      return FALSE;
     }
 
+    if (!$config->get('status')) {
+      $io->warning("Inactive splits can not not be exported.");
+      return FALSE;
+    }
+
+    $message = $t('Export the split config configuration?');
     if ($confirmed || $io->confirm($message)) {
-      $this->export($storage);
+      $target = $this->manager->singleExportTarget($config);
+      self::replaceStorageContents($this->manager->singleExportPreview($config), $target);
       $io->success($t("Configuration successfully exported."));
     }
+
+    return TRUE;
   }
 
   /**
    * Handle the import interaction.
    *
-   * @param string|null $split
-   *   The split name to import, null for standard import.
-   * @param \Symfony\Component\Console\Style\StyleInterface|\ConfigSplitDrush8Io $io
+   * @param string $split
+   *   The split name to import.
+   * @param \Symfony\Component\Console\Style\StyleInterface|object $io
    *   The $io interface of the cli tool calling.
    * @param callable $t
    *   The translation function akin to t().
    * @param bool $confirmed
    *   Whether the import is already confirmed by the console input.
    */
-  public function ioImport($split, $io, callable $t, $confirmed = FALSE) {
-    if (!$split) {
-      $io->text('Please consider using `drush config:import` instead for importing all config.');
-      $message = $t('Do a normal (including filters) config import?');
-      $storage = $this->syncStorage;
-      if (!$storage instanceof FilteredStorageInterface) {
-        throw new \RuntimeException('Only importing splits is supported when not using Config Filter 8.x-1.x');
-      }
-    }
-    else {
-      $config_name = $this->getSplitName($split);
-      $filter = $this->configFilterManager->getFilterInstance($this->getPluginIdFromConfigName($config_name));
-
-      // Filter the active storage so we only import the split.
-      $storage = new FilteredStorage($this->activeStorage, [$filter]);
-
-      $message = $t('The following directory will be used to merge config into the active storage:');
-      $message .= "\n";
-      $message .= $this->getDestination($config_name);
-      $message .= "\n";
-      $message .= $t('Import the configuration?');
+  public function ioImport(string $split, $io, callable $t, $confirmed = FALSE): bool {
+    $config = $this->getSplitFromArgument($split, $io, $t);
+    if ($config === NULL) {
+      return FALSE;
     }
 
-    try {
-      if ($confirmed || $io->confirm($message)) {
-        $status = $this->import($storage);
-        switch ($status) {
-          case ConfigSplitCliService::COMPLETE:
-            $io->success($t("Configuration successfully imported."));
-            break;
+    $message = $t('Import the split config configuration?');
+    $storage = $this->manager->singleImport($config, FALSE);
 
-          case ConfigSplitCliService::NO_CHANGES:
-            $io->text($t("There are no changes to import."));
-            break;
-
-          case ConfigSplitCliService::ALREADY_IMPORTING:
-            $io->error($t("Another request may be synchronizing configuration already."));
-            break;
-
-          default:
-            $io->error($t("Something unexpected happened"));
-            break;
-        }
-      }
+    if ($confirmed || $io->confirm($message)) {
+      return $this->tryImport($storage, $io, $t);
     }
-    catch (ConfigImporterException $e) {
-      $io->error($t('There have been errors importing: @errors', ['@errors' => strip_tags(implode("\n", $this->getErrors()))]));
-    }
+    return TRUE;
   }
 
   /**
-   * Export the configuration.
+   * Handle the activation interaction.
    *
-   * This is the quintessential config export.
-   *
-   * @param \Drupal\Core\Config\StorageInterface $storage
-   *   The config storage to export to.
-   * @param \Drupal\Core\Config\StorageInterface|null $active
-   *   The config storage to export from (optional).
+   * @param string $split
+   *   The split name to activate.
+   * @param \Symfony\Component\Console\Style\StyleInterface|object $io
+   *   The $io interface of the cli tool calling.
+   * @param callable $t
+   *   The translation function akin to t().
+   * @param bool $confirmed
+   *   Whether the import is already confirmed by the console input.
    */
-  public function export(StorageInterface $storage, StorageInterface $active = NULL) {
-    if (!isset($active)) {
-      // Use the active storage.
-      $active = $this->activeStorage;
+  public function ioActivate(string $split, $io, callable $t, $confirmed = FALSE): bool {
+    $config = $this->getSplitFromArgument($split, $io, $t);
+    if ($config === NULL) {
+      return FALSE;
     }
 
-    // Export by using the trait from core.
-    static::replaceStorageContents($active, $storage);
+    $message = $t('Activate the split config configuration?');
+    $storage = $this->manager->singleActivate($config, TRUE);
+
+    if ($confirmed || $io->confirm($message)) {
+      return $this->tryImport($storage, $io, $t);
+    }
+    return TRUE;
+  }
+
+  /**
+   * Handle the deactivation interaction.
+   *
+   * @param string $split
+   *   The split name to deactivate.
+   * @param \Drush\Style\DrushStyle|object $io
+   *   The $io interface of the cli tool calling.
+   * @param callable $t
+   *   The translation function akin to t().
+   * @param bool $confirmed
+   *   Whether the import is already confirmed by the console input.
+   * @param bool $override
+   *   Allows the deactivation via override.
+   */
+  public function ioDeactivate(string $split, $io, callable $t, $confirmed = FALSE, $override = FALSE): bool {
+    $config = $this->getSplitFromArgument($split, $io, $t);
+    if ($config === NULL) {
+      return FALSE;
+    }
+
+    $message = $t('Deactivate the split config configuration?');
+    $storage = $this->manager->singleDeactivate($config, FALSE, $override);
+
+    if ($confirmed || $io->confirm($message)) {
+      return $this->tryImport($storage, $io, $t);
+    }
+    return TRUE;
+  }
+
+  /**
+   * The hook to invoke after having exported all config.
+   */
+  public function postExportAll() {
+    // We need to make sure the split config is also written to the permanent
+    // split storage.
+    $this->manager->commitAll();
+  }
+
+  /**
+   * Get and set status config overrides.
+   *
+   * @param string $name
+   *   The split name to override.
+   * @param string|bool $status
+   *   The status to set.
+   * @param \Drush\Style\DrushStyle|object $io
+   *   The $io interface of the cli tool calling.
+   * @param callable $t
+   *   The translation function akin to t().
+   */
+  public function statusOverride(string $name, $status, $io, callable $t) {
+    if ($this->getSplitFromArgument($name, $io, $t) === NULL) {
+      return FALSE;
+    }
+    $map = [
+      NULL => 'none/default',
+      TRUE => 'active',
+      FALSE => 'inactive',
+    ];
+
+    $settings = $this->statusOverride->getSettingsOverride($name);
+    if ($settings !== NULL) {
+      $io->caution($t('The status for @name is overridden in settings.php to @status', ['@name' => $name, '@status' => $map[$settings]]));
+    }
+
+    if ($status === '') {
+      $state = $this->statusOverride->getSplitOverride($name);
+      $io->success($t('The status override for @name is @status', ['@name' => $name, '@status' => $map[$state]]));
+      return TRUE;
+    }
+
+    switch (strtolower((string) $status)) {
+      case 'active':
+      case '1':
+      case 'true':
+        $state = TRUE;
+        break;
+
+      case 'inactive':
+      case '0':
+      case 'false':
+        $state = FALSE;
+        break;
+
+      case 'default':
+      case 'null':
+      case 'none':
+        $state = NULL;
+        break;
+
+      default:
+        throw new \InvalidArgumentException(sprintf('The status must be one of "active", "inactive", "default" or "none". %s given', $status));
+    }
+
+    $this->statusOverride->setSplitOverride($name, $state);
+    $io->success($t('The status override for @name was set to @status', ['@name' => $name, '@status' => $map[$state]]));
+    return TRUE;
   }
 
   /**
@@ -313,7 +285,7 @@ class ConfigSplitCliService {
    * @return string
    *   The state of importing.
    */
-  public function import(StorageInterface $storage) {
+  private function import(StorageInterface $storage) {
 
     $comparer = new StorageComparer($storage, $this->activeStorage);
 
@@ -321,18 +293,7 @@ class ConfigSplitCliService {
       return static::NO_CHANGES;
     }
 
-    $importer = new ConfigImporter(
-      $comparer,
-      $this->eventDispatcher,
-      $this->configManager,
-      $this->lock,
-      $this->configTyped,
-      $this->moduleHandler,
-      $this->moduleInstaller,
-      $this->themeHandler,
-      $this->stringTranslation,
-      $this->moduleExtensionList
-    );
+    $importer = $this->getConfigImporterFromComparer($comparer);
 
     if ($importer->alreadyImporting()) {
       return static::ALREADY_IMPORTING;
@@ -362,99 +323,84 @@ class ConfigSplitCliService {
   }
 
   /**
-   * Get the plugin id of a split filter from a config name.
+   * Get the split from the argument.
    *
-   * @param string $name
-   *   The config name.
+   * @param string $split
+   *   The split name.
+   * @param object $io
+   *   The io object.
+   * @param callable $t
+   *   The translation function.
    *
-   * @return string
-   *   The plugin id.
+   * @return \Drupal\Core\Config\ImmutableConfig|null
+   *   The split config.
+   *
+   * @throws \InvalidArgumentException
+   *   When there is no split argument.
    */
-  protected function getPluginIdFromConfigName($name) {
-    return 'config_split:' . str_replace('config_split.config_split.', '', $name);
-  }
-
-  /**
-   * Get the configuration name from the short name.
-   *
-   * @param string $name
-   *   The name to get the config name for.
-   *
-   * @return string
-   *   The split configuration name.
-   */
-  protected function getSplitName($name) {
-
-    if (strpos($name, 'config_split.config_split.') !== 0) {
-      $name = 'config_split.config_split.' . $name;
+  private function getSplitFromArgument(string $split, $io, callable $t): ?ImmutableConfig {
+    if (!$split) {
+      throw new \InvalidArgumentException('Split can not be empty');
     }
 
-    if (!in_array($name, $this->activeStorage->listAll('config_split.config_split.'))) {
-      $names = [];
-      foreach ($this->activeStorage->listAll('config_split.config_split.') as $split_name) {
-        $names[] = $split_name;
-      }
-      $names = implode(', ', $names);
-
-      throw new \InvalidArgumentException('The following split is not available: ' . $name . PHP_EOL . 'Available names: ' . $names);
-    }
-
-    return $name;
-  }
-
-  /**
-   * Returns the directory path to export or "database".
-   *
-   * @param string $config_name
-   *   The configuration name.
-   *
-   * @return string
-   *   The destination.
-   */
-  protected function getDestination($config_name) {
-    $destination = $this->configManager->getConfigFactory()->get($config_name)->get('folder');
-    if ($destination == '') {
-      $destination = 'dedicated database table.';
-    }
-    return $destination;
-  }
-
-  /**
-   * Copy the configuration from one storage to another and remove stale items.
-   *
-   * This method is the copy of how it worked prior to Drupal 9.4.
-   * See https://www.drupal.org/node/3273823 for more details.
-   *
-   * @param \Drupal\Core\Config\StorageInterface $source
-   *   The configuration storage to copy from.
-   * @param \Drupal\Core\Config\StorageInterface $target
-   *   The configuration storage to copy to.
-   */
-  protected static function replaceStorageContents(StorageInterface $source, StorageInterface &$target) {
-    // Make sure there is no stale configuration in the target storage.
-    foreach (array_merge([StorageInterface::DEFAULT_COLLECTION], $target->getAllCollectionNames()) as $collection) {
-      $target->createCollection($collection)->deleteAll();
-    }
-
-    // Copy all the configuration from all the collections.
-    foreach (array_merge([StorageInterface::DEFAULT_COLLECTION], $source->getAllCollectionNames()) as $collection) {
-      $source_collection = $source->createCollection($collection);
-      $target_collection = $target->createCollection($collection);
-      foreach ($source_collection->listAll() as $name) {
-        $data = $source_collection->read($name);
-        if ($data !== FALSE) {
-          $target_collection->write($name, $data);
-        }
-        else {
-          \Drupal::logger('config')->notice('Missing required data for configuration: %config', [
-            '%config' => $name,
-          ]);
-        }
+    $config = $this->manager->getSplitConfig($split);
+    if ($config === NULL) {
+      // Try to get the split from the sync storage. This may not make sense
+      // for all the operations.
+      $config = $this->manager->getSplitConfig($split, $this->syncStorage);
+      if ($config === NULL) {
+        $io->error($t('There is no split with name @name', ['@name' => $split]));
       }
     }
 
-    // Make sure that the target is set to the same collection as the source.
-    $target = $target->createCollection($source->getCollectionName());
+    return $config;
+  }
+
+  /**
+   * Try importing the storage.
+   *
+   * @param \Drupal\Core\Config\StorageInterface $storage
+   *   The storage to import.
+   * @param object $io
+   *   The io object.
+   * @param callable $t
+   *   The translation function.
+   *
+   * @return bool
+   *   The success status.
+   */
+  private function tryImport(StorageInterface $storage, $io, callable $t): bool {
+    try {
+      $status = $this->import($storage);
+      switch ($status) {
+        case ConfigSplitCliService::COMPLETE:
+          $io->success($t("Configuration successfully imported."));
+          return TRUE;
+
+        case ConfigSplitCliService::NO_CHANGES:
+          $io->text($t("There are no changes to import."));
+          return TRUE;
+
+        case ConfigSplitCliService::ALREADY_IMPORTING:
+          $io->error(
+            $t("Another request may be synchronizing configuration already.")
+          );
+          return FALSE;
+
+        default:
+          $io->error($t("Something unexpected happened"));
+          return FALSE;
+      }
+    }
+    catch (ConfigImporterException $e) {
+      $io->error(
+        $t(
+          'There have been errors importing: @errors',
+          ['@errors' => strip_tags(implode("\n", $this->getErrors()))]
+        )
+      );
+      return FALSE;
+    }
   }
 
 }

@@ -4,7 +4,7 @@ session_limit_max: 1
 session_limit_masquerade_ignore: true
 session_limit_behaviour: 0
 session_limit_logged_out_message_severity: warning
-session_limit_admin_inclusion: 0
+session_limit_admin_inclusion: 1
 session_limit_roles:
   authenticated: 0
   viewer: 0
@@ -14,6 +14,6 @@ session_limit_roles:
   publications_manager: 0
   editor: 0
   manager: 0
-  administrator: -1
+  administrator: 2
 session_limit_logged_out_display_message: 'You have been automatically logged out. Someone else has logged in with your username and password and the maximum number of @number simultaneous session(s) was exceeded. This may indicate that your account has been compromised or that account sharing is not allowed on this site. Please contact the site administrator if you suspect your account has been compromised.'
 session_limit_log_events: true
