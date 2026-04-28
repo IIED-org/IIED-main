@@ -21,3 +21,9 @@ channels:
       - 0
       - 2
       - 3
+  -		
+    id: purger_varnishbundled_86a6c78d2b		
+    grants:		
+    - 0		
+    - 2		
+    - 3
