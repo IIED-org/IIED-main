@@ -44,6 +44,7 @@ Release managers
 - Dave Long 'longwave' https://www.drupal.org/u/longwave
 - Jess Myrbo 'xjm' https://www.drupal.org/u/xjm
 - Victoria Spagnolo 'quietone' https://www.drupal.org/u/quietone
+- (provisional) Edward Wu 'godotislate' https://www.drupal.org/u/godotislate
 
 Core JavaScript packages
 - Théodore Biadala 'nod_' https://www.drupal.org/u/nod_
@@ -59,6 +60,7 @@ Initiative facilitators
 General core committers
 - Drew Webber 'mcdruid' https://www.drupal.org/u/mcdruid
 - Juraj Nemec 'poker10' https://www.drupal.org/u/poker10
+- (provisional) Andrei Mateescu 'amateescu' https://www.drupal.org/u/amateescu
 
 Subsystem maintainers
 ---------------------
@@ -300,6 +302,7 @@ Menu Link Content
 
 Menu UI
 - Stephen Mustgrave 'smustgrave' https://www.drupal.org/u/smustgrave
+- Max Pogonowski 'darvanen' https://www.drupal.org/u/darvanen
 
 Migrate
 - Benji Fisher 'benjifisher' https://www.drupal.org/u/benjifisher
@@ -415,7 +418,7 @@ Theme API
   - Jean Valverde 'mogtofu33' https://www.drupal.org/u/mogtofu33
 
 Token
-- ?
+- Max Pogonowski 'darvanen' https://www.drupal.org/u/darvanen
 
 Toolbar
 - Théodore Biadala 'nod_' https://www.drupal.org/u/nod_
