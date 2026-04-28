@@ -1,0 +1,22 @@
+uuid: 0354ebe6-d014-46bb-b2e9-ca041bf41cde
+langcode: en
+status: true
+dependencies: {  }
+id: 86a6c78d2b
+name: File
+invalidationtype: wildcardurl
+hostname: localhost
+port: 80
+path: /
+request_method: BAN
+scheme: http
+verify: '1'
+headers: {  }
+body: null
+body_content_type: null
+runtime_measurement: true
+timeout: 1.0
+connect_timeout: 1.0
+cooldown_time: 0.0
+max_requests: 100
+http_errors: true

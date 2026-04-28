@@ -1,3 +1,5 @@
 base_urls: ''
+workflow: immediate
+wildcard: true
 debug: false
 processor: lateruntime
