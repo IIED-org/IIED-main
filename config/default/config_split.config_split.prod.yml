@@ -21,7 +21,6 @@ module:
   varnish_purge_tags: 0
   varnish_purger: 0
   varnish_focal_point_purge: 0
-  varnish_image_purge: 0
 theme: {  }
 complete_list:
   - password_policy.password_policy.password_expiry
