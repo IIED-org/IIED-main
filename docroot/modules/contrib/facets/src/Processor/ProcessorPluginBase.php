@@ -132,6 +132,8 @@ class ProcessorPluginBase extends PluginBase implements ProcessorInterface, Cach
    *   which the current user does not have access will be removed.
    * @param \Drupal\facets\FacetInterface $facet
    *   The facet for which the entities were loaded.
+   * @param \Drupal\Core\Entity\EntityAccessControlHandlerInterface $access
+   *   The access object.
    */
   protected function checkEntitiesAccess(
     array &$entities,

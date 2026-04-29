@@ -9,9 +9,10 @@ use Drupal\Core\Form\SubformState;
 use Drupal\facets\Entity\Facet;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\Hierarchy\HierarchyPluginBase;
+use Drupal\facets\Processor\PreQueryProcessorInterface;
 use Drupal\facets\Processor\ProcessorInterface;
 use Drupal\facets\Processor\SortProcessorInterface;
-use Drupal\facets\Result\Result;
+use Drupal\facets_exposed_filters\ExposedFacetBuildState;
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
 
 /**
@@ -26,11 +27,15 @@ class FacetsFilter extends FilterPluginBase {
   /**
    * {@inheritdoc}
    */
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
   public $no_operator = FALSE;
 
   /**
-   * Will be filled with the facet results after the query is executed.
+   * Stores the facet results after the query is executed.
+   *
+   * @var \Drupal\facets\Result\ResultInterface[]
    */
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
   public $facet_results = [];
 
   /**
@@ -44,9 +49,12 @@ class FacetsFilter extends FilterPluginBase {
     $options['expose']['contains']['multiple'] = ['default' => TRUE];
     $options['hierarchy'] = ['default' => FALSE];
     $options['label_display']['default'] = BlockPluginInterface::BLOCK_LABEL_VISIBLE;
+    $options['facet']['contains']['missing'] = ['default' => FALSE];
+    $options['facet']['contains']['missing_label'] = ['default' => 'others'];
     $options['facet']['contains']['show_numbers'] = ['default' => FALSE];
     $options['facet']['contains']['min_count'] = ['default' => 1];
     $options['facet']['contains']['query_operator'] = ['default' => 'or'];
+    $options['facet']['contains']['hard_limit'] = ['default' => 0];
     return $options;
   }
 
@@ -103,7 +111,7 @@ class FacetsFilter extends FilterPluginBase {
       return $form;
     }
 
-    // Retrieve the processed facet if we already done this in the current request.
+    // Retrieve the processed facet if already handled in the current request.
     $processed_facet = facets_exposed_filters_get_processed_facet($this->view->id(), $this->view->current_display, $this->options["id"]);
 
     // Empty facet results, return empty form.
@@ -121,6 +129,23 @@ class FacetsFilter extends FilterPluginBase {
       $active_facet_values = $this->getActiveFacetValues();
       $facet->setActiveItems($active_facet_values);
 
+      foreach ($facet->getProcessorsByStage(ProcessorInterface::STAGE_PRE_QUERY) as $processor) {
+        if ($processor instanceof PreQueryProcessorInterface) {
+          $processor->preQuery($facet);
+        }
+
+        $this->syncFacetActiveItemsToExposedState($facet, TRUE);
+
+        if (ExposedFacetBuildState::shouldSkipFacet($facet)) {
+          return;
+        }
+      }
+
+      // Processors may normalize or clear active items. Preserve that updated
+      // state for the rest of the exposed-form rebuild instead of restoring the
+      // raw request values later.
+      $active_facet_values = array_values($facet->getActiveItems());
+
       // Load the query_type plugin and execute build.
       $qtpm = \Drupal::service('plugin.manager.facets.query_type');
       /** @var \Drupal\facets\QueryType\QueryTypeInterface $query_type_plugin */
@@ -134,8 +159,8 @@ class FacetsFilter extends FilterPluginBase {
       );
       $query_type_plugin->build();
 
-      // When no results are available, we do not need to process the facet or render the form item.
-      if(!$facet->getResults()) {
+      // Skip facet processing and form rendering if there are no results.
+      if (!$facet->getResults()) {
         return;
       }
 
@@ -143,15 +168,23 @@ class FacetsFilter extends FilterPluginBase {
       $processors = $facet->getProcessorsByStage(ProcessorInterface::STAGE_POST_QUERY);
       foreach ($processors as $processor) {
         $processor->postQuery($facet);
+
+        if (ExposedFacetBuildState::shouldSkipFacet($facet)) {
+          return;
+        }
       }
 
       // Trigger build stage.
       $processors = $facet->getProcessorsByStage(ProcessorInterface::STAGE_BUILD);
       foreach ($processors as $processor) {
         $facet->setResults($processor->build($facet, $facet->getResults()));
+
+        if (ExposedFacetBuildState::shouldSkipFacet($facet)) {
+          return;
+        }
       }
 
-      // Trigger sort stage and sort the actual results with the sort processors.
+      // Allow processors to sort the results.
       $active_sort_processors = [];
       foreach ($facet->getProcessorsByStage(ProcessorInterface::STAGE_SORT) as $processor) {
         $active_sort_processors[] = $processor;
@@ -161,7 +194,8 @@ class FacetsFilter extends FilterPluginBase {
       }
       $facet->setActiveItems(array_values($active_facet_values));
 
-      // Store the processed facet so we can access it later (e.g. in an exposed form rendered as a block).
+      // Store the processed facet so we can access it later (e.g. in an exposed
+      // form rendered as a block).
       facets_exposed_filters_get_processed_facet($this->view->id(), $this->view->current_display, $this->options["id"], $facet);
     }
 
@@ -210,7 +244,7 @@ class FacetsFilter extends FilterPluginBase {
       if ($this->options["facet"]["show_numbers"] && $result->getCount() !== FALSE) {
         $label .= ' (' . $result->getCount() . ')';
       }
-      $options[$result->getRawValue()] = $hierarchy_prefix . $label;
+      $options[$this->getExposedOptionValue($facet, $result)] = $hierarchy_prefix . $label;
       if ($facet->getUseHierarchy()) {
         $children = $result->getChildren();
         if ($children && ($facet->getExpandHierarchy() || $result->isActive() || $result->hasActiveChildren())) {
@@ -222,11 +256,47 @@ class FacetsFilter extends FilterPluginBase {
   }
 
   /**
+   * Gets the submitted exposed-filter value for a facet result.
+   *
+   * Missing results need to submit the encoded "invert these values" token that
+   * the Search API facet query type understands. Submitting the raw `!` marker
+   * makes the exposed filter look active but queries for a literal `!` value,
+   * which returns no results.
+   *
+   * @param \Drupal\facets\FacetInterface $facet
+   *   The facet being rendered.
+   * @param \Drupal\facets\Result\ResultInterface $result
+   *   The facet result option.
+   *
+   * @return string
+   *   The exposed option value to submit.
+   */
+  private function getExposedOptionValue(FacetInterface $facet, $result): string {
+    if (!$result->isMissing()) {
+      return (string) $result->getRawValue();
+    }
+
+    foreach ((array) $facet->getActiveItems() as $active_item) {
+      if (is_string($active_item) && str_starts_with($active_item, '!(')) {
+        return $active_item;
+      }
+    }
+
+    $missing_filters = $result->getMissingFilters();
+
+    if ($missing_filters === []) {
+      return (string) $result->getRawValue();
+    }
+
+    return '!(' . implode(',', $missing_filters) . ')';
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function acceptExposedInput($input) {
-    // Modules like views_dependent_filters alter the exposed option to ignore the filter when hidden.
-    // We need to check for this.
+    // Modules like views_dependent_filters alter the exposed option to ignore
+    // the filter when hidden. We need to check for this.
     return $this->isExposed();
   }
 
@@ -244,6 +314,19 @@ class FacetsFilter extends FilterPluginBase {
     $facet = $this->getFacet();
     $active_values = $this->getActiveFacetValues();
     $facet->setActiveItems($active_values);
+
+    foreach ($facet->getProcessorsByStage(ProcessorInterface::STAGE_PRE_QUERY) as $processor) {
+      if ($processor instanceof PreQueryProcessorInterface) {
+        $processor->preQuery($facet);
+      }
+
+      $this->syncFacetActiveItemsToExposedState($facet);
+
+      if (ExposedFacetBuildState::shouldSkipFacet($facet)) {
+        return;
+      }
+    }
+
     $qtpm = \Drupal::service('plugin.manager.facets.query_type');
 
     /** @var \Drupal\facets\QueryType\QueryTypeInterface $query_type_plugin */
@@ -385,6 +468,13 @@ class FacetsFilter extends FilterPluginBase {
       '#default_value' => $facet->getQueryOperator(),
     ];
 
+    $form['facet']['hard_limit'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Hard limit'),
+      '#default_value' => $facet->getHardLimit(),
+      '#description' => $this->t('Display no more than this number of facet items.<br>*Note: Some search backends will use 0 as "no limit", and some still apply a default limit when hard limit is set to 0. If this affects you, set this to an appropriately-high value or a value that indicates "no limit" to your search backend'),
+    ];
+
     $hierarchy = $facet->getHierarchy();
     $options = array_map(function (HierarchyPluginBase $plugin) {
       return $plugin->getPluginDefinition()['label'];
@@ -421,6 +511,25 @@ class FacetsFilter extends FilterPluginBase {
       '#maxlength' => 4,
       '#min' => 0,
       '#required' => TRUE,
+    ];
+
+    $form['facet']['missing'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show missing'),
+      '#description' => $this->t('Add a facet item that counts and selects all search results which match the current query but do not belong to any of the facet items.'),
+      '#default_value' => $this->options['facet']['missing'],
+    ];
+
+    $form['facet']['missing_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Label of missing items'),
+      '#description' => $this->t('Label of the facet item for which do not belong to any of the regular items.'),
+      '#default_value' => $this->options['facet']['missing_label'],
+      '#states' => [
+        'visible' => [
+          ':input[name="options[facet][missing]"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     $form['facet']['show_numbers'] = [
@@ -523,9 +632,12 @@ class FacetsFilter extends FilterPluginBase {
       'use_hierarchy' => isset($this->options["facet"]["processor_configs"]["hierarchy_processor"]),
       'expand_hierarchy' => $this->options["facet"]["expand_hierarchy"] ?? FALSE,
       'min_count' => $this->options["facet"]["min_count"] ?? 1,
+      'missing' => $this->options["facet"]["missing"] ?? FALSE,
+      'missing_label' => $this->options["facet"]["missing_label"] ?? 'others',
       'widget' => '<nowidget>',
       'facet_type' => 'facets_exposed_filter',
     ]);
+    $facet->setHardLimit($this->options["facet"]["hard_limit"] ?? 0);
     if ($facet->getUseHierarchy()) {
       $facet->setHierarchy($this->options["facet"]["hierarchy"], []);
     }
@@ -548,8 +660,9 @@ class FacetsFilter extends FilterPluginBase {
    * to retrieve the active filters from the request ourself.
    */
   private function getActiveFacetValues() {
-    // Reset button in ajax request. We probably want a better way to detect if this was clicked.
-    if(isset($_GET["reset"])) {
+    // Reset button in ajax request. We probably want a better way to detect if
+    // this was clicked.
+    if (isset($_GET["reset"])) {
       return [];
     }
     $exposed = $this->view->getExposedInput();
@@ -563,7 +676,112 @@ class FacetsFilter extends FilterPluginBase {
     elseif (!is_array($enabled)) {
       $enabled = [$enabled];
     }
-    return $enabled;
+    return array_values($enabled);
+  }
+
+  /**
+   * Synchronizes processor-updated active items back into exposed state.
+   *
+   * Processors may clear or normalize active items in pre-query. The exposed
+   * filter integration must propagate that updated state to the view and the
+   * current request so AJAX rebuilds do not restore stale selections.
+   *
+   * @param \Drupal\facets\FacetInterface $facet
+   *   The processed facet.
+   * @param bool $checkbox_shape
+   *   When TRUE, multiple values are written back as `value => value` pairs for
+   *   checkbox rendering. Otherwise, they remain a plain list for query
+   *   execution.
+   */
+  private function syncFacetActiveItemsToExposedState(FacetInterface $facet, bool $checkbox_shape = FALSE): void {
+    $identifier = $this->options["expose"]["identifier"];
+
+    if (!is_string($identifier) || $identifier === '') {
+      return;
+    }
+
+    $stored_value = $this->getStoredActiveFacetValues($facet, $checkbox_shape);
+
+    $exposed_input = $this->view->getExposedInput();
+    $exposed_input = is_array($exposed_input) ? $exposed_input : [];
+
+    if ($stored_value === NULL || $stored_value === []) {
+      unset($exposed_input[$identifier]);
+    }
+    else {
+      $exposed_input[$identifier] = $stored_value;
+    }
+
+    $this->view->setExposedInput($exposed_input);
+
+    if (isset($this->view->exposed_raw_input) && is_array($this->view->exposed_raw_input)) {
+      if ($stored_value === NULL || $stored_value === []) {
+        unset($this->view->exposed_raw_input[$identifier]);
+      }
+      else {
+        $this->view->exposed_raw_input[$identifier] = $stored_value;
+      }
+    }
+
+    if (!$checkbox_shape) {
+      return;
+    }
+
+    $request = \Drupal::requestStack()->getCurrentRequest();
+
+    if (!$request) {
+      return;
+    }
+
+    if ($stored_value === NULL || $stored_value === []) {
+      $request->query->remove($identifier);
+      $request->request->remove($identifier);
+      unset($_GET[$identifier], $_POST[$identifier], $_REQUEST[$identifier]);
+    }
+    else {
+      $request->query->set($identifier, $stored_value);
+      $request->request->set($identifier, $stored_value);
+      $_GET[$identifier] = $stored_value;
+      $_POST[$identifier] = $stored_value;
+      $_REQUEST[$identifier] = $stored_value;
+    }
+  }
+
+  /**
+   * Returns active facet items in the shape expected by exposed filters.
+   *
+   * Multiple checkbox filters must stay keyed by option value so subsequent
+   * query-string serialization produces `field[value]=value` instead of
+   * indexed arrays like `field[0]=value`.
+   *
+   * @param \Drupal\facets\FacetInterface $facet
+   *   The processed facet.
+   * @param bool $checkbox_shape
+   *   When TRUE, multiple values are returned in Drupal checkbox shape
+   *   (`value => value`). Otherwise, multiple values are returned as a plain
+   *   list, which is what the facet query execution expects.
+   *
+   * @return array|string|null
+   *   The active items in the requested shape, the first scalar value for
+   *   single filters, or NULL when there is no active value.
+   */
+  private function getStoredActiveFacetValues(FacetInterface $facet, bool $checkbox_shape = FALSE): array|string|null {
+    $active_values = array_values($facet->getActiveItems());
+
+    if (empty($this->options["expose"]["multiple"])) {
+      return $active_values[0] ?? NULL;
+    }
+
+    if (!$checkbox_shape) {
+      return $active_values;
+    }
+
+    $stored_values = [];
+    foreach ($active_values as $active_value) {
+      $stored_values[(string) $active_value] = $active_value;
+    }
+
+    return $stored_values;
   }
 
   /**
@@ -613,6 +831,8 @@ class FacetsFilter extends FilterPluginBase {
     }
 
     $options["facet"]["min_count"] = (int) $options["facet"]["min_count"];
+    $options["facet"]["missing"] = (bool) $options["facet"]["missing"];
+    $options["facet"]["missing_label"] = $options["facet"]["missing_label"];
     $options["facet"]["show_numbers"] = (bool) $options["facet"]["show_numbers"];
 
     $form_state->setValue('options', $options);

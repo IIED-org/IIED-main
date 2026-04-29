@@ -23,6 +23,7 @@ class DefaultFacetManagerTest extends EntityKernelTestBase {
     'search_api',
     'search_api_db',
     'search_api_test_db',
+    'search_api_test_example_content',
     'facets_processors_collection',
     'facets_search_api_dependency',
     'facets_query_processor',
@@ -67,6 +68,7 @@ class DefaultFacetManagerTest extends EntityKernelTestBase {
       ->save();
 
     $this->installConfig([
+      'search_api_test_example_content',
       'search_api_test_db',
       'facets_search_api_dependency',
     ]);

@@ -8,3 +8,8 @@ dependencies:
   - search_api:search_api_test_db
   - drupal:views
 core_version_requirement: ^10.1 || ^11
+
+# Information added by Drupal.org packaging script on 2025-10-15
+version: '2.0.4'
+project: 'facets_pretty_paths'
+datestamp: 1760530790

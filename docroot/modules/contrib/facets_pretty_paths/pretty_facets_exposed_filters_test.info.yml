@@ -1,0 +1,10 @@
+name: Pretty Facets Exposed Filters Test
+type: module
+description: Provides config for testing Pretty Facets exposed filters.
+package: Testing
+hidden: true
+dependencies:
+  - search_api:search_api
+  - search_api:search_api_test_db
+  - drupal:views
+core_version_requirement: ^10.1 || ^11

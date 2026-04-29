@@ -3,7 +3,6 @@
 namespace Drupal\Tests\facets\Unit\FacetSource;
 
 use Drupal\Component\Plugin\Discovery\DiscoveryInterface;
-use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Component\Plugin\Factory\DefaultFactory;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -101,37 +100,6 @@ class FacetSourcePluginManagerTest extends UnitTestCase {
       ->method('getDefinitions')
       ->willReturn($definitions);
     $this->assertSame($definitions, $this->sut->getDefinitions());
-  }
-
-  /**
-   * Tests plugin manager definitions.
-   *
-   * @dataProvider invalidDefinitions
-   */
-  public function testInvalidDefinitions($invalid_definition) {
-    $definitions = ['foo' => [$invalid_definition]];
-
-    $this->discovery->expects($this->once())
-      ->method('getDefinitions')
-      ->willReturn($definitions);
-
-    $this->expectException(PluginException::class);
-    $this->sut->getDefinitions();
-  }
-
-  /**
-   * Provides invalid definitions.
-   *
-   * @return array
-   *   An invalid data provider.
-   */
-  public static function invalidDefinitions() {
-    return [
-      'only id' => ['id' => 'owl'],
-      'only display_id' => ['display_id' => 'search_api:owl'],
-      'only label' => ['label' => 'Owl'],
-      'no label' => ['id' => 'owl', 'display_id' => 'Owl'],
-    ];
   }
 
 }
