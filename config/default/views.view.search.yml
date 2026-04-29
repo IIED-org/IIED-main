@@ -433,6 +433,8 @@ display:
               search_api_fulltext:
                 plugin_id: default
                 advanced:
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   placeholder_text: ''
                   rewrite:
                     filter_rewrite_values: ''
@@ -443,8 +445,6 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  sort_options_method: alphabetical_asc
-                  sort_options_natural: true
       cache:
         type: search_api_none
       empty:
@@ -671,6 +671,8 @@ display:
               facets_field_theme_s_:
                 plugin_id: bef
                 advanced:
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   rewrite:
                     filter_rewrite_values: ''
                     filter_rewrite_values_key: false
@@ -680,8 +682,6 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
-                  sort_options_method: alphabetical_asc
-                  sort_options_natural: true
                 select_all_none: false
                 select_all_none_nested: false
                 display_inline: false
@@ -691,6 +691,8 @@ display:
               facets_field_type:
                 plugin_id: bef
                 advanced:
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   rewrite:
                     filter_rewrite_values: '- Any - |Show all'
                     filter_rewrite_values_key: false
@@ -700,8 +702,6 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
-                  sort_options_method: alphabetical_asc
-                  sort_options_natural: true
                 select_all_none: false
                 select_all_none_nested: true
                 display_inline: false
@@ -711,6 +711,8 @@ display:
               facets_field_document_type:
                 plugin_id: bef
                 advanced:
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   rewrite:
                     filter_rewrite_values: '- Any - |Show all'
                     filter_rewrite_values_key: false
@@ -720,8 +722,6 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
-                  sort_options_method: alphabetical_asc
-                  sort_options_natural: true
                 select_all_none: false
                 select_all_none_nested: false
                 display_inline: false
@@ -731,6 +731,8 @@ display:
               facets_field_area_list:
                 plugin_id: bef
                 advanced:
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   rewrite:
                     filter_rewrite_values: ''
                     filter_rewrite_values_key: false
@@ -740,8 +742,6 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
-                  sort_options_method: alphabetical_asc
-                  sort_options_natural: true
                 select_all_none: false
                 select_all_none_nested: false
                 display_inline: false
@@ -751,6 +751,8 @@ display:
               search_api_fulltext:
                 plugin_id: default
                 advanced:
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   placeholder_text: ''
                   rewrite:
                     filter_rewrite_values: ''
@@ -761,8 +763,6 @@ display:
                   is_secondary: false
                   hide_label: true
                   field_classes: ''
-                  sort_options_method: alphabetical_asc
-                  sort_options_natural: true
       cache:
         type: search_api_none
       empty:
@@ -912,6 +912,8 @@ display:
           hierarchy: true
           label_display: visible
           facet:
+            expand_hierarchy: true
+            hierarchy: taxonomy
             query_operator: or
             min_count: 1
             show_numbers: true
@@ -952,8 +954,6 @@ display:
                   sort: 30
                 settings:
                   sort: DESC
-            hierarchy: taxonomy
-            expand_hierarchy: 1
         facets_field_document_type:
           id: facets_field_document_type
           table: search_api_index_acquia_search_index
@@ -1006,6 +1006,8 @@ display:
           hierarchy: true
           label_display: visible
           facet:
+            expand_hierarchy: true
+            hierarchy: taxonomy
             query_operator: or
             min_count: 1
             show_numbers: true
@@ -1046,8 +1048,6 @@ display:
                   sort: 30
                 settings:
                   sort: DESC
-            hierarchy: taxonomy
-            expand_hierarchy: 1
         facets_field_area_list:
           id: facets_field_area_list
           table: search_api_index_acquia_search_index
