@@ -4,7 +4,6 @@ namespace Drupal\Tests\facets\Kernel\Entity;
 
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\facets\Entity\Facet;
-use Drupal\facets\Exception\Exception;
 use Drupal\facets\Exception\InvalidProcessorException;
 use Drupal\facets\Hierarchy\HierarchyPluginManager;
 use Drupal\facets\Plugin\facets\hierarchy\Taxonomy;
@@ -144,19 +143,6 @@ class FacetTest extends KernelTestBase {
     $entity->removeProcessor($id);
     $this->assertEmpty($entity->getProcessorsByStage(ProcessorInterface::STAGE_BUILD));
     $this->assertEmpty($entity->getProcessorsByStage(ProcessorInterface::STAGE_SORT));
-  }
-
-  /**
-   * Query type with no defined facet source.
-   *
-   * @covers ::getQueryType
-   */
-  public function testGetQueryTypeWithNoFacetSource() {
-    $entity = new Facet([], 'facets_facet');
-
-    $this->expectException(Exception::class);
-    $this->expectExceptionMessage('No facet source defined for facet.');
-    $entity->getQueryType();
   }
 
   /**

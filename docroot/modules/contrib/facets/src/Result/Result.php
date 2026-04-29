@@ -82,6 +82,13 @@ class Result implements ResultInterface {
   protected $children = [];
 
   /**
+   * Private property for term weight.
+   *
+   * @var int
+   */
+  protected $termWeight;
+
+  /**
    * Storage for implementation-specific data.
    *
    * @var array
@@ -212,6 +219,20 @@ class Result implements ResultInterface {
    */
   public function getChildren() {
     return $this->children;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setTermWeight(int $weight) {
+    $this->termWeight = $weight;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTermWeight() {
+    return $this->termWeight;
   }
 
   /**

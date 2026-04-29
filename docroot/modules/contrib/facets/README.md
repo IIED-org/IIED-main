@@ -9,7 +9,7 @@ For a full description of the module, visit the
 Submit bug reports and feature suggestions, or track changes in the
 [issue queue](https://www.drupal.org/project/issues/facets).
 
-## Table of contents 
+## Table of contents
 
 - Requirements
 - Recommended Modules
@@ -19,6 +19,7 @@ Submit bug reports and feature suggestions, or track changes in the
 - Extension modules
 - FAQ
 - Maintainers
+- AI bot abuse
 
 
 ## Requirements
@@ -34,21 +35,38 @@ source for creating facets.
 
 ## Installation
 
-- Install as you would normally install a contributed Drupal module. Visit:
-  https://www.drupal.org/docs/extending-drupal/installing-modules
-  for further information.
+Install the modules "Facets" and "Facets Exposed Filters" as you would
+normally install a contributed Drupal module. Visit:
+https://www.drupal.org/docs/extending-drupal/installing-modules
+for further information.
+
+Optionally, these modules are also available:
+
+- Facets Range Widget
+- Facets Searchbox Widget
+- Facets summary
+- Rest Facets
 
 
 ## Configuration
 
-Before adding a facet, there should be a facet source. Facet sources can be:
-- A view based on a Search API index with a page display.
-- A page from the search_api_page module.
+1. Ensure that the 'Facets' and 'Facets Exposed Filters' modules are installed.
+1. Create a [Search API](https://www.drupal.org/project/search_api) server
+    and index with indexed data, or a page from the
+    [Search API Pages](https://www.drupal.org/project/search_api_page)
+    module to use as facet source.
+1. Create a View based on the search index and save it.
+1. In the View, add a Facets enabled filter from the 'Facets' category.
+1. Configure the Facet processors you want active on the Facet. E.g. enable
+    'Transform entity ID to label' if you indexed a taxonomy term ID and want to
+    show the label.
 
-After adding one of those, you can add a facet on the facets configuration page:
-/admin/config/search/facets, there's an `add facet` link, that links to:
-admin/config/search/facets/add-facet. Use that page to add the facet by
-selecting the correct facet source and field from that source.
+Optionally, change the widget type under 'Advanced' > 'Exposed form'. For more
+options, install
+[Better Exposed Filters](https://www.drupal.org/project/better_exposed_filters).
+Install
+[Configurable Views Filter Block](https://www.drupal.org/project/configurable_views_filter_block)
+to place filters anywhere.
 
 
 ## Known issues
@@ -180,6 +198,14 @@ However, if you need to include HTML you can use
 hook_preprocess_facets_result_item().
 
 **Q: Why are results shown for inaccessible content?**
+
+## AI bot abuse
+
+Faceted navigation can generate many URL combinations that are attractive to AI crawlers and automated agents. This can lead to excessive traffic and expensive queries.
+
+See the dedicated documentation for mitigation strategies:
+
+- docs/ai_bot_abuse.md
 
 **A:** If the "Content access" Search API processor is enabled but results still
 aren't properly access-checked, you might need to write a custom processor to do
