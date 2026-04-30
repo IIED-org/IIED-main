@@ -1,0 +1,6 @@
+services:
+  iied_utils.type_label_filter:
+    class: Drupal\my_module\Plugin\views\filter\TypeLabelFilter
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: views.filter }

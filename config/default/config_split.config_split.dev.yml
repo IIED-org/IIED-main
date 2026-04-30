@@ -17,4 +17,6 @@ module:
   views_ui: 0
 theme: {  }
 complete_list: {  }
-partial_list: {  }
+partial_list:
+  - tfa.settings
+

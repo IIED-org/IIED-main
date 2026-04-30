@@ -15,6 +15,7 @@ dependencies:
     - field.storage.taxonomy_term.field_name
     - search_api.server.solr
   module:
+    - iied_utils
     - node
     - search_api_solr
     - taxonomy
@@ -197,17 +198,6 @@ field_settings:
       fields:
         - 'entity:node/title'
         - 'entity:taxonomy_term/name'
-  field_type:
-    label: 'Type and vocabulary'
-    property_path: aggregated_field
-    type: string
-    configuration:
-      type: union
-      separator: |
-
-      fields:
-        - 'entity:node/type'
-        - 'entity:taxonomy_term/vid'
   given:
     label: 'Full name » Given'
     datasource_id: 'entity:taxonomy_term'
@@ -216,6 +206,10 @@ field_settings:
     dependencies:
       config:
         - field.storage.taxonomy_term.field_name
+  item_bundle:
+    label: 'Item bundle'
+    property_path: item_bundle
+    type: string
   langcode:
     label: Language
     datasource_id: 'entity:taxonomy_term'
@@ -400,8 +394,8 @@ processor_settings:
       - field_product_code
       - field_product_code_new
       - field_title_or_name
-      - field_type
       - given
+      - item_bundle
       - langcode
       - name
       - name_1
@@ -419,6 +413,7 @@ processor_settings:
       h2: 3.0
       h3: 2.0
       strong: 2.0
+  item_bundle: {  }
   language_with_fallback: {  }
   rendered_item: {  }
   reverse_entity_references: {  }
@@ -432,6 +427,7 @@ processor_settings:
         m: '3.16e-11'
         a: 10.0
         b: 0.5
+        support_future_dates: false
   solr_date_range:
     weights:
       preprocess_index: 0
@@ -451,7 +447,7 @@ tracker_settings:
   default:
     indexing_order: fifo
 options:
-  cron_limit: 100
+  cron_limit: 500
   delete_on_fail: true
   index_directly: true
   track_changes_in_references: false
