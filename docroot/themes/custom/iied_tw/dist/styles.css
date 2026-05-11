@@ -5559,6 +5559,10 @@ button.cn-decline.klaro-close {
   margin-top: 2rem;
 }
 
+.mb-0 {
+  margin-bottom: 0px;
+}
+
 .block {
   display: block;
 }
@@ -6136,6 +6140,10 @@ button.cn-decline.klaro-close {
   place-content: center;
 }
 
+.place-content-end {
+  place-content: end;
+}
+
 .place-items-center {
   place-items: center;
 }
@@ -6618,11 +6626,6 @@ button.cn-decline.klaro-close {
 .bg-gray-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}
-
-.bg-gray-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
 .bg-gray-300 {
@@ -9422,6 +9425,10 @@ button.cn-decline.klaro-close {
     visibility: visible;
   }
 
+  .sm\:order-1 {
+    order: 1;
+  }
+
   .sm\:order-2 {
     order: 2;
   }
@@ -9780,10 +9787,6 @@ button.cn-decline.klaro-close {
 
   .md\:items-center {
     align-items: center;
-  }
-
-  .md\:justify-end {
-    justify-content: flex-end;
   }
 
   .md\:gap-12 {
@@ -10273,6 +10276,14 @@ button.cn-decline.klaro-close {
     grid-column: span 9 / span 9;
   }
 
+  .xl\:col-start-1 {
+    grid-column-start: 1;
+  }
+
+  .xl\:col-start-2 {
+    grid-column-start: 2;
+  }
+
   .xl\:col-start-3 {
     grid-column-start: 3;
   }
@@ -10385,8 +10396,16 @@ button.cn-decline.klaro-close {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
 
+  .xl\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .xl\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .xl\:flex-row {
+    flex-direction: row;
   }
 
   .xl\:flex-col {
@@ -10399,6 +10418,10 @@ button.cn-decline.klaro-close {
 
   .xl\:items-center {
     align-items: center;
+  }
+
+  .xl\:justify-end {
+    justify-content: flex-end;
   }
 
   .xl\:gap-10 {
@@ -10421,6 +10444,15 @@ button.cn-decline.klaro-close {
   .xl\:gap-x-6 {
     -moz-column-gap: 1.5rem;
          column-gap: 1.5rem;
+  }
+
+  .xl\:gap-y-10 {
+    row-gap: 2.5rem;
+  }
+
+  .xl\:gap-x-10 {
+    -moz-column-gap: 2.5rem;
+         column-gap: 2.5rem;
   }
 
   .xl\:space-x-8 > :not([hidden]) ~ :not([hidden]) {
@@ -10588,6 +10620,48 @@ button.cn-decline.klaro-close {
   .sm\:\[\&\:nth-child\(n\+4\)\]\:inline:nth-child(n+4) {
     display: inline;
   }
+}
+
+@media (min-width: 1280px) {
+  .xl\:\[\&\>\*\:first-child\:nth-last-child\(1\)\]\:col-start-3>*:first-child:nth-last-child(1) {
+    grid-column-start: 3;
+  }
+
+  .xl\:\[\&\>\*\:first-child\:nth-last-child\(2\)\]\:col-start-2>*:first-child:nth-last-child(2) {
+    grid-column-start: 2;
+  }
+
+  .xl\:\[\&\>\*\:first-child\:nth-last-child\(3\)\]\:col-start-1>*:first-child:nth-last-child(3) {
+    grid-column-start: 1;
+  }
+
+  .xl\:\[\&\>\*\:first-child\]\:col-start-2>*:first-child {
+    grid-column-start: 2;
+  }
+
+  .xl\:\[\&\>\*\]\:max-w-\[calc\(\(100\%-5rem\)\/3\)\]>* {
+    max-width: calc((100% - 5rem) / 3);
+  }
+
+  .xl\:\[\&\>\*\]\:shrink-0>* {
+    flex-shrink: 0;
+  }
+
+  .xl\:\[\&\>\*\]\:basis-\[calc\(\(100\%-5rem\)\/3\)\]>* {
+    flex-basis: calc((100% - 5rem) / 3);
+  }
+
+  .xl\:\[\&\>\*\]\:self-end>* {
+    align-self: flex-end;
+  }
+}
+
+.\[\&_\.form-actions\]\:mb-0 .form-actions {
+  margin-bottom: 0px;
+}
+
+.\[\&_\.form-item\]\:mb-0 .form-item {
+  margin-bottom: 0px;
 }
 
 .\[\&_p\:first-child\]\:mt-0 p:first-child {

@@ -24,7 +24,11 @@ Series page node template.
 
         <div class="mb-4 sm:justify-between sm:flex">
           <div class="sm:order-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
-          <div class="text-base font-medium leading-tight tracking-wider text-gray-500 uppercase text-muted">{{ node.type.entity.label() }}</div>
+
+              {% set label = not node.page_label.isEmpty() ? node.page_label.value : node.type.entity.label %}
+              <div class="text-sm font-medium leading-tight tracking-wider text-gray-500 uppercase text-muted">
+                {{ label }}
+              </div>
         </div>
 
 
@@ -41,18 +45,39 @@ Series page node template.
 
         {# attribution #} 
 
-        {#-- date and share --#}
+        {#-- date and categories --#}
         
-         <div
-          class="flex flex-col flex-wrap justify-between pb-6 mb-4 border-b border-gray-300 xl:border-none sm:flex-row xl:mb-0"
-          >
-          {{ content.field_contact }}
-    
-          {% if "Off" in content.field_hide_date.0 %}          
-            {{ node.getCreatedTime|date('d F Y') }}
+          {% set show_date = node.field_hide_date.isEmpty() or node.field_hide_date.value != '1' %}
+          {% set has_meta = not node.outcome.isEmpty() or not node.field_country.isEmpty() or show_date %}
+
+          {% if has_meta %}
+            <div class="flex flex-col flex-wrap justify-between pb-6 mb-4 prose border-b border-gray-300 xl:border-none sm:flex-row xl:mb-0">
+
+              {% if not node.outcome.isEmpty() or not node.field_country.isEmpty() %}
+                <div class="order-2 sm:order-1">
+                  {% if not node.outcome.isEmpty() %}
+                    <div>
+                      <strong>{{ 'Outcome:'|t }}</strong> {{ node.outcome.entity.label }}
+                    </div>
+                  {% endif %}
+
+                  {% if not node.field_country.isEmpty() %}
+                    <div>
+                      <strong>{{ 'Country:'|t }}</strong> {{ content.field_country.0 }}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% if show_date %}
+                <div class="order-1 sm:order-2">
+                  {{ node.getCreatedTime|date('d F Y') }}
+                </div>
+              {% endif %}
+
+            </div>
           {% endif %}
-          
-        </div>
+
 
       </div>
 
@@ -108,8 +133,15 @@ Series page node template.
         </div>
       </div>
     </div> #}
-        
 
+      {% if not node.field_contact.isEmpty() %}
+      <div class="container mx-auto xl:grid lg:gap-x-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12">
+        <div class="lg:col-span-10 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
+          <div class="prose">{{ content.field_contact }}</div>
+        </div> 
+      </div>
+      {% endif %}
+      
   {% include '@iied_tw/partials/_series_navigation.html.twig' %}
 
    
