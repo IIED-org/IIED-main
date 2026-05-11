@@ -8,14 +8,18 @@ dependencies:
     - field.field.node.series_page.field_collections
     - field.field.node.series_page.field_contact
     - field.field.node.series_page.field_content
+    - field.field.node.series_page.field_country
     - field.field.node.series_page.field_display_image
     - field.field.node.series_page.field_hide_date
     - field.field.node.series_page.field_image_caption
     - field.field.node.series_page.field_main_image
     - field.field.node.series_page.field_standfirst
     - field.field.node.series_page.field_tagline
+    - field.field.node.series_page.outcome
+    - field.field.node.series_page.page_label
     - node.type.series_page
   module:
+    - address
     - field_group
     - inline_entity_form
     - layout_paragraphs
@@ -41,6 +45,22 @@ third_party_settings:
         label_as_html: false
         description: ''
         required_fields: true
+    group_fff_impact_stories:
+      children:
+        - outcome
+        - field_country
+      label: 'FFF impact stories'
+      region: content
+      parent_name: ''
+      weight: 11
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: true
 id: node.series_page.default
 targetEntityType: node
 bundle: series_page
@@ -58,13 +78,13 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 13
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
   field_alternative_label:
     type: string_textfield
-    weight: 1
+    weight: 7
     region: content
     settings:
       size: 60
@@ -72,7 +92,7 @@ content:
     third_party_settings: {  }
   field_collections:
     type: entity_reference_autocomplete
-    weight: 9
+    weight: 10
     region: content
     settings:
       match_operator: CONTAINS
@@ -82,7 +102,7 @@ content:
     third_party_settings: {  }
   field_contact:
     type: text_textarea
-    weight: 10
+    weight: 6
     region: content
     settings:
       rows: 5
@@ -100,6 +120,12 @@ content:
       require_layouts: 1
       empty_message: ''
     third_party_settings: {  }
+  field_country:
+    type: address_country_default
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_display_image:
     type: boolean_checkbox
     weight: 6
@@ -109,7 +135,7 @@ content:
     third_party_settings: {  }
   field_hide_date:
     type: boolean_checkbox
-    weight: 19
+    weight: 20
     region: content
     settings:
       display_label: true
@@ -139,7 +165,7 @@ content:
     third_party_settings: {  }
   field_tagline:
     type: string_textarea
-    weight: 6
+    weight: 8
     region: content
     settings:
       rows: 5
@@ -147,34 +173,48 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 11
+    weight: 12
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
+  outcome:
+    type: options_select
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  page_label:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   path:
     type: path
-    weight: 15
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 12
+    weight: 13
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 18
+    weight: 19
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 17
+    weight: 18
     region: content
     settings:
       display_label: true
@@ -188,13 +228,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
   translation:
-    weight: 7
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
   uid:
     type: inline_entity_form_complex
-    weight: 14
+    weight: 15
     region: content
     settings:
       form_mode: default
@@ -211,7 +251,7 @@ content:
       removed_reference: optional
     third_party_settings: {  }
   url_redirects:
-    weight: 16
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }

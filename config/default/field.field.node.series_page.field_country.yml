@@ -1,0 +1,34 @@
+uuid: 2e44d87f-e8a7-4dac-891b-8996d8107572
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_country
+    - node.type.series_page
+  module:
+    - address
+id: node.series_page.field_country
+field_name: field_country
+entity_type: node
+bundle: series_page
+label: Country
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  available_countries:
+    BO: BO
+    EC: EC
+    GM: GM
+    GH: GH
+    KE: KE
+    LR: LR
+    MG: MG
+    NP: NP
+    TZ: TZ
+    TG: TG
+    VN: VN
+    ZM: ZM
+field_type: address_country

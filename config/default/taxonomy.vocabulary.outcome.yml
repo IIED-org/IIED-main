@@ -1,0 +1,9 @@
+uuid: 53ee80a8-c733-4de6-8235-b14a2b595e43
+langcode: en
+status: true
+dependencies: {  }
+name: Outcome
+vid: outcome
+description: 'Facet of FFF impact stories'
+weight: 0
+new_revision: false

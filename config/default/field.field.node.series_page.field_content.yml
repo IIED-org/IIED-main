@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.field_content
     - node.type.series_page
+    - paragraphs.paragraphs_type.about_the_author
     - paragraphs.paragraphs_type.accordion_box
     - paragraphs.paragraphs_type.advanced_chart
     - paragraphs.paragraphs_type.basic_text
@@ -76,6 +77,7 @@ settings:
       stories_cta: stories_cta
       in_page_menu: in_page_menu
       file_upload: file_upload
+      about_the_author: about_the_author
       stories_table: stories_table
       tab_box: tab_box
       timeline: timeline
@@ -91,7 +93,7 @@ settings:
     target_bundles_drag_drop:
       about_the_author:
         weight: -46
-        enabled: false
+        enabled: true
       accordion_box:
         weight: -65
         enabled: true

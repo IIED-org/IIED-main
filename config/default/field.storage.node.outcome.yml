@@ -1,0 +1,20 @@
+uuid: e9e605ca-bcfb-4018-a2d4-c0c3a17a1633
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.outcome
+field_name: outcome
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
