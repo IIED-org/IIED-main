@@ -1,9 +1,9 @@
-uuid: 837ec36b-1f87-4783-8128-118a8cee5061
+uuid: 402d402b-ee68-4a84-a60d-71e16bf44974
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.card
+    - core.entity_view_mode.node.card_md
     - node.type.article
     - node.type.blog
     - node.type.event
@@ -13,16 +13,19 @@ dependencies:
     - node.type.news
     - node.type.project
     - node.type.publication
+    - taxonomy.vocabulary.collection
+    - taxonomy.vocabulary.outcome
     - taxonomy.vocabulary.tags
   content:
-    - 'taxonomy_term:tags:851fef78-138d-4e44-ad88-c1228f8a76ec'
+    - 'taxonomy_term:collection:614396ce-c60b-4a69-adc9-e9a6546cb39e'
   module:
+    - address
     - better_exposed_filters
     - node
     - taxonomy
     - user
-id: gender_hub
-label: 'Gender-climate-environment hub'
+id: custom_collection
+label: 'Custom collection'
 module: views
 description: 'Provides grids for main gender-climate-environment hub'
 tag: ''
@@ -35,7 +38,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Gender-climate-environment hub'
+      title: 'Custom collection'
       fields:
         title:
           id: title
@@ -207,24 +210,32 @@ display:
           admin_label: ''
           plugin_id: taxonomy_index_tid
           operator: or
-          value:
-            - 1881
+          value: {  }
           group: 1
           exposed: false
           expose:
-            operator_id: ''
-            label: ''
+            operator_id: field_tags_target_id_op
+            label: 'Tags (field_tags)'
             description: ''
             use_operator: false
-            operator: ''
+            operator: field_tags_target_id_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: ''
+            identifier: field_tags_target_id
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
+              publications_editor: '0'
+              publications_manager: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -395,7 +406,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: card
+          view_mode: card_md
       query:
         type: views_query
         options:
@@ -418,7 +429,18 @@ display:
           empty: false
           content: "<div>\r\n<h3 class=\"mb-4\">All content</h3>\r\n<p class=\"mb-4\">Explore @total resources</p>\r\n</div>"
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        matomo:
+          enabled: false
+          keyword_gets: ''
+          keyword_behavior: first
+          keyword_concat_separator: ' '
+          category_behavior: none
+          category_gets: ''
+          category_concat_separator: ' '
+          category_fallback: ''
+          category_facets: {  }
+          category_facets_concat_separator: ', '
     cache_metadata:
       max-age: -1
       contexts:
@@ -431,13 +453,273 @@ display:
       tags: {  }
   block_1:
     id: block_1
-    display_title: 'All gender block'
+    display_title: 'All FFF block'
     display_plugin: block
     position: 1
     display_options:
+      filters:
+        field_collections_target_id:
+          id: field_collections_target_id
+          table: node__field_collections
+          field: field_collections_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value:
+            - 45284
+          group: 1
+          exposed: false
+          expose:
+            operator_id: field_collections_target_id_op
+            label: 'Collections (field_collections)'
+            description: ''
+            use_operator: false
+            operator: field_collections_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_collections_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
+              publications_editor: '0'
+              publications_manager: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          vid: collection
+          type: textfield
+          hierarchy: false
+          limit: true
+          error_message: true
+        langcode:
+          id: langcode
+          table: node_field_data
+          field: langcode
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: langcode
+          plugin_id: language
+          operator: in
+          value:
+            '***LANGUAGE_language_content***': '***LANGUAGE_language_content***'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        type_1:
+          id: type_1
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          operator: 'not in'
+          value:
+            external_resource: external_resource
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        outcome_target_id:
+          id: outcome_target_id
+          table: node__outcome
+          field: outcome_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: outcome_target_id_op
+            label: Outcome
+            description: ''
+            use_operator: false
+            operator: outcome_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: outcome_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
+              publications_editor: '0'
+              publications_manager: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          vid: outcome
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+        field_country_value:
+          id: field_country_value
+          table: node__field_country
+          field: field_country_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: country
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_country_value_op
+            label: Country
+            description: ''
+            use_operator: false
+            operator: field_country_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_country_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              hh_contributor: '0'
+              hh_reviewer: '0'
+              publications_editor: '0'
+              publications_manager: '0'
+              editor: '0'
+              manager: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        filters: false
+        filter_groups: false
       display_description: ''
-      display_extenders: {  }
-      block_description: 'All gender content'
+      display_extenders:
+        matomo:
+          enabled: false
+          keyword_gets: ''
+          keyword_behavior: first
+          keyword_concat_separator: ' '
+          category_behavior: none
+          category_gets: ''
+          category_concat_separator: ' '
+          category_fallback: ''
+          category_facets: {  }
+          category_facets_concat_separator: ', '
+      block_description: 'All FFF content'
     cache_metadata:
       max-age: -1
       contexts:

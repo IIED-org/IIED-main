@@ -9,10 +9,10 @@ label: 'Content (default)'
 type: 'canonical_entities:node'
 pattern: '[node:title]'
 selection_criteria:
-  be7547a0-ef17-4c5c-8f95-ee7de3f478e2:
+  b2dee824-d52f-4541-bb1d-fa8b5fcc64ed:
     id: 'entity_bundle:node'
     negate: false
-    uuid: be7547a0-ef17-4c5c-8f95-ee7de3f478e2
+    uuid: b2dee824-d52f-4541-bb1d-fa8b5fcc64ed
     context_mapping:
       node: node
     bundles:
@@ -24,7 +24,6 @@ selection_criteria:
       news: news
       page: page
       project: project
-      series_page: series_page
 selection_logic: and
 weight: -5
 relationships: {  }

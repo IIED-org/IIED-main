@@ -9,14 +9,18 @@ dependencies:
     - field.field.node.series_page.field_collections
     - field.field.node.series_page.field_contact
     - field.field.node.series_page.field_content
+    - field.field.node.series_page.field_country
     - field.field.node.series_page.field_display_image
     - field.field.node.series_page.field_hide_date
     - field.field.node.series_page.field_image_caption
     - field.field.node.series_page.field_main_image
     - field.field.node.series_page.field_standfirst
     - field.field.node.series_page.field_tagline
+    - field.field.node.series_page.outcome
+    - field.field.node.series_page.page_label
     - node.type.series_page
   module:
+    - address
     - ds
     - layout_paragraphs
     - text
@@ -31,7 +35,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 5
     region: content
   field_alternative_label:
     type: string
@@ -48,14 +52,14 @@ content:
       view_mode: link_back
       link: false
     third_party_settings: {  }
-    weight: 3
+    weight: 6
     region: content
   field_contact:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 11
     region: content
   field_content:
     type: layout_paragraphs
@@ -72,7 +76,14 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 6
+    weight: 9
+    region: content
+  field_country:
+    type: address_country_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
     region: content
   field_display_image:
     type: boolean
@@ -82,7 +93,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 7
+    weight: 10
     region: content
   field_hide_date:
     type: boolean
@@ -92,14 +103,14 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 9
+    weight: 12
     region: content
   field_image_caption:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 5
+    weight: 8
     region: content
   field_main_image:
     type: entity_reference_entity_view
@@ -116,12 +127,28 @@ content:
             lb: ''
             lb-col: false
             classes: {  }
-    weight: 4
+    weight: 7
     region: content
   field_standfirst:
     type: text_default
     label: hidden
     settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  outcome:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  page_label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
     weight: 1
     region: content

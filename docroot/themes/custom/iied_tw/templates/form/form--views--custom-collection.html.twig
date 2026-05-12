@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+<form{{ attributes.addClass(
+  'grid',
+  'mb-0',
+  'items-end',
+  'lg:gap-x-6',
+  'xl:grid-cols-3',
+  'xl:gap-x-10',
+  'xl:[&>*]:self-end',
+  'xl:[&>*:first-child]:col-start-2',
+  '[&_.form-item]:mb-0',
+  '[&_.form-actions]:mb-0'
+) }}>
+  {{ children }}
+</form>
+
+
