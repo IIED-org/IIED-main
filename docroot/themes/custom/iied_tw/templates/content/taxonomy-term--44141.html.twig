@@ -67,11 +67,32 @@
 
 {% if term.field_overview.value is not empty %}
   <div class="pt-6">
-    <div class="tab-wrapper" 
+   <div class="tab-wrapper" 
       x-data="{ tab: window.location.hash ? window.location.hash.substring(1) : 'research' }"
-      x-init="$refs[tab].focus()"
+      x-init="
+        const tabs = ['research', 'overview', 'discover'];
+
+        const switchToHash = () => {
+          const hash = window.location.hash ? window.location.hash.substring(1) : 'research';
+
+          if (tabs.includes(hash)) {
+            tab = hash;
+          } else {
+            tab = 'research';
+          }
+
+          $nextTick(() => {
+            if ($refs[tab]) {
+              $refs[tab].focus();
+            }
+          });
+        };
+
+        switchToHash();
+        window.addEventListener('hashchange', switchToHash);
+      "
       id="tab_wrapper"
-      >
+    >
       <nav class="border-b border-gray-300">
         <div class="container flex flex-row">
           <a x-ref="research" class="block px-6 py-2 text-lg font-semibold text-gray-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'research' }" @click.prevent="tab = 'research'; window.location.hash = 'research'" href="#">Research</a>
@@ -79,7 +100,7 @@
           <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
         
         {% if (drupal_view_result('hidden_handbrakes_display', 'block_1') is not empty) %}  
-          <a x-ref="hh" class="block px-6 py-2 text-lg font-semibold text-gray-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'hh' }" @click.prevent="tab = 'hh'; window.location.hash = 'hh'" href="#">Discover hidden handbrakes</a>
+          <a x-ref="discover" class="block px-6 py-2 text-lg font-semibold text-gray-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'discover' }" @click.prevent="tab = 'discover'; window.location.hash = 'discover'" href="#">Discover hidden handbrakes</a>
         {% endif %}
         
         {# My HH tab
@@ -95,15 +116,15 @@
           </div>
         </div>
         <div class="pt-6 tab-panel bg-iiedbg-10" x-show="tab === 'overview'" x-transition:enter.duration.750ms>
-           <div class="container content lg:grid lg:gap-x-6 lg:grid-cols-12">
-              <div class="mt-6 mb-24 prose md:prose-lg lg:col-span-8 lg:col-start-5">
+           <div class="container content">
+              <div class="pb-24 mx-auto mt-6 prose md:prose-lg">
               {{ term.field_overview.value|raw }}
               </div>
           </div>
         </div>
           {# hidden handbrakes display #}
-        <div class="pt-6 tab-panel bg-iiedbg-10" x-show="tab === 'hh'" x-transition:enter.duration.750ms>
-           <div class="container my-12">
+        <div class="pt-6 tab-panel bg-iiedbg-10" x-show="tab === 'discover'" x-transition:enter.duration.750ms>
+           <div class="container py-12">
               {{ drupal_view('hidden_handbrakes_display', 'block_1') }}
           </div>
         </div>
@@ -128,6 +149,6 @@
       {{ content }}
   </div>
   
-{# TODO: needs adjusting to show tags #}
-  {{ content.field_tags }} 
+{# TODO: needs adjusting to show tags
+  {{ content.field_tags }}  #}
 {% endif %}
