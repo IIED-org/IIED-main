@@ -7,7 +7,6 @@ dependencies:
     - node.type.hidden_handbrake
     - taxonomy.vocabulary.hh_impact
     - taxonomy.vocabulary.hh_problem_type
-    - taxonomy.vocabulary.un_geoscheme_regional_groupings
   module:
     - better_exposed_filters
     - node
@@ -95,45 +94,45 @@ display:
           bef:
             general:
               autosubmit: true
+              auto_submit_sort_only: false
+              autosubmit_breakpoint: ''
               autosubmit_exclude_textfield: true
               autosubmit_textfield_delay: 500
+              autosubmit_textfield_minimum_length: 3
               autosubmit_hide: true
               input_required: false
               allow_secondary: false
               secondary_label: 'Advanced options'
               secondary_open: false
               reset_button_always_show: false
-              autosubmit_textfield_minimum_length: 3
-              autosubmit_breakpoint: ''
-              auto_submit_sort_only: false
             filter:
               body_value:
                 plugin_id: default
                 advanced:
-                  placeholder_text: ''
-                  collapsible: false
-                  is_secondary: false
-                  collapsible_disable_automatic_open: false
-                  hide_label: false
-                  field_classes: ''
-                  open_by_default: false
                   sort_options_method: alphabetical_asc
                   sort_options_natural: true
+                  placeholder_text: ''
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
               field_region_affected_target_id:
                 plugin_id: default
                 advanced:
                   sort_options: false
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   rewrite:
                     filter_rewrite_values: ''
                     filter_rewrite_values_key: false
                   collapsible: false
-                  is_secondary: false
                   collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  open_by_default: false
-                  sort_options_method: alphabetical_asc
-                  sort_options_natural: true
       access:
         type: perm
         options:
@@ -185,113 +184,6 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
-        body_value:
-          id: body_value
-          table: node__body
-          field: body_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: views_autocomplete_filters_string
-          operator: word
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: body_value_op
-            label: Search
-            description: ''
-            use_operator: false
-            operator: body_value_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: body_value
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
-            placeholder: ''
-            autocomplete_filter: 0
-            autocomplete_min_chars: '0'
-            autocomplete_items: '10'
-            autocomplete_field: ''
-            autocomplete_raw_suggestion: 1
-            autocomplete_raw_dropdown: 1
-            autocomplete_dependent: 0
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        field_region_affected_target_id:
-          id: field_region_affected_target_id
-          table: node__field_region_affected
-          field: field_region_affected_target_id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: taxonomy_index_tid
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: field_region_affected_target_id_op
-            label: 'Region affected'
-            description: ''
-            use_operator: false
-            operator: field_region_affected_target_id_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: field_region_affected_target_id
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
-              hh_reviewer: '0'
-              hh_contributor: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          vid: un_geoscheme_regional_groupings
-          type: select
-          hierarchy: false
-          limit: true
-          error_message: true
         status:
           id: status
           table: node_field_data
@@ -338,6 +230,10 @@ display:
           1: AND
       style:
         type: default
+        options:
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
       row:
         type: 'entity:node'
         options:
@@ -360,7 +256,6 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - url
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
@@ -370,14 +265,24 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        matomo:
+          enabled: false
+          keyword_gets: ''
+          keyword_behavior: first
+          keyword_concat_separator: ' '
+          category_behavior: none
+          category_gets: ''
+          category_concat_separator: ' '
+          category_fallback: ''
+          category_facets: {  }
+          category_facets_concat_separator: ', '
       block_description: 'Display hidden handbrakes'
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - url
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
@@ -544,6 +449,34 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
+  block_3:
+    id: block_3
+    display_title: 'Archived version of block 1 with filters'
+    display_plugin: block
+    position: 1
+    display_options:
+      display_description: ''
+      display_extenders:
+        matomo:
+          enabled: false
+          keyword_gets: ''
+          keyword_behavior: first
+          keyword_concat_separator: ' '
+          category_behavior: none
+          category_gets: ''
+          category_concat_separator: ' '
+          category_fallback: ''
+          category_facets: {  }
+          category_facets_concat_separator: ', '
+      block_description: 'Display hidden handbrakes'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
