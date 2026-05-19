@@ -834,7 +834,7 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         ),
         'Doctrine\\Persistence\\' =>
         array (
-            0 => __DIR__ . '/..' . '/doctrine/persistence/src/Persistence',
+            0 => __DIR__ . '/..' . '/doctrine/persistence/src',
         ),
         'Doctrine\\Instantiator\\' =>
         array (
