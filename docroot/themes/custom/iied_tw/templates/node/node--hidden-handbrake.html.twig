@@ -170,12 +170,12 @@
       {{ content.field_additional_elements }}
       </div>
 
-        {# comments #}
+        {# comments
       <div class="px-4 py-2 -mx-4 bg-iiedblue-10 rounded-xl">  
 
-          {{ content.comment }}
+          {{ content.comment }} #}
       
-          {# Block login for non/authenticated users #}
+          {# Block login for non/authenticated users
           {% if logged_in %}
             {% if content.comment['#items'].comment_count < 1 %} 
               <p>Start the discussion!</p>
@@ -198,7 +198,9 @@
                 {% endif %}
             {% endif %}
 
-        </div>
+        </div> #}
+
+
         {# categories and share links #}
         <div class="flex items-center py-4">
           {% include '@iied_tw/partials/_share_links.html.twig' %}
@@ -215,7 +217,7 @@
     <div class="container">
       <div class="flex flex-wrap justify-between">
        <h2 class="mb-6">Related hidden handbrakes</h2>
-        <a href="/hidden-handbrakes" class="mt-2 mb-4">View all</a>
+        <a href="/hidden-handbrakes#discover" class="mt-2 mb-4">View all</a>
       </div>
         {{ drupal_view('hidden_handbrakes_display', 'block_2') }}
     </div>

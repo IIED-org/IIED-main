@@ -8,7 +8,9 @@
   {% endblock %}
   {% block image %}
     {# Insert publication image with default settings #}
-    {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'card_cover', 'img_style':'card_cover', 'alt_text': title_text|striptags } %}
+    <div class="object-cover w-3/12 h-auto">
+      {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'card_cover', 'img_style':'card_cover', 'alt_text': title_text|striptags } %}
+    </div>
   {% endblock %} 
   {% block date %}
       <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.field_date_published.value|date('d F Y') }} </p>
