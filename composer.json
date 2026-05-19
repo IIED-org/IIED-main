@@ -301,9 +301,6 @@
       "drupal/facets": {
         "Update aborted 3492410": "https://www.drupal.org/files/issues/2024-12-11/264.patch"
       },
-      "drupal/facets_pretty_paths": {
-        "Pretty paths for facets 3.x": "https://git.drupalcode.org/project/facets_pretty_paths/-/merge_requests/20.diff"
-      },
       "drupal/media_thumbnails": {
         "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"
       },
