@@ -95,17 +95,20 @@ Series page node template.
         class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
         {#-- image if field_display_image --#}
 
-        {% if node.field_main_image.target_id %}
-        <figure class="mb-6 -mx-4 sm:mx-0">
-          <div class="overflow-hidden bg-gray-300 border rounded-xl">
-            {{ content.field_main_image[0] }}
-          </div>
-          <figcaption
-            class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
-            {{ content.field_image_caption }}
-          </figcaption>
-        </figure>
+          {% if "On" in content.field_display_image.0 %}   
+          {% if node.field_main_image.target_id %}
+          <figure class="mb-6 -mx-4 sm:mx-0">
+            <div class="overflow-hidden bg-gray-300 border rounded-xl">
+              {{ content.field_main_image[0] }}
+            </div>
+            <figcaption
+              class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
+              {{ content.field_image_caption }}
+            </figcaption>
+          </figure>
+          {% endif %}
         {% endif %}
+
 
         {#-- body --#}
         <div class="prose md:prose-lg">
