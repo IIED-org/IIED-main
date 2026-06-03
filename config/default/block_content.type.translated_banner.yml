@@ -1,0 +1,8 @@
+uuid: 7495d472-0f79-4c3e-a9c0-0b0065e02c90
+langcode: en
+status: true
+dependencies: {  }
+id: translated_banner
+label: 'Translated banner'
+revision: false
+description: 'Use for custom banners placed on multilingual taxonomy term pages and reusable content blocks'
