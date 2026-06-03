@@ -9,6 +9,7 @@ dependencies:
     - field.field.taxonomy_term.collection.field_collection_type
     - field.field.taxonomy_term.collection.field_containers
     - field.field.taxonomy_term.collection.field_downloads
+    - field.field.taxonomy_term.collection.field_logo
     - field.field.taxonomy_term.collection.field_overview
     - field.field.taxonomy_term.collection.field_publications_more_link
     - field.field.taxonomy_term.collection.field_short_description
@@ -20,13 +21,16 @@ dependencies:
     - field.field.taxonomy_term.collection.layout_builder__layout
     - field.field.taxonomy_term.collection.link_back_text
     - field.field.taxonomy_term.collection.subheading
+    - image.style.page
     - taxonomy.vocabulary.collection
     - views.view.taxonomy_all_display
     - views.view.taxonomy_featured_display
   module:
+    - ds
     - entity_reference_revisions
     - layout_builder
     - layout_builder_restrictions
+    - svg_image
     - text
     - views
   theme:
@@ -72,6 +76,57 @@ third_party_settings:
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
+            weight: 0
+            additional: {  }
+          58dfa840-28f3-4e58-b90c-96cf62acf01f:
+            uuid: 58dfa840-28f3-4e58-b90c-96cf62acf01f
+            region: content
+            configuration:
+              id: 'field_block:taxonomy_term:collection:field_logo'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: image
+                label: hidden
+                settings:
+                  image_link: ''
+                  image_style: page
+                  image_loading:
+                    attribute: lazy
+                  svg_attributes:
+                    width: null
+                    height: null
+                  svg_render_as_image: true
+                third_party_settings:
+                  ds:
+                    ft:
+                      id: expert
+                      settings:
+                        lb: ''
+                        lbw: false
+                        lbw-el: ''
+                        lbw-cl: ''
+                        lbw-at: ''
+                        lb-col: false
+                        ow: true
+                        ow-el: a
+                        ow-cl: float-right
+                        ow-at: 'href="[term:field_url]"'
+                        ow-def-at: false
+                        ow-def-cl: false
+                        fis: false
+                        fis-el: ''
+                        fis-cl: ''
+                        fis-at: ''
+                        fis-def-at: false
+                        fi: false
+                        fi-el: ''
+                        fi-cl: ''
+                        fi-at: ''
+                        fi-def-at: false
+                        prefix: ''
+                        suffix: ''
             weight: 0
             additional: {  }
         third_party_settings: {  }
@@ -197,6 +252,49 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 3
+    region: content
+  field_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: page
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      ds:
+        ft:
+          id: expert
+          settings:
+            lb: ''
+            lbw: false
+            lbw-el: ''
+            lbw-cl: ''
+            lbw-at: ''
+            lb-col: false
+            ow: true
+            ow-el: a
+            ow-cl: float-right
+            ow-at: 'href="[term:field_url]"'
+            ow-def-at: false
+            ow-def-cl: false
+            fis: false
+            fis-el: ''
+            fis-cl: ''
+            fis-at: ''
+            fis-def-at: false
+            fi: false
+            fi-el: ''
+            fi-cl: ''
+            fi-at: ''
+            fi-def-at: false
+            prefix: ''
+            suffix: ''
+    weight: 2
     region: content
   field_publications_more_link:
     type: text_default
