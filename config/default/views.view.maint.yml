@@ -1460,10 +1460,10 @@ display:
       export_method: batch
       export_batch_size: 1000
       export_limit: 0
-      store_in_public_file_directory: null
       custom_redirect_path: false
       redirect_to_display: page_3
       include_query_params: false
+      export_filesystem: public
     cache_metadata:
       max-age: -1
       contexts:
@@ -2149,10 +2149,10 @@ display:
         page_9: '0'
       filename: 'projects_[date:html_datetime].csv'
       automatic_download: true
-      store_in_public_file_directory: null
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false
+      export_filesystem: public
     cache_metadata:
       max-age: -1
       contexts:
@@ -2824,10 +2824,10 @@ display:
         page_9: '0'
       filename: 'noProject_[date:html_datetime].csv'
       automatic_download: true
-      store_in_public_file_directory: null
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false
+      export_filesystem: public
     cache_metadata:
       max-age: -1
       contexts:
@@ -3653,10 +3653,10 @@ display:
         page_9: '0'
       filename: ''
       automatic_download: false
-      store_in_public_file_directory: null
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false
+      export_filesystem: public
     cache_metadata:
       max-age: -1
       contexts:
@@ -4875,10 +4875,10 @@ display:
       redirect_path: ''
       export_method: batch
       export_batch_size: 1000
-      store_in_public_file_directory: null
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false
+      export_filesystem: public
     cache_metadata:
       max-age: -1
       contexts:
@@ -5352,6 +5352,7 @@ display:
         page_9: '0'
       export_method: batch
       export_batch_size: 1000
+      export_filesystem: public
     cache_metadata:
       max-age: -1
       contexts:
@@ -5428,7 +5429,8 @@ display:
           buttons: true
           action_title: Action
           clear_on_exposed: true
-          force_selection_info: false
+          show_multipage_selection_box: default
+          show_select_all: default
           selected_actions:
             9:
               action_id: views_bulk_edit
@@ -6798,7 +6800,8 @@ display:
           buttons: false
           action_title: Action
           clear_on_exposed: true
-          force_selection_info: false
+          show_multipage_selection_box: default
+          show_select_all: default
           selected_actions:
             9:
               action_id: views_bulk_edit
@@ -15554,6 +15557,8 @@ display:
           buttons: true
           action_title: Action
           clear_on_exposed: true
+          show_multipage_selection_box: default
+          show_select_all: default
           selected_actions:
             7:
               action_id: node_save_action
@@ -16784,6 +16789,8 @@ display:
           buttons: true
           action_title: Action
           clear_on_exposed: true
+          show_multipage_selection_box: default
+          show_select_all: default
           selected_actions:
             7:
               action_id: node_save_action

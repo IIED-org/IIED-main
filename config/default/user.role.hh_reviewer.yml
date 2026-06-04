@@ -6,6 +6,7 @@ dependencies:
     - filter.format.simple_html
     - media.type.image
     - node.type.hidden_handbrake
+    - node.type.hidden_page
   module:
     - comment
     - file

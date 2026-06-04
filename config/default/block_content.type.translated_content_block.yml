@@ -1,0 +1,8 @@
+uuid: b534720b-091b-4324-9d7d-05fc571af6ac
+langcode: en
+status: true
+dependencies: {  }
+id: translated_content_block
+label: 'Translated content'
+revision: false
+description: 'Use for blocks placed on multilingual taxonomy term pages and reusable content blocks'

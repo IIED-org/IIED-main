@@ -3,11 +3,24 @@ langcode: en
 status: true
 dependencies:
   config:
+    - block_content.type.alert
+    - block_content.type.banner
+    - block_content.type.banner_custom
+    - block_content.type.basic
+    - block_content.type.card
+    - block_content.type.card_wide
+    - block_content.type.collection_card
+    - block_content.type.icon_block
+    - block_content.type.view_block
+    - core.entity_form_display.user.user.default
     - filter.format.basic_html
     - filter.format.full_html
     - filter.format.simple_html
+    - media.type.audio
     - media.type.document
     - media.type.image
+    - media.type.remote_video
+    - media.type.video
     - node.type.article
     - node.type.blog
     - node.type.event
@@ -18,8 +31,51 @@ dependencies:
     - node.type.page
     - node.type.project
     - node.type.publication
+    - paragraphs.paragraphs_type.about_the_author
+    - paragraphs.paragraphs_type.accordion_box
+    - paragraphs.paragraphs_type.accordion_section
+    - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.box
+    - paragraphs.paragraphs_type.file_upload
+    - paragraphs.paragraphs_type.gallery
+    - paragraphs.paragraphs_type.highchart
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_small
+    - paragraphs.paragraphs_type.image_wide
+    - paragraphs.paragraphs_type.in_page_menu
+    - paragraphs.paragraphs_type.info_box
+    - paragraphs.paragraphs_type.linked_person
+    - paragraphs.paragraphs_type.logo_block
+    - paragraphs.paragraphs_type.media_embed
+    - paragraphs.paragraphs_type.media_list
+    - paragraphs.paragraphs_type.modal_image
+    - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.related_content
+    - paragraphs.paragraphs_type.related_link
+    - paragraphs.paragraphs_type.related_project
+    - paragraphs.paragraphs_type.related_publication_inline
+    - paragraphs.paragraphs_type.researcher_profiles
+    - paragraphs.paragraphs_type.stories_block
+    - paragraphs.paragraphs_type.stories_cta
+    - paragraphs.paragraphs_type.stories_curated_content
+    - paragraphs.paragraphs_type.stories_link_list
+    - paragraphs.paragraphs_type.stories_quote
+    - paragraphs.paragraphs_type.stories_table
+    - paragraphs.paragraphs_type.stories_text
+    - paragraphs.paragraphs_type.stories_views
+    - paragraphs.paragraphs_type.tab
+    - paragraphs.paragraphs_type.tab_box
+    - paragraphs.paragraphs_type.timeline
+    - paragraphs.paragraphs_type.video_embed
+    - taxonomy.vocabulary.collection
+    - taxonomy.vocabulary.document_type
+    - taxonomy.vocabulary.global
+    - taxonomy.vocabulary.list
     - taxonomy.vocabulary.organisation
     - taxonomy.vocabulary.person
+    - taxonomy.vocabulary.series
+    - taxonomy.vocabulary.tags
+    - taxonomy.vocabulary.theme
   module:
     - comment
     - content_translation

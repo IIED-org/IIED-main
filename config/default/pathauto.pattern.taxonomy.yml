@@ -2,17 +2,22 @@ uuid: bb858ca2-15d4-479b-a856-c548c2167e10
 langcode: en
 status: true
 dependencies:
+  config:
+    - taxonomy.vocabulary.collection
+    - taxonomy.vocabulary.document_type
+    - taxonomy.vocabulary.list
+    - taxonomy.vocabulary.person
+    - taxonomy.vocabulary.series
   module:
     - taxonomy
 id: taxonomy
 label: 'Taxonomy (default)'
 type: 'canonical_entities:taxonomy_term'
-pattern: '[term:vocabulary]/[term:name]'
+pattern: '/[term:vocabulary]/[term:name]'
 selection_criteria:
   ceff100e-80ef-4179-b24c-ca39ad65077c:
     id: 'entity_bundle:taxonomy_term'
     negate: false
-    uuid: ceff100e-80ef-4179-b24c-ca39ad65077c
     context_mapping:
       taxonomy_term: taxonomy_term
     bundles:

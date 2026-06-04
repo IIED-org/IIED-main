@@ -17,9 +17,9 @@ dependencies:
     - taxonomy.vocabulary.organisation
   module:
     - address
-    - image
     - link
     - path
+    - svg_image
     - text
 id: taxonomy_term.organisation.dashboard_add_organisation
 targetEntityType: taxonomy_term
@@ -62,7 +62,8 @@ content:
     type: address_default
     weight: 6
     region: content
-    settings: {  }
+    settings:
+      wrapper_type: details
     third_party_settings: {  }
   field_location_legacy:
     type: string_textfield
@@ -130,4 +131,9 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
+  translation:
+    weight: 10
+    settings: {  }
+    third_party_settings: {  }
+    region: content
 hidden: {  }

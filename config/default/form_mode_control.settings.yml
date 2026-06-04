@@ -1,192 +1,28 @@
-'use  The form mode default linked to  block_content entity( basic )': block_content.basic.default
-'use  The form mode default linked to  block_content entity( jumbotron )': block_content.jumbotron.default
-'use  The form mode default linked to  comment entity( comment )': comment.comment.default
-'use  The form mode default linked to  media entity( audio )': media.audio.default
-'use  The form mode media_library linked to  media entity( audio )': media.audio.media_library
-'use  The form mode default linked to  media entity( document )': media.document.default
-'use  The form mode media_library linked to  media entity( document )': media.document.media_library
-'use  The form mode default linked to  media entity( image )': media.image.default
-'use  The form mode media_library linked to  media entity( image )': media.image.media_library
-'use  The form mode default linked to  media entity( remote_video )': media.remote_video.default
-'use  The form mode media_library linked to  media entity( remote_video )': media.remote_video.media_library
-'use  The form mode default linked to  media entity( video )': media.video.default
-'use  The form mode media_library linked to  media entity( video )': media.video.media_library
-'use  The form mode default linked to  node entity( article )': node.article.default
-'use  The form mode default linked to  node entity( page )': node.page.default
-'use  The form mode default linked to  node entity( project )': node.project.default
-'use  The form mode bulk_edit linked to  node entity( publication )': node.publication.bulk_edit
-'use  The form mode default linked to  node entity( publication )': node.publication.default
-'use  The form mode manager_admin linked to  node entity( publication )': node.publication.manager_admin
-'use  The form mode default linked to  paragraph entity( linked_person )': paragraph.linked_person.default
-'use  The form mode default linked to  paragraph entity( row_of_4 )': paragraph.row_of_4.default
-'use  The form mode default linked to  taxonomy_term entity( document_type )': taxonomy_term.document_type.default
-'use  The form mode default linked to  taxonomy_term entity( list )': taxonomy_term.list.default
-'use  The form mode dashboard_add_organisation linked to  taxonomy_term entity( organisation )': taxonomy_term.organisation.dashboard_add_organisation
-'use  The form mode default linked to  taxonomy_term entity( organisation )': taxonomy_term.organisation.default
-'use  The form mode dashboard_add_author linked to  taxonomy_term entity( person )': taxonomy_term.person.dashboard_add_author
-'use  The form mode default linked to  taxonomy_term entity( person )': taxonomy_term.person.default
-'use  The form mode default linked to  taxonomy_term entity( series )': taxonomy_term.series.default
-'use  The form mode default linked to  taxonomy_term entity( tags )': taxonomy_term.tags.default
-'use  The form mode default linked to  taxonomy_term entity( theme )': taxonomy_term.theme.default
-'use  The form mode default linked to  user entity( user )': user.user.default
-'use  The form mode default linked to  paragraph entity( image_wide )': paragraph.image_wide.default
-'use  The form mode default linked to  paragraph entity( media_embed )': paragraph.media_embed.default
-'use  The form mode default linked to  paragraph entity( file_upload )': paragraph.file_upload.default
-'use  The form mode default linked to  paragraph entity( basic_text )': paragraph.basic_text.default
-'use  The form mode default linked to  paragraph entity( info_box )': paragraph.info_box.default
-'use  The form mode default linked to  taxonomy_term entity( collection )': taxonomy_term.collection.default
-'use  The form mode default linked to  node entity( blog )': node.blog.default
-'use  The form mode default linked to  paragraph entity( image )': paragraph.image.default
-'use  The form mode default linked to  paragraph entity( video_embed )': paragraph.video_embed.default
-'use  The form mode default linked to  paragraph entity( about_the_author )': paragraph.about_the_author.default
-'use  The form mode default linked to  node entity( event )': node.event.default
-'use  The form mode default linked to  node entity( news )': node.news.default
-'use  The form mode default linked to  paragraph entity( related_link )': paragraph.related_link.default
-'use  The form mode default linked to  paragraph entity( researcher_profiles )': paragraph.researcher_profiles.default
-'use  The form mode default linked to  node entity( long_read )': node.long_read.default
-'use  The form mode default linked to  paragraph entity( stories_block )': paragraph.stories_block.default
-'use  The form mode default linked to  paragraph entity( stories_cta )': paragraph.stories_cta.default
-'use  The form mode default linked to  paragraph entity( stories_curated_content )': paragraph.stories_curated_content.default
-'use  The form mode default linked to  paragraph entity( stories_link_list )': paragraph.stories_link_list.default
-'use  The form mode default linked to  paragraph entity( stories_quote )': paragraph.stories_quote.default
-'use  The form mode default linked to  paragraph entity( stories_table )': paragraph.stories_table.default
-'use  The form mode default linked to  paragraph entity( stories_text )': paragraph.stories_text.default
-'use  The form mode default linked to  paragraph entity( stories_views )': paragraph.stories_views.default
-'use  The form mode default linked to  paragraph entity( quote )': paragraph.quote.default
-'use  The form mode default linked to  block_content entity( card )': block_content.card.default
-'use  The form mode default linked to  block_content entity( card_wide )': block_content.card_wide.default
-'use  The form mode default linked to  block_content entity( collection_card )': block_content.collection_card.default
-'use  The form mode default linked to  paragraph entity( timeline )': paragraph.timeline.default
-'use  The form mode default linked to  block_content entity( alert )': block_content.alert.default
-'use  The form mode default linked to  block_content entity( banner )': block_content.banner.default
-'use  The form mode default linked to  paragraph entity( gallery )': paragraph.gallery.default
-'use  The form mode default linked to  paragraph entity( modal_image )': paragraph.modal_image.default
-'use  The form mode default linked to  paragraph entity( logo_block )': paragraph.logo_block.default
-'use  The form mode default linked to  paragraph entity( in_page_menu )': paragraph.in_page_menu.default
-'use  The form mode default linked to  paragraph entity( tab )': paragraph.tab.default
-'use  The form mode default linked to  paragraph entity( tab_box )': paragraph.tab_box.default
-'use  The form mode default linked to  paragraph entity( box )': paragraph.box.default
-'use  The form mode default linked to  paragraph entity( media_list )': paragraph.media_list.default
-'use  The form mode default linked to  taxonomy_term entity( global )': taxonomy_term.global.default
-'use  The form mode default linked to  block_content entity( icon_block )': block_content.icon_block.default
-'use  The form mode default linked to  block_content entity( banner_custom )': block_content.banner_custom.default
-'use  The form mode default linked to  paragraph entity( image_round )': paragraph.image_round.default
-'use  The form mode default linked to  paragraph entity( image_small )': paragraph.image_small.default
-'use  The form mode default linked to  paragraph entity( related_content )': paragraph.related_content.default
-'use  The form mode default linked to  paragraph entity( related_project )': paragraph.related_project.default
-'use  The form mode default linked to  paragraph entity( accordion_box )': paragraph.accordion_box.default
-'use  The form mode default linked to  paragraph entity( accordion_section )': paragraph.accordion_section.default
-'use  The form mode default linked to  paragraph entity( highchart )': paragraph.highchart.default
-'use  The form mode default linked to  paragraph entity( related_publication_inline )': paragraph.related_publication_inline.default
-'use  The form mode default linked to  node entity( hidden_page )': node.hidden_page.default
-'use  The form mode default linked to  contact_message entity( feedback )': contact_message.feedback.default
-'use  The form mode default linked to  block_content entity( view_block )': block_content.view_block.default
-'use  The form mode default linked to  node entity( book )': node.book.default
-'use  The form mode default linked to  node entity( webform )': node.webform.default
-'use  The form mode default linked to  node entity( hidden_handbrake )': node.hidden_handbrake.default
-'use  The form mode default linked to  taxonomy_term entity( un_geoscheme_regional_groupings )': taxonomy_term.un_geoscheme_regional_groupings.default
-'use  The form mode guest_register linked to  user entity( user )': user.user.guest_register
-'use  The form mode register linked to  user entity( user )': user.user.register
-'use  The form mode contributor linked to  user entity( user )': user.user.contributor
-'use  The form mode default linked to  message entity( example_create_comment )': message.example_create_comment.default
-'use  The form mode default linked to  message entity( example_create_node )': message.example_create_node.default
-'use  The form mode default linked to  paragraph entity( sticky_box )': paragraph.sticky_box.default
-'use  The form mode default linked to  block_content entity( key_figure )': block_content.key_figure.default
-'use  The form mode default linked to  paragraph entity( key_figure )': paragraph.key_figure.default
-'use  The form mode default linked to  paragraph entity( related_content_no_image )': paragraph.related_content_no_image.default
-'use  The form mode default linked to  node entity( impact_story )': node.impact_story.default
-'use  The form mode default linked to  paragraph entity( related_card )': paragraph.related_card.default
-'use  The form mode default linked to  paragraph entity( form )': paragraph.form.default
-'use  The form mode default linked to  paragraph entity( unstyled )': paragraph.unstyled.default
-'use  The form mode default linked to  block_content entity( form_block )': block_content.form_block.default
-'use  The form mode default linked to  node entity( external_resource )': node.external_resource.default
-'use  The form mode bulk_edit linked to  node entity( external_resource )': node.external_resource.bulk_edit
-'use  The form mode manager_admin linked to  node entity( external_resource )': node.external_resource.manager_admin
-creation+editor+media+audio: media.audio.default
-creation+manager+media+audio: media.audio.default
-creation+administrator+media+audio: media.audio.default
-modification+editor+media+audio: media.audio.default
-modification+manager+media+audio: media.audio.default
-modification+administrator+media+audio: media.audio.default
-creation+publications_editor+media+document: media.document.default
-creation+publications_manager+media+document: media.document.default
-creation+editor+media+document: media.document.default
-creation+manager+media+document: media.document.default
-creation+administrator+media+document: media.document.default
-modification+publications_editor+media+document: media.document.default
-modification+publications_manager+media+document: media.document.default
-modification+editor+media+document: media.document.default
-modification+manager+media+document: media.document.default
-modification+administrator+media+document: media.document.default
-creation+hh_reviewer+media+image: media.image.default
-creation+publications_editor+media+image: media.image.default
-creation+publications_manager+media+image: media.image.default
-creation+editor+media+image: media.image.default
-creation+manager+media+image: media.image.default
-creation+administrator+media+image: media.image.default
-modification+hh_reviewer+media+image: media.image.default
-modification+publications_editor+media+image: media.image.default
-modification+publications_manager+media+image: media.image.default
-modification+editor+media+image: media.image.default
-modification+manager+media+image: media.image.default
-modification+administrator+media+image: media.image.default
-creation+publications_manager+media+remote_video: media.remote_video.default
-creation+editor+media+remote_video: media.remote_video.default
-creation+manager+media+remote_video: media.remote_video.default
-creation+administrator+media+remote_video: media.remote_video.default
-modification+publications_manager+media+remote_video: media.remote_video.default
-modification+editor+media+remote_video: media.remote_video.default
-modification+manager+media+remote_video: media.remote_video.default
-modification+administrator+media+remote_video: media.remote_video.default
-creation+publications_manager+media+video: media.video.default
-creation+editor+media+video: media.video.default
-creation+manager+media+video: media.video.default
-creation+administrator+media+video: media.video.default
-modification+publications_manager+media+video: media.video.default
-modification+editor+media+video: media.video.default
-modification+manager+media+video: media.video.default
-modification+administrator+media+video: media.video.default
-creation+manager+node+external_resource: node.external_resource.default
-creation+administrator+node+external_resource: node.external_resource.default
-modification+manager+node+external_resource: node.external_resource.default
-modification+administrator+node+external_resource: node.external_resource.default
-creation+publications_editor+node+publication: node.publication.default
-creation+publications_manager+node+publication: node.publication.manager_admin
-creation+editor+node+publication: node.publication.manager_admin
-creation+manager+node+publication: node.publication.manager_admin
-creation+administrator+node+publication: node.publication.manager_admin
-modification+publications_editor+node+publication: node.publication.default
-modification+publications_manager+node+publication: node.publication.manager_admin
-modification+editor+node+publication: node.publication.manager_admin
-modification+manager+node+publication: node.publication.manager_admin
-modification+administrator+node+publication: node.publication.manager_admin
-creation+publications_editor+taxonomy_term+organisation: taxonomy_term.organisation.dashboard_add_organisation
-creation+editor+taxonomy_term+organisation: taxonomy_term.organisation.dashboard_add_organisation
-creation+manager+taxonomy_term+organisation: taxonomy_term.organisation.default
-creation+administrator+taxonomy_term+organisation: taxonomy_term.organisation.default
-modification+publications_editor+taxonomy_term+organisation: taxonomy_term.organisation.dashboard_add_organisation
-modification+editor+taxonomy_term+organisation: taxonomy_term.organisation.dashboard_add_organisation
-modification+manager+taxonomy_term+organisation: taxonomy_term.organisation.default
-modification+administrator+taxonomy_term+organisation: taxonomy_term.organisation.default
-creation+publications_editor+taxonomy_term+person: taxonomy_term.person.dashboard_add_author
-creation+editor+taxonomy_term+person: taxonomy_term.person.dashboard_add_author
-creation+manager+taxonomy_term+person: taxonomy_term.person.default
-creation+administrator+taxonomy_term+person: taxonomy_term.person.default
-modification+publications_editor+taxonomy_term+person: taxonomy_term.person.dashboard_add_author
-modification+editor+taxonomy_term+person: taxonomy_term.person.dashboard_add_author
-modification+manager+taxonomy_term+person: taxonomy_term.person.default
-modification+administrator+taxonomy_term+person: taxonomy_term.person.default
-creation+editor+user+user: user.user.default
-creation+manager+user+user: user.user.default
-creation+administrator+user+user: user.user.default
-modification+editor+user+user: user.user.default
-modification+manager+user+user: user.user.default
-modification+administrator+user+user: user.user.default
-'use  The form mode default linked to  block_content entity( heading )': block_content.heading.default
-'use  The form mode dashboard_add_author linked to  taxonomy_term entity( tags )': taxonomy_term.tags.dashboard_add_author
-'use  The form mode default linked to  paragraph entity( boxed_quote )': paragraph.boxed_quote.default
-'use  The form mode default linked to  node entity( map_entry )': node.map_entry.default
-'use  The form mode default linked to  block_content entity( quote_block )': block_content.quote_block.default
-'use  The form mode default linked to  paragraph entity( advanced_chart )': paragraph.advanced_chart.default
-'use  The form mode default linked to  node entity( series_page )': node.series_page.default
-'use  The form mode default linked to  block_content entity( logo_block )': block_content.logo_block.default
+defaults:
+  node:
+    publication:
+      create:
+        publications_manager: manager_admin
+        editor: manager_admin
+        manager: manager_admin
+        administrator: manager_admin
+      edit:
+        publications_manager: manager_admin
+        editor: manager_admin
+        manager: manager_admin
+        administrator: manager_admin
+  taxonomy_term:
+    organisation:
+      create:
+        publications_editor: dashboard_add_organisation
+        editor: dashboard_add_organisation
+      edit:
+        publications_editor: dashboard_add_organisation
+        editor: dashboard_add_organisation
+    person:
+      create:
+        publications_editor: dashboard_add_author
+        editor: dashboard_add_author
+      edit:
+        publications_editor: dashboard_add_author
+        editor: dashboard_add_author

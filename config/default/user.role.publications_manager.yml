@@ -5,6 +5,9 @@ dependencies:
   config:
     - media.type.document
     - media.type.image
+    - media.type.remote_video
+    - media.type.video
+    - node.type.publication
   module:
     - file
     - form_mode_control

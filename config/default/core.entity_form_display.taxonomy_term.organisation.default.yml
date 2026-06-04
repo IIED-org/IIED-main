@@ -17,8 +17,8 @@ dependencies:
   module:
     - address
     - field_group
-    - image
     - link
+    - svg_image
     - text
 third_party_settings:
   field_group:
@@ -88,7 +88,8 @@ content:
     type: address_default
     weight: 7
     region: content
-    settings: {  }
+    settings:
+      wrapper_type: details
     third_party_settings: {  }
   field_logo:
     type: image_image
@@ -142,6 +143,11 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
+  translation:
+    weight: 10
+    settings: {  }
+    third_party_settings: {  }
+    region: content
 hidden:
   field_location_legacy: true
   path: true

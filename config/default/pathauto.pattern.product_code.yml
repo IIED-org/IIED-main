@@ -2,17 +2,18 @@ uuid: 00de0199-0cdc-453a-8efd-4493fd313276
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.publication
   module:
     - node
 id: product_code
 label: 'Product code'
 type: 'canonical_entities:node'
-pattern: '[node:field_product_code_new:value]'
+pattern: '/[node:field_product_code_new:value]'
 selection_criteria:
   4b99ff98-8359-4fdd-ae17-8e936a164434:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 4b99ff98-8359-4fdd-ae17-8e936a164434
     context_mapping:
       node: node
     bundles:
