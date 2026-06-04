@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\views_bulk_operations_test\Plugin\Action;
 
 use Drupal\Core\Action\Attribute\Action;
@@ -8,7 +10,7 @@ use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\views\ViewExecutable;
+use Drupal\node\Entity\Node;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsPreconfigurationInterface;
 
@@ -18,22 +20,17 @@ use Drupal\views_bulk_operations\Action\ViewsBulkOperationsPreconfigurationInter
 #[Action(
   id: 'views_bulk_operations_advanced_test_action',
   label: new TranslatableMarkup('VBO example action'),
-  type: ''
+  type: 'node'
 )]
-class ViewsBulkOperationsAdvancedTestAction extends ViewsBulkOperationsActionBase implements ViewsBulkOperationsPreconfigurationInterface, PluginFormInterface {
+final class ViewsBulkOperationsAdvancedTestAction extends ViewsBulkOperationsActionBase implements ViewsBulkOperationsPreconfigurationInterface, PluginFormInterface {
   use MessengerTrait;
 
   /**
    * {@inheritdoc}
    */
-  public function execute($entity = NULL) {
-    // Check if $this->view is an instance of ViewsExecutable.
-    if (!($this->view instanceof ViewExecutable)) {
-      throw new \Exception('View passed to action object is not an instance of \Drupal\views\ViewExecutable.');
-    }
-
+  public function execute(?Node $entity = NULL): TranslatableMarkup {
     // Check if context array has been passed to the action.
-    if (empty($this->context)) {
+    if (\count($this->context) === 0) {
       throw new \Exception('Context array empty in action object.');
     }
 
@@ -46,7 +43,7 @@ class ViewsBulkOperationsAdvancedTestAction extends ViewsBulkOperationsActionBas
     // Unpublish entity.
     if ($this->configuration['test_config'] === 'unpublish') {
       if (!$entity->isDefaultTranslation()) {
-        $entity = \Drupal::service('entity_type.manager')->getStorage('node')->load($entity->id());
+        $entity = Node::load($entity->id());
       }
       $entity->setUnpublished();
       $entity->save();
@@ -72,7 +69,7 @@ class ViewsBulkOperationsAdvancedTestAction extends ViewsBulkOperationsActionBas
    *
    * @param array $form
    *   Form array.
-   * @param \Drupal\views_bulk_operations_test\Plugin\Action\Drupal\Core\Form\FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    *
    * @return array

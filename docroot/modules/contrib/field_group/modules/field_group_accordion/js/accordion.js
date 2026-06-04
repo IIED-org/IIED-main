@@ -23,8 +23,8 @@
 
         // Get the index to set active.
         let activeIndex = false;
-        wrapper.find('.accordion-item').each((i) => {
-          if ($(this).hasClass('field-group-accordion-active')) {
+        wrapper.find('.accordion-item').each((i, element) => {
+          if ($(element).hasClass('field-group-accordion-active')) {
             activeIndex = i;
           }
         });

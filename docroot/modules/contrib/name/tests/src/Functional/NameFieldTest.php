@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\name\Functional;
 
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Component\Utility\Html;
 use Drupal\node\Entity\NodeType;
 
@@ -46,8 +47,13 @@ class NameFieldTest extends NameTestBase {
     $this->drupalLogin($this->adminUser);
 
     $this->drupalGet('admin/structure/types/manage/page/fields/add-field');
-    $this->getSession()->getPage()->fillField('new_storage_type', 'name');
-    $this->getSession()->getPage()->pressButton('Continue');
+
+    DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '11.2.2',
+      fn() => $this->getSession()->getPage()->clickLink('Name'),
+      fn() => !$this->getSession()->getPage()->fillField('new_storage_type', 'name') && $this->getSession()->getPage()->pressButton('Continue')
+    );
 
     $new_name_field = [
       'label' => 'Test name',
@@ -55,7 +61,13 @@ class NameFieldTest extends NameTestBase {
     ];
     $this->submitForm($new_name_field, 'Continue');
 
-    $this->submitForm([], 'Save settings');
+    DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '11.2.2',
+      fn() => $this->submitForm([], 'Save'),
+      fn() => $this->submitForm([], 'Save settings')
+    );
+
     $this->resetAll();
 
     // Required test.
@@ -70,7 +82,7 @@ class NameFieldTest extends NameTestBase {
 
     $this->submitForm($field_settings, 'Save settings');
 
-    $n = _name_translations();
+    $n = \Drupal::service('name.component_metadata')->getTranslations();
     $required_messages = [
       t('Label for @field field is required.', ['@field' => $n['title']]),
       t('Label for @field field is required.', ['@field' => $n['given']]),

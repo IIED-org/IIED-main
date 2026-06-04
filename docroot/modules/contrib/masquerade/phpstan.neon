@@ -1,0 +1,25 @@
+parameters:
+    level: 1
+    fileExtensions:
+        - php
+        - module
+        - inc
+        - install
+        - theme
+        - profile
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        # new static() is a best practice in Drupal, so we cannot fix that.
+        - "#^Unsafe usage of new static#"
+        -
+           message: "#^\\\\Drupal calls should be avoided in classes, use dependency injection instead$#"
+           count: 1
+           path: src/MasqueradeCallbacks.php
+        # Hook attributes only exist in Drupal 11.1+. Backport to 10.5/10.6 was
+        # reverted (see https://www.drupal.org/i/3482464); attributes act as
+        # inert metadata on older cores while procedural #[LegacyHook] wrappers
+        # provide the runtime path.
+        - '#^Attribute class Drupal\\Core\\Hook\\Attribute\\(Legacy)?Hook does not exist\.$#'
+        # PHPUnit\Framework\Attributes\* namespace exists from PHPUnit 10 onward;
+        # earlier PHPUnit shipped with older Drupal cores does not have it.
+        - '#^Attribute class PHPUnit\\Framework\\Attributes\\RunTestsInSeparateProcesses does not exist\.$#'

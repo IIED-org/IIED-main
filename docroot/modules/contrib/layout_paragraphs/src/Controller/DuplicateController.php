@@ -30,14 +30,14 @@ class DuplicateController extends ControllerBase {
   protected $tempstore;
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function __construct(LayoutParagraphsLayoutTempstoreRepository $tempstore) {
     $this->tempstore = $tempstore;
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -54,7 +54,7 @@ class DuplicateController extends ControllerBase {
    *   The source component to be cloned.
    *
    * @return array|\Drupal\Core\Ajax\AjaxResponse
-   *   A build array or Ajax respone.
+   *   A build array or Ajax response.
    */
   public function duplicate(LayoutParagraphsLayout $layout_paragraphs_layout, string $source_uuid) {
     $this->setLayoutParagraphsLayout($layout_paragraphs_layout);

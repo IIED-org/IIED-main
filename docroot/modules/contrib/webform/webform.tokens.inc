@@ -1186,7 +1186,7 @@ function _webform_token_render_more($more_title, $more) {
  * @return string
  *   Formatted interval wait time.
  */
-function _webform_token_get_interval_wait($interval_setting, BubbleableMetadata $bubbleable_metadata, WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
+function _webform_token_get_interval_wait($interval_setting, BubbleableMetadata $bubbleable_metadata, ?WebformInterface $webform = NULL, ?EntityInterface $source_entity = NULL, ?AccountInterface $account = NULL) {
   // Get last submission completed time.
   /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
   $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');

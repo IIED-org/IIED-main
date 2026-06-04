@@ -1,4 +1,32 @@
-# Installation Using Composer (recommended)
+# Installation
+
+## Using npm (new)
+
+If you are using npm for JavaScript assets and have a build step that would
+run `npm install` (for example), then you can add a package.json file to your
+site root that looks like this:
+
+        {
+            "name": "my_site",
+            "private": true,
+            "scripts": {
+                "postinstall": "npm run libraries:copy --workspaces --if-present"
+            },
+            "workspaces": [
+                "web/modules/contrib/charts/**/*"
+            ]
+        }
+
+If you already have a package.json file present in your site root, then edit
+it to include the "postinstall" script and the "workspaces".
+
+`npm install` will then add your JS files to the appropriate library
+directories (e.g. web/libraries/chart.js).
+
+This assumes that you are using the "web" directory and the charts module
+is in a directory like "web/modules/contrib/charts".
+
+## Using Composer
 
 If you use Composer to manage dependencies, edit your site's "composer.json"
 file as follows.

@@ -4,10 +4,13 @@ namespace Drupal\multiple_registration\Form;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\ProxyClass\Routing\RouteBuilder;
+use Drupal\Core\Routing\RouteBuilderInterface;
 use Drupal\multiple_registration\Controller\MultipleRegistrationController;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -47,11 +50,11 @@ class AccessSettingsPageForm extends ConfigFormBase {
    *   The multiple registration controller.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cacheBackend
    *   The cacheBackend service.
-   * @param \Drupal\Core\ProxyClass\Routing\RouteBuilder $routerBuilder
+   * @param \Drupal\Core\Routing\RouteBuilderInterface $routerBuilder
    *   The routerBuilder service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, MultipleRegistrationController $multipleRegistrationController, CacheBackendInterface $cacheBackend, RouteBuilder $routerBuilder) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, MultipleRegistrationController $multipleRegistrationController, CacheBackendInterface $cacheBackend, RouteBuilderInterface $routerBuilder, TypedConfigManagerInterface $typed_configmanager) {
+    parent::__construct($config_factory, $typed_configmanager);
     $this->multipleRegistrationController = $multipleRegistrationController;
     $this->cacheRender = $cacheBackend;
     $this->routeBuilder = $routerBuilder;
@@ -65,7 +68,8 @@ class AccessSettingsPageForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('multiple_registration.controller_service'),
       $container->get('cache.render'),
-      $container->get('router.builder')
+      $container->get('router.builder'),
+      $container->get('config.typed')
     );
   }
 
@@ -91,13 +95,15 @@ class AccessSettingsPageForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $config = $this->config('multiple_registration.access_settings_page_form_config');
+    $roles = Role::loadMultiple();
+    $roles = array_map(fn(RoleInterface $role) => $role->label(), $roles);
 
     $form['multiple_registration_pages_allowed_list'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Multiple registration allowed pages.'),
       '#description' => $this->t('Select multiple registration pages which will be accessible to anonymous user.'),
-      '#default_value' => $config->get('multiple_registration_pages_allowed_list'),
-      '#options' => user_role_names(),
+      '#default_value' => $config->get('multiple_registration_pages_allowed_list') ?? [],
+      '#options' => $roles,
     ];
 
     // Hide authenticated and anonymous roles from the allowed pages form to

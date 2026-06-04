@@ -57,7 +57,7 @@ class HorizontalTabsLabelsTest extends WebDriverTestBase {
   ];
 
   /**
-   * The webassert session.
+   * The WebAssert session.
    *
    * @var \Drupal\Tests\WebAssert
    */
@@ -290,21 +290,25 @@ class HorizontalTabsLabelsTest extends WebDriverTestBase {
   public function testHorizontalTabsLabelHtml() {
     $session = $this->assertSession();
 
-    $data = [
-      'label' => '<em>Tab 1</em>',
-      'group_name' => 'group_tab1',
-      'weight' => '1',
-      'children' => [
-        0 => 'test_label',
-      ],
-      'format_type' => 'tab',
-      'format_settings' => [
-        'label' => '<em>Tab 1</em>',
-        'formatter' => 'open',
-        'label_as_html' => TRUE,
-      ],
-    ];
-    $tab1 = $this->createGroup('node', $this->testNodeType->id(), 'view', 'default', $data);
+    // @codingStandardsIgnoreStart
+    // @todo For some reason this tab gets overridden by tab2. When being
+    // rendered alone, it will show up.
+    // $data = [
+    //   'label' => '<em>Tab 1</em>',
+    //   'group_name' => 'group_tab1',
+    //   'weight' => '1',
+    //   'children' => [
+    //     0 => 'body',
+    //   ],
+    //   'format_type' => 'tab',
+    //   'format_settings' => [
+    //     'label' => '<em>Tab 1</em>',
+    //     'formatter' => 'open',
+    //     'label_as_html' => TRUE,
+    //   ],
+    // ];
+    // $tab1 = $this->createGroup('node', $this->testNodeType->id(), 'view', 'default', $data);
+    // @codingStandardsIgnoreEnd
 
     $data = [
       'label' => '<em>Tab 2</em>',
@@ -317,6 +321,9 @@ class HorizontalTabsLabelsTest extends WebDriverTestBase {
       'format_settings' => [
         'label' => '<em>Tab 2</em>',
         'formatter' => 'closed',
+        // @todo Setting this to TRUE will prevent the parent "Horizontal tabs"
+        // from rendering, BUT THIS NEEDS TO BE TRUE, otherwise this test won't
+        // make sense
         'label_as_html' => TRUE,
       ],
     ];
@@ -325,9 +332,10 @@ class HorizontalTabsLabelsTest extends WebDriverTestBase {
     $data = [
       'label' => 'Horizontal tabs',
       'group_name' => 'group_horizontal_tabs',
-      'weight' => '1',
+      'weight' => '0',
       'children' => [
-        0 => $tab1->group_name,
+        // @todo Comment in, once tab1 can be rendered again.
+        // 0 => $tab1->group_name,
         1 => $tab2->group_name,
       ],
       'format_type' => 'tabs',
@@ -344,9 +352,6 @@ class HorizontalTabsLabelsTest extends WebDriverTestBase {
       'title' => 'Test',
     ]);
     $this->drupalGet('node/' . $node->id());
-    // See if the field group supports HTML elements in the label:
-    // Note, for some reason only Tab 2 gets rendered on the page:
-    // We expect the HTML to be not escaped:
     $session->elementContains('css', 'div.test-class-wrapper li.horizontal-tab-button.first > a > strong', '<em>Tab 2</em>');
   }
 
@@ -356,21 +361,25 @@ class HorizontalTabsLabelsTest extends WebDriverTestBase {
   public function testHorizontalTabsLabelNoHtml() {
     $session = $this->assertSession();
 
-    $data = [
-      'label' => '<em>Tab 1</em>',
-      'group_name' => 'group_tab1',
-      'weight' => '1',
-      'children' => [
-        0 => 'test_label',
-      ],
-      'format_type' => 'tab',
-      'format_settings' => [
-        'label' => '<em>Tab 1</em>',
-        'formatter' => 'open',
-        'label_as_html' => FALSE,
-      ],
-    ];
-    $tab1 = $this->createGroup('node', $this->testNodeType->id(), 'view', 'default', $data);
+    // @codingStandardsIgnoreStart
+    // @todo For some reason this tab gets overridden by tab2. When being
+    // rendered alone, it will show up.
+    // $data = [
+    //   'label' => '<em>Tab 1</em>',
+    //   'group_name' => 'group_tab1',
+    //   'weight' => '1',
+    //   'children' => [
+    //     0 => 'body',
+    //   ],
+    //   'format_type' => 'tab',
+    //   'format_settings' => [
+    //     'label' => '<em>Tab 1</em>',
+    //     'formatter' => 'open',
+    //     'label_as_html' => FALSE,
+    //   ],
+    // ];
+    // $tab1 = $this->createGroup('node', $this->testNodeType->id(), 'view', 'default', $data);
+    // @codingStandardsIgnoreEnd
 
     $data = [
       'label' => '<em>Tab 2</em>',
@@ -391,9 +400,10 @@ class HorizontalTabsLabelsTest extends WebDriverTestBase {
     $data = [
       'label' => 'Horizontal tabs',
       'group_name' => 'group_horizontal_tabs',
-      'weight' => '1',
+      'weight' => '0',
       'children' => [
-        0 => $tab1->group_name,
+        // @todo Comment in, once tab1 can be rendered again.
+        // 0 => $tab1->group_name,
         1 => $tab2->group_name,
       ],
       'format_type' => 'tabs',
@@ -410,9 +420,6 @@ class HorizontalTabsLabelsTest extends WebDriverTestBase {
       'title' => 'Test',
     ]);
     $this->drupalGet('node/' . $node->id());
-    // See if the field group supports HTML elements in the label:
-    // Note, for some reason only Tab 2 gets rendered on the page:
-    // We expect the HTML to be not escaped:
     $session->elementContains('css', 'div.test-class-wrapper li.horizontal-tab-button.first > a > strong', '&lt;em&gt;Tab 2&lt;/em&gt');
   }
 

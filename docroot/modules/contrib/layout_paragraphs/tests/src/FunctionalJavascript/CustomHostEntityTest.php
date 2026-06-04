@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
 
 use Drupal\field\Entity\FieldConfig;
@@ -61,7 +63,7 @@ class CustomHostEntityTest extends BuilderTest {
   ];
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    *
    * Adds fields to the custom host entity rather than a content type.
    */

@@ -47,23 +47,21 @@ class LayoutParagraphsAllowedTypesEvent extends Event {
   protected $region;
 
   /**
-   * The context a new compoment is being added into.
+   * The context a new component is being added into.
    *
    * @var array
    */
   protected $context;
 
   /**
-   * Class cosntructor.
+   * Class constructor.
    *
    * @param array $types
    *   An array of paragraph types.
    * @param \Drupal\layout_paragraphs\LayoutParagraphsLayout $layout
    *   The layout object.
-   * @param string $parent_uuid
-   *   The parent uuid.
-   * @param string $region
-   *   The region.
+   * @param array $context
+   *   The context.
    */
   public function __construct(array $types, LayoutParagraphsLayout $layout, $context) {
     $this->types = $types;

@@ -5,7 +5,7 @@ namespace Drupal\name\Form;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\name\Entity\NameListFormat;
-use Drupal\name\NameFormatterInterface;
+use Drupal\name\Service\NameFormatterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,7 +16,7 @@ class NameListFormatForm extends EntityForm {
   /**
    * The name formatter.
    *
-   * @var \Drupal\name\NameFormatterInterface
+   * @var \Drupal\name\Service\NameFormatterInterface
    */
   protected $formatter;
 
@@ -32,7 +32,7 @@ class NameListFormatForm extends EntityForm {
   /**
    * Constructs a new NameListFormatForm object.
    *
-   * @param \Drupal\name\NameFormatterInterface $formatter
+   * @param \Drupal\name\Service\NameFormatterInterface $formatter
    *   The name formatter.
    */
   public function __construct(NameFormatterInterface $formatter) {
@@ -80,7 +80,7 @@ class NameListFormatForm extends EntityForm {
     $element['and'] = [
       '#type' => 'radios',
       '#title' => $this->t('Last delimiter type'),
-      '#options' => $this->formatter->getLastDelimitorTypes(),
+      '#options' => $this->formatter->getLastDelimiterTypes(),
       '#default_value' => $this->entity->and,
       '#description' => $this->t('This specifies the delimiter between the second to last and the last name.'),
       '#required' => TRUE,
@@ -88,7 +88,7 @@ class NameListFormatForm extends EntityForm {
     $element['delimiter_precedes_last'] = [
       '#type' => 'radios',
       '#title' => $this->t('Standard delimiter precedes last delimiter'),
-      '#options' => $this->formatter->getLastDelimitorBehaviors(),
+      '#options' => $this->formatter->getLastDelimiterBehaviors(),
       '#default_value' => $this->entity->delimiter_precedes_last,
       '#description' => $this->t('This specifies the delimiter between the second to last and the last name. Contextual means that the delimiter is only included for lists with three or more names.'),
       '#required' => TRUE,
@@ -100,7 +100,7 @@ class NameListFormatForm extends EntityForm {
       '#title' => $this->t('Reduce list and append <em>el al</em>'),
       '#options' => [0 => $this->t('Never reduce')] + $options,
       '#default_value' => $this->entity->el_al_min,
-      '#description' => $this->t('This specifies a limit on the number of names to display. After this limit, names are removed and the abbrivation <em>et al</em> is appended. This Latin abbrivation of <em>et alii</em> means "and others".'),
+      '#description' => $this->t('This specifies a limit on the number of names to display. After this limit, names are removed and the abbreviation <em>et al</em> is appended. This Latin abbreviation of <em>et alii</em> means "and others".'),
       '#required' => TRUE,
     ];
     $element['el_al_first'] = [
@@ -134,6 +134,7 @@ class NameListFormatForm extends EntityForm {
     else {
       $this->messenger()->addMessage($this->t('Name list format %label has been updated.', ['%label' => $this->entity->label()]));
     }
+
     return $this->entity->save();
   }
 
@@ -141,12 +142,9 @@ class NameListFormatForm extends EntityForm {
    * {@inheritdoc}
    */
   public function delete(array $form, FormStateInterface $form_state) {
-    $form_state['redirect_route'] = [
-      'route_name' => 'name_list_format.delete_form',
-      'route_parameters' => [
-        'name_list_format' => $this->entity->id(),
-      ],
-    ];
+    $form_state->setRedirect('entity.name_list_format.delete_form', [
+      'name_list_format' => $this->entity->id(),
+    ]);
   }
 
 }

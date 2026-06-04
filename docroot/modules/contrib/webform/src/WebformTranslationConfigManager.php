@@ -93,7 +93,7 @@ class WebformTranslationConfigManager implements WebformTranslationConfigManager
    * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
    *   The typed config manager.
    */
-  public function __construct(ModuleHandlerInterface $module_handler, FormBuilderInterface $form_builder, WebformElementManagerInterface $element_manager, WebformTranslationManagerInterface $translation_manager, TypedConfigManagerInterface $typed_config_manager = NULL) {
+  public function __construct(ModuleHandlerInterface $module_handler, FormBuilderInterface $form_builder, WebformElementManagerInterface $element_manager, WebformTranslationManagerInterface $translation_manager, ?TypedConfigManagerInterface $typed_config_manager = NULL) {
     $this->formBuilder = $form_builder;
     $this->moduleHandler = $module_handler;
     $this->elementManager = $element_manager;

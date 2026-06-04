@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
 
 /**
@@ -43,7 +45,7 @@ class CorrectRegionTest extends BuilderTestBase {
     $this->addTextComponent('Third item', '.layout__region--third .lpb-btn--add');
 
     // Click the new item's drag button.
-    // This should create a <div> with the id 'lpb-navigatin-msg'.
+    // This should create a <div> with the id 'lpb-navigating-msg'.
     $button = $page->find('css', '.layout__region--third .lpb-drag');
     $button->click();
 
@@ -60,11 +62,10 @@ class CorrectRegionTest extends BuilderTestBase {
     $this->keyPress('ArrowUp');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->keyPress('Enter');
-//    $this->assertSession()->assertWaitOnAjaxRequest();
-
+    // $this->assertSession()->assertWaitOnAjaxRequest();
     // Add a fourth item above the third item, which has been moved to the first
     // region. Ensure the fourth item is correctly added to the first region,
-    // hiding the controls ui first so it doesn't overlapp the + button.
+    // hiding the controls ui first so it doesn't overlap the + button.
     // @see https://www.drupal.org/project/layout_paragraphs/issues/3281169
     $this->forceHidden('.layout__region--first .lpb-controls');
     $this->addTextComponent('Fourth item', '.layout__region--first .lpb-btn--add');

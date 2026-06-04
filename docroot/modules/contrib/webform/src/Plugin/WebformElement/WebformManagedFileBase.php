@@ -191,7 +191,7 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function prepare(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     // Track if this element has been processed because the work-around below
     // for 'Issue #2705471: Webform states File fields' which nests the
     // 'managed_file' element in a basic container, which triggers this element
@@ -615,13 +615,13 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
   /**
    * Get the allowed file extensions for an element.
    *
-   * @param array $element
+   * @param array|null $element
    *   An element.
    *
    * @return string
    *   File extensions.
    */
-  protected function getFileExtensions(array $element = NULL) {
+  protected function getFileExtensions(?array $element = NULL) {
     $extensions = (!empty($element['#file_extensions'])) ? $element['#file_extensions'] : $this->getDefaultFileExtensions();
     $extensions = str_replace(',', ' ', $extensions);
     return $extensions;
@@ -1142,7 +1142,7 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
    * @param null|array $fids
    *   An array of file ids. If NULL all files are deleted.
    */
-  public static function deleteFiles(WebformSubmissionInterface $webform_submission, array $fids = NULL) {
+  public static function deleteFiles(WebformSubmissionInterface $webform_submission, ?array $fids = NULL) {
     // Make sure the file.module is enabled since this method is called from
     // \Drupal\webform\WebformSubmissionStorage::delete.
     if (!\Drupal::moduleHandler()->moduleExists('file')) {
@@ -1319,7 +1319,7 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
    *   Returns FALSE if the user can't access the file.
    *   Returns TRUE if the user can access the file.
    */
-  public static function accessFile(FileInterface $file, AccountInterface $account = NULL) {
+  public static function accessFile(FileInterface $file, ?AccountInterface $account = NULL) {
     if (empty($file)) {
       return NULL;
     }

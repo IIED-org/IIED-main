@@ -21,6 +21,7 @@
   },
   "require-dev": {
     "drupal/entity_usage": "2.x-dev",
-    "drupal/block_field": "~1.0"
+    "drupal/block_field": "~1.0",
+    "drupal/field_group": "^3.6"
   }
 }

@@ -13,15 +13,6 @@
         return;
       }
 
-      // The colorbox library uses jQuery.isFunction().
-      // This function was removed in jQuery 3.3.0.
-      // This is a workaround to avoid fixing the library.
-      if (!$.isFunction) {
-        $.isFunction = function (obj) {
-          return typeof obj === 'function' || false;
-        };
-      }
-
       if (settings.colorbox.mobiledetect && window.matchMedia) {
         // Disable Colorbox for small screens.
         var mq = window.matchMedia('(max-device-width: ' + settings.colorbox.mobiledevicewidth + ')');

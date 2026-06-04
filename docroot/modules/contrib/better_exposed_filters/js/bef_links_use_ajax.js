@@ -19,7 +19,7 @@
           // Prevent following the link URL.
           event.preventDefault();
 
-          const target = event.target;
+          const target = event.currentTarget;
 
           const link_name = links_multiple ? target.name : links_name;
           const link_value = target.name.substring(links_multiple ? links_name.length - 1 : links_name.length).replace(/^\[|\]$/g, '');

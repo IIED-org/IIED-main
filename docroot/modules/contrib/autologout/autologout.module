@@ -163,7 +163,7 @@ function autologout_autologout_prevent() {
         // Get current token.
         $currentToken = \Drupal::service('persistent_login.token_handler')->getTokenFromCookie($request);
         foreach ($rememberPersistentTokens as $value) {
-          if (1 == $value->getStatus() && $value->getSeries() == $currentToken->getSeries()) {
+          if (1 == $value->getStatus() && $value->getHashedSeries() == $currentToken->getHashedSeries()) {
             return TRUE;
           }
         }
@@ -253,7 +253,7 @@ function autologout_page_attachments_alter(array &$attachments) {
 
   // Get the Drupal cookie lifetime and samesite from Core.
   $options = \Drupal::getContainer()->getParameter('session.storage.options');
-  $lifetime = $options['cookie_lifetime'];
+  $lifetime = $options['cookie_lifetime'] ?? NULL;
   $expiry = \Drupal::time()->getRequestTime() + 2000000;
   if ($lifetime > 0) {
     $expiry = \Drupal::time()->getRequestTime() + $lifetime;
@@ -404,7 +404,7 @@ function autologout_user_login($account): void {
   $config = \Drupal::config('autologout.settings');
   // Get the Drupal cookie lifetime and samesite from Core.
   $options = \Drupal::getContainer()->getParameter('session.storage.options');
-  $lifetime = $options['cookie_lifetime'];
+  $lifetime = $options['cookie_lifetime'] ?? NULL;
   $cookie_samesite = $options['cookie_samesite'] ?? 'Lax';
   // By default, expire like cores expiry.
   $expiry = \Drupal::time()->getRequestTime() + 2000000;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\views_bulk_operations\Action;
 
 use Drupal\Core\Action\ActionInterface;

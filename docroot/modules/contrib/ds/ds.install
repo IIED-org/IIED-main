@@ -70,13 +70,13 @@ function ds_update_8004() {
 }
 
 /**
- * Fix scrambled fields in the UI
+ * Fix scrambled fields in the UI.
  */
 function ds_update_8005() {
-  // Fix scrambled fields
+  // Fix scrambled fields.
   $entity_storage = \Drupal::service('entity_type.manager')->getStorage('entity_view_display');
   /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $entity_display */
-  foreach($entity_storage->loadMultiple() as $entity_display) {
+  foreach ($entity_storage->loadMultiple() as $entity_display) {
     if ($ds_config = $entity_display->getThirdPartySettings('ds')) {
       $components = $entity_display->getComponents();
       if (empty($ds_config['regions'])) {
@@ -177,5 +177,14 @@ function ds_update_8012() {
 function ds_update_8013() {
   \Drupal::configFactory()->getEditable('ds.settings')
     ->set('layout_suggestion_bc', TRUE)
+    ->save(TRUE);
+}
+
+/**
+ * Sets the 'array_merge_recursive_bc' setting to TRUE.
+ */
+function ds_update_8014() {
+  \Drupal::configFactory()->getEditable('ds.settings')
+    ->set('array_merge_build_bc', TRUE)
     ->save(TRUE);
 }

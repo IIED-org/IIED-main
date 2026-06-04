@@ -155,14 +155,14 @@ class DynamicFieldPluginTest extends TestBase {
     ];
     $this->dsConfigureUi($fields, 'admin/structure/types/manage/article/display');
 
-    /* @var \Drupal\node\NodeInterface $node */
+    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entitiesTestSetup();
 
     // Look at node and verify the menu is visible.
     $this->drupalGet('node/' . $node->id());
     $this->assertSession()->responseContains('Add content');
 
-    // Ensure that there is no XSS attack possible
+    // Ensure that there is no XSS attack possible.
     $this->assertSession()->responseNotContains('<script>alert("XSS")</script>');
 
     // Try to set the depth to 3, to ensure we can save the block.

@@ -2,6 +2,7 @@
 
 namespace Drupal\taxonomy_menu\Controller;
 
+use Drupal\taxonomy_menu\TaxonomyMenuInterface;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
@@ -26,7 +27,9 @@ class TaxonomyMenu extends ControllerBase {
 
     // Get taxonomy and create menu links from vocabularies.
     foreach ($taxonomy_menus as $taxonomy_menu) {
-      $links += $taxonomy_menu->getLinks([]);
+      if ($taxonomy_menu instanceof TaxonomyMenuInterface) {
+        $links += $taxonomy_menu->getLinks([]);
+      }
     }
 
     return $links;

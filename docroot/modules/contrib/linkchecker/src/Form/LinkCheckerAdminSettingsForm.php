@@ -62,7 +62,7 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
   protected $linkCleanUp;
 
   /**
-   * The controller class for users..
+   * The user storage interface.
    *
    * @var \Drupal\user\UserStorageInterface
    */
@@ -359,6 +359,7 @@ class LinkCheckerAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Log level'),
       '#description' => $this->t('Controls the severity of logging.'),
       '#options' => [
+        '-1' => $this->t('- None -'),
         RfcLogLevel::DEBUG => $this->t('Debug messages'),
         RfcLogLevel::INFO => $this->t('All messages (default)'),
         RfcLogLevel::NOTICE => $this->t('Notices and errors'),

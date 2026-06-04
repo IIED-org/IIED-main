@@ -5,6 +5,9 @@ namespace Drupal\Tests\paragraphs\Kernel\migrate;
 use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\node\Entity\Node;
 use Drupal\Tests\paragraphs\Traits\ParagraphsNodeMigrationAssertionsTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Test 'classic' Paragraph content migration.
@@ -12,6 +15,8 @@ use Drupal\Tests\paragraphs\Traits\ParagraphsNodeMigrationAssertionsTrait;
  * @group paragraphs
  * @require entity_reference_revisions
  */
+#[RunTestsInSeparateProcesses]
+#[Group('paragraphs')]
 class ParagraphContentMigrationTest extends ParagraphsMigrationTestBase {
 
   use ParagraphsNodeMigrationAssertionsTrait;
@@ -72,6 +77,7 @@ class ParagraphContentMigrationTest extends ParagraphsMigrationTestBase {
    *
    * @dataProvider providerParagraphContentMigration
    */
+  #[DataProvider('providerParagraphContentMigration')]
   public function testParagraphContentMigration($migration_to_run) {
     if ($migration_to_run) {
       $this->executeMigration($migration_to_run);

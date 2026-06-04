@@ -7,12 +7,16 @@ use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\paragraphs\Entity\ParagraphsType;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Test the migration of paragraphs and field collection fields.
  *
  * @group paragraphs
  */
+#[RunTestsInSeparateProcesses]
+#[Group('paragraphs')]
 class ParagraphsFieldMigrationTest extends ParagraphsMigrationTestBase {
 
   /**

@@ -14,3 +14,7 @@ publishcontent.settings:
       type: label
     unpublish_text_value:
       type: label
+    publish_markup_value:
+      type: label
+    unpublish_markup_value:
+      type: label

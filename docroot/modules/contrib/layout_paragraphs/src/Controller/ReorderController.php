@@ -28,14 +28,14 @@ class ReorderController extends ControllerBase {
   protected $tempstore;
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function __construct(LayoutParagraphsLayoutTempstoreRepository $tempstore) {
     $this->tempstore = $tempstore;
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -46,7 +46,7 @@ class ReorderController extends ControllerBase {
   /**
    * Reorders a Layout Paragraphs Layout's components.
    *
-   * Expects an two-dimmensional array of components in the "components" POST
+   * Expects an two-dimensional array of components in the "components" POST
    * parameter with key/value pairs for "uuid", "parent_uuid", and "region".
    *
    * @param \Symfony\Component\HttpFoundation\Request $request

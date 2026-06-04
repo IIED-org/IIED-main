@@ -33,7 +33,7 @@ class PasswordConfirm extends Password {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function prepare(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
     $element['#theme_wrappers'] = [];
   }
@@ -41,7 +41,7 @@ class PasswordConfirm extends Password {
   /**
    * {@inheritdoc}
    */
-  protected function prepareElementValidateCallbacks(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  protected function prepareElementValidateCallbacks(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepareElementValidateCallbacks($element, $webform_submission);
     $element['#element_validate'][] = [get_class($this), 'validatePasswordConfirm'];
   }
@@ -49,7 +49,7 @@ class PasswordConfirm extends Password {
   /**
    * {@inheritdoc}
    */
-  protected function prepareElementPreRenderCallbacks(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  protected function prepareElementPreRenderCallbacks(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     $element['#pre_render'] = [[get_called_class(), 'preRenderWebformCompositeFormElement']];
   }
 

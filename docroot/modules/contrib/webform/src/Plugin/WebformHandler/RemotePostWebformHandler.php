@@ -759,7 +759,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
             break;
 
           case 'bool':
-          case 'boolean';
+          case 'boolean':
             $data[$key] = (bool) $type_value;
             break;
 
@@ -900,7 +900,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    * @param string $type
    *   The type of message to be displayed to the end use.
    */
-  protected function debug($message, $state, $request_url, $request_method, $request_type, $request_options, ResponseInterface $response = NULL, $type = 'warning') {
+  protected function debug($message, $state, $request_url, $request_method, $request_type, $request_options, ?ResponseInterface $response = NULL, $type = 'warning') {
     if (empty($this->configuration['debug'])) {
       return;
     }

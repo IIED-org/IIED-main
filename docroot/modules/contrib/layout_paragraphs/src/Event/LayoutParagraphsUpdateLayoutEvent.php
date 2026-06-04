@@ -17,7 +17,7 @@ use Drupal\layout_paragraphs\LayoutParagraphsLayout;
  * avoid refreshing the entire builder whenever possible (for example, by
  * appending the HTML for a new paragraph in the correct position in the ui).
  * There are times when simply appending or replacing the new or altered
- * paragraph is insufficient for correclty rendering the layout, and the entire
+ * paragraph is insufficient for correctly rendering the layout, and the entire
  * builder interface should be refreshed by setting $needsRefresh to true in
  * this event.
  */
@@ -47,7 +47,7 @@ class LayoutParagraphsUpdateLayoutEvent extends Event {
   public $needsRefresh = FALSE;
 
   /**
-   * Class cosntructor.
+   * Class constructor.
    *
    * @param \Drupal\layout_paragraphs\LayoutParagraphsLayout $original_layout
    *   The layout object.

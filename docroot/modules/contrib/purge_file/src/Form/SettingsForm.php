@@ -64,11 +64,22 @@ class SettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    $form['wildcard'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Wildcard'),
-      '#description' => $this->t('Add wildcard to end of purge URL, purging all variants, such as query string tracking codes. Requires that the purger supports the "wildcardurl" invalidation.'),
-      '#default_value' => $config->get('wildcard'),
+    $form['invalidation_type'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Invalidation type'),
+      '#description' => $this->t('The type of invalidation to perform. Use wildcard types to automatically add wildcard to end of purge URL, purging all variants, such as query string tracking codes.'),
+      '#default_value' => $config->get('invalidation_type'),
+      '#options' => [
+        // \Drupal\purge\Plugin\Purge\Invalidation\UrlInvalidation:
+        'url' => 'Url',
+        // \Drupal\purge\Plugin\Purge\Invalidation\PathInvalidation:
+        'path' => 'Path',
+        // \Drupal\purge\Plugin\Purge\Invalidation\WildcardUrlInvalidation:
+        'wildcardurl' => 'Wildcard Url',
+        // \Drupal\purge\Plugin\Purge\Invalidation\WildcardPathInvalidation:
+        'wildcardpath' => 'Wildcard Path',
+      ],
+      '#required' => TRUE,
     ];
 
     $form['debug'] = [
@@ -86,10 +97,10 @@ class SettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('purge_file.settings')
-      ->set('workflow', $form_state->getValue('workflow'))
-      ->set('wildcard', (bool) $form_state->getValue('wildcard'))
       ->set('debug', (bool) $form_state->getValue('debug'))
       ->set('base_urls', $form_state->getValue('base_urls'))
+      ->set('invalidation_type', $form_state->getValue('invalidation_type'))
+      ->set('workflow', $form_state->getValue('workflow'))
       ->save();
     parent::submitForm($form, $form_state);
   }

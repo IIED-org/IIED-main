@@ -116,7 +116,7 @@ class Address extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function prepare(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
     $element['#theme_wrappers'] = [];
@@ -130,7 +130,7 @@ class Address extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  protected function prepareElementValidateCallbacks(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  protected function prepareElementValidateCallbacks(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepareElementValidateCallbacks($element, $webform_submission);
 
     $element['#element_validate'][] = [get_class($this), 'validateAddress'];
@@ -139,7 +139,7 @@ class Address extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  protected function prepareElementPreRenderCallbacks(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  protected function prepareElementPreRenderCallbacks(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepareElementPreRenderCallbacks($element, $webform_submission);
 
     // Replace 'form_element' theme wrapper with composite form element.

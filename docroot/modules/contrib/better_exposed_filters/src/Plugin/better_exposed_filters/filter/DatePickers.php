@@ -38,30 +38,76 @@ class DatePickers extends FilterWidgetBase {
    *
    * @param array $element
    *   The form element to process.
+   * @param bool $is_double_date
+   *   Indicates this is a double input date.
+   * @param string $field_id
+   *   The element field id.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
    */
-  protected function convertOffsets(array &$element): void {
+  protected function convertOffsets(array &$element, bool $is_double_date, string $field_id, FormStateInterface $form_state): void {
     $options = $this->handler->options;
 
     if ($options['value']['type'] !== 'offset') {
       return;
     }
-    unset($options['value']['type']);
 
-    foreach (array_keys($options['value']) as $key) {
-      if (!array_key_exists($key, $element) || !array_key_exists('#default_value', $element[$key])) {
-        continue;
-      }
+    $userInput = $form_state->getUserInput();
 
-      // Convert offset initial values to dates.
-      if ($element[$key]['#default_value'] === $options['value'][$key]) {
-        try {
-          $date = new \DateTime($element[$key]['#default_value']);
-          $element[$key]['#default_value'] = $date->format('Y-m-d');
-        }
-        catch (\Exception $e) {
-          $this->getLogger('better_exposed_filters')->log(RfcLogLevel::ERROR, $e->getMessage());
+    // Check if a Y-m-d date was submitted (not an offset string).
+    // If so, we need to change the filter type from 'offset' to 'date'
+    // so Views processes the value correctly.
+    $hasDateInput = FALSE;
+    if ($is_double_date) {
+      if ((isset($userInput[$field_id]['min']) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $userInput[$field_id]['min']))
+        || (isset($userInput[$field_id]['max']) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $userInput[$field_id]['max']))) {
+        $hasDateInput = TRUE;
+      }
+    }
+    else {
+      if (isset($userInput[$field_id]) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $userInput[$field_id])) {
+        $hasDateInput = TRUE;
+      }
+    }
+
+    // Change the filter type to 'date' when a Y-m-d date is submitted.
+    // This ensures Views processes the value as an absolute date, not as an
+    // offset from current time.
+    if ($hasDateInput) {
+      $this->handler->options['value']['type'] = 'date';
+      $this->handler->value['type'] = 'date';
+    }
+
+    try {
+      if ($is_double_date) {
+        foreach (['min', 'max'] as $key) {
+          // Convert offset initial values to dates for display.
+          if (isset($userInput[$field_id][$key]) && $userInput[$field_id][$key] !== '') {
+            $date = new \DateTime($userInput[$field_id][$key]);
+          }
+          else {
+            $date = new \DateTime($element[$key]['#default_value']);
+          }
+
+          // Set the default_value attribute for JavaScript to use for display.
+          $element[$key]['#attributes']['default_value'] = $date->format('Y-m-d');
         }
       }
+      else {
+        // Convert offset initial values to dates for display.
+        if (isset($userInput[$field_id]) && $userInput[$field_id] !== '') {
+          $date = new \DateTime($userInput[$field_id]);
+        }
+        else {
+          $date = new \DateTime($element['#default_value']);
+        }
+
+        // Set the default_value attribute for JavaScript to use for display.
+        $element['#attributes']['default_value'] = $date->format('Y-m-d');
+      }
+    }
+    catch (\Exception $e) {
+      $this->getLogger('better_exposed_filters')->log(RfcLogLevel::ERROR, $e->getMessage());
     }
   }
 
@@ -83,66 +129,29 @@ class DatePickers extends FilterWidgetBase {
 
     parent::exposedFormAlter($form, $form_state);
 
-    // Attach the JS (@see /js/datepickers.js)
-    $form['#attached']['library'][] = 'better_exposed_filters/datepickers';
-
-    // Date picker settings.
-    $element['#attached']['drupalSettings']['better_exposed_filters']['datepicker'] = TRUE;
-    $element['#attached']['drupalSettings']['better_exposed_filters']['datepicker_options'] = [];
-    $drupal_settings = &$element['#attached']['drupalSettings']['better_exposed_filters']['datepicker_options'];
-
     // Single Date API-based input element.
-    $is_single_date = isset($element['value']['#type'])
-      && 'date_text' == $element['value']['#type'];
+    $is_single_date = isset($element['#type']);
+
     // Double Date-API-based input elements such as "in-between".
-    $is_double_date = isset($element['min']['#type']) && isset($element['max']['#type'])
-      && 'date_text' === $element['min']['#type'] && 'date_text' === $element['max']['#type'];
+    $is_double_date = isset($element['min']['#type']) && isset($element['max']['#type']);
 
-    if ($is_single_date || $is_double_date) {
-      if (isset($element['value'])) {
-        $format = $element['value']['#date_format'];
-        $element['value']['#type'] = 'date';
-        $element['value']['#attributes']['class'][] = 'bef-datepicker';
-        $element['value']['#attributes']['autocomplete'] = 'off';
-      }
-      else {
-        // Both min and max share the same format.
-        $format = $element['min']['#date_format'];
-        $element['min']['#type'] = 'date';
-        $element['max']['#type'] = 'date';
-        $element['min']['#attributes']['class'][] = 'bef-datepicker';
-        $element['max']['#attributes']['class'][] = 'bef-datepicker';
-        $element['min']['#attributes']['autocomplete'] = 'off';
-        $element['max']['#attributes']['autocomplete'] = 'off';
-      }
-
-      $drupal_settings['dateformat'] = $format;
+    if ($is_single_date) {
+      $element['#type'] = 'date';
+      $element['#attributes']['class'][] = 'bef-datepicker';
+      $element['#attributes']['autocomplete'] = 'off';
     }
-    else {
-      /*
-       * Standard Drupal date field.  Depending on the settings, the field
-       * can be at $element (single field) or
-       * $element[subfield] for two-value date fields or filters
-       * with exposed operators.
-       */
-      $fields = ['min', 'max', 'value'];
-      if (count(array_intersect($fields, array_keys($element)))) {
-        foreach ($fields as $field) {
-          if (isset($element[$field])) {
-            $element[$field]['#type'] = 'date';
-            $element[$field]['#attributes']['class'][] = 'bef-datepicker';
-            $element[$field]['#attributes']['autocomplete'] = 'off';
-          }
-        }
-      }
-      else {
-        $element['#type'] = 'date';
-        $element['#attributes']['class'][] = 'bef-datepicker';
-        $element['#attributes']['autocomplete'] = 'off';
-      }
+    elseif ($is_double_date) {
+      // Both min and max share the same format.
+      $element['min']['#type'] = 'date';
+      $element['max']['#type'] = 'date';
+      $element['min']['#attributes']['class'][] = 'bef-datepicker';
+      $element['max']['#attributes']['class'][] = 'bef-datepicker';
+      $element['min']['#attributes']['autocomplete'] = 'off';
+      $element['max']['#attributes']['autocomplete'] = 'off';
     }
 
-    $this->convertOffsets($element);
+    $this->convertOffsets($element, $is_double_date, $field_id, $form_state);
+    $form['#attached']['library'][] = 'better_exposed_filters/datepickers';
   }
 
 }

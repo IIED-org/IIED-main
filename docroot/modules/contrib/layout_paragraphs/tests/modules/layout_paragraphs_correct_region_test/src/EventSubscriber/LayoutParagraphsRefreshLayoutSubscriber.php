@@ -11,7 +11,7 @@ use Drupal\layout_paragraphs\Event\LayoutParagraphsUpdateLayoutEvent;
 class LayoutParagraphsRefreshLayoutSubscriber implements EventSubscriberInterface {
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
     return [

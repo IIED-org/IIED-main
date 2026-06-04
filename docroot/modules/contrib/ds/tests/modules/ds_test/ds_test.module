@@ -110,7 +110,7 @@ function ds_test_form_entity_view_display_edit_form_alter(&$form, FormStateInter
  * Implements hook_ds_pre_render_alter().
  */
 function ds_test_ds_pre_render_alter(&$layout_render_array, array $context, array &$vars) {
-  /** @var EntityInterface $entity */
+  /** @var \Drupal\Core\Entity\EntityInterface $entity */
   $entity = $context['entity'];
   if (isset($entity->title->value) && $entity->title->value === 'Alter me!') {
     $layout_render_array['left'][] = ['#markup' => 'cool!', '#weight' => 20];

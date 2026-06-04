@@ -3,7 +3,6 @@
 namespace Drupal\Tests\ds\Functional;
 
 use Drupal\block_content\Entity\BlockContent;
-use Drupal\user\Entity\User;
 
 /**
  * Tests for the manage display tab in Display Suite.
@@ -32,7 +31,7 @@ class BlockTest extends TestBase {
   /**
    * The created user.
    *
-   * @var User
+   * @var \Drupal\user\Entity\User
    */
   protected $adminUser;
 
@@ -69,11 +68,19 @@ class BlockTest extends TestBase {
     $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains('Block type Basic Block has been added.');
 
+    // Create a body field for the block type for D11.
+    $d11 = FALSE;
+    if (method_exists($this, 'createBodyField')) {
+      $d11 = TRUE;
+      drupal_flush_all_caches();
+      $this->createBodyField('block_content', 'basic');
+    }
+
     // Create a basic block.
     $edit = [];
     $edit['info[0][value]'] = 'Test Block';
     $edit['body[0][value]'] = $this->randomMachineName(16);
-    $this->drupalGet('block/add/basic', []);
+    $this->drupalGet('block/add/basic');
     $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains('Basic Block Test Block has been created.');
 
@@ -105,7 +112,12 @@ class BlockTest extends TestBase {
     $this->assertSession()->pageTextContains('Test Block');
     $xpath = $this->xpath('//div[@class="region region-sidebar-first"]/div/div[@class="block-content block-content--type-basic block-content--view-mode-full ds-2col clearfix"]/div[@class="group-left"]/div[@class="field field--name-block-description field--type-ds field--label-hidden field__item"]/h2');
     $this->assertEquals(count($xpath), 1, 'Description in group-left');
-    $xpath = $this->xpath('//div[@class="region region-sidebar-first"]/div/div[@class="block-content block-content--type-basic block-content--view-mode-full ds-2col clearfix"]/div[@class="group-right"]/div[@class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item"]/p');
+    if ($d11) {
+      $xpath = $this->xpath('//div[@class="region region-sidebar-first"]/div/div[@class="block-content block-content--type-basic block-content--view-mode-full ds-2col clearfix"]/div[@class="group-right"]/div[@class="clearfix text-formatted field field--name-body field--type-text-long field--label-hidden field__item"]/p');
+    }
+    else {
+      $xpath = $this->xpath('//div[@class="region region-sidebar-first"]/div/div[@class="block-content block-content--type-basic block-content--view-mode-full ds-2col clearfix"]/div[@class="group-right"]/div[@class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item"]/p');
+    }
     $this->assertEquals(count($xpath), 1, 'Body in group-right');
   }
 

@@ -50,14 +50,14 @@ class LayoutParagraphsBuilderForm extends FormBase {
   protected $entityTypeManager;
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'layout_paragraphs_builder_form';
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function __construct(LayoutParagraphsLayoutTempstoreRepository $tempstore, EntityTypeManagerInterface $entity_type_manager) {
     $this->tempstore = $tempstore;
@@ -65,7 +65,7 @@ class LayoutParagraphsBuilderForm extends FormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -91,9 +91,10 @@ class LayoutParagraphsBuilderForm extends FormBase {
   public function buildForm(
     array $form,
     FormStateInterface $form_state,
-    ContentEntityInterface $entity = NULL,
-    string $field_name = NULL,
-    string $view_mode = NULL) {
+    ?ContentEntityInterface $entity = NULL,
+    ?string $field_name = NULL,
+    ?string $view_mode = NULL,
+  ) {
 
     $parents = array_merge($form['#parents'] ?? [], ['layout_paragraphs_storage_key']);
     $input = $form_state->getUserInput();
@@ -203,7 +204,7 @@ class LayoutParagraphsBuilderForm extends FormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    *
    * Saves the layout to its parent entity.
    *
@@ -222,8 +223,10 @@ class LayoutParagraphsBuilderForm extends FormBase {
     $field_name = $this->layoutParagraphsLayout->getFieldName();
     if ($entity instanceof RevisionableInterface) {
       $revision_id = $entity->getRevisionId();
+      /** @var \Drupal\Core\Entity\RevisionableStorageInterface $storage */
+      $storage = $this->entityTypeManager->getStorage($entity_type);
       /** @var \Drupal\Core\Entity\RevisionableInterface $entity */
-      $entity = $this->entityTypeManager->getStorage($entity_type)->loadRevision($revision_id);
+      $entity = $storage->loadRevision($revision_id);
       $entity->setNewRevision(FALSE);
     }
     else {

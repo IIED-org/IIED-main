@@ -1,4 +1,0 @@
-name: CKEditor WordCount
-type: module
-description: CKEditor WordCount
-core_version_requirement: ^9 || ^10

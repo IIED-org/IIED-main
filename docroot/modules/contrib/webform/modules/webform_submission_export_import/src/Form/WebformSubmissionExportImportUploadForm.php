@@ -537,7 +537,7 @@ class WebformSubmissionExportImportUploadForm extends ConfirmFormBase {
    *
    * @see http://www.jeffgeerling.com/blogs/jeff-geerling/using-batch-api-build-huge-csv
    */
-  public static function batchSet(WebformInterface $webform, EntityInterface $source_entity = NULL, $import_uri = '', array $import_options = []) {
+  public static function batchSet(WebformInterface $webform, ?EntityInterface $source_entity = NULL, $import_uri = '', array $import_options = []) {
     $parameters = [
       $webform,
       $source_entity,
@@ -571,7 +571,7 @@ class WebformSubmissionExportImportUploadForm extends ConfirmFormBase {
    * @param mixed|array $context
    *   The batch current context.
    */
-  public static function batchProcess(WebformInterface $webform, EntityInterface $source_entity = NULL, $import_uri = '', array $import_options = [], &$context = []) {
+  public static function batchProcess(WebformInterface $webform, ?EntityInterface $source_entity = NULL, $import_uri = '', array $import_options = [], &$context = []) {
     /** @var \Drupal\webform_submission_export_import\WebformSubmissionExportImportImporterInterface $importer */
     $importer = \Drupal::service('webform_submission_export_import.importer');
     $importer->setWebform($webform);

@@ -11,7 +11,7 @@ views_bulk_operations.update_selection:
   path: '/views-bulk-operations/ajax/{view_id}/{display_id}'
   defaults:
     _controller: '\Drupal\views_bulk_operations\Controller\ViewsBulkOperationsController::updateSelection'
-    _title: 'Views Bulk Operations multipage AJAX'
+    _title: 'Views Bulk Operations multi - page AJAX'
   requirements:
     _views_bulk_operation_access: 'TRUE'
 views_bulk_operations.execute_configurable:

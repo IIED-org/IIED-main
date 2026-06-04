@@ -33,7 +33,7 @@ class LayoutParagraphsSection extends LayoutParagraphsComponent {
    */
   public function __construct(
     ParagraphInterface $paragraph,
-    array $components = []
+    array $components = [],
   ) {
     parent::__construct($paragraph);
     $this->components = $components;
@@ -45,7 +45,7 @@ class LayoutParagraphsSection extends LayoutParagraphsComponent {
    * @param \Drupal\paragraphs\ParagraphInterface $paragraph
    *   The paragraph entity.
    *
-   * @return LayoutParagraphsComponent|LayoutParagraphsSection
+   * @return LayoutParagraphsComponent|LayoutParagraphsSection|null
    *   The component.
    */
   public function getComponent(ParagraphInterface $paragraph) {
@@ -62,7 +62,7 @@ class LayoutParagraphsSection extends LayoutParagraphsComponent {
    * @param string $uuid
    *   The uuid to search for.
    *
-   * @return LayoutParagraphsComponent
+   * @return LayoutParagraphsComponent|null
    *   The component.
    */
   public function getComponentByUuid($uuid) {
@@ -120,7 +120,7 @@ class LayoutParagraphsSection extends LayoutParagraphsComponent {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function defaultSettings() {
     return [

@@ -282,6 +282,9 @@ class LinkExtractorBatch {
     }
 
     $query->orderBy('base.' . $entityType->getKey('id'));
+
+    $query->addTag('linkchecker_' . $entityType->getBundleEntityType() . '_' . $bundle);
+
     return $query;
   }
 

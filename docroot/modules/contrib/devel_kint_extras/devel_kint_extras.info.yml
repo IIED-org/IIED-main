@@ -4,9 +4,11 @@ description: 'Shows methods and statics available for an object when using Kint 
 core_version_requirement: ^9 || ^10 || ^11
 package: Development
 dependencies:
-  - devel:devel (^4.0 || ^5.0)
+  - devel:devel (^5.4)
+lifecycle: obsolete
+lifecycle_link: 'https://www.drupal.org/node/3549864'
 
-# Information added by Drupal.org packaging script on 2025-03-03
-version: '1.1.4'
+# Information added by Drupal.org packaging script on 2025-10-09
+version: '1.1.6'
 project: 'devel_kint_extras'
-datestamp: 1740995046
+datestamp: 1759998792

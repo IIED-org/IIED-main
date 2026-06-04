@@ -63,7 +63,6 @@ class BetterExposedFiltersGeneralTest extends BetterExposedFiltersTestBase {
 
     // Click Reset button.
     $this->getSession()->getPage()->pressButton('Reset');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Verify field cleared.
     $this->assertSession()->fieldValueEquals('field_bef_email_value', '');
@@ -391,6 +390,38 @@ class BetterExposedFiltersGeneralTest extends BetterExposedFiltersTestBase {
     // Check random element on page.
     $this->assertSession()->pageTextContains('Page one');
     $this->assertSession()->pageTextContains('Page two');
+  }
+
+  /**
+   * Tests filter ordering.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function testExposedFilterOrder(): void {
+    $view = Views::getView('bef_test');
+    $view->storage->getDisplay('default')['display_options']['filters']['field_bef_integer_value']['expose']['use_operator'] = TRUE;
+    $view->save();
+
+    $this->setBetterExposedOptions($view, [
+      'filter' => [
+        'field_bef_integer_value' => [
+          'plugin_id' => 'bef',
+          'advanced' => [
+            'collapsible' => TRUE,
+          ],
+        ],
+      ],
+    ]);
+
+    $this->drupalGet('/bef-test');
+    $session = $this->assertSession();
+    // Test published filter is first.
+    $session->elementAttributeContains('css', '.bef-exposed-form > :nth-child(1)', 'class', 'js-form-item-status');
+
+    // Test bef_integer is 4th and collapsible.
+    $session->elementAttributeContains('css', '.bef-exposed-form > :nth-child(4)', 'data-drupal-selector', 'edit-field-bef-integer-value-collapsible');
   }
 
 }

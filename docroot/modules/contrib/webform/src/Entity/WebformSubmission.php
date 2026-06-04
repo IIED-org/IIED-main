@@ -923,7 +923,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   /**
    * {@inheritdoc}
    */
-  public function access($operation, AccountInterface $account = NULL, $return_as_object = FALSE) {
+  public function access($operation, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     $access = parent::access($operation, $account, TRUE)
       ->orIf($this->invokeWebformHandlers('access', $operation, $account));
     return $return_as_object ? $access : $access->isAllowed();

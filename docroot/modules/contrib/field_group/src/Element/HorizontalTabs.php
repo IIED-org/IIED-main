@@ -4,7 +4,7 @@ namespace Drupal\field_group\Element;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-use Drupal\Core\Render\Element\RenderElement;
+use Drupal\Core\Render\Element\RenderElementBase;
 
 /**
  * Provides a render element for horizontal tabs.
@@ -14,7 +14,7 @@ use Drupal\Core\Render\Element\RenderElement;
  *
  * @FormElement("horizontal_tabs")
  */
-class HorizontalTabs extends RenderElement {
+class HorizontalTabs extends RenderElementBase {
 
   /**
    * {@inheritdoc}

@@ -65,7 +65,7 @@ class BlockFieldConfigForm extends FieldFormBase implements ContainerInjectionIn
     $this->field = $field;
 
     // Create an instance of the block.
-    /* @var $block \Drupal\Core\Block\BlockPluginInterface */
+    /** @var \Drupal\Core\Block\BlockPluginInterface $block */
     $manager = \Drupal::service('plugin.manager.block');
     $block_id = $field['properties']['block'];
     $block = $manager->createInstance($block_id);
@@ -106,7 +106,7 @@ class BlockFieldConfigForm extends FieldFormBase implements ContainerInjectionIn
     $field = $this->field;
 
     // Create an instance of the block.
-    /* @var $block BlockPluginInterface */
+    /** @var BlockPluginInterface $block */
     $manager = \Drupal::service('plugin.manager.block');
     $block_id = $field['properties']['block'];
     $block = $manager->createInstance($block_id);
@@ -122,7 +122,7 @@ class BlockFieldConfigForm extends FieldFormBase implements ContainerInjectionIn
     $field = $this->field;
 
     // Create an instance of the block.
-    /* @var $block BlockPluginInterface */
+    /** @var BlockPluginInterface $block */
     $manager = \Drupal::service('plugin.manager.block');
     $block_id = $field['properties']['block'];
     $block = $manager->createInstance($block_id);

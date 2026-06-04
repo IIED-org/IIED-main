@@ -5,6 +5,7 @@ namespace Drupal\name\Feeds\Target;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\feeds\FieldTargetDefinition;
 use Drupal\feeds\Plugin\Type\Target\FieldTargetBase;
+use Drupal\name\Utility\NameComponents;
 
 /**
  * Defines a name field mapper.
@@ -23,7 +24,7 @@ class NameTarget extends FieldTargetBase {
    */
   protected static function prepareTarget(FieldDefinitionInterface $field_definition) {
     $target_definition = FieldTargetDefinition::createFromFieldDefinition($field_definition);
-    foreach (_name_component_keys() as $key) {
+    foreach (NameComponents::coreKeys() as $key) {
       $target_definition->addProperty($key);
     }
     return $target_definition;

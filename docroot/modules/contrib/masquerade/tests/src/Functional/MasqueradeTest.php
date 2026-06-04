@@ -4,12 +4,14 @@ namespace Drupal\Tests\masquerade\Functional;
 
 use Drupal\block\Entity\Block;
 use Drupal\Tests\block\Traits\BlockCreationTrait;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests form permissions and user switching functionality.
  *
  * @group masquerade
  */
+#[RunTestsInSeparateProcesses]
 class MasqueradeTest extends MasqueradeWebTestBase {
 
   use BlockCreationTrait;

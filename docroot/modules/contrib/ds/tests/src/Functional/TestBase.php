@@ -9,7 +9,7 @@ use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 use Drupal\Tests\field_ui\Traits\FieldUiTestTrait;
-use \Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
+use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 
 /**
  * Base test for Display Suite.
@@ -166,8 +166,8 @@ abstract class TestBase extends BrowserTestBase {
 
     /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $display */
     $display = \Drupal::entityTypeManager()
-        ->getStorage('entity_form_display')
-         ->load('node.article.default');
+      ->getStorage('entity_form_display')
+      ->load('node.article.default');
 
     $display->setComponent('field_' . $this->vocabulary->id())->save();
   }
@@ -180,7 +180,7 @@ abstract class TestBase extends BrowserTestBase {
    * @param $second
    *   Second element to compare
    * @param string $message
-   *   The message
+   *   The message.
    */
   protected function assertTrimEqual($first, $second, $message = '') {
     $first = (string) $first;

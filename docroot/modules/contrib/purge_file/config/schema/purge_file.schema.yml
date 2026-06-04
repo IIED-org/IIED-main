@@ -14,3 +14,6 @@ purge_file.settings:
     debug:
       type: boolean
       label: 'Enable debug'
+    invalidation_type:
+      type: string
+      label: 'Invalidation type'

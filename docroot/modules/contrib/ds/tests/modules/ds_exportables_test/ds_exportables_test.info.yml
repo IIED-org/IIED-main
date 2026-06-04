@@ -5,7 +5,7 @@ package: 'Display Suite'
 core_version_requirement: ^10.2 || ^11
 hidden: TRUE
 
-# Information added by Drupal.org packaging script on 2025-05-05
-version: '8.x-3.30'
+# Information added by Drupal.org packaging script on 2026-02-13
+version: '8.x-3.37'
 project: 'ds'
-datestamp: 1746467922
+datestamp: 1771000266

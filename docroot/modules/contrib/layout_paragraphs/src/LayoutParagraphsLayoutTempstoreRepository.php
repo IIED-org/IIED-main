@@ -46,12 +46,12 @@ class LayoutParagraphsLayoutTempstoreRepository {
   }
 
   /**
-   * Get a layout paragraphs layout frome the tempstore using its storage key.
+   * Get a layout paragraphs layout from the tempstore using its storage key.
    *
    * @param string $key
    *   The storage key.
    *
-   * @return \Drupal\layout_paragraphs\LayoutParagraphsLayout
+   * @return \Drupal\layout_paragraphs\LayoutParagraphsLayout|null
    *   The layout.
    */
   public function getWithStorageKey(string $key) {

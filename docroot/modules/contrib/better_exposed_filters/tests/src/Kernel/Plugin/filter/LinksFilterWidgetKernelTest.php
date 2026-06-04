@@ -49,7 +49,7 @@ class LinksFilterWidgetKernelTest extends BetterExposedFiltersKernelTestBase {
 
     // Check our "FIELD_BEF_INTEGER" filter is rendered as links.
     $actual = $this->xpath('//form//a[starts-with(@name, "field_bef_integer_value")]');
-    $this->assertCount(6, $actual);
+    $this->assertCount(7, $actual);
 
     // Check our "TERM_NODE_TID_DEPTH" filter is rendered as nested links.
     $actual = $this->xpath("//form//div[contains(concat(' ',normalize-space(@class),' '),' bef-nested ')]");

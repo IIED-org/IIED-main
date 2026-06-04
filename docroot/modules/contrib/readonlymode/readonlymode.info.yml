@@ -5,7 +5,7 @@ type: module
 core_version_requirement: ^10.1 || ^11
 configure: system.site_maintenance_mode
 
-# Information added by Drupal.org packaging script on 2024-08-31
-version: '8.x-1.3'
+# Information added by Drupal.org packaging script on 2025-12-03
+version: '8.x-1.4'
 project: 'readonlymode'
-datestamp: 1725100055
+datestamp: 1764763090

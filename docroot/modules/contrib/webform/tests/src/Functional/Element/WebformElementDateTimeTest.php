@@ -2,7 +2,9 @@
 
 namespace Drupal\Tests\webform\Functional\Element;
 
-use Drupal\Component\Utility\DeprecationHelper;
+// @code
+// use Drupal\Component\Utility\DeprecationHelper;
+// @endcode
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
@@ -54,15 +56,16 @@ class WebformElementDateTimeTest extends WebformElementBrowserTestBase {
     $assert_session->fieldValueEquals('datetime_default[time]', '16:00:00');
 
     // Check timepicker.
-    $now_date = date('D, m/d/Y', strtotime('now'));
-
-    DeprecationHelper::backwardsCompatibleCall(
-      currentVersion: \Drupal::VERSION,
-      deprecatedVersion: '10.2',
-      currentCallable: fn() => $assert_session->responseContains('        <input data-drupal-selector="edit-datetime-timepicker-date" type="text" min="Mon, 01/01/1900" max="Sat, 12/31/2050" placeholder="YYYY-MM-DD" data-help="Enter the date using the format YYYY-MM-DD (e.g., ' . $now_date . ')." id="edit-datetime-timepicker-date" name="datetime_timepicker[date]" value="Tue, 08/18/2009" size="15" class="form-text" />'),
-      deprecatedCallable: fn() => $assert_session->responseContains('<input data-drupal-selector="edit-datetime-timepicker-date" title="Date (e.g. ' . $now_date . ')" type="text" min="Mon, 01/01/1900" max="Sat, 12/31/2050" placeholder="YYYY-MM-DD" data-help="Enter the date using the format YYYY-MM-DD (e.g., ' . $now_date . ')." id="edit-datetime-timepicker-date" name="datetime_timepicker[date]" value="Tue, 08/18/2009" size="15" class="form-text" />'),
-    );
-
+    // @code
+    // $now_date = date('D, m/d/Y', strtotime('now'));
+    //
+    // DeprecationHelper::backwardsCompatibleCall(
+    //   currentVersion: \Drupal::VERSION,
+    //   deprecatedVersion: '10.2',
+    //   currentCallable: fn() => $assert_session->responseContains('<input data-drupal-selector="edit-datetime-timepicker-date" type="text" min="Mon, 01/01/1900" max="Sat, 12/31/2050" placeholder="YYYY-MM-DD" data-help="Enter the date using the format YYYY-MM-DD (e.g., ' . $now_date . ')." id="edit-datetime-timepicker-date" name="datetime_timepicker[date]" value="Tue, 08/18/2009" size="15" class="form-text" />'),
+    //   deprecatedCallable: fn() => $assert_session->responseContains('<input data-drupal-selector="edit-datetime-timepicker-date" title="Date (e.g. ' . $now_date . ')" type="text" min="Mon, 01/01/1900" max="Sat, 12/31/2050" placeholder="YYYY-MM-DD" data-help="Enter the date using the format YYYY-MM-DD (e.g., ' . $now_date . ')." id="edit-datetime-timepicker-date" name="datetime_timepicker[date]" value="Tue, 08/18/2009" size="15" class="form-text" />'),
+    // );
+    // @endcode
     $assert_session->responseContains('<input data-drupal-selector="edit-datetime-timepicker-time"');
     // Skip time which can change during the tests.
     // phpcs:ignore

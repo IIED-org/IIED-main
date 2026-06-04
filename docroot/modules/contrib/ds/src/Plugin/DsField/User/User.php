@@ -55,7 +55,7 @@ class User extends Entity {
   public function build() {
     $view_mode = $this->getEntityViewMode();
 
-    /* @var $node \Drupal\node\NodeInterface */
+    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entity();
     $uid = $node->getOwnerId();
     $user = $this->entityTypeManager

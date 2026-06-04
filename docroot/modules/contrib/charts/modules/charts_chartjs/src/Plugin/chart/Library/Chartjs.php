@@ -6,11 +6,15 @@ use Drupal\charts\Attribute\Chart;
 use Drupal\Component\Utility\Color;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\charts\Plugin\chart\Library\ChartBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * The 'Chartjs' chart type attribute.
@@ -31,7 +35,38 @@ use Drupal\charts\Plugin\chart\Library\ChartBase;
     "spline",
   ]
 )]
-class Chartjs extends ChartBase {
+class Chartjs extends ChartBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * Constructs a \Drupal\views\Plugin\Block\ViewsBlockBase object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
+   *   The form builder.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface|null $module_handler
+   *   The module handler service.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, FormBuilderInterface $form_builder, ?ModuleHandlerInterface $module_handler = NULL) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $module_handler, $form_builder);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('form_builder'),
+      $container->get('module_handler')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -122,16 +157,26 @@ class Chartjs extends ChartBase {
    * {@inheritdoc}
    */
   public function preRender(array $element) {
-    $chart_definition = [];
-
     if (!isset($element['#id'])) {
       $element['#id'] = Html::getUniqueId('chartjs-render');
     }
 
+    // Handle manual sizing wrapper.
+    // Only add the wrapper if at least one dimension is specified.
     if (!empty($element['#height']) || !empty($element['#width'])) {
+      $style = 'display:inline-block;';
+
+      if (!empty($element['#height'])) {
+        $style .= 'height:' . $element['#height'] . $element['#height_units'] . ';';
+      }
+
+      if (!empty($element['#width'])) {
+        $style .= 'width:' . $element['#width'] . $element['#width_units'] . ';';
+      }
+
       $element['#content_prefix']['manual_sizing'] = [
         '#type' => 'inline_template',
-        '#template' => '<div data-chartjs-render-wrapper style="display:inline-block;height:' . $element['#height'] . $element['#height_units'] . ';width:' . $element['#width'] . $element['#width_units'] . ';">',
+        '#template' => '<div data-chartjs-render-wrapper style="' . $style . '">',
       ];
       $element['#content_suffix']['manual_sizing'] = [
         '#type' => 'inline_template',
@@ -139,12 +184,19 @@ class Chartjs extends ChartBase {
       ];
     }
 
-    $chart_definition = $this->populateOptions($element, $chart_definition);
-    $chart_definition = $this->populateCategories($element, $chart_definition);
-    $chart_definition = $this->populateDatasets($element, $chart_definition);
-    $chart_definition = $this->populateAxes($element, $chart_definition);
+    // Use raw definition if provided, otherwise build from elements.
+    if (!empty($element['#chart_definition'])) {
+      $chart_definition = $element['#chart_definition'];
+    }
+    else {
+      $chart_definition = [];
+      $chart_definition = $this->populateOptions($element, $chart_definition);
+      $chart_definition = $this->populateCategories($element, $chart_definition);
+      $chart_definition = $this->populateDatasets($element, $chart_definition);
+      $chart_definition = $this->populateAxes($element, $chart_definition);
+    }
 
-    // Merge in chart raw options.
+    // Merge in chart raw options (applies to both methods).
     if (!empty($element['#raw_options'])) {
       $chart_definition = NestedArray::mergeDeepArray([
         $chart_definition,
@@ -155,6 +207,77 @@ class Chartjs extends ChartBase {
     $element['#attached']['library'][] = 'charts_chartjs/chartjs';
     $element['#attributes']['class'][] = 'charts-chartjs';
     $element['#chart_definition'] = $chart_definition;
+
+    // Attach the color changer form if requested.
+    if (!empty($element['#color_changer']) && empty($element['#in_preview_mode'])) {
+      $element = $this->applyColorChanger($element, $chart_definition);
+    }
+
+    return $element;
+  }
+
+  /**
+   * Utility to apply color changer options.
+   *
+   * @param array $element
+   *   The element.
+   * @param array $chart_definition
+   *   The chart definition.
+   *
+   * @return array
+   *   The chart element.
+   *
+   * @throws \Drupal\Core\Form\EnforcedResponseException
+   * @throws \Drupal\Core\Form\FormAjaxException
+   */
+  private function applyColorChanger(array $element, array $chart_definition): array {
+    $chart_type = $chart_definition['type'] ?? 'line';
+    $datasets = $chart_definition['data']['datasets'] ?? [];
+
+    // Transform datasets to be compatible with BaseColorChanger.
+    $formatted_series = [];
+    foreach ($datasets as $index => $dataset) {
+      // Ensure the label is a string.
+      $label = $dataset['label'] ?? '';
+      if (is_array($label)) {
+        // If it's an array, we grab the first value or use a fallback.
+        $label = reset($label);
+      }
+
+      // Use a string fallback for the label.
+      $series_name = !empty($label) ? $label : $this->t('Series @n', ['@n' => $index]);
+
+      if (in_array($chart_type, ['pie', 'doughnut'])) {
+        $formatted_series[$index] = [
+          'name' => $series_name,
+          'data' => [],
+        ];
+
+        foreach ($chart_definition['data']['labels'] as $i => $label_item) {
+          // Ensure individual data point names are strings too.
+          $item_name = is_array($label_item) ? reset($label_item) : $label_item;
+          $formatted_series[$index]['data'][$i] = [
+            'name' => $item_name,
+            'color' => $dataset['backgroundColor'][$i] ?? '#000000',
+          ];
+        }
+      }
+      else {
+        $formatted_series[$index] = [
+          'name' => $series_name,
+          'color' => $dataset['backgroundColor'] ?? '#000000',
+        ];
+      }
+    }
+
+    $form_state_items = [
+      'chart_series' => $formatted_series,
+      'chart_id' => $element['#id'],
+      'chart_type' => $chart_type,
+    ];
+
+    $element['#attached']['library'][] = 'charts_chartjs/color_changer';
+    $element['#content_suffix']['color_changer'] = $this->colorChangerFormBuilder($form_state_items);
 
     return $element;
   }

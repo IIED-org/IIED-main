@@ -3,8 +3,8 @@
 namespace Drupal\views_json_source\Plugin\views\query;
 
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Transliteration\TransliterationInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -17,6 +17,7 @@ use Drupal\views_json_source\Event\PreCacheEvent;
 use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Base query handler for views_json_source.
@@ -60,7 +61,7 @@ class ViewsJsonQuery extends QueryPluginBase {
   /**
    * The event dispatcher.
    *
-   * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
   protected $eventDispatcher;
 
@@ -124,9 +125,16 @@ class ViewsJsonQuery extends QueryPluginBase {
   public $filter = [];
 
   /**
+   * Transliteration service.
+   *
+   * @var \Drupal\Component\Transliteration\TransliterationInterface
+   */
+  protected $transliteration;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config, CacheBackendInterface $cache, TimeInterface $time, ContainerAwareEventDispatcher $event_dispatcher, ClientInterface $http_client, Token $token, LoggerInterface $logger) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config, CacheBackendInterface $cache, TimeInterface $time, EventDispatcherInterface $event_dispatcher, ClientInterface $http_client, Token $token, LoggerInterface $logger, TransliterationInterface $transliteration) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->config = $config;
@@ -136,6 +144,7 @@ class ViewsJsonQuery extends QueryPluginBase {
     $this->httpClient = $http_client;
     $this->token = $token;
     $this->logger = $logger;
+    $this->transliteration = $transliteration;
   }
 
   /**
@@ -152,7 +161,8 @@ class ViewsJsonQuery extends QueryPluginBase {
       $container->get('event_dispatcher'),
       $container->get('http_client'),
       $container->get('token'),
-      $container->get('logger.channel.views_json_source')
+      $container->get('logger.channel.views_json_source'),
+      $container->get('transliteration')
     );
   }
 
@@ -210,6 +220,10 @@ class ViewsJsonQuery extends QueryPluginBase {
       $headers = $this->options['headers']
         ? Json::decode($this->options['headers']) ?? []
         : [];
+
+      foreach ($headers as $key => $value) {
+        $headers[$key] = $this->token->replacePlain($value);
+      }
 
       $result = $this->getRequestResponse($uri, $headers);
       if (isset($result->error)) {
@@ -347,6 +361,10 @@ class ViewsJsonQuery extends QueryPluginBase {
    * Define ops for using in filter.
    */
   public function ops($op, $l, $r) {
+    // Transliterate values before comparison.
+    $l = $this->transliterateValue($l);
+    $r = $this->transliterateValue($r);
+
     $table = [
       '=' => function ($l, $r) {
         return $l == $r;
@@ -386,6 +404,13 @@ class ViewsJsonQuery extends QueryPluginBase {
     ];
 
     return array_key_exists($op, $table) ? call_user_func($table[$op], $l, $r) : FALSE;
+  }
+
+  /**
+   * Transliterate.
+   */
+  protected function transliterateValue($value) {
+    return $this->transliteration->transliterate($value);
   }
 
   /**

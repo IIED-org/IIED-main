@@ -23,9 +23,22 @@ views.field.views_bulk_operations_bulk_form:
     clear_on_exposed:
       type: boolean
       label: 'Clear selection when exposed filters change'
-    force_selection_info:
-      type: boolean
-      label: 'Should the selection information always be displayed?'
+    show_multipage_selection_box:
+      type: string
+      label: 'Show an "Items selected" details element'
+      constraints:
+        Choice:
+          - default
+          - always_show
+          - always_hide
+    show_select_all:
+      type: string
+      label: 'Show a "Select / Deselect all results (all pages)" checkbox'
+      constraints:
+        Choice:
+          - default
+          - always_show
+          - always_hide
     selected_actions:
       type: sequence
       label: 'Selected actions data array'

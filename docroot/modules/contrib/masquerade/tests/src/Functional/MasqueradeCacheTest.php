@@ -3,12 +3,14 @@
 namespace Drupal\Tests\masquerade\Functional;
 
 use Drupal\block\Entity\Block;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests caching for masquerade.
  *
  * @group masquerade
  */
+#[RunTestsInSeparateProcesses]
 class MasqueradeCacheTest extends MasqueradeWebTestBase {
 
   /**
@@ -28,32 +30,32 @@ class MasqueradeCacheTest extends MasqueradeWebTestBase {
    */
   public function testMasqueradeSwitchBlockCaching() {
     // Create two masquerade users.
-    $umberto = $this->drupalCreateUser([
+    $user1 = $this->drupalCreateUser([
       'masquerade as any user',
       'access content',
-    ], 'umberto');
-    $nelle = $this->drupalCreateUser([
+    ], 'user1');
+    $user2 = $this->drupalCreateUser([
       'masquerade as any user',
       'access content',
-    ], 'nelle');
+    ], 'user2');
 
     // Add the Masquerade block to the sidebar.
     $masquerade_block = $this->drupalPlaceBlock('masquerade');
 
-    // Login as Umberto.
-    $this->drupalLogin($umberto);
+    // Login as first user.
+    $this->drupalLogin($user1);
     $this->drupalGet('<front>');
     $this->assertBlockAppears($masquerade_block);
 
-    // Masquerade as Nelle.
-    $edit = ['masquerade_as' => $nelle->getAccountName()];
+    // Masquerade as second user.
+    $edit = ['masquerade_as' => $user2->getAccountName()];
     $this->submitForm($edit, 'Switch');
     $this->drupalGet('<front>');
     $this->assertNoBlockAppears($masquerade_block);
 
-    // Logout, and log in as Nelle.
+    // Logout, and log in as first one.
     $this->drupalLogout();
-    $this->drupalLogin($nelle);
+    $this->drupalLogin($user2);
     $this->drupalGet('<front>');
     $this->assertBlockAppears($masquerade_block);
 
@@ -82,10 +84,10 @@ class MasqueradeCacheTest extends MasqueradeWebTestBase {
     $this->assertCacheContext('session');
 
     // Login as the test user and make sure the Unmasquerade link is not visible
-    // and the cache context is correctly set.
+    // and the cache context is missing.
     $this->drupalLogin($test_user);
     $this->assertSession()->linkNotExists('Unmasquerade');
-    $this->assertCacheContext('session.is_masquerading');
+    $this->assertNoCacheContext('session.is_masquerading');
   }
 
   /**

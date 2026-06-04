@@ -8,6 +8,15 @@ general:
     - core/drupal
     - core/jquery
     - core/once
+
+reset_ajax:
+  js:
+    js/bef_reset_ajax.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+
 auto_submit:
   js:
     js/auto_submit.js: {}
@@ -15,6 +24,7 @@ auto_submit:
     - core/drupal
     - core/once
     - core/drupal.debounce
+
 select_all_none:
   js:
     js/bef_select_all_none.js: {}
@@ -49,6 +59,11 @@ soft_limit:
     - core/once
     - core/drupalSettings
     - core/jquery
+
+scrollable:
+  css:
+    theme:
+      css/bef_scrollable.css: {}
 
 links_use_ajax:
   js:

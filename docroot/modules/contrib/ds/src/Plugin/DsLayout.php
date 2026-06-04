@@ -187,7 +187,7 @@ class DsLayout extends LayoutDefault implements PluginFormInterface {
         $url = Url::fromRoute('ds.classes');
         $destination = \Drupal::destination()->getAsArray();
         $url->setOption('query', $destination);
-        $form['ds_classes']['info'] = ['#markup' => '<p>' . $this->t('You have not defined any CSS classes which can be used on regions.') . '</p><p>' .  Link::fromTextAndUrl($this->t('Manage region and field CSS classes'), $url)->toString() . '</p>'];
+        $form['ds_classes']['info'] = ['#markup' => '<p>' . $this->t('You have not defined any CSS classes which can be used on regions.') . '</p><p>' . Link::fromTextAndUrl($this->t('Manage region and field CSS classes'), $url)->toString() . '</p>'];
       }
       else {
         $form['ds_classes']['#access'] = FALSE;

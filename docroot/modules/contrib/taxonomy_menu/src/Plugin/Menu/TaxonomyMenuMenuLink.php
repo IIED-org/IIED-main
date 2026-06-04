@@ -2,6 +2,7 @@
 
 namespace Drupal\taxonomy_menu\Plugin\Menu;
 
+use Drupal\taxonomy_menu\TaxonomyMenuInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Menu\MenuLinkBase;
@@ -12,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Defines menu links provided by taxonomy menu.
  *
- * @see \Drupal\taxonony_menu\Plugin\Derivative\TaxonomyMenuMenuLink
+ * @see \Drupal\taxonomy_menu\Plugin\Derivative\TaxonomyMenuMenuLink
  */
 class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPluginInterface {
 
@@ -76,7 +77,7 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
     $plugin_definition,
     EntityTypeManagerInterface $entity_type_manager,
     StaticMenuLinkOverridesInterface $static_override,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
   ) {
     $this->configuration = $configuration;
     $this->pluginId = $plugin_id;
@@ -104,7 +105,7 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function getTitle() {
-    /** @var \Drupal\taxonomy\Entity\Term. $link */
+    /** @var \Drupal\taxonomy\Entity\Term $link */
     $link = $this->entityTypeManager->getStorage('taxonomy_term')
       ->load($this->pluginDefinition['metadata']['taxonomy_term_id']) ?? NULL;
 
@@ -117,23 +118,24 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
       return $link->label();
     }
 
-    return NULL;
+    return '';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getDescription() {
-    /** @var \Drupal\taxonomy\Entity\Term. $link */
+    /** @var \Drupal\taxonomy\Entity\Term $link */
     $link = $this->entityTypeManager->getStorage('taxonomy_term')
       ->load($this->pluginDefinition['metadata']['taxonomy_term_id']) ?? NULL;
 
     // Get the description field name.
     $taxonomy_menu = $this->entityTypeManager->getStorage('taxonomy_menu')
       ->load($this->pluginDefinition['metadata']['taxonomy_menu_id']);
-    $description_field_name = !empty($taxonomy_menu)
-      ? $taxonomy_menu->getDescriptionFieldName()
-      : '';
+    $description_field_name = '';
+    if ($taxonomy_menu instanceof TaxonomyMenuInterface) {
+      $description_field_name = $taxonomy_menu->getDescriptionFieldName();
+    }
 
     $language = $this->languageManager->getCurrentLanguage()->getId();
 
@@ -147,7 +149,7 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
       return $link->{$description_field_name}->value;
     }
 
-    return NULL;
+    return '';
   }
 
   /**
@@ -192,11 +194,11 @@ class TaxonomyMenuMenuLink extends MenuLinkBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function isEnabled() {
-    /* @var $link \Drupal\taxonomy\Entity\Term. */
+    /** @var \Drupal\taxonomy\Entity\Term|null $link */
     $link = $this->entityTypeManager->getStorage('taxonomy_term')
       ->load($this->pluginDefinition['metadata']['taxonomy_term_id']);
 
-    if (!empty($link)) {
+    if (parent::isEnabled() && $link !== NULL) {
       $language = $this->languageManager->getCurrentLanguage()->getId();
       if ($link->hasTranslation($language)) {
         $translation = $link->getTranslation($language);

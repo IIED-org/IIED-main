@@ -137,7 +137,7 @@ class WebformMessageManager implements WebformMessageManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function setWebformSubmission(WebformSubmissionInterface $webform_submission = NULL) {
+  public function setWebformSubmission(?WebformSubmissionInterface $webform_submission = NULL) {
     $this->webformSubmission = $webform_submission;
     if ($webform_submission) {
       $this->webform = $webform_submission->getWebform();
@@ -148,14 +148,14 @@ class WebformMessageManager implements WebformMessageManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function setWebform(WebformInterface $webform = NULL) {
+  public function setWebform(?WebformInterface $webform = NULL) {
     $this->webform = $webform;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setSourceEntity(EntityInterface $entity = NULL) {
+  public function setSourceEntity(?EntityInterface $entity = NULL) {
     $this->sourceEntity = $entity;
   }
 

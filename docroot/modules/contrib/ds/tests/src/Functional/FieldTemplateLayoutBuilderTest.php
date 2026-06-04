@@ -42,7 +42,7 @@ class FieldTemplateLayoutBuilderTest extends TestBase {
 
     $this->drupalPlaceBlock('local_tasks_block');
 
-    // Create a nodes to test field_block templates on
+    // Create a nodes to test field_block templates on.
     $this->createContentType([
       'type' => 'bundle_with_section_field',
       'name' => 'Bundle with section field',

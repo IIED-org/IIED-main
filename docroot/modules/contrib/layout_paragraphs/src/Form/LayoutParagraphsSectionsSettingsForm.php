@@ -56,7 +56,7 @@ class LayoutParagraphsSectionsSettingsForm extends ConfigFormBase {
     TypedConfigManagerInterface $typedConfigManager,
     EntityTypeBundleInfoInterface $entity_type_bundle_info,
     EntityTypeManagerInterface $entity_type_manager,
-    LayoutPluginManagerInterface $layout_plugin_manager
+    LayoutPluginManagerInterface $layout_plugin_manager,
   ) {
     parent::__construct($config_factory, $typedConfigManager);
     $this->typedConfigManager = $typedConfigManager;

@@ -5,7 +5,7 @@ namespace Drupal\name\Form;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\name\Entity\NameFormat;
-use Drupal\name\NameFormatParser;
+use Drupal\name\Service\NameFormatParserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,7 +16,7 @@ class NameFormatForm extends EntityForm {
   /**
    * The name format parser for token help.
    *
-   * @var \Drupal\name\NameFormatParser
+   * @var \Drupal\name\Service\NameFormatParserInterface
    */
   protected $parser;
 
@@ -32,10 +32,10 @@ class NameFormatForm extends EntityForm {
   /**
    * Constructs a new NameListFormatForm object.
    *
-   * @param \Drupal\name\NameFormatParser $parser
+   * @param \Drupal\name\Service\NameFormatParserInterface $parser
    *   The name format parser.
    */
-  public function __construct(NameFormatParser $parser) {
+  public function __construct(NameFormatParserInterface $parser) {
     $this->parser = $parser;
   }
 
@@ -94,15 +94,17 @@ class NameFormatForm extends EntityForm {
   }
 
   /**
+   * Redirects to the delete name format form.
    *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
    */
   public function delete(array $form, FormStateInterface $form_state) {
-    $form_state['redirect_route'] = [
-      'route_name' => 'name_format_delete_confirm',
-      'route_parameters' => [
-        'name_format' => $this->entity->id(),
-      ],
-    ];
+    $form_state->setRedirect('entity.name_format.delete_form', [
+      'name_format' => $this->entity->id(),
+    ]);
   }
 
   /**
@@ -116,6 +118,7 @@ class NameFormatForm extends EntityForm {
     else {
       $this->messenger()->addMessage($this->t('Name format %label has been updated.', ['%label' => $this->entity->label()]));
     }
+
     return $this->entity->save();
   }
 

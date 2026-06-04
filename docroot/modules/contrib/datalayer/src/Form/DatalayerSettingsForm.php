@@ -8,7 +8,6 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -311,7 +310,8 @@ class DatalayerSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Pages that should expose active user details to the dataLayer. Leaving empty will expose nothing.'),
     ];
 
-    $user_roles = Role::loadMultiple();
+    /** @var \Drupal\user\Entity\Role[] $user_roles */
+    $user_roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple();
     unset($user_roles[RoleInterface::ANONYMOUS_ID]);
     $role_options = [];
     foreach ($user_roles as $id => $role) {

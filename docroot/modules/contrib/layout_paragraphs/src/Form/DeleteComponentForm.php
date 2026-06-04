@@ -35,14 +35,14 @@ class DeleteComponentForm extends FormBase {
   protected $componentUuid;
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   protected function __construct($tempstore) {
     $this->tempstore = $tempstore;
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -51,16 +51,16 @@ class DeleteComponentForm extends FormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'layout_paragraphs_delete_component_form';
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, LayoutParagraphsLayout $layout_paragraphs_layout = NULL, string $component_uuid = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?LayoutParagraphsLayout $layout_paragraphs_layout = NULL, ?string $component_uuid = NULL) {
     $this->setLayoutParagraphsLayout($layout_paragraphs_layout);
     $this->componentUuid = $component_uuid;
     $component = $this->layoutParagraphsLayout->getComponentByUuid($this->componentUuid);
@@ -100,7 +100,7 @@ class DeleteComponentForm extends FormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    *
    * Deletes the component and saves the layout.
    */

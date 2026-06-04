@@ -931,7 +931,7 @@ class ChartDataCollectorTable extends FormElementBase {
    */
   private static function castValueToNumeric(string|int|float $value): float|int|null|array {
     if (is_numeric($value)) {
-      return is_int($value) ? (integer) $value : (float) $value;
+      return is_int($value) ? $value : (float) $value;
     }
 
     // When a value is empty string, or it's not comma separated string let

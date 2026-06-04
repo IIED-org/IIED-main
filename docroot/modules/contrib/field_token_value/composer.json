@@ -1,0 +1,30 @@
+{
+  "name": "drupal/field_token_value",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "description": "Allows you to use a Views to display an entity or entities for an entity_reference field display.",
+  "homepage": "https://www.drupal.org/project/field_token_value",
+  "authors": [
+    {
+      "name": "haydent",
+      "homepage": "https://www.drupal.org/u/haydent"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/field_token_value",
+    "source": "https://git.drupalcode.org/project/field_token_value"
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "drupal/core": "^10 || ^11",
+    "drupal/token": "^1.15",
+    "php": ">=8.1.0"
+  },
+  "extra": {
+    "drush": {
+      "services": {
+        "drush.services.yml": "^10 || ^11"
+      }
+    }
+  }
+}

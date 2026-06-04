@@ -92,7 +92,7 @@ class TaxonomyMenuForm extends EntityForm {
       '#ajax' => [
         'callback' => '::ajaxReplaceDescriptionFieldForm',
         'wrapper' => 'description-field-container',
-        'method' => 'replace',
+        'method' => 'replaceWith',
       ],
     ];
 
@@ -159,7 +159,7 @@ class TaxonomyMenuForm extends EntityForm {
     asort($custom_menus);
 
     $available_menus = $custom_menus;
-    $menu_options = $this->menuParentSelector->getParentSelectOptions(NULL, $available_menus);
+    $menu_options = $this->menuParentSelector->getParentSelectOptions('', $available_menus);
 
     $form['menu_parent'] = [
       '#type' => 'select',

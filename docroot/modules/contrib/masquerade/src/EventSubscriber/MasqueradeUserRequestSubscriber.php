@@ -42,7 +42,7 @@ class MasqueradeUserRequestSubscriber extends UserRequestSubscriber {
   }
 
   /**
-   * Initialises masquerade required services.
+   * Initializes masquerade required services.
    *
    * @param \Drupal\masquerade\Masquerade $masquerade
    *   The masquerade service.

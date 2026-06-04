@@ -18,7 +18,8 @@
     "drupal/core": "^9.4 || ^10 || ^11"
   },
   "require-dev": {
-    "drupal/views_bulk_operations": "~4.2.4"
+    "drupal/views_bulk_operations": "~4.2.4",
+    "drupal/action": "^0.2"
   },
   "suggest": {
     "drupal/views_bulk_operations": "Get VBO for all the views benefits like batching, ability to select all view results or persistent selection across pages"

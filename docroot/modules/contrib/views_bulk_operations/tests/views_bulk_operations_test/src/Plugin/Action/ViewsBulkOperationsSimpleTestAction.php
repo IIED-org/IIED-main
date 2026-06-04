@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\views_bulk_operations_test\Plugin\Action;
 
 use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\node\NodeInterface;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
 
 /**
@@ -16,13 +19,13 @@ use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
   label: new TranslatableMarkup('VBO simple test action'),
   type: 'node'
 )]
-class ViewsBulkOperationsSimpleTestAction extends ViewsBulkOperationsActionBase {
+final class ViewsBulkOperationsSimpleTestAction extends ViewsBulkOperationsActionBase {
   use MessengerTrait;
 
   /**
    * {@inheritdoc}
    */
-  public function execute($entity = NULL) {
+  public function execute(?NodeInterface $entity = NULL): TranslatableMarkup {
     $this->messenger()->addMessage(\sprintf('Test action (label: %s)',
       $entity->label()
     ));

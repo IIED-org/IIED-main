@@ -3,12 +3,16 @@
 namespace Drupal\Tests\paragraphs\Functional\WidgetLegacy;
 
 use Drupal\paragraphs\Entity\Paragraph;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the configuration of paragraphs.
  *
  * @group paragraphs
  */
+#[RunTestsInSeparateProcesses]
+#[Group('paragraphs')]
 class ParagraphsAdministrationTest extends ParagraphsTestBase {
 
   /**
@@ -145,8 +149,11 @@ class ParagraphsAdministrationTest extends ParagraphsTestBase {
     $this->drupalGet('admin/structure/paragraphs_type');
     $this->assertSession()->pageTextContains('There are no Paragraphs types yet.');
     $this->drupalGet('admin/structure/types/manage/paragraphs/fields/add-field');
-    $this->getSession()->getPage()->fillField('new_storage_type', 'field_ui:entity_reference_revisions:paragraph');
-    if ($this->coreVersion('10.3')) {
+    if ($this->coreVersion('11.2')) {
+      $this->clickLink('Create structured content.');
+    }
+    else {
+      $this->getSession()->getPage()->fillField('new_storage_type', 'field_ui:entity_reference_revisions:paragraph');
       $this->getSession()->getPage()->pressButton('Continue');
     }
     $edit = [

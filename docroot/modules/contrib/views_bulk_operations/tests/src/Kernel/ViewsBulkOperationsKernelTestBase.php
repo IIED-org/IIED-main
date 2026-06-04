@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\views_bulk_operations\Kernel;
 
 use Drupal\Component\Datetime\TimeInterface;
@@ -10,7 +12,7 @@ use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\user\Entity\User;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
-use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionCompletedTrait;
+use Drupal\views_bulk_operations\Traits\ViewsBulkOperationsActionCompletedTrait;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsViewDataInterface;
 use Drupal\views_bulk_operations\ViewsBulkOperationsBatch;
 
@@ -136,8 +138,8 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
       ]);
       $type->save();
 
-      $count_languages = isset($type_data['languages']) ? \count($type_data['languages']) : 0;
-      if ($count_languages) {
+      $count_languages = \array_key_exists('languages', $type_data) ? \count($type_data['languages']) : 0;
+      if ($count_languages !== 0) {
         for ($i = 0; $i < $count_languages; $i++) {
           $language = ConfigurableLanguage::createFromLangcode($type_data['languages'][$i]);
           $language->save();
@@ -147,7 +149,7 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
 
       // Create some test nodes.
       $time = $this->time->getRequestTime();
-      if (!isset($type_data['count'])) {
+      if (!\array_key_exists('count', $type_data)) {
         $type_data['count'] = 10;
       }
       for ($i = 0; $i < $type_data['count']; $i++) {
@@ -162,7 +164,7 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
         ]);
         $this->testNodesData[$node->id()]['en'] = $title;
 
-        if ($count_languages) {
+        if ($count_languages !== 0) {
           // It doesn't really matter to which languages we translate
           // from the API point of view so some randomness should be fine.
           $langcode = $type_data['languages'][\rand(0, $count_languages - 1)];
@@ -187,7 +189,8 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
    *   The view object.
    */
   protected function initializeView(array $vbo_data): ViewExecutable {
-    if (!$view = Views::getView($vbo_data['view_id'])) {
+    $view = Views::getView($vbo_data['view_id']);
+    if ($view === NULL) {
       throw new \Exception('Incorrect view ID provided.');
     }
     if (!$view->setDisplay($vbo_data['display_id'])) {
@@ -215,10 +218,10 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
     $vbo_data += self::VBO_DEFAULTS;
 
     $view = $this->initializeView($vbo_data);
-    if (!empty($vbo_data['arguments'])) {
+    if (\array_key_exists('arguments', $vbo_data)) {
       $view->setArguments($vbo_data['arguments']);
     }
-    if (!empty($vbo_data['exposed_input'])) {
+    if (\array_key_exists('exposed_input', $vbo_data)) {
       $view->setExposedInput($vbo_data['exposed_input']);
     }
 
@@ -271,7 +274,7 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
 
     // Get action definition and check if action ID is correct.
     $action_definition = $this->container->get('plugin.manager.views_bulk_operations_action')->getDefinition($vbo_data['action_id']);
-    if (!isset($vbo_data['action_label'])) {
+    if (!\array_key_exists('action_label', $vbo_data)) {
       $vbo_data['action_label'] = (string) $action_definition['label'];
     }
 
@@ -282,7 +285,7 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
     }
 
     // Populate entity list if empty.
-    if (empty($vbo_data['list'])) {
+    if (!\array_key_exists('list', $vbo_data) || \count($vbo_data['list']) === 0) {
       $context = [];
       do {
         $context['finished'] = 1;
@@ -297,13 +300,13 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
     ];
 
     // Execute the selected action.
-    $context = [];
+    $context = ['results' => []];
     do {
       $context['finished'] = 1;
       $context['message'] = '';
       ViewsBulkOperationsBatch::operation($vbo_data, $context);
-      if (!empty($context['message'])) {
-        $summary['messages'][] = (string) $context['message'];
+      if (\array_key_exists('message', $context)) {
+        $summary['messages'][] = $context['message'];
       }
     } while ($context['finished'] < 1);
 
@@ -320,15 +323,15 @@ abstract class ViewsBulkOperationsKernelTestBase extends KernelTestBase {
   /**
    * Override trait message() method so we can get the output.
    *
-   * @return string|null
-   *   The message set previously or NULL.
+   * @return array|null
+   *   The messages set previously or NULL.
    */
-  public static function message($message = NULL, $type = 'status', $repeat = TRUE) {
+  public static function message(string|\Stringable|NULL $message = NULL, string $type = 'status', ?bool $repeat = TRUE): ?array {
     if ($message === NULL) {
       return self::$messages;
     }
     self::$messages[] = [
-      'message' => (string) $message,
+      'message' => $message,
       'type' => $type,
     ];
     return NULL;

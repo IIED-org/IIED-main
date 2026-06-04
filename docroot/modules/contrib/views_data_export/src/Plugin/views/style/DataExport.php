@@ -297,12 +297,14 @@ class DataExport extends Serializer {
       '#theme' => 'export_icon',
       '#url' => $url,
       '#format' => mb_strtoupper($format),
+      '#title' => $title,
       '#theme_wrappers' => [
         'container' => [
           '#attributes' => [
             'class' => [
               Html::cleanCssIdentifier($format) . '-feed',
               'views-data-export-feed',
+              Html::cleanCssIdentifier('views-data-export-feed--' . $this->displayHandler->display['id']),
             ],
           ],
         ],

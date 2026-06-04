@@ -53,13 +53,6 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
   protected $database;
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * The webform submission generation service.
    *
    * @var \Drupal\webform\WebformSubmissionGenerateInterface

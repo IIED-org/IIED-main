@@ -8,6 +8,8 @@ use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\publishcontent\Event\PublishContentPublishEvent;
+use Drupal\publishcontent\Event\PublishContentUnpublishEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -68,6 +70,13 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
   protected $time;
 
   /**
+   * An event dispatcher instance to use for publishing events.
+   *
+   * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -80,6 +89,7 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
     $instance->currentUser = $container->get('current_user');
     $instance->logger = $container->get('logger.factory')->get('publishcontent');
     $instance->time = $container->get('datetime.time');
+    $instance->eventDispatcher = $container->get('event_dispatcher');
     return $instance;
   }
 
@@ -97,14 +107,14 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
   public function toggleEntityStatus(NodeInterface $node, $langcode = '') {
     try {
       if ($referrer = $this->server->get('HTTP_REFERER')) {
-        $redirectUrl = Url::fromUri($referrer, ['absolute' => TRUE])->getUri();
+        $redirect_url = Url::fromUri($referrer, ['absolute' => TRUE])->getUri();
       }
       else {
-        $redirectUrl = $node->toUrl()->toString();
+        $redirect_url = $node->toUrl()->toString();
       }
     }
     catch (\Exception $e) {
-      $redirectUrl = Url::fromRoute('<front>')->setAbsolute()->toString();
+      $redirect_url = Url::fromRoute('<front>')->setAbsolute()->toString();
     }
 
     if ($node->isTranslatable()) {
@@ -117,22 +127,33 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
           '@publish' => $this->config->get('publish_text_value'),
           '@unpublish' => $this->config->get('unpublish_text_value'),
         ]));
-        return new RedirectResponse($redirectUrl);
+        return new RedirectResponse($redirect_url);
       }
 
       $node = $node->getTranslation($langcode);
     }
 
-    $node->isPublished() ? $node->setUnpublished() : $node->setPublished();
+    if ($node->isPublished()) {
+      $node->setUnpublished();
 
-    $isPublished = $node->isPublished();
-    $status = $isPublished ? $this->config->get('publish_text_value') : $this->config->get('unpublish_text_value');
+      $event = new PublishContentUnpublishEvent($node, $langcode);
+      $this->eventDispatcher->dispatch($event, PublishContentUnpublishEvent::class);
+    }
+    else {
+      $node->setPublished();
+
+      $event = new PublishContentPublishEvent($node, $langcode);
+      $this->eventDispatcher->dispatch($event, PublishContentPublishEvent::class);
+    }
+
+    $is_published = $node->isPublished();
+    $status = $is_published ? $this->config->get('publish_text_value') : $this->config->get('unpublish_text_value');
 
     if (!empty($this->config)) {
       if ($this->config->get('create_log_entry')) {
         $this->logger->notice($this->t('@type: @action @title', [
           '@type' => $node->bundle(),
-          '@action' => $isPublished ? 'unpublished' : 'published',
+          '@action' => $is_published ? $this->t('published') : $this->t('unpublished'),
           '@title' => $node->getTitle(),
         ]));
       }
@@ -151,17 +172,23 @@ class PublishContentPublishEntity implements ContainerInjectionInterface {
 
     try {
       $node->save();
-      $this->messenger->addMessage($this->t('@title has been set to @status',
-      [
-        '@title' => $node->getTitle(),
-        '@status' => $status,
-      ]
-      ));
+      // Allow flexible translation for the message.
+      if ($is_published) {
+        $message = $this->t('%title has been published.', [
+          '%title' => $node->getTitle(),
+        ]);
+      }
+      else {
+        $message = $this->t('%title has been unpublished.', [
+          '%title' => $node->getTitle(),
+        ]);
+      }
+      $this->messenger->addMessage($message);
     }
     catch (EntityStorageException $e) {
     }
 
-    return new RedirectResponse($redirectUrl);
+    return new RedirectResponse($redirect_url);
   }
 
   /**

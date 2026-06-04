@@ -1,7 +1,11 @@
 services:
+  _defaults:
+    autowire: true
+
   masquerade:
     class: Drupal\masquerade\Masquerade
     arguments: ['@current_user', '@entity_type.manager', '@module_handler', '@session_manager', '@session', '@logger.channel.masquerade', '@user.permissions']
+  Drupal\masquerade\Masquerade: '@masquerade'
   logger.channel.masquerade:
     parent: logger.channel_base
     arguments: ['masquerade']
@@ -35,3 +39,6 @@ services:
     decorates: session_manager.metadata_bag
     parent: session_manager.metadata_bag
     public: false
+  Drupal\masquerade\Hook\MasqueradeHooks: ~
+  Drupal\masquerade\Hook\MasqueradeUserHooks: ~
+  Drupal\masquerade\Hook\MasqueradeMigrationHooks: ~

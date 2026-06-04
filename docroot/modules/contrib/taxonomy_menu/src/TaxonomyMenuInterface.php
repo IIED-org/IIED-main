@@ -54,7 +54,7 @@ interface TaxonomyMenuInterface extends ConfigEntityInterface {
    * Get menu link plugin definitions.
    *
    * @param array $base_plugin_definition
-   *   Base plugin deifinition.
+   *   Base plugin definition.
    * @param bool $include_base_plugin_id
    *   If true, 'taxonomy_menu.menu_link:' will be prepended to the returned
    *   plugin ids.

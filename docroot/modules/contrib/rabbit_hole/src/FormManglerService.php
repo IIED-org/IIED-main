@@ -153,7 +153,7 @@ class FormManglerService {
     $entity_type_id,
     $entity,
     FormStateInterface $form_state,
-    $form_id,
+    $form_id
   ) {
 
     if ($entity === NULL) {
@@ -482,7 +482,7 @@ class FormManglerService {
     $form_id,
     EntityInterface $entity = NULL,
     $entity_is_bundle = FALSE,
-    ImmutableConfig $bundle_settings = NULL,
+    ImmutableConfig $bundle_settings = NULL
   ) {
 
     foreach ($this->rhBehaviorPluginManager->getDefinitions() as $id => $def) {

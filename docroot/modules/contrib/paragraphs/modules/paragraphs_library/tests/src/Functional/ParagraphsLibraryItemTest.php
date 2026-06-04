@@ -9,12 +9,16 @@ use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\field_ui\Traits\FieldUiTestTrait;
 use Drupal\Tests\paragraphs\FunctionalJavascript\ParagraphsTestBaseTrait;
 use Drupal\Tests\paragraphs\Traits\ParagraphsCoreVersionUiTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the functionality of the Paragraphs Library.
  *
  * @group paragraphs_library
  */
+#[RunTestsInSeparateProcesses]
+#[Group('paragraphs_library')]
 class ParagraphsLibraryItemTest extends BrowserTestBase {
 
   use ParagraphsTestBaseTrait, FieldUiTestTrait, ParagraphsCoreVersionUiTestTrait;

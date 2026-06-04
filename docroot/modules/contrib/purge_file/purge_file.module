@@ -14,7 +14,7 @@ use Drupal\file\FileInterface;
  *   A list of invalidation plugin IDs.
  */
 function purge_file_supported_url_purgers() {
-  return ['url', 'wildcardurl'];
+  return ['url', 'wildcardurl', 'path', 'wildcardpath'];
 }
 
 /**
@@ -95,8 +95,8 @@ function purge_file_purge(FileInterface $file) {
   }
 
   $base_urls_input = $purge_file_config->get('base_urls');
-  $use_wildcard = $purge_file_config->get('wildcard') && in_array('wildcardurl', $url_purgers_enabled);
-  $invalidator = $use_wildcard ? 'wildcardurl' : 'url';
+  $invalidator = $purge_file_config->get('invalidation_type');
+  $use_wildcard = in_array($invalidator, ['wildcardurl', 'wildcardpath']) && in_array($invalidator, $url_purgers_enabled);
   if (!in_array($invalidator, $url_purgers_enabled)) {
     return FALSE;
   }
@@ -118,14 +118,18 @@ function purge_file_purge(FileInterface $file) {
     // Build urls to purge.
     $urls = [];
 
-    foreach ($base_urls as $base_url) {
-      $urls[] = rtrim($base_url, '/') . $file->createFileUrl();
+    if (in_array($invalidator, ['url', 'wildcardurl'], TRUE)) {
+      foreach ($base_urls as $base_url) {
+        $urls[] = rtrim($base_url, '/') . $file->createFileUrl();
+      }
+    }
+    else {
+      $urls[] = ltrim($file->createFileUrl(), '/');
     }
 
     $invalidations = [];
     if ($purge_file_config->get('debug')) {
-      $wildcard_text = ($use_wildcard) ? ' (with wildcard "*")' : '';
-      \Drupal::logger('purge_file')->info(sprintf('Purging file with the following URL(s): %s%s', implode(',', $urls), $wildcard_text));
+      \Drupal::logger('purge_file')->info(sprintf('Purging file using "%s" invalidator with the following URL(s): %s', $invalidator, implode(',', $urls)));
     }
 
     foreach ($urls as $url) {
@@ -156,11 +160,12 @@ function purge_file_purge(FileInterface $file) {
   }
   catch (\Throwable $exception) {
     \Drupal::logger('purge_file')
-      ->error('@class exception during file invalidation via workflow "@workflow", File id: @file_id, File @file_uri: Error: @error', [
+      ->error('@class exception during file invalidation via workflow "@workflow", File id: @file_id, File: @file_uri, Invalidator: @invalidator, Error: @error', [
         '@class' => get_class($exception),
         '@workflow' => $workflow,
         '@file_id' => $file->id(),
         '@file_uri' => $file->getFileUri(),
+        '@invalidator' => $invalidator,
         '@error' => $exception->getMessage(),
       ]);
   }

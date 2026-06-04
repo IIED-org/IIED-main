@@ -6,7 +6,7 @@ configure: linkchecker.admin_settings_form
 test_dependencies:
   - redirect:redirect
 
-# Information added by Drupal.org packaging script on 2025-06-30
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2025-11-30
+version: '2.1.0'
 project: 'linkchecker'
-datestamp: 1751291861
+datestamp: 1764514973

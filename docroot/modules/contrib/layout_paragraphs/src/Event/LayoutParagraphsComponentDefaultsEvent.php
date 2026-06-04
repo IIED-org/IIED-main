@@ -22,7 +22,8 @@ class LayoutParagraphsComponentDefaultsEvent extends Event {
    */
   public function __construct(
     protected string $paragraphTypeId,
-    protected array $defaultValues) {
+    protected array $defaultValues,
+  ) {
   }
 
   /**

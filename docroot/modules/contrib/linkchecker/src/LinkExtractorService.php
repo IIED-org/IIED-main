@@ -370,14 +370,15 @@ class LinkExtractorService {
   public function saveLink(LinkCheckerLinkInterface $link) {
     $storage = $this->entityTypeManager->getStorage($link->getEntityTypeId());
 
-    $parent_entity = $link->getParentEntity();
-    $query = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('urlhash', LinkCheckerLink::generateHash($link->getUrl()))
-      ->condition('parent_entity_type_id', $parent_entity->getEntityTypeId())
-      ->condition('parent_entity_id', $parent_entity->id())
-      ->condition('entity_field', $link->getParentEntityFieldName())
-      ->condition('entity_langcode', $link->getParentEntityLangcode());
-    $ids = $query->execute();
+    if ($parent_entity = $link->getParentEntity()) {
+      $query = $storage->getQuery()->accessCheck(FALSE)
+        ->condition('urlhash', LinkCheckerLink::generateHash($link->getUrl()))
+        ->condition('parent_entity_type_id', $parent_entity->getEntityTypeId())
+        ->condition('parent_entity_id', $parent_entity->id())
+        ->condition('entity_field', $link->getParentEntityFieldName())
+        ->condition('entity_langcode', $link->getParentEntityLangcode());
+      $ids = $query->execute();
+    }
 
     if (empty($ids)) {
       $link->save();

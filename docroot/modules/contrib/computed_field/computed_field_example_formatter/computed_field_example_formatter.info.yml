@@ -1,7 +1,7 @@
 name: Computed Field Example Formatter
 type: module
 description: Provides an example PHP formatter for computed fields where the code is implemented inside the module.
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8 || ^9 || ^10 || ^11
 package: Field types
 dependencies:
   - computed_field:computed_field

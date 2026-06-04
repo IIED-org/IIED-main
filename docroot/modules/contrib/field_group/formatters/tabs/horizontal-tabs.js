@@ -32,7 +32,6 @@
             .find('> [data-horizontal-tabs-panes]')
             .each((indexTabWrapper, tabWrapper) => {
               const $this = $(tabWrapper).addClass('horizontal-tabs-panes');
-              // eslint-disable-next-line jquery/no-val
               const focusID = $(
                 ':hidden.horizontal-tabs-active-tab',
                 tabWrapper,
@@ -51,28 +50,32 @@
               );
               tabList.removeClass('visually-hidden');
 
-              let summary;
+              let tabTitle;
               /* eslint max-nested-callbacks: ['error', 4] */
               // Transform each details into a tab.
               $details.each((i, element) => {
                 const $thisDetail = $(element);
-                const summaryElement = $thisDetail.find('> summary');
-                const detailsTitle = summaryElement
+                const $summaryElement = $thisDetail.find('> summary');
+                const $detailsTitle = $summaryElement
                   .first()
                   .find('.details-title');
-                if (detailsTitle.length) {
-                  summary = detailsTitle
-                    .find('> span:last-child')
-                    .html()
-                    .trim();
+                if ($detailsTitle.length) {
+                  tabTitle = $detailsTitle.find('> span:last-child').html();
                 } else {
-                  summary =
-                    summaryElement.clone().html().trim() ||
-                    summaryElement.find('> span:first-child').html().trim();
+                  // Remove the required mark element from the tab title, if it
+                  // exists (e.g. gin theme will have it twice).
+                  tabTitle =
+                    $summaryElement
+                      .clone()
+                      .find('.required-mark')
+                      .remove()
+                      .end()
+                      .html() ||
+                    $summaryElement.find('> span:first-child').html();
                 }
 
                 const horizontalTab = new Drupal.HorizontalTab({
-                  title: summary,
+                  title: tabTitle,
                   details: $thisDetail,
                 });
                 horizontalTab.item.addClass(`horizontal-tab-button-${i}`);
@@ -276,6 +279,11 @@
         (tab.title = $('<strong></strong>').html(settings.title)),
       )),
     );
+
+    tab.item.addClass(settings.details.attr('class'));
+    // Remove 'claro-details' class to remove additional bottom border from ul >
+    // li of horizontal tab.
+    tab.item.removeClass('claro-details');
 
     // No need to add summary on frontend.
     if (settings.details.drupalGetSummary) {

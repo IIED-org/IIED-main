@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\views_bulk_operations_example\Plugin\Action;
 
 use Drupal\Core\Action\Attribute\Action;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Render\Markup;
@@ -17,7 +20,7 @@ use Drupal\views_bulk_operations\Action\ViewsBulkOperationsPreconfigurationInter
  * If type is left empty, action will be selectable for all
  * entity types.
  *
- * The api_version annotation parameter specifies the behaviour of displayed
+ * The api_version annotation parameter specifies the behavior of displayed
  * messages: anything other than "1" displays counts of exactly what's returned
  * by the action execute() and executeMultiple() method.
  */
@@ -26,12 +29,12 @@ use Drupal\views_bulk_operations\Action\ViewsBulkOperationsPreconfigurationInter
   label: new TranslatableMarkup('VBO example action'),
   type: ''
 )]
-class ViewsBulkOperationExampleAction extends ViewsBulkOperationsActionBase implements ViewsBulkOperationsPreconfigurationInterface, PluginFormInterface {
+final class ViewsBulkOperationExampleAction extends ViewsBulkOperationsActionBase implements ViewsBulkOperationsPreconfigurationInterface, PluginFormInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function execute($entity = NULL) {
+  public function execute(?EntityInterface $entity = NULL): TranslatableMarkup {
     /*
      * All config resides in $this->configuration.
      * Passed view rows will be available in $this->context.
@@ -71,7 +74,7 @@ class ViewsBulkOperationExampleAction extends ViewsBulkOperationsActionBase impl
    *
    * @param array $form
    *   Form array.
-   * @param \Drupal\views_bulk_operations_example\Plugin\Action\Drupal\Core\Form\FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    *
    * @return array
@@ -94,7 +97,7 @@ class ViewsBulkOperationExampleAction extends ViewsBulkOperationsActionBase impl
    *
    * @param array $form
    *   Form array.
-   * @param \Drupal\views_bulk_operations_example\Plugin\Action\Drupal\Core\Form\FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {

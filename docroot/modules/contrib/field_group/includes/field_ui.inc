@@ -187,6 +187,7 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
         '#prefix' => '<span class="group-label">',
         '#suffix' => '</span>',
       ],
+      'machine_name' => NULL,
       'weight' => [
         '#type' => 'textfield',
         '#default_value' => $group->weight,
@@ -215,6 +216,21 @@ function field_group_field_ui_display_form_alter(&$form, FormStateInterface $for
         '#attributes' => ['class' => ['field-region']],
       ],
     ];
+
+    // In newer versions of Drupal Core, a machine name column is added.
+    // @todo Remove this condition once 11.1 is oldest supported Drupal Core.
+    $header_column_classes = array_column($table['#header'], 'class');
+    if (!empty($header_column_classes)) {
+      foreach ($header_column_classes as $classes) {
+        if (in_array('machine-name', $classes)) {
+          $table[$name]['machine_name'] = [
+            '#markup' => $name,
+            '#attributes' => ['class' => ['machine-name']],
+          ];
+          break;
+        }
+      }
+    }
 
     // For view settings. Add a spacer cell. Can't use colspan because of JS.
     if ($params->context == 'view') {

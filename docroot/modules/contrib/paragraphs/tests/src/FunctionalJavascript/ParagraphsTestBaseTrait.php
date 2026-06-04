@@ -2,8 +2,10 @@
 
 namespace Drupal\Tests\paragraphs\FunctionalJavascript;
 
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\FieldStorageConfigInterface;
 use Drupal\file\Entity\File;
 use Drupal\node\Entity\NodeType;
 use Drupal\paragraphs\Entity\ParagraphsType;
@@ -70,7 +72,7 @@ trait ParagraphsTestBaseTrait {
         'field_name' => $paragraphs_field_name,
         'entity_type' => $entity_type,
         'type' => 'entity_reference_revisions',
-        'cardinality' => '-1',
+        'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
         'settings' => [
           'target_type' => 'paragraph',
         ],
@@ -158,14 +160,17 @@ trait ParagraphsTestBaseTrait {
    */
   protected function addFieldtoParagraphType($paragraph_type_id, $field_name, $field_type, array $storage_settings = []) {
     // Add a paragraphs field.
-    $field_storage = FieldStorageConfig::create([
-      'field_name' => $field_name,
-      'entity_type' => 'paragraph',
-      'type' => $field_type,
-      'cardinality' => 1,
-      'settings' => $storage_settings,
-    ]);
-    $field_storage->save();
+    $field_storage = FieldStorageConfig::loadByName('paragraph', $field_name);
+    if (!$field_storage) {
+      $field_storage = FieldStorageConfig::create([
+        'field_name' => $field_name,
+        'entity_type' => 'paragraph',
+        'type' => $field_type,
+        'cardinality' => 1,
+        'settings' => $storage_settings,
+      ]);
+      $field_storage->save();
+    }
     $field = FieldConfig::create([
       'field_storage' => $field_storage,
       'bundle' => $paragraph_type_id,

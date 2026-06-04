@@ -3,6 +3,8 @@ services:
     class: Drupal\gin_login\Theme\ThemeNegotiator
     arguments:
       - '@config.factory'
+      - '@request_stack'
+      - '@gin_login.route'
     tags:
       - { name: theme_negotiator, priority: 1000 }
   gin_login.route:

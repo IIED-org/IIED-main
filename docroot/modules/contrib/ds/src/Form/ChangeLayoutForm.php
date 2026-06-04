@@ -254,7 +254,7 @@ class ChangeLayoutForm extends FormBase {
     }
 
     // Save configuration.
-    /* @var $entity_display \Drupal\Core\Entity\Display\EntityDisplayInterface*/
+    /** @var \Drupal\Core\Entity\Display\EntityDisplayInterface $entity_display*/
     $entity_display = $this->entityTypeManager
       ->getStorage('entity_view_display')
       ->load($entity_type . '.' . $bundle . '.' . $display_mode);

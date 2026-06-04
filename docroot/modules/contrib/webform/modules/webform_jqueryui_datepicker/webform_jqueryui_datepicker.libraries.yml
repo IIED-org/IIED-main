@@ -1,5 +1,4 @@
 webform_jqueryui_datepicker.element:
-  version: VERSION
   css:
     component:
       css/webform_jqueryui_datepicker.element.css: {}

@@ -407,6 +407,7 @@ class BetterExposedFilters extends InputRequired {
       '#type' => 'item',
       '#description' => $this->t('No sort elements have been exposed yet.'),
       '#access' => !$is_sort_exposed,
+      '#input' => FALSE,
     ];
 
     if ($is_sort_exposed) {
@@ -480,6 +481,7 @@ class BetterExposedFilters extends InputRequired {
       '#type' => 'item',
       '#description' => $this->t('No pager elements have been exposed yet.'),
       '#access' => !$is_pager_exposed,
+      '#input' => FALSE,
     ];
 
     if ($is_pager_exposed) {
@@ -840,7 +842,15 @@ class BetterExposedFilters extends InputRequired {
       }
 
       if (!empty($bef_options['general']['autosubmit_hide'])) {
-        $form['actions']['submit']['#attributes']['class'][] = 'js-hide';
+        $children = Element::children($form['actions']);
+        $children = array_diff($children, ['submit']);
+
+        if (empty($children)) {
+          $form['actions']['#attributes']['class'][] = 'js-hide';
+        }
+        else {
+          $form['actions']['submit']['#attributes']['class'][] = 'js-hide';
+        }
       }
     }
 
@@ -937,6 +947,12 @@ class BetterExposedFilters extends InputRequired {
       $form['actions']['reset']['#op'] = 'reset';
       $form['actions']['reset']['#type'] = 'submit';
       $form['actions']['reset']['#id'] = Html::getUniqueId('edit-reset-' . $this->view->storage->id());
+      $form['actions']['reset']['#limit_validation_errors'] = [];
+      $form['actions']['reset']['#submit'][] = [$this, 'resetForm'];
+
+      if ($this->view->display_handler->ajaxEnabled()) {
+        $form['#attached']['library'][] = 'better_exposed_filters/reset_ajax';
+      }
     }
 
     // Ensure default process/pre_render callbacks are included when a BEF

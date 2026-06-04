@@ -217,6 +217,7 @@ abstract class DriverBase implements DrupalMemcacheInterface {
         'pointer_size',
         'accepting_conns',
         'listen_disabled_num',
+        'slab_reassign_last_busy_status',
       ];
 
       foreach ($stats as $bin => $servers) {
@@ -224,7 +225,7 @@ abstract class DriverBase implements DrupalMemcacheInterface {
           foreach ($servers as $server) {
             if (is_array($server)) {
               foreach ($server as $key => $value) {
-                if (!in_array($key, $no_aggregate)) {
+                if (!in_array($key, $no_aggregate) && is_numeric($value)) {
                   if (isset($stats[$bin]['total'][$key])) {
                     $stats[$bin]['total'][$key] += $value;
                   }

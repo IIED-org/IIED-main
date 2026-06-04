@@ -108,7 +108,6 @@ abstract class BlockBase extends DsFieldBase implements ContainerFactoryPluginIn
         $render_element = $block_build;
       }
 
-
       // Merge cache contexts, tags and max-age.
       if ($contexts = $block->getCacheContexts()) {
         $render_element['#cache']['contexts'] = [];
@@ -163,7 +162,7 @@ abstract class BlockBase extends DsFieldBase implements ContainerFactoryPluginIn
   protected function getBlock() {
     if (!$this->block) {
       // Create an instance of the block.
-      /* @var $block BlockPluginInterface */
+      /** @var BlockPluginInterface $block */
       $block_id = $this->blockPluginId();
       $block = $this->blockManager->createInstance($block_id);
 

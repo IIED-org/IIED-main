@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\views_bulk_operations\Kernel;
+
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * @coversDefaultClass \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor
  * @group views_bulk_operations
  */
-class ActionMessagesTest extends ViewsBulkOperationsKernelTestBase {
+final class ActionMessagesTest extends ViewsBulkOperationsKernelTestBase {
 
   /**
    * Tests messages displayed by different actions.
@@ -17,7 +21,7 @@ class ActionMessagesTest extends ViewsBulkOperationsKernelTestBase {
    *
    * @dataProvider actionDataProvider
    */
-  public function testViewsbulkOperationsActionMessages(int $nodes_count, string $action_id, array $result_messages): void {
+  public function testViewsBulkOperationsActionMessages(int $nodes_count, string $action_id, array $result_messages): void {
     $this->createTestNodes([
       'page' => [
         'count' => $nodes_count,
@@ -34,7 +38,7 @@ class ActionMessagesTest extends ViewsBulkOperationsKernelTestBase {
 
     foreach ($result_messages as $index => $message) {
       static::assertEquals($message['type'], $results['finished_output'][$index]['type']);
-      static::assertEquals($message['message'], $results['finished_output'][$index]['message']);
+      static::assertEquals((string) $message['message'], (string) $results['finished_output'][$index]['message']);
     }
   }
 
@@ -44,14 +48,14 @@ class ActionMessagesTest extends ViewsBulkOperationsKernelTestBase {
    * @return mixed[]
    *   The test data.
    */
-  public function actionDataProvider(): array {
+  public static function actionDataProvider(): array {
     return [
       [
         4,
         'views_bulk_operations_simple_test_action',
         [
           [
-            'message' => 'Test (3)',
+            'message' => new TranslatableMarkup('Test (3)'),
             'type' => 'status',
           ],
         ],
@@ -61,11 +65,15 @@ class ActionMessagesTest extends ViewsBulkOperationsKernelTestBase {
         'views_bulk_operations_test_action_v2',
         [
           [
-            'message' => 'A warning message. (1)',
+            'message' => new TranslatableMarkup('A warning message. (1)'),
             'type' => 'warning',
           ],
           [
-            'message' => 'Standard output. (2)',
+            'message' => new TranslatableMarkup('A warning message with a "quote", an & ampersand, and <tag>. (1)'),
+            'type' => 'warning',
+          ],
+          [
+            'message' => new TranslatableMarkup('Standard output. (1)'),
             'type' => 'status',
           ],
         ],

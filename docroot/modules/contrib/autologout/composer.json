@@ -7,5 +7,8 @@
   "support": {
     "issues": "https://www.drupal.org/project/issues/autologout",
     "source": "https://git.drupalcode.org/project/autologout"
+  },
+  "require": {
+    "drupal/js_cookie": "*"
   }
 }

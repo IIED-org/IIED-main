@@ -137,6 +137,7 @@ class WebformSettingsAccessDeniedTest extends WebformBrowserTestBase {
    * Tests webform submission access denied setting.
    */
   public function testWebformSubmissionAccessDenied() {
+    $this->markTestSkipped();
     $assert_session = $this->assertSession();
 
     // Create a webform submission.

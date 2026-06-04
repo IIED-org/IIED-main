@@ -38,7 +38,7 @@ class ComponentFormController extends ControllerBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -57,7 +57,7 @@ class ComponentFormController extends ControllerBase {
    *   The paragraph type id.
    *
    * @return array|\Drupal\Core\Ajax\AjaxResponse
-   *   A build array or Ajax respone.
+   *   A build array or Ajax response.
    */
   public function insertForm(Request $request, LayoutParagraphsLayout $layout_paragraphs_layout, string $paragraph_type_id) {
 

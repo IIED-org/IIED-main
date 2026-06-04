@@ -26,8 +26,9 @@ seamlessly with existing paragraph reference fields.
   - Visit
   https://www.drupal.org/docs/develop/using-composer/manage-dependencies#third-party-libraries
   for further information.
-- Run `composer require bower-asset/dragula drupal/paragraphs drupal/layout_paragraphs`
-- Install Layout Paragraps.
+- Run `composer require
+    bower-asset/dragula drupal/paragraphs drupal/layout_paragraphs`
+- Install Layout Paragraphs.
 
 **Without composer**
 - Download the [Dragula dist folder](https://github.com/bevacqua/dragula/tree/master/dist)
@@ -43,7 +44,7 @@ as you would normally install a contributed Drupal module.
 - Install the the [Paragraphs module](https://www.drupal.org/project/paragraphs)
 and the [Layout Paragraphs module](https://www.drupal.org/project/layout_paragraphs)
 as you would normally install a contributed Drupal module.
-- The Dragual library will be automatically loaded via CDN if no local library
+- The Dragula library will be automatically loaded via CDN if no local library
 exists.
 
 Visit "[Installing Modules](https://www.drupal.org/node/1897420)", if you have
@@ -157,11 +158,11 @@ system.
 #### Example Code: Working with a Layout
 
 ```php
-// Instantiate a new layout given an exisitng node
+// Instantiate a new layout given an existing node
 // and the paragraph reference field name.
 $layout = new LayoutParagraphsLayout($node, $field_name);
 
-// Insert a new component directly after the exisiting paragraph with the given
+// Insert a new component directly after the existing paragraph with the given
 // uuid. This will add the new component into the same section and region as the
 // paragraph with the given uuid.
 $layout->insertAfterComponent($existing_paragraph_uuid, $the_new_paragraph);

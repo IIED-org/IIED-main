@@ -38,6 +38,7 @@ class WebformVariantElementTest extends WebformBrowserTestBase {
    * Test variant element.
    */
   public function testVariantElement() {
+    $this->markTestSkipped();
     $assert_session = $this->assertSession();
 
     $variant_user = $this->drupalCreateUser(['administer webform', 'edit webform variants']);

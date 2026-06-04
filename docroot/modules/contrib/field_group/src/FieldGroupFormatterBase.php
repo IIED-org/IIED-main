@@ -106,7 +106,7 @@ abstract class FieldGroupFormatterBase extends PluginSettingsBase implements Fie
       '#type' => 'checkbox',
       '#title' => $this->t('Allow HTML in label'),
       '#default_value' => $this->getSetting('label_as_html'),
-      '#description' => $this->t('Allows using (XSS-filtered) HTML in the label (e.g. icons).'),
+      '#description' => $this->t('Allows using (XSS-filtered) HTML in the label (e.g. icons). Note, that some elements might not have labels by default, but that can differ per theme.'),
       '#weight' => -2,
     ];
 

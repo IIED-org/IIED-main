@@ -9,12 +9,12 @@
 }
 
 .lpb-component-list__item a {
-  align-items: center;
   display: flex;
-  margin-top: 10px;
+  align-items: center;
   width: 100%;
+  margin-top: 10px;
 }
 .lpb-component-list__item img {
-  margin-right: 10px;
   max-width: 24px;
+  margin-right: 10px;
 }

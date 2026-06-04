@@ -457,7 +457,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   An associative array containing last submission data
    *   with excluded elements.
    */
-  protected function getLastSubmissionData(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
+  protected function getLastSubmissionData(WebformInterface $webform, ?EntityInterface $source_entity = NULL, ?AccountInterface $account = NULL) {
     $last_submission = $this->getStorage()->getLastSubmission($webform, $source_entity, $account, ['in_draft' => FALSE, 'access_check' => FALSE]);
     if (!$last_submission) {
       return [];
@@ -1457,7 +1457,7 @@ class WebformSubmissionForm extends ContentEntityForm {
           $track_last_page = ($this->getWebform()->getSetting('wizard_confirmation')) ? count($track_pages) : count($track_pages) + 1;
           break;
 
-        default;
+        default:
         case 'name':
           $track_previous_page = $previous_page;
           $track_next_page = $next_page;

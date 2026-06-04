@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\views_bulk_operations\Functional;
 
 use Drupal\Tests\BrowserTestBase;
@@ -24,9 +26,7 @@ abstract class ViewsBulkOperationsFunctionalTestBase extends BrowserTestBase {
   protected array $testNodes = [];
 
   /**
-   * Modules to install.
-   *
-   * @var array
+   * {@inheritdoc}
    */
   protected static $modules = [
     'node',

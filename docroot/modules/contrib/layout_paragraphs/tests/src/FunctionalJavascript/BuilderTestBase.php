@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
 
 use Behat\Mink\Exception\ExpectationException;
@@ -100,11 +102,18 @@ abstract class BuilderTestBase extends WebDriverTestBase {
     $this->submitForm([
       'settings[handler_settings][negate]' => '1',
     ], 'Save settings');
+    // The "Save settings" button uses Drupal AJAX and then redirects to the
+    // field list. Wait for the redirect to complete by polling for the status
+    // message that appears on the destination page.
+    $this->assertNotEmpty($this->assertSession()->waitForText('Saved'));
+    $this->assertSession()->statusMessageContains('Saved');
     // Use "Layout Paragraphs" formatter for the content field.
     $this->drupalGet('admin/structure/types/manage/' . $type_name . '/display');
     $page = $this->getSession()->getPage();
+    $this->htmlOutput($this->getSession()->getPage()->getContent());
     $page->selectFieldOption('fields[' . $paragraph_field . '][type]', 'layout_paragraphs');
     $this->assertSession()->assertWaitOnAjaxRequest(10000, 'Unable to choose layout paragraphs (fields[' . $paragraph_field . '][type]) field formatter.');
+    $this->htmlOutput($this->getSession()->getPage()->getContent());
     $this->submitForm([], 'Save');
   }
 
@@ -182,26 +191,22 @@ abstract class BuilderTestBase extends WebDriverTestBase {
     $page = $this->getSession()->getPage();
     // Click the Add Component button.
     $page->find('css', $css_selector)->click();
-//    $this->assertSession()->assertWaitOnAjaxRequest(1000, 'Unable to click add a component.');
     $this->assertNotEmpty($this->assertSession()->waitForText('Choose a component'));
-
 
     // Add a section.
     $page->clickLink('section');
-//    $this->assertSession()->assertWaitOnAjaxRequest(1000, 'Unable to select section component.');
     $this->assertNotEmpty($this->assertSession()->waitForText('Create new section'));
 
     // Choose a three-column layout.
     $elements = $page->findAll('css', '.layout-select__item label.option');
     $elements[$columns_choice]->click();
-//    $this->assertSession()->assertWaitOnAjaxRequest(1000, 'Unable to select layout.');
     $this->assertNotEmpty($this->assertSession()->waitForText('Choose a layout:'));
     $this->getSession()->wait(1000);
 
     // Save the layout.
     $button = $page->find('css', 'button.lpb-btn--save');
     $button->click();
-//    $this->assertSession()->assertWaitOnAjaxRequest();
+    // $this->assertSession()->assertWaitOnAjaxRequest();
     $this->getSession()->wait(1000);
   }
 
@@ -221,7 +226,7 @@ abstract class BuilderTestBase extends WebDriverTestBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    *
    * Added method with fixed return comment for IDE type hinting.
    *
@@ -244,14 +249,14 @@ abstract class BuilderTestBase extends WebDriverTestBase {
   protected function assertOrderOfStrings(array $strings, $assert_message = 'Strings are not in correct order.') {
     $page = $this->getSession()->getPage();
     $page_text = $page->getHtml();
-    $highmark = -1;
+    $high_mark = -1;
     foreach ($strings as $string) {
       $this->assertSession()->pageTextContains($string);
       $pos = strpos($page_text, $string);
-      if ($pos <= $highmark) {
+      if ($pos <= $high_mark) {
         throw new ExpectationException($assert_message, $this->getSession()->getDriver());
       }
-      $highmark = $pos;
+      $high_mark = $pos;
     }
   }
 
@@ -309,7 +314,7 @@ abstract class BuilderTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Save and close the fronend builder.
+   * Save and close the frontend builder.
    */
   protected function saveAndCloseFrontendBuilder() {
     $this->saveFrontendBuilder();

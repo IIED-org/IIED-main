@@ -3,3 +3,10 @@ widget.inline:
   css:
     component:
       css/name.inline.css: {}
+
+field_ui:
+  css:
+    theme:
+      css/name.icon.css: {}
+  dependencies:
+    - field_ui/drupal.field_ui.manage_fields

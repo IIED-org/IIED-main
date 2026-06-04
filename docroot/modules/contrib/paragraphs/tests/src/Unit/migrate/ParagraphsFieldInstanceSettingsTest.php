@@ -3,6 +3,8 @@
 namespace Drupal\Tests\paragraphs\Unit\migrate;
 
 use Drupal\paragraphs\Plugin\migrate\process\ParagraphsFieldInstanceSettings;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Test the ParagraphFieldInstanceSettings Process Plugin.
@@ -10,6 +12,7 @@ use Drupal\paragraphs\Plugin\migrate\process\ParagraphsFieldInstanceSettings;
  * @group paragraphs
  * @coversDefaultClass \Drupal\paragraphs\Plugin\migrate\process\ParagraphsFieldInstanceSettings
  */
+#[Group('paragraphs')]
 class ParagraphsFieldInstanceSettingsTest extends ProcessTestCase {
 
   /**
@@ -35,6 +38,7 @@ class ParagraphsFieldInstanceSettingsTest extends ProcessTestCase {
    *
    * @dataProvider getData
    */
+  #[DataProvider('getData')]
   public function testParagraphsInstanceFieldSettings(array $source, array $expected) {
 
     $value = $this->plugin->transform($source, $this->migrateExecutable, $this->row, 'settings');

@@ -28,4 +28,3 @@ variables:
   SKIP_CSPELL: '1'
   # We want to test in Drupal 10 too.
   OPT_IN_TEST_PREVIOUS_MAJOR: 1
-

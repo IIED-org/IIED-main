@@ -1562,17 +1562,17 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    *   TRUE if the element is required.
    * @param array $element_options
    *   The element options.
-   * @param array $options_options
+   * @param array|null $options_options
    *   The options options.
-   * @param array $role_options
+   * @param array|null $role_options
    *   The (user) role options.
-   * @param array $other_options
+   * @param array|null $other_options
    *   The other options.
    *
    * @return array
    *   A select other element.
    */
-  protected function buildElement($name, $title, $label, $required = FALSE, array $element_options = [], array $options_options = NULL, array $role_options = NULL, array $other_options = NULL) {
+  protected function buildElement($name, $title, $label, $required = FALSE, array $element_options = [], ?array $options_options = NULL, ?array $role_options = NULL, ?array $other_options = NULL) {
     [$element_name, $element_type] = (strpos($name, '_') !== FALSE) ? explode('_', $name) : [$name, 'text'];
 
     $default_option = $this->getDefaultConfigurationValue($name);

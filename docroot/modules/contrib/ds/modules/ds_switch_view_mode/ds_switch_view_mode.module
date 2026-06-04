@@ -62,7 +62,7 @@ function ds_switch_view_mode_entity_view_mode_alter(&$view_mode, EntityInterface
  */
 function ds_switch_view_mode_form_node_form_alter(&$form, FormStateInterface $form_state) {
   // Switch full view mode.
-  /* @var Drupal\node\NodeInterface $node */
+  /** @var Drupal\node\NodeInterface $node */
   $node = $form_state->getFormObject()->getEntity();
 
   if (\Drupal::currentUser()->hasPermission('ds switch ' . $node->bundle()) || \Drupal::currentUser()->hasPermission('ds switch view mode')) {
@@ -129,7 +129,7 @@ function ds_switch_view_mode_form_node_form_alter(&$form, FormStateInterface $fo
 
       $ds_layouts = Ds::getLayouts();
       $fallback_image = [
-       '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . \Drupal::service('extension.list.module')->getPath('ds') . '/images/preview.png' . '"/></div>',
+        '#markup' => '<div class="ds-layout-preview-image"><img src="' . base_path() . \Drupal::service('extension.list.module')->getPath('ds') . '/images/preview.png' . '"/></div>',
       ];
 
       if (isset($layout_settings['layout'])) {

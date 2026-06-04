@@ -1,5 +1,5 @@
 admin:
-  version: VERSION
+  version: 1.33
   js:
     js/ds_extras.admin.js: {}
   dependencies:

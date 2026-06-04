@@ -11,7 +11,7 @@ services:
     arguments: ['@memcache.factory', 'memcache_bin_timestamps', 0.001]
   cache.backend.memcache:
     class: Drupal\memcache\MemcacheBackendFactory
-    arguments: ['@memcache.factory', '@cache_tags.invalidator.checksum', '@memcache.timestamp.invalidator.bin', '@datetime.time']
+    arguments: ['@memcache.factory', '@cache_tags.invalidator.checksum', '@memcache.timestamp.invalidator.bin']
   memcache.lock.factory:
     class: Drupal\memcache\Lock\MemcacheLockFactory
     arguments: ['@memcache.factory']

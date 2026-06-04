@@ -279,8 +279,8 @@ class AutologoutManager implements AutologoutManagerInterface {
         ->load($uid);
     }
 
-    if ($user->id() == 0) {
-      // Anonymous doesn't get logged out.
+    if (!$user || $user->id() == 0) {
+      // Anonymous or non-existent user doesn't get logged out.
       return 0;
     }
     $user_timeout = $this->userData->get('autologout', $user->id(), 'timeout');
@@ -331,8 +331,8 @@ class AutologoutManager implements AutologoutManagerInterface {
         ->load($uid);
     }
 
-    if ($user->id() == 0) {
-      // Anonymous doesn't get logged out.
+    if (!$user || $user->id() == 0) {
+      // Anonymous or non-existent user doesn't get logged out.
       return;
     }
 

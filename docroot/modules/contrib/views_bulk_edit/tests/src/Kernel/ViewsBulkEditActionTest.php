@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\views_bulk_edit\Kernel;
 
-use Drupal\node\NodeInterface;
 use Drupal\Tests\views_bulk_operations\Kernel\ViewsBulkOperationsKernelTestBase;
+use Drupal\node\NodeInterface;
 
 /**
  * @coversDefaultClass \Drupal\views_bulk_edit\Plugin\Action\ModifyEntityValues
@@ -16,6 +16,7 @@ class ViewsBulkEditActionTest extends ViewsBulkOperationsKernelTestBase {
    */
   protected static $modules = [
     'views_bulk_edit',
+    'action',
   ];
 
   /**

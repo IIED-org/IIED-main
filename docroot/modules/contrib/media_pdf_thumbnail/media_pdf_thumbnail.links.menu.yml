@@ -1,5 +1,0 @@
-media_pdf_thumbnail.settings:
-  title: 'Media PDF thumbnail'
-  parent: system.admin_config_media
-  route_name: view.pdf_image_entity.list
-  description: 'Media PDF thumbnail settings.'

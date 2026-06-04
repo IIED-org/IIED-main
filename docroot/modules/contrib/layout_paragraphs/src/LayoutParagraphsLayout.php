@@ -2,7 +2,6 @@
 
 namespace Drupal\layout_paragraphs;
 
-use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
@@ -16,7 +15,7 @@ use Drupal\paragraphs\ParagraphInterface;
  * Layout Paragraphs Sections and Layout Paragraphs Components
  * associated with a paragraphs reference field.
  * This class provides public methods for manipulating a layout -
- * i.e. adding, removing, and reording paragraph layout sections
+ * i.e. adding, removing, and reordering paragraph layout sections
  * and paragraph layout components.
  *
  * See also:
@@ -77,7 +76,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
    */
   public function __construct(
     EntityReferenceFieldItemListInterface $paragraphs_reference_field,
-    array $settings = []
+    array $settings = [],
   ) {
     $this->paragraphsReferenceField = $paragraphs_reference_field;
     $this->settings = $settings;
@@ -213,7 +212,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
    * @param string $uuid
    *   The uuid to search for.
    *
-   * @return LayoutParagraphsComponent
+   * @return LayoutParagraphsComponent|null
    *   The component.
    */
   public function getComponentByUuid($uuid) {
@@ -334,6 +333,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
    * @return $this
    */
   public function reorderComponents(array $ordered_items) {
+    $reordered_items = [];
     foreach ($ordered_items as $ordered_item) {
       if ($component = $this->getComponentByUuid($ordered_item['uuid'])) {
         $component->setSettings([
@@ -363,7 +363,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
    * @return \Drupal\layout_paragraphs\LayoutParagraphsComponent
    *   The duplicated component.
    */
-  public function duplicateComponent(string $source_uuid, string $target_section_uuid = NULL) {
+  public function duplicateComponent(string $source_uuid, ?string $target_section_uuid = NULL) {
     $source_component = $this->getComponentByUuid($source_uuid);
     $cloned_paragraph = $source_component->getEntity()->createDuplicate();
     if ($target_section_uuid) {
@@ -467,7 +467,8 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
   protected function insertSiblingComponent(
     string $sibling_uuid,
     ParagraphInterface $new_paragraph,
-    int $delta_offset = 0) {
+    int $delta_offset = 0,
+  ) {
 
     // Create a layout component for the new paragraph.
     $new_component = $this->getComponent($new_paragraph);
@@ -542,7 +543,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
   }
 
   /**
-   * Searchs for a component by its uuid and returns its delta.
+   * Searches for a component by its uuid and returns its delta.
    *
    * @param string $uuid
    *   The uuid to search for.

@@ -2,10 +2,12 @@
 
 /**
  * @file
+ * Hooks and functions for the Read Only Mode module.
+ *
  * Read Only Mode provides an alternative to the built in 'Maintenance Mode' in
  * Drupal. Instead of displaying a static text file to users while the site is
  * in maintenance mode, Read Only Mode will allow access (reading) of existing
- * content while preventing changing or adding content (posting / submitting.
+ * content while preventing changing or adding content (posting / submitting
  * forms / etc).
  *
  * This allows the site to remain functional while maintenance is performed.
@@ -13,6 +15,7 @@
  * that the site is in maintenance mode.
  */
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -120,11 +123,9 @@ function readonlymode_form_system_site_maintenance_mode_alter(&$form, FormStateI
  */
 function readonlymode_settings_form_validate(array &$form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
-  if ($path = $values['url']) {
-    $path_validator = \Drupal::pathValidator();
-    if (!$path_validator->isValid($form_state->getValue('url'))) {
-      $form_state->setErrorByName('url', t('The path %link_path is either invalid or you do not have access to it.', ['%link_path' => $path]));
-    }
+
+  if (!empty($values['url']) && (!UrlHelper::isValid($values['url']) || UrlHelper::isExternal($values['url']))) {
+    $form_state->setErrorByName('url', t('The path %link_path is either invalid or you do not have access to it.', ['%link_path' => $values['url']]));
   }
 }
 
@@ -156,7 +157,14 @@ function readonlymode_form_alter(&$form, FormStateInterface $form_state, $form_i
   if (!_readonlymode_form_check($form, $form_id, FALSE)) {
     // If a redirect URL is set, then we redirect to it.
     if ($url = $settings->get('url')) {
-      return new RedirectResponse($url);
+      $url = '/' . ltrim($url, '/');
+
+      // Don't loop the redirect.
+      if (\Drupal::request()->getRequestUri() != $url) {
+        $response = new RedirectResponse($url);
+        $response->send();
+        return;
+      }
     }
     else {
       // Remove FAPI #after_build handlers.
@@ -172,17 +180,26 @@ function readonlymode_form_alter(&$form, FormStateInterface $form_state, $form_i
           unset($form[$key]);
         }
       }
-      $form['readonly_notice'] = [
-        '#markup' => \Drupal::token()
-          ->replace($settings->get('messages.default')),
-        '#prefix' => '<div class="messages warning">',
-        '#suffix' => '</div>',
-      ];
+      if (\Drupal::currentUser()->hasPermission('readonlymode access messages')) {
+        $form['readonly_notice'] = [
+          '#theme' => 'status_messages',
+          '#message_list' => [
+            'warning' => [
+              \Drupal::token()->replace($settings->get('messages.default')),
+            ],
+          ],
+          '#status_headings' => [
+            'warning' => \t('Warning message'),
+          ],
+          '#weight' => -100,
+        ];
+      }
     }
   }
 
-  if (\Drupal::currentUser()
-    ->hasPermission('readonlymode access forms') && $settings->get('enabled')
+  if ($settings->get('enabled') &&
+    \Drupal::currentUser()->hasPermission('readonlymode access forms') &&
+    \Drupal::currentUser()->hasPermission('readonlymode access messages')
   ) {
     \Drupal::messenger()->addMessage(t('The site is currently set to Read Only, content moderation is disabled for all users without the "Access all forms while in Read Only Mode" permission.'), 'warning', FALSE);
   }
@@ -197,8 +214,11 @@ function readonlymode_form_alter(&$form, FormStateInterface $form_state, $form_i
  * occurring while Read Only Mode is enabled.
  */
 function readonlymode_check_form_validate(array &$form, FormStateInterface $form_state) {
-  // Check for Read Only Mode, whether we are allowed this form,.
-  if (!_readonlymode_form_check($form, $form['form_id']['#value'], TRUE)) {
+  // Check for Read Only Mode, whether we are allowed this form.
+  $form_id = !empty($form['form_id']['#value']) ? $form['form_id']['#value'] : $form['#form_id'];
+  if (\Drupal::currentUser()->hasPermission('readonlymode access messages') &&
+    !_readonlymode_form_check($form, $form_id, TRUE)
+  ) {
     $form_state->setErrorByName('submit', \Drupal::token()
       ->replace(\Drupal::config('readonlymode.settings')
         ->get('messages.not_saved')));
@@ -258,16 +278,13 @@ function _readonlymode_form_check(array &$form, $form_id, $submitted = TRUE) {
 /**
  * Check for form_id in a given list.
  *
- * @param string $list
+ * @param array|string $list
  *   A string of form id's separated by newlines.
  *
  * @return bool
  *   TRUE when matched, FALSE otherwise.
  */
 function _readonlymode_form_list_check($form_id, $list) {
-  if (!is_string($list)) {
-    return FALSE;
-  }
   $l = preg_split('/(\r\n|\n|\r)/', $list);
   foreach ($l as $word) {
     // Skip empty words.

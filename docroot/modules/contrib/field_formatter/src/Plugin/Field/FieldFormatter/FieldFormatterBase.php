@@ -225,12 +225,14 @@ abstract class FieldFormatterBase extends EntityReferenceFormatterBase {
     foreach ($target_bundles as $value) {
       $bundle_field_names = array_map(
         function (FieldDefinitionInterface $field_definition) {
-          return $field_definition->getLabel() . ' (' . $field_definition->getName() . ')';
+          return $field_definition->getName() . ' ("' . $field_definition->getLabel() . '")';
         },
         $this->entityFieldManager->getFieldDefinitions($entity_type_id, $value)
       );
       $field_names = array_merge($field_names, $bundle_field_names);
     }
+    // Sort alphabetically by field machine name for easier selection:
+    ksort($field_names);
     return $field_names;
   }
 

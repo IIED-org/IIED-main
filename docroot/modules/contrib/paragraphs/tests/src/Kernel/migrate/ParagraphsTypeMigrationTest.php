@@ -2,11 +2,16 @@
 
 namespace Drupal\Tests\paragraphs\Kernel\migrate;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
 /**
  * Test Migration of paragraph and field collection bundles.
  *
  * @group paragraphs
  */
+#[RunTestsInSeparateProcesses]
+#[Group('paragraphs')]
 class ParagraphsTypeMigrationTest extends ParagraphsMigrationTestBase {
 
   /**

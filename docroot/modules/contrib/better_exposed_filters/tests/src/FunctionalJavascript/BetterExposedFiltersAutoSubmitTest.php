@@ -295,6 +295,137 @@ class BetterExposedFiltersAutoSubmitTest extends BetterExposedFiltersTestBase {
   }
 
   /**
+   * Tests that auto submit radio buttons work and gain focus on ajax reload.
+   *
+   * @throws \Behat\Mink\Exception\ResponseTextException
+   */
+  public function testAutoSubmitWithRadios(): void {
+
+    $view = Views::getView('bef_test');
+
+    // Convert filter to radios by setting multiple = FALSE.
+    $view->storage->getDisplay('default')['display_options']['filters']['field_bef_letters_value']['expose']['multiple'] = FALSE;
+    $view->storage->save();
+
+    // Configure BEF settings for the filter.
+    $this->setBetterExposedOptions($view, [
+      'filter' => [
+        'field_bef_letters_value' => [
+          'plugin_id' => 'bef',
+        ],
+      ],
+    ]);
+
+    $this->turnAjaxOn();
+
+    // Visit the bef-test page.
+    $this->drupalGet('bef-test');
+
+    $session = $this->getSession();
+    $page = $session->getPage();
+
+    $this->assertSession()->pageTextContains('Page One');
+    $this->assertSession()->pageTextContains('Page Two');
+
+    // Select radio button for 'b' to filter to only "Page Two".
+    $radio_b = $page->find('css', 'input[name="field_bef_letters_value"][value="b"]');
+    $this->assertNotNull($radio_b, 'Radio button for value "b" should exist');
+
+    // Trigger the radio button change and auto-submit.
+    $radio_b->click();
+
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $this->assertSession()->pageTextContains('Page Two');
+    $this->assertSession()->pageTextNotContains('Page One');
+
+    $this->assertTrue($radio_b->isChecked(), 'Radio button for value "b" should be selected');
+
+    // Check focus restoration.
+    $active_selector = $this->getSession()->evaluateScript('document.activeElement.getAttribute("data-drupal-selector")');
+    $expected_selector = $radio_b->getAttribute('data-drupal-selector');
+    $this->assertEquals($expected_selector, $active_selector, 'The clicked radio button should regain focus after AJAX submission.');
+
+  }
+
+  /**
+   * Tests that auto-submit text fields retain focus and cursor position.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function testAutoSubmitTextFieldFocusRetention(): void {
+    $view = Views::getView('bef_test');
+    $this->setBetterExposedOptions($view, [
+      'general' => [
+        'autosubmit_exclude_textfield' => FALSE,
+      ],
+    ]);
+
+    $this->turnAjaxOn();
+
+    $this->drupalGet('bef-test');
+
+    $session = $this->getSession();
+    $page = $session->getPage();
+
+    // Find the text input field.
+    $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
+    $this->assertNotNull($field_bef_email);
+
+    // Use JavaScript to set value, store the triggered selector (as
+    // triggerSubmit would), and click submit to trigger AJAX.
+    $session->executeScript("
+      var input = document.querySelector('.form-item-field-bef-email-value input');
+      input.value = '1bef';
+      input.focus();
+      // Store the selector as triggerSubmit() would.
+      drupalSettings.bef_autosubmit_triggered_selector = input.getAttribute('data-drupal-selector');
+      drupalSettings.bef_autosubmit_cursor_position = input.value.length;
+      // Click the auto-submit button to trigger immediate AJAX.
+      document.querySelector('[data-bef-auto-submit-click]').click();
+    ");
+
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Allow the IntersectionObserver to fire.
+    $this->getSession()->wait(500);
+
+    // Check focus restoration - the text field should regain focus.
+    $active_selector = $session->evaluateScript('document.activeElement.getAttribute("data-drupal-selector")');
+    $this->assertIsString($active_selector);
+    $expected_selector_base = 'edit-field-bef-email-value';
+    $this->assertStringStartsWith($expected_selector_base, $active_selector);
+
+    // Set a value and position the cursor in the middle.
+    $test_value = 'testvalue';
+    $cursor_position = 4;
+
+    // Use JavaScript to set value, position cursor, store the triggered
+    // selector, and click submit to trigger immediate AJAX.
+    $session->executeScript("
+      var input = document.querySelector('.form-item-field-bef-email-value input');
+      input.value = '{$test_value}';
+      input.focus();
+      input.setSelectionRange({$cursor_position}, {$cursor_position});
+      // Store the selector and cursor position as triggerSubmit() would.
+      drupalSettings.bef_autosubmit_triggered_selector = input.getAttribute('data-drupal-selector');
+      drupalSettings.bef_autosubmit_cursor_position = {$cursor_position};
+      // Click the auto-submit button to trigger immediate AJAX.
+      document.querySelector('[data-bef-auto-submit-click]').click();
+    ");
+
+    // Wait for AJAX to complete.
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Allow the IntersectionObserver to fire.
+    $this->getSession()->wait(500);
+
+    // Check that the cursor position was restored after AJAX.
+    $restored_position = $session->evaluateScript('document.activeElement.selectionStart');
+    $this->assertEquals($cursor_position, $restored_position);
+  }
+
+  /**
    * Tests auto submit sort only.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException

@@ -60,16 +60,6 @@ phpcs:
   before_script:
     - cp $_WEB_ROOT/core/phpcs.xml.dist ./core.phpcs.xml.dist
 
-composer (10.2):
-  extends: .composer-base
-  variables:
-    DRUPAL_CORE: "10.2.12"
-
-phpunit (10.2):
-  extends: phpunit
-  needs:
-    - "composer (10.2)"
-
 ###################################################################################
 #
 #                                        *

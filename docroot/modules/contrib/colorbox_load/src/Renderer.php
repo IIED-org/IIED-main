@@ -14,20 +14,11 @@ use Symfony\Component\HttpFoundation\Request;
 class Renderer implements MainContentRendererInterface {
 
   /**
-   * The renderer service.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
+   * Constructs a new Renderer.
    */
-  protected $renderer;
-
-  /**
-   * Constructs a new HtmlRenderer.
-   *
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer service.
-   */
-  public function __construct(RendererInterface $renderer) {
-    $this->renderer = $renderer;
+  public function __construct(
+    protected RendererInterface $renderer,
+  ) {
   }
 
   /**
@@ -35,7 +26,7 @@ class Renderer implements MainContentRendererInterface {
    */
   public function renderResponse(array $main_content, Request $request, RouteMatchInterface $route_match) {
     $response = new AjaxResponse();
-    $content = $this->renderer->renderPlain($main_content);
+    $content = $this->renderer->renderInIsolation($main_content);
     $response->setAttachments($main_content['#attached']);
     $response->addCommand(new OpenCommand($content));
     return $response;

@@ -126,7 +126,7 @@ function layout_paragraphs_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
- * Implements hook_prepreprocess_radios().
+ * Implements hook_preprocess_radios().
  *
  * Add wrapper class for layout selection.
  */
@@ -160,7 +160,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
           'lpb-tooltip--hover',
           'lpb-tooltip--focus',
         ],
-        'aria-describedy' => $id . '--tip',
+        'aria-describedby' => $id . '--tip',
       ],
       '#weight' => 10,
     ],
@@ -182,7 +182,7 @@ function layout_paragraphs_preprocess_layout_paragraphs_builder_controls(&$varia
       '#attributes' => [
         'class' => ['lpb-controls-label'],
       ],
-      '#value' => $entity->getParagraphType()->label,
+      '#value' => $entity->getParagraphType()->get('label'),
       '#weight' => 30,
     ],
     'move_up' => [
@@ -335,6 +335,7 @@ function layout_paragraphs_paragraph_presave(ParagraphInterface $paragraph) {
   }
 
   // If the parent component cannot be loaded, we are not cloning.
+  /** @var \Drupal\paragraphs\Entity\Paragraph|NULL $parent_component */
   $parent_component = \Drupal::service('entity.repository')
     ->loadEntityByUuid('paragraph', $parent_uuid);
   if (empty($parent_component)) {
@@ -351,8 +352,11 @@ function layout_paragraphs_paragraph_presave(ParagraphInterface $paragraph) {
   // the paragraph's parent's host's id, we ARE cloning.
   if ($host->id() !== $parent_host->id()) {
 
+    $uuid_map = [];
+
     // Map the UUIDs to deltas from the clone source.
     $items = _layout_paragraphs_get_paragraphs($parent_component);
+    /** @var \Drupal\paragraphs\Entity\Paragraph $item */
     foreach ($items as $delta => $item) {
       $uuid_map[$item->uuid()] = $delta;
     }
@@ -360,6 +364,7 @@ function layout_paragraphs_paragraph_presave(ParagraphInterface $paragraph) {
     // Map the deltas to UUIds from the clone destination.
     $items = _layout_paragraphs_get_paragraphs($paragraph);
     $delta_map = [];
+    /** @var \Drupal\paragraphs\Entity\Paragraph $item */
     foreach ($items as $delta => $item) {
       $delta_map[$delta] = $item->uuid();
     }
@@ -385,6 +390,7 @@ function layout_paragraphs_paragraph_presave(ParagraphInterface $paragraph) {
  */
 function layout_paragraphs_entity_translation_create(FieldableEntityInterface $entity) {
   $entity_type_manager = \Drupal::entityTypeManager();
+  /** @var \Drupal\Core\Entity\RevisionableStorageInterface $paragraph_storage */
   $paragraph_storage = $entity_type_manager->getStorage('paragraph');
   /** @var \Drupal\field\FieldConfigInterface[] $field_definitions */
   $field_definitions = $entity_type_manager->getStorage('field_config')
@@ -468,8 +474,8 @@ function layout_paragraphs_entity_translation_create(FieldableEntityInterface $e
  * @param \Drupal\paragraphs\ParagraphInterface $paragraph
  *   The paragraph to use for finding the complete list of siblings.
  *
- * @return \Drupal\Core\Field\EntityReferenceFieldItemList
- *   The list of paragraphs.
+ * @return array
+ *   The list of paragraph entities.
  */
 function _layout_paragraphs_get_paragraphs(ParagraphInterface $paragraph) {
   $host = $paragraph->getParentEntity();

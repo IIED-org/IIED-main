@@ -39,19 +39,20 @@
       return;
     }
     $dialogs.each((i, dialog) => {
-      const bounding = dialog.getBoundingClientRect();
-      const viewPortHeight =
+      let bounding = dialog.getBoundingClientRect();
+      let viewPortHeight =
         window.innerHeight || document.documentElement.clientHeight;
       if (bounding.bottom > viewPortHeight) {
         const $dialog = $('.ui-dialog-content', dialog);
         const height = viewPortHeight - 200;
         $dialog.dialog('option', 'height', height);
-        $dialog.css('overscroll-behavior', 'contain');
+        $dialog[0].style.overscrollBehavior = 'contain';
 
         if ($dialog.data('lpOriginalHeight') !== height) {
           $dialog.data('lpOriginalHeight', height);
-          const bounding = dialog.getBoundingClientRect();
-          const viewPortHeight = window.innerHeight || document.documentElement.clientHeight;
+          bounding = dialog.getBoundingClientRect();
+          viewPortHeight =
+            window.innerHeight || document.documentElement.clientHeight;
           if (bounding.bottom > viewPortHeight) {
             const pos = $dialog.dialog('option', 'position');
             $dialog.dialog('option', 'position', pos);
@@ -121,9 +122,7 @@
    */
   function movesErrors(settings, el, source, handle) {
     return Drupal._lpbMoveErrors.moves
-      .map((validator) =>
-        validator.apply(null, [settings, el, source, handle]),
-      )
+      .map((validator) => validator.apply(null, [settings, el, source, handle]))
       .filter((errors) => errors !== false && errors !== undefined);
   }
 
@@ -132,8 +131,12 @@
    * @param {jQuery} $element The builder element.
    */
   function updateMoveButtons($element) {
-    const lpbBuilderElements = Array.from($element[0].querySelectorAll('.js-lpb-component-list, .js-lpb-region'));
-    const lpbBuilderComponent = lpbBuilderElements.filter(el => el.querySelector('.js-lpb-component'));
+    const lpbBuilderElements = Array.from(
+      $element[0].querySelectorAll('.js-lpb-component-list, .js-lpb-region'),
+    );
+    const lpbBuilderComponent = lpbBuilderElements.filter((el) =>
+      el.querySelector('.js-lpb-component'),
+    );
 
     $element[0].querySelectorAll('.lpb-up, .lpb-down').forEach((el) => {
       // Set the tabindex of the up and down arrows to 0.
@@ -141,29 +144,37 @@
     });
 
     lpbBuilderComponent.forEach((el) => {
-      const components = Array.from(el.children).filter(n => n.classList.contains('js-lpb-component'));
+      const components = Array.from(el.children).filter((n) =>
+        n.classList.contains('js-lpb-component'),
+      );
 
-      // Set the tabindex of the first component's up arrow to -1.
-      components[0].querySelector('.lpb-up')?.setAttribute('tabindex', '-1');
+      if (components.length > 0) {
+        // Set the tabindex of the first component's up arrow to -1.
+        components[0].querySelector('.lpb-up')?.setAttribute('tabindex', '-1');
 
-      // Set the tabindex of the last component's down arrow to -1.
-      components[components.length - 1].querySelector('.lpb-down')?.setAttribute('tabindex', '-1');
+        // Set the tabindex of the last component's down arrow to -1.
+        components[components.length - 1]
+          .querySelector('.lpb-down')
+          ?.setAttribute('tabindex', '-1');
+      }
     });
   }
 
   /**
    * Hides the add content button in regions that contain components.
-   * @param {jQuery} $element The builder element.
+   * @param {HTMLElement} element The builder element.
    */
-  function hideEmptyRegionButtons($element) {
-    $element.find('.js-lpb-region').each((i, e) => {
-      const $e = $(e);
-      if ($e.find('.js-lpb-component').length === 0) {
-        $e.find('.lpb-btn--add.center').css('display', 'block');
-      } else {
-        $e.find('.lpb-btn--add.center').css('display', 'none');
-      }
-    });
+  function hideEmptyRegionButtons(element) {
+    element
+      .querySelectorAll('.lpb-btn--add.center')
+      .forEach((buttonElement) => {
+        const regionElement = buttonElement.closest('.js-lpb-region');
+        if (regionElement?.querySelector('.js-lpb-component')) {
+          buttonElement.style.display = 'none';
+        } else {
+          buttonElement.style.display = 'block';
+        }
+      });
   }
 
   /**
@@ -173,7 +184,7 @@
   function updateUi($element) {
     reorderComponents($element);
     updateMoveButtons($element);
-    hideEmptyRegionButtons($element);
+    hideEmptyRegionButtons($element[0]);
   }
 
   /**
@@ -197,16 +208,19 @@
     }
 
     // Determine if the move should be animated horizontally or vertically.
-    const animateProp = $sibling[0].getBoundingClientRect().top == $moveItem[0].getBoundingClientRect().top
-      ? 'translateX'
-      : 'translateY';
+    const animateProp =
+      $sibling[0].getBoundingClientRect().top ===
+      $moveItem[0].getBoundingClientRect().top
+        ? 'translateX'
+        : 'translateY';
     // Determine the dimension property to use for the animation.
-    const dimmensionProp = animateProp === 'translateX' ? 'offsetWidth' : 'offsetHeight';
+    const dimensionProp =
+      animateProp === 'translateX' ? 'offsetWidth' : 'offsetHeight';
     // Determine the distance to move the sibling and the item.
-    const siblingDest = $moveItem[0][dimmensionProp] * direction * -1;
-    const itemDest = $sibling[0][dimmensionProp] * direction;
+    const siblingDest = $moveItem[0][dimensionProp] * direction * -1;
+    const itemDest = $sibling[0][dimensionProp] * direction;
     const distance = Math.abs(Math.max(siblingDest, itemDest));
-    const duration  = distance * .25;
+    const duration = distance * 0.25;
     const siblingKeyframes = [
       { transform: `${animateProp}(0)` },
       { transform: `${animateProp}(${siblingDest}px)` },
@@ -217,12 +231,12 @@
     ];
     const timing = {
       duration,
-      iterations: 1
-    }
+      iterations: 1,
+    };
     const anim1 = $moveItem[0].animate(itemKeyframes, timing);
     anim1.onfinish = () => {
-      $moveItem.css({ transform: 'none' });
-      $sibling.css({ transform: 'none' });
+      $moveItem[0].style.transform = 'none';
+      $sibling[0].style.transform = 'none';
       $sibling[method]($moveItem);
       $moveItem
         .closest(`[${idAttr}]`)
@@ -412,19 +426,20 @@
   }
 
   function initDragAndDrop($element, settings) {
-    const containers = once('is-dragula-enabled', '.js-lpb-component-list, .js-lpb-region', $element[0]);
-    const drake = dragula(
-      containers,
-      {
-        accepts: (el, target, source, sibling) =>
-          acceptsErrors(settings, el, target, source, sibling).length === 0,
-        moves: (el, source, handle) =>
-          movesErrors(settings, el, source, handle).length === 0,
-      },
+    const containers = once(
+      'is-dragula-enabled',
+      '.js-lpb-component-list, .js-lpb-region',
+      $element[0],
     );
+    const drake = dragula(containers, {
+      accepts: (el, target, source, sibling) =>
+        acceptsErrors(settings, el, target, source, sibling).length === 0,
+      moves: (el, source, handle) =>
+        movesErrors(settings, el, source, handle).length === 0,
+    });
     drake.on('drop', (el) => {
       const $el = $(el);
-      if ($el.prev().is('a')) {
+      if ($el.prev()[0]?.matches('a')) {
         $el.insertBefore($el.prev());
       }
       $element.trigger('lpb-component:drop', [$el.attr('data-uuid')]);
@@ -455,13 +470,13 @@
 
   // An object with arrays for "accepts" and "moves" dragula callback functions.
   Drupal._lpbMoveErrors = {
-    'accepts': [],
-    'moves': [],
+    accepts: [],
+    moves: [],
   };
   /**
    * Registers a move validation function.
    * @param {Function} f The validator function.
-   * @param {String} t The dragula callback to register the validator for.
+   * @param {String} c The dragula callback to register the validator for.
    */
   Drupal.registerLpbMoveError = (f, c = 'accepts') => {
     Drupal._lpbMoveErrors[c].push(f);
@@ -519,21 +534,24 @@
     }
 
     const buttons = [];
-    const $buttons = $lpDialog.find('.layout-paragraphs-component-form > .form-actions input[type=submit], .layout-paragraphs-component-form > .form-actions a.button');
+    const $buttons = $lpDialog.find(
+      '.layout-paragraphs-component-form > .form-actions input[type=submit], .layout-paragraphs-component-form > .form-actions a.button',
+    );
 
     if ($buttons.length === 0) {
       return;
     }
 
     $buttons.each((_i, el) => {
-      const $originalButton = $(el).css({ display: 'none' });
+      const $originalButton = $(el);
+      $originalButton[0].style.display = 'none';
       buttons.push({
         text: $originalButton.html() || $originalButton.attr('value'),
         class: $originalButton.attr('class'),
         click(e) {
           // If the original button is an anchor tag, triggering the "click"
           // event will not simulate a click. Use the click method instead.
-          if ($originalButton.is('a')) {
+          if ($originalButton[0].matches('a')) {
             $originalButton[0].click();
           } else {
             $originalButton
@@ -559,10 +577,13 @@
 
       // Listen to relevant events and update UI.
       once('lpb-events', '[data-lpb-id]').forEach((el) => {
-        $(el).on('lpb-builder:init.lpb lpb-component:insert.lpb lpb-component:update.lpb lpb-component:move.lpb lpb-component:drop.lpb lpb-component:delete.lpb', (e) => {
-          const $element = $(e.currentTarget);
-          updateUi($element);
-        });
+        $(el).on(
+          'lpb-builder:init.lpb lpb-component:insert.lpb lpb-component:update.lpb lpb-component:move.lpb lpb-component:drop.lpb lpb-component:delete.lpb',
+          (e) => {
+            const $element = $(e.currentTarget);
+            updateUi($element);
+          },
+        );
       });
 
       // Initialize the editor drag and drop ui.
@@ -614,7 +635,7 @@
       clearInterval(lpDialogInterval);
       lpDialogInterval = setInterval(
         repositionDialog.bind(null, lpDialogInterval),
-        500
+        500,
       );
     }
   };
@@ -623,5 +644,4 @@
   } else {
     window.addEventListener('dialog:aftercreate', handleAfterDialogCreate);
   }
-
 })(jQuery, Drupal, Drupal.debounce, dragula, once);

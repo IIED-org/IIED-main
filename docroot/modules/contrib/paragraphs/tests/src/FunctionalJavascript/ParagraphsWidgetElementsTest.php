@@ -10,6 +10,8 @@ use Drupal\language\Entity\ConfigurableLanguage;
  *
  * @group paragraphs
  */
+#[RunTestsInSeparateProcesses]
+#[Group('paragraphs')]
 class ParagraphsWidgetElementsTest extends WebDriverTestBase {
 
   use LoginAdminTrait;

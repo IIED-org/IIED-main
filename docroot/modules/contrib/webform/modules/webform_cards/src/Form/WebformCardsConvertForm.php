@@ -23,7 +23,7 @@ class WebformCardsConvertForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, WebformInterface $webform = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?WebformInterface $webform = NULL) {
     $form['#title'] = $this->t('Convert @title wizard pages to cards', ['@title' => $webform->label()]);
     $form['webform_id'] = [
       '#type' => 'value',

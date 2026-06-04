@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\field_formatter\Kernel\Plugin\Field\FieldFormatter;
 
-use Drupal\entity_test\Entity\EntityTest;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\entity_test\Entity\EntityTest;
 
 /**
  * @coversDefaultClass \Drupal\field_formatter\Plugin\Field\FieldFormatter\FieldLink

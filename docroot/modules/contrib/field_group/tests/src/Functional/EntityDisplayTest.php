@@ -138,6 +138,48 @@ class EntityDisplayTest extends BrowserTestBase {
   }
 
   /**
+   * Test field access for field groups that are nested.
+   */
+  public function testNestedGroupFieldAccess() {
+    $data = [
+      'label' => 'Child Wrapper',
+      'children' => [
+        'field_no_access',
+        'field_test',
+      ],
+      'parent' => 'group_test_parent',
+      'format_type' => 'html_element',
+      'format_settings' => [
+        'element' => 'div',
+        'id' => 'wrapper-id-child',
+      ],
+    ];
+
+    $child_group = $this->createGroup('node', $this->type, 'form', 'default', $data);
+
+    $data = [
+      'group_name' => 'group_test_parent',
+      'label' => 'Parent Wrapper',
+      'children' => [
+        $child_group->group_name,
+      ],
+      'format_type' => 'html_element',
+      'format_settings' => [
+        'element' => 'div',
+        'id' => 'wrapper-id-parent',
+      ],
+    ];
+
+    $this->createGroup('node', $this->type, 'form', 'default', $data);
+
+    $this->drupalGet($this->node->toUrl('edit-form'));
+
+    // Test that both groups are not shown.
+    $this->assertEmpty($this->xpath("//div[contains(@id, 'wrapper-id-child')]"), $this->t('Div that contains fields with no access is not shown.'));
+    $this->assertEmpty($this->xpath("//div[contains(@id, 'wrapper-id-parent')]"), $this->t('Div that contains fields with no access is not shown.'));
+  }
+
+  /**
    * Test the html element formatter.
    */
   public function testHtmlElement() {

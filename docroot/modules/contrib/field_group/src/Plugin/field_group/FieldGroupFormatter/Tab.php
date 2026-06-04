@@ -66,6 +66,8 @@ class Tab extends FieldGroupFormatterBase {
 
     $element += $add;
 
+    // Add tab validation behavior.
+    $element['#attached']['library'][] = 'field_group/tab_validation';
   }
 
   /**

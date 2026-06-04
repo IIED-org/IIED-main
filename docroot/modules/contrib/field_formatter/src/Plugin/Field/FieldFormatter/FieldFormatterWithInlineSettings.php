@@ -7,9 +7,7 @@ use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Field\FormatterInterface;
 use Drupal\Core\Field\FormatterPluginManager;
 use Drupal\Core\Form\FormStateInterface;
@@ -114,35 +112,21 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
   }
 
   /**
-   * Get field definition for given field storage definition.
-   *
-   * @param \Drupal\Core\Field\FieldStorageDefinitionInterface $field_storage_definition
-   *   The field storage definition.
-   *
-   * @return \Drupal\Core\Field\BaseFieldDefinition
-   *   The field definition.
-   */
-  protected function getFieldDefinition(FieldStorageDefinitionInterface $field_storage_definition) {
-    return BaseFieldDefinition::createFromFieldStorageDefinition($field_storage_definition);
-  }
-
-  /**
    * Get all available formatters by loading available ones and filtering out.
    *
-   * @param \Drupal\Core\Field\FieldStorageDefinitionInterface $field_storage_definition
-   *   The field storage definition.
+   * @param \Drupal\Core\Field\FieldDefinitionInterface $fieldDefinition
+   *   The field definition.
    *
    * @return string[]
    *   The field formatter labels keys by plugin ID.
    */
-  protected function getAvailableFormatterOptions(FieldStorageDefinitionInterface $field_storage_definition) {
-    $field_definition = $this->getFieldDefinition($field_storage_definition);
-    $formatters = $this->formatterPluginManager->getOptions($field_storage_definition->getType());
-    $formatter_instances = array_map(function ($formatter_id) use ($field_definition) {
+  protected function getAvailableFormatterOptions(FieldDefinitionInterface $fieldDefinition) {
+    $formatters = $this->formatterPluginManager->getOptions($fieldDefinition->getType());
+    $formatter_instances = array_map(function ($formatter_id) use ($fieldDefinition) {
       // @todo Ensure it is right to empty all values here, see:
       // https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Field%21FormatterPluginManager.php/class/FormatterPluginManager/8.2.x
       $configuration = [
-        'field_definition' => $field_definition,
+        'field_definition' => $fieldDefinition,
         'settings' => [],
         'label' => '',
         'view_mode' => '',
@@ -150,8 +134,8 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
       ];
       return $this->formatterPluginManager->createInstance($formatter_id, $configuration);
     }, array_combine(array_keys($formatters), array_keys($formatters)));
-    $filtered_formatter_instances = array_filter($formatter_instances, function (FormatterInterface $formatter) use ($field_definition) {
-      return $formatter->isApplicable($field_definition);
+    $filtered_formatter_instances = array_filter($formatter_instances, function (FormatterInterface $formatter) use ($fieldDefinition) {
+      return $formatter->isApplicable($fieldDefinition);
     });
     $options = array_map(function (FormatterInterface $formatter) {
       return $formatter->getPluginDefinition()['label'];
@@ -220,13 +204,23 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $form = parent::settingsForm($form, $form_state);
     // Name of the field this formatter is currently displaying.
-    $target_entity_type_id = $this->fieldDefinition->getSetting('target_type');
-    $field_storage_definitions = $this->entityFieldManager->getFieldStorageDefinitions($target_entity_type_id);
+    $targetEntityTypeId = $this->fieldDefinition->getSetting('target_type');
+    $fieldDefinitionHandlerSettings = $this->fieldDefinition->getSetting('handler_settings');
+    $targetEntityBundleIds = empty($fieldDefinitionHandlerSettings['target_bundles']) ? array_keys($this->entityTypeBundleInfo->getBundleInfo($targetEntityTypeId)) : $fieldDefinitionHandlerSettings['target_bundles'];
     $formatted_field_name = $this->getSettingFromFormState($form_state, 'field_name');
-    // In case there is no definition for specified field.
-    if (isset($field_storage_definitions[$formatted_field_name])) {
-      $field_storage = $field_storage_definitions[$formatted_field_name];
-      $formatter_options = $this->getAvailableFormatterOptions($field_storage);
+    // Search through all target bundles to find our field definition:
+    $fieldDefinition = NULL;
+    foreach ($targetEntityBundleIds as $targetEntityBundleId) {
+      $fieldDefinitions = $this->entityFieldManager->getFieldDefinitions($targetEntityTypeId, $targetEntityBundleId);
+      if (!isset($fieldDefinitions[$formatted_field_name])) {
+        // The field definition could not be found in the current bundle,
+        // continue to the next one.
+        continue;
+      }
+      $fieldDefinition = $fieldDefinitions[$formatted_field_name];
+    }
+    if ($fieldDefinition) {
+      $formatter_options = $this->getAvailableFormatterOptions($fieldDefinition);
     }
 
     $form['#prefix'] = '<div id="field-formatter-ajax">' . ($form['#prefix'] ?? '');
@@ -280,7 +274,7 @@ class FieldFormatterWithInlineSettings extends FieldFormatterBase implements Con
       ];
 
       $options = [
-        'field_definition' => $this->getFieldDefinition($field_storage),
+        'field_definition' => $fieldDefinition,
         'configuration' => [
           'type' => $formatter_type,
           'settings' => $settings,

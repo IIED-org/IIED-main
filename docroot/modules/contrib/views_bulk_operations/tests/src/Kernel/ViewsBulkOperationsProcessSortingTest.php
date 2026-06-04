@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\views_bulk_operations\Kernel;
 
 use Drupal\node\Entity\NodeType;
@@ -9,7 +11,7 @@ use Drupal\views\Views;
  * @coversDefaultClass \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor
  * @group views_bulk_operations
  */
-class ViewsBulkOperationsProcessSortingTest extends ViewsBulkOperationsKernelTestBase {
+final class ViewsBulkOperationsProcessSortingTest extends ViewsBulkOperationsKernelTestBase {
 
   /**
    * {@inheritdoc}
@@ -59,14 +61,14 @@ class ViewsBulkOperationsProcessSortingTest extends ViewsBulkOperationsKernelTes
    *
    * @covers ::getPageList
    */
-  public function testViewsbulkOperationsIdOrderIsForcedOnTableStylePlugin(): void {
+  public function testViewsBulkOperationsIdOrderIsForcedOnTableStylePlugin(): void {
     $view_name = 'batch_with_date_default_tablesort';
     $display_id = 'page_1';
     $view = Views::getView($view_name);
-    $this->assertNotNull($view, 'View should exist');
-    $this->assertTrue($view->setDisplay($display_id), 'Display should exist');
+    self::assertNotNull($view, 'View should exist');
+    self::assertTrue($view->setDisplay($display_id), 'Display should exist');
     $view->execute();
-    $this->assertSame(
+    self::assertSame(
       [8, 9, 7, 5, 6, 4, 2, 3, 1],
       array_map(fn ($row) => (int) $row->nid, $view->result),
       'View executed normally must sort by table display default sorting which is "changed desc".',
@@ -80,6 +82,7 @@ class ViewsBulkOperationsProcessSortingTest extends ViewsBulkOperationsKernelTes
       'display_id' => $display_id,
       'batch_size' => 3,
       'relationship_id' => 'none',
+      'exclude_mode' => FALSE,
     ], $view2);
     $page_and_expected = [
       0 => [1, 2, 3],
@@ -88,7 +91,7 @@ class ViewsBulkOperationsProcessSortingTest extends ViewsBulkOperationsKernelTes
     ];
     foreach ($page_and_expected as $page => $expected) {
       $result = $actionProcessor->getPageList($page);
-      $this->assertSame(
+      self::assertSame(
         $expected,
         array_map(fn($res) => (int) $res[0], $result),
         'VBO processor when called should force ordering by id.',

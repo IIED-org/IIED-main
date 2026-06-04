@@ -5,6 +5,8 @@ namespace Drupal\multiple_registration;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 
 /**
  * Provides a service for getting available user roles in Multiple Registration.
@@ -50,7 +52,8 @@ class AvailableUserRolesService {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function getAvailableRoles() {
-    $roles = user_role_names();
+    $roles = Role::loadMultiple();
+    $roles = array_map(fn(RoleInterface $role) => $role->label(), $roles);
     $role_storage = $this->entityTypeManager;
     $admin_role = $role_storage->getQuery()
       ->condition('is_admin', TRUE)

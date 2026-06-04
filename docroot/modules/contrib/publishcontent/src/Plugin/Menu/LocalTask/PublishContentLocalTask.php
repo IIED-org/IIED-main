@@ -58,7 +58,7 @@ class PublishContentLocalTask extends LocalTaskDefault implements ContainerFacto
   /**
    * {@inheritdoc}
    */
-  public function getTitle(Request $request = NULL) {
+  public function getTitle(?Request $request = NULL) {
     $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->nodeStorage->load($this->routeMatch->getRawParameter('node'));

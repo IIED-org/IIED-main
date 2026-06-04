@@ -14,9 +14,11 @@ readonlymode.settings:
         default:
           type: string
           label: 'Default'
+          translatable: true
         not_saved:
           type: string
           label: 'Not Saved'
+          translatable: true
     forms:
       type: mapping
       mapping:

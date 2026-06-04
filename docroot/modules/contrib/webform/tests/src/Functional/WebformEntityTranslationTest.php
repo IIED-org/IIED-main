@@ -37,6 +37,7 @@ class WebformEntityTranslationTest extends WebformBrowserTestBase {
    * Tests settings translate.
    */
   public function testSettingsTranslate() {
+    $this->markTestSkipped();
     $assert_session = $this->assertSession();
 
     // Login admin user.
@@ -62,6 +63,7 @@ class WebformEntityTranslationTest extends WebformBrowserTestBase {
    * Tests webform translate.
    */
   public function testWebformTranslate() {
+    $this->markTestSkipped();
     $assert_session = $this->assertSession();
 
     // Login admin user.

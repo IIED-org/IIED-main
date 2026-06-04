@@ -54,8 +54,7 @@ class LpHostEntity extends ContentEntityBase implements LpHostEntityInterface {
   /**
    * {@inheritdoc}
    *
-   * When a new lp host entity entity is created, set the uid entity reference to
-   * the current user as the creator of the entity.
+   * Set the uid entity reference to the current user.
    */
   public static function preCreate(EntityStorageInterface $storage_controller, array &$values) {
     parent::preCreate($storage_controller, $values);

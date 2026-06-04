@@ -77,7 +77,7 @@ class XmlSitemapEntityFunctionalTest extends XmlSitemapTestBase {
       'xmlsitemap[priority]' => 0.3,
       'xmlsitemap[changefreq]' => XMLSITEMAP_FREQUENCY_WEEKLY,
     ];
-    $this->submitForm($edit, t('Save configuration'));
+    $this->submitForm($edit, 'Save configuration');
     $entity = EntityTestMul::create();
     $entity->save();
     $this->assertSitemapLinkValues('entity_test_mul', $entity->id(), [
@@ -101,7 +101,7 @@ class XmlSitemapEntityFunctionalTest extends XmlSitemapTestBase {
       'xmlsitemap[changefreq]' => XMLSITEMAP_FREQUENCY_YEARLY,
     ];
     $this->drupalGet('admin/config/search/xmlsitemap/settings/entity_test_mul/entity_test_mul');
-    $this->submitForm($edit, t('Save configuration'));
+    $this->submitForm($edit, 'Save configuration');
     $entity = EntityTestMul::create();
     $entity->save();
     $this->assertSitemapLinkValues('entity_test_mul', $entity->id(), [

@@ -1807,7 +1807,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         '<p>' . $this->t('There are several ways to download the needed third-party libraries.') . '</p>' .
         '<p><strong>' . $this->t('Recommended') . '</strong></p>' .
         '<ul>' .
-        '<li>' . $this->t('Use the <a href="https://github.com/wikimedia/composer-merge-plugin">Composer Merge plugin</a> to include the Webform module\'s <a href="https://cgit.drupalcode.org/webform/tree/composer.libraries.json">composer.libraries.json</a> or generate a custom file using <code>drush webform:libraries:composer &gt; DRUPAL_ROOT/composer.libraries.json</code>.', $t_args) . '<br/><strong>' . $this->t('<a href="https://www.drupal.org/node/3003140">Learn more &raquo;</a>') . '</strong>' . '</li>' .
+        '<li>' . $this->t('Use the <a href="https://github.com/wikimedia/composer-merge-plugin">Composer Merge plugin</a> to include the Webform module\'s <a href="https://cgit.drupalcode.org/webform/tree/composer.libraries.json">composer.libraries.json</a> or generate a custom file using <code>drush webform:libraries:composer &gt; DRUPAL_ROOT/composer.libraries.json</code>.', $t_args) . '<br/><strong>' . $this->t('<a href="https://www.drupal.org/node/3003140">Learn more &raquo;</a>') . '</strong></li>' .
         '</ul>' .
         '<p><strong>' . $this->t('Alternatives') . '</strong></p>' .
         '<ul>' .

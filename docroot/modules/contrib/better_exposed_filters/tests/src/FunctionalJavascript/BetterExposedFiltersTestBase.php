@@ -75,6 +75,18 @@ class BetterExposedFiltersTestBase extends WebDriverTestBase {
       'type' => 'bef_test',
       'status' => 0,
     ]);
+    $this->createNode([
+      'title' => 'Page with 0 value',
+      'field_bef_boolean' => FALSE,
+      'field_bef_email' => '2bef-test2@drupal.org',
+      'field_bef_integer' => '0',
+      'field_bef_price' => '75',
+      'field_bef_letters' => 'Bumble & the Bee',
+      // Vancouver.
+      'field_bef_location' => '15',
+      'type' => 'bef_test',
+      'status' => 1,
+    ]);
   }
 
 }

@@ -4,8 +4,8 @@ namespace Drupal\views_bulk_edit\Form;
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\RevisionableEntityBundleInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
+use Drupal\Core\Entity\RevisionableEntityBundleInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Plugin\Context\Context;

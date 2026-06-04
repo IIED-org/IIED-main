@@ -87,7 +87,7 @@ class BehaviorSettingsManager implements BehaviorSettingsManagerInterface {
    */
   private function generateBehaviorSettingsFullId(
     $entity_type_id,
-    $entity_id = '',
+    $entity_id = ''
   ) {
     return $entity_type_id . (isset($entity_id) ? '_' . $entity_id : '');
   }

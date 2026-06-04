@@ -1,19 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\views_bulk_operations\FunctionalJavascript;
 
 use Behat\Mink\Element\DocumentElement;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
-use Drupal\Tests\WebAssert;
-use Drupal\views_bulk_operations\Form\ViewsBulkOperationsFormTrait;
+use Drupal\FunctionalJavascriptTests\JSWebAssert;
 
 /**
  * @coversDefaultClass \Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm
  * @group views_bulk_operations
  */
-class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
-
-  use ViewsBulkOperationsFormTrait;
+final class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
 
   private const TEST_NODE_COUNT = 15;
 
@@ -28,7 +27,7 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
   /**
    * The assert session.
    */
-  protected WebAssert $assertSession;
+  protected JSWebAssert $assertSession;
 
   /**
    * The page element.
@@ -58,9 +57,7 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
   protected array $testViewParams;
 
   /**
-   * Modules to install.
-   *
-   * @var array
+   * {@inheritdoc}
    */
   protected static $modules = [
     'node',
@@ -155,8 +152,9 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
   /**
    * Test if selection persists on view pages.
    */
-  private function testSelectionPersists() {
+  private function testSelectionPersists(): void {
     $selected_ids = [];
+    $selected_indexes = [];
 
     $page_selections = [
       [0, 1, 3],
@@ -190,10 +188,10 @@ class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
         $view_node_index = $page * $this->testViewParams['items_per_page'] + $i;
         $node = $this->testNodes[$view_node_index];
         if (\array_key_exists($node->id(), $selected_ids)) {
-          $this->assertTrue($this->page->hasCheckedField($node->label()), sprintf('%s should be still checked.', $node->label()));
+          self::assertTrue($this->page->hasCheckedField($node->label()), sprintf('%s should be still checked.', $node->label()));
         }
         else {
-          $this->assertTrue($this->page->hasUncheckedField($node->label()), sprintf('%s should be still unchecked.', $node->label()));
+          self::assertTrue($this->page->hasUncheckedField($node->label()), sprintf('%s should be still unchecked.', $node->label()));
         }
       }
 

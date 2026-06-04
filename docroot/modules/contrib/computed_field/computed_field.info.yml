@@ -1,7 +1,7 @@
 name: Computed Field
 type: module
 description: Defines a field type that allows values to be "computed" via PHP code.
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^8 || ^9 || ^10 || ^11
 package: Field types
 
 # Information added by Drupal.org packaging script on 2024-01-20

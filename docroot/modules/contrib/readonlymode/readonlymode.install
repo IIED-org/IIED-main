@@ -5,6 +5,8 @@
  * Install and update hooks for the Read Only Mode module.
  */
 
+use Drupal\user\Entity\Role;
+
 /**
  * Implements hook_install().
  */
@@ -15,15 +17,19 @@ function readonlymode_install() {
 
 /**
  * Move the Read Only Mode settings from variable to config.
- *
- * @ingroup config_upgrade
  */
 function readonlymode_update_8001() {
-  update_variables_to_config('readonlymode.settings', [
-    'site_readonly' => 'enabled',
-    'site_readonly_url' => 'url',
-    'site_readonly_message' => 'messages.default',
-    'site_readonly_forms_allowed' => 'forms.additional.edit',
-    'site_readonly_forms_viewonly' => 'forms.additional.view',
-  ]);
+  // Nothing to do.
+}
+
+/**
+ * Set user permissions.
+ */
+function readonlymode_update_8002() {
+  foreach (['anonymous', 'authenticated'] as $item) {
+    if ($role = Role::load($item)) {
+      $role->grantPermission('readonlymode access messages');
+      $role->save();
+    }
+  }
 }

@@ -205,7 +205,7 @@ class WebformEntityController extends ControllerBase implements ContainerInjecti
    * @return array
    *   A render array representing a webform confirmation page
    */
-  public function confirmation(Request $request, WebformInterface $webform = NULL, WebformSubmissionInterface $webform_submission = NULL) {
+  public function confirmation(Request $request, ?WebformInterface $webform = NULL, ?WebformSubmissionInterface $webform_submission = NULL) {
     /** @var \Drupal\Core\Entity\EntityInterface $source_entity */
     if (!$webform) {
       [$webform, $source_entity] = $this->requestHandler->getWebformEntities();
@@ -285,7 +285,7 @@ class WebformEntityController extends ControllerBase implements ContainerInjecti
    *
    * @see \Drupal\webform\Entity\Webform::getSubmissionForm
    */
-  protected function getVariants(Request $request, WebformInterface $webform, EntityInterface $source_entity = NULL) {
+  protected function getVariants(Request $request, WebformInterface $webform, ?EntityInterface $source_entity = NULL) {
     // Get variants from '_webform_variant query string parameter.
     $webform_variant = $request->query->get('_webform_variant');
     if ($webform_variant && ($webform->access('update') || $webform->access('test'))) {
@@ -412,7 +412,7 @@ class WebformEntityController extends ControllerBase implements ContainerInjecti
    * @return string
    *   The webform label as a render array.
    */
-  public function title(WebformInterface $webform = NULL) {
+  public function title(?WebformInterface $webform = NULL) {
     /** @var \Drupal\Core\Entity\EntityInterface $source_entity */
     if (!$webform) {
       [$webform, $source_entity] = $this->requestHandler->getWebformEntities();

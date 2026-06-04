@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityMalformedException;
 use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\linkchecker\LinkCheckerLinkInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
@@ -75,6 +76,13 @@ class LinkcheckerLinkPageEntityLabel extends FieldPluginBase {
 
     if ($linked_entity->getEntityTypeId() === 'paragraph' && $linked_entity->getParentEntity() !== NULL) {
       $linked_entity = $linked_entity->getParentEntity();
+    }
+
+    if ($linked_entity instanceof TranslatableInterface) {
+      $langcode = $linkchecker_link->get('entity_langcode')->value;
+      if ($linked_entity->hasTranslation($langcode)) {
+        $linked_entity = $linked_entity->getTranslation($langcode);
+      }
     }
 
     if (!empty($this->options['link_to_entity'])) {

@@ -4,12 +4,14 @@ namespace Drupal\Tests\Kernel\masquerade;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\user\Entity\Role;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests permission config dependencies.
  *
  * @group masquerade
  */
+#[RunTestsInSeparateProcesses]
 class MasqueradeConfigDependencyTest extends KernelTestBase {
 
   /**

@@ -23,6 +23,7 @@ function views_data_export_theme() {
       'variables' => [
         'format' => NULL,
         'url' => NULL,
+        'title' => NULL,
       ],
     ],
   ];
@@ -84,5 +85,14 @@ function views_data_export_views_query_alter(ViewExecutable $view, QueryPluginBa
     $search_query = $query->getSearchApiQuery();
     $facet_manager = \Drupal::service('facets.manager');
     $facet_manager->alterQuery($search_query, $facet_source);
+  }
+}
+
+/**
+ * Implements hook_preprocess_export_icon().
+ */
+function views_data_export_preprocess_export_icon(&$variables) {
+  if (isset($variables['title'])) {
+    $variables['attributes']['title'] = $variables['title'];
   }
 }

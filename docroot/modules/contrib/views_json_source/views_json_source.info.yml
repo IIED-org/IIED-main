@@ -7,7 +7,7 @@ configure: views_json_source.settings
 dependencies:
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2024-04-18
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2026-03-05
+version: '2.0.3'
 project: 'views_json_source'
-datestamp: 1713447283
+datestamp: 1772695563

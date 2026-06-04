@@ -1,7 +1,7 @@
 services:
   components.registry:
     class: Drupal\components\Template\ComponentsRegistry
-    arguments: ['@extension.list.module', '@extension.list.theme', '@module_handler', '@theme.manager', '@cache.default', '@file_system']
+    arguments: ['@extension.list.module', '@extension.list.theme', '@module_handler', '@theme.manager', '@cache.bootstrap', '@file_system', '@config.factory']
 
   components.twig.loader:
     class: Drupal\components\Template\Loader\ComponentsLoader
@@ -11,5 +11,6 @@ services:
 
   components.twig.extension:
     class: Drupal\components\Template\TwigExtension
+    arguments: ['@components.registry']
     tags:
       - { name: twig.extension, priority: 150 }

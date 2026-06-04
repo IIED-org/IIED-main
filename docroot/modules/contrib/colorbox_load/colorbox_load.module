@@ -8,14 +8,9 @@
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
- * @file
- * Allow you to load any content in a colorbox.
- */
-
-/**
  * Implements hook_page_attachments().
  */
-function colorbox_load_page_attachments(array &$page) {
+function colorbox_load_page_attachments(array &$page): void {
   \Drupal::service('colorbox.attachment')->attach($page);
   $page['#attached']['library'][] = 'colorbox_load/colorbox_load';
 }

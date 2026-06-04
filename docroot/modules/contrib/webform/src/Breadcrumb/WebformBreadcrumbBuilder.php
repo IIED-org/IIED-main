@@ -62,7 +62,7 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
    */
-  public function __construct(ModuleHandlerInterface $module_handler, WebformRequestInterface $request_handler, TranslationInterface $string_translation, ConfigFactoryInterface $config_factory = NULL) {
+  public function __construct(ModuleHandlerInterface $module_handler, WebformRequestInterface $request_handler, TranslationInterface $string_translation, ?ConfigFactoryInterface $config_factory = NULL) {
     $this->moduleHandler = $module_handler;
     $this->requestHandler = $request_handler;
     $this->setStringTranslation($string_translation);

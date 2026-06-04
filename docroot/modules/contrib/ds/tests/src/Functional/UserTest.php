@@ -3,14 +3,14 @@
 namespace Drupal\Tests\ds\Functional;
 
 /**
- * Tests user functionality
+ * Tests user functionality.
  *
  * @group ds
  */
 class UserTest extends TestBase {
 
   /**
-   * Tests hook_ds_pre_render_alter() with user entities
+   * Tests hook_ds_pre_render_alter() with user entities.
    */
   public function testCompatibility() {
 
@@ -20,13 +20,13 @@ class UserTest extends TestBase {
       'access content',
     ]);
 
-    $this->dsSelectLayout([], [],'admin/config/people/accounts/display');
+    $this->dsSelectLayout([], [], 'admin/config/people/accounts/display');
 
     $fields = [
       'fields[username][region]' => 'right',
     ];
 
-    $this->dsConfigureUi($fields,'admin/config/people/accounts/display');
+    $this->dsConfigureUi($fields, 'admin/config/people/accounts/display');
 
     $this->drupalGet('user/' . $new_user->id());
 

@@ -5,6 +5,8 @@
 
 /* global Chart, ChartDataLabels */
 (function (Drupal, once) {
+  Drupal.chartjsCharts = Drupal.chartjsCharts || { instances: {} };
+
   function copyAttributes(source, target) {
     return Array.from(source.attributes).forEach((attribute) => {
       target.setAttribute(
@@ -36,7 +38,7 @@
           if (options.plugins && options.plugins.datalabels) {
             enabledPlugins.push(ChartDataLabels);
           }
-          new Chart(chartId, {
+          Drupal.chartjsCharts.instances[chartId] = new Chart(canvas, {
             type: chart.type,
             data: chart.data,
             plugins: enabledPlugins,

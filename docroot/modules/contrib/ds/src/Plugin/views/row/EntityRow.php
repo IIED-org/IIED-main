@@ -18,7 +18,8 @@ use Drupal\views\Plugin\views\row\EntityRow as ViewsEntityRow;
  */
 class EntityRow extends ViewsEntityRow {
 
-  /** @var \Drupal\ds\Plugin\views\Entity\Render\TranslationLanguageRenderer */
+  /**
+   * @var \Drupal\ds\Plugin\views\Entity\Render\TranslationLanguageRenderer */
   protected $entityLanguageRenderer;
 
   /**
@@ -200,20 +201,20 @@ class EntityRow extends ViewsEntityRow {
         $delta_fields[$key] = $key;
       }
     }
-    $form['delta_fieldset'] = array(
+    $form['delta_fieldset'] = [
       '#type' => 'details',
       '#title' => $this->t('Delta fields'),
       '#collapsible' => TRUE,
       '#collapsed' => empty($this->options['delta_fields']),
-    );
-    $form['delta_fieldset']['delta_fields'] = array(
+    ];
+    $form['delta_fieldset']['delta_fields'] = [
       '#type' => 'select',
       '#title' => $this->t('Select fields'),
       '#description' => $this->t('Select fields which "delta" value should be added to the result row. On the manage display of an entity you can decide to look for this delta value to only print that row.'),
       '#options' => $delta_fields,
       '#multiple' => TRUE,
       '#default_value' => !empty($this->options['delta_fieldset']['delta_fields']) ? $this->options['delta_fieldset']['delta_fields'] : '',
-    );
+    ];
 
     // Advanced function.
     $form['advanced_fieldset'] = [

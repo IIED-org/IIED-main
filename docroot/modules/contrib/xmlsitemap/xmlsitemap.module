@@ -1564,7 +1564,7 @@ function xmlsitemap_xmlsitemap_index_links($limit) {
       }
     }
     catch (\Exception $e) {
-      watchdog_exception('xmlsitemap', $e);
+      \Drupal::logger('xmlsitemap', $e);
     }
   }
 }

@@ -36,7 +36,7 @@
   },
   "require-dev": {
     "drupal/address": "1.x-dev",
-    "drupal/bootstrap": "3.x-dev",
+    "drupal/bootstrap": "^3.0",
     "drupal/captcha": "^1 || ^2",
     "drupal/chosen": "3.0.x-dev",
     "drupal/ckeditor": "1.0.x-dev",

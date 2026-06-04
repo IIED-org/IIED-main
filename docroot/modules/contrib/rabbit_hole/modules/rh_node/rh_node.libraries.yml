@@ -1,5 +1,4 @@
 node-form:
-  version: 1.x
   js:
     rh-node.js: {}
   dependencies:

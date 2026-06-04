@@ -9,7 +9,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\layout_paragraphs\LayoutParagraphsLayout;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -47,7 +46,7 @@ class LayoutParagraphsBuilderController extends ControllerBase {
   protected $layoutParagraphsBuilderAccess;
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function __construct(LayoutParagraphsLayoutTempstoreRepository $tempstore, EntityDisplayRepositoryInterface $entity_display_repository, $layout_paragraphs_builder_access) {
     $this->tempstore = $tempstore;
@@ -56,7 +55,7 @@ class LayoutParagraphsBuilderController extends ControllerBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(

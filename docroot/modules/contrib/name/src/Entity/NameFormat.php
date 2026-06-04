@@ -3,7 +3,6 @@
 namespace Drupal\name\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
-use Drupal\name\NameFormatInterface;
 
 /**
  * Defines the Name Format configuration entity class.
@@ -12,14 +11,14 @@ use Drupal\name\NameFormatInterface;
  *   id = "name_format",
  *   label = @Translation("Name format"),
  *   handlers = {
- *     "access" = "Drupal\name\NameFormatAccessController",
- *     "list_builder" = "Drupal\name\NameFormatListBuilder",
+ *     "access" = "Drupal\name\Access\NameFormatAccessHandler",
+ *     "list_builder" = "Drupal\name\ListBuilder\NameFormatListBuilder",
  *     "form" = {
  *       "add" = "Drupal\name\Form\NameFormatForm",
  *       "edit" = "Drupal\name\Form\NameFormatForm",
  *       "delete" = "Drupal\name\Form\NameFormatDeleteConfirm"
  *     },
- *     "list_builder" = "Drupal\name\NameFormatListBuilder"
+ *     "list_builder" = "Drupal\name\ListBuilder\NameFormatListBuilder"
  *   },
  *   config_prefix = "name_format",
  *   fieldable = FALSE,

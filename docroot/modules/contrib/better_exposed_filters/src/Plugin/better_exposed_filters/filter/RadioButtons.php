@@ -27,6 +27,8 @@ class RadioButtons extends FilterWidgetBase {
       'soft_limit' => 0,
       'soft_limit_label_less' => '',
       'soft_limit_label_more' => '',
+      'scrollable' => FALSE,
+      'scrollable_height' => 300,
     ];
   }
 
@@ -63,6 +65,26 @@ class RadioButtons extends FilterWidgetBase {
       '#default_value' => !empty($this->configuration['display_inline']),
       '#description' => $this->t('Display checkbox/radio options inline.'
       ),
+    ];
+
+    $form['scrollable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use scrollable container'),
+      '#default_value' => !empty($this->configuration['scrollable']),
+      '#description' => $this->t('Wrap the filter options in a scrollable container with a fixed height.'),
+    ];
+
+    $form['scrollable_height'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Scrollable container height (px)'),
+      '#default_value' => $this->configuration['scrollable_height'] ?: 300,
+      '#min' => 50,
+      '#field_suffix' => 'px',
+      '#states' => [
+        'visible' => [
+          ':input[name="exposed_form_options[bef][filter][' . $filter->field . '][configuration][scrollable]"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     $options = [50, 40, 30, 20, 15, 10, 5, 3];
@@ -121,7 +143,7 @@ class RadioButtons extends FilterWidgetBase {
     foreach ($input as $key => $value) {
       if (is_array($value)) {
         $value = array_filter($value, function ($item) {
-          return !($item === '' || $item === NULL || $item === 0 || $item === '0');
+          return !($item === '' || $item === NULL || is_int($item));
         });
 
         if (empty($value)) {
@@ -145,6 +167,10 @@ class RadioButtons extends FilterWidgetBase {
       // Clean up filters that pass objects as options instead of strings.
       if (!empty($form[$field_id . '_wrapper'][$field_id]['#options'])) {
         $form[$field_id . '_wrapper'][$field_id]['#options'] = BetterExposedFiltersHelper::flattenOptions($form[$field_id . '_wrapper'][$field_id]['#options']);
+      }
+      // Ensure options exist to prevent radios/checkbox processing warnings.
+      if (!isset($form[$field_id . '_wrapper'][$field_id]['#options'])) {
+        $form[$field_id . '_wrapper'][$field_id]['#options'] = [];
       }
 
       // Support rendering hierarchical checkboxes/radio buttons (e.g. taxonomy
@@ -172,6 +198,9 @@ class RadioButtons extends FilterWidgetBase {
       else {
         $form[$field_id . '_wrapper'][$field_id]['#theme'] = 'bef_radios';
         $form[$field_id . '_wrapper'][$field_id]['#type'] = 'radios';
+        if (!isset($form[$field_id . '_wrapper'][$field_id]['#options'])) {
+          $form[$field_id . '_wrapper'][$field_id]['#options'] = [];
+        }
       }
     }
     elseif (!empty($form[$field_id])) {
@@ -191,7 +220,8 @@ class RadioButtons extends FilterWidgetBase {
 
       // Render as checkboxes if filter allows multiple selections or filter
       // is already trying to render checkboxes.
-      if (!empty($form[$field_id]['#multiple']) || $form[$field_id]['#type'] === 'checkboxes') {
+      if (!empty($form[$field_id]['#multiple']) || (isset($form[$field_id]['#type'])
+        && $form[$field_id]['#type'] === 'checkboxes')) {
         $form[$field_id]['#theme'] = 'bef_checkboxes';
         $form[$field_id]['#type'] = 'checkboxes';
 
@@ -206,6 +236,9 @@ class RadioButtons extends FilterWidgetBase {
       else {
         $form[$field_id]['#theme'] = 'bef_radios';
         $form[$field_id]['#type'] = 'radios';
+        if (!isset($form[$field_id]['#options'])) {
+          $form[$field_id]['#options'] = [];
+        }
       }
     }
 
@@ -226,6 +259,19 @@ class RadioButtons extends FilterWidgetBase {
       }
       $form['#attached']['drupalSettings']['better_exposed_filters']['soft_limit'][$field_id]['list_selector'] = $list_selector;
       $form['#attached']['drupalSettings']['better_exposed_filters']['soft_limit'][$field_id]['item_selector'] = $item_selector;
+    }
+
+    // Scrollable container.
+    if (!empty($this->configuration['scrollable'])) {
+      $height = (int) ($this->configuration['scrollable_height'] ?: 300);
+      $element_key = !empty($form[$field_id . '_wrapper'][$field_id]) ? [$field_id . '_wrapper', $field_id] : [$field_id];
+      $target = &$form;
+      foreach ($element_key as $key) {
+        $target = &$target[$key];
+      }
+      $target['#bef_scrollable'] = TRUE;
+      $target['#bef_scrollable_height'] = $height;
+      $form['#attached']['library'][] = 'better_exposed_filters/scrollable';
     }
   }
 

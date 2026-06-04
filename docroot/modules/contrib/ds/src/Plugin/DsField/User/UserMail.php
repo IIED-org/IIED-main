@@ -56,4 +56,5 @@ class UserMail extends Field {
 
     return $summary;
   }
+
 }

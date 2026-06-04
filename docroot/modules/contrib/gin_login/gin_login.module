@@ -8,7 +8,6 @@
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Url;
 use Drupal\gin\GinSettings;
-use Drupal\gin_login\Services\GinLoginRouteService;
 
 /**
  * Page_attachments_alter()
@@ -100,6 +99,16 @@ function gin_login_form_alter(&$form, $form_state, $form_id) {
   if (strpos($form_id, 'user_login') !== FALSE || strpos($form_id, 'user_register') !== FALSE || in_array($form_id, ['user_pass'])) {
     $form['actions']['submit']['#attributes']['class'][] = 'button--primary';
 
+    // Move actions before new elements.
+    $form['actions']['#weight'] = '98';
+
+    // New wrapper.
+    $form['more-links'] = [
+      '#type' => 'container',
+      '#weight' => '99',
+      '#attributes' => ['class' => ['more-links']],
+    ];
+
     // Check if site is in maintenance mode.
     // Display a message if true.
     if (\Drupal::state()->get('system.maintenance_mode')) {
@@ -113,18 +122,8 @@ function gin_login_form_alter(&$form, $form_state, $form_id) {
 
   // Adding button/links to Register and Forgot password.
   if (strpos($form_id, 'user_login') !== FALSE) {
-    // Move actions before new elements.
-    $form['actions']['#weight'] = '98';
-
     // Add new class to submit button.
     $form['actions']['submit']['#attributes']['class'][] = 'button-login';
-
-    // New wrapper.
-    $form['more-links'] = [
-      '#type' => 'container',
-      '#weight' => '99',
-      '#attributes' => ['class' => ['more-links']],
-    ];
 
     // Register button.
     $register_url = Url::fromRoute('user.register');
@@ -149,14 +148,33 @@ function gin_login_form_alter(&$form, $form_state, $form_id) {
       '#type' => 'link',
       '#url' => Url::fromRoute('user.pass'),
       '#title' => t('Forgot your password?'),
-      '#attributes' => ['class' => ['link', 'forgot-password-link']],
+      '#attributes' => ['class' => ['link', 'link--more']],
       '#weight' => '2',
     ];
   }
 
-  // Changing name of Reset button.
+  // Adding link back to Login.
+  if (strpos($form_id, 'user_register') !== FALSE || in_array($form_id, ['user_pass'])) {
+    // Login link button.
+    $login_url = Url::fromRoute('user.login');
+    if ($login_url->access()) {
+      $form['more-links']['login_link'] = [
+        '#type' => 'link',
+        '#url' => $login_url,
+        '#title' => t('Already have an account? Log in'),
+        '#attributes' => ['class' => ['link', 'link--more']],
+        '#weight' => '1',
+      ];
+    }
+  }
+
+  // Changing name of Reset button and Login link.
   if (in_array($form_id, ['user_pass'])) {
     $form['actions']['submit']['#value'] = t('Reset');
+
+    if (isset($form['more-links']['login_link'])) {
+      $form['more-links']['login_link']['#title'] = t('Log in');
+    }
   }
 }
 
@@ -165,7 +183,9 @@ function gin_login_form_alter(&$form, $form_state, $form_id) {
  */
 function gin_login_theme() {
   // Page.
-  $route_definitions = \Drupal::classResolver(GinLoginRouteService::class)->getLoginRouteDefinitions();
+  $route_definitions = \Drupal::service('gin_login.route')->getLoginRouteDefinitions();
+
+  $theme = [];
 
   foreach ($route_definitions as $route_definition) {
     $theme[$route_definition['page']] = [
@@ -208,7 +228,11 @@ function gin_login_preprocess_ginlogin(&$variables) {
 
   if (isset($configData['brand_image']) && $configData['brand_image']['use_default'] == "0") {
     if (isset($configData['brand_image']['path']) && !empty($configData['brand_image']['path'])) {
-      $variables['brand_image'] = $fileUrlGenerator->generateAbsoluteString($configData['brand_image']['path']);
+      $variables['brand_image'] = [
+        '#theme' => 'image',
+        '#uri' => $configData['brand_image']['path'],
+        '#attributes' => ['loading' => 'lazy'],
+      ];
     }
   }
   else {
@@ -233,11 +257,16 @@ function gin_login_theme_suggestions_page_alter(array &$suggestions, array $vari
       break;
 
     case 'user.pass':
+    case 'user.reset.form':
       $suggestions[] = 'page__user__password';
       break;
 
     case 'user.register':
       $suggestions[] = 'page__user__register';
+      break;
+
+    case 'user.logout.confirm':
+      $suggestions[] = 'page__user__logout_confirm';
       break;
   }
 }
@@ -248,7 +277,7 @@ function gin_login_theme_suggestions_page_alter(array &$suggestions, array $vari
 function _gin_login__check_path() {
   // Get path from Route.
   $route = \Drupal::routeMatch()->getRouteName();
-  $route_definitions = \Drupal::classResolver(GinLoginRouteService::class)->getLoginRouteDefinitions();
+  $route_definitions = \Drupal::service('gin_login.route')->getLoginRouteDefinitions();
 
   if (array_key_exists($route, $route_definitions)) {
     return TRUE;
@@ -260,9 +289,7 @@ function _gin_login__check_path() {
  * Ignore gin sticky actions.
  */
 function gin_login_gin_ignore_sticky_form_actions() {
-  // Get path from Route.
-  $route = \Drupal::routeMatch()->getRouteName();
-  $route_definitions = \Drupal::classResolver(GinLoginRouteService::class)->getLoginRouteDefinitions();
+  $route_definitions = \Drupal::service('gin_login.route')->getLoginRouteDefinitions();
 
   // Fallback routes.
   $fallback_routes = [

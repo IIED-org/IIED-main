@@ -29,10 +29,17 @@ class NameListFormattableMarkup implements MarkupInterface {
 
   /**
    * Constructor for NameListFormattableMarkup.
+   *
+   * @param array $names
+   *   Names to render in the list.
+   * @param mixed $separator
+   *   A separator between rendered names. When the separator implements
+   *   MarkupInterface, it is treated as trusted markup. Any other value is
+   *   cast to string and escaped.
    */
   public function __construct(array $names = [], $separator = ', ') {
     $this->names = $names;
-    $this->separator = $this->escapeValues($separator);
+    $this->separator = $separator instanceof MarkupInterface ? (string) $separator : Html::escape((string) $separator);
   }
 
   /**

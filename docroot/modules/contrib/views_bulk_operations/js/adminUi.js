@@ -4,16 +4,17 @@
  */
 
 (function ($, Drupal) {
-
-  'use strict';
-
   /**
    * @type {Drupal~behavior}
    */
   Drupal.behaviors.views_bulk_operations = {
-    attach: function (context, settings) {
-      once('views-bulk-operations-ui', '.views-bulk-operations-ui', context).forEach(Drupal.viewsBulkOperationsUi);
-    }
+    attach(context, settings) {
+      once(
+        'views-bulk-operations-ui',
+        '.views-bulk-operations-ui',
+        context,
+      ).forEach(Drupal.viewsBulkOperationsUi);
+    },
   };
 
   /**
@@ -22,13 +23,19 @@
    * @param {object} element
    */
   Drupal.viewsBulkOperationsUi = function (element) {
-    var $uiElement = $(element);
+    const $uiElement = $(element);
 
     // Select / deselect all functionality.
-    var actionsElementWrapper = $uiElement.find('details.vbo-actions-widget > .details-wrapper');
+    const actionsElementWrapper = $uiElement.find(
+      'details.vbo-actions-widget > .details-wrapper',
+    );
     if (actionsElementWrapper.length) {
-      var checked = false;
-      var allHandle = $('<a href="#" class="vbo-all-switch">' + Drupal.t('Select / deselect all') + '</a>');
+      let checked = false;
+      const allHandle = $(
+        `<a href="#" class="vbo-all-switch">${Drupal.t(
+          'Select / deselect all',
+        )}</a>`,
+      );
       actionsElementWrapper.prepend(allHandle);
       allHandle.on('click', function (event) {
         event.preventDefault();

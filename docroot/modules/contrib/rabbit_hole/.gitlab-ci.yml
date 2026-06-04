@@ -28,7 +28,7 @@ variables:
   OPT_IN_TEST_PREVIOUS_MAJOR: 1
   OPT_IN_TEST_PREVIOUS_MINOR: 1
   OPT_IN_TEST_NEXT_MINOR: 1
-  OPT_IN_TEST_NEXT_MAJOR: 1
+  # OPT_IN_TEST_NEXT_MAJOR: 1
   OPT_IN_TEST_MAX_PHP: 1
   CORE_PREVIOUS_PHP_MIN: 8.1
-  _LENIENT_ALLOW_LIST: commerce,group,token,profile,inline_entity_form,entity_reference_revisions,entity,state_machine,flexible_permissions
+  _LENIENT_ALLOW_LIST: commerce,group,token,profile,inline_entity_form,entity_reference_revisions,entity,state_machine,flexible_permissions,address

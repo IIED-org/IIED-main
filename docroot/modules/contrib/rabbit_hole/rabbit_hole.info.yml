@@ -4,7 +4,7 @@ description: Basic functionality that is shared among the different Rabbit Hole 
 core_version_requirement: ^9.5 || ^10 || ^11
 package: Other
 
-# Information added by Drupal.org packaging script on 2024-07-19
-version: '8.x-1.0'
+# Information added by Drupal.org packaging script on 2026-03-16
+version: '8.x-1.2'
 project: 'rabbit_hole'
-datestamp: 1721413115
+datestamp: 1773704446

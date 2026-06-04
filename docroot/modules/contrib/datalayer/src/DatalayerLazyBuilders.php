@@ -5,7 +5,6 @@ namespace Drupal\datalayer;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\AdminContext;
 use Drupal\Core\Security\TrustedCallbackInterface;
-use Drupal\Core\Url;
 
 /**
  * Lazy builders for the datalayer module.
@@ -17,21 +16,21 @@ class DatalayerLazyBuilders implements TrustedCallbackInterface {
    *
    * @var \Drupal\Core\Routing\AdminContext
    */
-  protected $router_admin_context;
+  protected AdminContext $routerAdminContext;
 
   /**
    * A config factory for retrieving required config settings.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $config;
+  protected ConfigFactoryInterface $config;
 
   /**
    * Constructs a new DatalayerLazyBuilders object.
    */
   public function __construct(ConfigFactoryInterface $config, AdminContext $router_admin_context) {
     $this->config = $config;
-    $this->router_admin_context = $router_admin_context;
+    $this->routerAdminContext = $router_admin_context;
   }
 
   /**
@@ -42,7 +41,7 @@ class DatalayerLazyBuilders implements TrustedCallbackInterface {
   }
 
   /**
-   * #lazy_builder callback; builds script tag with user-specific info.
+   * The #lazy_builder callback; builds script tag with user-specific info.
    *
    * @return array
    *   A renderable array.
@@ -53,7 +52,7 @@ class DatalayerLazyBuilders implements TrustedCallbackInterface {
     $build['datalayer'] = [
       '#type' => 'html_tag',
       '#tag' => 'script',
-      '#access' => !$this->router_admin_context->isAdminRoute() || $datalayer_settings->get('remove_from_admin_routes') === FALSE,
+      '#access' => !$this->routerAdminContext->isAdminRoute() || $datalayer_settings->get('remove_from_admin_routes') === FALSE,
       // Use json_encode() instead of
       // Drupal\Component\Serialization\Json::encode() because we want to pass
       // the additional JSON_UNESCAPED_UNICODE flag.

@@ -49,7 +49,7 @@ class WebformUiElementTestForm extends WebformUiElementFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, WebformInterface $webform = NULL, $key = NULL, $parent_key = NULL, $type = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?WebformInterface $webform = NULL, $key = NULL, $parent_key = NULL, $type = NULL) {
     // Create a temp webform.
     $this->webform = Webform::create(['id' => '_webform_ui_temp_form']);
 

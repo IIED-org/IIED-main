@@ -1,3 +1,9 @@
+ds.field_plugin.block_title:
+  type: ds.field_plugin.title
+
+ds.field_plugin.media_name:
+  type: ds.field_plugin.title
+
 ds.field_plugin.node_title:
   type: ds.field_plugin.title
 

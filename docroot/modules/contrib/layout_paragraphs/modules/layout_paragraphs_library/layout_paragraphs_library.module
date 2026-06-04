@@ -142,6 +142,7 @@ function layout_paragraphs_library_submit(&$form, FormStateInterface $form_state
       /** @var \Drupal\paragraphs_library\Entity\LibraryItem $library_item */
       $library_item = $paragraph->get('field_reusable_paragraph')->entity;
       if ($library_item) {
+        /** @var \Drupal\paragraphs\Entity\Paragraph $original_paragraph */
         $original_paragraph = $library_item->get('paragraphs')->entity;
         $form_object->setParagraph($original_paragraph);
         $new_paragraph = $original_paragraph;
@@ -196,10 +197,22 @@ function layout_paragraphs_library_ajax(&$form, FormStateInterface $form_state) 
       if ($command['command'] == 'insert' && $command['selector'] == $wrong_selector) {
         $command['selector'] = $correct_selector;
       }
-    };
+    }
     return $response;
   }
   else {
     return $form_object->successfulAjaxSubmit($form, $form_state);
   }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ *
+ * Remove once Issue #3502302 "HookCollectorPass fails to correctly register
+ * module hooks in some contexts" is fixed in core.
+ *
+ * @see https://www.drupal.org/project/drupal/issues/3502302
+ */
+function layout_paragraphs_library_library_info_alter(&$libraries, $extension): void {
+  layout_paragraphs_library_info_alter($libraries, $extension);
 }

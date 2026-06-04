@@ -63,7 +63,7 @@ trait NameAdditionalPreferredTrait {
       '#default_value' => $this->getSetting('alternative_field_reference'),
       '#empty_option' => $this->getEmptyOption(),
       '#options' => $this->getAdditionalSources(),
-      '#description' => $this->t('A data source to use as the alternative component within the name formats. Possible use-cases include; providing a custom fully formatted name alternative to use in citations; a separate field for a users creditatons / post-nominal letters.<br>i.e. "a" and "A" name format options.'),
+      '#description' => $this->t('A data source to use as the alternative component within the name formats. Possible use-cases include; providing a custom fully formatted name alternative to use in citations; a separate field for a users accreditation / post-nominal letters.<br>i.e. "a" and "A" name format options.'),
     ];
     $elements['alternative_field_reference_separator'] = [
       '#type' => 'textfield',
@@ -81,7 +81,10 @@ trait NameAdditionalPreferredTrait {
   }
 
   /**
+   * The preferred and alternative settings to the summary.
    *
+   * @param array $summary
+   *   The summary array to add the settings to.
    */
   protected function settingsNameAdditionalPreferredSummary(&$summary) {
     if ($type = $this->getSetting('preferred_field_reference')) {
@@ -137,8 +140,8 @@ trait NameAdditionalPreferredTrait {
     if (!isset($this->entityFieldManager)) {
       $this->entityFieldManager = \Drupal::service('entity_field.manager');
     }
-    // If a formatter, $this->fieldDefinition is set, otherwise we have a field.
-    $field_definition = empty($this->fieldDefinition) ? $this->getFieldDefinition() : $this->fieldDefinition;
+
+    $field_definition = $this->getFieldDefinition();
     $entity_type_id = $field_definition->getTargetEntityTypeId();
     $entity_type = $this->entityTypeManager
       ->getStorage($entity_type_id)
@@ -164,7 +167,7 @@ trait NameAdditionalPreferredTrait {
   }
 
   /**
-   *
+   * Returns the empty option for the select list.
    */
   protected function getEmptyOption() {
     if ($this->getTraitUsageIsField()) {
@@ -176,7 +179,7 @@ trait NameAdditionalPreferredTrait {
   }
 
   /**
-   *
+   * Helper function to determine if the trait is being used in a field.
    */
   protected function getTraitUsageIsField() {
     return is_subclass_of($this, 'Drupal\Core\Field\FieldItemBase');

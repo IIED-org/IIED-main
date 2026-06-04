@@ -2026,7 +2026,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPages($operation = 'default', WebformSubmissionInterface $webform_submission = NULL) {
+  public function getPages($operation = 'default', ?WebformSubmissionInterface $webform_submission = NULL) {
     $pages = $this->buildPages($operation);
     if ($this->getSetting('wizard_progress_states') && $webform_submission) {
       /** @var \Drupal\webform\WebformSubmissionConditionsValidatorInterface $constraint_validator */
@@ -2715,7 +2715,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $handlers = $this->getHandlers();
 
     switch ($method) {
-      case 'overrideSettings';
+      case 'overrideSettings':
         // If webform submission and alter settings, make sure to completely
         // reset all settings to their original values.
         $this->resetSettings();
@@ -2773,7 +2773,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * @return bool
    *   TRUE if a webform handler is enabled.
    */
-  protected function isHandlerEnabled(WebformHandlerInterface $handler, WebformSubmissionInterface $webform_submission = NULL) {
+  protected function isHandlerEnabled(WebformHandlerInterface $handler, ?WebformSubmissionInterface $webform_submission = NULL) {
     // Check if the handler is disabled.
     if ($handler->isDisabled()) {
       return FALSE;
@@ -2943,7 +2943,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function applyVariants(WebformSubmissionInterface $webform_submission = NULL, array $variants = [], $force = FALSE) {
+  public function applyVariants(?WebformSubmissionInterface $webform_submission = NULL, array $variants = [], $force = FALSE) {
     // Get variants from webform submission.
     if ($webform_submission) {
       // Make sure webform submission is associated with this webform.

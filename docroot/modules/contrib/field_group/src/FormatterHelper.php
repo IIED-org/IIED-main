@@ -52,7 +52,7 @@ class FormatterHelper implements TrustedCallbackInterface {
    *
    * @param array $element
    *   Form that is being processed.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface|null $form_state
    *   The current state of the form.
    * @param array $form
    *   The complete form structure.
@@ -60,7 +60,7 @@ class FormatterHelper implements TrustedCallbackInterface {
    * @return array
    *   The updated form.
    */
-  public static function formProcess(array &$element, FormStateInterface $form_state = NULL, array &$form = []) {
+  public static function formProcess(array &$element, ?FormStateInterface $form_state = NULL, array &$form = []) {
     if (empty($element['#field_group_form_process'])) {
       $element['#field_group_form_process'] = TRUE;
       if (empty($element['#fieldgroups'])) {

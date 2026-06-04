@@ -170,7 +170,8 @@ display:
           buttons: true
           action_title: Action
           clear_on_exposed: true
-          force_selection_info: false
+          show_multipage_selection_box: default
+          show_select_all: default
           selected_actions:
             -
               action_id: views_bulk_operations_simple_test_action
@@ -181,6 +182,7 @@ display:
               action_id: views_bulk_operations_advanced_test_action
               preconfiguration:
                 add_confirmation: true
+            - action_id: views_bulk_operations_test_null_type
           plugin_id: views_bulk_operations_bulk_form
       filters:
         sticky:

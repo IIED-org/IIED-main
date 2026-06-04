@@ -2,7 +2,7 @@ name.settings:
   path: '/admin/config/regional/name/settings'
   defaults:
     _title: 'Name format settings'
-    _form: 'Drupal\name\NameSettingsForm'
+    _form: 'Drupal\name\Form\SettingsForm'
   requirements:
     _permission: 'administer site configuration'
 
@@ -73,6 +73,6 @@ entity.name_list_format.delete_form:
 name.autocomplete:
   path: '/name/autocomplete/{field_name}/{entity_type}/{bundle}/{component}'
   defaults:
-    _controller: '\Drupal\name\Controller\NameAutocompleteController::autocomplete'
+    _controller: '\Drupal\name\Controller\AutocompleteController::autocomplete'
   requirements:
     _permission: 'access content'

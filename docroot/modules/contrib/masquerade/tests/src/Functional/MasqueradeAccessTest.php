@@ -3,15 +3,17 @@
 namespace Drupal\Tests\masquerade\Functional;
 
 use Drupal\Core\Session\AccountInterface;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests masquerade access mechanism.
  *
- * @todo Convert into DUTB. This is essentially a unit test for
+ * @todo Convert into UnitTestCase. This is essentially a unit test for
  *   masquerade_target_user_access() only.
  *
  * @group masquerade
  */
+#[RunTestsInSeparateProcesses]
 class MasqueradeAccessTest extends MasqueradeWebTestBase {
 
   /**

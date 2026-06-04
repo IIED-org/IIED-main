@@ -82,6 +82,12 @@ better_exposed_filters.filter.bef:
     soft_limit_label_more:
       type: label
       label: 'Soft limit label show more'
+    scrollable:
+      type: boolean
+      label: 'Use scrollable container'
+    scrollable_height:
+      type: integer
+      label: 'Scrollable container height in pixels'
 
 better_exposed_filters.filter.bef_links:
   label: 'Links'
@@ -105,6 +111,12 @@ better_exposed_filters.filter.bef_links:
     soft_limit_label_more:
       type: label
       label: 'Soft limit label show more'
+    scrollable:
+      type: boolean
+      label: 'Use scrollable container'
+    scrollable_height:
+      type: integer
+      label: 'Scrollable container height in pixels'
 
 better_exposed_filters.filter.bef_hidden:
   label: 'Hidden'
@@ -152,6 +164,10 @@ better_exposed_filters.filter.bef_sliders:
 
 better_exposed_filters.filter.bef_datepickers:
   label: 'jQuery UI Date Picker'
+  type: better_exposed_filters_filter_widget
+
+better_exposed_filters.filter.bef_datetimepicker:
+  label: 'Date & Time Picker'
   type: better_exposed_filters_filter_widget
 
 better_exposed_filters.filter.bef_number:

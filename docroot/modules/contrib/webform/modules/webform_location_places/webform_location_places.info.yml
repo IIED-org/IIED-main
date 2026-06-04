@@ -8,7 +8,7 @@ lifecycle_link: 'https://www.drupal.org/docs/8/modules/webform/webform-frequentl
 dependencies:
   - 'webform:webform'
 
-# Information added by Drupal.org packaging script on 2024-12-10
-version: '6.2.9'
+# Information added by Drupal.org packaging script on 2026-03-19
+version: '6.2.10'
 project: 'webform'
-datestamp: 1733851071
+datestamp: 1773926339

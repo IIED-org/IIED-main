@@ -85,15 +85,13 @@ class ViewsReferenceLazyFieldFormatter extends FormatterBase implements TrustedC
 
     foreach ($items as $delta => $item) {
       $view_name = $item->getValue()['target_id'];
-      $display_id = $item->getValue()['display_id'];
-      $view = Views::getView($view_name);
-
-      // Add an extra check because the view could have been deleted.
-      if (!$view instanceof ViewExecutable) {
+      $display_id = $item->getValue()['display_id'] ?? '';
+      // When creating a node with JavaScript disabled, for example in layout
+      // builder context, the form is multistep so display ID may not have been
+      // selected.
+      if (!$display_id) {
         continue;
       }
-
-      $view->setDisplay($display_id);
       $enabled_settings = array_filter($this->getFieldSetting('enabled_settings') ?? []);
       $elements[$delta] = [
         '#lazy_builder' => [
@@ -112,6 +110,9 @@ class ViewsReferenceLazyFieldFormatter extends FormatterBase implements TrustedC
           ],
         ],
         '#create_placeholder' => TRUE,
+        '#lazy_builder_preview' => [
+          '#theme' => 'viewsreference__lazy_builder_loading',
+        ],
       ];
     }
     return $elements;
@@ -149,13 +150,14 @@ class ViewsReferenceLazyFieldFormatter extends FormatterBase implements TrustedC
    *   The field item delta.
    */
   public static function lazyBuilder(string $view_name, string $display_id, string $data, string $enabled_settings, bool $plugin_types, ?string $parent_entity_type, ?string $parent_entity_id, ?string $parent_field_name, ?string $parent_revision_id, ?int $delta): array {
-    // Since no JS creating a node is a multi-step, it is possible that
-    // no display ID has yet been selected.
+    // Double-check that a display ID has been selected.
     if (!$display_id) {
       return [];
     }
+
     $unserialized_data = !empty($data) ? unserialize($data, ['allowed_classes' => FALSE]) : [];
     $unserialized_enabled_settings = !empty($enabled_settings) ? unserialize($enabled_settings, ['allowed_classes' => FALSE]) : [];
+    $unserialized_enabled_settings = array_filter($unserialized_enabled_settings);
     $view = Views::getView($view_name);
 
     // Add an extra check because the view could have been deleted.
@@ -186,7 +188,7 @@ class ViewsReferenceLazyFieldFormatter extends FormatterBase implements TrustedC
       if (!empty($view->result) || !empty($view->empty)) {
         // Add a custom template if the title is available.
         $title = $view->getTitle();
-        if (!empty($title)) {
+        if (!empty($title) && !empty($unserialized_enabled_settings['title'])) {
           // If the title contains tokens, we need to render the view to
           // populate the rowTokens.
           if (mb_strpos($title, '{{') !== FALSE) {

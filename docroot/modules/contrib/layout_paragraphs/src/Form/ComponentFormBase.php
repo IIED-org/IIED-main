@@ -91,7 +91,7 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
   protected $formMode = 'default';
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function __construct(
     LayoutParagraphsLayoutTempstoreRepository $tempstore,
@@ -99,8 +99,8 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
     LayoutPluginManagerInterface $layout_plugin_manager,
     ModuleHandlerInterface $module_handler,
     EventDispatcherInterface $event_dispatcher,
-    EntityRepositoryInterface $entity_repository
-    ) {
+    EntityRepositoryInterface $entity_repository,
+  ) {
     $this->tempstore = $tempstore;
     $this->entityTypeManager = $entity_type_manager;
     $this->layoutPluginManager = $layout_plugin_manager;
@@ -110,7 +110,7 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -124,28 +124,28 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'layout_paragraphs_component_form';
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getParagraph() {
     return $this->paragraph;
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function setParagraph(ParagraphInterface $paragraph) {
     $this->paragraph = $paragraph;
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getLayoutParagraphsLayout() {
     return $this->layoutParagraphsLayout;
@@ -158,11 +158,14 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
    *   The form array.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
+   * @param string $form_display_mode
+   *   The form display mode.
    */
   protected function buildComponentForm(
     array $form,
     FormStateInterface $form_state,
-    string $form_display_mode = 'default') {
+    string $form_display_mode = 'default',
+  ) {
 
     $this->initFormLangcodes($form_state);
     $display = EntityFormDisplay::collectRenderDisplay($this->paragraph, $form_display_mode);
@@ -310,7 +313,7 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   abstract public function successfulAjaxSubmit(array $form, FormStateInterface $form_state);
 
@@ -373,7 +376,10 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
    *   The form element.
    */
   public function afterBuild(array $element, FormStateInterface $form_state) {
-    $parents = array_merge($element['#parents'], [$this->getFormId(), $element['#paragraph']->bundle()]);
+    $parents = array_merge($element['#parents'], [
+      $this->getFormId(),
+      $element['#paragraph']->bundle(),
+    ]);
     $unprocessed_id = 'edit-' . implode('-', $parents);
     $element['#attributes']['data-drupal-selector'] = Html::getId($unprocessed_id);
     $element['#dialog_id'] = $unprocessed_id . '-dialog';
@@ -616,14 +622,14 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getFormMode() {
     return $this->formMode;
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function setFormMode($view_mode) {
     $this->formMode = $view_mode;

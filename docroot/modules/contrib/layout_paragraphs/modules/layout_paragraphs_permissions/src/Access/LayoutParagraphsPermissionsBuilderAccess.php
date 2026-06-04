@@ -14,14 +14,14 @@ use Drupal\Core\Access\AccessResult;
 class LayoutParagraphsPermissionsBuilderAccess extends LayoutParagraphsBuilderAccess {
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function access(
     AccountInterface $account,
     LayoutParagraphsLayout $layout_paragraphs_layout,
-    string $operation = NULL,
-    string $component_uuid = NULL,
-    ParagraphsTypeInterface $paragraph_type = NULL
+    ?string $operation = NULL,
+    ?string $component_uuid = NULL,
+    ?ParagraphsTypeInterface $paragraph_type = NULL,
   ) {
     $access = parent::access($account, $layout_paragraphs_layout, $operation, $component_uuid, $paragraph_type);
     if ($operation == 'reorder') {

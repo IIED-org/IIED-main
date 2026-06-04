@@ -169,7 +169,7 @@ abstract class WebformCompositeBase extends WebformElementBase implements Webfor
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function prepare(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
     // If #flexbox is not set or an empty string, determine if the

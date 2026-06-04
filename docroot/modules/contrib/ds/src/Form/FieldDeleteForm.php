@@ -74,7 +74,7 @@ class FieldDeleteForm extends ConfirmFormBase implements ContainerInjectionInter
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL, $field_key = '') {
+  public function buildForm(array $form, FormStateInterface $form_state, ?Request $request = NULL, $field_key = '') {
     $config = $this->config('ds.field.' . $field_key);
     $this->field = $config->get();
 

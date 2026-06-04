@@ -35,6 +35,7 @@ class ReadOnlyModeMigrateTest extends MigrateDrupal7TestBase {
    */
   public function testReadOnlyModemMigration() {
     $expected_config = [
+      'langcode' => 'en',
       'enabled' => 1,
       'url' => '',
       'messages' => [

@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\views_bulk_edit\Functional;
 
-use Drupal\node\NodeInterface;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\node\NodeInterface;
 
 /**
  * @coversDefaultClass \Drupal\views_bulk_edit\Plugin\Action\ModifyEntityValues

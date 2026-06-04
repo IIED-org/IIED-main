@@ -1,39 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\components\Unit;
 
 use Drupal\components\Template\TwigExtension;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Template\Loader\StringLoader;
 use Drupal\Core\Template\TwigExtension as CoreTwigExtension;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Twig\Environment;
 
 /**
+ * Tests the TwigExtension.
+ *
  * @coversDefaultClass \Drupal\components\Template\TwigExtension
  * @group components
  */
+#[
+  Group('components'), /* @phpstan-ignore attribute.notFound */
+  CoversClass('\Drupal\components\Template\TwigExtension') /* @phpstan-ignore attribute.notFound */
+]
 class TwigExtensionFunctionsTest extends UnitTestCase {
 
   /**
    * The renderer.
    *
-   * @var \Drupal\Core\Render\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
+   * @var \Drupal\Core\Render\RendererInterface
    */
-  protected $renderer;
+  protected RendererInterface $renderer;
 
   /**
    * The system under test.
    *
    * @var \Drupal\components\Template\TwigExtension
    */
-  protected $systemUnderTest;
+  protected TwigExtension $systemUnderTest;
 
   /**
    * The Twig environment.
    *
    * @var \Twig\Environment
    */
-  protected $twigEnvironment;
+  protected Environment $twigEnvironment;
 
   /**
    * {@inheritdoc}
@@ -47,7 +59,7 @@ class TwigExtensionFunctionsTest extends UnitTestCase {
     $dateFormatter = $this->createMock('\Drupal\Core\Datetime\DateFormatterInterface');
     $fileURLGenerator = $this->createMock('\Drupal\Core\File\FileUrlGeneratorInterface');
 
-    $this->systemUnderTest = new TwigExtension();
+    $this->systemUnderTest = new TwigExtension($this->createMock('Drupal\components\Template\ComponentsRegistry'));
     $coreTwigExtension = new CoreTwigExtension($this->renderer, $urlGenerator, $themeManager, $dateFormatter, $fileURLGenerator);
 
     $loader = new StringLoader();
@@ -60,8 +72,6 @@ class TwigExtensionFunctionsTest extends UnitTestCase {
 
   /**
    * Tests incorrectly using a Twig namespaced template name.
-   *
-   * @covers ::template
    */
   public function testTemplateNamespaceException() {
     $this->renderer->expects($this->exactly(0))
@@ -95,15 +105,14 @@ class TwigExtensionFunctionsTest extends UnitTestCase {
    * @param string $rendered_output
    *   The HTML output from the rendered $expected array.
    *
-   * @covers ::template
-   *
    * @dataProvider providerTestTemplate
    */
+  #[DataProvider('providerTestTemplate') /* @phpstan-ignore attribute.notFound */]
   public function testTemplate(
     string $template,
     array $variables,
     array $expected,
-    string $rendered_output
+    string $rendered_output,
   ) {
     $this->renderer
       ->expects($this->exactly(1))
@@ -111,12 +120,17 @@ class TwigExtensionFunctionsTest extends UnitTestCase {
       ->with($expected)
       ->willReturn($rendered_output);
 
-    $result = $this->twigEnvironment->render($template, $variables);
+    try {
+      $result = $this->twigEnvironment->render($template, $variables);
+    }
+    catch (\Exception $e) {
+      $this->fail('No Exception expected but the following was thrown: "' . $e->getMessage() . '"');
+    }
     $this->assertEquals($rendered_output, $result);
   }
 
   /**
-   * Data provider for testTemplate().
+   * Data provider for ::testTemplate().
    *
    * @see testTemplate()
    */
@@ -149,7 +163,7 @@ class TwigExtensionFunctionsTest extends UnitTestCase {
         'rendered_output' => '<ul><li><a href="https://example.com">example link</a></li></ul>',
       ],
       'Works with an array of theme hooks' => [
-        'inline_template' => '{{ template([ "item_list__dogs", "item_list__cats" ], items = [ link ] ) }}',
+        'template' => '{{ template([ "item_list__dogs", "item_list__cats" ], items = [ link ] ) }}',
         'variables' => ['link' => $link],
         'expected' => [
           '#theme' => ['item_list__dogs', 'item_list__cats'],

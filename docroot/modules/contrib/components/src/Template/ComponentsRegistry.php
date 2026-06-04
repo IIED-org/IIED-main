@@ -4,6 +4,8 @@ namespace Drupal\components\Template;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Extension\ExtensionList;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -26,49 +28,56 @@ class ComponentsRegistry {
    * @var array
    *   An array of component registries, keyed by the theme name.
    */
-  protected $registry = [];
+  protected array $registry = [];
 
   /**
    * The module handler.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $moduleHandler;
+  protected ModuleHandlerInterface $moduleHandler;
 
   /**
    * The theme manager.
    *
    * @var \Drupal\Core\Theme\ThemeManagerInterface
    */
-  protected $themeManager;
+  protected ThemeManagerInterface $themeManager;
 
   /**
    * The module extension list service.
    *
    * @var \Drupal\Core\Extension\ModuleExtensionList
    */
-  protected $moduleExtensionList;
+  protected ModuleExtensionList $moduleExtensionList;
 
   /**
    * The theme extension list service.
    *
    * @var \Drupal\Core\Extension\ThemeExtensionList
    */
-  protected $themeExtensionList;
+  protected ThemeExtensionList $themeExtensionList;
 
   /**
    * The cache backend.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
-  protected $cache;
+  protected CacheBackendInterface $cache;
 
   /**
    * The file system service.
    *
    * @var \Drupal\Core\File\FileSystemInterface
    */
-  protected $fileSystem;
+  protected FileSystemInterface $fileSystem;
+
+  /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected ConfigFactoryInterface $configFactory;
 
   /**
    * Constructs a new ComponentsRegistry object.
@@ -85,6 +94,8 @@ class ComponentsRegistry {
    *   Cache backend for storing the components registry info.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   The file system service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The config factory service.
    */
   public function __construct(
     ModuleExtensionList $moduleExtensionList,
@@ -92,7 +103,8 @@ class ComponentsRegistry {
     ModuleHandlerInterface $moduleHandler,
     ThemeManagerInterface $themeManager,
     CacheBackendInterface $cache,
-    FileSystemInterface $fileSystem
+    FileSystemInterface $fileSystem,
+    ConfigFactoryInterface $configFactory,
   ) {
     $this->moduleExtensionList = $moduleExtensionList;
     $this->themeExtensionList = $themeExtensionList;
@@ -100,6 +112,7 @@ class ComponentsRegistry {
     $this->themeManager = $themeManager;
     $this->cache = $cache;
     $this->fileSystem = $fileSystem;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -112,12 +125,59 @@ class ComponentsRegistry {
    *   The path to the template, or NULL if not found.
    */
   public function getTemplate(string $name): ?string {
+    if (!self::isValidComponentName($name)) {
+      return NULL;
+    }
+
     $themeName = $this->themeManager->getActiveTheme()->getName();
     if (!isset($this->registry[$themeName])) {
       $this->load($themeName);
     }
 
-    return $this->registry[$themeName][$name] ?? NULL;
+    if (!empty($this->registry[$themeName][$name])) {
+      return $this->registry[$themeName][$name];
+    }
+
+    // If the template was not found in the active theme, and the active theme
+    // is not the same as the default theme, load the default theme and check
+    // there too. We may be dealing with the admin theme.
+    $defaultThemeName = $this->config('system.theme')->get('default');
+    if (empty($defaultThemeName) || $defaultThemeName === $themeName) {
+      return NULL;
+    }
+
+    if (!isset($this->registry[$defaultThemeName])) {
+      $this->load($defaultThemeName);
+    }
+
+    return $this->registry[$defaultThemeName][$name] ?? NULL;
+  }
+
+  /**
+   * Validates if the given name is a valid component template name.
+   *
+   * @param string $name
+   *   The name of the component template.
+   */
+  public static function isValidComponentName(string $name): bool {
+    $extension = substr($name, strrpos($name, '.', -1));
+
+    return ($extension === '.twig' || $extension === '.html' || $extension === '.svg')
+      && $name[0] === '@'
+      && $name[1] !== '/' && str_contains(substr($name, 2), '/');
+  }
+
+  /**
+   * Retrieves a configuration object.
+   *
+   * @param string $name
+   *   The name of the configuration object to retrieve.
+   *
+   * @return \Drupal\Core\Config\ImmutableConfig
+   *   A configuration object.
+   */
+  protected function config(string $name): ImmutableConfig {
+    return $this->configFactory->get($name);
   }
 
   /**
@@ -142,12 +202,11 @@ class ComponentsRegistry {
 
       foreach ($nameSpaces as $nameSpace => $nameSpacePaths) {
         foreach ($nameSpacePaths as $nameSpacePath) {
-          $possible_duplicates = [];
           try {
             // Get a listing of all Twig files in the namespace path.
             $files = $this->fileSystem->scanDirectory($nameSpacePath, $regex);
           }
-          catch (NotRegularDirectoryException $exception) {
+          catch (NotRegularDirectoryException) {
             $this->logWarning(sprintf('The "@%s" namespace contains a path, "%s", that is not a directory.',
               $nameSpace,
               $nameSpacePath,
@@ -166,28 +225,6 @@ class ComponentsRegistry {
                 $this->registry[$themeName][$template] = $filePath;
               }
             }
-
-            // Keep track of duplicates filenames inside this $nameSpacePath.
-            $possible_duplicates[$file->filename][] = $filePath;
-          }
-
-          // Duplicate template names are expected across separate configured
-          // directories in a namespace (e.g. a theme directory vs base theme
-          // directory), but duplicates within one configured directory should
-          // be warned against.
-          foreach ($possible_duplicates as $filename => $paths) {
-            if (count($paths) > 1) {
-              $extension = substr($filename, strrpos($filename, '.', -1));
-              if ($extension !== '.svg') {
-                $this->logWarning(sprintf('Found multiple files for the "%s" template; it is recommended to only have one "%s" file in the "%s" namespace’s "%s" directory. Found: %s',
-                  '@' . $nameSpace . '/' . $filename,
-                  $filename,
-                  $nameSpace,
-                  $nameSpacePath,
-                  implode(', ', $paths)
-                ));
-              }
-            }
           }
         }
       }
@@ -198,7 +235,7 @@ class ComponentsRegistry {
           'components:registry:' . $themeName,
           $this->registry[$themeName],
           Cache::PERMANENT,
-          ['theme_registry']
+          ['components_registry']
         );
       }
     }
@@ -222,7 +259,8 @@ class ComponentsRegistry {
     if ($cached = $this->cache->get('components:namespaces')) {
       $allNamespaces = $cached->data;
     }
-    else {
+
+    if (!isset($allNamespaces) || !isset($allNamespaces[$themeName])) {
       $allNamespaces = $this->findNamespaces($this->moduleExtensionList, $this->themeExtensionList);
       // Only persist if all modules are loaded to ensure the cache is complete.
       if ($this->moduleHandler->isLoaded()) {
@@ -230,13 +268,16 @@ class ComponentsRegistry {
           'components:namespaces',
           $allNamespaces,
           Cache::PERMANENT,
-          ['theme_registry']
+          ['components_registry']
         );
       }
     }
 
     // Get the un-altered namespaces for the theme.
-    $namespaces = $allNamespaces[$themeName] ?? [];
+    $namespaces = $allNamespaces[$themeName]
+      // If ::getNamespaces is called with a theme unknown to
+      // ThemeExtensionList, we just return all the module namespaces.
+      ?? $allNamespaces['$moduleNamespaces'];
 
     // Run hook_components_namespaces_alter().
     $this->moduleHandler->alter('components_namespaces', $namespaces, $themeName);
@@ -248,7 +289,7 @@ class ComponentsRegistry {
         'components:namespaces:' . $themeName,
         $namespaces,
         Cache::PERMANENT,
-        ['theme_registry']
+        ['components_registry']
       );
     }
 
@@ -319,8 +360,12 @@ class ComponentsRegistry {
     }
 
     // Build the full list of namespaces for each theme.
-    $namespaces = [];
+    $namespaces = [
+      // Pass the module namespaces back to ::getNamespaces().
+      '$moduleNamespaces' => $moduleNamespaces,
+    ];
     foreach (array_keys($themeInfo) as $activeTheme) {
+      // See the docs of this method as to why paths are prepended in this way.
       $namespaces[$activeTheme] = $moduleNamespaces;
       foreach (array_merge($themeInfo[$activeTheme]['extensionInfo']['baseThemes'], [$activeTheme]) as $themeName) {
         foreach ($themeInfo[$themeName]['namespaces'] as $namespace => $paths) {
@@ -350,7 +395,7 @@ class ComponentsRegistry {
   protected function normalizeExtensionListInfo(ExtensionList $extensionList): array {
     $data = [];
 
-    $themeExtensions = method_exists($extensionList, 'getBaseThemes') ? $extensionList->getList() : [];
+    $themeExtensions = ($extensionList instanceof ThemeExtensionList) ? $extensionList->getList() : [];
     foreach ($extensionList->getAllInstalledInfo() as $name => $extensionInfo) {
       $data[$name] = [
         // Save information about the extension.
@@ -360,15 +405,15 @@ class ComponentsRegistry {
           'package' => $extensionInfo['package'] ?? '',
         ],
       ];
-      if (method_exists($extensionList, 'getBaseThemes')) {
+      if (!empty($themeExtensions)) {
         $data[$name]['extensionInfo']['baseThemes'] = [];
-        foreach ($extensionList->getBaseThemes($themeExtensions, $name) as $baseTheme => $baseThemeName) {
+        foreach ($themeExtensions[$name]->base_themes ?? [] as $baseTheme => $baseThemeName) {
           // If NULL is given as the name of any base theme, then Drupal
-          // encountered an error trying to find the base themes. If this
-          // happens for an active theme, Drupal will throw a fatal error. But
-          // this may happen for a non-active, installed theme and the
-          // components module should simply ignore the broken base theme since
-          // the error won't affect the active theme.
+          // encountered an error trying to find the base theme. If this happens
+          // for an active theme, Drupal will throw a fatal error. But this may
+          // happen for a non-active, installed theme and the components module
+          // should simply ignore the missing base theme since the error won't
+          // affect the active theme.
           if (!is_null($baseThemeName)) {
             $data[$name]['extensionInfo']['baseThemes'][] = $baseTheme;
           }

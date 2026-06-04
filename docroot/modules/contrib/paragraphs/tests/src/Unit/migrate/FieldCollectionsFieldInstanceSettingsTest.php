@@ -4,6 +4,8 @@ namespace Drupal\Tests\paragraphs\Unit\migrate;
 
 use Drupal\migrate\MigrateSkipRowException;
 use Drupal\paragraphs\Plugin\migrate\process\FieldCollectionFieldInstanceSettings;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Test the ParagraphFieldInstanceSettings Process Plugin.
@@ -11,6 +13,7 @@ use Drupal\paragraphs\Plugin\migrate\process\FieldCollectionFieldInstanceSetting
  * @group paragraphs
  * @coversDefaultClass \Drupal\paragraphs\Plugin\migrate\process\FieldCollectionFieldInstanceSettings
  */
+#[Group('paragraphs')]
 class FieldCollectionsFieldInstanceSettingsTest extends ProcessTestCase {
 
   /**
@@ -33,6 +36,7 @@ class FieldCollectionsFieldInstanceSettingsTest extends ProcessTestCase {
    *
    * @dataProvider getData
    */
+  #[DataProvider('getData')]
   public function testFieldCollectionInstanceFieldSettings(array $source, array $expected) {
 
     $this->row->expects($this->any())

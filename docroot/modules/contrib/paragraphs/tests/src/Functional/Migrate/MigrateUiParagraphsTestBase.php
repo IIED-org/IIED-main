@@ -11,10 +11,14 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\migrate\Plugin\MigrateIdMapInterface;
 use Drupal\Tests\migrate_drupal_ui\Functional\MigrateUpgradeTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Provides a base class for testing Paragraphs migration via the UI.
  */
+#[RunTestsInSeparateProcesses]
+#[Group('paragraphs')]
 abstract class MigrateUiParagraphsTestBase extends MigrateUpgradeTestBase {
 
   use StringTranslationTrait;

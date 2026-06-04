@@ -352,4 +352,47 @@ class AutologoutTest extends BrowserTestBase {
     );
   }
 
+  /**
+   * Tests warning block displays correct message.
+   */
+  public function testAutologoutWarningBlock(): void {
+    $this->drupalLogin($this->privilegedUser);
+
+    // Place/enable the autologout warning block.
+    $this->drupalPlaceBlock('autologout_warning_block');
+
+    // Visit front page and check the correct message is displayed.
+    $this->drupalGet('/node');
+
+    $this->assertSession()->pageTextContains(
+      $this->t('You will be logged out in 10 sec if this page is not refreshed before then.')
+    );
+
+    // Update autologout settings to enforce the logout on admin pages.
+    $this->configFactory = \Drupal::service('config.factory');
+    $this->configFactory->getEditable('autologout.settings')
+      ->set('enforce_admin', TRUE)
+      ->save();
+
+    // Visit admin page and verify the correct message is displayed.
+    $this->drupalGet('/admin/config/people/autologout');
+
+    $this->assertSession()->pageTextContains(
+      $this->t('You will be logged out in 10 sec if this page is not refreshed before then.')
+    );
+
+    // Update autologout settings to avoid the logout on admin pages.
+    $this->configFactory->getEditable('autologout.settings')
+      ->set('enforce_admin', FALSE)
+      ->save();
+
+    // Visit the admin page and verify the correct message is displayed.
+    $this->drupalGet('/admin/config/people/autologout');
+
+    $this->assertSession()->pageTextContains(
+      $this->t('Autologout does not apply on the current page, you will be kept logged in whilst this page remains open.')
+    );
+
+  }
+
 }

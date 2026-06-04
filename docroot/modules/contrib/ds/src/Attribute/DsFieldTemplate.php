@@ -27,7 +27,7 @@ class DsFieldTemplate extends Plugin {
     public readonly string $id,
     public readonly TranslatableMarkup $title,
     public readonly string $theme,
-    public readonly ?string $deriver = NULL
+    public readonly ?string $deriver = NULL,
   ) {}
 
 }

@@ -149,10 +149,6 @@ class WebformBreadcrumbBuilderTest extends UnitTestCase {
     \Drupal::setContainer($container);
   }
 
-  /* ************************************************************************ */
-  // Below test is passing locally but failing on Drupal.org.
-  /* ************************************************************************ */
-
   /**
    * Tests WebformBreadcrumbBuilder::applies().
    *

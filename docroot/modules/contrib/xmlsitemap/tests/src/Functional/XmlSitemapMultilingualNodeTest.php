@@ -48,7 +48,9 @@ class XmlSitemapMultilingualNodeTest extends XmlSitemapMultilingualTestBase {
       'language_configuration[language_alterable]' => TRUE,
     ];
     $this->drupalGet('admin/structure/types/manage/page');
-    $this->submitForm($edit, 'Save content type');
+    $this->submitForm($edit,
+      version_compare(\Drupal::VERSION, '10.2', '>=') ? 'Save' : 'Save content type'
+    );
     $this->assertSession()->responseContains((string) new FormattableMarkup('The content type %content_type has been updated.', [
       '%content_type' => 'Basic page',
     ]));
@@ -62,14 +64,12 @@ class XmlSitemapMultilingualNodeTest extends XmlSitemapMultilingualTestBase {
     $node = $this->drupalCreateNode([]);
     $this->drupalGet('node/' . $node->id() . '/edit');
 
-    $this->submitForm([
-      'langcode[0][value]' => 'en',
-    ], t('Save'));
+    $this->submitForm(['langcode[0][value]' => 'en'], 'Save');
     $link = $this->assertSitemapLink('node', $node->id(), ['status' => 0, 'access' => 1]);
     $this->assertSame('en', $link['language']);
     $this->drupalGet('node/' . $node->id() . '/edit');
 
-    $this->submitForm(['langcode[0][value]' => 'fr'], t('Save'));
+    $this->submitForm(['langcode[0][value]' => 'fr'], 'Save');
     $link = $this->assertSitemapLink('node', $node->id(), ['status' => 0, 'access' => 1]);
     $this->assertSame('fr', $link['language']);
   }

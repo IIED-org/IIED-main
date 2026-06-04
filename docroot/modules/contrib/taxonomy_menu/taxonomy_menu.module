@@ -5,6 +5,7 @@
  * Contains taxonomy_menu.module.
  */
 
+use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 
@@ -28,7 +29,9 @@ function taxonomy_menu_help($route_name, RouteMatchInterface $route_match) {
  * Check for taxonomy term insert.
  */
 function taxonomy_menu_taxonomy_term_insert(EntityInterface $entity) {
-  \Drupal::service('taxonomy_menu.helper')->generateTaxonomyMenuEntries($entity, FALSE);
+  if ($entity instanceof TermInterface) {
+    \Drupal::service('taxonomy_menu.helper')->generateTaxonomyMenuEntries($entity, FALSE);
+  }
 }
 
 /**
@@ -37,7 +40,9 @@ function taxonomy_menu_taxonomy_term_insert(EntityInterface $entity) {
  * Check for taxonomy term deletion.
  */
 function taxonomy_menu_taxonomy_term_delete(EntityInterface $entity) {
-  \Drupal::service('taxonomy_menu.helper')->removeTaxonomyMenuEntries($entity, FALSE);
+  if ($entity instanceof TermInterface) {
+    \Drupal::service('taxonomy_menu.helper')->removeTaxonomyMenuEntries($entity, FALSE);
+  }
 }
 
 /**
@@ -46,5 +51,7 @@ function taxonomy_menu_taxonomy_term_delete(EntityInterface $entity) {
  * Check for taxonomy term updates.
  */
 function taxonomy_menu_taxonomy_term_update(EntityInterface $entity) {
-  \Drupal::service('taxonomy_menu.helper')->updateTaxonomyMenuEntries($entity, FALSE);
+  if ($entity instanceof TermInterface) {
+    \Drupal::service('taxonomy_menu.helper')->updateTaxonomyMenuEntries($entity, FALSE);
+  }
 }

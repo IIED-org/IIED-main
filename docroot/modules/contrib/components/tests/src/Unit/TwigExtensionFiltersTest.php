@@ -1,37 +1,49 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\components\Unit;
 
 use Drupal\components\Template\TwigExtension;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Twig\Extension\CoreExtension;
 
 /**
+ * Tests the TwigExtension's filters.
+ *
  * @coversDefaultClass \Drupal\components\Template\TwigExtension
  * @group components
  */
+#[
+  Group('components'), /* @phpstan-ignore attribute.notFound */
+  CoversClass(TwigExtension::class) /* @phpstan-ignore attribute.notFound */
+]
 class TwigExtensionFiltersTest extends UnitTestCase {
 
   /**
    * The renderer.
    *
-   * @var \Drupal\Core\Render\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
+   * @var \Drupal\Core\Render\RendererInterface
    */
-  protected $renderer;
+  protected RendererInterface $renderer;
 
   /**
    * The system under test.
    *
    * @var \Drupal\components\Template\TwigExtension
    */
-  protected $systemUnderTest;
+  protected TwigExtension $systemUnderTest;
 
   /**
    * The Twig CoreExtension.
    *
    * @var \Twig\Extension\CoreExtension
    */
-  protected $coreExtension;
+  protected CoreExtension $coreExtension;
 
   /**
    * {@inheritdoc}
@@ -40,7 +52,7 @@ class TwigExtensionFiltersTest extends UnitTestCase {
     parent::setUp();
 
     $this->renderer = $this->createMock('\Drupal\Core\Render\RendererInterface');
-    $this->systemUnderTest = new TwigExtension();
+    $this->systemUnderTest = new TwigExtension($this->createMock('Drupal\components\Template\ComponentsRegistry'));
 
     // Load the Twig CoreExtension as its file contains static functions used by
     // TwigExtension.
@@ -49,8 +61,6 @@ class TwigExtensionFiltersTest extends UnitTestCase {
 
   /**
    * Tests exceptions during recursive_merge filter.
-   *
-   * @covers ::recursiveMergeFilter
    */
   public function testRecursiveMergeFilterException() {
     try {
@@ -76,18 +86,23 @@ class TwigExtensionFiltersTest extends UnitTestCase {
    * @param array $expected
    *   The expected result.
    *
-   * @covers ::recursiveMergeFilter
-   *
    * @dataProvider providerTestRecursiveMergeFilter
    */
+  #[DataProvider('providerTestRecursiveMergeFilter') /* @phpstan-ignore attribute.notFound */]
   public function testRecursiveMergeFilter(array $element, array $value, array $expected) {
-    $result = TwigExtension::recursiveMergeFilter($element, $value);
+    try {
+      $result = TwigExtension::recursiveMergeFilter($element, $value);
+    }
+    catch (\Exception $e) {
+      $this->fail('No Exception expected but the following was thrown: "' . $e->getMessage() . '"');
+    }
+
     $this->assertEquals($expected, $result);
     $this->assertEquals(array_replace_recursive($element, $value), $result);
   }
 
   /**
-   * Data provider for testRecursiveMergeFilter().
+   * Data provider for ::testRecursiveMergeFilter().
    *
    * @see testRecursiveMergeFilter()
    */
@@ -131,8 +146,6 @@ class TwigExtensionFiltersTest extends UnitTestCase {
 
   /**
    * Tests exceptions during set filter.
-   *
-   * @covers ::setFilter
    */
   public function testSetFilterException() {
     try {
@@ -160,17 +173,22 @@ class TwigExtensionFiltersTest extends UnitTestCase {
    * @param array $expected
    *   The expected result.
    *
-   * @covers ::setFilter
-   *
    * @dataProvider providerTestSetFilter
    */
-  public function testSetFilter(array $element, string $at, $value, array $expected) {
-    $result = TwigExtension::setFilter($element, $at, $value);
+  #[DataProvider('providerTestSetFilter') /* @phpstan-ignore attribute.notFound */]
+  public function testSetFilter(array $element, string $at, mixed $value, array $expected) {
+    try {
+      $result = TwigExtension::setFilter($element, $at, $value);
+    }
+    catch (\Exception $e) {
+      $this->fail('No Exception expected but the following was thrown: "' . $e->getMessage() . '"');
+    }
+
     $this->assertEquals($expected, $result);
   }
 
   /**
-   * Data provider for testSetFilter().
+   * Data provider for ::testSetFilter().
    *
    * @see testSetFilter()
    */
@@ -226,8 +244,6 @@ class TwigExtensionFiltersTest extends UnitTestCase {
 
   /**
    * Tests exceptions during add filter.
-   *
-   * @covers ::addFilter
    */
   public function testAddFilterException() {
     try {
@@ -253,11 +269,10 @@ class TwigExtensionFiltersTest extends UnitTestCase {
    * @param array $expected
    *   The expected render array.
    *
-   * @covers ::addFilter
-   *
    * @dataProvider providerTestAddFilter
    */
-  public function testAddFilter(string $at, $value, array $expected) {
+  #[DataProvider('providerTestAddFilter') /* @phpstan-ignore attribute.notFound */]
+  public function testAddFilter(string $at, mixed $value, array $expected) {
     $element = [
       'existing' => 'value',
       'element' => [
@@ -274,13 +289,13 @@ class TwigExtensionFiltersTest extends UnitTestCase {
       $result = TwigExtension::addFilter($element, $at, $value);
     }
     catch (\Exception $e) {
-      $this->fail('No Exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
+      $this->fail('No Exception expected but the following was thrown: "' . $e->getMessage() . '"');
     }
     $this->assertEquals($expected, $result, 'Failed to replace a value.');
   }
 
   /**
-   * Data provider for testAddFilter().
+   * Data provider for ::testAddFilter().
    *
    * @see testAddFilter()
    */

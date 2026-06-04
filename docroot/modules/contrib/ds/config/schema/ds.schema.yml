@@ -59,3 +59,6 @@ ds.settings:
     layout_suggestion_bc:
       type: boolean
       label: 'Undo layout suggestion fix'
+    array_merge_build_bc:
+      type: boolean
+      label: 'Use original array merge build behavior'

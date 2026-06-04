@@ -37,7 +37,7 @@ function hook_masquerade_access(UserInterface $user, UserInterface $target_accou
   if ($target_account->id() == 1) {
     return FALSE;
   }
-  // Example: If the target username is 'demo', always grant access for everone.
+  // Example: If the target username is 'demo', always grant access for anyone.
   if ($target_account->label() == 'demo') {
     return TRUE;
   }

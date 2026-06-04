@@ -1,0 +1,31 @@
+# Schema for the configuration files of the Field Token Value module.
+
+field.formatter.settings.field_token_value_text:
+  type: mapping
+  label: 'Field token value configuration'
+  mapping:
+    wrapper:
+      type: string
+      label: 'Wrapper'
+    link:
+      type: boolean
+      label: 'Link'
+
+field.field_settings.field_token_value:
+  type: mapping
+  label: 'Field token value field settings'
+  mapping:
+    field_value:
+      type: label
+      label: 'Field value'
+    remove_empty:
+      type: integer
+      label: 'Remove empty tokens'
+
+field.value.field_token_value:
+  type: mapping
+  label: 'Default value'
+  mapping:
+    value:
+      type: string
+      label: 'Value'

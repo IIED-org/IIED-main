@@ -81,7 +81,7 @@ interface WebformOptionsLimitHandlerInterface extends WebformHandlerInterface {
    * @return $this
    *   This webform handler.
    */
-  public function setSourceEntity(EntityInterface $source_entity = NULL);
+  public function setSourceEntity(?EntityInterface $source_entity = NULL);
 
   /**
    * Get the webform source entity.
