@@ -1,6 +1,0 @@
-<?php
-
-namespace Drupal\text\Plugin\Field\FieldType;
-
-class TextItem extends TextItemBase {
-}
