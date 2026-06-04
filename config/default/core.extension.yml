@@ -91,7 +91,6 @@ module:
   language: 0
   language_switcher_extended: 0
   layout_builder: 0
-  layout_builder_expose_all_field_blocks: 0
   layout_builder_restrictions: 0
   layout_builder_styles: 0
   layout_builder_tabs: 0
@@ -178,7 +177,6 @@ module:
   tfa: 0
   token: 0
   toolbar: 0
-  tour: 0
   twig_field_value: 0
   twig_tweak: 0
   update: 0
