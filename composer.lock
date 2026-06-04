@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1465dcff2a03c375f028f577735ba8c",
+    "content-hash": "0a0d6b0bf4e3bd88725925461a2ae8f9",
     "packages": [
         {
             "name": "acquia/http-hmac-php",
@@ -5377,26 +5377,26 @@
         },
         {
             "name": "drupal/formdazzle",
-            "version": "3.0.0",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/formdazzle.git",
-                "reference": "3.0.0"
+                "reference": "4.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/formdazzle-3.0.0.zip",
-                "reference": "3.0.0",
-                "shasum": "08e42e7d5ac07834899ff68127a7307ce4a946e9"
+                "url": "https://ftp.drupal.org/files/projects/formdazzle-4.0.0.zip",
+                "reference": "4.0.0",
+                "shasum": "6ba866a99aeeb7a044a7b0055b9bbade90fa4ccb"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0",
-                    "datestamp": "1678091526",
+                    "version": "4.0.0",
+                    "datestamp": "1723998766",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6938,31 +6938,26 @@
         },
         {
             "name": "drupal/layout_builder_restrictions",
-            "version": "2.20.0",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/layout_builder_restrictions.git",
-                "reference": "8.x-2.20"
+                "reference": "3.0.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/layout_builder_restrictions-8.x-2.20.zip",
-                "reference": "8.x-2.20",
-                "shasum": "cd5c87869a0843f91fae0600f74b6c2ed102e398"
+                "url": "https://ftp.drupal.org/files/projects/layout_builder_restrictions-3.0.4.zip",
+                "reference": "3.0.4",
+                "shasum": "826edbab8ed665bccfb668092b155a60ec6da296"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10"
-            },
-            "require-dev": {
-                "drupal/dashboards": "^2",
-                "drupal/layout_library": "dev-1.x",
-                "drupal/mini_layouts": "dev-2.0.x"
+                "drupal/core": "^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.20",
-                    "datestamp": "1715895237",
+                    "version": "3.0.4",
+                    "datestamp": "1752762015",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9177,29 +9172,29 @@
         },
         {
             "name": "drupal/search404",
-            "version": "2.1.2",
+            "version": "2.2.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search404.git",
-                "reference": "2.1.2"
+                "reference": "2.2.0-rc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search404-2.1.2.zip",
-                "reference": "2.1.2",
-                "shasum": "1bd271486856e33a23c394849503477b97fbe25f"
+                "url": "https://ftp.drupal.org/files/projects/search404-2.2.0-rc3.zip",
+                "reference": "2.2.0-rc3",
+                "shasum": "0ab624c2d1cc7372c84f1d9d08d57e3553a6416a"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^10.3 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.1.2",
-                    "datestamp": "1677067806",
+                    "version": "2.2.0-rc3",
+                    "datestamp": "1736859063",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -11775,48 +11770,43 @@
         },
         {
             "name": "drupal/webform",
-            "version": "6.2.10",
+            "version": "6.3.0-beta9",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/webform.git",
-                "reference": "6.2.10"
+                "reference": "6.3.0-beta9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform-6.2.10.zip",
-                "reference": "6.2.10",
-                "shasum": "82594fde5a3041867903a93f69f447b29bf3115f"
+                "url": "https://ftp.drupal.org/files/projects/webform-6.3.0-beta9.zip",
+                "reference": "6.3.0-beta9",
+                "shasum": "90225ae8c025ac879e3b9c7c1f9378323a42e802"
             },
             "require": {
-                "drupal/core": "^10.2",
-                "php": ">=8.1"
+                "drupal/core": "^10.3 || ^11.0"
             },
             "require-dev": {
-                "drupal/address": "1.x-dev",
-                "drupal/bootstrap": "^3.0",
-                "drupal/captcha": "^1 || ^2",
-                "drupal/chosen": "3.0.x-dev",
-                "drupal/ckeditor": "1.0.x-dev",
-                "drupal/clientside_validation": "^3 || ^4",
+                "drupal/address": "^2.0",
+                "drupal/captcha": "^2.0",
+                "drupal/chosen": "^4.0",
+                "drupal/clientside_validation": "^4.0",
                 "drupal/clientside_validation_jquery": "*",
-                "drupal/devel": "5.x-dev",
-                "drupal/entity": "1.x-dev",
-                "drupal/entity_print": "2.x-dev",
-                "drupal/group": "1.x-dev",
-                "drupal/hal": "1 - 2",
-                "drupal/jquery_ui": "1.x-dev",
-                "drupal/jquery_ui_button": "2.x-dev",
-                "drupal/jquery_ui_checkboxradio": "2.x-dev",
-                "drupal/jquery_ui_datepicker": "2.x-dev",
-                "drupal/mailsystem": "4.x-dev",
-                "drupal/metatag": "1.x-dev",
-                "drupal/paragraphs": "1.x-dev",
-                "drupal/select2": "1.x-dev",
-                "drupal/smtp": "1.x-dev",
-                "drupal/styleguide": "^1 || ^2",
-                "drupal/telephone_validation": "2.x-dev",
-                "drupal/token": "1.x-dev",
-                "drupal/variationcache": "1.x-dev",
+                "drupal/devel": "^5.0",
+                "drupal/entity": "^1.0",
+                "drupal/entity_print": "^2.0",
+                "drupal/hal": "^2.0",
+                "drupal/jquery_ui": "^1.0",
+                "drupal/jquery_ui_button": "^2.0",
+                "drupal/jquery_ui_checkboxradio": "^2.0",
+                "drupal/jquery_ui_datepicker": "^2.0",
+                "drupal/mailsystem": "^4.0",
+                "drupal/metatag": "^2.0",
+                "drupal/paragraphs": "^1.0",
+                "drupal/select2": "^1.0 || ^2.0",
+                "drupal/smtp": "^1.0",
+                "drupal/styleguide": "^2.0",
+                "drupal/telephone_validation": "^2.0",
+                "drupal/token": "^1.0",
                 "drupal/webform_access": "*",
                 "drupal/webform_attachment": "*",
                 "drupal/webform_clientside_validation": "*",
@@ -11835,16 +11825,16 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "6.2.10",
-                    "datestamp": "1773926566",
+                    "version": "6.3.0-beta9",
+                    "datestamp": "1777906727",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "drush": {
                     "services": {
-                        "drush.services.yml": ">=9"
+                        "drush.services.yml": ">=11"
                     }
                 }
             },
@@ -12091,25 +12081,25 @@
         },
         {
             "name": "drupal/xmlsitemap",
-            "version": "1.6.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/xmlsitemap.git",
-                "reference": "8.x-1.6"
+                "reference": "2.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/xmlsitemap-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "d4e78b9fa0c5e20eab90e52abd7aed4f698f57f3"
+                "url": "https://ftp.drupal.org/files/projects/xmlsitemap-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "5ffa171f2e86311dd0142bab25ea48b142927ec0"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10",
+                "drupal/core": "^10.3 || ^11",
                 "ext-xmlwriter": "*"
             },
             "require-dev": {
                 "drupal/config_readonly": "^1.0",
-                "drupal/metatag": "^1.0",
+                "drupal/metatag": "^2.0",
                 "drupal/robotstxt": "^1.0"
             },
             "suggest": {
@@ -12118,8 +12108,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1768582978",
+                    "version": "2.0.0",
+                    "datestamp": "1745611162",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12127,7 +12117,7 @@
                 },
                 "drush": {
                     "services": {
-                        "drush.services.yml": "^10 || ^11"
+                        "drush.services.yml": ">=11"
                     }
                 }
             },
@@ -24641,9 +24631,11 @@
         "drupal/linkchecker": 15,
         "drupal/name": 5,
         "drupal/rabbit_hole": 10,
+        "drupal/search404": 5,
         "drupal/search_api_sorts": 20,
         "drupal/term_merge": 10,
         "drupal/views_field_view": 10,
+        "drupal/webform": 10,
         "drupal/webform_shs": 10
     },
     "prefer-stable": true,

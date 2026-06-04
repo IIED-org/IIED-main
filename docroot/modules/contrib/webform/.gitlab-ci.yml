@@ -14,21 +14,54 @@ include:
   - project: $_GITLAB_TEMPLATES_REPO
     ref: $_GITLAB_TEMPLATES_REF
     file:
-      - '/includes/include.drupalci.main.yml'
-      - '/includes/include.drupalci.variables.yml'
-      - '/includes/include.drupalci.workflows.yml'
-#
+      - "/includes/include.drupalci.main.yml"
+      - "/includes/include.drupalci.variables.yml"
+      - "/includes/include.drupalci.workflows.yml"
+
 ################
 # Pipeline configuration variables are defined with default values and descriptions in the file
 # https://git.drupalcode.org/project/gitlab_templates/-/blob/main/includes/include.drupalci.variables.yml
 # Uncomment the lines below if you want to override any of the variables. The following is just an example.
 ################
 variables:
-#   SKIP_ESLINT: '1'
-#   OPT_IN_TEST_NEXT_MAJOR: '1'
-#   _CURL_TEMPLATES_REF: 'main'
   _PHPUNIT_CONCURRENT: 1
+  OPT_IN_TEST_MAX_PHP: 1
+  OPT_IN_TEST_NEXT_MINOR: 1
+  OPT_IN_TEST_PREVIOUS_MAJOR: 1
+  OPT_IN_TEST_PREVIOUS_MINOR: 1
+  _LENIENT_ALLOW_LIST: "select2, styleguide"
+  _CSPELL_IGNORE_PATHS: 'webform.libraries.yml,
+  config/install/*,
+  config/schema/*,
+  tests/modules/*/config/*,
+  modules/*/js/*,
+  modules/*/tests/modules/*/config/*,
+  modules/*/config/install/*,
+  includes/webform.libraries.inc,
+  js/*, css/*,
+  tests/files/*,
+  modules/*/tests/modules/*/files/*.csv,
+  modules/*/tests/modules/*/style-guide/*'
+  _PHPCS_EXTRA: '--ignore=*/modules/webform_bootstap/*'
 
-composer:
+composer (next minor):
   variables:
-    DRUPAL_CORE: 10.6.3
+    _COMPOSER_PATCHES_FILE: .gitlab-ci/next_minor_patches.json
+
+phpcs:
+  allow_failure: false
+
+# Todo: Remove this workaround once all our dependencies are D11 compatible.
+phpunit:
+  allow_failure: false
+  before_script:
+    - 'sed -i "s/core_version_requirement.*/core_version_requirement: \^11/" web/modules/contrib/**/*.info.yml'
+    # Replace versions in submodules too.
+    - 'sed -i "s/core_version_requirement.*/core_version_requirement: \^11/" web/modules/contrib/**/**/*.info.yml'
+
+phpunit (previous major):
+  before_script: []
+
+# Allow max PHP tests to fail as deprecations in other modules will fail this pipeline.
+phpunit (max PHP version):
+  allow_failure: true

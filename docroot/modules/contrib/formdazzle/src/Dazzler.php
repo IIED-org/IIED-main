@@ -22,7 +22,7 @@ class Dazzler implements RenderCallbackInterface {
    * @param string $form_id
    *   The form id.
    */
-  public static function formAlter(array &$form, string $form_id) {
+  public static function formAlter(array &$form, string $form_id): void {
     // Instead of altering the form now, we wait until all hook_form_alter
     // functions are completed and make our changes during the #pre_render
     // phase of Drupal\Core\Render\Renderer::render().
@@ -131,6 +131,13 @@ class Dazzler implements RenderCallbackInterface {
       $form_id_suggestion = str_replace('views_exposed_form__', 'views__', $form['#theme'][0]);
     }
 
+    // Use a simplified form ID if the form ID is too specific and it has
+    // a number at the end of ID string.
+    // @see \Drupal\commerce_cart\Form\AddToCartForm::getFormId()
+    elseif (str_starts_with($form_id_suggestion, $last_suggestion) && preg_match('/([a-zA-Z]_)*\d$/', $form_id_suggestion) === 1) {
+      $form_id_suggestion = $last_suggestion;
+    }
+
     return $form_id_suggestion;
   }
 
@@ -144,7 +151,7 @@ class Dazzler implements RenderCallbackInterface {
    * @param string $form_id_suggestion
    *   A suggestion to use based on the form ID.
    */
-  public static function traverse(array &$element, string $form_id, string $form_id_suggestion) {
+  public static function traverse(array &$element, string $form_id, string $form_id_suggestion): void {
     // Add the default info for the #type of form element.
     self::addDefaultThemeProperties($element);
 
@@ -168,7 +175,7 @@ class Dazzler implements RenderCallbackInterface {
    * @param array $element
    *   The form or form element.
    */
-  public static function addDefaultThemeProperties(array &$element) {
+  public static function addDefaultThemeProperties(array &$element): void {
     if (isset($element['#type'])) {
       $default_theme_properties = array_intersect_key(
         \Drupal::service('element_info')->getInfo($element['#type']),
@@ -188,7 +195,7 @@ class Dazzler implements RenderCallbackInterface {
    * @param string $form_id_suggestion
    *   A suggestion to use based on the form ID.
    */
-  public static function addSuggestions(array &$element, string $form_id, string $form_id_suggestion) {
+  public static function addSuggestions(array &$element, string $form_id, string $form_id_suggestion): void {
     $needs_theme_suggestion = isset($element['#theme']);
     $needs_theme_wrapper_suggestion = isset($element['#theme_wrappers']);
 
@@ -340,7 +347,7 @@ class Dazzler implements RenderCallbackInterface {
    * @param array $variables
    *   The variables that will be passed to the form_element Twig template.
    */
-  public static function preprocessFormElement(array &$variables) {
+  public static function preprocessFormElement(array &$variables): void {
     if (isset($variables['element']['#formdazzle'])) {
       $suggestion_suffix = $variables['element']['#formdazzle']['suggestion_suffix'];
 
@@ -362,7 +369,7 @@ class Dazzler implements RenderCallbackInterface {
    * @param string $hook
    *   The name of the module hook being implemented.
    */
-  public static function moduleImplementsAlter(array &$implementations, string $hook) {
+  public static function moduleImplementsAlter(array &$implementations, string $hook): void {
     if ($hook === 'form_alter') {
       $group = $implementations['formdazzle'];
       unset($implementations['formdazzle']);

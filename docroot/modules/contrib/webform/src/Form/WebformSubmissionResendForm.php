@@ -11,7 +11,7 @@ use Drupal\webform\WebformSubmissionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Defines a webform that resends webform submission.
+ * Defines a webform that resend webform submission.
  */
 class WebformSubmissionResendForm extends FormBase {
 

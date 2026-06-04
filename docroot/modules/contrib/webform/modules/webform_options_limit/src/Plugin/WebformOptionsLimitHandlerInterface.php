@@ -36,7 +36,7 @@ interface WebformOptionsLimitHandlerInterface extends WebformHandlerInterface {
   const LIMIT_STATUS_UNLIMITED = 'unlimited';
 
   /**
-   * Option limit eror.
+   * Option limit error.
    */
   const LIMIT_STATUS_ERROR = 'error';
 

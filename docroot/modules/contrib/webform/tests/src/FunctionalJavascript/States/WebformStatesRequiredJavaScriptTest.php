@@ -1,5 +1,4 @@
 <?php
-// phpcs:ignoreFile
 
 namespace Drupal\Tests\webform\FunctionalJavascript\States;
 
@@ -32,9 +31,6 @@ class WebformStatesRequiredJavaScriptTest extends WebformWebDriverTestBase {
    * Tests webform (custom) #states required logic.
    */
   public function testRequiredState() {
-    // @todo Fix broken test on Drupal.org that working as expected locally.
-    $this->assertTrue(TRUE);
-    return;
 
     $session = $this->getSession();
     $page = $session->getPage();

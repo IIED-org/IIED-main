@@ -159,7 +159,7 @@ class Table extends WebformElementBase {
   protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     // Render the HTML table.
     $build = $this->formatHtml($element, $webform_submission, $options);
-    $html = $this->renderer->renderPlain($build);
+    $html = $this->renderer->renderInIsolation($build);
 
     // Convert table in pipe delimited plain text.
     $html = preg_replace('#\s*</td>\s*<td[^>]*>\s*#', ' | ', $html);

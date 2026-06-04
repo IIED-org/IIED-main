@@ -114,7 +114,8 @@ class FormAlter implements ContainerInjectionInterface {
     ContextHandlerInterface $context_handler,
     UuidInterface $uuid,
     PrivateTempStoreFactory $private_temp_store_factory,
-    ConfigFactoryInterface $config_factory) {
+    ConfigFactoryInterface $config_factory,
+  ) {
     $this->sectionStorageManager = $section_storage_manager;
     $this->blockManager = $block_manager;
     $this->layoutManager = $layout_manager;

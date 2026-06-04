@@ -2,15 +2,16 @@
 
 namespace Drupal\layout_builder_restrictions\Form;
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\layout_builder\Form\MoveBlockForm as MoveBlockFormCore;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenOffCanvasDialogCommand;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\layout_builder\Form\MoveBlockForm as MoveBlockFormCore;
 
 /**
  * Provides a form for moving a block.
  *
+ * @phpstan-ignore-line
  * @internal
  *   Form classes are internal.
  */
@@ -26,10 +27,11 @@ class MoveBlockForm extends MoveBlockFormCore {
     // $original_section = $this->sectionStorage->getSection($from_delta);
     // $component = $original_section->getComponent($this->uuid);
     // Retrieve defined Layout Builder Restrictions plugins.
+    // @phpstan-ignore-line
     $layout_builder_restrictions_manager = \Drupal::service('plugin.manager.layout_builder_restriction');
     $restriction_definitions = $layout_builder_restrictions_manager->getDefinitions();
     foreach ($restriction_definitions as $restriction_definition) {
-      // @todo: respect ordering of plugins (see #3045266)
+      // @todo respect ordering of plugins (see #3045266)
       $plugin_instance = $layout_builder_restrictions_manager->createInstancE($restriction_definition['id']);
       $block_status = $plugin_instance->blockAllowedinContext($this->sectionStorage, $from_delta, $to_delta, $to_region, $this->uuid, NULL);
       if ($block_status !== TRUE) {

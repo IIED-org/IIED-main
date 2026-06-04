@@ -54,8 +54,8 @@ class WebformSubmissionViews extends WebformMultiple {
       '#type' => 'container',
       '#title' => t('View / Name / Title'),
       '#help' => '<b>' . t('View') . ':</b> ' . t('A webform submission embed display. The selected view should also include contextual filters. {webform_id}/{source_entity_type}/{source_entity_id}/{account_id}/{in_draft}') .
-        '<hr/><b>' . t('Name') . ':</b> ' . t('The name to be displayed in the URL when there are multiple submission views available.') .
-        '<hr/><b>' . t('Options') . ':</b> ' . t('The title to be display in the dropdown menu when there are multiple submission views available.'),
+      '<hr/><b>' . t('Name') . ':</b> ' . t('The name to be displayed in the URL when there are multiple submission views available.') .
+      '<hr/><b>' . t('Options') . ':</b> ' . t('The title to be display in the dropdown menu when there are multiple submission views available.'),
       'view' => [
         '#type' => 'select',
         '#title' => t('View'),

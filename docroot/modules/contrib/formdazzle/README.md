@@ -24,3 +24,18 @@ Formdazzle adds the following two theme suggestions to the list:
 
 3. `input--textfield--webform-contact.html.twig`
 4. `input--textfield--webform-contact--first-name.html.twig`
+
+## Similar modules
+
+### [Themable forms](https://www.drupal.org/project/themable_forms)
+
+Differences (see https://www.drupal.org/project/formdazzle/issues/3278319)
+1. Themable Forms (started in September 2016 by lauriii) is older than
+   formdazzle (started September 2019 by JohnAlbin).
+2. Themable forms has very few commits and amounts to two template suggestion
+   hooks inside the *.module file.
+3. Formdazzle! on the other, hand has many commits and takes a different
+   approach. It uses the *.module file to register a preprocess_form_element()
+   function, but all the module's business logic is housed in a PHP Class
+   called Dazzler.php. The class has unit tests whereas Themable Forms has no
+   tests (due to its simplistic nature).

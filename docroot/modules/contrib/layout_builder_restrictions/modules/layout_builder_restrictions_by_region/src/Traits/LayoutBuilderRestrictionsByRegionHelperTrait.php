@@ -26,7 +26,7 @@ trait LayoutBuilderRestrictionsByRegionHelperTrait {
    */
   protected function regionRestrictionStatus(string $layout_plugin, string $region_id, $static_id = NULL, $entity_view_display_id = NULL) {
     if (is_null($static_id) && is_null($entity_view_display_id)) {
-      throw new Exception("Either a static ID or a entity view display ID must be provided.");
+      throw new \Exception("Either a static ID or a entity view display ID must be provided.");
     }
     $region_categories = NULL;
     $region_restricted = FALSE;

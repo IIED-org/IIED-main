@@ -44,6 +44,10 @@ class PasswordConfirm extends Password {
   protected function prepareElementValidateCallbacks(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepareElementValidateCallbacks($element, $webform_submission);
     $element['#element_validate'][] = [get_class($this), 'validatePasswordConfirm'];
+
+    // Add js-form-type-password-confirm to ensure it works with core's javascript.
+    // @see core/modules/user/user.js
+    $element['#attributes']['class'][] = 'js-form-type-password-confirm';
   }
 
   /**

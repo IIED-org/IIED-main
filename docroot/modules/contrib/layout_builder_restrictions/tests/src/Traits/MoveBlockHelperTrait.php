@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_builder_restrictions\Traits;
 
 use Drupal\Tests\contextual\FunctionalJavascript\ContextualLinkClickTrait;
@@ -19,7 +21,8 @@ trait MoveBlockHelperTrait {
    */
   protected function assertBlockTable(array $expected_block_labels) {
     $page = $this->getSession()->getPage();
-    $this->assertSession()->assertWaitOnAjaxRequest();
+    $assert = $this->assertSession();
+    $this->assertNotEmpty($assert->waitForText('Move the'));
     $block_tds = $page->findAll('css', '.layout-builder-components-table__block-label');
     $this->assertCount(count($block_tds), $expected_block_labels);
     /** @var \Behat\Mink\Element\NodeElement $block_td */
@@ -29,7 +32,7 @@ trait MoveBlockHelperTrait {
   }
 
   /**
-   * Reconciles minor rendering differences in theme output
+   * Reconciles minor rendering differences in theme output.
    *
    * @param string $string
    *   A string of text.
@@ -41,9 +44,9 @@ trait MoveBlockHelperTrait {
     // Drupal 9.5 and 10 appear to have different output for in-progress moved
     // blocks on Olivero theme. Normalize with a space before the asterisk.
     // Before: 'Body (current)*'
-    // After: 'Body (current) *'
+    // After: 'Body (current) *'.
     $string = str_replace(")*", ") *", $string);
-    // @todo: Make this more abstracted for other scenarios.
+    // @todo Make this more abstracted for other scenarios.
     // Before: 'branding*'
     // After: 'branding *'
     $string = str_replace("branding*", "branding *", $string);
@@ -148,12 +151,11 @@ trait MoveBlockHelperTrait {
    *   The initial blocks that should be shown in the draggable table.
    */
   protected function openMoveForm($delta, $region, $field, array $initial_blocks) {
-    $assert_session = $this->assertSession();
+    $assert = $this->assertSession();
     $body_field_locator = "[data-layout-delta=\"$delta\"] [data-region=\"$region\"] ." . $field;
     $this->clickContextualLink($body_field_locator, 'Move');
-    $assert_session->assertWaitOnAjaxRequest();
-    $this->assertNotEmpty($assert_session->waitForElementVisible('named', ['select', 'Region']));
-    $assert_session->fieldValueEquals('Region', "$delta:$region");
+    $this->assertNotEmpty($assert->waitForElementVisible('named', ['select', 'Region']));
+    $assert->fieldValueEquals('Region', "$delta:$region");
     $this->assertBlockTable($initial_blocks);
   }
 

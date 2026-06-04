@@ -21,6 +21,6 @@ class ValidateD7MigrationStateTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['search404'];
+  protected static $modules = ['search404'];
 
 }

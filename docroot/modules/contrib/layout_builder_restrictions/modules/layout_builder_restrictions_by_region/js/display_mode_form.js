@@ -2,12 +2,12 @@
   Drupal.behaviors.layoutBuilderRestrictionsByRegion = {
     attach: function (context, settings) {
       // On page load.
-      $( 'input.restriction-type:checked').each(function() {
+      $( 'input.restriction-type:checked').each(function () {
         displayToggle(this);
       });
 
       // On change of restrictions radios.
-      $( 'input.restriction-type', context ).change(function(e) {
+      $( 'input.restriction-type', context ).change(function (e) {
         displayToggle(this);
       });
 

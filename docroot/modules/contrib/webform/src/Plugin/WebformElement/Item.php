@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -49,6 +50,14 @@ class Item extends WebformMarkup {
   protected function prepareElementValidateCallbacks(array &$element, ?WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepareElementValidateCallbacks($element, $webform_submission);
     $element['#element_validate'][] = [get_class($this), 'validateItem'];
+
+    // Must manually process #states because we are using #markup to define
+    // the item's (child) content.
+    // @see \Drupal\Core\Form\FormHelper::processStates
+    if (!empty($element['#states'])) {
+      $element['#attached']['library'][] = 'core/drupal.states';
+      $element['#wrapper_attributes']['data-drupal-states'] = Json::encode($element['#states']);
+    }
   }
 
   /**

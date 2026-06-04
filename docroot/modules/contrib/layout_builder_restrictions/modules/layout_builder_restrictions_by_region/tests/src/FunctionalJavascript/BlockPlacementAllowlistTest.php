@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_builder_restrictions_by_region\FunctionalJavascript;
 
 use Drupal\Tests\layout_builder_restrictions\FunctionalJavascript\LayoutBuilderRestrictionsTestBase;
@@ -94,7 +96,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     // Add restriction to First region.
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="first"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allow all existing & new Content fields blocks.'));
     $assert_session->checkboxChecked('Allow all existing & new Content fields blocks.');
     $assert_session->checkboxNotChecked('Allow specific Content fields blocks:');
 
@@ -103,7 +105,6 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[starts-with(@id,"edit-submit--")]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
 
     // Verify First region is 'Restricted' and Second region
     // remains 'Unrestricted'.
@@ -113,7 +114,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     // Reload First region allowed block form to verify temp storage.
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="first"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allow all existing & new Content fields blocks.'));
     $assert_session->checkboxNotChecked('Allow all existing & new Content fields blocks.');
     $assert_session->checkboxChecked('Allow specific Content fields blocks:');
     $page->pressButton('Close');
@@ -121,7 +122,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     // Load Second region allowed block form to verify temp storage.
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="second"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allow all existing & new Content fields blocks.'));
     $assert_session->checkboxChecked('Allow all existing & new Content fields blocks.');
     $assert_session->checkboxNotChecked('Allow specific Content fields blocks:');
     $page->pressButton('Close');
@@ -132,7 +133,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $assert_session->elementContains('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="all_regions"]', 'Unrestricted');
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="all_regions"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allow all existing & new Content fields blocks.'));
     $assert_session->checkboxChecked('Allow all existing & new Content fields blocks.');
     $assert_session->checkboxNotChecked('Allow specific Content fields blocks:');
     $page->pressButton('Close');
@@ -200,22 +201,20 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $this->navigateToNodeLayout($node_id);
     // Remove default one-column layout and replace with two-column layout.
     $this->clickLink('Remove Section 1');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Are you sure'));
     $page->pressButton('Remove');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Add section'));
     $this->clickLink('Add section');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Two column'));
     $this->clickLink('Two column');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Configure section'));
     $element = $page->find('xpath', '//*[contains(@class, "ui-dialog-off-canvas")]//*[starts-with(@id,"edit-actions-submit--")]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
-
+    $this->assertNotEmpty($assert_session->waitForElementRemoved('css', '.ui-dialog-off-canvas'));
     // Select 'Add block' link in First region.
     $element = $page->find('xpath', '//*[contains(@class, "layout__region--first")]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
-
+    $this->assertNotEmpty($assert_session->waitForLink('Body'));
     // Initially, the body field is available.
     $assert_session->linkExists('Body');
     // Initially, custom blocks instances are available.
@@ -224,7 +223,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $assert_session->linkExists('Alternate Block 1');
     // Initially, all inline block types are allowed.
     $this->clickLink('Create content block');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForLink('Basic'));
     $assert_session->linkExists('Basic');
     $assert_session->linkExists('Alternate');
     $page->pressButton('Close');
@@ -238,7 +237,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="first"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allow all existing & new Content fields blocks.'));
 
     // Impose Custom Block type restrictions.
     $assert_session->checkboxChecked('Allow all existing & new Content fields blocks.');
@@ -254,7 +253,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[starts-with(@id,"edit-submit--")]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Save'));
     $page->pressButton('Save');
 
     $this->navigateToNodeLayout($node_id);
@@ -262,14 +261,14 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     // Select 'Add block' link in First region.
     $element = $page->find('xpath', '//*[contains(@class, "layout__region--first")]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Choose a block'));
     $assert_session->linkNotExists('Body');
     $assert_session->linkNotExists('Basic Block 1');
     $assert_session->linkNotExists('Basic Block 2');
     $assert_session->linkNotExists('Alternate Block 1');
     // Inline block types are still allowed.
     $this->clickLink('Create content block');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForLink('Basic'));
     $assert_session->linkExists('Basic');
     $assert_session->linkExists('Alternate');
 
@@ -280,7 +279,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="first"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allow specific Content fields blocks:'));
 
     $assert_session->checkboxChecked('Allow specific Content fields blocks:');
     $assert_session->checkboxNotChecked('Allow all existing & new Content fields blocks.');
@@ -292,7 +291,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[starts-with(@id,"edit-submit--")]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Save'));
     $page->pressButton('Save');
 
     // Check independent restrictions on Custom block and Inline blocks.
@@ -300,7 +299,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
 
     $element = $page->find('xpath', '//*[contains(@class, "layout__region--first")]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Choose a block'));
 
     $assert_session->linkNotExists('Body');
     $assert_session->linkNotExists('Basic Block 1');
@@ -315,7 +314,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="first"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allow specific Content fields blocks:'));
     $assert_session->checkboxChecked('Allow specific Content fields blocks:');
 
     // Allow only 'body' field as an option.
@@ -327,12 +326,12 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
 
     $element = $page->find('xpath', '//*[starts-with(@id,"edit-submit--")]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Save'));
     $page->pressButton('Save');
 
     $this->navigateToNodeLayout($node_id);
     $this->clickLink('Add block');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForLink('Body'));
     $assert_session->linkExists('Body');
     // ... but other 'content' fields aren't.
     $assert_session->linkNotExists('Promoted to front page');
@@ -344,7 +343,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $assert_session->linkNotExists('Alternate Block 1');
     // Only the basic inline block type is allowed.
     $this->clickLink('Create content block');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForLink('Alternate'));
     $assert_session->linkNotExists('Basic');
     $assert_session->linkExists('Alternate');
 
@@ -354,7 +353,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="first"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allowed blocks'));
 
     $element = $page->find('xpath', '//*[starts-with(@id, "edit-allowed-blocks-custom-blocks-restriction-allowlisted--")]');
     $element->click();
@@ -364,13 +363,13 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $page->checkField('allowed_blocks[Custom blocks][allowed_blocks][block_content:' . $blocks['Basic Block 1'] . ']');
     $element = $page->find('xpath', '//*[starts-with(@id,"edit-submit--")]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Save'));
     $page->pressButton('Save');
 
     $this->navigateToNodeLayout($node_id);
     $element = $page->find('xpath', '//*[contains(@class, "layout__region--first")]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForLink('Basic Block 1'));
     $assert_session->linkExists('Basic Block 1');
     $assert_session->linkNotExists('Basic Block 2');
     $assert_session->linkExists('Alternate Block 1');
@@ -383,27 +382,28 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="second"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allowed blocks'));
 
     // System blocks are disallowed.
     $element = $page->find('xpath', '//*[starts-with(@id, "edit-allowed-blocks-system-restriction-allowlisted--")]');
     $element->click();
     $element = $page->find('xpath', '//*[starts-with(@id,"edit-submit--")]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Save'));
     $page->pressButton('Save');
 
     $this->navigateToNodeLayout($node_id);
 
     $element = $page->find('xpath', '//*[contains(@class, "layout__region--first")]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForLink('Powered by Drupal'));
     $assert_session->linkExists('Powered by Drupal');
     $page->pressButton('Close');
 
     $element = $page->find('xpath', '//*[contains(@class, "layout__region--second")]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+
+    $this->assertNotEmpty($assert_session->waitForText('Choose a block'));
     $assert_session->linkNotExists('Powered by Drupal');
     $page->pressButton('Close');
 
@@ -429,7 +429,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     // Manage restrictions for First region.
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-threecol-section-table"]/tbody/tr[@data-region="first"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allow all existing & new Content fields blocks.'));
 
     $assert_session->checkboxChecked('Allow all existing & new Content fields blocks.');
     $assert_session->checkboxNotChecked('Allow specific Content fields blocks:');
@@ -447,7 +447,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[starts-with(@id,"edit-submit--")]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Save'));
 
     $assert_session->elementContains('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-threecol-section-table"]/tbody/tr[@data-region="third"]', 'Third');
     $assert_session->elementContains('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-threecol-section-table"]/tbody/tr[@data-region="third"]', 'Restricted');
@@ -458,12 +458,12 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     // Add three-column layout below existing section.
     $element = $page->find('xpath', '//*[@data-layout-builder-highlight-id="section-1"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForLink('Three column'));
     $this->clickLink('Three column');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Configure section'));
     $element = $page->find('xpath', '//*[contains(@class, "ui-dialog-off-canvas")]//*[starts-with(@id,"edit-actions-submit--")]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Save'));
     $page->pressButton('Save');
 
     $this->navigateToNodeLayout($node_id);
@@ -488,17 +488,17 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $this->navigateToNodeLayout($node_id);
     $element = $page->find('xpath', '//*[contains(@class, "layout--twocol-section")]/*[contains(@class, "layout__region--first")]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForLink('Promoted to front page'));
     $assert_session->linkExists('Promoted to front page');
     $page->pressButton('Close');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForElementRemoved('css', '.ui-dialog-off-canvas'));
 
     $element = $page->find('xpath', '//*[contains(@class, "layout--twocol-section")]/*[contains(@class, "layout__region--second")]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForLink('Promoted to front page'));
     $assert_session->linkExists('Promoted to front page');
     $page->pressButton('Close');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Save'));
     $page->pressButton('Save');
 
     // Add a restriction for all_regions.
@@ -507,7 +507,7 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-blocks-by-layout-layout-twocol-section-table"]/tbody/tr[@data-region="all_regions"]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Allow all existing & new Content fields blocks.'));
 
     $assert_session->checkboxChecked('Allow all existing & new Content fields blocks.');
     $assert_session->checkboxNotChecked('Allow specific Content fields blocks:');
@@ -516,21 +516,21 @@ class BlockPlacementAllowlistTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $element = $page->find('xpath', '//*[starts-with(@id,"edit-submit--")]');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Save'));
     $page->pressButton('Save');
 
     // Verify restrictions applied to both regions.
     $this->navigateToNodeLayout($node_id);
     $element = $page->find('xpath', '//*[contains(@class, "layout--twocol-section")]/*[contains(@class, "layout__region--first")]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Choose a block'));
     $assert_session->linkNotExists('Promoted to front page');
     $page->pressButton('Close');
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForElementRemoved('css', '.ui-dialog-off-canvas'));
 
     $element = $page->find('xpath', '//*[contains(@class, "layout--twocol-section")]/*[contains(@class, "layout__region--second")]//a');
     $element->click();
-    $assert_session->assertWaitOnAjaxRequest();
+    $this->assertNotEmpty($assert_session->waitForText('Choose a block'));
     $assert_session->linkNotExists('Promoted to front page');
   }
 

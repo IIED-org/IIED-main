@@ -14,5 +14,7 @@
         "issues": "https://drupal.org/project/issues/formdazzle",
         "source": "https://git.drupalcode.org/project/formdazzle"
     },
-    "require": {}
+    "require": {
+        "drupal/core": "^10 || ^11"
+    }
 }

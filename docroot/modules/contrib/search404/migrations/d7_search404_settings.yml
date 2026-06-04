@@ -41,7 +41,7 @@ process:
   search404_ignore: search404_ignore
   search404_ignore_extensions: search404_ignore_extensions
   search404_ignore_paths: search404_ignore_paths
-  search404_ignore_query: search404_ignore_query
+  search404_ignore_query: search404_deny_specific_file_extensions
   search404_jump: search404_jump
   search404_page_text: search404_page_text
   search404_page_title: search404_page_title

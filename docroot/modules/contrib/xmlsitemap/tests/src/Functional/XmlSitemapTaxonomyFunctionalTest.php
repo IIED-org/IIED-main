@@ -64,8 +64,7 @@ class XmlSitemapTaxonomyFunctionalTest extends XmlSitemapTestBase {
     ];
     $this->submitForm($edit, t('Save'));
 
-    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['name' => $term_name, 'vid' => 'tags']);
-    $term = !empty($terms) ? reset($terms) : NULL;
+    $term = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties(['name' => $term_name, 'vid' => 'tags'])[1];
     $link = $this->linkStorage->load('taxonomy_term', $term->id());
     $this->assertEquals(1, (int) $link['status']);
     $this->assertEquals(1, (int) $link['priority']);

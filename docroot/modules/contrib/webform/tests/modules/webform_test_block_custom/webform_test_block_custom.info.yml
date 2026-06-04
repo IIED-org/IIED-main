@@ -1,14 +1,13 @@
 name: 'Webform Block Custom test'
 type: module
 description: 'Support module for webform block custom testing.'
-package: 'Webform Testing'
-core_version_requirement: ^10.2
+package: Testing
 dependencies:
   - 'drupal:block'
   - 'drupal:block_content'
   - 'webform:webform'
 
-# Information added by Drupal.org packaging script on 2026-03-19
-version: '6.2.10'
+# Information added by Drupal.org packaging script on 2026-05-04
+version: '6.3.0-beta9'
 project: 'webform'
-datestamp: 1773926339
+datestamp: 1777906735

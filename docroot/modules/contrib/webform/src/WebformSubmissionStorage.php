@@ -2,14 +2,18 @@
 
 namespace Drupal\webform;
 
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
+use Drupal\Core\Entity\TranslatableInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
+use Drupal\Core\Utility\Error;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use Drupal\webform\EntityStorage\WebformEntityStorageTrait;
@@ -94,6 +98,13 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   protected $elementManager;
 
   /**
+   * Route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected RouteMatchInterface $routeMatch;
+
+  /**
    * {@inheritdoc}
    */
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
@@ -107,6 +118,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $instance->entityTypeRepository = $container->get('entity_type.repository');
     $instance->accessRulesManager = $container->get('webform.access_rules_manager');
     $instance->elementManager = $container->get('plugin.manager.webform.element');
+    $instance->routeMatch = $container->get('current_route_match');
     return $instance;
   }
 
@@ -282,6 +294,12 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       'in_draft' => FALSE,
     ];
 
+    // If the source entity is new, it can't have previous submission.
+    // This allows new webform nodes to be previewed.
+    if ($source_entity && $source_entity->isNew()) {
+      return 0;
+    }
+
     $query = $this->getQuery();
     $query->accessCheck(FALSE);
     $this->addQueryConditions($query, $webform, $source_entity, $account, $options);
@@ -400,11 +418,11 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    * @param array $options
    *   (optional) Additional options and query conditions.
    *   Options/conditions include:
-   *   - in_draft (boolean): NULL will return all saved submissions and drafts.
+   *   - in_draft (bool): NULL will return all saved submissions and drafts.
    *     Defaults to NULL
-   *   - check_source_entity (boolean): Check that a source entity is defined.
+   *   - check_source_entity (bool): Check that a source entity is defined.
    *   - interval (int): Limit total within an seconds interval.
-   *   - check_access (boolean): Check access to the submission.
+   *   - check_access (bool): Check access to the submission.
    */
   public function addQueryConditions($query, ?WebformInterface $webform = NULL, ?EntityInterface $source_entity = NULL, ?AccountInterface $account = NULL, array $options = []) {
     // Set default options/conditions.
@@ -1138,7 +1156,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     }
     catch (\Exception $e) {
       $transaction->rollBack();
-      watchdog_exception($this->entityTypeId, $e);
+      Error::logException($this->loggerFactory->get($this->entityTypeId), $e);
       throw new EntityStorageException($e->getMessage(), $e->getCode(), $e);
     }
   }
@@ -1191,11 +1209,14 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     // Log deleted.
     foreach ($entities as $entity) {
       $webform = $entity->getWebform();
-      $this->loggerFactory->get('webform')
-        ->notice('Deleted @form: Submission #@id.', [
-          '@id' => $entity->id(),
-          '@form' => ($webform) ? $webform->label() : '[' . $this->t('Webform', [], ['context' => 'form']) . ']',
-        ]);
+      // Do not log the deleted webform submissions on batch.
+      if ($this->routeMatch->getRouteName() !== 'system.batch_page.json') {
+        $this->loggerFactory->get('webform')
+          ->notice('Deleted @form: Submission #@id.', [
+            '@id' => $entity->id(),
+            '@form' => ($webform) ? $webform->label() : '[' . $this->t('Webform', [], ['context' => 'form']) . ']',
+          ]);
+      }
     }
 
     return $return;
@@ -1250,17 +1271,38 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         // actually need to query the entire dataset of webform submissions, we
         // are disabling access check.
         $query->accessCheck(FALSE);
-        $query->condition('created', $this->time->getRequestTime() - ($webform->getSetting('purge_days') * $days_to_seconds), '<');
+
         $query->condition('webform_id', $webform->id());
+
+        $purge_timestamp = $this->time->getRequestTime() - ($webform->getSetting('purge_days') * $days_to_seconds);
         switch ($webform->getSetting('purge')) {
           case WebformSubmissionStorageInterface::PURGE_DRAFT:
             $query->condition('in_draft', 1);
+            $query->condition('created', $purge_timestamp, '<');
             break;
 
           case WebformSubmissionStorageInterface::PURGE_COMPLETED:
             $query->condition('in_draft', 0);
+            $query->condition('completed', $purge_timestamp, '<');
+            break;
+
+          default:
+            $query->condition(
+              $query->orConditionGroup()
+                ->condition(
+                  $query->andConditionGroup()
+                    ->condition('in_draft', 1)
+                    ->condition('created', $purge_timestamp, '<')
+                )
+                ->condition(
+                  $query->andConditionGroup()
+                    ->condition('in_draft', 0)
+                    ->condition('completed', $purge_timestamp, '<')
+                )
+            );
             break;
         }
+
         $query->range(0, $remaining);
         $sids = array_values($query->execute());
         if (empty($sids)) {

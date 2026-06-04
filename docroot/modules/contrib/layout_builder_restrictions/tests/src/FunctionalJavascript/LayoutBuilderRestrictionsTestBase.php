@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_builder_restrictions\FunctionalJavascript;
 
 use Drupal\block_content\Entity\BlockContent;
@@ -30,6 +32,7 @@ abstract class LayoutBuilderRestrictionsTestBase extends WebDriverTestBase {
     ]));
 
     $this->getSession()->resizeWindow(1200, 4000);
+    // phpcs:ignore
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
 

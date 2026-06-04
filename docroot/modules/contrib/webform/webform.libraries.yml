@@ -60,6 +60,12 @@ webform.admin.dropbutton:
   dependencies:
     - core/drupal.dropbutton
 
+webform.admin.machine-name:
+  js:
+    js/webform.admin.machine-name.js: {}
+  dependencies:
+    - core/drupal.machine-name
+
 webform.admin.off_canvas:
   js:
     js/webform.admin.off-canvas.js: {}
@@ -91,18 +97,6 @@ webform.admin.translation:
     theme:
       css/webform.admin.translation.css: {}
 
-# Add-ons.
-
-webform.addons:
-  css:
-    theme:
-      css/webform.addons.css: {}
-  dependencies:
-    - webform/webform.ajax
-    - webform/webform.element.details.toggle
-    - webform/webform.element.details.save
-    - webform/webform.promotions
-
 # Ajax.
 
 webform.ajax:
@@ -118,6 +112,7 @@ webform.ajax:
     - core/drupal.announce
     - core/jquery
     - core/once
+    - core/tabbable
     - webform/webform.scroll
 
 # Announce.
@@ -193,6 +188,7 @@ drupal.dialog:
     js/webform.drupal.dialog.js: {}
   dependencies:
     - core/drupal.dialog
+    - core/tabbable
 
 # Help.
 
@@ -459,76 +455,53 @@ webform.element.chosen:
     - core/once
     - webform/libraries.jquery.chosen
 
-webform.element.codemirror.text:
+webform.element.codemirror:
   css:
     component:
       css/webform.element.codemirror.css: {}
   js:
     js/webform.element.codemirror.js: { weight: -1 }
   dependencies:
+    - core/tabbable
+
+webform.element.codemirror.text:
+  dependencies:
+    - webform/webform.element.codemirror
     - webform/libraries.codemirror.text
 
 webform.element.codemirror.yaml:
-  css:
-    component:
-      css/webform.element.codemirror.css: {}
-  js:
-    js/webform.element.codemirror.js: { weight: -1 }
   dependencies:
+    - webform/webform.element.codemirror
     - webform/libraries.codemirror.yaml
 
 webform.element.codemirror.html:
-  css:
-    component:
-      css/webform.element.codemirror.css: {}
-  js:
-    js/webform.element.codemirror.js: { weight: -1 }
   dependencies:
+    - webform/webform.element.codemirror
     - webform/libraries.codemirror.html
 
 webform.element.codemirror.htmlmixed:
-  css:
-    component:
-      css/webform.element.codemirror.css: {}
-  js:
-    js/webform.element.codemirror.js: { weight: -1 }
   dependencies:
+    - webform/webform.element.codemirror
     - webform/libraries.codemirror.htmlmixed
 
 webform.element.codemirror.css:
-  css:
-    component:
-      css/webform.element.codemirror.css: {}
-  js:
-    js/webform.element.codemirror.js: { weight: -1 }
   dependencies:
+    - webform/webform.element.codemirror
     - webform/libraries.codemirror.css
 
 webform.element.codemirror.javascript:
-  css:
-    component:
-      css/webform.element.codemirror.css: {}
-  js:
-    js/webform.element.codemirror.js: { weight: -1 }
   dependencies:
+    - webform/webform.element.codemirror
     - webform/libraries.codemirror.javascript
 
 webform.element.codemirror.php:
-  css:
-    component:
-      css/webform.element.codemirror.css: {}
-  js:
-    js/webform.element.codemirror.js: { weight: -1 }
   dependencies:
+    - webform/webform.element.codemirror
     - webform/libraries.codemirror.php
 
 webform.element.codemirror.twig:
-  css:
-    component:
-      css/webform.element.codemirror.css: {}
-  js:
-    js/webform.element.codemirror.js: { weight: -1 }
   dependencies:
+    - webform/webform.element.codemirror
     - webform/libraries.codemirror.twig
 
 webform.element.color:
@@ -538,7 +511,6 @@ webform.element.color:
   js:
     js/webform.element.color.js: {}
   dependencies:
-    - core/modernizr
     - webform/webform.element.inputmask
 
 webform.element.composite:
@@ -770,8 +742,6 @@ webform.element.range:
       css/webform.element.range.css: {}
   js:
     js/webform.element.range.js: {}
-  dependencies:
-    - core/modernizr
 
 webform.element.rating:
   css:
@@ -893,7 +863,6 @@ webform.element.time:
     js/webform.element.time.js: {}
   dependencies:
     - core/drupal
-    - core/modernizr
     - webform/libraries.jquery.timepicker
 
 webform.element.video_file:
@@ -928,21 +897,20 @@ imce.input:
 
 libraries.choices:
   remote: https://github.com/Choices-js/Choices
-  version: '9.0.1'
+  version: '11.0.2'
   license:
     name: MIT
     url: https://github.com/Choices-js/Choices/blob/master/LICENSE
     gpl-compatible: true
   directory: choices
   cdn:
-    /libraries/choices/: https://cdn.jsdelivr.net/gh/Choices-js/Choices@v9.0.1/
+    /libraries/choices/: https://cdn.jsdelivr.net/gh/Choices-js/Choices@v11.0.2/
   css:
     component:
       css/webform.choices.base.css: {  }
       /libraries/choices/public/assets/styles/choices.min.css: { minified: true }
   js:
     /libraries/choices/public/assets/scripts/choices.min.js: { minified: true }
-    'https://polyfill-fastly.io/v3/polyfill.min.js?features=es5%2Ces6%2CArray.prototype.includes%2Cfetch%2CCustomEvent%2CElement.prototype.closest%2CElement.prototype.classList': { weight: -1, browsers: { IE: 'lte IE 11'} }
 
 libraries.codemirror.text:
   remote: https://github.com/codemirror/codemirror
@@ -1041,14 +1009,14 @@ libraries.codemirror.twig:
 
 libraries.jquery.inputmask:
   remote: https://github.com/RobinHerbots/jquery.inputmask
-  version: '5.0.8'
+  version: '5.0.9'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
   directory: jquery.inputmask
   cdn:
-    /libraries/jquery.inputmask/: https://cdn.jsdelivr.net/gh/RobinHerbots/Inputmask@5.0.8/
+    /libraries/jquery.inputmask/: https://cdn.jsdelivr.net/gh/RobinHerbots/Inputmask@5.0.9/
   js:
     /libraries/jquery.inputmask/dist/jquery.inputmask.min.js: { minified: true }
   dependencies:

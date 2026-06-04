@@ -29,6 +29,12 @@ class WebformVariantOverrideTest extends WebformBrowserTestBase {
 
     $this->drupalLogin($this->rootUser);
 
+    // Check override properties changes title.
+    $this->drupalGet('/webform/test_variant_override');
+    $assert_session->responseNotContains('Overridden title');
+    $this->drupalGet('/webform/test_variant_override', ['query' => ['_webform_variant[variant]' => 'properties']]);
+    $assert_session->responseContains('Overridden title');
+
     // Check override settings enables preview.
     $this->drupalGet('/webform/test_variant_override');
     $assert_session->responseNotContains('<div class="webform-progress">');
@@ -53,8 +59,8 @@ class WebformVariantOverrideTest extends WebformBrowserTestBase {
     $assert_session->responseNotContains('No results were saved to the database.');
     $this->postSubmission($webform, [], NULL, ['query' => ['_webform_variant[variant]' => 'No-Results']]);
     $assert_session->responseNotContains('New submission added to Test: Variant override.');
-    // $assert_session->responseContains('No results were saved to the database.');
-    //
+    $assert_session->responseContains('No results were saved to the database.');
+
     // Check overriding form properties such as method and action.
     $this->drupalGet('/webform/test_variant_override', ['query' => ['_webform_variant[variant]' => 'Custom-Form-Properties']]);
     $assert_session->responseContains('action="https://drupal.org" method="get"');

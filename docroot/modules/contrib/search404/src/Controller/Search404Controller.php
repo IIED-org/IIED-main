@@ -2,17 +2,21 @@
 
 namespace Drupal\search404\Controller;
 
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Path\PathMatcherInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\search\Form\SearchPageForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Component\Utility\Html;
-use Drupal\search\Form\SearchPageForm;
-use Drupal\Core\Messenger\MessengerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Route controller for search.
@@ -63,6 +67,13 @@ class Search404Controller extends ControllerBase {
   protected $searchPageRepository;
 
   /**
+   * The file url generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected $fileUrlGenerator;
+
+  /**
    * Constructor for search404controller.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
@@ -75,13 +86,16 @@ class Search404Controller extends ControllerBase {
    *   The current path service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $fileUrlGenerator
+   *   The file url generator.
    */
-  public function __construct(LoggerChannelFactoryInterface $logger_factory, MessengerInterface $messenger, PathMatcherInterface $path_matcher, CurrentPathStack $currentPath, RequestStack $requestStack) {
+  public function __construct(LoggerChannelFactoryInterface $logger_factory, MessengerInterface $messenger, PathMatcherInterface $path_matcher, CurrentPathStack $currentPath, RequestStack $requestStack, FileUrlGeneratorInterface $fileUrlGenerator) {
     $this->logger = $logger_factory->get('search404');
     $this->messenger = $messenger;
     $this->pathMatcher = $path_matcher;
     $this->currentPath = $currentPath;
     $this->requestStack = $requestStack;
+    $this->fileUrlGenerator = $fileUrlGenerator;
   }
 
   /**
@@ -93,7 +107,8 @@ class Search404Controller extends ControllerBase {
       $container->get('messenger'),
       $container->get('path.matcher'),
       $container->get('path.current'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('file_url_generator')
     );
     if ($container->get('module_handler')->moduleExists('search')) {
       $instance->searchPageRepository = $container->get('search.search_page_repository');
@@ -108,7 +123,7 @@ class Search404Controller extends ControllerBase {
    */
   public function getTitle() {
     $search_404_page_title = $this->config('search404.settings')->get('search404_page_title');
-    $title = !empty($search_404_page_title) ? $search_404_page_title : $this->t('Page not found');
+    $title = !empty($search_404_page_title) ? Html::escape($search_404_page_title) : $this->t('Page not found');
     return $title;
   }
 
@@ -117,6 +132,16 @@ class Search404Controller extends ControllerBase {
    */
   public function search404Page(Request $request) {
     $keys = $this->search404GetKeys();
+
+    // Return early, if the search404GetKeys() function returns FALSE, meaning
+    // that the search query contained a denied file extension:
+    if ($keys === FALSE) {
+      return new Response($this->get404ErrorMessage($keys), 404);
+    }
+
+    if ($keys instanceof RedirectResponse) {
+      return $keys;
+    }
 
     // If the current path is set as one of the ignore path,
     // then do not get into the complex search functions.
@@ -171,9 +196,7 @@ class Search404Controller extends ControllerBase {
       }
       // Ignore this requested page ?
       if ($is_matched || $is_wildcard) {
-        $build['#title'] = $this->t('Page not found');
-        $build['#markup'] = $this->t('The requested page could not be found.');
-        return $build;
+        return new Response($this->getTitle(), 404);
       }
     }
 
@@ -193,7 +216,11 @@ class Search404Controller extends ControllerBase {
       if ($keys && !$this->config('search404.settings')->get('search404_skip_auto_search')) {
         // If custom search enabled.
         if ($this->moduleHandler()->moduleExists('search_by_page') && $this->config('search404.settings')->get('search404_do_search_by_page')) {
-          $this->search404CustomErrorMessage($keys);
+          $errorMessage = $this->get404ErrorMessage($keys);
+          if (!empty($errorMessage)) {
+            $this->messenger->addError($errorMessage);
+          }
+
           return $this->search404Goto('search_pages/' . $keys);
         }
         else {
@@ -233,14 +260,22 @@ class Search404Controller extends ControllerBase {
                 || (count($results) >= 1 && $this->config('search404.settings')->get('search404_first') && $path_matches)
               )
             ) {
-              $this->search404CustomErrorMessage($keys);
+              $errorMessage = $this->get404ErrorMessage($keys);
+              if (!empty($errorMessage)) {
+                $this->messenger->addError($errorMessage);
+              }
+
               if (isset($results[0]['#result']['link'])) {
                 $result_path = $results[0]['#result']['link'];
               }
               return $this->search404Goto($result_path);
             }
             else {
-              $this->search404CustomErrorMessage($keys);
+              $errorMessage = $this->get404ErrorMessage($keys);
+              if (!empty($errorMessage)) {
+                $this->messenger->addError($errorMessage);
+              }
+
               // Redirecting the page for empty search404 result,
               // if redirect url is configured.
               if (!count($results) && $this->config('search404.settings')->get('search404_page_redirect')) {
@@ -252,11 +287,15 @@ class Search404Controller extends ControllerBase {
         }
       }
       else {
-        $this->search404CustomErrorMessage($keys);
+        $errorMessage = $this->get404ErrorMessage($keys);
+        if (!empty($errorMessage)) {
+          $this->messenger->addError($errorMessage);
+        }
       }
 
       // Construct the search form.
       $build['search_form'] = $this->formBuilder()->getForm(SearchPageForm::class, $entity);
+      $build['search_form']['#attributes']['class'][] = 'search-404';
 
       // Set the custom page text on the top of the results.
       $search_404_page_text = $this->config('search404.settings')->get('search404_page_text');
@@ -276,8 +315,8 @@ class Search404Controller extends ControllerBase {
       }
       $build['search_results'] = [
         '#theme' => [
-          'item_list__search_results__' . $plugin->getPluginId(),
-          'item_list__search_results',
+          'item_list__search_results__search404__' . $plugin->getPluginId(),
+          'item_list__search_results__search404',
         ],
         '#items' => $results,
         '#empty' => [
@@ -286,6 +325,7 @@ class Search404Controller extends ControllerBase {
         '#list_type' => 'ol',
         '#attributes' => [
           'class' => [
+            'search-404',
             'search-results',
             $plugin->getPluginId() . '-results',
           ],
@@ -306,7 +346,11 @@ class Search404Controller extends ControllerBase {
     ) {
       $custom_search_path = $this->config('search404.settings')->get('search404_custom_search_path');
 
-      $this->search404CustomErrorMessage($keys);
+      $errorMessage = $this->get404ErrorMessage($keys);
+      if (!empty($errorMessage)) {
+        $this->messenger->addError($errorMessage);
+      }
+
       if ($keys != '') {
         $custom_search_path = str_replace('@keys', $keys, $custom_search_path);
       }
@@ -324,6 +368,9 @@ class Search404Controller extends ControllerBase {
    *
    * @param string $path
    *   Parameter used to redirect.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   The redirect response.
    */
   public function search404Goto($path = '') {
     // Set redirect response.
@@ -375,13 +422,20 @@ class Search404Controller extends ControllerBase {
     // Try to get keywords from the search result (if it was one)
     // that resulted in the 404 if the config is set.
     if ($this->config('search404.settings')->get('search404_use_search_engine')) {
-      $keys = $this->search404SearchEngineQuery();
+      $keys[] = $this->search404SearchEngineQuery();
+      // Filter empty entries:
+      $keys = array_filter($keys);
     }
-
     // If keys are not yet populated from a search engine referer
     // use keys from the path that resulted in the 404.
     if (empty($keys)) {
       $path = $this->currentPath->getPath();
+      if ($this->config('search404.settings')->get('search404_search_file_entities')) {
+        $fileResponse = $this->findFileEntity($path);
+        if ($fileResponse) {
+          return $fileResponse;
+        }
+      }
       $path = urldecode($path);
       $path = preg_replace('/[_+-.,!@#$^&*();\'"?=]|[|]|[{}]|[<>]/', '/', $path);
       $paths = explode('/', $path);
@@ -430,13 +484,30 @@ class Search404Controller extends ControllerBase {
       }
     }
 
-    // Abort query on certain extensions, e.g: gif jpg jpeg png.
-    $extensions = explode(' ', $this->config('search404.settings')->get('search404_ignore_query'));
-    $extensions = trim(implode('|', $extensions));
-    if (!empty($extensions)) {
-      foreach ($keys as $key) {
-        if (preg_match("/\.($extensions)$/i", $key)) {
+    $ignoredExtensions = explode(' ', $this->config('search404.settings')->get('search404_ignore_extensions'));
+    $path = urldecode($this->currentPath->getPath());
+    // If the current search result contains an ignored extension, we
+    // shouldn't abort the query:
+    if (!in_array(end($keys), $ignoredExtensions)) {
+      $abortAllFileQueries = $this->config('search404.settings')->get('search404_deny_all_file_extensions');
+      if ($abortAllFileQueries) {
+        // Abort query if URL path matches any of the file extensions.
+        if (preg_match("/^.+\.[a-zA-Z0-9]+$/i", $path)) {
           return FALSE;
+        }
+      }
+      else {
+        $extensionsToAbortOn = explode(' ', $this->config('search404.settings')->get('search404_deny_specific_file_extensions') ?? '');
+        // "$extensionsToAbortOn" can be false, so we need two separate if
+        // cases:
+        if (!empty($extensionsToAbortOn)) {
+          $extensionsToAbortOn = trim(implode('|', $extensionsToAbortOn));
+          if (!empty($extensionsToAbortOn)) {
+            // Abort query if URL ends with a specified extension to abort on:
+            if (preg_match('/\.(' . $extensionsToAbortOn . ')$/', $path)) {
+              return FALSE;
+            }
+          }
         }
       }
     }
@@ -459,10 +530,16 @@ class Search404Controller extends ControllerBase {
       $keys = array_filter($keys);
     }
 
-    // Ignore certain extensions from query.
-    $extensions = explode(' ', $this->config('search404.settings')->get('search404_ignore_extensions'));
-    if (!empty($extensions)) {
-      $keys = array_diff($keys, $extensions);
+    // "$ignoredExtensions" can be false, so we need two separate if
+    // cases:
+    if (!empty($ignoredExtensions)) {
+      $ignoredExtensions = trim(implode('|', $ignoredExtensions));
+      if (!empty($ignoredExtensions)) {
+        // Remove last query key, if URL ends with an extension to ignore:
+        if (preg_match('/\.(' . $ignoredExtensions . ')$/', $path)) {
+          array_pop($keys);
+        }
+      }
     }
 
     // Ignore certain words (use case insensitive search).
@@ -488,20 +565,23 @@ class Search404Controller extends ControllerBase {
   }
 
   /**
-   * Displays an error message of page not found.
+   * Helper method to create the search 404 error message.
    *
    * @param string $keys
    *   Keywords to display along with the error message.
    */
-  public function search404CustomErrorMessage($keys) {
+  public function get404ErrorMessage($keys) {
     $error_message = '';
     $disable_error = $this->config('search404.settings')->get('search404_disable_error_message');
     if ($disable_error) {
       return;
     }
     if ($custom_error_message = $this->config('search404.settings')->get('search404_custom_error_message')) {
-      if (empty($keys)) {
-        $error_message = str_replace('@keys', 'Invalid keys used', $custom_error_message);
+      if ($keys === FALSE) {
+        $error_message = str_replace('@keys', 'No search was performed. Reason: Searching for this file extension is not allowed.', $custom_error_message);
+      }
+      elseif (empty($keys)) {
+        $error_message = str_replace('@keys', 'No search was performed. Reason: Invalid keywords used', $custom_error_message);
       }
       else {
         $error_message = str_replace('@keys', $keys, $custom_error_message);
@@ -510,16 +590,73 @@ class Search404Controller extends ControllerBase {
     else {
       // Invalid keys used, actually this happens
       // when no keys are populated to search with custom path.
-      if (empty($keys)) {
-        $error_message = $this->t('The page you requested does not exist. Invalid keywords used.');
+      if ($keys === FALSE) {
+        $error_message = $this->t('The page you requested does not exist. No search was performed. Reason: Searching for this file extension is not allowed.');
+      }
+      elseif (empty($keys)) {
+        $error_message = $this->t('The page you requested does not exist. No search was performed. Reason: Invalid keywords used.');
       }
       else {
         $error_message = $this->t('The page you requested does not exist. For your convenience, a search was performed using the query %keys.', ['%keys' => Html::escape($keys)]);
       }
     }
     if (!empty($error_message)) {
-      $this->messenger->addError($error_message);
+      return $error_message;
     }
+  }
+
+  /**
+   * Helper function to verify if the requested path points to a managed file.
+   *
+   * @param string $requestPath
+   *   The requested path.
+   *
+   * @return false|\Symfony\Component\HttpFoundation\RedirectResponse
+   *   If the path points to a managed file, this returns the RedirectResponse
+   *   to that file, FALSE otherwise.
+   */
+  protected function findFileEntity(string $requestPath): RedirectResponse|bool {
+    $filename = basename($requestPath);
+    try {
+      $storage = $this->entityTypeManager()->getStorage('file');
+    }
+    catch (InvalidPluginDefinitionException | PluginNotFoundException $e) {
+      // Can be ignored, we can't find any files.
+      return FALSE;
+    }
+    /** @var \Drupal\file\Entity\File[] $files */
+    $files = $storage->loadByProperties([
+      'filename' => $filename,
+      'status' => 1,
+    ]);
+    if (!$files) {
+      return FALSE;
+    }
+    if (count($files) === 1) {
+      $destination = reset($files);
+    }
+    else {
+      // Walk through the $requestPath and find the most specific file entity.
+      $destination = NULL;
+      $parts = explode('/', $requestPath);
+      while ($parts) {
+        array_shift($parts);
+        $path = '/' . implode('/', $parts);
+        foreach ($files as $file) {
+          if (file_exists($file->getFileUri())) {
+            $url = $this->fileUrlGenerator->generateString($file->getFileUri());
+            $potential_last_pos = strlen($url) - strlen($path);
+            if (strrpos($url, $path) === $potential_last_pos) {
+              $destination = $file;
+              break 2;
+            }
+          }
+        }
+      }
+    }
+    return $destination !== NULL ?
+      $this->search404Goto($this->fileUrlGenerator->generateString($destination->getFileUri())) :
+      FALSE;
   }
 
 }

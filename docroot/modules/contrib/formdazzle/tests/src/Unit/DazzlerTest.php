@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\formdazzle\Unit;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Render\Markup;
 use Drupal\formdazzle\Dazzler;
@@ -19,13 +20,6 @@ class DazzlerTest extends UnitTestCase {
    * @var \Drupal\Core\Render\ElementInfoManagerInterface|\PHPUnit\Framework\MockObject\MockObject
    */
   protected $elementInfoManager;
-
-  /**
-   * Form element fixtures.
-   *
-   * @var array
-   */
-  protected $fixtures;
 
   /**
    * {@inheritdoc}
@@ -48,37 +42,35 @@ class DazzlerTest extends UnitTestCase {
   /**
    * Initializes the mocked element info manager.
    */
-  public function initElementInfoManager() {
+  public function initElementInfoManager(): void {
     if (is_null($this->elementInfoManager)) {
       $this->elementInfoManager = $this->createMock('\Drupal\Core\Render\ElementInfoManagerInterface');
       $this->elementInfoManager
         ->method('getInfo')
-        ->will(
-          $this->returnValueMap([
-            ['no_theme_defaults', ['#fixture' => TRUE]],
+        ->willReturnMap([
+          ['no_theme_defaults', ['#fixture' => TRUE]],
+          [
+            'mixed_defaults',
             [
-              'mixed_defaults',
-              [
-                '#fixture' => TRUE,
-                '#theme' => 'mixed_defaults',
-              ],
+              '#fixture' => TRUE,
+              '#theme' => 'mixed_defaults',
             ],
-            ['with_theme', ['#theme' => 'with_theme']],
+          ],
+          ['with_theme', ['#theme' => 'with_theme']],
+          [
+            'with_theme_and_wrappers',
             [
-              'with_theme_and_wrappers',
-              [
-                '#theme' => 'with_theme',
-                '#theme_wrappers' => ['with_theme_wrapper'],
-              ],
+              '#theme' => 'with_theme',
+              '#theme_wrappers' => ['with_theme_wrapper'],
             ],
+          ],
+          [
+            'form',
             [
-              'form',
-              [
-                '#theme_wrappers' => ['form'],
-              ],
+              '#theme_wrappers' => ['form'],
             ],
-          ])
-        );
+          ],
+        ]);
     }
   }
 
@@ -91,58 +83,54 @@ class DazzlerTest extends UnitTestCase {
    * @return array
    *   The fixture.
    */
-  protected function getFixture($name) {
-    // Setting up fixtures as a class member variable can't be done during
-    // Setup() because dataProvider functions are run before Setup().
-    if (is_null($this->fixtures)) {
-      // Form element fixtures.
-      $this->fixtures = [
-        'no_theme_defaults' => [
-          '#type' => 'no_theme_defaults',
-        ],
-        'mixed_defaults' => [
-          '#type' => 'mixed_defaults',
-        ],
-        'with_theme_and_wrappers' => [
-          '#type' => 'with_theme_and_wrappers',
-        ],
-        'no_default_overrides' => [
-          '#type' => 'with_theme_and_wrappers',
-          '#theme' => 'no_default_overrides',
-          '#theme_wrappers' => ['no_default_overrides'],
-        ],
-        'no_type' => [
-          '#fixture' => TRUE,
-        ],
-        'with_theme' => [
-          '#type' => 'with_theme',
-        ],
-      ];
+  protected static function getFixture(string $name): array {
+    // Form element fixtures.
+    $fixtures = [
+      'no_theme_defaults' => [
+        '#type' => 'no_theme_defaults',
+      ],
+      'mixed_defaults' => [
+        '#type' => 'mixed_defaults',
+      ],
+      'with_theme_and_wrappers' => [
+        '#type' => 'with_theme_and_wrappers',
+      ],
+      'no_default_overrides' => [
+        '#type' => 'with_theme_and_wrappers',
+        '#theme' => 'no_default_overrides',
+        '#theme_wrappers' => ['no_default_overrides'],
+      ],
+      'no_type' => [
+        '#fixture' => TRUE,
+      ],
+      'with_theme' => [
+        '#type' => 'with_theme',
+      ],
+    ];
 
-      // Form fixtures.
-      $form_fixtures = [
-        'simple_form' => [],
-        'node_article_edit_form' => [
-          '#theme' => ['node_article_edit_form', 'node_form'],
+    // Form fixtures.
+    $form_fixtures = [
+      'simple_form' => [],
+      'node_article_edit_form' => [
+        '#theme' => ['node_article_edit_form', 'node_form'],
+      ],
+      'with_child' => [
+        'child' => [
+          '#type' => 'with_theme_and_wrappers',
         ],
-        'with_child' => [
-          'child' => [
-            '#type' => 'with_theme_and_wrappers',
-          ],
-        ],
+      ],
+    ];
+    $fixtures = array_merge($fixtures, $form_fixtures);
+    foreach (array_keys($form_fixtures) as $form_id) {
+      // All our form fixtures share this structure.
+      $fixtures[$form_id] += [
+        '#type' => 'form',
+        '#form_id' => $form_id,
+        '#theme' => [$form_id],
       ];
-      $this->fixtures += $form_fixtures;
-      foreach (array_keys($form_fixtures) as $form_id) {
-        // All our form fixtures share this structure.
-        $this->fixtures[$form_id] += [
-          '#type' => 'form',
-          '#form_id' => $form_id,
-          '#theme' => [$form_id],
-        ];
-      }
     }
 
-    return $this->fixtures[$name];
+    return $fixtures[$name];
   }
 
   /**
@@ -151,10 +139,10 @@ class DazzlerTest extends UnitTestCase {
    * @return string
    *   The test message to use.
    */
-  public function getTestMessage() {
+  public function getTestMessage(): string {
     return preg_replace_callback('/^test(.)([^ ]+)/', function ($matches) {
       return Dazzler::class . '::' . strtolower($matches[1]) . $matches[2] . '()';
-    }, $this->getName());
+    }, 'DazzlerTest');
   }
 
   /**
@@ -166,7 +154,7 @@ class DazzlerTest extends UnitTestCase {
    * @return \Drupal\Component\Render\MarkupInterface|string
    *   The Twig debug comment.
    */
-  public function getTwigDebugComment(array $templates) {
+  public static function getTwigDebugComment(array $templates): MarkupInterface|string {
     return Markup::create(PHP_EOL . PHP_EOL
       . '<!-- THEME DEBUG -->' . PHP_EOL
       . '<!-- THEME HOOK: No templates found. -->' . PHP_EOL
@@ -191,11 +179,11 @@ class DazzlerTest extends UnitTestCase {
    *
    * @see testFormAlter()
    */
-  public function providerFormAlter() {
+  public static function providerFormAlter(): array {
     $data = [];
     $class = 'Drupal\formdazzle\Dazzler';
 
-    $actual = $this->getFixture('simple_form');
+    $actual = self::getFixture('simple_form');
     $expected = $actual + [
       '#pre_render' => [[$class, 'preRenderForm']],
       '#formdazzle' => ['form_id' => 'a_form_id'],
@@ -206,7 +194,8 @@ class DazzlerTest extends UnitTestCase {
       $expected,
     ];
 
-    $actual = $this->getFixture('simple_form') + [
+    $actual = self::getFixture('simple_form') + [
+      // @phpstan-ignore-next-line
       '#pre_render' => ['some_pre_render'],
     ];
     $expected = $actual + [
@@ -240,14 +229,14 @@ class DazzlerTest extends UnitTestCase {
    *
    * @see testPreRenderForm()
    */
-  public function providerPreRenderForm() {
+  public static function providerPreRenderForm(): array {
     $data = [];
 
     // Basic test.
     $form = [
       '#form_id' => 'a_form_id',
       '#theme' => ['a_form_id'],
-    ] + $this->getFixture('with_child');
+    ] + self::getFixture('with_child');
     Dazzler::formAlter($form, 'a_form_id');
     $expected = $form;
     $expected['#theme_wrappers'] = ['form__a_form_id'];
@@ -256,7 +245,7 @@ class DazzlerTest extends UnitTestCase {
       '#theme' => 'with_theme__a_form_id',
       '#theme_wrappers' => ['with_theme_wrapper__a_form_id'],
     ];
-    $expected['#markup'] = $this->getTwigDebugComment(['a-form-id.html.twig']);
+    $expected['#markup'] = self::getTwigDebugComment(['a-form-id.html.twig']);
     unset($expected['#formdazzle']);
     $data['adds suggestions to the entire form'] = [
       $form,
@@ -264,11 +253,11 @@ class DazzlerTest extends UnitTestCase {
     ];
 
     // Node edit form.
-    $form = $this->getFixture('node_article_edit_form');
+    $form = self::getFixture('node_article_edit_form');
     Dazzler::formAlter($form, 'node_article_edit_form');
     $expected = $form + [
       '#theme_wrappers' => ['form__node_article_edit_form'],
-      '#markup' => $this->getTwigDebugComment([
+      '#markup' => self::getTwigDebugComment([
         'node-article-edit-form.html.twig',
         'node-form.html.twig',
       ]),
@@ -280,12 +269,12 @@ class DazzlerTest extends UnitTestCase {
     ];
 
     // Form with #theme as string.
-    $form = $this->getFixture('node_article_edit_form');
+    $form = self::getFixture('node_article_edit_form');
     $form['#theme'] = 'node_form__article__edit';
     Dazzler::formAlter($form, 'node_article_edit_form');
     $expected = $form + [
       '#theme_wrappers' => ['form__node_article_edit_form'],
-      '#markup' => $this->getTwigDebugComment([
+      '#markup' => self::getTwigDebugComment([
         'node-form--article--edit.html.twig',
         'node-form--article.html.twig',
         'node-form.html.twig',
@@ -298,14 +287,14 @@ class DazzlerTest extends UnitTestCase {
     ];
 
     // Form that has not had Dazzler::formAlter() run on it.
-    $form = $this->getFixture('with_child');
+    $form = self::getFixture('with_child');
     $data['does not alter forms lacking #formdazzle data'] = [
       $form,
       $form,
     ];
 
     // Form that has incorrect #formdazzle data in it.
-    $form = $this->getFixture('with_child') + [
+    $form = self::getFixture('with_child') + [
       '#formdazzle' => [
         'not_form_id' => TRUE,
       ],
@@ -335,15 +324,15 @@ class DazzlerTest extends UnitTestCase {
    *
    * @see testRepeatedPreRenderFormCalls()
    */
-  public function providerRepeatedPreRenderFormCalls() {
+  public static function providerRepeatedPreRenderFormCalls(): array {
     $data = [];
 
     // Node edit form.
-    $form = $this->getFixture('with_child');
+    $form = self::getFixture('with_child');
     Dazzler::formAlter($form, 'with_child');
     $expected = $form + [
       '#theme_wrappers' => ['form__with_child'],
-      '#markup' => $this->getTwigDebugComment(['with-child.html.twig']),
+      '#markup' => self::getTwigDebugComment(['with-child.html.twig']),
     ];
     $expected['child'] = [
       '#type' => 'with_theme_and_wrappers',
@@ -398,7 +387,7 @@ class DazzlerTest extends UnitTestCase {
    *
    * @see testGetFormIdSuggestion()
    */
-  public function providerGetFormIdSuggestion() {
+  public static function providerGetFormIdSuggestion(): array {
     return [
       'simple form ID' => [['#theme' => ['form_id']], 'form_id', 'form_id'],
       'webform submission form' => [
@@ -445,14 +434,14 @@ class DazzlerTest extends UnitTestCase {
    *
    * @see testFormAlter()
    */
-  public function providerTraverse() {
+  public static function providerTraverse(): array {
     // Initial form.
     $form_id = 'simple_form';
     $form_suggestion = 'a_form_suggestion';
-    $form = $this->getFixture($form_id) + [
-      'parent' => $this->getFixture('with_theme_and_wrappers') + [
+    $form = self::getFixture($form_id) + [
+      'parent' => self::getFixture('with_theme_and_wrappers') + [
         '#parents' => ['parent'],
-        'child' => $this->getFixture('with_theme') + [
+        'child' => self::getFixture('with_theme') + [
           '#parents' => ['parent', 'child'],
         ],
       ],
@@ -489,30 +478,30 @@ class DazzlerTest extends UnitTestCase {
    *
    * @see testAddDefaultThemeProperties()
    */
-  public function providerAddDefaultThemeProperties() {
+  public static function providerAddDefaultThemeProperties(): array {
     return [
       'Ignores non-theme defaults (#1)' => [
-        $this->getFixture('no_theme_defaults'),
-        $this->getFixture('no_theme_defaults'),
+        self::getFixture('no_theme_defaults'),
+        self::getFixture('no_theme_defaults'),
       ],
       'Ignores non-theme defaults (#2)' => [
-        $this->getFixture('mixed_defaults'),
-        $this->getFixture('mixed_defaults') + ['#theme' => 'mixed_defaults'],
+        self::getFixture('mixed_defaults'),
+        self::getFixture('mixed_defaults') + ['#theme' => 'mixed_defaults'],
       ],
       'Adds #theme #theme_wrappers defaults' => [
-        $this->getFixture('with_theme_and_wrappers'),
-        $this->getFixture('with_theme_and_wrappers') + [
+        self::getFixture('with_theme_and_wrappers'),
+        self::getFixture('with_theme_and_wrappers') + [
           '#theme' => 'with_theme',
           '#theme_wrappers' => ['with_theme_wrapper'],
         ],
       ],
       'Does not override existing properties' => [
-        $this->getFixture('no_default_overrides'),
-        $this->getFixture('no_default_overrides'),
+        self::getFixture('no_default_overrides'),
+        self::getFixture('no_default_overrides'),
       ],
       'Does not add defaults for non-#type elements' => [
-        $this->getFixture('no_type'),
-        $this->getFixture('no_type'),
+        self::getFixture('no_type'),
+        self::getFixture('no_type'),
       ],
     ];
   }
@@ -532,7 +521,7 @@ class DazzlerTest extends UnitTestCase {
    *
    * @see testAddSuggestions()
    */
-  public function providerAddSuggestions() {
+  public static function providerAddSuggestions(): array {
     return [
       'no suggestion needed' => [
         [
@@ -643,14 +632,14 @@ class DazzlerTest extends UnitTestCase {
       ],
       'ensure valid name #theme suggestion' => [
         [
-          '#name' => 'Element Key.Val[grey-box][a1/bü]',
+          '#name' => 'Element Key.Val[gray-box][a1/bü]',
           '#theme' => 'theme_hook',
         ],
         'form_id',
         'form_suggestion',
         [
-          '#name' => 'Element Key.Val[grey-box][a1/bü]',
-          '#theme' => 'theme_hook__form_suggestion__element_key_val_grey_box_a1_b',
+          '#name' => 'Element Key.Val[gray-box][a1/bü]',
+          '#theme' => 'theme_hook__form_suggestion__element_key_val_gray_box_a1_b',
         ],
       ],
       'add type-based #theme suggestion (unknown)' => [
@@ -881,7 +870,7 @@ class DazzlerTest extends UnitTestCase {
    *
    * @dataProvider providerPreprocessFormElement
    */
-  public function testPreprocessFormElement(array $variables, array $expected) {
+  public function testPreprocessFormElement(array $variables, array $expected): void {
     Dazzler::preprocessFormElement($variables);
     $this->assertEquals($expected, $variables, $this->getTestMessage());
   }
@@ -891,7 +880,7 @@ class DazzlerTest extends UnitTestCase {
    *
    * @see testPreprocessFormElement()
    */
-  public function providerPreprocessFormElement() {
+  public static function providerPreprocessFormElement(): array {
     $variables = [
       'element' => [
         '#formdazzle' => [
@@ -926,7 +915,7 @@ class DazzlerTest extends UnitTestCase {
    *
    * @dataProvider providerModuleImplementsAlter
    */
-  public function testModuleImplementsAlter(array $implementations, string $hook, array $expected) {
+  public function testModuleImplementsAlter(array $implementations, string $hook, array $expected): void {
     Dazzler::moduleImplementsAlter($implementations, $hook);
     $this->assertEquals(
       array_keys($expected),
@@ -940,7 +929,7 @@ class DazzlerTest extends UnitTestCase {
    *
    * @see testModuleImplementsAlter()
    */
-  public function providerModuleImplementsAlter() {
+  public static function providerModuleImplementsAlter(): array {
     $implementations = [
       'media_library' => FALSE,
       'menu_ui' => FALSE,

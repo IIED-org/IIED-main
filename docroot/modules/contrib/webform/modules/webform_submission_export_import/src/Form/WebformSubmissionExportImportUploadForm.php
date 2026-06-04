@@ -258,7 +258,7 @@ class WebformSubmissionExportImportUploadForm extends ConfirmFormBase {
    *   The current state of the form.
    */
   public function submitUploadForm(array &$form, FormStateInterface $form_state) {
-    $validators = ['file_validate_extensions' => ['csv']];
+    $validators = ['FileExtension' => ['extensions' => 'csv']];
 
     $import_type = $form_state->getValue('import_type');
 
@@ -289,7 +289,7 @@ class WebformSubmissionExportImportUploadForm extends ConfirmFormBase {
         $form_state->setRebuild();
       }
       else {
-        $this->messenger()->addError($this->t("Uable to parse CSV file. Please review the CSV file's formatting."));
+        $this->messenger()->addError($this->t("Unable to parse CSV file. Please review the CSV file's formatting."));
       }
     }
   }
@@ -325,7 +325,7 @@ class WebformSubmissionExportImportUploadForm extends ConfirmFormBase {
       '#type' => 'webform_message',
       '#message_type' => 'warning',
       '#message_message' => $this->t('Are you sure you want to import @submissions?', $t_args) . '<br/>' .
-        '<strong>' . $this->t('This action cannot be undone.') . '</strong>',
+      '<strong>' . $this->t('This action cannot be undone.') . '</strong>',
     ];
 
     // Details.
@@ -455,6 +455,7 @@ class WebformSubmissionExportImportUploadForm extends ConfirmFormBase {
    */
   public function getQuestion() {
     // Do not alter the form's title.
+    return '';
   }
 
   /**
@@ -698,7 +699,7 @@ class WebformSubmissionExportImportUploadForm extends ConfirmFormBase {
             'row' => $row_prefix,
             'message' => ['#markup' => $message],
           ];
-          $message = \Drupal::service('renderer')->renderPlain($build);
+          $message = \Drupal::service('renderer')->renderInIsolation($build);
           if ($is_cli) {
             \Drupal::logger('webform_submission_export_import')->$message_type($message);
           }

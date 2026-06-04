@@ -35,7 +35,6 @@ class WebformNodeResultsTest extends WebformNodeBrowserTestBase {
    * Tests webform node results.
    */
   public function testResults() {
-    $this->markTestSkipped();
     global $base_path;
 
     $assert_session = $this->assertSession();

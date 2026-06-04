@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_builder_restrictions\FunctionalJavascript;
 
 /**
@@ -107,7 +109,7 @@ class LanguageCategoriesTest extends LayoutBuilderRestrictionsTestBase {
    */
   public function testBlockRestriction() {
     // Create 2 custom block types, with 3 block instances.
-    $blocks = $this->generateTestBlocks();
+    $this->generateTestBlocks();
     $node_id = $this->generateTestNode();
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
