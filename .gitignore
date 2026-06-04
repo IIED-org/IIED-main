@@ -40,5 +40,5 @@ docroot/libraries/flexslider
 .htaccess
 .DS_Store
 
-# Drupal 11: ignore vendor directory
-vendor/
+# Drupal 11: ignore /vendor directory
+/vendor/
