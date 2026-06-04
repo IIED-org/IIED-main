@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
+class ComposerStaticInite016b260163e7ca60c6452b55a05cb39
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -72,6 +72,10 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         array (
             'enshrined\\svgSanitize\\' => 22,
         ),
+        'd' =>
+        array (
+            'dekor\\' => 6,
+        ),
         'c' =>
         array (
             'cweagans\\Composer\\' => 18,
@@ -137,7 +141,6 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
             'Symfony\\Component\\BrowserKit\\' => 29,
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
             'Symfony\\Bridge\\PhpUnit\\' => 23,
-            'Spatie\\PdfToImage\\' => 18,
             'Solarium\\' => 9,
             'SlevomatCodingStandard\\' => 23,
             'SelfUpdate\\' => 11,
@@ -180,7 +183,6 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
             'OpenTelemetry\\Contrib\\Otlp\\' => 27,
             'OpenTelemetry\\Context\\' => 22,
             'OpenTelemetry\\API\\' => 18,
-            'OomphInc\\ComposerInstallersExtender\\' => 36,
         ),
         'N' =>
         array (
@@ -329,6 +331,10 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         'enshrined\\svgSanitize\\' =>
         array (
             0 => __DIR__ . '/..' . '/enshrined/svg-sanitize/src',
+        ),
+        'dekor\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/dekor/php-array-table/src',
         ),
         'cweagans\\Composer\\' =>
         array (
@@ -522,10 +528,6 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         array (
             0 => __DIR__ . '/..' . '/symfony/phpunit-bridge',
         ),
-        'Spatie\\PdfToImage\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/spatie/pdf-to-image/src',
-        ),
         'Solarium\\' =>
         array (
             0 => __DIR__ . '/..' . '/solarium/solarium/src',
@@ -659,10 +661,6 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
         'OpenTelemetry\\API\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/api',
-        ),
-        'OomphInc\\ComposerInstallersExtender\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/oomphinc/composer-installers-extender/src',
         ),
         'Nyholm\\Psr7Server\\' =>
         array (
@@ -1707,10 +1705,10 @@ class ComposerStaticInit8c6359279b2732908e79e248e72f7dbd
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8c6359279b2732908e79e248e72f7dbd::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8c6359279b2732908e79e248e72f7dbd::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit8c6359279b2732908e79e248e72f7dbd::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit8c6359279b2732908e79e248e72f7dbd::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite016b260163e7ca60c6452b55a05cb39::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite016b260163e7ca60c6452b55a05cb39::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInite016b260163e7ca60c6452b55a05cb39::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInite016b260163e7ca60c6452b55a05cb39::$classMap;
 
         }, null, ClassLoader::class);
     }

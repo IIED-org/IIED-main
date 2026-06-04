@@ -259,7 +259,9 @@ class AnnotatedCommand extends Command implements HelpDocumentAlter
             // Alas, Symfony provides no accessor.
             $class = new \ReflectionClass($inputOption);
             $property = $class->getProperty('suggestedValues');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $suggestedValues = $property->getValue($inputOption);
         }
         $this->addOption(
@@ -356,7 +358,7 @@ class AnnotatedCommand extends Command implements HelpDocumentAlter
     /**
      * {@inheritdoc}
      */
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output): void
     {
         $state = $this->injectIntoCommandfileInstance($input, $output);
         $this->commandProcessor()->interact(
@@ -368,7 +370,7 @@ class AnnotatedCommand extends Command implements HelpDocumentAlter
         $state->restore();
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $state = $this->injectIntoCommandfileInstance($input, $output);
         // Allow the hook manager a chance to provide configuration values,

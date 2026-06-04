@@ -52,7 +52,7 @@ class KML extends GeoAdapter
 
   public function geomFromText($text) {
     // Change to lower-case and strip all CDATA
-    $text = mb_strtolower($text, mb_detect_encoding($text));
+    $text = mb_strtolower($text, 'UTF-8');
     $text = preg_replace('/<!\[cdata\[(.*?)\]\]>/s','',$text);
 
     // Load into DOMDocument
@@ -273,13 +273,16 @@ class KML extends GeoAdapter
 
   public function collectionToKML($geom) {
     $components = $geom->getComponents();
-    $str = '<'.$this->nss.'MultiGeometry>';
+    $str = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><kml xmlns="http://earth.google.com/kml/2.1"><Document><Placemark>';
+    $str .= '<'.$this->nss.'MultiGeometry>';
     foreach ($geom->getComponents() as $comp) {
       $sub_adapter = new KML();
       $str .= $sub_adapter->write($comp);
     }
 
-    return $str .'</'.$this->nss.'MultiGeometry>';
+    $str .= '</'.$this->nss.'MultiGeometry>';
+    $str .= '</Placemark></Document></kml>';
+    return $str;
   }
 
 }

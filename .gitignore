@@ -39,3 +39,7 @@ docroot/libraries/flexslider
 # Ignore environment-specific .htaccess
 .htaccess
 .DS_Store
+
+# Drupal 11: ignore vendor directory and tailwind output
+/vendor
+styles.css

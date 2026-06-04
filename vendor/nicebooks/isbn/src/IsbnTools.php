@@ -6,25 +6,22 @@ namespace Nicebooks\Isbn;
 
 /**
  * Tools to work with ISBN numbers as plain strings.
+ *
+ * @deprecated Use the Isbn class instead.
  */
-final class IsbnTools
+final readonly class IsbnTools
 {
-    private readonly bool $cleanupBeforeValidate;
-
-    private readonly bool $validateCheckDigit;
-
-    public function __construct(bool $cleanupBeforeValidate = true, bool $validateCheckDigit = true)
-    {
-        $this->cleanupBeforeValidate = $cleanupBeforeValidate;
-        $this->validateCheckDigit    = $validateCheckDigit;
-    }
+    public function __construct(
+        private bool $cleanupBeforeValidate = true,
+        private bool $validateCheckDigit = true,
+    ) {}
 
     /**
      * Returns whether the given ISBN is a valid ISBN-10 or ISBN-13.
      *
      * @param string $isbn The unformatted ISBN.
      */
-    public function isValidIsbn(string $isbn) : bool
+    public function isValidIsbn(string $isbn): bool
     {
         return $this->isValidIsbn10($isbn) || $this->isValidIsbn13($isbn);
     }
@@ -34,7 +31,7 @@ final class IsbnTools
      *
      * @param string $isbn The unformatted ISBN.
      */
-    public function isValidIsbn10(string $isbn) : bool
+    public function isValidIsbn10(string $isbn): bool
     {
         if ($this->cleanupBeforeValidate) {
             if (preg_match(Internal\Regexp::ASCII, $isbn) === 0) {
@@ -42,6 +39,7 @@ final class IsbnTools
             }
 
             $isbn = preg_replace(Internal\Regexp::NON_ALNUM, '', $isbn);
+            assert($isbn !== null);
         }
 
         $isbn = strtoupper($isbn);
@@ -51,7 +49,7 @@ final class IsbnTools
         }
 
         if ($this->validateCheckDigit) {
-            if (! Internal\CheckDigit::validateCheckDigit10($isbn)) {
+            if (!Internal\CheckDigit::validateCheckDigit10($isbn)) {
                 return false;
             }
         }
@@ -64,7 +62,7 @@ final class IsbnTools
      *
      * @param string $isbn The unformatted ISBN.
      */
-    public function isValidIsbn13(string $isbn) : bool
+    public function isValidIsbn13(string $isbn): bool
     {
         if ($this->cleanupBeforeValidate) {
             if (preg_match(Internal\Regexp::ASCII, $isbn) === 0) {
@@ -72,6 +70,7 @@ final class IsbnTools
             }
 
             $isbn = preg_replace(Internal\Regexp::NON_ALNUM, '', $isbn);
+            assert($isbn !== null);
         }
 
         if (preg_match(Internal\Regexp::ISBN13, $isbn) === 0) {
@@ -79,7 +78,7 @@ final class IsbnTools
         }
 
         if ($this->validateCheckDigit) {
-            if (! Internal\CheckDigit::validateCheckDigit13($isbn)) {
+            if (!Internal\CheckDigit::validateCheckDigit13($isbn)) {
                 return false;
             }
         }
@@ -96,7 +95,7 @@ final class IsbnTools
      *
      * @throws Exception\InvalidIsbnException If the ISBN is not a valid ISBN-10.
      */
-    public function convertIsbn10to13(string $isbn) : string
+    public function convertIsbn10to13(string $isbn): string
     {
         if ($this->cleanupBeforeValidate) {
             if (preg_match(Internal\Regexp::ASCII, $isbn) === 0) {
@@ -104,6 +103,7 @@ final class IsbnTools
             }
 
             $isbn = preg_replace(Internal\Regexp::NON_ALNUM, '', $isbn);
+            assert($isbn !== null);
         }
 
         $isbn = strtoupper($isbn);
@@ -113,7 +113,7 @@ final class IsbnTools
         }
 
         if ($this->validateCheckDigit) {
-            if (! Internal\CheckDigit::validateCheckDigit10($isbn)) {
+            if (!Internal\CheckDigit::validateCheckDigit10($isbn)) {
                 throw Exception\InvalidIsbnException::forIsbn($isbn);
             }
         }
@@ -134,7 +134,7 @@ final class IsbnTools
      * @throws Exception\InvalidIsbnException        If the ISBN is not a valid ISBN-13.
      * @throws Exception\IsbnNotConvertibleException If the ISBN cannot be converted.
      */
-    public function convertIsbn13to10(string $isbn) : string
+    public function convertIsbn13to10(string $isbn): string
     {
         if ($this->cleanupBeforeValidate) {
             if (preg_match(Internal\Regexp::ASCII, $isbn) === 0) {
@@ -142,6 +142,7 @@ final class IsbnTools
             }
 
             $isbn = preg_replace(Internal\Regexp::NON_ALNUM, '', $isbn);
+            assert($isbn !== null);
         }
 
         if (preg_match(Internal\Regexp::ISBN13, $isbn) === 0) {
@@ -149,7 +150,7 @@ final class IsbnTools
         }
 
         if ($this->validateCheckDigit) {
-            if (! Internal\CheckDigit::validateCheckDigit13($isbn)) {
+            if (!Internal\CheckDigit::validateCheckDigit13($isbn)) {
                 throw Exception\InvalidIsbnException::forIsbn($isbn);
             }
         }
@@ -166,7 +167,7 @@ final class IsbnTools
      *
      * @throws Exception\InvalidIsbnException If the ISBN is not valid.
      */
-    public function format(string $isbn) : string
+    public function format(string $isbn): string
     {
         if ($this->cleanupBeforeValidate) {
             if (preg_match(Internal\Regexp::ASCII, $isbn) === 0) {
@@ -174,11 +175,12 @@ final class IsbnTools
             }
 
             $isbn = preg_replace(Internal\Regexp::NON_ALNUM, '', $isbn);
+            assert($isbn !== null);
         }
 
         if (preg_match(Internal\Regexp::ISBN13, $isbn) === 1) {
             if ($this->validateCheckDigit) {
-                if (! Internal\CheckDigit::validateCheckDigit13($isbn)) {
+                if (!Internal\CheckDigit::validateCheckDigit13($isbn)) {
                     throw Exception\InvalidIsbnException::forIsbn($isbn);
                 }
             }
@@ -190,7 +192,7 @@ final class IsbnTools
 
         if (preg_match(Internal\Regexp::ISBN10, $isbn) === 1) {
             if ($this->validateCheckDigit) {
-                if (! Internal\CheckDigit::validateCheckDigit10($isbn)) {
+                if (!Internal\CheckDigit::validateCheckDigit10($isbn)) {
                     throw Exception\InvalidIsbnException::forIsbn($isbn);
                 }
             }

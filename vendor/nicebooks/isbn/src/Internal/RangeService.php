@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nicebooks\Isbn\Internal;
 
 use Nicebooks\Isbn\IsbnGroup;
+use Nicebooks\Isbn\RegistrationGroup;
 
 /**
  * Internal utility class for ISBN formatting.
@@ -20,17 +21,20 @@ use Nicebooks\Isbn\IsbnGroup;
 final class RangeService
 {
     /**
-     * @psalm-var list<RangeType>|null
+     * @var list<RangeType>|null
      */
     private static ?array $ranges = null;
 
     /**
-     * @psalm-return list<RangeType>
+     * @return list<RangeType>
      */
-    private static function getRanges() : array
+    private static function getRanges(): array
     {
         if (self::$ranges === null) {
-            self::$ranges = require __DIR__ . '/../../data/ranges.php';
+            /** @var list<RangeType> $ranges */
+            $ranges = require __DIR__ . '/../../data/ranges.php';
+
+            self::$ranges = $ranges;
         }
 
         return self::$ranges;
@@ -39,16 +43,32 @@ final class RangeService
     /**
      * @return IsbnGroup[]
      */
-    public static function getGroups(bool $is13) : array
+    public static function getGroups(bool $is13): array
     {
         $groups = [];
 
         foreach (self::getRanges() as [$rangePrefix, $groupIdentifier, $groupName]) {
             if ($is13) {
+                // @mago-expect analyzer:deprecated-class
                 $groups[] = new IsbnGroup($rangePrefix . '-' . $groupIdentifier, $groupName);
             } elseif ($rangePrefix === '978') {
+                // @mago-expect analyzer:deprecated-class
                 $groups[] = new IsbnGroup($groupIdentifier, $groupName);
             }
+        }
+
+        return $groups;
+    }
+
+    /**
+     * @return list<RegistrationGroup>
+     */
+    public static function getRegistrationGroups(): array
+    {
+        $groups = [];
+
+        foreach (self::getRanges() as [$rangePrefix, $groupIdentifier, $groupName]) {
+            $groups[] = new RegistrationGroup($rangePrefix, $groupIdentifier, $groupName);
         }
 
         return $groups;
@@ -59,11 +79,11 @@ final class RangeService
      *
      * @param string $isbn The ISBN-10 or ISBN-13, regexp-validated.
      */
-    public static function getRangeInfo(string $isbn) : ?RangeInfo
+    public static function getRangeInfo(string $isbn): ?RangeInfo
     {
         $length = strlen($isbn);
-        $isbnPrefix = ($length === 10) ? '978' : substr($isbn, 0, 3);
-        $isbnDigits = ($length === 10) ? $isbn : substr($isbn, 3);
+        $isbnPrefix = $length === 10 ? '978' : substr($isbn, 0, 3);
+        $isbnDigits = $length === 10 ? $isbn : substr($isbn, 3);
 
         foreach (self::getRanges() as [$eanPrefix, $groupIdentifier, $groupName, $ranges]) {
             if ($isbnPrefix !== $eanPrefix) {
@@ -76,8 +96,6 @@ final class RangeService
             if ($isbnGroup !== $groupIdentifier) {
                 continue;
             }
-
-            $groupIdentifier = ($length === 10 ? $groupIdentifier : $eanPrefix . '-' . $groupIdentifier);
 
             $parts = null;
 
@@ -97,13 +115,15 @@ final class RangeService
                 }
             }
 
-            return new RangeInfo($groupIdentifier, $groupName, $parts);
+            $registrationGroup = new RegistrationGroup($eanPrefix, $groupIdentifier, $groupName);
+
+            return new RangeInfo($registrationGroup, $parts);
         }
 
         return null;
     }
 
-    public static function format(string $isbn) : string
+    public static function format(string $isbn): string
     {
         $rangeInfo = self::getRangeInfo($isbn);
 

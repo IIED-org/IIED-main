@@ -8,33 +8,35 @@ use Nicebooks\Isbn\Internal\RangeService;
 
 /**
  * Represents a national or geographic group of publishers.
+ *
+ * @deprecated Use RegistrationGroup instead. Warning: getPrefix() has a different meaning there!
  */
-final class IsbnGroup
+final readonly class IsbnGroup
 {
     /**
      * The group prefix.
      *
      * Example: "2" for ISBN-10, "978-2" for ISBN-13.
      */
-    private readonly string $prefix;
+    private string $prefix;
 
     /**
      * The group name.
      *
      * Example: "French language".
      */
-    private readonly string $name;
+    private string $name;
 
     public function __construct(string $prefix, string $name)
     {
         $this->prefix = $prefix;
-        $this->name   = $name;
+        $this->name = $name;
     }
 
     /**
      * @return IsbnGroup[]
      */
-    public static function getIsbn10Groups() : array
+    public static function getIsbn10Groups(): array
     {
         return RangeService::getGroups(false);
     }
@@ -42,17 +44,17 @@ final class IsbnGroup
     /**
      * @return IsbnGroup[]
      */
-    public static function getIsbn13Groups() : array
+    public static function getIsbn13Groups(): array
     {
         return RangeService::getGroups(true);
     }
 
-    public function getPrefix() : string
+    public function getPrefix(): string
     {
         return $this->prefix;
     }
 
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }

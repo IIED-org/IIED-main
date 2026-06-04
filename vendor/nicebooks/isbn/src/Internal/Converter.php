@@ -15,12 +15,12 @@ use Nicebooks\Isbn\Exception\IsbnNotConvertibleException;
  *
  * @internal
  */
-final class Converter
+final readonly class Converter
 {
     /**
      * @param string $isbn The ISBN-10, unformatted, regexp-validated.
      */
-    public static function convertIsbn10to13(string $isbn) : string
+    public static function convertIsbn10to13(string $isbn): string
     {
         $isbn = '978' . substr($isbn, 0, 9);
 
@@ -32,9 +32,9 @@ final class Converter
      *
      * @throws \Nicebooks\Isbn\Exception\IsbnNotConvertibleException
      */
-    public static function convertIsbn13to10(string $isbn) : string
+    public static function convertIsbn13to10(string $isbn): string
     {
-        if (substr($isbn, 0, 3) !== '978') {
+        if (!str_starts_with($isbn, '978')) {
             throw IsbnNotConvertibleException::forIsbn($isbn);
         }
 

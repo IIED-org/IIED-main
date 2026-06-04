@@ -16,7 +16,7 @@ final class Locale
      *
      * @var array
      */
-    protected static $aliases = [
+    protected static array $aliases = [
         'az-AZ' => 'az-Latn-AZ',
         'bs-BA' => 'bs-Latn-BA',
         'ha-GH' => 'ha-Latn-GH',
@@ -67,40 +67,53 @@ final class Locale
      *
      * @var array
      */
-    protected static $parents = [
+    protected static array $parents = [
         'en-150' => 'en-001',
         'en-AG' => 'en-001',
         'en-AI' => 'en-001',
+        'en-AT' => 'en-150',
         'en-AU' => 'en-001',
         'en-BB' => 'en-001',
+        'en-BE' => 'en-150',
         'en-BM' => 'en-001',
         'en-BS' => 'en-001',
         'en-BW' => 'en-001',
         'en-BZ' => 'en-001',
         'en-CC' => 'en-001',
+        'en-CH' => 'en-150',
         'en-CK' => 'en-001',
         'en-CM' => 'en-001',
         'en-CX' => 'en-001',
         'en-CY' => 'en-001',
+        'en-CZ' => 'en-150',
+        'en-DE' => 'en-150',
         'en-DG' => 'en-001',
+        'en-DK' => 'en-150',
         'en-DM' => 'en-001',
         'en-ER' => 'en-001',
+        'en-ES' => 'en-150',
+        'en-FI' => 'en-150',
         'en-FJ' => 'en-001',
         'en-FK' => 'en-001',
         'en-FM' => 'en-001',
+        'en-FR' => 'en-150',
         'en-GB' => 'en-001',
         'en-GD' => 'en-001',
         'en-GG' => 'en-001',
         'en-GH' => 'en-001',
         'en-GI' => 'en-001',
         'en-GM' => 'en-001',
+        'en-GS' => 'en-001',
         'en-GY' => 'en-001',
         'en-HK' => 'en-001',
+        'en-HU' => 'en-150',
+        'en-ID' => 'en-001',
         'en-IE' => 'en-001',
         'en-IL' => 'en-001',
         'en-IM' => 'en-001',
         'en-IN' => 'en-001',
         'en-IO' => 'en-001',
+        'en-IT' => 'en-150',
         'en-JE' => 'en-001',
         'en-JM' => 'en-001',
         'en-KE' => 'en-001',
@@ -115,24 +128,33 @@ final class Locale
         'en-MS' => 'en-001',
         'en-MT' => 'en-001',
         'en-MU' => 'en-001',
+        'en-MV' => 'en-001',
         'en-MW' => 'en-001',
         'en-MY' => 'en-001',
         'en-NA' => 'en-001',
         'en-NF' => 'en-001',
         'en-NG' => 'en-001',
+        'en-NL' => 'en-150',
+        'en-NO' => 'en-150',
         'en-NR' => 'en-001',
         'en-NU' => 'en-001',
         'en-NZ' => 'en-001',
         'en-PG' => 'en-001',
         'en-PK' => 'en-001',
+        'en-PL' => 'en-150',
         'en-PN' => 'en-001',
+        'en-PT' => 'en-150',
         'en-PW' => 'en-001',
+        'en-RO' => 'en-150',
         'en-RW' => 'en-001',
         'en-SB' => 'en-001',
         'en-SC' => 'en-001',
         'en-SD' => 'en-001',
+        'en-SE' => 'en-150',
         'en-SG' => 'en-001',
         'en-SH' => 'en-001',
+        'en-SI' => 'en-150',
+        'en-SK' => 'en-150',
         'en-SL' => 'en-001',
         'en-SS' => 'en-001',
         'en-SX' => 'en-001',
@@ -151,15 +173,6 @@ final class Locale
         'en-ZA' => 'en-001',
         'en-ZM' => 'en-001',
         'en-ZW' => 'en-001',
-        'en-AT' => 'en-150',
-        'en-BE' => 'en-150',
-        'en-CH' => 'en-150',
-        'en-DE' => 'en-150',
-        'en-DK' => 'en-150',
-        'en-FI' => 'en-150',
-        'en-NL' => 'en-150',
-        'en-SE' => 'en-150',
-        'en-SI' => 'en-150',
         'es-AR' => 'es-419',
         'es-BO' => 'es-419',
         'es-BR' => 'es-419',
@@ -182,12 +195,13 @@ final class Locale
         'es-US' => 'es-419',
         'es-UY' => 'es-419',
         'es-VE' => 'es-419',
+        'hi-Latn' => 'en-IN',
+        'ht' => 'fr-HT',
         'nb' => 'no',
         'nn' => 'no',
         'pt-AO' => 'pt-PT',
         'pt-CH' => 'pt-PT',
         'pt-CV' => 'pt-PT',
-        'pt-FR' => 'pt-PT',
         'pt-GQ' => 'pt-PT',
         'pt-GW' => 'pt-PT',
         'pt-LU' => 'pt-PT',
@@ -232,11 +246,6 @@ final class Locale
 
     /**
      * Checks whether two locales match.
-     *
-     * @param string $firstLocale  The first locale.
-     * @param string $secondLocale The second locale.
-     *
-     * @return bool TRUE if the locales match, FALSE otherwise.
      */
     public static function match(string $firstLocale, string $secondLocale): bool
     {
@@ -253,15 +262,11 @@ final class Locale
      * For example, "de" and "de-AT" will match because they both have
      * "de" in common. This is useful for partial locale matching.
      *
-     * @param string $firstLocale  The first locale.
-     * @param string $secondLocale The second locale.
-     *
      * @return bool TRUE if there is a common candidate, FALSE otherwise.
      * @see self::getCandidates
      * TODO Check if typehints could be added (NULL)
-     *
      */
-    public static function matchCandidates($firstLocale, $secondLocale): bool
+    public static function matchCandidates(?string $firstLocale, ?string $secondLocale): bool
     {
         if (empty($firstLocale) || empty($secondLocale)) {
             return false;
@@ -287,13 +292,10 @@ final class Locale
      * @param string $locale           The requested locale (i.e. fr-FR).
      * @param string|null $fallbackLocale   A fallback locale (i.e "en").
      *
-     * @return string
-     *
      * @throws UnknownLocaleException
-     *@see self::getCandidates
-     *
+     * @see self::getCandidates
      */
-    public static function resolve(array $availableLocales, string $locale, string $fallbackLocale = null): string
+    public static function resolve(array $availableLocales, string $locale, ?string $fallbackLocale = null): string
     {
         $locale = self::canonicalize($locale);
         $resolvedLocale = null;
@@ -316,10 +318,6 @@ final class Locale
      *
      * Standardizes separators and capitalization, turning
      * a locale such as "sr_rs_latn" into "sr-RS-Latn".
-     *
-     * @param string $locale The locale.
-     *
-     * @return string The canonicalized locale.
      */
     public static function canonicalize(?string $locale): ?string
     {
@@ -335,7 +333,7 @@ final class Locale
                 continue;
             }
 
-            if (strlen($part) == 4) {
+            if (strlen($part) === 4) {
                 // Script code.
                 $localeParts[$index] = ucfirst($part);
             } else {
@@ -364,7 +362,7 @@ final class Locale
      *
      * @return array An array of all variants of a locale.
      */
-    public static function getCandidates(string $locale, string $fallbackLocale = null): array
+    public static function getCandidates(string $locale, ?string $fallbackLocale = null): array
     {
         $locale = self::replaceAlias($locale);
         $candidates = [$locale];
@@ -385,26 +383,20 @@ final class Locale
 
     /**
      * Gets the parent for the given locale.
-     *
-     * @param string $locale
-     *   The locale.
-     *
-     * @return string|null
-     *   The parent, or null if none found.
      */
     public static function getParent(string $locale): ?string
     {
         $parent = null;
         if (isset(self::$parents[$locale])) {
             $parent = self::$parents[$locale];
-        } elseif (strpos($locale, '-') !== false) {
+        } elseif (str_contains($locale, '-')) {
             $localeParts = explode('-', $locale);
             array_pop($localeParts);
             $parent = implode('-', $localeParts);
         }
         // The library doesn't have data for the empty 'und' locale, it
         // is more user friendly to use the configured fallback instead.
-        if ($parent == 'und') {
+        if ($parent === 'und') {
             $parent = null;
         }
 
@@ -415,8 +407,6 @@ final class Locale
      * Replaces a locale alias with the real locale.
      *
      * For example, "zh-CN" is replaced with "zh-Hans-CN".
-     *
-     * @return string The locale.
      */
     public static function replaceAlias(?string $locale): ?string
     {
