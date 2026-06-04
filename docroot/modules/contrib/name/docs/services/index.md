@@ -21,6 +21,9 @@ recommended API surface for custom code.
 - `name.user_realname_preload`
 - `name.component_metadata`
 - `name.element_validator`
+- `name.twig.name_format_help` (`Drupal\name\Twig\NameFormatHelpTwigExtension`) —
+  tagged Twig extension; registers `name_format_token_help()` for help topic
+  templates. Not a general-purpose service for DI.
 
 Use these when extending deeper module behavior (widget layouts, option maps,
 component metadata, or validation flow).

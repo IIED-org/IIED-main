@@ -41,4 +41,4 @@ docroot/libraries/flexslider
 .DS_Store
 
 # Drupal 11: ignore vendor directory
-/vendor
+vendor/

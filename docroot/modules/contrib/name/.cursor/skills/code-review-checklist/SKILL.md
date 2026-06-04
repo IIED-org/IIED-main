@@ -9,6 +9,9 @@ disable-model-invocation: true
 - [ ] No public or protected class/method/property/constant removed or renamed
 - [ ] No required parameter added to an existing method
 - [ ] No parameter type narrowed or return type widened on existing API
+- [ ] No new methods added to existing interfaces in minor releases
+- [ ] If new API is needed in a minor release, it uses a concrete class,
+      sub-interface, new service, or utility (not an existing interface)
 - [ ] If deprecating: introduction uses `name:8.x-1.x`; removal target uses `name:2.0.0` (semver next major)
 - [ ] No service ID removed or renamed in `name.services.yml`
 - [ ] No config key or schema key removed or renamed

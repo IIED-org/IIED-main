@@ -8,6 +8,7 @@ alwaysApply: true
 - Use PHP 8.3+ features when appropriate (typed properties, match expressions, etc.)
 - Follow Drupal's PHP coding standards (based on PSR-12 with modifications)
 - Always use strict typing: `declare(strict_types=1);`
+- For condition extraction and increment/decrement readability rules, see `readability-control-flow.mdc`.
 - Implement proper error handling with try-catch blocks and Drupal's logging system
 - Use type hints for method parameters and return types
 

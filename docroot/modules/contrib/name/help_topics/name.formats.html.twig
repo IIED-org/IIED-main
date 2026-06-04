@@ -16,9 +16,11 @@ related:
   <li>{% trans %}<code>t g f</code> shows "Dr. Jane Smith".{% endtrans %}</li>
 </ul>
 
+<h2>{% trans %}Format tokens{% endtrans %}</h2>
+{{ render_var(name_format_token_help()) }}
+
 <h2>{% trans %}Tips{% endtrans %}</h2>
 <ul>
   <li>{% trans %}Start with a short pattern and test output.{% endtrans %}</li>
   <li>{% trans %}Use conditional tokens when some name parts may be empty.{% endtrans %}</li>
-  <li>{% trans %}Use the format help on the form to see full token details.{% endtrans %}</li>
 </ul>

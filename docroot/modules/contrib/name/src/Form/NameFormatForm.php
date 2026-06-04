@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\name\Entity\NameFormat;
 use Drupal\name\Service\NameFormatParserInterface;
+use Drupal\name\Utility\NameFormatHelp;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -79,7 +80,7 @@ class NameFormatForm extends EntityForm {
       '#required' => TRUE,
     ];
 
-    $element['help'] = $this->parser->renderableTokenHelp();
+    $element['help'] = NameFormatHelp::renderableTokenHelp();
 
     return $element;
   }

@@ -104,10 +104,17 @@ authenticated:
 ```
 Note that not all commands have a default filter field.
 
-Other fields in the output may be searched by using a simple expression in the `--filter` term. For example, to list only the enabled extensions with the `pm:list` command, you could run:
+Other fields in the output may be searched by using a simple expression in the `--filter` term. For example, to list only the enabled extensions with the [pm:list](commands/pm_list.md) command, you could run:
 ```shell
 $ drush pm:list --filter='status=enabled'
 ```
+
+Exclude rows via the negation operator `!`:
+
+```shell
+drush watchdog:show --filter="type!=locale"
+```
+
 To search for fields that contain a string using the operator `*=`, or match a regular expression with the `~=` operator. For example, to find all views whose machine name contains the word *content*:
 ```shell
 drush views:list --filter='machine-name*=content'

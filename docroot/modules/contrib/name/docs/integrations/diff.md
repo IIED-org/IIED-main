@@ -26,4 +26,4 @@ Configure this under Diff’s field-level settings for the name field (compare �
 ## See also
 
 - [Integration overview](../api/overview.md#integration-with-other-modules)
-- [Classes reference — Diff](../classes/index.md#diff-integration)
+- [Classes reference — Integration classes](../classes/index.md#integration-classes)

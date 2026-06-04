@@ -42,6 +42,8 @@ class ConsoleIO extends BaseIO
     /** @var string */
     protected $lastMessageErr = '';
 
+    /** @var string|false */
+    private $sendTimestamps = false;
     /** @var float */
     private $startTime;
     /** @var array<IOInterface::*, OutputInterface::VERBOSITY_*> */
@@ -74,6 +76,14 @@ class ConsoleIO extends BaseIO
     public function enableDebugging(float $startTime)
     {
         $this->startTime = $startTime;
+    }
+
+    /**
+     * @return void
+     */
+    public function enableTimestamps(string $format = DATE_RFC3339_EXTENDED)
+    {
+        $this->sendTimestamps = $format;
     }
 
     /**
@@ -171,6 +181,12 @@ class ConsoleIO extends BaseIO
             $timeSpent = microtime(true) - $this->startTime;
             $messages = array_map(static function ($message) use ($memoryUsage, $timeSpent): string {
                 return sprintf('[%.1fMiB/%.2fs] %s', $memoryUsage, $timeSpent, $message);
+            }, (array) $messages);
+        }
+
+        if ($this->sendTimestamps !== false) {
+            $messages = array_map(function ($message): string {
+                return sprintf('[%s] %s', (new \DateTime())->format($this->sendTimestamps), $message);
             }, (array) $messages);
         }
 
@@ -371,6 +387,7 @@ class ConsoleIO extends BaseIO
         $pattern = $allowNewlines ? "{{$escapePattern}|[\x01-\x09\x0B\x0C\x0E-\x1A]|\r(?!\n)}u" : "{{$escapePattern}|[\x01-\x1A]}u";
         if (is_string($messages)) {
             $messages = self::ensureValidUtf8($messages);
+
             return Preg::replace($pattern, '', $messages);
         }
 

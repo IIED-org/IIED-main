@@ -34,6 +34,35 @@ This page highlights the classes most developers interact with.
 - `Drupal\name\Entity\NameFormatInterface`
 - `Drupal\name\Entity\NameListFormatInterface`
 
+## Format parsing utilities
+
+These classes are marked `@internal` and implement the format-string pipeline
+behind `name.format_parser`. They are documented here for contributors and
+developers extending the service.
+
+- `Drupal\name\Utility\NameFormatParser` — static facade over the pipeline.
+- `Drupal\name\Utility\NameFormatTokens` — builds the token map from name
+  components.
+- `Drupal\name\Utility\NameFormatLexer` — walks the format string and resolves
+  tokens.
+- `Drupal\name\Utility\NameFormatModifiers` — applies casing, initials, and
+  word-boundary modifiers.
+- `Drupal\name\Utility\NameFormatAssembler` — joins resolved pieces into a
+  plain string.
+- `Drupal\name\Utility\NameFormatOutput` — wraps the assembled string in the
+  appropriate Drupal renderable type.
+- `Drupal\name\Utility\NameFormatHelp` — provides translated token labels
+  shared by the format edit form and the `name.formats` help topic.
+
+See [Parser Service](../services/parser.md) for the public API over this
+pipeline.
+
+## Twig extensions
+
+- `Drupal\name\Twig\NameFormatHelpTwigExtension` — registers
+  `name_format_token_help()` for use in help topic templates via
+  `render_var()`. Not intended for general theme use.
+
 ## Integration classes
 
 - Feeds: `Drupal\name\Feeds\Target\NameTarget`

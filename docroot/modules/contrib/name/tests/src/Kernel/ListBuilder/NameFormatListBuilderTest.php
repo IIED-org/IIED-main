@@ -6,6 +6,7 @@ namespace Drupal\Tests\name\Kernel\ListBuilder;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\name\ListBuilder\NameFormatListBuilder;
+use Drupal\name\Utility\NameFormatHelp;
 
 /**
  * @coversDefaultClass \Drupal\name\ListBuilder\NameFormatListBuilder
@@ -66,8 +67,7 @@ final class NameFormatListBuilderTest extends KernelTestBase {
       ->getHandler('name_format', 'list_builder');
 
     $render = $handler->render();
-    $expected_help = $this->container->get('name.format_parser')
-      ->renderableTokenHelp();
+    $expected_help = NameFormatHelp::renderableTokenHelp();
 
     $this->assertArrayHasKey('list', $render);
     $this->assertArrayHasKey('help', $render);

@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Drush\Commands\core;
 
+use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\Hooks\HookManager;
+use Consolidation\OutputFormatters\Options\FormatterOptions;
 use Consolidation\OutputFormatters\StructuredData\PropertyList;
+use Consolidation\SiteAlias\SiteAliasManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StreamWrapper\PrivateStream;
 use Drupal\Core\StreamWrapper\PublicStream;
@@ -16,18 +19,30 @@ use Drush\Boot\DrupalBootLevels;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Drush\Sql\SqlBase;
-use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
-use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
-use Consolidation\OutputFormatters\Options\FormatterOptions;
-use Consolidation\AnnotatedCommand\CommandData;
 use Drush\Utils\StringUtils;
+use League\Container\Container as DrushContainer;
 use Symfony\Component\Filesystem\Path;
 
-final class StatusCommands extends DrushCommands implements SiteAliasManagerAwareInterface
+#[CLI\Bootstrap(DrupalBootLevels::NONE)]
+final class StatusCommands extends DrushCommands
 {
-    use SiteAliasManagerAwareTrait;
-
     const STATUS = 'core:status';
+
+    public function __construct(
+        private readonly SiteAliasManagerInterface $siteAliasManager
+    ) {
+        parent::__construct();
+    }
+
+    /**
+     * Not using Autowire in order to implicitly test backward compat.
+     */
+    public static function createEarly(DrushContainer $drush_container): self
+    {
+        return new self(
+            $drush_container->get('site.alias.manager'),
+        );
+    }
 
     /**
      * An overview of the environment - Drush and Drupal.
@@ -63,19 +78,18 @@ final class StatusCommands extends DrushCommands implements SiteAliasManagerAwar
         'install-profile' => 'Install profile',
         'root' => 'Drupal root',
         'drupal-settings-file' => 'Drupal Settings',
-        'site-path' => 'Site path',
         'site' => 'Site path',
         'themes' => 'Themes path',
         'modules' => 'Modules path',
         'files' => 'Files, Public',
         'private' => 'Files, Private',
         'temp' => 'Files, Temp',
+        // config-sync is deprecated. Use 'config' instead.
         'config-sync' => 'Drupal config',
-        'files-path' => 'Files, Public',
-        'temp-path' => 'Files, Temp',
+        'config' => 'Drupal config',
         '%paths' => 'Other paths'
     ])]
-    #[CLI\DefaultTableFields(fields: ['drupal-version', 'uri', 'db-driver', 'db-hostname', 'db-port', 'db-username', 'db-name', 'db-status', 'bootstrap', 'theme', 'admin-theme', 'php-bin', 'php-conf', 'php-os', 'php-version', 'drush-script', 'drush-version', 'drush-temp', 'drush-conf', 'install-profile', 'root', 'site', 'files', 'private', 'temp'])]
+    #[CLI\DefaultTableFields(fields: ['drupal-version', 'uri', 'db-driver', 'db-hostname', 'db-port', 'db-username', 'db-name', 'db-status', 'bootstrap', 'theme', 'admin-theme', 'php-bin', 'php-conf', 'php-os', 'php-version', 'drush-script', 'drush-version', 'drush-temp', 'drush-conf', 'install-profile', 'root', 'site', 'files', 'private', 'temp', 'config'])]
     #[CLI\Bootstrap(level: DrupalBootLevels::MAX)]
     #[CLI\Topics(topics: [DocsCommands::README])]
     public function status($options = ['project' => self::REQ, 'format' => 'table']): PropertyList
@@ -92,7 +106,7 @@ final class StatusCommands extends DrushCommands implements SiteAliasManagerAwar
     {
         $boot_manager = Drush::bootstrapManager();
         $boot_object = Drush::bootstrap();
-        if (($drupal_root = $boot_manager->getRoot()) && ($boot_object instanceof DrupalBoot)) {
+        if (($drupal_root = $boot_manager->getRoot())) {
             $status_table['drupal-version'] = $boot_object->getVersion($drupal_root);
             $conf_dir = $boot_object->confPath();
             $settings_file = Path::join($conf_dir, 'settings.php');
@@ -114,9 +128,7 @@ final class StatusCommands extends DrushCommands implements SiteAliasManagerAwar
                         $status_table['db-port'] = isset($db_spec['port']) ? $db_spec['port'] : null;
                     }
                     if ($boot_manager->hasBootstrapped(DrupalBootLevels::CONFIGURATION)) {
-                        if (method_exists('Drupal', 'installProfile')) {
-                            $status_table['install-profile'] = \Drupal::installProfile();
-                        }
+                        $status_table['install-profile'] = \Drupal::installProfile();
                         if ($boot_manager->hasBootstrapped(DrupalBootLevels::DATABASE)) {
                             $status_table['db-status'] = dt('Connected');
                             if ($boot_manager->hasBootstrapped(DrupalBootLevels::FULL)) {
@@ -144,21 +156,19 @@ final class StatusCommands extends DrushCommands implements SiteAliasManagerAwar
         $status_table['drush-temp'] = Path::canonicalize($this->getConfig()->tmp());
         $status_table['drush-conf'] = array_map([Path::class, 'canonicalize'], $this->getConfig()->configPaths());
         // List available alias files
-        $alias_files = $this->siteAliasManager()->listAllFilePaths();
+        $alias_files = $this->siteAliasManager->listAllFilePaths();
         sort($alias_files);
         $status_table['drush-alias-files'] = $alias_files;
-        $alias_searchpaths = $this->siteAliasManager()->searchLocations();
+        $alias_searchpaths = $this->siteAliasManager->searchLocations();
         $status_table['alias-searchpaths'] = array_map([Path::class, 'canonicalize'], $alias_searchpaths);
 
         $paths = self::pathAliases($options, $boot_manager, $boot_object);
-        if (!empty($paths)) {
-            foreach ($paths as $target => $one_path) {
-                $name = $target;
-                if (str_starts_with($name, '%')) {
-                    $name = substr($name, 1);
-                }
-                $status_table[$name] = $one_path;
+        foreach ($paths as $target => $one_path) {
+            $name = $target;
+            if (str_starts_with($name, '%')) {
+                $name = substr($name, 1);
             }
+            $status_table[$name] = $one_path;
         }
 
         // Store the paths into the '%paths' index; this will be
@@ -190,10 +200,6 @@ final class StatusCommands extends DrushCommands implements SiteAliasManagerAwar
         }
     }
 
-    /**
-     * @param array $options
-     * @param BootstrapManager $boot_manager
-     */
     public static function pathAliases(array $options, BootstrapManager $boot_manager, $boot): array
     {
         $paths = [];
@@ -215,6 +221,7 @@ final class StatusCommands extends DrushCommands implements SiteAliasManagerAwar
                 if ($boot_manager->hasBootstrapped(DrupalBootLevels::CONFIGURATION)) {
                     try {
                         $paths["%config-sync"] = Settings::get('config_sync_directory');
+                        $paths["%config"] = Settings::get('config_sync_directory');
                     } catch (\Exception $e) {
                         // Nothing to do.
                     }

@@ -43,6 +43,8 @@ process:
 
 Use explicit `title`, `generational`, or `credentials` arrays in plugin
 configuration when you need parser behavior that differs from field settings.
+See [Parser Service](../services/parser.md) for format-string and settings
+details.
 
 ## Site builder and migration notes
 

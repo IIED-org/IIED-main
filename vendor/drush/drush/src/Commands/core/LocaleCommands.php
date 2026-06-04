@@ -15,13 +15,16 @@ use Drupal\Core\State\StateInterface;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\locale\PoDatabaseReader;
 use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\CommandFailedException;
 use Drush\Utils\StringUtils;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 final class LocaleCommands extends DrushCommands
 {
+    use AutowireTrait;
+
     const CHECK = 'locale:check';
     const CLEAR = 'locale:clear-status';
     const UPDATE = 'locale:update';
@@ -39,30 +42,18 @@ final class LocaleCommands extends DrushCommands
         return $this->configFactory;
     }
 
-    public function getModuleHandler(): ModuleHandlerInterface
-    {
-        return $this->moduleHandler;
-    }
-
     public function getState(): StateInterface
     {
         return $this->state;
     }
 
-    public function __construct(protected LanguageManagerInterface $languageManager, protected ConfigFactoryInterface $configFactory, protected ModuleHandlerInterface $moduleHandler, protected StateInterface $state)
-    {
-    }
-
-    public static function create(ContainerInterface $container): self
-    {
-        $commandHandler = new static(
-            $container->get('language_manager'),
-            $container->get('config.factory'),
-            $container->get('module_handler'),
-            $container->get('state')
-        );
-
-        return $commandHandler;
+    public function __construct(
+        protected LanguageManagerInterface $languageManager,
+        protected ConfigFactoryInterface $configFactory,
+        protected ModuleHandlerInterface $moduleHandler,
+        protected StateInterface $state
+    ) {
+        parent::__construct();
     }
 
     /**
@@ -72,7 +63,7 @@ final class LocaleCommands extends DrushCommands
     #[CLI\ValidateModulesEnabled(modules: ['locale'])]
     public function check(): void
     {
-        $this->getModuleHandler()->loadInclude('locale', 'inc', 'locale.compare');
+        $this->moduleHandler->loadInclude('locale', 'inc', 'locale.compare');
 
         // Check translation status of all translatable project in all languages.
         // First we clear the cached list of projects. Although not strictly
@@ -113,7 +104,7 @@ final class LocaleCommands extends DrushCommands
     #[CLI\ValidateModulesEnabled(modules: ['locale'])]
     public function update($options = ['langcodes' => self::REQ]): void
     {
-        $module_handler = $this->getModuleHandler();
+        $module_handler = $this->moduleHandler;
         $module_handler->loadInclude('locale', 'fetch.inc');
         $module_handler->loadInclude('locale', 'bulk.inc');
 
@@ -185,7 +176,7 @@ final class LocaleCommands extends DrushCommands
 
         $file_uri = drush_tempnam('drush_', null, '.po');
         if ($this->writePoFile($file_uri, $language, $poreader_options)) {
-            $this->output()->writeln(file_get_contents($file_uri));
+            $this->output()->writeln(file_get_contents($file_uri), OutputInterface::OUTPUT_RAW);
         } else {
             $this->logger()->success(dt('Nothing to export.'));
         }
@@ -219,7 +210,7 @@ final class LocaleCommands extends DrushCommands
     #[CLI\Option(name: 'type', description: 'String types to include, defaults to <info>not-customized</info>. Recognized values: <info>not-customized</info>, <info>customized</info>', suggestedValues: ['not-customized', 'customized'])]
     #[CLI\Option(name: 'override', description: 'Whether and how imported strings will override existing translations. Defaults to the Import behavior configured in the admin interface. Recognized values: <info>none</info>, <info>customized</info>, <info>not-customized</info>, <info>all</info>', suggestedValues: ['none', 'not-customized', 'customized', 'all'])]
     #[CLI\Usage(name: 'drush locale:import-all /var/www/translations', description: 'Import all translations from the defined directory (non-recursively). Supported filename patterns are: {project}-{version}.{langcode}.po, {prefix}.{langcode}.po or {langcode}.po.')]
-    #[CLI\Usage(name: 'drush locale:import-all /var/www/translations/custom --types=customized --override=all', description: 'Import all custom translations from the defined directory (non-recursively) and override any existing translation. Supported filename patterns are: {project}-{version}.{langcode}.po, {prefix}.{langcode}.po or {langcode}.po.')]
+    #[CLI\Usage(name: 'drush locale:import-all /var/www/translations/custom --type=customized --override=all', description: 'Import all custom translations from the defined directory (non-recursively) and override any existing translation. Supported filename patterns are: {project}-{version}.{langcode}.po, {prefix}.{langcode}.po or {langcode}.po.')]
     #[CLI\Version(version: '12.2')]
     #[CLI\ValidateModulesEnabled(modules: ['locale'])]
     public function importAll($directory, $options = ['type' => self::REQ, 'override' => self::REQ])
@@ -234,8 +225,8 @@ final class LocaleCommands extends DrushCommands
             throw new \Exception('Translation files not found in the defined directory.');
         }
 
-        $this->getModuleHandler()->loadInclude('locale', 'translation.inc');
-        $this->getModuleHandler()->loadInclude('locale', 'bulk.inc');
+        $this->moduleHandler->loadInclude('locale', 'translation.inc');
+        $this->moduleHandler->loadInclude('locale', 'bulk.inc');
 
         $translationOptions = _locale_translation_default_update_options();
         $translationOptions['customized'] = $this->convertCustomizedType($options['type']);
@@ -295,19 +286,19 @@ final class LocaleCommands extends DrushCommands
     }
 
     /**
-     * Imports to a gettext translation file.
+     * Imports from a gettext translation file.
      */
     #[CLI\Command(name: self::IMPORT, aliases: ['locale-import'])]
     #[CLI\Argument(name: 'langcode', description: 'The language code of the imported translations.')]
     #[CLI\Argument(name: 'file', description: 'Path and file name of the gettext file. Relative paths calculated from Drupal root.')]
-    #[CLI\Option(name: 'type', description: 'String types to include, defaults to all types. Recognized values: <info>not-customized</info>, <info>customized</info>, </info>not-translated<info>')]
-    #[CLI\Option(name: 'override', description: 'Whether and how imported strings will override existing translations. Defaults to the Import behavior configured in the admin interface. Recognized values: <info>none</info>, <info>customized</info>, <info>not-customized</info>, <info>all</info>')]
+    #[CLI\Option(name: 'type', description: 'Treat imported strings as this type of translation. Recognized values: <info>not-customized</info>, <info>customized</info>, </info>not-translated<info>')]
+    #[CLI\Option(name: 'override', description: 'Whether and how imported strings will override existing translations. Defaults to the import behavior configured in the admin interface. Recognized values: <info>none</info>, <info>customized</info>, <info>not-customized</info>, <info>all</info>')]
     #[CLI\Option(name: 'autocreate-language', description: 'Create the language in addition to import.')]
     #[CLI\Usage(name: 'drush locale-import nl drupal-8.4.2.nl.po', description: 'Import the Dutch drupal core translation.')]
     #[CLI\Usage(name: 'drush locale-import --type=customized nl drupal-8.4.2.nl.po', description: 'Import the Dutch drupal core translation. Treat imported strings as custom translations.')]
     #[CLI\Usage(name: 'drush locale-import --override=none nl drupal-8.4.2.nl.po', description: "Import the Dutch drupal core translation. Don't overwrite existing translations. Only append new translations.")]
     #[CLI\Usage(name: 'drush locale-import --override=not-customized nl drupal-8.4.2.nl.po', description: 'Import the Dutch drupal core translation. Only override non-customized translations, customized translations are kept.')]
-    #[CLI\Usage(name: 'drush locale-import nl custom-translations.po --type=customized --override=all', description: 'Import customized Dutch translations and override any existing translation.')]
+    #[CLI\Usage(name: 'drush locale-import nl custom-translations.po --type=customized --override=all', description: 'Import customized Dutch translations and override any existing translations.')]
     #[CLI\ValidateModulesEnabled(modules: ['locale'])]
     public function import($langcode, $file, $options = ['type' => 'not-customized', 'override' => self::REQ, 'autocreate-language' => false]): void
     {
@@ -317,8 +308,8 @@ final class LocaleCommands extends DrushCommands
 
         $language = $this->getTranslatableLanguage($langcode, $options['autocreate-language']);
 
-        $this->getModuleHandler()->loadInclude('locale', 'translation.inc');
-        $this->getModuleHandler()->loadInclude('locale', 'bulk.inc');
+        $this->moduleHandler->loadInclude('locale', 'translation.inc');
+        $this->moduleHandler->loadInclude('locale', 'bulk.inc');
 
         $translationOptions = _locale_translation_default_update_options();
         $translationOptions['langcode'] = $language->getId();
@@ -428,8 +419,6 @@ final class LocaleCommands extends DrushCommands
 
     /**
      * Check if language is translatable.
-     *
-     * @param LanguageInterface $language
      */
     private function isTranslatable(LanguageInterface $language): bool
     {
@@ -462,7 +451,7 @@ final class LocaleCommands extends DrushCommands
             'not_translated' => 'not-translated',
         ];
 
-        if (empty($types)) {
+        if ($types === []) {
             return array_fill_keys(array_keys($valid_convertions), true);
         }
 
@@ -487,7 +476,7 @@ final class LocaleCommands extends DrushCommands
      * @param array $options The export options for PoDatabaseReader.
      * @return bool True if successful.
      */
-    private function writePoFile(string $file_uri, LanguageInterface $language = null, array $options = []): bool
+    private function writePoFile(string $file_uri, ?LanguageInterface $language = null, array $options = []): bool
     {
         $reader = new PoDatabaseReader();
 

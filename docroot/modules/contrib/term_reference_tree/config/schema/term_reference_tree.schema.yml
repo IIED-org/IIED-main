@@ -11,6 +11,9 @@ field.widget.settings.term_reference_tree:
     select_parents:
       type: boolean
       label: 'Select parents automatically'
+    select_all:
+      type: boolean
+      label: "Select all"
     cascading_selection:
       type: integer
       label: 'Cascading selection'

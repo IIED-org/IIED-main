@@ -10,14 +10,15 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\Core\Url;
 use Drush\Attributes as CLI;
-use Drush\Commands\core\DocsCommands;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 use Drush\Drupal\DrupalUtil;
 use Drush\Utils\StringUtils;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class DrupalCommands extends DrushCommands
 {
+    use AutowireTrait;
+
     const CRON = 'core:cron';
     const REQUIREMENTS = 'core:requirements';
     const ROUTE = 'core:route';
@@ -37,19 +38,12 @@ final class DrupalCommands extends DrushCommands
         return $this->routeProvider;
     }
 
-    public function __construct(protected CronInterface $cron, protected ModuleHandlerInterface $moduleHandler, protected RouteProviderInterface $routeProvider)
-    {
-    }
-
-    public static function create(ContainerInterface $container): self
-    {
-        $commandHandler = new static(
-            $container->get('cron'),
-            $container->get('module_handler'),
-            $container->get('router.route_provider')
-        );
-
-        return $commandHandler;
+    public function __construct(
+        protected CronInterface $cron,
+        protected ModuleHandlerInterface $moduleHandler,
+        protected RouteProviderInterface $routeProvider
+    ) {
+        parent::__construct();
     }
 
     /**
@@ -59,9 +53,9 @@ final class DrupalCommands extends DrushCommands
      */
     #[CLI\Command(name: self::CRON, aliases: ['cron', 'core-cron'])]
     #[CLI\Topics(topics: [DocsCommands::CRON])]
-    public function cron(): void
+    public function cron(): bool
     {
-        $this->getCron()->run();
+        return $this->getCron()->run();
     }
 
     /**
@@ -93,8 +87,11 @@ final class DrupalCommands extends DrushCommands
 
         drupal_load_updates();
 
-        $requirements = $this->getModuleHandler()->invokeAll('requirements', ['runtime']);
-        $this->getModuleHandler()->alter('requirements', $requirements);
+        $requirements = $this->moduleHandler->invokeAll('requirements', ['runtime']);
+        $runtime_requirements = $this->moduleHandler->invokeAll('runtime_requirements');
+        $requirements = array_merge($requirements, $runtime_requirements);
+        $this->moduleHandler->alter('requirements', $requirements);
+        $this->moduleHandler->alter('runtime_requirements', $requirements);
         // If a module uses "$requirements[] = " instead of
         // "$requirements['label'] = ", then build a label from
         // the title.
@@ -113,19 +110,24 @@ final class DrupalCommands extends DrushCommands
 
         $min_severity = $options['severity'];
         foreach ($requirements as $key => $info) {
+            // Adjust once Drupal 11.1- is unsupported.
             $severity = array_key_exists('severity', $info) ? $info['severity'] : -1;
+            if (is_object($severity)) {
+                $severity = $severity->value;
+            }
+
             $rows[$key] = [
-                'title' => self::styleRow((string) $info['title'], $options['format'], $severity),
-                'value' => self::styleRow(DrupalUtil::drushRender($info['value'] ?? ''), $options['format'], $severity),
-                'description' => self::styleRow(DrupalUtil::drushRender($info['description'] ?? ''), $options['format'], $severity),
+                'title' => $this->styleRow((string) $info['title'], $options['format'], $severity),
+                'value' => $this->styleRow(DrupalUtil::drushRender($info['value'] ?? ''), $options['format'], $severity),
+                'description' => $this->styleRow(DrupalUtil::drushRender($info['description'] ?? ''), $options['format'], $severity),
                 'sid' => $severity,
-                'severity' => self::styleRow(@$severities[$severity], $options['format'], $severity)
+                'severity' => $this->styleRow(@$severities[$severity], $options['format'], $severity)
             ];
             if ($severity < $min_severity) {
                 unset($rows[$key]);
             }
         }
-        return new RowsOfFields($rows);
+        return new RowsOfFields($rows ?? []);
     }
 
     /**
@@ -178,7 +180,7 @@ final class DrupalCommands extends DrushCommands
         return $items;
     }
 
-    private static function styleRow($content, $format, $severity): ?string
+    private function styleRow($content, $format, $severity): ?string
     {
         if (
             !in_array($format, [

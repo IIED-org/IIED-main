@@ -80,6 +80,8 @@ class Application extends BaseApplication
     private $disablePluginsByDefault = false;
     /** @var bool */
     private $disableScriptsByDefault = false;
+    /** @var string|false|null */
+    private $commandName = '';
 
     /**
      * @var string|false Store the initial working directory at startup time
@@ -185,6 +187,7 @@ class Application extends BaseApplication
             } catch (\InvalidArgumentException $e) {
             }
         }
+        $this->commandName = $commandName;
 
         // prompt user for dir change if no composer.json is present in current dir
         if (
@@ -322,6 +325,7 @@ class Application extends BaseApplication
             try {
                 $command = $this->find($name);
                 $commandName = $command->getName();
+                $this->commandName = $commandName;
                 $isProxyCommand = ($command instanceof Command\BaseCommand && $command->isProxyCommand());
             } catch (\InvalidArgumentException $e) {
             }
@@ -373,6 +377,7 @@ class Application extends BaseApplication
             $file = Factory::getComposerFile();
             if ($mayNeedScriptCommand && is_file($file) && Filesystem::isReadable($file) && is_array($composerJson = json_decode(file_get_contents($file), true))) {
                 if (isset($composerJson['scripts']) && is_array($composerJson['scripts'])) {
+                    $projectLoaderRegistered = false;
                     foreach ($composerJson['scripts'] as $script => $dummy) {
                         if (!defined('Composer\Script\ScriptEvents::'.str_replace('-', '_', strtoupper($script)))) {
                             if ($this->has($script)) {
@@ -386,16 +391,19 @@ class Application extends BaseApplication
 
                                 $aliases = $composerJson['scripts-aliases'][$script] ?? [];
 
-                                $composer = $this->getComposer(false);
-                                if ($composer !== null) {
-                                    $rootPackage = $composer->getPackage();
-                                    $generator = $composer->getAutoloadGenerator();
+                                if (!$projectLoaderRegistered) {
+                                    $projectLoaderRegistered = true;
+                                    $composer = $this->getComposer(false);
+                                    if ($composer !== null) {
+                                        $rootPackage = $composer->getPackage();
+                                        $generator = $composer->getAutoloadGenerator();
 
-                                    $packageMap = $generator->buildPackageMap($composer->getInstallationManager(), $rootPackage, []);
-                                    $map = $generator->parseAutoloads($packageMap, $rootPackage);
+                                        $packageMap = $generator->buildPackageMap($composer->getInstallationManager(), $rootPackage, []);
+                                        $map = $generator->parseAutoloads($packageMap, $rootPackage);
 
-                                    $loader = $generator->createLoader($map, $composer->getConfig()->get('vendor-dir'));
-                                    $loader->register(false);
+                                        $loader = $generator->createLoader($map, $composer->getConfig()->get('vendor-dir'));
+                                        $loader->register(false);
+                                    }
                                 }
 
                                 // if the command is not an array of commands, and points to a valid Command subclass, import its details directly
@@ -576,12 +584,26 @@ class Application extends BaseApplication
                 $io->writeError($hint, true, IOInterface::QUIET);
             }
         }
+
+        if (
+            $exception instanceof TransportException
+            // self-update is online-only, so suggesting offline mode there is nonsensical
+            && $this->commandName !== 'self-update'
+            && (
+                false !== strpos($exception->getMessage(), 'curl error 28 ') // CURLE_OPERATION_TIMEDOUT
+                || false !== strpos($exception->getMessage(), 'Resolving timed out')
+                || false !== strpos($exception->getMessage(), 'Could not resolve host')
+            )
+        ) {
+            $io->writeError('<warning>If you intend to run Composer without connecting to the internet, run the command again prefixed with COMPOSER_DISABLE_NETWORK=1 to make Composer run in offline mode.</warning>', true, IOInterface::QUIET);
+        }
     }
 
     /**
      * @throws JsonValidationException
      * @throws \InvalidArgumentException
      * @return ?Composer If $required is true then the return value is guaranteed
+     * @phpstan-return ($required is true ? Composer : Composer|null)
      */
     public function getComposer(bool $required = true, ?bool $disablePlugins = null, ?bool $disableScripts = null): ?Composer
     {
@@ -676,6 +698,7 @@ class Application extends BaseApplication
             new Command\ReinstallCommand(),
             new Command\BumpCommand(),
             new Command\RepositoryCommand(),
+            new Command\PolicyCommand(),
             new Command\SelfUpdateCommand(),
         ]);
     }

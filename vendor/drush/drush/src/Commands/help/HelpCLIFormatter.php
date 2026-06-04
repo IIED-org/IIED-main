@@ -42,9 +42,9 @@ class HelpCLIFormatter implements FormatterInterface
             }
         } elseif (array_key_exists('usages', $data)) {
             // Usages come from Console commands.
-            // Don't show the last two Usages which come from synopsis and alias. See \Symfony\Component\Console\Descriptor\XmlDescriptor::getCommandDocument.
-            array_pop($data['usages']);
-            array_pop($data['usages']);
+            // Don't show the first two Usages which come from synopsis and alias. See \Symfony\Component\Console\Descriptor\XmlDescriptor::getCommandDocument.
+            array_shift($data['usages']);
+            array_shift($data['usages']);
             if ($data['usages']) {
                 $output->writeln('');
                 $output->writeln('<comment>Examples:</comment>');
@@ -139,7 +139,7 @@ class HelpCLIFormatter implements FormatterInterface
         }
         return sprintf(
             '%s%s',
-            $option['shortcut']  ? sprintf('-%s, ', $option['shortcut']) : ' ',
+            $option['shortcut']  ? sprintf('-%s, ', $option['shortcut']) : '',
             sprintf('--%s%s', $option['name'], $value)
         );
     }

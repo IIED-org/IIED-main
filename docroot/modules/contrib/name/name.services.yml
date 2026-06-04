@@ -116,3 +116,8 @@ services:
   Drupal\name\Service\UserRealnamePreloadInterface: '@name.user_realname_preload'
   Drupal\name\Service\NameComponentMetadataInterface: '@name.component_metadata'
   Drupal\name\Service\ElementValidatorInterface: '@name.element_validator'
+
+  name.twig.name_format_help:
+    class: Drupal\name\Twig\NameFormatHelpTwigExtension
+    tags:
+      - { name: twig.extension }

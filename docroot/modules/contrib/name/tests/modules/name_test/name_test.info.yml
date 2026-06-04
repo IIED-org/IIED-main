@@ -6,7 +6,7 @@ dependencies:
   - drupal:views
   - name:name
 
-# Information added by Drupal.org packaging script on 2026-05-19
-version: '8.x-1.4'
+# Information added by Drupal.org packaging script on 2026-05-24
+version: '8.x-1.5'
 project: 'name'
-datestamp: 1779218909
+datestamp: 1779662874

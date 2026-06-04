@@ -196,7 +196,7 @@
     "drupal/webform_shs": "^2.0@beta",
     "drupal/webform_views": "^5.1",
     "drupal/xmlsitemap": "^1.4",
-    "drush/drush": "^12",
+    "drush/drush": "^13",
     "mglaman/composer-drupal-lenient": "^1.0",
     "npm-asset/imagesloaded": "^4.1",
     "npm-asset/masonry-layout": "^4.2",

@@ -35,6 +35,9 @@ interface NameFormatParserInterface {
   /**
    * Supported format tokens.
    *
+   * @param bool $describe
+   *   Appends the description of the letter to the description.
+   *
    * @return array<string, \Drupal\Core\StringTranslation\TranslatableMarkup|string>
    *   Tokens keyed by letter.
    */

@@ -6,6 +6,8 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Tests\UnitTestCase;
 use Drupal\name\Service\NameFormatParserService;
+use Drupal\name\Utility\NameFormatHelp;
+use Drupal\name\Utility\NameFormatTokens;
 
 /**
  * Tests the name formatter.
@@ -15,7 +17,6 @@ use Drupal\name\Service\NameFormatParserService;
  * @group name
  */
 class NameFormatParserServiceTest extends UnitTestCase {
-
   /**
    * The name format parser.
    *
@@ -42,26 +43,6 @@ class NameFormatParserServiceTest extends UnitTestCase {
     \Drupal::setContainer($container);
 
     $this->parser = new NameFormatParserService($config_factory);
-  }
-
-  /**
-   * Calls a private parser method.
-   *
-   * @param string $method
-   *   The method name.
-   * @param array $args
-   *   The method arguments.
-   *
-   * @return mixed
-   *   The method result.
-   */
-  private function callPrivate(string $method, array $args = []): mixed {
-    $reflection = new \ReflectionMethod(
-      NameFormatParserService::class,
-      $method
-    );
-    $reflection->setAccessible(TRUE);
-    return $reflection->invokeArgs($this->parser, $args);
   }
 
   /**
@@ -100,281 +81,6 @@ class NameFormatParserServiceTest extends UnitTestCase {
 
     $formatted = $this->parser->parse($components, $pattern, $settings);
     $this->assertEquals($expected, $formatted);
-  }
-
-  /**
-   * @covers ::isModifierChar
-   */
-  public function testIsModifierCharIdentifiesModifierCharacters(): void {
-    foreach (['L', 'U', 'F', 'T', 'S', 'G', 'B', 'b'] as $char) {
-      $this->assertTrue($this->callPrivate('isModifierChar', [$char]));
-    }
-
-    $this->assertFalse($this->callPrivate('isModifierChar', ['g']));
-    $this->assertFalse($this->callPrivate('isModifierChar', ['+']));
-  }
-
-  /**
-   * @covers ::isConditionChar
-   */
-  public function testIsConditionCharIdentifiesConditionCharacters(): void {
-    foreach (['=', '^', '|', '+', '-', '~'] as $char) {
-      $this->assertTrue($this->callPrivate('isConditionChar', [$char]));
-    }
-
-    $this->assertFalse($this->callPrivate('isConditionChar', ['g']));
-    $this->assertFalse($this->callPrivate('isConditionChar', ['L']));
-  }
-
-  /**
-   * @covers ::applyConditions
-   *
-   * @dataProvider applyConditionsProvider
-   */
-  public function testApplyConditionsAppliesConditionalFlags(
-    array $pieces,
-    string $expected,
-  ): void {
-    $this->assertSame(
-      $expected,
-      $this->callPrivate('applyConditions', [$pieces])
-    );
-  }
-
-  /**
-   * Provides test cases for conditional piece handling.
-   *
-   * @return array[]
-   *   The test cases.
-   */
-  public static function applyConditionsProvider(): array {
-    return [
-      'unconditional pieces are included' => [
-        [
-          ['value' => 'John', 'conditions' => ''],
-          ['value' => ' ', 'conditions' => ''],
-          ['value' => 'Doe', 'conditions' => ''],
-        ],
-        'John Doe',
-      ],
-      'plus condition includes with both neighbors' => [
-        [
-          ['value' => 'John', 'conditions' => ''],
-          ['value' => ' ', 'conditions' => '+'],
-          ['value' => 'Doe', 'conditions' => ''],
-        ],
-        'John Doe',
-      ],
-      'plus condition excludes with empty neighbor' => [
-        [
-          ['value' => '', 'conditions' => ''],
-          ['value' => ' ', 'conditions' => '+'],
-          ['value' => 'Doe', 'conditions' => ''],
-        ],
-        'Doe',
-      ],
-      'minus condition includes after present neighbor' => [
-        [
-          ['value' => 'John', 'conditions' => ''],
-          ['value' => ' ', 'conditions' => '-'],
-          ['value' => '', 'conditions' => ''],
-        ],
-        'John ',
-      ],
-      'minus condition excludes after empty neighbor' => [
-        [
-          ['value' => '', 'conditions' => ''],
-          ['value' => ' ', 'conditions' => '-'],
-          ['value' => 'Doe', 'conditions' => ''],
-        ],
-        'Doe',
-      ],
-      'tilde condition includes after empty neighbor' => [
-        [
-          ['value' => '', 'conditions' => ''],
-          ['value' => ' ', 'conditions' => '~'],
-          ['value' => 'Doe', 'conditions' => ''],
-        ],
-        ' Doe',
-      ],
-      'tilde condition excludes after present neighbor' => [
-        [
-          ['value' => 'John', 'conditions' => ''],
-          ['value' => ' ', 'conditions' => '~'],
-          ['value' => 'Doe', 'conditions' => ''],
-        ],
-        'JohnDoe',
-      ],
-      'caret condition includes before empty neighbor' => [
-        [
-          ['value' => 'John', 'conditions' => ''],
-          ['value' => ' Jr.', 'conditions' => '^'],
-          ['value' => '', 'conditions' => ''],
-        ],
-        'John Jr.',
-      ],
-      'caret condition excludes before present neighbor' => [
-        [
-          ['value' => 'John', 'conditions' => ''],
-          ['value' => ' Jr.', 'conditions' => '^'],
-          ['value' => 'Doe', 'conditions' => ''],
-        ],
-        'JohnDoe',
-      ],
-      'equals condition includes before present neighbor' => [
-        [
-          ['value' => 'John', 'conditions' => ''],
-          ['value' => ' ', 'conditions' => '='],
-          ['value' => 'Doe', 'conditions' => ''],
-        ],
-        'John Doe',
-      ],
-      'equals condition excludes before empty neighbor' => [
-        [
-          ['value' => 'John', 'conditions' => ''],
-          ['value' => ' ', 'conditions' => '='],
-          ['value' => '', 'conditions' => ''],
-        ],
-        'John',
-      ],
-      'fallback condition includes after empty neighbor' => [
-        [
-          ['value' => '', 'conditions' => ''],
-          ['value' => 'Fallback', 'conditions' => '|'],
-          ['value' => '', 'conditions' => ''],
-        ],
-        'Fallback',
-      ],
-      'fallback condition excludes after present neighbor' => [
-        [
-          ['value' => 'Primary', 'conditions' => ''],
-          ['value' => 'Fallback', 'conditions' => '|'],
-          ['value' => '', 'conditions' => ''],
-        ],
-        'Primary',
-      ],
-      'fallback condition overrides matching condition' => [
-        [
-          ['value' => 'Primary', 'conditions' => ''],
-          ['value' => 'Fallback', 'conditions' => '|-'],
-          ['value' => '', 'conditions' => ''],
-        ],
-        'Primary',
-      ],
-      'escaped backslashes are converted to tabs' => [
-        [
-          ['value' => 'John\\\\Doe', 'conditions' => ''],
-        ],
-        "John\tDoe",
-      ],
-    ];
-  }
-
-  /**
-   * @covers ::pieceConditionMet
-   *
-   * @dataProvider pieceConditionMetProvider
-   */
-  public function testPieceConditionMetChecksSurroundingPieces(
-    string $conditions,
-    string|false $last_component,
-    string|false $next_component,
-    bool $expected,
-  ): void {
-    $this->assertSame(
-      $expected,
-      $this->callPrivate(
-        'pieceConditionMet',
-        [$conditions, $last_component, $next_component]
-      )
-    );
-  }
-
-  /**
-   * Provides test cases for condition matching.
-   *
-   * @return array[]
-   *   The test cases.
-   */
-  public static function pieceConditionMetProvider(): array {
-    return [
-      'plus matches with both neighbors' => ['+', 'John', 'Doe', TRUE],
-      'plus misses without previous neighbor' => ['+', '', 'Doe', FALSE],
-      'minus matches with previous neighbor' => ['-', 'John', FALSE, TRUE],
-      'minus misses without previous neighbor' => ['-', '', FALSE, FALSE],
-      'tilde matches without previous neighbor' => ['~', '', 'Doe', TRUE],
-      'tilde misses with previous neighbor' => ['~', 'John', 'Doe', FALSE],
-      'caret matches without next neighbor' => ['^', 'John', '', TRUE],
-      'caret misses with next neighbor' => ['^', 'John', 'Doe', FALSE],
-      'equals matches with next neighbor' => ['=', 'John', 'Doe', TRUE],
-      'equals misses without next neighbor' => ['=', 'John', '', FALSE],
-    ];
-  }
-
-  /**
-   * @covers ::resolveTokenValue
-   */
-  public function testResolveTokenValueUsesStringTokensAndLiteralFallback(): void {
-    $tokens = [
-      'g' => 'John',
-      'd' => NULL,
-    ];
-
-    $this->assertSame(
-      'John',
-      $this->callPrivate('resolveTokenValue', ['g', $tokens])
-    );
-    $this->assertSame(
-      '',
-      $this->callPrivate('resolveTokenValue', ['d', $tokens])
-    );
-    $this->assertSame(
-      'x',
-      $this->callPrivate('resolveTokenValue', ['x', $tokens])
-    );
-  }
-
-  /**
-   * @covers ::processBracketGroup
-   */
-  public function testProcessBracketGroupParsesMatchedGroup(): void {
-    $result = $this->callPrivate(
-      'processBracketGroup',
-      ['(g)', 0, ['g' => 'John'], 'L', '-']
-    );
-
-    $this->assertIsArray($result['piece']);
-    $this->assertSame('john', $result['piece']['value']);
-    $this->assertSame('-', $result['piece']['conditions']);
-    $this->assertSame(2, $result['advance']);
-  }
-
-  /**
-   * @covers ::processBracketGroup
-   */
-  public function testProcessBracketGroupPreservesUnmatchedOpeningBracket(): void {
-    $result = $this->callPrivate(
-      'processBracketGroup',
-      ['(g', 0, ['g' => 'John'], '', '']
-    );
-
-    $this->assertIsArray($result['piece']);
-    $this->assertSame('(', $result['piece']['value']);
-    $this->assertSame(0, $result['advance']);
-  }
-
-  /**
-   * @covers ::processBracketGroup
-   */
-  public function testProcessBracketGroupPreservesClosingBracket(): void {
-    $result = $this->callPrivate(
-      'processBracketGroup',
-      [')', 0, [], '', '']
-    );
-
-    $this->assertIsArray($result['piece']);
-    $this->assertSame(')', $result['piece']['value']);
-    $this->assertSame(0, $result['advance']);
   }
 
   /**
@@ -442,12 +148,19 @@ class NameFormatParserServiceTest extends UnitTestCase {
   /**
    * @covers ::getMarkupOptions
    */
-  public function testGetMarkupOptions(): void {
+  public function testGetMarkupOptionsMatchesUtility(): void {
     $options = $this->parser->getMarkupOptions();
-    $this->assertSame(
-      ['none', 'raw', 'simple', 'microdata', 'rdfa'],
-      array_keys($options)
-    );
+    $this->assertTranslatedOptionsEqual(NameFormatHelp::markupOptions(), $options);
+  }
+
+  /**
+   * @covers ::getMarkupOptions
+   */
+  public function testGetMarkupOptionsTriggersDeprecation(): void {
+    $options = $this->parser->getMarkupOptions();
+    $this->assertArrayHasKey('microdata', $options);
+    $this->assertArrayHasKey('rdfa', $options);
+    $this->assertArrayHasKey('none', $options);
   }
 
   /**
@@ -463,8 +176,8 @@ class NameFormatParserServiceTest extends UnitTestCase {
   /**
    * @covers ::tokenHelp
    */
-  public function testTokenHelpWithDescribeAppendsLetterHints(): void {
-    $tokens = $this->parser->tokenHelp(TRUE);
+  public function testTokenHelpAppendsLetterHints(): void {
+    $tokens = $this->parser->tokenHelp();
     $this->assertStringContainsString('<br><small>', (string) $tokens['g']);
     $this->assertStringContainsString('(lowercase G)</small>', (string) $tokens['g']);
     $this->assertStringContainsString('<br><small>', (string) $tokens['I']);
@@ -556,7 +269,6 @@ class NameFormatParserServiceTest extends UnitTestCase {
    * Tilde conditional: insert separator when there is no previous component.
    *
    * @covers ::parse
-   * @covers ::format
    */
   public function testParseConditionalTildeInsertsSeparatorWhenPreviousEmpty(): void {
     $settings = [
@@ -603,8 +315,6 @@ class NameFormatParserServiceTest extends UnitTestCase {
    * Lowercase modifier preserves a single outer span from markup output.
    *
    * @covers ::parse
-   * @covers ::renderComponent
-   * @covers ::applyModifiers
    */
   public function testParseModifierLowercasePreservesSimpleMarkupWrapper(): void {
     $settings = [
@@ -623,8 +333,6 @@ class NameFormatParserServiceTest extends UnitTestCase {
    * Lowercase modifier keeps microdata attributes on the outer span.
    *
    * @covers ::parse
-   * @covers ::renderComponent
-   * @covers ::applyModifiers
    */
   public function testParseModifierLowercasePreservesMicrodataAttributes(): void {
     $settings = [
@@ -642,7 +350,6 @@ class NameFormatParserServiceTest extends UnitTestCase {
    * Preferred token is empty when both preferred and given are empty.
    *
    * @covers ::parse
-   * @covers ::renderFirstComponent
    */
   public function testParsePreferredTokenEmptyWhenPreferredAndGivenEmpty(): void {
     $settings = [
@@ -665,7 +372,6 @@ class NameFormatParserServiceTest extends UnitTestCase {
    * First-letter preferred-or-given token is empty when both are empty.
    *
    * @covers ::parse
-   * @covers ::renderFirstComponent
    */
   public function testParsePreferredOrGivenInitialTokenEmptyWhenPreferredAndGivenEmpty(): void {
     $settings = [
@@ -688,7 +394,6 @@ class NameFormatParserServiceTest extends UnitTestCase {
    * Simple markup wraps components in class spans with escaped text.
    *
    * @covers ::parse
-   * @covers ::renderComponent
    */
   public function testParseWithSimpleMarkup(): void {
     $components = [
@@ -725,7 +430,6 @@ class NameFormatParserServiceTest extends UnitTestCase {
    * Empty format returns an empty string.
    *
    * @covers ::parse
-   * @covers ::format
    */
   public function testParseWithEmptyFormatReturnsEmptyString(): void {
     $settings = [
@@ -736,6 +440,299 @@ class NameFormatParserServiceTest extends UnitTestCase {
 
     $out = (string) $this->parser->parse(['given' => 'John'], '', $settings);
     $this->assertSame('', $out);
+  }
+
+  /**
+   * Asserts two option arrays match (keys and rendered strings).
+   *
+   * @param array<string, \Drupal\Core\StringTranslation\TranslatableMarkup|string> $expected
+   *   Expected options.
+   * @param array<string, \Drupal\Core\StringTranslation\TranslatableMarkup|string> $actual
+   *   Options from the code under test.
+   */
+  private function assertTranslatedOptionsEqual(array $expected, array $actual): void {
+    $this->assertSame(array_keys($expected), array_keys($actual));
+    foreach ($expected as $key => $markup) {
+      $this->assertSame((string) $markup, (string) $actual[$key]);
+    }
+  }
+
+  /**
+   * Invokes a protected method on a NameFormatParserService instance.
+   *
+   * @param \Drupal\name\Service\NameFormatParserService $parser
+   *   The service instance.
+   * @param string $method
+   *   The protected method name.
+   * @param array $arguments
+   *   Positional arguments for the method.
+   *
+   * @return mixed
+   *   The invoked method return value.
+   */
+  protected function callProtectedParserMethod(
+    NameFormatParserService $parser,
+    string $method,
+    array $arguments = [],
+  ): mixed {
+    $reflection = new \ReflectionMethod(NameFormatParserService::class, $method);
+    $reflection->setAccessible(TRUE);
+    return $reflection->invokeArgs($parser, $arguments);
+  }
+
+  /**
+   * AddComponent() applies modifiers and resets the by-ref params to ''.
+   *
+   * @covers ::addComponent
+   */
+  public function testAddComponentAppliesModifiersAndClearsByRefParams(): void {
+    $modifiers  = 'L';
+    $conditions = '+';
+    $method     = new \ReflectionMethod(
+      NameFormatParserService::class,
+      'addComponent',
+    );
+    $method->setAccessible(TRUE);
+    $piece = $method->invokeArgs(
+      $this->parser,
+      ['JOHN', &$modifiers, &$conditions],
+    );
+
+    $this->assertSame(['value' => 'john', 'conditions' => '+'], $piece);
+    $this->assertSame('', $modifiers, 'modifiers must be reset by-ref');
+    $this->assertSame('', $conditions, 'conditions must be reset by-ref');
+  }
+
+  /**
+   * AddComponent() with no modifiers returns the value unchanged.
+   *
+   * @covers ::addComponent
+   */
+  public function testAddComponentNoModifiersReturnsValueUnchanged(): void {
+    $modifiers  = '';
+    $conditions = '';
+    $method     = new \ReflectionMethod(
+      NameFormatParserService::class,
+      'addComponent',
+    );
+    $method->setAccessible(TRUE);
+    $piece = $method->invokeArgs(
+      $this->parser,
+      ['John', &$modifiers, &$conditions],
+    );
+
+    $this->assertSame(['value' => 'John', 'conditions' => ''], $piece);
+  }
+
+  /**
+   * ApplyModifiers() delegates L/U to the utility.
+   *
+   * Uses the instance boundary regexp for the B/b modifiers.
+   *
+   * @covers ::applyModifiers
+   */
+  public function testApplyModifiersUsesInstanceBoundaryRegExp(): void {
+    // DeprecationHandler dedupes identical messages within a request.
+    $this->assertSame(
+      'john',
+      $this->callProtectedParserMethod($this->parser, 'applyModifiers', ['JOHN', 'L']),
+    );
+    $this->assertSame(
+      'JOHN',
+      $this->callProtectedParserMethod($this->parser, 'applyModifiers', ['john', 'U']),
+    );
+
+    // Default boundary regexp '/[\b,\s]/' does not split on '/'.
+    $this->assertSame(
+      'foo/bar',
+      $this->callProtectedParserMethod($this->parser, 'applyModifiers', ['foo/bar', 'B']),
+    );
+
+    // Override the instance regexp to split on '/' instead.
+    $prop = new \ReflectionProperty(NameFormatParserService::class, 'boundaryRegExp');
+    $prop->setAccessible(TRUE);
+    $prop->setValue($this->parser, '/[\/]/');
+
+    $this->assertSame(
+      'foo',
+      $this->callProtectedParserMethod($this->parser, 'applyModifiers', ['foo/bar', 'B']),
+    );
+  }
+
+  /**
+   * ClosingBracketPosition() delegates to NameFormatParser.
+   *
+   * @covers ::closingBracketPosition
+   */
+  public function testClosingBracketPositionDelegatesToParser(): void {
+    $this->assertSame(
+      4,
+      $this->callProtectedParserMethod(
+        $this->parser,
+        'closingBracketPosition',
+        ['(abc)'],
+      ),
+    );
+    $this->assertFalse(
+      $this->callProtectedParserMethod(
+        $this->parser,
+        'closingBracketPosition',
+        ['(abc'],
+      ),
+    );
+  }
+
+  /**
+   * RenderComponent() passes the instance markup mode to the utility.
+   *
+   * @covers ::renderComponent
+   */
+  public function testRenderComponentUsesInstanceMarkup(): void {
+    // Prime markup state via parse().
+    $this->parser->parse(['given' => 'x'], 'g', [
+      'markup' => 'simple',
+      'sep1'   => ' ',
+      'sep2'   => ', ',
+      'sep3'   => '',
+    ]);
+
+    $result = $this->callProtectedParserMethod(
+      $this->parser,
+      'renderComponent',
+      ['John', 'given'],
+    );
+    $this->assertSame(
+      '<span class="given">John</span>',
+      $result,
+    );
+  }
+
+  /**
+   * RenderComponent() with an 'initial' modifier returns only the first letter.
+   *
+   * @covers ::renderComponent
+   */
+  public function testRenderComponentInitialModifierReturnsFirstLetter(): void {
+    $this->parser->parse(['given' => 'x'], 'g', [
+      'markup' => 'none',
+      'sep1'   => ' ',
+      'sep2'   => ', ',
+      'sep3'   => '',
+    ]);
+
+    $result = $this->callProtectedParserMethod(
+      $this->parser,
+      'renderComponent',
+      ['JoHn', 'given', 'initial'],
+    );
+    $this->assertSame('J', $result);
+  }
+
+  /**
+   * RenderFirstComponent() returns NULL when all candidates are empty.
+   *
+   * @covers ::renderFirstComponent
+   */
+  public function testRenderFirstComponentReturnsNullWhenAllEmpty(): void {
+    $this->parser->parse(['given' => 'x'], 'g', [
+      'markup' => 'simple',
+      'sep1'   => ' ',
+      'sep2'   => ', ',
+      'sep3'   => '',
+    ]);
+
+    $result = $this->callProtectedParserMethod(
+      $this->parser,
+      'renderFirstComponent',
+      [['', NULL, ''], 'given'],
+    );
+    $this->assertNull($result);
+  }
+
+  /**
+   * RenderFirstComponent() returns the first non-empty rendered value.
+   *
+   * Uses the instance markup mode.
+   *
+   * @covers ::renderFirstComponent
+   */
+  public function testRenderFirstComponentReturnsFirstNonEmptyWithMarkup(): void {
+    $this->parser->parse(['given' => 'x'], 'g', [
+      'markup' => 'simple',
+      'sep1'   => ' ',
+      'sep2'   => ', ',
+      'sep3'   => '',
+    ]);
+
+    $result = $this->callProtectedParserMethod(
+      $this->parser,
+      'renderFirstComponent',
+      [['', 'John'], 'given'],
+    );
+    $this->assertSame('<span class="given">John</span>', $result);
+  }
+
+  /**
+   * @covers ::format
+   */
+  public function testFormatTriggersDeprecation(): void {
+    $result = $this->callProtectedParserMethod($this->parser, 'format', [
+      ['given' => 'John'],
+      '',
+    ]);
+    $this->assertSame('', $result);
+  }
+
+  /**
+   * @covers ::format
+   */
+  public function testFormatDelegatesToUtilityWithTokens(): void {
+    $this->parser->parse(['given' => 'x'], 'g', [
+      'markup' => 'none',
+      'sep1'   => ' ',
+      'sep2'   => ', ',
+      'sep3'   => '',
+    ]);
+    $result = $this->callProtectedParserMethod($this->parser, 'format', [
+      ['given' => 'John', 'family' => 'Doe'],
+      'gif',
+    ]);
+    $this->assertSame('John Doe', $result);
+  }
+
+  /**
+   * @covers ::generateTokens
+   */
+  public function testGenerateTokensTriggersDeprecation(): void {
+    $this->parser->parse(['given' => 'x'], 'g', [
+      'markup' => 'none',
+      'sep1'   => ' ',
+      'sep2'   => ', ',
+      'sep3'   => '',
+    ]);
+    $tokens = $this->callProtectedParserMethod($this->parser, 'generateTokens', [
+      ['given' => 'John'],
+    ]);
+    $this->assertArrayHasKey('g', $tokens);
+    $this->assertSame('John', $tokens['g']);
+  }
+
+  /**
+   * @covers ::generateTokens
+   */
+  public function testGenerateTokensMatchesUtility(): void {
+    $this->parser->parse(['given' => 'x'], 'g', [
+      'markup' => 'simple',
+      'sep1'   => ' ',
+      'sep2'   => ', ',
+      'sep3'   => '',
+    ]);
+    $components = ['given' => 'Jane', 'family' => 'Smith'];
+    $tokens = $this->callProtectedParserMethod($this->parser, 'generateTokens', [$components]);
+    $this->assertSame(
+      NameFormatTokens::build($components, ' ', ', ', '', 'simple'),
+      $tokens,
+    );
   }
 
   /**

@@ -36,6 +36,7 @@ class TermReferenceTree extends WidgetBase {
       'start_minimized' => TRUE,
       'leaves_only' => FALSE,
       'select_parents' => FALSE,
+      'select_all' => FALSE,
       'cascading_selection' => self::CASCADING_SELECTION_NONE,
       'max_depth' => 0,
     ] + parent::defaultSettings();
@@ -70,6 +71,14 @@ class TermReferenceTree extends WidgetBase {
       '#return_value' => 1,
     ];
 
+    $form['select_all'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Select all'),
+      '#description' => $this->t("Adds a new option to check/uncheck all Tree Widget options."),
+      '#default_value' => $this->getSetting('select_all'),
+      '#return_value' => 1,
+    ];
+
     $form['cascading_selection'] = [
       '#type' => 'select',
       '#title' => $this->t('Cascading selection'),
@@ -92,6 +101,10 @@ class TermReferenceTree extends WidgetBase {
       $form['cascading_selection']['#disabled'] = TRUE;
       $form['cascading_selection']['#default_value'] = self::CASCADING_SELECTION_NONE;
       $form['cascading_selection']['#description'] .= ' <em>' . $this->t("This option is only valid if an unlimited number of values can be selected.") . '</em>';
+
+      $form['select_all']['#disabled'] = TRUE;
+      $form['select_all']['#default_value'] = TRUE;
+      $form['select_all']['#description'] .= ' <em>' . $this->t("This option is only valid if an unlimited number of values can be selected.") . '</em>';
     }
 
     $form['max_depth'] = [
@@ -121,6 +134,10 @@ class TermReferenceTree extends WidgetBase {
 
     if ($this->getSetting('select_parents')) {
       $summary[] = $this->t('Select parents automatically');
+    }
+
+    if ($this->getSetting('select_all')) {
+      $summary[] = $this->t('Select all option');
     }
 
     $cascadingSelection = $this->getSetting('cascading_selection');
@@ -155,6 +172,7 @@ class TermReferenceTree extends WidgetBase {
       ->getCardinality();
     $element['#leaves_only'] = $this->getSetting('leaves_only');
     $element['#select_parents'] = $this->getSetting('select_parents');
+    $element['#select_all'] = $this->getSetting('select_all');
     $element['#cascading_selection'] = $this->getSetting('cascading_selection');
     $element['#value_key'] = 'target_id';
     $element['#max_depth'] = $this->getSetting('max_depth');
@@ -172,6 +190,10 @@ class TermReferenceTree extends WidgetBase {
    * Form element validation handler for term reference form widget.
    */
   public static function validateTermReferenceTreeElement(&$element, FormStateInterface $form_state) {
+    // If user has no access, the validation isn't needed.
+    if (isset($element['#access']) && !$element['#access']) {
+      return;
+    }
     $items = _term_reference_tree_flatten($element, $form_state);
     $value = [];
     if ($element['#max_choices'] != 1) {
@@ -204,6 +226,40 @@ class TermReferenceTree extends WidgetBase {
       $form_state->setError($element, t('%name field is required.', ['%name' => $element['#title']]));
     }
     $form_state->setValueForElement($element, $value);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+
+    // @todo This is only a workaround for
+    // https://www.drupal.org/project/term_reference_tree/issues/2988590.
+    // The problem should still be fixed at the root cause, if possible.
+    foreach ($values as $delta => $value) {
+      if (!is_array($value)) {
+
+        // This handles the case of the widget being hidden and its value should
+        // not be changed. The current value is present as `value = "value"`.
+        // Detect this using loose comparison, and throw all other stuff out.
+        if ($delta != $value) {
+          unset($values[$delta]);
+        }
+        continue;
+      }
+
+      // Detect default values being submitted, and leave those intact.
+      // Leave correct input values intact.
+      if (array_key_exists('target_id', $value)) {
+        continue;
+      }
+
+      // Just in case there are other leftovers that would interfere with core
+      // field element validation.
+      unset($values[$delta]);
+    }
+
+    return $values;
   }
 
 }

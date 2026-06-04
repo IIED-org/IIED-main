@@ -11,6 +11,7 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\name\Service\AdditionalComponentInterface;
 use Drupal\name\Service\NameFormatterInterface;
 use Drupal\name\Service\UserRealnamePreloadInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Hook implementations that integrate the user entity with realname lookups.
@@ -33,7 +34,9 @@ final class UserHooks {
 
   public function __construct(
     private readonly ConfigFactoryInterface $configFactory,
+    #[Autowire(lazy: true)]
     private readonly NameFormatterInterface $nameFormatter,
+    #[Autowire(lazy: true)]
     private readonly AdditionalComponentInterface $additionalComponent,
     private readonly UserRealnamePreloadInterface $realnamePreload,
   ) {}

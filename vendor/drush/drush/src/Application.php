@@ -7,18 +7,21 @@ namespace Drush;
 use Composer\Autoload\ClassLoader;
 use Consolidation\AnnotatedCommand\AnnotatedCommand;
 use Consolidation\SiteAlias\SiteAliasManager;
+use Drush\Attributes\HandleRemoteCommands;
 use Drush\Boot\BootstrapManager;
 use Drush\Boot\DrupalBootLevels;
 use Drush\Command\RemoteCommandProxy;
 use Drush\Config\ConfigAwareTrait;
+use Drush\Event\ConsoleDefinitionsEvent;
 use Drush\Runtime\RedispatchHook;
-use Drush\Runtime\TildeExpansionHook;
 use Drush\Runtime\ServiceManager;
+use Drush\Runtime\TildeExpansionHook;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Robo\Contract\ConfigAwareInterface;
 use Robo\Robo;
 use Symfony\Component\Console\Application as SymfonyApplication;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,20 +40,11 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
     use LoggerAwareTrait;
     use ConfigAwareTrait;
 
-    /** @var BootstrapManager */
-    protected $bootstrapManager;
-
-    /** @var SiteAliasManager */
-    protected $aliasManager;
-
-    /** @var RedispatchHook */
-    protected $redispatchHook;
-
-    /** @var TildeExpansionHook */
-    protected $tildeExpansionHook;
-
-    /** @var ServiceManager */
-    protected $serviceManager;
+    protected ?BootstrapManager $bootstrapManager;
+    protected ?SiteAliasManager $aliasManager;
+    protected ?RedispatchHook $redispatchHook;
+    protected ?TildeExpansionHook $tildeExpansionHook;
+    protected ?ServiceManager $serviceManager;
 
     /**
      * Add global options to the Application and their default values to Config.
@@ -78,7 +72,7 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
 
         $this->getDefinition()
             ->addOption(
-                new InputOption('--root', '-r', InputOption::VALUE_REQUIRED, 'The Drupal root for this site.')
+                new InputOption('--root', '-r', InputOption::VALUE_REQUIRED, 'The Drupal root for this site. Note: this option is deprecated and will be removed. ')
             );
 
 
@@ -95,6 +89,11 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
         $this->getDefinition()
             ->addOption(
                 new InputOption('--define', '-D', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Define a configuration item value.', [])
+            );
+
+        $this->getDefinition()
+            ->addOption(
+                new InputOption('--xdebug', null, InputOption::VALUE_NONE, 'Drush turns off Xdebug to achieve better performance. Pass this option to keep Xdebug enabled.')
             );
     }
 
@@ -183,11 +182,8 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
     /**
      * @inheritdoc
      */
-    public function find($name)
+    public function find($name): Command
     {
-        if (empty($name)) {
-            return;
-        }
         $command = $this->bootstrapAndFind($name);
         // Avoid exception when help is being built by https://github.com/bamarni/symfony-console-autocomplete.
         // @todo Find a cleaner solution.
@@ -196,6 +192,13 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
             $this->checkObsolete($command);
         }
         return $command;
+    }
+
+    protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output): int
+    {
+        $this->redispatchIfRemote($command, $input);
+        // If we get here, redispatch did not happen.
+        return parent::doRunCommand($command, $input, $output);
     }
 
     /**
@@ -227,7 +230,7 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
 
             if (!$this->bootstrapManager()->hasBootstrapped(DrupalBootLevels::ROOT)) {
                 // Unable to progress in the bootstrap. Give friendly error message.
-                throw new CommandNotFoundException(dt('Command !command was not found. Pass --root or a @siteAlias in order to run Drupal-specific commands.', ['!command' => $name]));
+                throw new CommandNotFoundException(dt('Command !command was not found. Make sure that the `drush` you are calling is a dependency of a your site\'s composer.json', ['!command' => $name]));
             }
 
             // Try to find it again, now that we bootstrapped as far as possible.
@@ -277,7 +280,7 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
      * second call. At the moment, the work done here is trivial, so we let
      * it happen twice.
      */
-    protected function configureIO(InputInterface $input, OutputInterface $output)
+    protected function configureIO(InputInterface $input, OutputInterface $output): void
     {
         // Do default Symfony confguration.
         parent::configureIO($input, $output);
@@ -315,6 +318,8 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
         // any of the configuration steps we do here.
         $this->configureIO($input, $output);
 
+        $this->addListeners($commandfileSearchpath);
+
         // Directly add the yaml-cli commands.
         $this->addCommands($this->serviceManager->instantiateYamlCliCommands());
 
@@ -330,19 +335,14 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
         $commandInstances = $this->serviceManager->instantiateServices($commandClasses, Drush::getContainer());
 
         // Register our commands with Robo, our application framework.
-        // Note that Robo::register can accept either Annotated Command
-        // command handlers or Symfony Console Command objects.
+        // Note that Robo::register can accept Annotated Command
+        // handlers or Symfony Console Command objects, but not yet invokables.
+        $commandInstances = $this->serviceManager->commandFromInvokable($commandInstances);
+        array_walk($commandInstances, fn($instance) => $this->logger->debug('Add command {class}', ['class' => $instance::class]));
         Robo::register($this, $commandInstances);
-    }
 
-    /**
-     * Renders a caught exception. Omits the command docs at end.
-     */
-    public function renderException(\Exception $e, OutputInterface $output)
-    {
-        $output->writeln('', OutputInterface::VERBOSITY_QUIET);
-
-        $this->doRenderException($e, $output);
+        // Dispatch our custom event. It also fires later in \Drush\Boot\DrupalBoot8::bootstrapDrupalFull.
+        Drush::getContainer()->get('eventDispatcher')->dispatch(new ConsoleDefinitionsEvent($this), ConsoleDefinitionsEvent::class);
     }
 
     /**
@@ -353,5 +353,25 @@ class Application extends SymfonyApplication implements LoggerAwareInterface, Co
         $output->writeln('', OutputInterface::VERBOSITY_QUIET);
 
         $this->doRenderThrowable($e, $output);
+    }
+
+    // Discover event listeners and add those that do not require bootstrap.
+    protected function addListeners($commandfileSearchpath): void
+    {
+        $listenerClasses = $this->serviceManager->discoverListeners($commandfileSearchpath, '\Drush');
+        $listenerClasses = $this->serviceManager->filterListeners($listenerClasses);
+        $this->serviceManager->addListeners($listenerClasses, Drush::getContainer());
+    }
+
+    protected function redispatchIfRemote(Command $command, InputInterface $input): void
+    {
+        // Redispatch if the command is remote and is eligible.
+        // @phpstan-ignore-next-line function.alreadyNarrowedType
+        $code = method_exists($command, 'getCode') && $command->getCode() ? $command->getCode() : $command;
+        $reflection = new \ReflectionObject($code);
+        $attributes = $reflection->getAttributes(HandleRemoteCommands::class);
+        if (empty($attributes) && !$command instanceof AnnotatedCommand && !$command instanceof RemoteCommandProxy) {
+            $this->redispatchHook->redispatchIfRemote($input);
+        }
     }
 }

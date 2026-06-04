@@ -11,6 +11,7 @@ use Drupal\name\Entity\NameFormat;
 use Drupal\name\Service\GeneratorInterface;
 use Drupal\name\Service\NameFormatParserInterface;
 use Drupal\name\Service\NameFormatterInterface;
+use Drupal\name\Utility\NameFormatHelp;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -150,7 +151,7 @@ class NameFormatListBuilder extends ConfigEntityListBuilder {
   public function render() {
     return [
       'list' => parent::render(),
-      'help' => $this->parser->renderableTokenHelp(),
+      'help' => NameFormatHelp::renderableTokenHelp(),
     ];
   }
 

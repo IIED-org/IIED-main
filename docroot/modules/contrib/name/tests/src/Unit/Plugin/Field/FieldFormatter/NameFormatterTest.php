@@ -155,7 +155,7 @@ class NameFormatterTest extends UnitTestCase {
     $configuration = [
       'field_definition' => $this->fieldDefinition,
       'settings' => [
-        'markup' => 'western',
+        'markup' => 'none',
         'link_target' => 'name',
       ],
       'label' => 'above',
@@ -367,10 +367,6 @@ class NameFormatterTest extends UnitTestCase {
       ->method('loadSampleValues')
       ->willReturn([['given_name' => 'George', 'family_name' => 'Washington']]);
 
-    $this->nameParser->expects($this->once())
-      ->method('getMarkupOptions')
-      ->willReturn(['western' => 'Western']);
-
     $summary = $this->plugin->settingsSummary();
 
     $this->assertIsArray($summary);
@@ -402,10 +398,6 @@ class NameFormatterTest extends UnitTestCase {
     $this->nameGenerator->expects($this->once())
       ->method('loadSampleValues')
       ->willReturn([['given_name' => 'George', 'family_name' => 'Washington']]);
-
-    $this->nameParser->expects($this->once())
-      ->method('getMarkupOptions')
-      ->willReturn(['western' => 'Western']);
 
     $summary = $this->plugin->settingsSummary();
 
@@ -439,10 +431,6 @@ class NameFormatterTest extends UnitTestCase {
       ->method('load')
       ->with('default')
       ->willReturn(NULL);
-
-    $this->nameParser->expects($this->once())
-      ->method('getMarkupOptions')
-      ->willReturn(['western' => 'Western']);
 
     $summary = $this->plugin->settingsSummary();
     $format_summary = (string) ($summary[0] ?? '');
@@ -493,10 +481,6 @@ class NameFormatterTest extends UnitTestCase {
       ->with('default')
       ->willReturn($name_list_format);
 
-    $this->nameParser->expects($this->once())
-      ->method('getMarkupOptions')
-      ->willReturn(['western' => 'Western']);
-
     $name_format->expects($this->exactly(2))
       ->method('id')
       ->willReturn('default');
@@ -512,7 +496,7 @@ class NameFormatterTest extends UnitTestCase {
       ->willReturnCallback(function ($key, $value) use ($formatter) {
         static $call = 0;
         $expected = [
-          ['markup', 'western'],
+          ['markup', 'none'],
           ['markup', 'none'],
         ];
         $this->assertSame($expected[$call][0], $key);
@@ -575,10 +559,6 @@ class NameFormatterTest extends UnitTestCase {
       ->method('loadSampleValues')
       ->willReturn([['given_name' => 'George', 'family_name' => 'Washington']]);
 
-    $this->nameParser->expects($this->once())
-      ->method('getMarkupOptions')
-      ->willReturn(['western' => 'Western']);
-
     $this->nameFormatter->expects($this->once())
       ->method('getSetting')
       ->with('markup')
@@ -590,7 +570,7 @@ class NameFormatterTest extends UnitTestCase {
       ->willReturnCallback(function ($key, $value) use ($formatter) {
         static $call = 0;
         $expected = [
-          ['markup', 'western'],
+          ['markup', 'none'],
           ['markup', 'none'],
         ];
         $this->assertSame($expected[$call][0], $key);
@@ -653,10 +633,6 @@ class NameFormatterTest extends UnitTestCase {
       ->method('load')
       ->with('default')
       ->willReturn(NULL);
-
-    $this->nameParser->expects($this->once())
-      ->method('getMarkupOptions')
-      ->willReturn(['western' => 'Western']);
 
     $summary = $this->plugin->settingsSummary();
     $list_summary = (string) ($summary[1] ?? '');

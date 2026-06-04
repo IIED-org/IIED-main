@@ -103,6 +103,7 @@ return array(
     'MabeEnum\\' => array($vendorDir . '/marc-mabe/php-enum/src'),
     'League\\Csv\\' => array($vendorDir . '/league/csv/src'),
     'League\\Container\\' => array($vendorDir . '/league/container/src'),
+    'Laravel\\Prompts\\' => array($vendorDir . '/laravel/prompts/src'),
     'Laminas\\Stdlib\\' => array($vendorDir . '/laminas/laminas-stdlib/src'),
     'Kint\\' => array($vendorDir . '/kint-php/kint/src'),
     'JsonSchema\\' => array($vendorDir . '/justinrainbow/json-schema/src/JsonSchema'),

@@ -21,6 +21,7 @@ use Drupal\name\Service\GeneratorInterface;
 use Drupal\name\Service\NameFormatParserInterface;
 use Drupal\name\Service\NameFormatterInterface;
 use Drupal\name\Traits\NameAdditionalPreferredTrait;
+use Drupal\name\Utility\NameFormatHelp;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -196,7 +197,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
       '#type' => 'select',
       '#title' => $this->t('Markup'),
       '#default_value' => $this->getSetting('markup'),
-      '#options' => $this->parser->getMarkupOptions(),
+      '#options' => NameFormatHelp::markupOptions(),
       '#description' => $this->t('This option wraps the individual components of the name in SPAN elements with corresponding classes to the component.'),
       '#required' => TRUE,
     ];
@@ -271,7 +272,7 @@ class NameFormatter extends FormatterBase implements ContainerFactoryPluginInter
     }
 
     // Additional options.
-    $markup_options = $this->parser->getMarkupOptions();
+    $markup_options = NameFormatHelp::markupOptions();
     $summary[] = $this->t('Markup: @type', [
       '@type' => $markup_options[$this->getSetting('markup')],
     ]);
