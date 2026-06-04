@@ -12,12 +12,9 @@ storage: folder
 folder: ../config/splits/local
 module:
   dblog: 0
-  devel_generate: 0
   field_ui: 0
-  help_topics: 0
   twig_xdebug: 0
   devel: 0
-  devel_kint_extras: 0
   stage_file_proxy: 0
   views_ui: 0
   webform_ui: 0
