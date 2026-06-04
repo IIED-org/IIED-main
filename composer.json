@@ -315,8 +315,9 @@
         "Add 'front' options to menu position": "https://www.drupal.org/files/issues/2022-06-20/responsive_menu-menuposition-3274889-3.diff"
       },
       "drupal/readmore_js": {
-        "Fix readmore_js to prevent scroll to top.": "https://git.drupalcode.org/issue/readmore_js-3312818/-/commit/67f2912296417d5a3db83045909323c73dcdd605.patch",
-        "3385364": "https://www.drupal.org/files/issues/2023-09-06/drupal-10-compatibility-fixes-3385364-2.patch"
+        "Fix readmore_js to prevent scroll to top.": "patches/readmore_js-3312818.patch",
+        "3385364": "patches/readmore_js-3385364-2.patch",
+        "d11 update":"patches/readmore_js-d11.patch"
       },
       "drupal/search_api_solr": {
         "Fix search_api_solr to avoid 'can not use FieldCache on multivalued field'.": "https://git.drupalcode.org/issue/search_api_solr-3326515/-/commit/c8293cc85563c52b17357c7f1ccea2f4c9f359f1.patch"
@@ -342,6 +343,9 @@
       },
       "drupal/computed_field": {
        "3539496 Make v3 compatible with Drupal 11": "https://www.drupal.org/files/issues/2026-05-29/3539496-17.patch"
+      },
+      "drupal/webform_shs": {
+        "3435681 d11 compatibility":"https://www.drupal.org/files/issues/2024-03-25/webform_shs.2.0.0-beta1.rector.patch"
       }
     },
     "drupal-lenient": {

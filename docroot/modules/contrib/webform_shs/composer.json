@@ -26,6 +26,6 @@
   },
   "license": "GPL-2.0+",
     "require": {
-        "drupal/core": "^9 || ^10"
-    }
+    "drupal/core": "^9 || ^10 || ^11"
+  }
 }

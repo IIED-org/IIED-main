@@ -1,0 +1,26 @@
+From 67f2912296417d5a3db83045909323c73dcdd605 Mon Sep 17 00:00:00 2001
+From: Finn <finn@agile.coop>
+Date: Fri, 30 Sep 2022 09:43:19 +0100
+Subject: [PATCH] Remove automatic scroll to top after clicking hide link.
+
+---
+ js/selector.js | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/js/selector.js b/js/selector.js
+index 3e363cd..0317499 100644
+--- a/js/selector.js
++++ b/js/selector.js
+@@ -22,7 +22,8 @@
+               blockCSS: 'display: inline-block; width: auto;',
+               afterToggle: function(trigger, element, expanded) {
+                 if(!expanded) { // The "Close" link was clicked
+-                 window.scrollTo({ top: element.offsetTop, behavior: 'smooth' });
++                  // Would be good to make this optional, commenting out for now.
++                  // window.scrollTo({ top: element.offsetTop, behavior: 'smooth' });
+                 }
+               }
+             });
+-- 
+GitLab
+
