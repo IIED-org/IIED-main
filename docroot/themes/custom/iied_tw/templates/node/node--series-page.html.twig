@@ -26,7 +26,7 @@ Series page node template.
           <div class="mb-4 sm:order-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
 
               {% set label = not node.page_label.isEmpty() ? node.page_label.value : node.type.entity.label %}
-              <div class="text-sm font-medium leading-tight tracking-wider text-gray-500 uppercase text-muted">
+              <div class="text-base font-medium leading-tight tracking-wider text-gray-500 uppercase">
                 {{ label }}
               </div>
         </div>

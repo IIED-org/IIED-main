@@ -5431,6 +5431,10 @@ button.cn-decline.klaro-close {
   margin-top: -2rem;
 }
 
+.mb-0 {
+  margin-bottom: 0px;
+}
+
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -5557,10 +5561,6 @@ button.cn-decline.klaro-close {
 
 .mt-8 {
   margin-top: 2rem;
-}
-
-.mb-0 {
-  margin-bottom: 0px;
 }
 
 .block {
@@ -5703,8 +5703,20 @@ button.cn-decline.klaro-close {
   height: 100vh;
 }
 
+.h-7 {
+  height: 1.75rem;
+}
+
 .max-h-44 {
   max-height: 11rem;
+}
+
+.max-h-60 {
+  max-height: 15rem;
+}
+
+.max-h-7 {
+  max-height: 1.75rem;
 }
 
 .max-h-fit {
@@ -6070,6 +6082,13 @@ button.cn-decline.klaro-close {
   cursor: pointer;
 }
 
+.select-none {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
 .resize {
   resize: both;
 }
@@ -6138,10 +6157,6 @@ button.cn-decline.klaro-close {
 
 .place-content-center {
   place-content: center;
-}
-
-.place-content-end {
-  place-content: end;
 }
 
 .place-items-center {
@@ -6608,6 +6623,11 @@ button.cn-decline.klaro-close {
 .border-white {
   --tw-border-opacity: 1;
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
+}
+
+.border-gray-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(243 244 246 / var(--tw-border-opacity));
 }
 
 .border-b-white {
@@ -10276,6 +10296,10 @@ button.cn-decline.klaro-close {
     grid-column: span 9 / span 9;
   }
 
+  .xl\:col-span-1 {
+    grid-column: span 1 / span 1;
+  }
+
   .xl\:col-start-1 {
     grid-column-start: 1;
   }
@@ -10290,6 +10314,10 @@ button.cn-decline.klaro-close {
 
   .xl\:col-start-4 {
     grid-column-start: 4;
+  }
+
+  .xl\:col-start-8 {
+    grid-column-start: 8;
   }
 
   .xl\:row-span-2 {
@@ -10404,10 +10432,6 @@ button.cn-decline.klaro-close {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .xl\:flex-row {
-    flex-direction: row;
-  }
-
   .xl\:flex-col {
     flex-direction: column;
   }
@@ -10418,10 +10442,6 @@ button.cn-decline.klaro-close {
 
   .xl\:items-center {
     align-items: center;
-  }
-
-  .xl\:justify-end {
-    justify-content: flex-end;
   }
 
   .xl\:gap-10 {
@@ -10436,6 +10456,11 @@ button.cn-decline.klaro-close {
     gap: 1.5rem;
   }
 
+  .xl\:gap-x-10 {
+    -moz-column-gap: 2.5rem;
+         column-gap: 2.5rem;
+  }
+
   .xl\:gap-x-12 {
     -moz-column-gap: 3rem;
          column-gap: 3rem;
@@ -10444,15 +10469,6 @@ button.cn-decline.klaro-close {
   .xl\:gap-x-6 {
     -moz-column-gap: 1.5rem;
          column-gap: 1.5rem;
-  }
-
-  .xl\:gap-y-10 {
-    row-gap: 2.5rem;
-  }
-
-  .xl\:gap-x-10 {
-    -moz-column-gap: 2.5rem;
-         column-gap: 2.5rem;
   }
 
   .xl\:space-x-8 > :not([hidden]) ~ :not([hidden]) {
@@ -10623,32 +10639,8 @@ button.cn-decline.klaro-close {
 }
 
 @media (min-width: 1280px) {
-  .xl\:\[\&\>\*\:first-child\:nth-last-child\(1\)\]\:col-start-3>*:first-child:nth-last-child(1) {
-    grid-column-start: 3;
-  }
-
-  .xl\:\[\&\>\*\:first-child\:nth-last-child\(2\)\]\:col-start-2>*:first-child:nth-last-child(2) {
-    grid-column-start: 2;
-  }
-
-  .xl\:\[\&\>\*\:first-child\:nth-last-child\(3\)\]\:col-start-1>*:first-child:nth-last-child(3) {
-    grid-column-start: 1;
-  }
-
   .xl\:\[\&\>\*\:first-child\]\:col-start-2>*:first-child {
     grid-column-start: 2;
-  }
-
-  .xl\:\[\&\>\*\]\:max-w-\[calc\(\(100\%-5rem\)\/3\)\]>* {
-    max-width: calc((100% - 5rem) / 3);
-  }
-
-  .xl\:\[\&\>\*\]\:shrink-0>* {
-    flex-shrink: 0;
-  }
-
-  .xl\:\[\&\>\*\]\:basis-\[calc\(\(100\%-5rem\)\/3\)\]>* {
-    flex-basis: calc((100% - 5rem) / 3);
   }
 
   .xl\:\[\&\>\*\]\:self-end>* {
