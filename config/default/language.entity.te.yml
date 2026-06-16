@@ -1,9 +1,9 @@
 uuid: baad0ec1-5f27-4a28-9611-4d488b9c5259
-langcode: en
+langcode: te
 status: true
 dependencies: {  }
 id: te
-label: Telugu
+label: తెలుగు
 direction: ltr
 weight: 7
 locked: false

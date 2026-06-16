@@ -435,8 +435,22 @@ display:
     display_plugin: block
     position: 1
     display_options:
+      defaults:
+        use_ajax: false
+      use_ajax: true
       display_description: ''
-      display_extenders: {  }
+      display_extenders:
+        matomo:
+          enabled: false
+          keyword_gets: ''
+          keyword_behavior: first
+          keyword_concat_separator: ' '
+          category_behavior: none
+          category_gets: ''
+          category_concat_separator: ' '
+          category_fallback: ''
+          category_facets: {  }
+          category_facets_concat_separator: ', '
       block_description: 'All gender content'
     cache_metadata:
       max-age: -1

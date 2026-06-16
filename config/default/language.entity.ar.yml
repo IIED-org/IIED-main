@@ -3,7 +3,7 @@ langcode: ar
 status: true
 dependencies: {  }
 id: ar
-label: Arabic
+label: العربية
 direction: ltr
 weight: -10
 locked: false

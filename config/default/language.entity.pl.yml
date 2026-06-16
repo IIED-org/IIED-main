@@ -1,9 +1,9 @@
 uuid: 961db279-7355-4a1c-b7aa-e90d91b324b2
-langcode: en
+langcode: pl
 status: true
 dependencies: {  }
 id: pl
-label: Polish
+label: Polski
 direction: ltr
 weight: 0
 locked: false
