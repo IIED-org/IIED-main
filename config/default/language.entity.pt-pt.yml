@@ -1,9 +1,9 @@
 uuid: 3df73321-d9b6-4362-8e38-0984347a20cc
-langcode: en
+langcode: pt-pt
 status: true
 dependencies: {  }
 id: pt-pt
-label: 'Portuguese, Portugal'
+label: 'Português (Portugal)'
 direction: ltr
 weight: 2
 locked: false

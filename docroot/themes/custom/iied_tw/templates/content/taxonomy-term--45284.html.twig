@@ -1,0 +1,126 @@
+{% extends '@iied_tw/content/taxonomy-term--collection.html.twig' %}
+
+{#
+/**
+ * For Forest and Farm Facility impact stories (FFF)
+ * /collection/forest-farm-facility-impact-stories
+ * taxonomy-term--45284
+ */
+#}
+
+{% block header %}
+  <div class="mb-8 border-b border-gray-100">
+    <div class="container overflow-hidden xl:grid xl:grid-cols-12 xl:gap-x-12 xl:items-center">
+      <div class="xl:col-span-6">
+        {{ title_prefix }}
+        <h1 class="mb-6">{{ name }}</h1>
+        {{ title_suffix }}
+
+        {% if term.description.value %}
+          <p class="mb-12 prose prose-lg lg:prose-xl">
+            {{ term.description.value|striptags }}
+          </p>
+        {% endif %}
+      </div>
+
+      <div class="self-end xl:col-span-4 xl:col-start-8">
+        {% if term.field_term_image is defined and term.field_term_image.entity %}
+          <img
+            src="{{ term.field_term_image.entity.uri.value|image_style('scale_sm') }}"
+            alt="{{ term.field_term_image.alt|default(name) }}"
+            class="object-contain object-center max-h-60"
+          >
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+
+
+
+{% block main %}
+  <div
+    class="tab-wrapper"
+    x-data="{
+      tab: 'inthiscollection',
+      tabs: ['inthiscollection', 'overview'],
+      setTabFromHash() {
+        const hash = window.location.hash ? window.location.hash.substring(1) : '';
+        this.tab = this.tabs.includes(hash) ? hash : 'inthiscollection';
+
+        this.$nextTick(() => {
+          if (this.$refs[this.tab]) {
+            this.$refs[this.tab].focus();
+          }
+        });
+      },
+      changeTab(tabName) {
+        if (!this.tabs.includes(tabName)) return;
+        this.tab = tabName;
+        window.location.hash = tabName;
+      }
+    }"
+    x-init="
+      setTabFromHash();
+      window.addEventListener('hashchange', () => setTabFromHash());
+    "
+  >
+    <nav class="border-b border-gray-300" aria-label="Collection tabs">
+      <div class="container flex flex-row" role="tablist">
+        <a
+          x-ref="inthiscollection"
+          role="tab"
+          :aria-selected="tab === 'inthiscollection' ? 'true' : 'false'"
+          aria-controls="panel-inthiscollection"
+          class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none"
+          :class="{ 'active border-b-2': tab === 'inthiscollection' }"
+          @click.prevent="changeTab('inthiscollection')"
+          href="#inthiscollection"
+        >
+          In this {{ collectionType }}
+        </a>
+
+        <a
+          x-ref="overview"
+          role="tab"
+          :aria-selected="tab === 'overview' ? 'true' : 'false'"
+          aria-controls="panel-overview"
+          class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none"
+          :class="{ 'active border-b-2': tab === 'overview' }"
+          @click.prevent="changeTab('overview')"
+          href="#overview"
+        >
+          Overview
+        </a>
+      </div>
+    </nav>
+
+    <div
+      id="panel-inthiscollection"
+      role="tabpanel"
+      class="tab-panel"
+      x-show="tab === 'inthiscollection'"
+      x-transition:enter.duration.750ms
+    >
+      <div class="content">
+        {{ content|without('field_overview', 'field_tags', 'field_theme') }}
+      </div>
+    </div>
+
+    <div
+      id="panel-overview"
+      role="tabpanel"
+      class="pt-6 tab-panel"
+      x-show="tab === 'overview'"
+      x-transition:enter.duration.750ms
+    >
+      <div class="container content lg:grid lg:gap-x-6 lg:grid-cols-12">
+        <div class="mb-12 prose md:prose-lg lg:col-span-8 lg:col-start-5">
+          {{ term.field_overview.value|raw }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

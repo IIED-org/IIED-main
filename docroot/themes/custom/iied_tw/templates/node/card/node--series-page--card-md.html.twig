@@ -15,7 +15,7 @@ Series page card
    {% endblock %}
 
    {% block date %}
-     {% if node.field_tagline.value is not empty %}
-      <p class="text-gray-500">{{ content.field_tagline }}</p>
-     {% endif %}
+      {% if node.field_tagline.value is not empty %}
+         <p class="text-gray-500">{{ node.field_tagline.value }}</p>
+      {% endif %}
    {% endblock %}

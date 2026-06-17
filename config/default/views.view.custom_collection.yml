@@ -706,8 +706,10 @@ display:
         groups:
           1: AND
       defaults:
+        use_ajax: false
         filters: false
         filter_groups: false
+      use_ajax: true
       display_description: ''
       display_extenders:
         matomo:

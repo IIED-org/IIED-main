@@ -15,7 +15,6 @@
     {% endblock %}
 
   {% block main %}
-    <div>
       <div class="tab-wrapper" 
         x-data="{ tab: window.location.hash ? window.location.hash.substring(1) : 'inthiscollection' }"
         x-init="
@@ -47,8 +46,7 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
+
 
   {% endblock %}
      

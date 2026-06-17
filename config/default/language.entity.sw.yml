@@ -1,9 +1,9 @@
 uuid: 6bb3e2f2-9218-4235-8f8d-967e7b6949bb
-langcode: en
+langcode: sw
 status: true
 dependencies: {  }
 id: sw
-label: Swahili
+label: Kiswahili
 direction: ltr
 weight: 6
 locked: false
