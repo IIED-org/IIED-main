@@ -50,7 +50,6 @@ dependencies:
     - layout_builder
     - masquerade
     - media
-    - media_revisions_ui
     - node
     - paragraphs
     - path
@@ -58,7 +57,6 @@ dependencies:
     - publishcontent
     - rabbit_hole
     - redirect
-    - scn
     - shortcut
     - system
     - tablefield
@@ -105,7 +103,6 @@ permissions:
   - 'administer menu'
   - 'administer nodes'
   - 'administer redirects'
-  - 'administer scn configuration'
   - 'administer taxonomy'
   - 'administer url aliases'
   - 'administer webform submission'
@@ -139,7 +136,6 @@ permissions:
   - 'create url aliases'
   - 'create webform content'
   - 'customize shortcut links'
-  - 'delete all media revisions'
   - 'delete all revisions'
   - 'delete any article content'
   - 'delete any blog content'
@@ -162,10 +158,8 @@ permissions:
   - 'delete any series_page content'
   - 'delete any webform content'
   - 'delete content translations'
-  - 'delete document media revisions'
   - 'delete external_resource revisions'
   - 'delete hidden_handbrake revisions'
-  - 'delete image media revisions'
   - 'delete impact_story revisions'
   - 'delete media'
   - 'delete own article content'
@@ -258,17 +252,15 @@ permissions:
   - 'rabbit hole bypass media'
   - 'rabbit hole bypass node'
   - 'rabbit hole bypass taxonomy_term'
+  - 'rebuild node access permissions'
   - 'rebuild tablefield'
-  - 'revert all media revisions'
   - 'revert all revisions'
   - 'revert article revisions'
   - 'revert blog revisions'
-  - 'revert document media revisions'
   - 'revert event revisions'
   - 'revert external_resource revisions'
   - 'revert hidden_handbrake revisions'
   - 'revert hidden_page revisions'
-  - 'revert image media revisions'
   - 'revert impact_story revisions'
   - 'revert long_read revisions'
   - 'revert news revisions'
@@ -310,12 +302,10 @@ permissions:
   - 'view any unpublished webform content'
   - 'view article revisions'
   - 'view blog revisions'
-  - 'view document media revisions'
   - 'view event revisions'
   - 'view external_resource revisions'
   - 'view hidden_handbrake revisions'
   - 'view hidden_page revisions'
-  - 'view image media revisions'
   - 'view impact_story revisions'
   - 'view long_read revisions'
   - 'view media'

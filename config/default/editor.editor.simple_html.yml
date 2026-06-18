@@ -20,6 +20,7 @@ settings:
       properties:
         reversed: false
         startIndex: false
+        styles: false
       multiBlock: true
 image_upload:
   status: false

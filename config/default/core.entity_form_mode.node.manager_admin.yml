@@ -6,6 +6,6 @@ dependencies:
     - node
 id: node.manager_admin
 label: Manager/Admin
-description: ''
+description: null
 targetEntityType: node
 cache: true

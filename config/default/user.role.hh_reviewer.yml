@@ -13,7 +13,6 @@ dependencies:
     - filter
     - form_mode_control
     - media
-    - media_revisions_ui
     - node
     - publishcontent
     - system
@@ -53,7 +52,6 @@ permissions:
   - 'use text format simple_html'
   - 'view any unpublished hidden_handbrake content'
   - 'view hidden_handbrake revisions'
-  - 'view image media revisions'
   - 'view own unpublished content'
   - 'view the administration theme'
   - 'view user email addresses'

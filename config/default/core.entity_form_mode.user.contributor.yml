@@ -6,6 +6,6 @@ dependencies:
     - user
 id: user.contributor
 label: Contributor
-description: ''
+description: null
 targetEntityType: user
 cache: true
