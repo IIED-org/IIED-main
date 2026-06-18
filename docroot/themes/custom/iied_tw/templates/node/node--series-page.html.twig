@@ -23,10 +23,10 @@ Series page node template.
       >
 
         <div class="mb-4 sm:justify-between sm:flex">
-          <div class="sm:order-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
+          <div class="mb-4 sm:order-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
 
               {% set label = not node.page_label.isEmpty() ? node.page_label.value : node.type.entity.label %}
-              <div class="text-sm font-medium leading-tight tracking-wider text-gray-500 uppercase text-muted">
+              <div class="text-base font-medium leading-tight tracking-wider text-gray-500 uppercase">
                 {{ label }}
               </div>
         </div>
@@ -51,7 +51,7 @@ Series page node template.
           {% set has_meta = not node.outcome.isEmpty() or not node.field_country.isEmpty() or show_date %}
 
           {% if has_meta %}
-            <div class="flex flex-col flex-wrap justify-between pb-6 mb-4 prose border-b border-gray-300 xl:border-none sm:flex-row xl:mb-0">
+            <div class="flex flex-col flex-wrap justify-between pb-6 mb-4 prose sm:flex-row xl:mb-0">
 
               {% if not node.outcome.isEmpty() or not node.field_country.isEmpty() %}
                 <div class="order-2 sm:order-1">
@@ -79,6 +79,19 @@ Series page node template.
           {% endif %}
 
 
+        {% set collections_term = node.field_collections.0.entity %}
+
+        {% if collections_term and collections_term.field_logo.0.entity %}
+          {% set logo_file = collections_term.field_logo.0.entity %}
+
+          <img
+            src="{{ file_url(logo_file.uri.value) }}"
+            alt=""
+            aria-hidden="true"
+            class="object-contain mb-6 pointer-events-none select-none max-h-7"
+          >
+        {% endif %}
+
       </div>
 
       {# / attribution #} {#-- collection --#}
@@ -95,17 +108,20 @@ Series page node template.
         class="order-1 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
         {#-- image if field_display_image --#}
 
-        {% if node.field_main_image.target_id %}
-        <figure class="mb-6 -mx-4 sm:mx-0">
-          <div class="overflow-hidden bg-gray-300 border rounded-xl">
-            {{ content.field_main_image[0] }}
-          </div>
-          <figcaption
-            class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
-            {{ content.field_image_caption }}
-          </figcaption>
-        </figure>
+          {% if "On" in content.field_display_image.0 %}   
+          {% if node.field_main_image.target_id %}
+          <figure class="mb-6 -mx-4 sm:mx-0">
+            <div class="overflow-hidden bg-gray-300 border rounded-xl">
+              {{ content.field_main_image[0] }}
+            </div>
+            <figcaption
+              class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
+              {{ content.field_image_caption }}
+            </figcaption>
+          </figure>
+          {% endif %}
         {% endif %}
+
 
         {#-- body --#}
         <div class="prose md:prose-lg">

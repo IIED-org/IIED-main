@@ -106,6 +106,7 @@ permissions:
   - 'administer nodes'
   - 'administer redirects'
   - 'administer scn configuration'
+  - 'administer taxonomy'
   - 'administer url aliases'
   - 'administer webform submission'
   - 'configure any layout'

@@ -5589,8 +5589,20 @@ button.cn-decline.klaro-close {
   height: 100vh;
 }
 
+.h-7 {
+  height: 1.75rem;
+}
+
 .max-h-44 {
   max-height: 11rem;
+}
+
+.max-h-60 {
+  max-height: 15rem;
+}
+
+.max-h-7 {
+  max-height: 1.75rem;
 }
 
 .max-h-fit {
@@ -5950,6 +5962,13 @@ button.cn-decline.klaro-close {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.select-none {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .resize {
@@ -6485,6 +6504,11 @@ button.cn-decline.klaro-close {
 .border-white {
   --tw-border-opacity: 1;
   border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
+}
+
+.border-gray-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(243 244 246 / var(--tw-border-opacity));
 }
 
 .border-b-white {
@@ -10111,6 +10135,10 @@ button.cn-decline.klaro-close {
     grid-column: span 9 / span 9;
   }
 
+  .xl\:col-span-1 {
+    grid-column: span 1 / span 1;
+  }
+
   .xl\:col-start-1 {
     grid-column-start: 1;
   }
@@ -10125,6 +10153,10 @@ button.cn-decline.klaro-close {
 
   .xl\:col-start-4 {
     grid-column-start: 4;
+  }
+
+  .xl\:col-start-8 {
+    grid-column-start: 8;
   }
 
   .xl\:row-span-2 {

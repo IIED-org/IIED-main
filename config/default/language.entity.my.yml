@@ -1,9 +1,9 @@
 uuid: 55613278-114a-455d-a8a0-9b59f14b57e9
-langcode: en
+langcode: my
 status: true
 dependencies: {  }
 id: my
-label: Burmese
+label: မြန်မာဘာသာ
 direction: ltr
 weight: -8
 locked: false

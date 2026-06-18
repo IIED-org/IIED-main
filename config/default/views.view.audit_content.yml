@@ -697,6 +697,7 @@ display:
                   is_secondary: false
                   hide_label: false
                   field_classes: ''
+                  sort_options_unsupported: ''
               field_tags_target_id:
                 plugin_id: default
                 advanced:

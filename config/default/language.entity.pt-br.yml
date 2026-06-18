@@ -3,7 +3,7 @@ langcode: pt-br
 status: true
 dependencies: {  }
 id: pt-br
-label: 'Portuguese (Brazil)'
+label: 'Português (Brasil)'
 direction: ltr
 weight: 1
 locked: false

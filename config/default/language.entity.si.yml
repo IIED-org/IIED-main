@@ -1,9 +1,9 @@
 uuid: 7933ffe3-8c61-4a6d-aa77-df0e4b014249
-langcode: en
+langcode: si
 status: true
 dependencies: {  }
 id: si
-label: Sinhala
+label: සිංහල
 direction: ltr
 weight: 4
 locked: false
