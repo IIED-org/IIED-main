@@ -1,56 +1,4 @@
 <?php
-/**
- * Lets modules alter the Solarium select query before executing it.
- *
- * After this hook, the select query will be finally converted into an
- * expression that will be processed by the lucene query parser. Therefore you
- * can't modify the 'q' parameter here, because it gets overwritten by that
- * conversion. If you need to modify the 'q' parameter you should implement an
- * event listener instead of this hook that handles the solarium events (our
- * connector injects the drupal event handler into solarium) or implement
- * hook_search_api_solr_converted_query() instead. If you want to force a
- * different parser like edismax you must set the 'defType' parameter
- * accordingly.
- *
- * @param \Solarium\Core\Query\QueryInterface $solarium_query
- *   The Solarium query object, as generated from the Search API query.
- * @param \Drupal\search_api\Query\QueryInterface $query
- *   The Search API query object representing the executed search query.
- */
-// function iied_utils_search_api_solr_query_alter(\Solarium\Core\Query\QueryInterface $solarium_query, \Drupal\search_api\Query\QueryInterface $query) {
-//   // To get a list of solrium events:
-//   // @see http://solarium.readthedocs.io/en/stable/customizing-solarium/#plugin-system
-//   // If the Search API query has a 'my_custom_boost' option, use the edsimax
-//   // query handler and add some boost queries.
-// //  if ($query->getOption('my_custom_boost')) {
-//     // $solr_field_names maps search_api field names to real field names in
-//     // the Solr index.
-//     $solr_field_names = $query->getIndex()->getServerInstance()->getBackend()->getSolrFieldNames($query->getIndex());
-
-//     /** @var \Solarium\Component\EdisMax $edismax */
-//     $edismax = $solarium_query->getEDisMax();
-
-//    //  $keys = $query->getKeys();
-//    //  if (is_array($keys)) {
-//    //    $keys = implode(' ', $keys);
-//    //  }
-//    //
-//    //  if ($keys) {
-//    //    $boost_queries['title_exact_phrase'] = [
-//    //     'query' => $solr_field_names['title'] . ':' . $solarium_query->getHelper()->escapePhrase($keys) . '^5.0',
-//    //   ];
-//    //   $edismax->addBoostQueries($boost_queries);
-//    // }
-
-//     // Boost documents by date.
-//     // @see https://www.drupal.org/project/search_api_solr/issues/2855329
-//     $boost_functions = 'recip(abs(ms(NOW/HOUR,' . $solr_field_names['aggregated_field_date'] . ')),3.16e-11,1,.4)^21.0';
-//     $edismax->setBoostFunctions($boost_functions);
-
-//     // Avoid the conversion into a lucene parser expression, keep edismax.
-//     $solarium_query->addParam('defType', 'edismax');
-// //  }
-// }
 
 // Generate publication product ID and set field_product_code_new
 // Code reinstated 20220928 CB
@@ -134,42 +82,44 @@ function iied_utils_get_page_entity() {
   return FALSE;
 }
 
+// use \Drupal\views\ViewExecutable;
 /**
  * Implements hook_form_FORM_ID_alter() for views_exposed_form().
  *
  * Custom integration for facets. When a Views exposed filter is modified on a
  * search results page it will lose any facets which have been already selected.
  * This adds hidden fields for each facet so their values are retained.
+ * 20260618 cb commented out as not D11 compatible (or needed anymore?)
  */
-function iied_utils_form_views_exposed_form_alter(&$form, FormStateInterface $form_state) {
-  // Retrieve the view object and the query plugin.
-  $storage = $form_state->getStorage();
-  if (!isset($storage['view'])) {
-    return;
-  }
-  $view = $storage['view'];
-  if (!($view instanceof ViewExecutable)) {
-    return;
-  }
-  $query_plugin = $view->getQuery();
-  // Make sure the view is based on Search API and has the "Preserve facets"
-  // option enabled, and that the Facets module is installed.
-  $preserve_facets = !empty($query_plugin->options['preserve_facet_query_args'])
-    && $query_plugin instanceof SearchApiQuery
-    && \Drupal::moduleHandler()->moduleExists('facets');
-  if ($preserve_facets) {
-    // Retrieve the facet source.
-    $query = $query_plugin->getSearchApiQuery();
-    $display_id = $query->getSearchId(FALSE);
-    $facet_source_id = str_replace(':', '__', 'search_api:' . $display_id);
-    $facet_source = \Drupal::entityTypeManager()
-      ->getStorage('facets_facet_source')
-      ->load($facet_source_id);
-    if (!$facet_source) {
-      return;
-    }
-    if ( 'facets_pretty_paths' == $facet_source->getUrlProcessorName()) {
-      $form['#action'] = NULL;
-    }
-  }
-}
+// function iied_utils_form_views_exposed_form_alter(&$form, FormStateInterface $form_state) {
+//   // Retrieve the view object and the query plugin.
+//   $storage = $form_state->getStorage();
+//   if (!isset($storage['view'])) {
+//     return;
+//   }
+//   $view = $storage['view'];
+//   if (!($view instanceof ViewExecutable)) {
+//     return;
+//   }
+//   $query_plugin = $view->getQuery();
+//   // Make sure the view is based on Search API and has the "Preserve facets"
+//   // option enabled, and that the Facets module is installed.
+//   $preserve_facets = !empty($query_plugin->options['preserve_facet_query_args'])
+//     && $query_plugin instanceof SearchApiQuery
+//     && \Drupal::moduleHandler()->moduleExists('facets');
+//   if ($preserve_facets) {
+//     // Retrieve the facet source.
+//     $query = $query_plugin->getSearchApiQuery();
+//     $display_id = $query->getSearchId(FALSE);
+//     $facet_source_id = str_replace(':', '__', 'search_api:' . $display_id);
+//     $facet_source = \Drupal::entityTypeManager()
+//       ->getStorage('facets_facet_source')
+//       ->load($facet_source_id);
+//     if (!$facet_source) {
+//       return;
+//     }
+//     if ( 'facets_pretty_paths' == $facet_source->getUrlProcessorName()) {
+//       $form['#action'] = NULL;
+//     }
+//   }
+// }

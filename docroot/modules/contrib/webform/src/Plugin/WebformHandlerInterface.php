@@ -111,7 +111,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   /**
    * Sets the id for this webform handler.
    *
-   * @param int $handler_id
+   * @param string $handler_id
    *   The handler_id for this webform handler.
    *
    * @return $this
@@ -531,7 +531,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   The account trying to access the entity.
    *
-   * @return \Drupal\Core\Core\AccessResultInterface
+   * @return \Drupal\Core\Access\AccessResultInterface
    *   The result of the access check. No option returns a neutral result.
    */
   public function access(WebformSubmissionInterface $webform_submission, $operation, ?AccountInterface $account = NULL);

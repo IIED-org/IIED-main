@@ -27,6 +27,12 @@ class CoreExtensionMimeTypeGuesserExtended extends ExtensionMimeTypeGuesser {
    */
   public function __construct() {
     $this->moduleHandler = \Drupal::service('module_handler');
+    if (property_exists($this, 'fileSystem')) {
+      $this->fileSystem = \Drupal::service('file_system');
+    }
+    if (property_exists($this, 'map')) {
+      $this->map = \Drupal::service('Drupal\Core\File\MimeType\MimeTypeMapInterface');
+    }
   }
 
   /**

@@ -1899,7 +1899,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $this->getEntity();
     if ($webform_submission->id() && !WebformSubmission::load($webform_submission->id())) {
-      $form_state->setErrorByName(NULL, $this->t('An error occurred while trying to validate the submission. Please save your work and reload this page.'));
+      $form_state->setErrorByName('', $this->t('An error occurred while trying to validate the submission. Please save your work and reload this page.'));
       return;
     }
 
@@ -2156,7 +2156,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         '#theme' => 'item_list',
         '#items' => $file_names,
       ];
-      $form_state->setErrorByName(NULL, $this->renderer->renderInIsolation($message));
+      $form_state->setErrorByName('', $this->renderer->renderInIsolation($message));
     }
   }
 

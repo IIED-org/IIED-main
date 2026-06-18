@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "npx tailwindcss -i src/tailwind.pcss -o dist/styles.css --watch",
     "build:dev": "npx tailwindcss -i src/tailwind.pcss -o dist/styles.css",
-    "build": "npx tailwindcss -i src/tailwind.pcss -o dist/styles.css --minify",
+    "build:prod": "npx tailwindcss -i src/tailwind.pcss -o dist/styles.css --minify",
     "browser-sync": "browser-sync start --config 'browser-sync.cjs' --http",
     "watch": "run-p dev browser-sync"
   },

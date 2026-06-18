@@ -24,7 +24,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
  *   }
  * )
  */
-class TypeLabelProcessor extends ProcessorPluginBase implements ContainerFactoryPluginInterface {
+final class TypeLabelProcessor extends ProcessorPluginBase implements ContainerFactoryPluginInterface {
 
   /**
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -36,7 +36,7 @@ class TypeLabelProcessor extends ProcessorPluginBase implements ContainerFactory
     $this->entityTypeManager = $entity_type_manager;
   }
 
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     return new static(
       $configuration,
       $plugin_id,
@@ -44,7 +44,6 @@ class TypeLabelProcessor extends ProcessorPluginBase implements ContainerFactory
       $container->get('entity_type.manager')
     );
   }
-
   /**
    * {@inheritdoc}
    */
