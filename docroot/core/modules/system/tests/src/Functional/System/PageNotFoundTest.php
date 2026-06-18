@@ -7,12 +7,14 @@ namespace Drupal\Tests\system\Functional\System;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests page not found functionality, including custom 404 pages.
- *
- * @group system
  */
+#[Group('system')]
+#[RunTestsInSeparateProcesses]
 class PageNotFoundTest extends BrowserTestBase {
 
   use AssertPageCacheContextsAndTagsTrait;
@@ -27,6 +29,11 @@ class PageNotFoundTest extends BrowserTestBase {
    */
   protected $defaultTheme = 'stark';
 
+  /**
+   * The test user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
   protected $adminUser;
 
   /**
@@ -47,6 +54,9 @@ class PageNotFoundTest extends BrowserTestBase {
     user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, ['access user profiles']);
   }
 
+  /**
+   * Tests page not found.
+   */
   public function testPageNotFound(): void {
     $this->drupalLogin($this->adminUser);
     $this->drupalGet($this->randomMachineName(10));

@@ -12,8 +12,11 @@ use Drupal\Core\Validation\Plugin\Validation\Constraint\EmailConstraint;
 use Symfony\Component\Validator\Constraints\Blank;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\IdenticalTo;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\PositiveOrZero;
 
 /**
  * Constraint plugin manager.
@@ -117,10 +120,25 @@ class ConstraintManager extends DefaultPluginManager {
       'class' => Choice::class,
       'type' => FALSE,
     ]);
+    $this->getDiscovery()->setDefinition('File', [
+      'label' => new TranslatableMarkup('File'),
+      'class' => File::class,
+      'type' => ['string'],
+    ]);
     $this->getDiscovery()->setDefinition('Image', [
       'label' => new TranslatableMarkup('Image'),
       'class' => Image::class,
       'type' => ['string'],
+    ]);
+    $this->getDiscovery()->setDefinition('PositiveOrZero', [
+      'label' => new TranslatableMarkup('Positive or zero'),
+      'class' => PositiveOrZero::class,
+      'type' => ['integer'],
+    ]);
+    $this->getDiscovery()->setDefinition('IdenticalTo', [
+      'label' => new TranslatableMarkup('IdenticalTo'),
+      'class' => IdenticalTo::class,
+      'type' => FALSE,
     ]);
   }
 

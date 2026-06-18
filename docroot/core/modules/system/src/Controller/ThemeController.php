@@ -149,7 +149,7 @@ class ThemeController extends ControllerBase {
       catch (UnmetDependenciesException $e) {
         $this->messenger()->addError($e->getTranslatedMessage($this->getStringTranslation(), $theme));
       }
-      catch (MissingDependencyException $e) {
+      catch (MissingDependencyException) {
         $this->messenger()->addError($this->t('Unable to install @theme due to missing module dependencies.', ['@theme' => $theme]));
       }
 
@@ -170,6 +170,9 @@ class ThemeController extends ControllerBase {
    */
   protected function willInstallExperimentalTheme($theme) {
     $all_themes = $this->themeList->getList();
+    if (!isset($all_themes[$theme])) {
+      return FALSE;
+    }
     $dependencies = array_keys($all_themes[$theme]->requires);
     $themes_to_enable = array_merge([$theme], $dependencies);
 

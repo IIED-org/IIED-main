@@ -317,9 +317,12 @@ class Query extends QueryBase implements QueryInterface {
    * Determines whether the query requires GROUP BY and ORDER BY MIN/MAX.
    *
    * @return bool
+   *   TRUE if the query is a simple query which does not require GROUP BY and
+   *   ORDER BY MIN/MAX. Otherwise FALSE.
    */
   protected function isSimpleQuery() {
-    return (!$this->pager && !$this->range && !$this->count) || $this->sqlQuery->getMetaData('simple_query');
+    $isSimpleRange = !$this->range || (($this->range['start'] === 0) && ($this->range['length'] === 1));
+    return (!$this->pager && $isSimpleRange && !$this->count) || $this->sqlQuery->getMetaData('simple_query');
   }
 
   /**

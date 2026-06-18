@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace Drupal\Tests\update\Functional;
 
 use Drupal\Core\Url;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests edge cases of the Available Updates report UI.
  *
  * For example, manually checking for updates, recovering from problems
  * connecting to the release history server, clearing the disk cache, and more.
- *
- * @group update
  */
+#[Group('update')]
+#[RunTestsInSeparateProcesses]
 class UpdateSemverCoreTest extends UpdateSemverCoreTestBase {
 
   /**
@@ -39,7 +41,7 @@ class UpdateSemverCoreTest extends UpdateSemverCoreTestBase {
   }
 
   /**
-   * Tests the Update Manager module when the update server returns 503 errors.
+   * Tests the Update Status module when the update server returns 503 errors.
    */
   public function testServiceUnavailable(): void {
     $this->refreshUpdateStatus([], '503-error');

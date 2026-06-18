@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\rest\Unit;
 
-use Drupal\Tests\UnitTestCase;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\rest\Plugin\views\display\RestExport;
+use Drupal\Tests\UnitTestCase;
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Tests the REST export view plugin.
- *
- * @group rest
  */
+#[Group('rest')]
 class CollectRoutesTest extends UnitTestCase {
 
   /**
@@ -27,6 +27,8 @@ class CollectRoutesTest extends UnitTestCase {
 
   /**
    * The RouteCollection.
+   *
+   * @var \Symfony\Component\Routing\RouteCollection
    */
   protected $routes;
 
@@ -37,11 +39,6 @@ class CollectRoutesTest extends UnitTestCase {
     parent::setUp();
 
     $container = new ContainerBuilder();
-
-    $request = $this->getMockBuilder('\Symfony\Component\HttpFoundation\Request')
-      ->disableOriginalConstructor()
-      ->getMock();
-
     $view = new View(['id' => 'test_view'], 'view');
 
     $view_executable = $this->getMockBuilder('\Drupal\views\ViewExecutable')

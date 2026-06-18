@@ -15,6 +15,6 @@
         "source": "https://git.drupalcode.org/project/formdazzle"
     },
     "require": {
-        "drupal/core": "^10 || ^11"
+        "drupal/core": "^10.1 || ^11 || ^12"
     }
 }

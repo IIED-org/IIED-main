@@ -150,6 +150,7 @@ class BlockListBuilder extends ConfigEntityListBuilder implements FormInterface 
    * Builds the main "Blocks" portion of the form.
    *
    * @return array
+   *   An array representing the blocks form structure.
    */
   protected function buildBlocksForm() {
     // Build blocks first for each region.
@@ -355,7 +356,7 @@ class BlockListBuilder extends ConfigEntityListBuilder implements FormInterface 
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOperations(EntityInterface $entity) {
+  public function getDefaultOperations(EntityInterface $entity/* , ?CacheableMetadata $cacheability = NULL */) {
     $operations = parent::getDefaultOperations($entity);
 
     if (isset($operations['edit'])) {
@@ -383,7 +384,7 @@ class BlockListBuilder extends ConfigEntityListBuilder implements FormInterface 
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $blocks = $form_state->getValue('blocks');
-    $entities = $this->storage->loadMultiple(array_keys($blocks));
+    $entities = $this->storage->loadMultipleOverrideFree(array_keys($blocks));
     /** @var \Drupal\block\BlockInterface[] $entities */
     foreach ($entities as $entity_id => $entity) {
       $entity_values = $form_state->getValue(['blocks', $entity_id]);

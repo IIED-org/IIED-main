@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\views\Kernel;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormState;
 use Drupal\views\Plugin\views\area\Broken as BrokenArea;
 use Drupal\views\Plugin\views\field\Broken as BrokenField;
@@ -12,12 +11,14 @@ use Drupal\views\Plugin\views\filter\Broken as BrokenFilter;
 use Drupal\views\Plugin\views\filter\Standard;
 use Drupal\views\Plugin\views\ViewsHandlerInterface;
 use Drupal\views\Views;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests basic functions from the Views module.
- *
- * @group views
  */
+#[Group('views')]
+#[RunTestsInSeparateProcesses]
 class ModuleTest extends ViewsKernelTestBase {
 
   /**
@@ -78,7 +79,7 @@ class ModuleTest extends ViewsKernelTestBase {
         $this->assertEquals($description_bottom, $form['description']['description_bottom']['#markup']);
         $details = [];
         foreach ($item as $key => $value) {
-          $details[] = new FormattableMarkup('@key: @value', ['@key' => $key, '@value' => $value]);
+          $details[] = "$key: $value";
         }
         $this->assertEquals($details, $form['description']['detail_list']['#items']);
       }
@@ -322,7 +323,7 @@ class ModuleTest extends ViewsKernelTestBase {
    * @return array
    *   A formatted options array that matches the expected output.
    */
-  protected function formatViewOptions(array $views = []) {
+  protected function formatViewOptions(array $views = []): array {
     $expected_options = [];
     foreach ($views as $view) {
       foreach ($view->get('display') as $display) {

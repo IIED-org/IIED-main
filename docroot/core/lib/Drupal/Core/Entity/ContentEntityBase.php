@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 /**
  * Implements Entity Field API specific enhancements to the Entity class.
  *
+ * @implements \IteratorAggregate<string, \Drupal\Core\Field\FieldItemListInterface>
+ *
  * @ingroup entity_api
  */
 abstract class ContentEntityBase extends EntityBase implements \IteratorAggregate, ContentEntityInterface, TranslationStatusInterface {
@@ -34,11 +36,11 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
    * are keyed by language code, whereas LanguageInterface::LANGCODE_DEFAULT
    * is used for values in default language.
    *
+   * @var array
+   *
    * @todo Add methods for getting original fields and for determining
    * changes.
    * @todo Provide a better way for defining default values.
-   *
-   * @var array
    */
   protected $values = [];
 
@@ -52,9 +54,9 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   /**
    * Local cache for field definitions.
    *
-   * @see ContentEntityBase::getFieldDefinitions()
-   *
    * @var array
+   *
+   * @see ContentEntityBase::getFieldDefinitions()
    */
   protected $fieldDefinitions;
 
@@ -210,7 +212,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
    */
   public function __construct(array $values, $entity_type, $bundle = FALSE, $translations = []) {
     $this->entityTypeId = $entity_type;
-    $this->entityKeys['bundle'] = $bundle ? $bundle : $this->entityTypeId;
+    $this->entityKeys['bundle'] = $bundle ?: $this->entityTypeId;
     $this->langcodeKey = $this->getEntityType()->getKey('langcode');
     $this->defaultLangcodeKey = $this->getEntityType()->getKey('default_langcode');
     $this->revisionTranslationAffectedKey = $this->getEntityType()->getKey('revision_translation_affected');
@@ -243,8 +245,8 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
             }
           }
           else {
-            // We save translatable fields such as the publishing status of a node
-            // into an entity key array keyed by langcode as a performance
+            // We save translatable fields such as the publishing status of a
+            // node into an entity key array keyed by langcode as a performance
             // optimization, so we don't have to go through TypedData when we
             // need these values.
             foreach ($this->values[$field_name] as $langcode => $field_value) {
@@ -355,13 +357,13 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
    * {@inheritdoc}
    */
   public function isDefaultRevision($new_value = NULL) {
-    $return = $this->isDefaultRevision;
-    if (isset($new_value)) {
-      $this->isDefaultRevision = (bool) $new_value;
-    }
+    $current_value = $this->isDefaultRevision;
     // New entities should always ensure at least one default revision exists,
     // creating an entity without a default revision is an invalid state.
-    return $this->isNew() || $return;
+    if (isset($new_value) && (!$this->isNew() || $new_value === TRUE)) {
+      $this->isDefaultRevision = (bool) $new_value;
+    }
+    return (bool) $current_value;
   }
 
   /**
@@ -526,7 +528,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   public function validate() {
     $this->validated = TRUE;
     $violations = $this->getTypedData()->validate();
-    return new EntityConstraintViolationList($this, iterator_to_array($violations));
+    return new EntityConstraintViolationList($this, $violations);
   }
 
   /**
@@ -556,7 +558,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   /**
    * {@inheritdoc}
    */
-  public function __sleep() {
+  public function __sleep(): array {
     // Get the values of instantiated field objects, only serialize the values.
     foreach ($this->fields as $name => $fields) {
       foreach ($fields as $langcode => $field) {
@@ -588,6 +590,17 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   /**
    * {@inheritdoc}
    */
+  public function getBundleEntity(): ?EntityInterface {
+    $entityType = $this->getEntityType();
+    if (!$entityType->hasKey('bundle') || !$entityType->getBundleEntityType()) {
+      return NULL;
+    }
+    return $this->get($entityType->getKey('bundle'))->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function uuid() {
     return $this->getEntityKey('uuid');
   }
@@ -612,7 +625,8 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   /**
    * Gets a translated field.
    *
-   * @return \Drupal\Core\Field\FieldItemListInterface
+   * @return \Drupal\Core\Field\FieldItemListInterface<\Drupal\Core\Field\FieldItemInterface>
+   *   The translated field.
    */
   protected function getTranslatedField($name, $langcode) {
     if ($this->translations[$this->activeLangcode]['status'] == static::TRANSLATION_REMOVED) {
@@ -695,10 +709,12 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   }
 
   /**
-   * {@inheritdoc}
+   * Retrieves the iterator for the object.
+   *
+   * @return \ArrayIterator<string, \Drupal\Core\Field\FieldItemListInterface<\Drupal\Core\Field\FieldItemInterface>>
+   *   The iterator.
    */
-  #[\ReturnTypeWillChange]
-  public function getIterator() {
+  public function getIterator(): \ArrayIterator {
     return new \ArrayIterator($this->getFields());
   }
 
@@ -967,6 +983,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
     $translation->isDefaultRevision = &$this->isDefaultRevision;
     $translation->enforceRevisionTranslationAffected = &$this->enforceRevisionTranslationAffected;
     $translation->isSyncing = &$this->isSyncing;
+    $translation->originalEntity = &$this->originalEntity;
 
     return $translation;
   }
@@ -1109,6 +1126,11 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
       $return = $this->getTranslatedField($name, $this->activeLangcode);
       return $return;
     }
+    if ($name === 'original') {
+      // A variable is required that this technically is a return-by-reference.
+      $original = parent::__get('original');
+      return $original;
+    }
     // Else directly read/write plain values. That way, non-field entity
     // properties can always be accessed directly.
     if (!isset($this->values[$name])) {
@@ -1147,6 +1169,9 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
     elseif ($name == 'translations') {
       $this->translations = $value;
     }
+    elseif ($name == 'original') {
+      parent::__set('original', $value);
+    }
     // Directly write non-field values.
     else {
       $this->values[$name] = $value;
@@ -1157,6 +1182,9 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
    * Implements the magic method for isset().
    */
   public function __isset($name) {
+    if ($name == 'original') {
+      return parent::__isset('original');
+    }
     // "Official" Field API fields are always set. For non-field properties,
     // check the internal values.
     return $this->hasField($name) ? TRUE : isset($this->values[$name]);
@@ -1166,6 +1194,9 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
    * Implements the magic method for unset().
    */
   public function __unset($name) {
+    if ($name == 'original') {
+      parent::__unset('original');
+    }
     // Unsetting a field means emptying it.
     if ($this->hasField($name)) {
       $this->get($name)->setValue([]);
@@ -1223,6 +1254,11 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
       $duplicate->loadedRevisionId = NULL;
     }
 
+    // Modules might need to add or change the data initially held by the new
+    // entity object, for instance to fill-in default values.
+    \Drupal::moduleHandler()->invokeAll($this->getEntityTypeId() . '_duplicate', [$duplicate, $this]);
+    \Drupal::moduleHandler()->invokeAll('entity_duplicate', [$duplicate, $this]);
+
     return $duplicate;
   }
 
@@ -1264,10 +1300,13 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
     // Ensure that the following properties are actually cloned by
     // overwriting the original references with ones pointing to copies of
     // them: enforceIsNew, newRevision, loadedRevisionId, fields, entityKeys,
-    // translatableEntityKeys, values, isDefaultRevision and
-    // enforceRevisionTranslationAffected.
+    // translatableEntityKeys, values, isDefaultRevision,
+    // enforceRevisionTranslationAffected and originalEntity.
     $enforce_is_new = $this->enforceIsNew;
     $this->enforceIsNew = &$enforce_is_new;
+
+    $originalEntity = $this->originalEntity;
+    $this->originalEntity = &$originalEntity;
 
     $new_revision = $this->newRevision;
     $this->newRevision = &$new_revision;
@@ -1469,15 +1508,18 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
       return TRUE;
     }
 
-    // $this->original only exists during save. See
+    // The original entity only exists during save. See
     // \Drupal\Core\Entity\EntityStorageBase::save(). If it exists we re-use it
     // here for performance reasons.
     /** @var \Drupal\Core\Entity\ContentEntityBase $original */
-    $original = $this->original ? $this->original : NULL;
+    $original = $this->getOriginal();
 
     if (!$original) {
       $id = $this->getOriginalId() ?? $this->id();
-      $original = $this->entityTypeManager()->getStorage($this->getEntityTypeId())->loadUnchanged($id);
+      $storage = $this->entityTypeManager()->getStorage($this->getEntityTypeId());
+      $original = $this->getLoadedRevisionId() && $storage instanceof RevisionableStorageInterface
+        ? $storage->loadRevisionUnchanged($this->getLoadedRevisionId())
+        : $storage->loadUnchanged($id);
     }
 
     // If the current translation has just been added, we have a change.

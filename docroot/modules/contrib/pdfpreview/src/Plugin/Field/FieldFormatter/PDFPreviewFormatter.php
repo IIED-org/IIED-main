@@ -202,11 +202,11 @@ class PDFPreviewFormatter extends ImageFormatter {
       unset($item->_attributes);
 
       if (!empty($item->description)) {
-        $item_attributes['alt'] = $item->description;
+        $item_attributes['alt'] = "Preview of " . $item->description;
         $item_attributes['title'] = $item->description;
       }
       elseif ($parent_entity instanceof MediaInterface) {
-        $item_attributes['alt'] = $parent_entity->getName();
+        $item_attributes['alt'] = "Preview of " . $parent_entity->getName();
         $item_attributes['title'] = $parent_entity->getName();
       }
       else {

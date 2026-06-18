@@ -6,18 +6,20 @@ namespace Drupal\Tests\Component\PhpStorage;
 
 use Drupal\Component\PhpStorage\FileStorage;
 use Drupal\Component\Utility\Random;
-use Drupal\Tests\Traits\PhpUnitWarnings;
+use Drupal\TestTools\Extension\DeprecationBridge\ExpectDeprecationTrait;
 use org\bovigo\vfs\vfsStreamDirectory;
-use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @coversDefaultClass \Drupal\Component\PhpStorage\FileStorage
- * @group Drupal
- * @group PhpStorage
+ * Tests Drupal\Component\PhpStorage\FileStorage.
  */
+#[CoversClass(FileStorage::class)]
+#[Group('Drupal')]
+#[Group('PhpStorage')]
 class FileStorageTest extends PhpStorageTestBase {
 
-  use PhpUnitWarnings, ExpectDeprecationTrait;
+  use ExpectDeprecationTrait;
 
   /**
    * Standard test settings to pass to storage instances.
@@ -41,10 +43,10 @@ class FileStorageTest extends PhpStorageTestBase {
   /**
    * Tests basic load/save/delete operations.
    *
-   * @covers ::load
-   * @covers ::save
-   * @covers ::exists
-   * @covers ::delete
+   * @legacy-covers ::load
+   * @legacy-covers ::save
+   * @legacy-covers ::exists
+   * @legacy-covers ::delete
    */
   public function testCRUD(): void {
     $php = new FileStorage($this->standardSettings);
@@ -52,17 +54,7 @@ class FileStorageTest extends PhpStorageTestBase {
   }
 
   /**
-   * @covers ::writeable
-   * @group legacy
-   */
-  public function testWritable(): void {
-    $this->expectDeprecation('Drupal\Component\PhpStorage\FileStorage::writeable() is deprecated in drupal:10.1.0 and will be removed from drupal:11.0.0. There is no replacement. See https://www.drupal.org/node/3155413');
-    $php = new FileStorage($this->standardSettings);
-    $this->assertTrue($php->writeable());
-  }
-
-  /**
-   * @covers ::deleteAll
+   * Tests delete all.
    */
   public function testDeleteAll(): void {
     // Random generator.
@@ -97,7 +89,7 @@ class FileStorageTest extends PhpStorageTestBase {
   }
 
   /**
-   * @covers ::createDirectory
+   * Tests create directory fail warning.
    */
   public function testCreateDirectoryFailWarning(): void {
     $directory = new vfsStreamDirectory('permissionDenied', 0200);
@@ -107,7 +99,7 @@ class FileStorageTest extends PhpStorageTestBase {
     ]);
     $code = "<?php\n echo 'here';";
 
-    // PHPUnit 10 cannot expect warnings, so we have to catch them ourselves.
+    // PHPUnit cannot expect warnings, so we have to catch them ourselves.
     $messages = [];
     set_error_handler(function (int $errno, string $errstr) use (&$messages): void {
       $messages[] = [$errno, $errstr];

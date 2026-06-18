@@ -323,6 +323,10 @@ abstract class EntityDisplayFormBase extends EntityForm {
       'human_name' => [
         '#plain_text' => $label,
       ],
+      'machine_name' => [
+        '#markup' => $field_name,
+        '#attributes' => ['class' => ['machine-name']],
+      ],
       'weight' => [
         '#type' => 'textfield',
         '#title' => $this->t('Weight for @title', ['@title' => $label]),
@@ -496,6 +500,10 @@ abstract class EntityDisplayFormBase extends EntityForm {
       'human_name' => [
         '#markup' => $extra_field['label'],
       ],
+      'machine_name' => [
+        '#markup' => $field_id,
+        '#attributes' => ['class' => ['machine-name']],
+      ],
       'weight' => [
         '#type' => 'textfield',
         '#title' => $this->t('Weight for @title', ['@title' => $extra_field['label']]),
@@ -575,7 +583,11 @@ abstract class EntityDisplayFormBase extends EntityForm {
 
           $display_mode_label = $display_modes[$mode]['label'];
           $url = $this->getOverviewUrl($mode);
-          $this->messenger()->addStatus($this->t('The %display_mode mode now uses custom display settings. You might want to <a href=":url">configure them</a>.', ['%display_mode' => $display_mode_label, ':url' => $url->toString()]));
+          $this->messenger()
+            ->addStatus($this->t('The %display_mode mode now uses custom display settings. You might want to <a href=":url">configure them</a>.', [
+              '%display_mode' => $display_mode_label,
+              ':url' => $url->toString(),
+            ]));
         }
         $statuses[$mode] = !empty($value);
       }

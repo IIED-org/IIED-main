@@ -8,12 +8,14 @@ use Drupal\Core\Entity\Entity\EntityFormMode;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the entity display modes UI.
- *
- * @group field_ui
  */
+#[Group('field_ui')]
+#[RunTestsInSeparateProcesses]
 class EntityDisplayModeTest extends BrowserTestBase {
 
   /**
@@ -133,6 +135,7 @@ class EntityDisplayModeTest extends BrowserTestBase {
     $edit = [
       'id' => $this->randomMachineName(),
       'label' => $this->randomString(),
+      'description' => $this->randomString(),
     ];
     $this->submitForm($edit, 'Save');
     $this->assertSession()->pageTextContains("Saved the {$edit['label']} form mode.");

@@ -8,16 +8,17 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Url;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\node\Entity\Node;
-use Drupal\node\Entity\NodeType;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Thoroughly test the administrative interface of the filter module.
- *
- * @group filter
  */
+#[Group('filter')]
+#[RunTestsInSeparateProcesses]
 class FilterAdminTest extends BrowserTestBase {
 
   /**
@@ -268,7 +269,6 @@ class FilterAdminTest extends BrowserTestBase {
     $this->assertSession()->checkboxChecked('filters[' . $second_filter . '][status]');
     $this->assertSession()->checkboxChecked('filters[' . $first_filter . '][status]');
     /** @var \Drupal\user\Entity\Role $role */
-    \Drupal::entityTypeManager()->getStorage('user_role')->resetCache([RoleInterface::AUTHENTICATED_ID]);
     $role = Role::load(RoleInterface::AUTHENTICATED_ID);
     $this->assertTrue($role->hasPermission($format->getPermissionName()), 'The authenticated role has permission to use the filter.');
 
@@ -277,7 +277,6 @@ class FilterAdminTest extends BrowserTestBase {
     $this->submitForm([], 'Disable');
     $this->assertSession()->addressEquals('admin/config/content/formats');
     $this->assertSession()->statusMessageContains("Disabled text format {$edit['name']}.", 'status');
-    \Drupal::entityTypeManager()->getStorage('user_role')->resetCache([RoleInterface::AUTHENTICATED_ID]);
     $role = Role::load(RoleInterface::AUTHENTICATED_ID);
     $this->assertFalse($role->hasPermission($format->getPermissionName()), 'The filter permission has been removed from the authenticated role');
 
@@ -414,12 +413,10 @@ class FilterAdminTest extends BrowserTestBase {
    */
   public function testDisabledFormat(): void {
     // Create a node type and add a standard body field.
-    $node_type = NodeType::create([
+    $node_type = $this->drupalCreateContentType([
       'type' => $this->randomMachineName(),
       'name' => $this->randomString(),
     ]);
-    $node_type->save();
-    node_add_body_field($node_type, $this->randomString());
 
     // Create a text format with a filter that returns a static string.
     $format = FilterFormat::create([
@@ -497,12 +494,10 @@ class FilterAdminTest extends BrowserTestBase {
     $filter_test->save();
 
     // Create a node type and add a standard body field.
-    $node_type = NodeType::create([
+    $node_type = $this->drupalCreateContentType([
       'type' => $this->randomMachineName(),
       'name' => $this->randomString(),
     ]);
-    $node_type->save();
-    node_add_body_field($node_type, $this->randomString());
 
     // Create a new node of the new node type.
     $title = $this->randomString();

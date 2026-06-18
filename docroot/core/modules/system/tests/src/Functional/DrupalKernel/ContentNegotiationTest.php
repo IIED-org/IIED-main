@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Drupal\Tests\system\Functional\DrupalKernel;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
-// cspell:ignore msword
-
+// cspell:ignore msword pjpeg silverlight xbap
 /**
  * Tests content negotiation.
- *
- * @group DrupalKernel
  */
+#[Group('DrupalKernel')]
+#[RunTestsInSeparateProcesses]
 class ContentNegotiationTest extends BrowserTestBase {
 
   /**
@@ -44,7 +45,7 @@ class ContentNegotiationTest extends BrowserTestBase {
       'Android #1 (2012)' => 'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
       'Android #2 (2012)' => 'text/xml,text/html,application/xhtml+xml,image/png,text/plain,*/*;q=0.8',
     ];
-    foreach ($tests as $case => $header) {
+    foreach ($tests as $header) {
       $this->drupalGet('', [], ['Accept' => $header]);
       $this->assertSession()->pageTextNotContains('Unsupported Media Type');
       $this->assertSession()->pageTextContains('Log in');

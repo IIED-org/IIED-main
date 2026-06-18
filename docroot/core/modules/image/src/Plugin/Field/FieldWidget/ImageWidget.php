@@ -9,9 +9,11 @@ use Drupal\Core\Image\ImageFactory;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\file\Element\ManagedFile;
 use Drupal\file\Entity\File;
 use Drupal\file\Plugin\Field\FieldWidget\FileWidget;
 use Drupal\image\Entity\ImageStyle;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
  * Plugin implementation of the 'image_image' widget.
@@ -107,9 +109,7 @@ class ImageWidget extends FileWidget {
   }
 
   /**
-   * Overrides \Drupal\file\Plugin\Field\FieldWidget\FileWidget::formMultipleElements().
-   *
-   * Special handling for draggable multiple widgets and 'add more' button.
+   * {@inheritdoc}
    */
   protected function formMultipleElements(FieldItemListInterface $items, array &$form, FormStateInterface $form_state) {
     $elements = parent::formMultipleElements($items, $form, $form_state);
@@ -294,7 +294,7 @@ class ImageWidget extends FileWidget {
     // Only do validation if the function is triggered from other places than
     // the image process form.
     $triggering_element = $form_state->getTriggeringElement();
-    if (!empty($triggering_element['#submit']) && in_array('file_managed_file_submit', $triggering_element['#submit'], TRUE)) {
+    if (!empty($triggering_element['#submit']) && in_array([ManagedFile::class, 'submit'], $triggering_element['#submit'], TRUE)) {
       $form_state->setLimitValidationErrors([]);
     }
   }
@@ -342,6 +342,16 @@ class ImageWidget extends FileWidget {
       }
     }
     return $changed;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function errorElement(array $element, ConstraintViolationInterface $error, array $form, FormStateInterface $form_state) {
+    $element = parent::errorElement($element, $error, $form, $form_state);
+
+    $property_path_array = explode('.', $error->getPropertyPath());
+    return ($element === FALSE) ? FALSE : $element[$property_path_array[1]];
   }
 
 }

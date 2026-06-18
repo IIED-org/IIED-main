@@ -8,12 +8,15 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\RouteProcessor\RouteProcessorManager;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Routing\Route;
 
 /**
- * @coversDefaultClass \Drupal\Core\RouteProcessor\RouteProcessorManager
- * @group RouteProcessor
+ * Tests Drupal\Core\RouteProcessor\RouteProcessorManager.
  */
+#[CoversClass(RouteProcessorManager::class)]
+#[Group('RouteProcessor')]
 class RouteProcessorManagerTest extends UnitTestCase {
 
   /**
@@ -68,6 +71,7 @@ class RouteProcessorManagerTest extends UnitTestCase {
    *   The parameters to use in mock with() expectation.
    *
    * @return \Drupal\Core\RouteProcessor\OutboundRouteProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
+   *   The mock processor object.
    */
   protected function getMockProcessor($route_name, $route, $parameters) {
     $processor = $this->createMock('Drupal\Core\RouteProcessor\OutboundRouteProcessorInterface');

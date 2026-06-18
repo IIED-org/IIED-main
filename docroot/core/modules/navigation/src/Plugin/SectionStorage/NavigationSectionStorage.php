@@ -28,7 +28,7 @@ use Symfony\Component\Routing\RouteCollection;
 /**
  * Provides navigation section storage.
  *
- * @internal The navigation module is experimental.
+ * @internal
  */
 #[SectionStorage(id: "navigation",
   context_definitions: [
@@ -38,6 +38,7 @@ use Symfony\Component\Routing\RouteCollection;
     ),
   ],
   handles_permission_check: TRUE,
+  allow_inline_blocks: FALSE,
 )]
 final class NavigationSectionStorage extends PluginBase implements SectionStorageInterface, SectionStorageLocalTaskProviderInterface, ContainerFactoryPluginInterface, CacheableDependencyInterface {
 

@@ -6,17 +6,19 @@ namespace Drupal\Tests\field\Functional\EntityReference;
 
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\node\Entity\Node;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
-use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\node\Entity\Node;
-use Drupal\field\Entity\FieldStorageConfig;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests creating new entity (e.g. taxonomy-term) from an autocomplete widget.
- *
- * @group entity_reference
  */
+#[Group('entity_reference')]
+#[RunTestsInSeparateProcesses]
 class EntityReferenceAutoCreateTest extends BrowserTestBase {
 
   use EntityReferenceFieldCreationTrait;
@@ -188,7 +190,6 @@ class EntityReferenceAutoCreateTest extends BrowserTestBase {
       'auto_create_bundle' => $vocabularies[1]->id(),
     ];
     $this->createEntityReferenceField('node', $this->referencingType, $field_name, $this->randomString(), 'taxonomy_term', 'default', $handler_settings);
-    /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $fd */
     \Drupal::service('entity_display.repository')
       ->getFormDisplay('node', $this->referencingType)
       ->setComponent($field_name, ['type' => 'entity_reference_autocomplete'])

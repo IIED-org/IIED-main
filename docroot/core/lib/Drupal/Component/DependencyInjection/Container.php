@@ -46,8 +46,6 @@ use Symfony\Contracts\Service\ResetInterface;
  */
 class Container implements ContainerInterface, ResetInterface {
 
-  use ServiceIdHashTrait;
-
   /**
    * The parameters of the container.
    *
@@ -126,7 +124,7 @@ class Container implements ContainerInterface, ResetInterface {
   /**
    * {@inheritdoc}
    */
-  public function get($id, $invalid_behavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE): ?object {
+  public function get(string $id, int $invalid_behavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE): ?object {
     if ($this->hasParameter('_deprecated_service_list')) {
       if ($deprecation = $this->getParameter('_deprecated_service_list')[$id] ?? '') {
         @trigger_error($deprecation, E_USER_DEPRECATED);
@@ -202,7 +200,7 @@ class Container implements ContainerInterface, ResetInterface {
    * ref-counting. A subsequent call to ContainerInterface::get() will recreate
    * a new instance of the shared service.
    */
-  public function reset() {
+  public function reset(): void {
     $this->services = [];
   }
 
@@ -306,30 +304,23 @@ class Container implements ContainerInterface, ResetInterface {
 
   /**
    * {@inheritdoc}
-   *
-   * phpcs:ignore Drupal.Commenting.FunctionComment.VoidReturn
-   * @return void
    */
-  public function set($id, $service) {
+  public function set(string $id, ?object $service): void {
     $this->services[$id] = $service;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function has($id): bool {
+  public function has(string $id): bool {
     return isset($this->aliases[$id]) || isset($this->services[$id]) || isset($this->serviceDefinitions[$id]) || $id === 'service_container';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getParameter($name): array|bool|string|int|float|NULL {
+  public function getParameter(string $name): array|bool|string|int|float|\UnitEnum|null {
     if (!\array_key_exists($name, $this->parameters)) {
-      if (!$name) {
-        throw new ParameterNotFoundException('');
-      }
-
       throw new ParameterNotFoundException($name, NULL, NULL, NULL, $this->getParameterAlternatives($name));
     }
 
@@ -339,17 +330,14 @@ class Container implements ContainerInterface, ResetInterface {
   /**
    * {@inheritdoc}
    */
-  public function hasParameter($name): bool {
+  public function hasParameter(string $name): bool {
     return \array_key_exists($name, $this->parameters);
   }
 
   /**
    * {@inheritdoc}
-   *
-   * phpcs:ignore Drupal.Commenting.FunctionComment.VoidReturn
-   * @return void
    */
-  public function setParameter($name, $value) {
+  public function setParameter(string $name, array|bool|string|int|float|\UnitEnum|null $value): void {
     if ($this->frozen) {
       throw new LogicException('Impossible to call set() on a frozen ParameterBag.');
     }
@@ -360,7 +348,7 @@ class Container implements ContainerInterface, ResetInterface {
   /**
    * {@inheritdoc}
    */
-  public function initialized($id): bool {
+  public function initialized(string $id): bool {
     if (isset($this->aliases[$id])) {
       $id = $this->aliases[$id];
     }

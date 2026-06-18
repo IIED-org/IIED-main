@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace Drupal\Tests\field\Kernel;
 
 use Drupal\entity_test\Entity\EntityTest;
+use Drupal\entity_test\EntityTestHelper;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Delete field storages and fields during config delete method invocation.
- *
- * @group field
  */
+#[Group('field')]
+#[RunTestsInSeparateProcesses]
 class FieldImportDeleteTest extends FieldKernelTestBase {
 
   /**
@@ -30,7 +33,7 @@ class FieldImportDeleteTest extends FieldKernelTestBase {
    * Tests deleting field storages and fields as part of config import.
    */
   public function testImportDelete(): void {
-    entity_test_create_bundle('test_bundle');
+    EntityTestHelper::createBundle('test_bundle');
 
     $this->installConfig(['field_test_config']);
     // At this point there are 5 field configuration objects in the active
@@ -63,7 +66,7 @@ class FieldImportDeleteTest extends FieldKernelTestBase {
     $entity_test->save();
 
     // Create a second bundle for the 'Entity test' entity type.
-    entity_test_create_bundle('test_bundle');
+    EntityTestHelper::createBundle('test_bundle');
 
     // Get the uuid's for the field storages.
     $field_storage_uuid = FieldStorageConfig::load($field_storage_id)->uuid();

@@ -9,13 +9,15 @@ use Drupal\filter\Entity\FilterFormat;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests access to text formats.
- *
- * @group Access
- * @group filter
  */
+#[Group('Access')]
+#[Group('filter')]
+#[RunTestsInSeparateProcesses]
 class FilterFormatAccessTest extends BrowserTestBase {
 
   /**
@@ -335,7 +337,7 @@ class FilterFormatAccessTest extends BrowserTestBase {
   /**
    * Rebuilds text format and permission caches in the thread running the tests.
    */
-  protected function resetFilterCaches() {
+  protected function resetFilterCaches(): void {
     filter_formats_reset();
   }
 

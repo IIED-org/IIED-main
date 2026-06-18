@@ -13,11 +13,11 @@ use Drupal\views\Form\ViewsForm;
 use Drupal\Core\Render\Element;
 
 /**
- * Implements hook_preprocess_HOOK() for HTML document templates.
+ * Implements hook_preprocess_HOOK() for html.
  *
  * Adds body classes if certain regions have content.
  */
-function umami_preprocess_html(&$variables) {
+function umami_preprocess_html(&$variables): void {
   // Add a sidebar class if the sidebar has content in it.
   if (!empty($variables['page']['sidebar'])) {
     $variables['attributes']['class'][] = 'two-columns';
@@ -29,9 +29,9 @@ function umami_preprocess_html(&$variables) {
 }
 
 /**
- * Implements hook_preprocess_field().
+ * Implements hook_preprocess_HOOK() for field.
  */
-function umami_preprocess_field(&$variables, $hook) {
+function umami_preprocess_field(&$variables, $hook): void {
   $element = $variables['element'];
   // Add class to label and items fields to be styled using the meta styles.
   if (isset($element['#field_name'])) {
@@ -49,9 +49,9 @@ function umami_preprocess_field(&$variables, $hook) {
 }
 
 /**
- * Implements hook_preprocess_block().
+ * Implements hook_preprocess_HOOK() for block.
  */
-function umami_preprocess_block(&$variables) {
+function umami_preprocess_block(&$variables): void {
   $variables['title_attributes']['class'][] = 'block__title';
   // Add a class indicating the content block bundle.
   if (isset($variables['elements']['content']['#block_content'])) {
@@ -62,7 +62,7 @@ function umami_preprocess_block(&$variables) {
 /**
  * Implements hook_theme_suggestions_HOOK_alter() for block templates.
  */
-function umami_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+function umami_theme_suggestions_block_alter(array &$suggestions, array $variables): void {
   // Block suggestions for content block bundles.
   if (isset($variables['elements']['content']['#block_content'])) {
     array_splice($suggestions, 1, 0, 'block__bundle__' . $variables['elements']['content']['#block_content']->bundle());
@@ -70,9 +70,9 @@ function umami_theme_suggestions_block_alter(array &$suggestions, array $variabl
 }
 
 /**
- * Implements hook_umami_preprocess_block__bundle__banner_block().
+ * Implements hook_preprocess_HOOK() for block--bundle--banner-block.
  */
-function umami_preprocess_block__bundle__banner_block(&$variables) {
+function umami_preprocess_block__bundle__banner_block(&$variables): void {
   if (isset($variables['content']['field_content_link'])) {
     foreach (Element::children($variables['content']['field_content_link']) as $key) {
       $variables['content']['field_content_link'][$key]['#attributes']['class'][] = 'button';
@@ -83,9 +83,9 @@ function umami_preprocess_block__bundle__banner_block(&$variables) {
 }
 
 /**
- * Implements hook_umami_preprocess_block__bundle__footer_promo_block().
+ * Implements hook_preprocess_HOOK() for block bundle footer promo.
  */
-function umami_preprocess_block__bundle__footer_promo_block(&$variables) {
+function umami_preprocess_block__bundle__footer_promo_block(&$variables): void {
   if (isset($variables['content']['field_content_link'])) {
     foreach (Element::children($variables['content']['field_content_link']) as $key) {
       $variables['content']['field_content_link'][$key]['#attributes']['class'][] = 'footer-block__link';
@@ -94,9 +94,9 @@ function umami_preprocess_block__bundle__footer_promo_block(&$variables) {
 }
 
 /**
- * Implements hook_preprocess_breadcrumb().
+ * Implements hook_preprocess_HOOK() for breadcrumb.
  */
-function umami_preprocess_breadcrumb(&$variables) {
+function umami_preprocess_breadcrumb(&$variables): void {
   // We are creating a variable for the Current Page Title, to allow us to print
   // it after the breadcrumbs loop has run.
   $route_match = \Drupal::routeMatch();
@@ -119,21 +119,21 @@ function umami_preprocess_breadcrumb(&$variables) {
 }
 
 /**
- * Implements hook_preprocess_menu_local_task().
+ * Implements hook_preprocess_HOOK() for menu-local-task.
  */
-function umami_preprocess_menu_local_task(&$variables) {
+function umami_preprocess_menu_local_task(&$variables): void {
   $variables['link']['#options']['attributes']['class'][] = 'tabs__link';
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_FORM_ID_alter() for search_block_form.
  */
-function umami_form_search_block_form_alter(&$form, FormStateInterface $form_state) {
+function umami_form_search_block_form_alter(&$form, FormStateInterface $form_state): void {
   $form['keys']['#attributes']['placeholder'] = t('Search by keyword, ingredient, dish');
 }
 
 /**
- * Implements hook_preprocess_links__media_library_menu().
+ * Implements hook_preprocess_HOOK() for links--media-library-menu.
  *
  * This targets the menu of available media types in the media library's modal
  * dialog.
@@ -141,7 +141,7 @@ function umami_form_search_block_form_alter(&$form, FormStateInterface $form_sta
  * @todo Do this in the relevant template once
  *   https://www.drupal.org/project/drupal/issues/3088856 is resolved.
  */
-function umami_preprocess_links__media_library_menu(array &$variables) {
+function umami_preprocess_links__media_library_menu(array &$variables): void {
   foreach ($variables['links'] as &$link) {
     $link['link']['#options']['attributes']['class'][] = 'media-library-menu__link';
   }
@@ -152,7 +152,7 @@ function umami_preprocess_links__media_library_menu(array &$variables) {
  *
  * @todo revisit in https://drupal.org/node/3110132
  */
-function umami_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+function umami_form_alter(array &$form, FormStateInterface $form_state, $form_id): void {
   $form_object = $form_state->getFormObject();
 
   if ($form_object instanceof ViewsForm && str_starts_with($form_object->getBaseFormId(), 'views_form_media_library')) {
@@ -161,11 +161,11 @@ function umami_form_alter(array &$form, FormStateInterface $form_state, $form_id
 }
 
 /**
- * Implements hook_preprocess_image_widget().
+ * Implements hook_preprocess_HOOK() for image-widget.
  *
  * @todo Revisit in https://drupal.org/node/3117430
  */
-function umami_preprocess_image_widget(&$variables) {
+function umami_preprocess_image_widget(&$variables): void {
   if (!empty($variables['element']['fids']['#value'])) {
     $file = reset($variables['element']['#files']);
     $variables['data']["file_{$file->id()}"]['filename']['#suffix'] = ' <span class="file-size">(' . ByteSizeMarkup::create($file->getSize()) . ')</span> ';
@@ -173,7 +173,7 @@ function umami_preprocess_image_widget(&$variables) {
 }
 
 /**
- * Implements template_preprocess_links().
+ * Implements hook_preprocess_HOOK() for links.
  *
  * This makes it so array keys of #links items are added as a class. This
  * functionality was removed in Drupal 8.1, but still necessary in some
@@ -181,7 +181,7 @@ function umami_preprocess_image_widget(&$variables) {
  *
  * @todo remove in https://drupal.org/node/3120962
  */
-function umami_preprocess_links(&$variables) {
+function umami_preprocess_links(&$variables): void {
   if (!empty($variables['links'])) {
     foreach ($variables['links'] as $key => $value) {
       if (!is_numeric($key)) {

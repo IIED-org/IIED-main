@@ -155,7 +155,7 @@ class ViewListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOperations(EntityInterface $entity) {
+  public function getDefaultOperations(EntityInterface $entity/* , ?CacheableMetadata $cacheability = NULL */) {
     $operations = parent::getDefaultOperations($entity);
     // Remove destination redirect for Edit operation.
     $operations['edit']['url'] = $entity->toUrl('edit-form');
@@ -269,7 +269,7 @@ class ViewListBuilder extends ConfigEntityListBuilder {
               //   https://www.drupal.org/node/2423913
               $rendered_path = Link::fromTextAndUrl('/' . $path, Url::fromUserInput('/' . $path))->toString();
             }
-            catch (BadRequestException | NotAcceptableHttpException $e) {
+            catch (BadRequestException | NotAcceptableHttpException) {
               $rendered_path = '/' . $path;
             }
           }

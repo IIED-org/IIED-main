@@ -5,23 +5,27 @@ declare(strict_types=1);
 namespace Drupal\Tests\comment\Functional;
 
 use Drupal\comment\CommentInterface;
+use Drupal\comment\CommentPreviewMode;
 use Drupal\comment\Entity\Comment;
 use Drupal\comment\Entity\CommentType;
 use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
 use Drupal\comment\Tests\CommentTestTrait;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\entity_test\Entity\EntityTest;
+use Drupal\entity_test\EntityTestHelper;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Tests\field_ui\Traits\FieldUiTestTrait;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests commenting on a test entity.
- *
- * @group comment
  */
+#[Group('comment')]
+#[RunTestsInSeparateProcesses]
 class CommentNonNodeTest extends BrowserTestBase {
 
   use FieldUiTestTrait;
@@ -66,7 +70,7 @@ class CommentNonNodeTest extends BrowserTestBase {
     $this->drupalPlaceBlock('page_title_block');
 
     // Create a bundle for entity_test.
-    entity_test_create_bundle('entity_test', 'Entity Test', 'entity_test');
+    EntityTestHelper::createBundle('entity_test', 'Entity Test', 'entity_test');
     CommentType::create([
       'id' => 'comment',
       'label' => 'Comment settings',
@@ -130,7 +134,7 @@ class CommentNonNodeTest extends BrowserTestBase {
     $edit['comment_body[0][value]'] = $comment;
 
     $field = FieldConfig::loadByName('entity_test', 'entity_test', 'comment');
-    $preview_mode = $field->getSetting('preview');
+    $preview_mode = CommentPreviewMode::from($field->getSetting('preview'));
 
     // Must get the page before we test for fields.
     if ($entity !== NULL) {
@@ -151,26 +155,26 @@ class CommentNonNodeTest extends BrowserTestBase {
       $edit += $contact;
     }
     switch ($preview_mode) {
-      case DRUPAL_REQUIRED:
+      case CommentPreviewMode::Required:
         // Preview required so no save button should be found.
         $this->assertSession()->buttonNotExists('Save');
         $this->submitForm($edit, 'Preview');
         // Don't break here so that we can test post-preview field presence and
         // function below.
-      case DRUPAL_OPTIONAL:
+      case CommentPreviewMode::Optional:
         $this->assertSession()->buttonExists('Preview');
         $this->assertSession()->buttonExists('Save');
         $this->submitForm($edit, 'Save');
         break;
 
-      case DRUPAL_DISABLED:
+      case CommentPreviewMode::Disabled:
         $this->assertSession()->buttonNotExists('Preview');
         $this->assertSession()->buttonExists('Save');
         $this->submitForm($edit, 'Save');
         break;
     }
     $match = [];
-    // Get comment ID
+    // Get comment ID.
     preg_match('/#comment-([0-9]+)/', $this->getURL(), $match);
 
     // Get comment.
@@ -233,7 +237,7 @@ class CommentNonNodeTest extends BrowserTestBase {
    * @param bool $approval
    *   Operation is found on approval page.
    */
-  public function performCommentOperation($comment, $operation, $approval = FALSE) {
+  public function performCommentOperation($comment, $operation, $approval = FALSE): void {
     $edit = [];
     $edit['operation'] = $operation;
     $edit['comments[' . $comment->id() . ']'] = TRUE;
@@ -495,7 +499,7 @@ class CommentNonNodeTest extends BrowserTestBase {
    */
   public function testsNonIntegerIdEntities(): void {
     // Create a bundle for entity_test_string_id.
-    entity_test_create_bundle('entity_test', 'Entity Test', 'entity_test_string_id');
+    EntityTestHelper::createBundle('entity_test', 'Entity Test', 'entity_test_string_id');
     $limited_user = $this->drupalCreateUser([
       'administer entity_test_string_id fields',
       'administer comment types',
@@ -504,9 +508,9 @@ class CommentNonNodeTest extends BrowserTestBase {
     // Visit the Field UI field add page.
     $this->drupalGet('entity_test_string_id/structure/entity_test/fields/add-field');
     // Ensure field isn't shown for string IDs.
-    $this->assertSession()->elementNotExists('css', "[name='new_storage_type'][value='comment']");
+    $this->assertSession()->elementNotExists('xpath', "//a//span[text()='Comments']");
     // Ensure a core field type shown.
-    $this->assertSession()->elementExists('css', "[name='new_storage_type'][value='boolean']");
+    $this->assertSession()->elementExists('xpath', "//a//span[text()='Boolean']");
 
     // Attempt to add a comment-type referencing this entity-type.
     $this->drupalGet('admin/structure/comment/types/add');
@@ -514,16 +518,16 @@ class CommentNonNodeTest extends BrowserTestBase {
     $this->assertSession()->responseNotContains('Test entity with string_id');
 
     // Create a bundle for entity_test_no_id.
-    entity_test_create_bundle('entity_test', 'Entity Test', 'entity_test_no_id');
+    EntityTestHelper::createBundle('entity_test', 'Entity Test', 'entity_test_no_id');
     $this->drupalLogin($this->drupalCreateUser([
       'administer entity_test_no_id fields',
     ]));
     // Visit the Field UI field add page.
     $this->drupalGet('entity_test_no_id/structure/entity_test/fields/add-field');
     // Ensure field isn't shown for empty IDs.
-    $this->assertSession()->elementNotExists('css', "[name='new_storage_type'][value='comment']");
+    $this->assertSession()->elementNotExists('xpath', "//a//span[text()='Comments']");
     // Ensure a core field type shown.
-    $this->assertSession()->elementExists('css', "[name='new_storage_type'][value='boolean']");
+    $this->assertSession()->elementExists('xpath', "//a//span[text()='Boolean']");
   }
 
   /**

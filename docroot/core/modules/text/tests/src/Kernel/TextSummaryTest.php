@@ -8,16 +8,18 @@ use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\filter\Entity\FilterFormat;
 use Drupal\filter\Render\FilteredMarkup;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\filter\Entity\FilterFormat;
 use Drupal\Tests\user\Traits\UserCreationTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests text_summary() with different strings and lengths.
- *
- * @group text
  */
+#[Group('text')]
+#[RunTestsInSeparateProcesses]
 class TextSummaryTest extends KernelTestBase {
 
   use UserCreationTrait;
@@ -70,7 +72,8 @@ class TextSummaryTest extends KernelTestBase {
                 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ' .
                 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.';
     // cSpell:enable
-    // First three sentences add up to: 336, so add one for space and then 3 to get half-way into next word.
+    // First three sentences add up to: 336, so add one for space and then 3 to
+    // get half-way into next word.
     $this->assertTextSummary($text, $expected, NULL, 340);
   }
 
@@ -256,6 +259,7 @@ class TextSummaryTest extends KernelTestBase {
    * Tests required summary.
    */
   public function testRequiredSummary(): void {
+    $this->installEntitySchema('user');
     $this->installEntitySchema('entity_test');
     $this->setUpCurrentUser();
     $field_definition = FieldStorageConfig::create([

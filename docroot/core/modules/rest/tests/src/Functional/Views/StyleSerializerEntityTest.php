@@ -13,6 +13,8 @@ use Drupal\Tests\views\Functional\ViewTestBase;
 use Drupal\views\Entity\View;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\Views;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -20,12 +22,13 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 /**
  * Tests the serializer style plugin.
  *
- * @group rest
  * @see \Drupal\rest\Plugin\views\display\RestExport
  * @see \Drupal\rest\Plugin\views\style\Serializer
  * @see \Drupal\rest\Plugin\views\row\DataEntityRow
  * @see \Drupal\rest\Plugin\views\row\DataFieldRow
  */
+#[Group('rest')]
+#[RunTestsInSeparateProcesses]
 class StyleSerializerEntityTest extends ViewTestBase {
 
   use AssertPageCacheContextsAndTagsTrait;
@@ -53,10 +56,17 @@ class StyleSerializerEntityTest extends ViewTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_serializer_display_field', 'test_serializer_display_entity', 'test_serializer_display_entity_translated', 'test_serializer_node_display_field', 'test_serializer_node_exposed_filter', 'test_serializer_shared_path'];
+  public static $testViews = [
+    'test_serializer_display_field',
+    'test_serializer_display_entity',
+    'test_serializer_display_entity_translated',
+    'test_serializer_node_display_field',
+    'test_serializer_node_exposed_filter',
+    'test_serializer_shared_path',
+  ];
 
   /**
-   * A user with administrative privileges to look at test entity and configure views.
+   * A user with permissions to look at test entity and configure views.
    *
    * @var \Drupal\user\Entity\User|false
    *
@@ -207,7 +217,7 @@ class StyleSerializerEntityTest extends ViewTestBase {
    * @param string $format
    *   The new request format.
    */
-  protected function addRequestWithFormat($format) {
+  protected function addRequestWithFormat($format): void {
     $request = \Drupal::request();
     $request = clone $request;
     $request->setRequestFormat($format);
@@ -220,6 +230,11 @@ class StyleSerializerEntityTest extends ViewTestBase {
    */
   public function testRestRenderCaching(): void {
     $this->drupalLogin($this->adminUser);
+
+    /** @var \Drupal\Core\Cache\VariationCacheFactoryInterface $vc_factory */
+    $variation_cache_factory = \Drupal::service('variation_cache_factory');
+    $variation_cache = $variation_cache_factory->get('render');
+
     /** @var \Drupal\Core\Render\RenderCacheInterface $render_cache */
     $render_cache = \Drupal::service('render_cache');
 
@@ -268,6 +283,10 @@ class StyleSerializerEntityTest extends ViewTestBase {
     $this->assertSession()->responseHeaderEquals('content-type', 'application/json');
     $this->assertCacheContexts($cache_contexts);
     $this->assertCacheTags($cache_tags);
+
+    // Because we warm caches in different requests, we do not properly populate
+    // the internal properties of our variation cache. Reset it.
+    $variation_cache->reset();
     $this->assertNotEmpty($render_cache->get($original));
 
     $result_xml = $this->drupalGet('test/serialize/entity', ['query' => ['_format' => 'xml']]);
@@ -421,7 +440,10 @@ class StyleSerializerEntityTest extends ViewTestBase {
       'created' => 'created',
     ];
 
-    $edit = ['row_options[field_options][name][alias]' => $alias_map['name'], 'row_options[field_options][nothing][alias]' => $alias_map['nothing']];
+    $edit = [
+      'row_options[field_options][name][alias]' => $alias_map['name'],
+      'row_options[field_options][nothing][alias]' => $alias_map['nothing'],
+    ];
     $this->drupalGet($row_options);
     $this->submitForm($edit, 'Apply');
     $this->assertSession()->pageTextContains('The machine-readable name must contain only letters, numbers, dashes and underscores.');
@@ -429,7 +451,10 @@ class StyleSerializerEntityTest extends ViewTestBase {
     // Change the map alias value to a valid one.
     $alias_map['nothing'] = $this->randomMachineName();
 
-    $edit = ['row_options[field_options][name][alias]' => $alias_map['name'], 'row_options[field_options][nothing][alias]' => $alias_map['nothing']];
+    $edit = [
+      'row_options[field_options][name][alias]' => $alias_map['name'],
+      'row_options[field_options][nothing][alias]' => $alias_map['nothing'],
+    ];
     $this->drupalGet($row_options);
     $this->submitForm($edit, 'Apply');
 

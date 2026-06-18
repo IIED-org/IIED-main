@@ -1,10 +1,7 @@
 {% import _self as menus %}
-<div class="admin-toolbar__item">
-  <h4 class="visually-hidden focusable">{{ title }}</h4>
-  <ul class="toolbar-block__list">
-    {{ menus.menu_items(items, attributes, 0) }}
-  </ul>
-</div>
+<ul class="toolbar-block__list">
+  {{ menus.menu_items(items, attributes, 0) }}
+</ul>
 
 {% macro menu_items(items, attributes, menu_level) %}
   {% for item in items %}
@@ -31,7 +28,7 @@
         <li id="{{ item_id }}" class="toolbar-block__list-item">
           {% include 'navigation:toolbar-button' with {
             attributes: item_link_attributes.setAttribute('href', item.url|render|default(null)).setAttribute('data-drupal-tooltip', item.title).setAttribute('data-drupal-tooltip-class', 'admin-toolbar__tooltip'),
-            icon: item.class|clean_class,
+            icon: item.icon,
             html_tag: item_link_tag,
             text: item.title,
             modifiers: [
@@ -50,7 +47,7 @@
               'data-toolbar-popover-control': true,
               'data-has-safe-triangle': true,
             }),
-            icon: item.class|clean_class,
+            icon: item.icon,
             text: item.title,
             modifiers: [
               'expand--side',
@@ -140,6 +137,7 @@
           >
             <span data-toolbar-action class="toolbar-menu__link-action visually-hidden">{{ 'Extend'|t }}</span>
             <span class="toolbar-menu__link-title">{{ item.title }}</span>
+            {{ icon('navigation', 'chevron', { class: 'toolbar-menu__chevron', size: 16 }) }}
           </button>
           <ul class="toolbar-menu toolbar-menu--level-{{ menu_level + 1 }}" inert>
             {{ menus.menu_items(item.below, attributes, menu_level + 1) }}

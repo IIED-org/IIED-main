@@ -16,13 +16,15 @@ use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\Tests\Traits\Core\GeneratePermutationsTrait;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests comment field level access.
- *
- * @group comment
- * @group Access
  */
+#[Group('comment')]
+#[Group('Access')]
+#[RunTestsInSeparateProcesses]
 class CommentFieldAccessTest extends EntityKernelTestBase {
 
   use CommentTestTrait;
@@ -222,8 +224,20 @@ class CommentFieldAccessTest extends EntityKernelTestBase {
 
     // Generate permutations.
     $combinations = [
-      'comment' => [$comment1, $comment2, $comment3, $comment4, $comment5],
-      'user' => [$comment_admin_user, $comment_enabled_user, $comment_no_edit_user, $comment_disabled_user, $anonymous_user],
+      'comment' => [
+        $comment1,
+        $comment2,
+        $comment3,
+        $comment4,
+        $comment5,
+      ],
+      'user' => [
+        $comment_admin_user,
+        $comment_enabled_user,
+        $comment_no_edit_user,
+        $comment_disabled_user,
+        $anonymous_user,
+      ],
     ];
     $permutations = $this->generatePermutations($combinations);
 

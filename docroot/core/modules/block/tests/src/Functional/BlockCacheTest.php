@@ -6,12 +6,14 @@ namespace Drupal\Tests\block\Functional;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests block caching.
- *
- * @group block
  */
+#[Group('block')]
+#[RunTestsInSeparateProcesses]
 class BlockCacheTest extends BrowserTestBase {
 
   /**
@@ -25,7 +27,7 @@ class BlockCacheTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
-   * A user with permission to create and edit books and to administer blocks.
+   * A user with permission to administer blocks.
    *
    * @var object
    */

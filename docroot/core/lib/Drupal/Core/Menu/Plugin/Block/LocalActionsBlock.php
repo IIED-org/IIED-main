@@ -70,7 +70,7 @@ class LocalActionsBlock extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return ['label_display' => FALSE];
+    return ['label_display' => '0'];
   }
 
   /**
@@ -81,6 +81,13 @@ class LocalActionsBlock extends BlockBase implements ContainerFactoryPluginInter
     $local_actions = $this->localActionManager->getActionsForRoute($route_name);
 
     return $local_actions;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createPlaceholder(): bool {
+    return TRUE;
   }
 
 }

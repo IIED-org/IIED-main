@@ -12,12 +12,14 @@ use Drupal\filter\Entity\FilterFormat;
 use Drupal\filter\Render\FilteredMarkup;
 use Drupal\Tests\field\Functional\FunctionalString\StringFieldTest;
 use Drupal\Tests\TestFileCreationTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the creation of text fields.
- *
- * @group text
  */
+#[Group('text')]
+#[RunTestsInSeparateProcesses]
 class TextFieldTest extends StringFieldTest {
 
   use TestFileCreationTrait {
@@ -307,7 +309,7 @@ class TextFieldTest extends StringFieldTest {
   /**
    * Helper function for testTextfieldWidgetsFormatted().
    */
-  public function _testTextfieldWidgetsFormatted($field_type, $widget_type) {
+  public function _testTextfieldWidgetsFormatted($field_type, $widget_type): void {
     // Create a field.
     $field_name = $this->randomMachineName();
     $field_storage = FieldStorageConfig::create([
@@ -398,7 +400,6 @@ class TextFieldTest extends StringFieldTest {
     $this->assertSession()->pageTextContains('entity_test ' . $id . ' has been updated.');
 
     // Display the entity.
-    $this->container->get('entity_type.manager')->getStorage('entity_test')->resetCache([$id]);
     $entity = EntityTest::load($id);
     $display = $display_repository->getViewDisplay($entity->getEntityTypeId(), $entity->bundle(), 'full');
     $content = $display->build($entity);

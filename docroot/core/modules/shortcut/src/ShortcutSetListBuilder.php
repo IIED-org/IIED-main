@@ -16,22 +16,22 @@ class ShortcutSetListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['name'] = t('Name');
+    $header['name'] = $this->t('Name');
     return $header + parent::buildHeader();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOperations(EntityInterface $entity) {
+  public function getDefaultOperations(EntityInterface $entity/* , ?CacheableMetadata $cacheability = NULL */) {
     $operations = parent::getDefaultOperations($entity);
 
     if (isset($operations['edit'])) {
-      $operations['edit']['title'] = t('Edit shortcut set');
+      $operations['edit']['title'] = $this->t('Edit shortcut set');
     }
 
     $operations['list'] = [
-      'title' => t('List links'),
+      'title' => $this->t('List links'),
       'url' => $entity->toUrl('customize-form'),
     ];
     return $operations;

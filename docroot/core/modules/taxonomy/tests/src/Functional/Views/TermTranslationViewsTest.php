@@ -6,12 +6,14 @@ namespace Drupal\Tests\taxonomy\Functional\Views;
 
 use Drupal\Core\Url;
 use Drupal\Tests\taxonomy\Functional\TaxonomyTranslationTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for views translation.
- *
- * @group taxonomy
  */
+#[Group('taxonomy')]
+#[RunTestsInSeparateProcesses]
 class TermTranslationViewsTest extends TaxonomyTestBase {
 
   use TaxonomyTranslationTestTrait;
@@ -79,8 +81,8 @@ class TermTranslationViewsTest extends TaxonomyTestBase {
     $this->drupalLogin($this->rootUser);
 
     foreach ($this->terms as $term) {
-      // Test with "Content: Has taxonomy term ID (with depth)" contextual filter.
-      // Generate base language url and send request.
+      // Test with "Content: Has taxonomy term ID (with depth)" contextual
+      // filter. Generate base language url and send request.
       $url = Url::fromRoute('view.taxonomy_translated_term_name_test.page_1', ['arg_0' => $term->id()])->toString();
       $this->drupalGet($url);
       $this->assertSession()->pageTextContains($term->label());
@@ -106,7 +108,7 @@ class TermTranslationViewsTest extends TaxonomyTestBase {
   /**
    * Setup translated terms in a hierarchy.
    */
-  protected function setUpTerms() {
+  protected function setUpTerms(): void {
     $parent_vid = 0;
     foreach ($this->termTranslationMap as $name => $translation) {
 

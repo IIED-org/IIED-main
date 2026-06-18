@@ -8,12 +8,14 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\entity_test\Entity\EntityTestRev;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the options allowed values api.
- *
- * @group options
  */
+#[Group('options')]
+#[RunTestsInSeparateProcesses]
 class OptionsDynamicValuesApiTest extends OptionsFieldUnitTestBase {
 
   /**
@@ -46,7 +48,7 @@ class OptionsDynamicValuesApiTest extends OptionsFieldUnitTestBase {
       'type' => 'list_string',
       'cardinality' => 1,
       'settings' => [
-        'allowed_values_function' => 'options_test_dynamic_values_callback',
+        'allowed_values_function' => '\Drupal\options_test\OptionsAllowedValues::dynamicValues',
       ],
     ]);
     $this->fieldStorage->save();
@@ -65,7 +67,7 @@ class OptionsDynamicValuesApiTest extends OptionsFieldUnitTestBase {
       ->save();
 
     // Create an entity and prepare test data that will be used by
-    // options_test_dynamic_values_callback().
+    // \Drupal\options_test\OptionsAllowedValues::dynamicValues().
     $values = [
       'user_id' => 2,
       'name' => $this->randomMachineName(),
@@ -77,7 +79,7 @@ class OptionsDynamicValuesApiTest extends OptionsFieldUnitTestBase {
   /**
    * Tests options_allowed_values().
    *
-   * @see options_test_dynamic_values_callback()
+   * @see \Drupal\options_test\OptionsAllowedValues::dynamicValues()
    */
   public function testOptionsAllowedValues(): void {
     // Test allowed values without passed $items.

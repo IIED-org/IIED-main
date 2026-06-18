@@ -75,7 +75,7 @@ class LocalTasksBlock extends BlockBase implements ContainerFactoryPluginInterfa
    */
   public function defaultConfiguration() {
     return [
-      'label_display' => FALSE,
+      'label_display' => '0',
       'primary' => TRUE,
       'secondary' => TRUE,
     ];
@@ -163,6 +163,13 @@ class LocalTasksBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $levels = $form_state->getValue('levels');
     $this->configuration['primary'] = $levels['primary'];
     $this->configuration['secondary'] = $levels['secondary'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createPlaceholder(): bool {
+    return TRUE;
   }
 
 }

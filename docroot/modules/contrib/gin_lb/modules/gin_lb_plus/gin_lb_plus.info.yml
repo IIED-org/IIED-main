@@ -9,7 +9,7 @@ dependencies:
   - gin_lb:gin_lb (>=2.0)
   - section_library:section_library
 
-# Information added by Drupal.org packaging script on 2025-04-29
-version: '2.0.0-beta1'
+# Information added by Drupal.org packaging script on 2025-07-21
+version: '3.0.0-beta1'
 project: 'gin_lb'
-datestamp: 1745915721
+datestamp: 1753078114

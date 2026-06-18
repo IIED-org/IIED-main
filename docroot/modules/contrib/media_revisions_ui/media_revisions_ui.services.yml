@@ -1,5 +1,0 @@
-services:
-  media_revisions_ui.route_subscriber:
-    class: Drupal\media_revisions_ui\Routing\RouteSubscriber
-    tags:
-      - { name: event_subscriber }

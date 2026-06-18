@@ -6,12 +6,14 @@ namespace Drupal\Tests\filter\Functional;
 
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the default text formats for different users.
- *
- * @group filter
  */
+#[Group('filter')]
+#[RunTestsInSeparateProcesses]
 class FilterDefaultFormatTest extends BrowserTestBase {
 
   /**
@@ -82,7 +84,7 @@ class FilterDefaultFormatTest extends BrowserTestBase {
   /**
    * Rebuilds text format and permission caches in the thread running the tests.
    */
-  protected function resetFilterCaches() {
+  protected function resetFilterCaches(): void {
     filter_formats_reset();
   }
 
