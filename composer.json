@@ -337,13 +337,8 @@
         "3512164": "https://git.drupalcode.org/project/views_dependent_filters/-/merge_requests/12.diff"
       },
       "drupal/pdfpreview": {
-        "3344262 Add alt text": "https://www.drupal.org/files/issues/2025-08-15/pdfpreview-missing-alt-text.patch",
-        "3344262 test for empty alt": "patches/3344262-pdfpreview-missing-alt-text.patch",
-        "3344262 remove title": "patches/3344262-pdfpreview-remove-title.patch"
-      },
-      "drupal/computed_field": {
-       "3539496 Make v3 compatible with Drupal 11": "https://www.drupal.org/files/issues/2026-05-29/3539496-17.patch"
-      },
+        "3344262 test for empty alt": "https://www.drupal.org/files/issues/2026-01-23/pdfpreview-missing-alt-text_0.patch"
+       },
       "drupal/webform_shs": {
         "3435681 d11 compatibility":"https://www.drupal.org/files/issues/2024-03-25/webform_shs.2.0.0-beta1.rector.patch"
       }
