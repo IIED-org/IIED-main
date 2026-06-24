@@ -1,8 +1,5 @@
-@import url("fonts.css");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer base {
   h1 {
@@ -94,7 +91,7 @@
     @apply border-b-2 border-iiedblue-500;
   }
   .keypoint {
-    @apply list-none pl-0 !important;
+    @apply list-none! pl-0!;
   }
   .keypoint li {
     @apply before:content-keypoint before:mr-2;
@@ -275,11 +272,11 @@
 
   /*-- highcharts --*/
   .highcharts-title {
-    @apply text-xl font-headline !important;
+    @apply text-xl! font-headline!;
   }
 
   .highcharts-subtitle {
-    @apply text-lg !important;
+    @apply text-lg!;
   }
 
   .hc-dimmed {
@@ -503,7 +500,7 @@
     }
 
   .search-page .filter-chip, .views-filters-summary {
-    @apply text-balance my-1 flex inline-flex;
+    @apply text-balance my-1 flex;
     .item {
       @apply inline-flex items-center ml-2 mt-1 space-x-1 border border-gray-300 rounded-full;
       .value {
@@ -557,7 +554,7 @@
 
   /*-- sign up forms --*/
   #mc_embed_signup .input-group li input {
-    @apply mr-2 border border-gray-300 rounded shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-200 focus:ring-opacity-50;
+    @apply mr-2 border border-gray-300 rounded shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-100;
   }
 
  #mc_embed_signup #mc-embedded-subscribe {
