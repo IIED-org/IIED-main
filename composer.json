@@ -155,6 +155,7 @@
     "drupal/readonlymode": "^1.1",
     "drupal/real_aes": "^2.5",
     "drupal/redirect": "^1.7",
+    "drupal/schema_metatag": "^3.0",
     "drupal/search404": "^2.2@RC",
     "drupal/search_api": "^1.23",
     "drupal/search_api_autocomplete": "^1.6",
