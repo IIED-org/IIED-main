@@ -1,0 +1,20 @@
+display:
+  default:
+    display_title: Default
+    display_options:
+      fields:
+        type:
+          label: Type
+        timestamp:
+          label: Date
+        name:
+          label: Utilisateur
+        link:
+          label: Actions
+      exposed_form:
+        options:
+          submit_button: Filter
+      filters:
+        type:
+          expose:
+            label: Type

@@ -16,11 +16,11 @@ dependencies:
     - taxonomy.vocabulary.organisation
   module:
     - address
-    - image
     - layout_builder
     - layout_builder_restrictions
     - layout_discovery
     - link
+    - svg_image
     - text
 third_party_settings:
   layout_builder:

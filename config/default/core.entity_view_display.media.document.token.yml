@@ -1,0 +1,48 @@
+uuid: 423cfc4c-3ede-4c5a-bd84-19533a8e3fbc
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.token
+    - field.field.media.document.field_media_document
+    - field.field.media.document.field_pdf_pages
+    - field.field.media.document.field_size
+    - image.style.card_370
+    - media.type.document
+  module:
+    - layout_builder
+    - pdfpreview
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
+id: media.document.token
+targetEntityType: media
+bundle: document
+mode: token
+content:
+  field_media_document:
+    type: pdfpreview
+    label: hidden
+    settings:
+      image_style: card_370
+      image_link: ''
+      show_description: '1'
+      tag: span
+      image_loading:
+        attribute: lazy
+      fallback_formatter: 0
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_pdf_pages: true
+  field_size: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
