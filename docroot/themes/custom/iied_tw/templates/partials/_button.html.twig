@@ -1,4 +1,4 @@
- <button
+ {# <button
   class="h-12 max-w-xs px-6 py-2 mb-6 text-lg transition-colors duration-150 rounded-full shadow-sm hover:shadow-none bg-iiedorange-500 hover:bg-iiedorange-600 focus:shadow-outline"
 >
   <a
@@ -7,4 +7,11 @@
     title="{{ button_title }}"
     >{{ button_title }}</a
   >
-</button>
+</button> #}
+<a
+  href="{{ url }}"
+  title="{{ button_title }}"
+  class="inline-flex items-center justify-center h-12 max-w-xs px-6 py-2 mb-6 text-lg font-semibold text-gray-900 transition-colors duration-150 rounded-full shadow-sm whitespace-nowrap bg-iiedorange-500 hover:bg-iiedorange-600 hover:text-gray-900 hover:no-underline hover:shadow-none"
+>
+  {{ button_title }}
+</a>

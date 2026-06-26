@@ -1,0 +1,52 @@
+
+/* ------------------------------------------------------------------
+   Drupal / Tailwind v4 compatibility
+
+   Drupal core's unlayered `.hidden` overrides Tailwind v4 responsive
+   display utilities because they are emitted inside @layer utilities.
+   preventing patterns such as: hidden lg:flex or hidden md:block
+
+   These rules intentionally live outside any @layer declaration.
+   Remove if Tailwind/Drupal no longer require this workaround.
+   ------------------------------------------------------------------ */
+
+/* sm */
+@media (min-width: 40rem) {
+  .sm\:block { display: block; }
+  .sm\:inline { display: inline; }
+  .sm\:flex { display: flex; }
+  .sm\:grid { display: grid; }
+  .sm\:hidden { display: none; }
+}
+
+/* md */
+@media (min-width: 48rem) {
+  .md\:block { display: block; }
+  .md\:inline { display: inline; }
+  .md\:flex { display: flex; }
+  .md\:grid { display: grid; }
+  .md\:hidden { display: none; }
+}
+
+/* lg */
+@media (min-width: 64rem) {
+  .lg\:block { display: block; }
+  .lg\:inline { display: inline; }
+  .lg\:flex { display: flex; }
+  .lg\:grid { display: grid; }
+  .lg\:hidden { display: none; }
+}
+
+/* xl */
+@media (min-width: 80rem) {
+  .xl\:block { display: block; }
+  .xl\:inline { display: inline; }
+  .xl\:flex { display: flex; }
+  .xl\:grid { display: grid; }
+  .xl\:hidden { display: none; }
+}
+
+/* 2xl */
+@media (min-width: 96rem) {
+  .\32xl\:grid { display: grid; }
+}
