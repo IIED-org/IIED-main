@@ -253,7 +253,7 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: '<a class="h-10 px-3 py-2 mb-4 transition bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500" href="javascript:history.back();">Go back to previous page</a>'
+            value: '<a class="h-10 px-3 py-2 mb-4 transition bg-white border border-gray-300 rounded-full shadow-xs hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500" href="javascript:history.back();">Go back to previous page</a>'
             format: full_html
           tokenize: false
       sorts: {  }
@@ -1181,7 +1181,7 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: '<span class="inline-flex leading-[1.5]"><a href="/search"><input data-drupal-selector="edit-reset-search-3" type="submit" id="edit-reset-search--3" name="reset" value="Clear search" class="button btn-outline form-submit h-10 px-3 py-0 ml-2 transition-colors duration-150 rounded-full cursor-pointer" /></a></span>'
+            value: '<span class="inline-flex leading-[1.5]"><a href="/search"><input data-drupal-selector="edit-reset-search-3" type="submit" id="edit-reset-search--3" name="reset" value="Clear search" class="h-10 px-3 py-0 ml-2 transition-colors duration-150 rounded-full cursor-pointer button btn-outline form-submit" /></a></span>'
             format: full_html
           tokenize: false
       exposed_block: true
