@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 id: grey_divider_below
 label: 'Grey divider below'
-classes: 'mb-6 border-b border-gray-300'
+classes: 'mb-6 border-b border-stone-300'
 type: section
 group: default
 block_restrictions: {  }

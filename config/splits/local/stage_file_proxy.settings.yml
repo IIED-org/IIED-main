@@ -3,5 +3,5 @@ origin: 'https://www.iied.org'
 origin_dir: sites/default/files
 proxy_headers: ''
 use_imagecache_root: true
-verify: false
+verify: true
 excluded_extensions: ''
