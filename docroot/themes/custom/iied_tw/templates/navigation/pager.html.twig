@@ -38,7 +38,7 @@
     <ul class="inline-flex -space-x-px overflow-hidden pager__items js-pager__items rounded-xl">
       {# Print first item if we are not on the first page. #}
       {% if items.first %}
-        <li class="py-2 border border-gray-300 rounded-l-xl pager__item pager__item--first">
+        <li class="py-2 border border-stone-300 rounded-l-xl pager__item pager__item--first">
           <a href="{{ items.first.href }}" class="px-4 py-2" title="{{ 'Go to first page'|t }}"{{ items.first.attributes|without('href', 'title') }}>
             <span class="visually-hidden">{{ 'First page'|t }}</span>
             <span aria-hidden="true">{{ items.first.text|default('« First'|t) }}</span>
@@ -47,7 +47,7 @@
       {% endif %}
       {# Print previous item if we are not on the first page. #}
       {% if items.previous %}
-        <li class="py-2 border border-gray-300 pager__item pager__item--previous">
+        <li class="py-2 border border-stone-300 pager__item pager__item--previous">
           <a href="{{ items.previous.href }}" class="px-4 py-2" title="{{ 'Go to previous page'|t }}" rel="prev"{{ items.previous.attributes|without('href', 'title', 'rel') }}>
             <span class="visually-hidden">{{ 'Previous page'|t }}</span>
             <span aria-hidden="true">{{ items.previous.text|default('‹ Previous'|t) }}</span>
@@ -56,11 +56,11 @@
       {% endif %}
       {# Add an ellipsis if there are further previous pages. #}
       {% if ellipses.previous %}
-        <li class="px-4 py-2 border border-gray-300 pager__item pager__item--ellipsis" role="presentation">&hellip;</li>
+        <li class="px-4 py-2 border border-stone-300 pager__item pager__item--ellipsis" role="presentation">&hellip;</li>
       {% endif %}
       {# Now generate the actual pager piece. #}
       {% for key, item in items.pages %}
-        <li class="border border-gray-300 py-2 [&:nth-child(n+4)]:hidden sm:[&:nth-child(n+4)]:inline pager__item{{ current == key ? ' is-active bg-iiedblue-300' : '' }}">
+        <li class="border border-stone-300 py-2 [&:nth-child(n+4)]:hidden sm:[&:nth-child(n+4)]:inline pager__item{{ current == key ? ' is-active bg-iiedblue-300' : '' }}">
           {% if current == key %}
             {% set title = 'Current page'|t %}
           {% else %}
@@ -76,11 +76,11 @@
       {% endfor %}
       {# Add an ellipsis if there are further next pages. #}
       {% if ellipses.next %}
-        <li class="px-4 py-2 border border-gray-300 pager__item pager__item--ellipsis" role="presentation">&hellip;</li>
+        <li class="px-4 py-2 border border-stone-300 pager__item pager__item--ellipsis" role="presentation">&hellip;</li>
       {% endif %}
       {# Print next item if we are not on the last page. #}
       {% if items.next %}
-        <li class="py-2 border border-gray-300 pager__item pager__item--next">
+        <li class="py-2 border border-stone-300 pager__item pager__item--next">
           <a href="{{ items.next.href }}" class="px-4 py-2" title="{{ 'Go to next page'|t }}" rel="next"{{ items.next.attributes|without('href', 'title', 'rel') }}>
             <span class="visually-hidden">{{ 'Next page'|t }}</span>
             <span aria-hidden="true">{{ items.next.text|default('Next ›'|t) }}</span>
@@ -89,7 +89,7 @@
       {% endif %}
       {# Print last item if we are not on the last page. #}
       {% if items.last %}
-        <li class="py-2 border border-gray-300 rounded-r-xl pager__item pager__item--last">
+        <li class="py-2 border border-stone-300 rounded-r-xl pager__item pager__item--last">
           <a href="{{ items.last.href }}" class="px-4 py-2" title="{{ 'Go to last page'|t }}"{{ items.last.attributes|without('href', 'title') }}>
             <span class="visually-hidden">{{ 'Last page'|t }}</span>
             <span aria-hidden="true">{{ items.last.text|default('Last »'|t) }}</span>

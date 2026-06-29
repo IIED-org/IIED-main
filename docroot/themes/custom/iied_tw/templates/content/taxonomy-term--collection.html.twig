@@ -42,7 +42,7 @@
               {% if key is not empty %}
                 <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.tid.value}) }}">
                 {{ item.entity.label }}</a>
-                {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-gray-300"></div>' }}
+                {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-stone-300"></div>' }}
               {% endif %}
             {% endfor %}
           </div>
@@ -101,10 +101,10 @@
         x-init="$refs[tab].focus()"
         id="tab_wrapper"
         >
-        <nav class="border-b border-gray-300">
+        <nav class="border-b border-stone-300">
           <div class="container flex flex-row">
-            <a x-ref="inthiscollection" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'inthiscollection' }" @click.prevent="tab = 'inthiscollection'; window.location.hash = 'inthiscollection'" href="#">{{ tabCollectionLabel }}</a>
-            <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">{{ tabOverviewLabel }}</a>
+            <a x-ref="inthiscollection" class="block px-6 py-2 text-lg font-semibold text-stone-700 focus:border-b-2 border-iiedblue-500 hover:text-stone-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'inthiscollection' }" @click.prevent="tab = 'inthiscollection'; window.location.hash = 'inthiscollection'" href="#">{{ tabCollectionLabel }}</a>
+            <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-stone-700 focus:border-b-2 border-iiedblue-500 hover:text-stone-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">{{ tabOverviewLabel }}</a>
           </div>  
         </nav>
           <div class="pt-6 tab-panel" x-show="tab === 'inthiscollection'" x-transition:enter.duration.750ms>

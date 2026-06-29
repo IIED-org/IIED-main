@@ -9,7 +9,7 @@ For general featured card display
     {{ node.field_main_image.value.alt }}
         <a href="{{ url }}" class="hover:no-underline">
           <div
-            class="flex flex-col h-full overflow-hidden transition-shadow bg-white border border-gray-300 rounded-xl hover:shadow-lg group"
+            class="flex flex-col h-full overflow-hidden transition-shadow bg-white border border-stone-300 rounded-xl hover:shadow-lg group"
           >
             <div class="relative">
 
@@ -21,7 +21,7 @@ For general featured card display
 
               {% block label %}
               <div
-                class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-gray-900 bg-iiedblue-500 rounded-tr-xl"
+                class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-stone-900 bg-iiedblue-500 rounded-tr-xl"
               >
                {{ node.type.entity.label() }}
               </div>
@@ -30,11 +30,11 @@ For general featured card display
             </div>
 
             <div class="relative z-20 flex flex-col justify-between h-full p-4 -mt-3 bg-white rounded-odd-even">
-              <h4 class="mb-4 text-xl leading-relaxed text-gray-900 lg:text-2xl">
+              <h4 class="mb-4 text-xl leading-relaxed text-stone-900 lg:text-2xl">
                 {{ label }}
               </h4>
               {% block date %}
-              <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
+              <p class="text-stone-500">{{ node.getCreatedTime|date('d F Y') }}</p>
               {% endblock %}
             </div>
           </div>

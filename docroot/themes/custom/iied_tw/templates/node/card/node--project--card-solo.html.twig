@@ -3,9 +3,9 @@
     {% block date %}
 
         {% if node.field_date_or_caption.value is not empty %}
-        <p class="text-gray-500">{{ node.field_date_or_caption.value }}</p>
+        <p class="text-stone-500">{{ node.field_date_or_caption.value }}</p>
         {% else %}
-        <p class="text-gray-500 lowercase first-letter:uppercase">
+        <p class="text-stone-500 lowercase first-letter:uppercase">
         {% set allowed_values = node.field_project_status.getSetting('allowed_values') %}
         {% set list_values = node.field_project_status.getValue() %}
         {% for list_value in list_values %}

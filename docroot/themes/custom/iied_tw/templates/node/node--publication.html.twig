@@ -167,7 +167,7 @@
 					{% if series_term.field_url.uri and series_term.field_logo %}
 						<section class="py-6">
 							<a href="{{ series_term.field_url.uri }}">
-								<div class="container flex-row px-6 py-2 border border-gray-300 bg-iiedorange-5 hover:bg-iiedorange-10 rounded-xl md:flex">
+								<div class="container flex-row px-6 py-2 border border-stone-300 bg-iiedorange-5 hover:bg-iiedorange-10 rounded-xl md:flex">
 									{% if series_term.field_logo %}
 										<img title="{{ series_term.field_logo.title }}" alt="{{ series_term.field_logo.alt }}" class="object-contain h-auto pr-4 md:w-2/12" src="{{ series_term.field_logo|file_uri|image_style('search_cover') }}"/>
 									{% endif %}
@@ -189,7 +189,7 @@
 	{# related project (only if no series link) #}
 
 	{% if content.field_project[0] %}
-		<section class="bg-gray-100">
+		<section class="bg-stone-100">
 			<div class="container py-8 mx-auto">
 				{% if not series_term.field_url.uri %}
 					<h2 class="mb-4">Related project</h2>

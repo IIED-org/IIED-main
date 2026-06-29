@@ -7,7 +7,7 @@ Card to display related content
 
         <a href="{{ url }}" class="hover:no-underline">
           <div
-            class="flex flex-row h-full overflow-hidden transition-shadow bg-white border border-gray-300 lg:flex-col rounded-xl group hover:shadow-md grow"
+            class="flex flex-row h-full overflow-hidden transition-shadow bg-white border border-stone-300 lg:flex-col rounded-xl group hover:shadow-md grow"
           >
       
             <div class="relative border-r lg:static lg:order-1 lg:border-r-0 lg:border-b-2 border-iiedgreen-500">
@@ -23,12 +23,12 @@ Card to display related content
             </div>
 
             <div class="flex flex-col justify-between w-9/12 p-4 lg:w-full lg:order-2">
-              <h5 class="mb-4 text-xl leading-relaxed text-gray-900">
+              <h5 class="mb-4 text-xl leading-relaxed text-stone-900">
                 {{ label }}
               </h5>
 
               {% block date %}
-              <p class="text-gray-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }} </p>
+              <p class="text-stone-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }} </p>
               {% endblock %}
               
             </div>

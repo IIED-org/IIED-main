@@ -47,10 +47,10 @@
   {% if multiple %}
     <div{{ attributes }}>
       {% for item in items %}
-        <div{{ item.attributes.addClass('relative flex flex-col items-center px-6 py-4 mb-10 ml-10 space-y-4 bg-gray-100 shadow-sm rounded-xl md:flex-row md:space-y-0') }}>
+        <div{{ item.attributes.addClass('relative flex flex-col items-center px-6 py-4 mb-10 ml-10 space-y-4 bg-stone-100 shadow-sm rounded-xl md:flex-row md:space-y-0') }}>
           <div class="absolute z-10 w-6 h-6 mt-1 border-2 border-white rounded-full shadow-sm bg-iiedgreen-500 -left-10 -translate-x-2/4 md:mt-0"
           ></div>
-          <div class="absolute z-0 w-10 h-0.5 bg-gray-300 -left-10"></div>
+          <div class="absolute z-0 w-10 h-0.5 bg-stone-300 -left-10"></div>
           <div class="flex-auto">
         {{ item.content }}
           </div>
@@ -59,10 +59,10 @@
     </div>
   {% else %}
     {% for item in items %}
-        <div{{ item.attributes.addClass('relative flex flex-col items-center px-6 py-4 mb-10 ml-10 space-y-4 bg-gray-100 shadow-sm rounded-xl md:flex-row md:space-y-0') }}>
+        <div{{ item.attributes.addClass('relative flex flex-col items-center px-6 py-4 mb-10 ml-10 space-y-4 bg-stone-100 shadow-sm rounded-xl md:flex-row md:space-y-0') }}>
           <div class="absolute z-10 w-6 h-6 mt-1 border-2 border-white rounded-full shadow-sm bg-iiedgreen-500 -left-10 -translate-x-2/4 md:mt-0"
           ></div>
-          <div class="absolute z-0 w-10 h-0.5 bg-gray-300 -left-10"></div>
+          <div class="absolute z-0 w-10 h-0.5 bg-stone-300 -left-10"></div>
           <div class="flex-auto">
         {{ item.content }}
           </div>
