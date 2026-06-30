@@ -49,7 +49,7 @@ class WebformElementTextFormatTest extends WebformElementBrowserTestBase {
   /**
    * Test text format element.
    */
-  public function testTextFormat() {
+  public function testTextFormat(): void {
     $assert_session = $this->assertSession();
 
     $webform = Webform::load('test_element_text_format');
@@ -85,7 +85,7 @@ class WebformElementTextFormatTest extends WebformElementBrowserTestBase {
   /**
    * Tests webform text format element files.
    */
-  public function testTextFormatFiles() {
+  public function testTextFormatFiles(): void {
     $this->createFilters();
 
     $webform = Webform::load('test_element_text_format');

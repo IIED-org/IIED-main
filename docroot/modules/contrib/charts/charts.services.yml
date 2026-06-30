@@ -30,6 +30,8 @@ services:
       - '@module_handler'
     tags:
       - { name: hook }
+  Drupal\charts\Hook\ChartsHooks:
+    alias: charts.hooks
 
   charts.table_builder:
     class: Drupal\charts\Service\ChartTableBuilder

@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\rdf;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rdf\Functional\Rest\RdfMappingResourceTestBase;
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class RdfMappingHalJsonCookieTest extends RdfMappingResourceTestBase {
 
   use CookieResourceTestTrait;

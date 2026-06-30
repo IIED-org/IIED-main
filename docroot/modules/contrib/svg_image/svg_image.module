@@ -109,7 +109,7 @@ function svg_image_get_image_file_dimensions(File $file) {
         if ($svg) {
           foreach ($svg->attributes() as $attribute => $value) {
             if (in_array($attribute, $neededVariables)) {
-              $variables[$attribute] = (integer) $value;
+              $variables[$attribute] = (int) $value;
             }
           }
         }

@@ -96,9 +96,9 @@ trait ProximityTrait {
     $filter_lng = empty($filter_lng) ? 0 : $filter_lng;
 
     // Pre-calculate filter values.
-    $filter_latcos = cos(deg2rad($filter_lat));
-    $filter_latsin = sin(deg2rad($filter_lat));
-    $filter_lng    = deg2rad($filter_lng);
+    $filter_latcos = (float) cos(deg2rad($filter_lat));
+    $filter_latsin = (float) sin(deg2rad($filter_lat));
+    $filter_lng    = (float) deg2rad($filter_lng);
 
     return "(
       ACOS(LEAST(1,

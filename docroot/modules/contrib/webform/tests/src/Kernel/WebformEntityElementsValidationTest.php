@@ -37,7 +37,7 @@ class WebformEntityElementsValidationTest extends KernelTestBase {
   /**
    * Tests validating elements.
    */
-  public function testValidate() {
+  public function testValidate(): void {
     $tests = [
       /*
       [

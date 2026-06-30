@@ -13,6 +13,12 @@ abstract class FileUploadHalJsonTestBase extends FileUploadResourceTestBase {
   use HalEntityNormalizationTrait;
 
   /**
+   * @var string
+   * Entity type ID under test.
+   */
+  protected static $entityTypeId = 'file';
+
+  /**
    * {@inheritdoc}
    */
   protected static $modules = ['hal'];

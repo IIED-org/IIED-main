@@ -2,11 +2,16 @@
 
 namespace Drupal\Tests\hal\Functional\taxonomy;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\BasicAuthResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class TermHalJsonBasicAuthTest extends TermHalJsonAnonTest {
 
   use BasicAuthResourceTestTrait;

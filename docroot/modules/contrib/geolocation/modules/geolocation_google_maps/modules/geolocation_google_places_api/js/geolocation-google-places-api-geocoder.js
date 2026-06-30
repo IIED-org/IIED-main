@@ -44,7 +44,7 @@
         var componentRestrictions = {};
         if (typeof drupalSettings.geolocation.geocoder.google_places_api.componentRestrictions !== 'undefined') {
           componentRestrictions = drupalSettings.geolocation.geocoder.google_places_api.componentRestrictions;
-          if (componentRestrictions.country !== undefined && !$.isArray(componentRestrictions.country)) {
+          if (componentRestrictions.country !== undefined && !Array.isArray(componentRestrictions.country)) {
             componentRestrictions.country = componentRestrictions.country.split(',');
           }
         }

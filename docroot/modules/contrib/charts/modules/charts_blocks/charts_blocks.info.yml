@@ -1,12 +1,12 @@
 name: Charts Blocks
 type: module
 description: Create Charts blocks without the need for Views.
-core_version_requirement: ^10.3 || ^11
+core_version_requirement: ^10.3 || ^11 || ^12
 package: Charts
 dependencies:
   - drupal:charts
 
-# Information added by Drupal.org packaging script on 2026-04-07
-version: '5.2.0'
+# Information added by Drupal.org packaging script on 2026-06-23
+version: '5.2.2'
 project: 'charts'
-datestamp: 1775594146
+datestamp: 1782213254

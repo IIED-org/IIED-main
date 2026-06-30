@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Kernel;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\user\Entity\User;
@@ -12,6 +15,8 @@ use Drupal\node\Entity\NodeType;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class EntityTranslationNormalizeTest extends NormalizerTestBase {
 
   /**
@@ -26,7 +31,6 @@ class EntityTranslationNormalizeTest extends NormalizerTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->installSchema('system', ['sequences']);
     $this->installConfig(['node', 'content_translation']);
   }
 

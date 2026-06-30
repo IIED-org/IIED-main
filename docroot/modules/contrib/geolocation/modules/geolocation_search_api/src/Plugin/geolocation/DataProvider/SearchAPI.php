@@ -55,7 +55,7 @@ class SearchAPI extends DataProviderBase implements DataProviderInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPositionsFromViewsRow(ResultRow $row, FieldPluginBase $views_field = NULL) {
+  public function getPositionsFromViewsRow(ResultRow $row, ?FieldPluginBase $views_field = NULL) {
     $positions = [];
 
     if (!($views_field instanceof SearchApiEntityField)) {

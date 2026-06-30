@@ -131,7 +131,7 @@ class GeolocationGeometry extends DataProviderBase implements DataProviderInterf
   /**
    * {@inheritdoc}
    */
-  public function getLocationsFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
+  public function getLocationsFromViewsRow(ResultRow $row, ?FieldPluginBase $viewsField = NULL) {
     $locations = parent::getLocationsFromViewsRow($row, $viewsField);
 
     $current_style = $viewsField->displayHandler->getPlugin('style');
@@ -157,7 +157,7 @@ class GeolocationGeometry extends DataProviderBase implements DataProviderInterf
   /**
    * {@inheritdoc}
    */
-  public function getShapesFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
+  public function getShapesFromViewsRow(ResultRow $row, ?FieldPluginBase $viewsField = NULL) {
     $shapes = parent::getShapesFromViewsRow($row, $viewsField);
 
     if (empty($shapes)) {

@@ -8,6 +8,7 @@ use Drupal\charts\Hook\ChartsHooks;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Utility\Token;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -32,18 +33,20 @@ class HookThemeTest extends UnitTestCase {
   protected function setUp(): void {
     parent::setUp();
 
-    // 1. Mock the dependencies needed for the ChartsHooks constructor.
+    // Mock the dependencies needed for the ChartsHooks constructor.
     $requestStack = $this->createMock(RequestStack::class);
     $configFactory = $this->createMock(ConfigFactoryInterface::class);
     $extensionPathResolver = $this->createMock(ExtensionPathResolver::class);
     $moduleHandler = $this->createMock(ModuleHandlerInterface::class);
+    $token = $this->createMock(Token::class);
 
-    // 2. Instantiate the class we want to test.
+    // Instantiate the class we want to test.
     $this->chartsHooks = new ChartsHooks(
       $requestStack,
       $configFactory,
       $extensionPathResolver,
-      $moduleHandler
+      $moduleHandler,
+      $token
     );
 
   }
@@ -54,7 +57,7 @@ class HookThemeTest extends UnitTestCase {
    * @covers ::theme
    */
   public function testTheme(): void {
-    // 3. Call the method directly on the object and check its output.
+    // Call the method directly on the object and check its output.
     $data = $this->chartsHooks->theme();
 
     $this->assertIsArray($data);

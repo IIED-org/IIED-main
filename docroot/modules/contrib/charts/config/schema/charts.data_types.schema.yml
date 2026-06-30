@@ -232,6 +232,11 @@ charts_config:
       label: 'Y axis Display'
     library_config:
       type: charts.settings.library_plugin.[%parent.library]
+    library_configs:
+      type: sequence
+      label: 'Per-library settings'
+      sequence:
+        type: charts.settings.library_plugin.[%key]
     library_type_options:
       type: charts.library_plugin.[%parent.library].options.[%parent.type]
 

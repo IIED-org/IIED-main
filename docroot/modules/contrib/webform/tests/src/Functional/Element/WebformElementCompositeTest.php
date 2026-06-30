@@ -24,7 +24,7 @@ class WebformElementCompositeTest extends WebformElementBrowserTestBase {
   /**
    * Test composite (builder).
    */
-  public function testComposite() {
+  public function testComposite(): void {
     $assert_session = $this->assertSession();
 
     /* ********************************************************************** */

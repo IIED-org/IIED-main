@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\system;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\BasicAuthResourceTestTrait;
 use Drupal\Tests\system\Functional\Rest\MenuResourceTestBase;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class MenuHalJsonBasicAuthTest extends MenuResourceTestBase {
 
   use BasicAuthResourceTestTrait;

@@ -76,6 +76,9 @@ class DateTimeFieldMapping extends FieldMappingBase {
       }
       $content->set($field_id, $field_data);
     }
+    elseif ($field_type == 'timestamp' && $field_value != 0) {
+      $content->set($field_id, $this->convertTimestamp($field_value, $field_definition));
+    }
   }
 
   /**
@@ -99,6 +102,8 @@ class DateTimeFieldMapping extends FieldMappingBase {
         $date_time->getTimestamp(), 'custom',
         DateTimeItemInterface::DATETIME_STORAGE_FORMAT, 'UTC'
       );
+    } elseif ($field_definition->getType() === 'timestamp') {
+      $result = $date_time->getTimestamp();
     } else {
       // Check if field_type of "smartdate" and if so, convert.
       if ($field_definition->getType() == "smartdate") {

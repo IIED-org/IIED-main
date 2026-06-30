@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\node;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\hal\Functional\EntityResource\HalEntityNormalizationTrait;
 use Drupal\Tests\node\Functional\Rest\NodeResourceTestBase;
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
@@ -10,6 +13,8 @@ use Drupal\user\Entity\User;
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class NodeHalJsonAnonTest extends NodeResourceTestBase {
 
   use HalEntityNormalizationTrait;

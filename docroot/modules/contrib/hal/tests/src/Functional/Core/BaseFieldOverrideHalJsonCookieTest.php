@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\Core;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\FunctionalTests\Rest\BaseFieldOverrideResourceTestBase;
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class BaseFieldOverrideHalJsonCookieTest extends BaseFieldOverrideResourceTestBase {
 
   use CookieResourceTestTrait;

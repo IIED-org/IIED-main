@@ -219,7 +219,7 @@ class LocationInputManager extends DefaultPluginManager {
    * @return array
    *   Centre value.
    */
-  public function getForm(array $settings, $context = NULL, array $default_value = NULL) {
+  public function getForm(array $settings, $context = NULL, ?array $default_value = NULL) {
     $form = [];
 
     /*

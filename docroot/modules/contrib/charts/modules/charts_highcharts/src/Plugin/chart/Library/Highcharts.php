@@ -2,12 +2,12 @@
 
 namespace Drupal\charts_highcharts\Plugin\chart\Library;
 
+use Drupal\charts\ApplyRawOptionsTrait;
 use Drupal\charts\Attribute\Chart;
 use Drupal\charts\Element\Chart as ChartElement;
 use Drupal\charts\Plugin\chart\Library\ChartBase;
 use Drupal\charts\TypeManager;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -39,9 +39,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
     "scatter",
     "solidgauge",
     "spline",
-  ]
+  ],
+  example_route: "charts_highcharts_api_example.display",
 )]
 class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
+
+  use ApplyRawOptionsTrait;
 
   /**
    * The element info manager.
@@ -1182,15 +1185,8 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
       $chart_definition['legend']['enabled'] = FALSE;
     }
 
-    // Merge in chart raw options.
-    if (!empty($element['#raw_options'])) {
-      $chart_definition = NestedArray::mergeDeepArray([
-        $chart_definition,
-        $element['#raw_options'],
-      ]);
-    }
-
-    return $chart_definition;
+    // Merge in chart raw options and return the definition.
+    return $this->applyRawOptions($element, $chart_definition);
   }
 
   /**
@@ -1313,12 +1309,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
         }
 
         // Merge in series raw options.
-        if (!empty($element[$key]['#raw_options'])) {
-          $series = NestedArray::mergeDeepArray([
-            $series,
-            $element[$key]['#raw_options'],
-          ]);
-        }
+        $series = $this->applyRawOptions($element[$key], $series);
 
         // Add the series to the main chart definition.
         // Scatter colors adjustment.
@@ -1373,12 +1364,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
             ChartElement::trimArray($series_point);
 
             // Merge in point raw options.
-            if (!empty($data_item['#raw_options'])) {
-              $series_point = NestedArray::mergeDeepArray([
-                $series_point,
-                $data_item['#raw_options'],
-              ]);
-            }
+            $series_point = $this->applyRawOptions($data_item, $series_point);
           }
         }
       }
@@ -1441,12 +1427,7 @@ class Highcharts extends ChartBase implements ContainerFactoryPluginInterface {
         }
 
         // Merge in axis raw options.
-        if (!empty($element[$key]['#raw_options'])) {
-          $axis = NestedArray::mergeDeepArray([
-            $axis,
-            $element[$key]['#raw_options'],
-          ]);
-        }
+        $axis = $this->applyRawOptions($element[$key], $axis);
 
         $chart_definition[$axis_type][] = $axis;
       }

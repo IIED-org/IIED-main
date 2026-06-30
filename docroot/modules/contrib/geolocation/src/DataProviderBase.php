@@ -90,7 +90,7 @@ abstract class DataProviderBase extends PluginBase implements DataProviderInterf
    * @return array
    *   Altered settings.
    */
-  protected function getSettings(array $settings = NULL) {
+  protected function getSettings(?array $settings = NULL) {
     if (is_null($settings)) {
       $settings = $this->configuration;
     }
@@ -101,7 +101,7 @@ abstract class DataProviderBase extends PluginBase implements DataProviderInterf
   /**
    * {@inheritdoc}
    */
-  public function getTokenHelp(FieldDefinitionInterface $fieldDefinition = NULL) {
+  public function getTokenHelp(?FieldDefinitionInterface $fieldDefinition = NULL) {
     if (empty($fieldDefinition)) {
       $fieldDefinition = $this->fieldDefinition;
     }
@@ -214,7 +214,7 @@ abstract class DataProviderBase extends PluginBase implements DataProviderInterf
   /**
    * {@inheritdoc}
    */
-  public function getPositionsFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
+  public function getPositionsFromViewsRow(ResultRow $row, ?FieldPluginBase $viewsField = NULL) {
     $positions = [];
 
     if (!$viewsField) {
@@ -240,7 +240,7 @@ abstract class DataProviderBase extends PluginBase implements DataProviderInterf
   /**
    * {@inheritdoc}
    */
-  public function getLocationsFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
+  public function getLocationsFromViewsRow(ResultRow $row, ?FieldPluginBase $viewsField = NULL) {
     $positions = [];
 
     foreach ($this->getFieldItemsFromViewsRow($row, $viewsField) as $item) {
@@ -253,7 +253,7 @@ abstract class DataProviderBase extends PluginBase implements DataProviderInterf
   /**
    * {@inheritdoc}
    */
-  public function getShapesFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
+  public function getShapesFromViewsRow(ResultRow $row, ?FieldPluginBase $viewsField = NULL) {
     $positions = [];
 
     foreach ($this->getFieldItemsFromViewsRow($row, $viewsField) as $item) {
@@ -266,7 +266,7 @@ abstract class DataProviderBase extends PluginBase implements DataProviderInterf
   /**
    * {@inheritdoc}
    */
-  protected function getFieldItemsFromViewsRow(ResultRow $row, FieldPluginBase $viewsField = NULL) {
+  protected function getFieldItemsFromViewsRow(ResultRow $row, ?FieldPluginBase $viewsField = NULL) {
     if (!$viewsField) {
       $viewsField = $this->viewsField;
     }

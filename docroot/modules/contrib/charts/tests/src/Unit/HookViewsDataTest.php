@@ -8,6 +8,7 @@ use Drupal\charts\Hook\ChartsHooks;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Utility\Token;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -32,23 +33,25 @@ class HookViewsDataTest extends UnitTestCase {
   protected function setUp(): void {
     parent::setUp();
 
-    // 1. Mock all the dependencies required by the ChartsHooks constructor.
+    // Mock all the dependencies required by the ChartsHooks constructor.
     // We don't need to configure them because the viewsData() method doesn't
     // use them.
     $requestStack = $this->createMock(RequestStack::class);
     $configFactory = $this->createMock(ConfigFactoryInterface::class);
     $extensionPathResolver = $this->createMock(ExtensionPathResolver::class);
     $moduleHandler = $this->createMock(ModuleHandlerInterface::class);
+    $token = $this->createMock(Token::class);
 
-    // 2. Instantiate the class we want to test, passing in the mocks.
+    // Instantiate the class we want to test, passing in the mocks.
     $this->chartsHooks = new ChartsHooks(
       $requestStack,
       $configFactory,
       $extensionPathResolver,
-      $moduleHandler
+      $moduleHandler,
+      $token
     );
 
-    // 3. The viewsData() method uses $this->t(). The StringTranslationTrait
+    // The viewsData() method uses $this->t(). The StringTranslationTrait
     // needs a translator. UnitTestCase provides a simple stub for this.
     $this->chartsHooks->setStringTranslation($this->getStringTranslationStub());
   }
@@ -59,7 +62,7 @@ class HookViewsDataTest extends UnitTestCase {
    * @covers ::viewsData
    */
   public function testViewsData(): void {
-    // 4. Call the method directly on the object and run assertions.
+    // Call the method directly on the object and run assertions.
     $data = $this->chartsHooks->viewsData();
 
     $this->assertIsArray($data);

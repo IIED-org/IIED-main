@@ -28,7 +28,7 @@ class WebformNodeReferencesTest extends WebformNodeBrowserTestBase {
   /**
    * Tests webform node references.
    */
-  public function testReferences() {
+  public function testReferences(): void {
     global $base_path;
 
     $assert_session = $this->assertSession();

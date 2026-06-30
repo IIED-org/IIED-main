@@ -57,6 +57,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
   public function __construct(LinkManagerInterface $link_manager, EntityResolverInterface $entity_Resolver, ?EntityTypeManagerInterface $entity_type_manager = NULL) {
     $this->linkManager = $link_manager;
     $this->entityResolver = $entity_Resolver;
+    // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
     $this->entityTypeManager = $entity_type_manager ?: \Drupal::service('entity_type.manager');
   }
 
@@ -182,7 +183,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
   /**
    * {@inheritdoc}
    */
-  public function getUuid($data) {
+  public function getUuid($data): ?string {
     if (isset($data['uuid'])) {
       $uuid = $data['uuid'];
       // The value may be a nested array like $uuid[0]['value'].
@@ -191,6 +192,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
       }
       return $uuid;
     }
+    return NULL;
   }
 
   /**

@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\comment;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\comment\Functional\Rest\CommentTypeResourceTestBase;
 use Drupal\Tests\rest\Functional\BasicAuthResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class CommentTypeHalJsonBasicAuthTest extends CommentTypeResourceTestBase {
 
   use BasicAuthResourceTestTrait;

@@ -46,7 +46,7 @@ interface DataProviderInterface extends PluginInspectionInterface {
    * @return array
    *   Retrieved locations.
    */
-  public function getPositionsFromViewsRow(ResultRow $row, FieldPluginBase $views_field = NULL);
+  public function getPositionsFromViewsRow(ResultRow $row, ?FieldPluginBase $views_field = NULL);
 
   /**
    * Get locations from views row.
@@ -59,7 +59,7 @@ interface DataProviderInterface extends PluginInspectionInterface {
    * @return array
    *   Renderable locations.
    */
-  public function getLocationsFromViewsRow(ResultRow $row, FieldPluginBase $views_field = NULL);
+  public function getLocationsFromViewsRow(ResultRow $row, ?FieldPluginBase $views_field = NULL);
 
   /**
    * Get shapes from views row.
@@ -72,7 +72,7 @@ interface DataProviderInterface extends PluginInspectionInterface {
    * @return array
    *   Renderable shapes.
    */
-  public function getShapesFromViewsRow(ResultRow $row, FieldPluginBase $views_field = NULL);
+  public function getShapesFromViewsRow(ResultRow $row, ?FieldPluginBase $views_field = NULL);
 
   /**
    * Get positions from field item list.
@@ -129,7 +129,7 @@ interface DataProviderInterface extends PluginInspectionInterface {
    * @return array
    *   Token help element.
    */
-  public function getTokenHelp(FieldDefinitionInterface $fieldDefinitionInterface = NULL);
+  public function getTokenHelp(?FieldDefinitionInterface $fieldDefinitionInterface = NULL);
 
   /**
    * Provide data provider settings form array.

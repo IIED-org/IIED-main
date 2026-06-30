@@ -8,7 +8,7 @@ dependencies:
   - 'clientside_validation:clientside_validation'
   - 'clientside_validation:clientside_validation_jquery'
 
-# Information added by Drupal.org packaging script on 2026-06-04
-version: '6.3.0-rc1'
+# Information added by Drupal.org packaging script on 2026-06-22
+version: '6.3.0-rc2'
 project: 'webform'
-datestamp: 1780611596
+datestamp: 1782137802

@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\block_content;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Core\Cache\Cache;
 use Drupal\Tests\block_content\Functional\Rest\BlockContentResourceTestBase;
 use Drupal\Tests\hal\Functional\EntityResource\HalEntityNormalizationTrait;
@@ -10,6 +13,8 @@ use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class BlockContentHalJsonAnonTest extends BlockContentResourceTestBase {
 
   use HalEntityNormalizationTrait;

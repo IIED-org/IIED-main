@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Kernel;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Core\Url;
 use Drupal\entity_test\Entity\EntityTestMulRev;
 use Drupal\field\Entity\FieldConfig;
@@ -13,6 +16,8 @@ use Drupal\Tests\serialization\Kernel\NormalizerTestBase;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class EntityResolverTest extends NormalizerTestBase {
 
   /**
@@ -29,6 +34,9 @@ class EntityResolverTest extends NormalizerTestBase {
    */
   protected $format = 'hal_json';
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp(): void {
     parent::setUp();
 

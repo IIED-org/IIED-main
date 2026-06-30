@@ -50,7 +50,7 @@ function geolocation_address_geolocation_field_map_widget_alter(&$element, $cont
       'drupalSettings' => [
         'geolocation' => [
           'addressIntegration' => [
-            $element['widget']['#field_name'] => [
+            implode('-', str_replace('_', '-', $element['widget']['#parents'])) => [
               'geocoder' => $settings['geocoder'],
               'settings' => $settings['settings'],
               'address_field' => $settings['address_field'],

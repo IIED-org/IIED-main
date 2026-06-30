@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\block;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\block\Functional\Rest\BlockResourceTestBase;
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class BlockHalJsonCookieTest extends BlockResourceTestBase {
 
   use CookieResourceTestTrait;

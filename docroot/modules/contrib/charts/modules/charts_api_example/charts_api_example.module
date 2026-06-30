@@ -17,23 +17,3 @@ use Drupal\Core\Routing\RouteMatchInterface;
 function charts_api_example_help($route_name, RouteMatchInterface $route_match) {
   return \Drupal::service('charts_api_example.hooks')->help($route_name, $route_match);
 }
-
-/**
- * Implements hook_chart_definition_CHART_ID_alter().
- *
- * @phpstan-ignore-next-line
- */
-#[LegacyHook]
-function charts_api_example_chart_definition_example_id_php_alter(&$chart) {
-  return \Drupal::service('charts_api_example.hooks')->chartDefinitionExampleIdPhpAlter($chart);
-}
-
-/**
- * Implements hook_chart_alter().
- *
- * @phpstan-ignore-next-line
- */
-#[LegacyHook]
-function charts_api_example_chart_alter(array &$element, ?string $chart_id) {
-  return \Drupal::service('charts_api_example.hooks')->chartAlter($element, $chart_id);
-}

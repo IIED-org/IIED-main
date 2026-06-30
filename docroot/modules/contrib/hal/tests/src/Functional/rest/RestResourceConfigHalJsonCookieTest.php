@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\rest;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 use Drupal\Tests\rest\Functional\Rest\RestResourceConfigResourceTestBase;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class RestResourceConfigHalJsonCookieTest extends RestResourceConfigResourceTestBase {
 
   use CookieResourceTestTrait;

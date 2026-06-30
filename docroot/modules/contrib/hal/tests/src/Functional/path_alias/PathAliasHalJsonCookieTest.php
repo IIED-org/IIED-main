@@ -2,11 +2,16 @@
 
 namespace Drupal\Tests\hal\Functional\path_alias;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class PathAliasHalJsonCookieTest extends PathAliasHalJsonTestBase {
 
   use CookieResourceTestTrait;

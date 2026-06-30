@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\search;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 use Drupal\Tests\search\Functional\Rest\SearchPageResourceTestBase;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class SearchPageHalJsonCookieTest extends SearchPageResourceTestBase {
 
   use CookieResourceTestTrait;

@@ -23,7 +23,7 @@ class WebformScheduledEmailTest extends WebformNodeBrowserTestBase {
   /**
    * Tests webform schedule email handler.
    */
-  public function testWebformScheduledEmail() {
+  public function testWebformScheduledEmail(): void {
     // Set default timezone to America/Los_Angeles.
     $this->config('system.date')
       ->set('timezone.default', 'America/Los_Angeles')

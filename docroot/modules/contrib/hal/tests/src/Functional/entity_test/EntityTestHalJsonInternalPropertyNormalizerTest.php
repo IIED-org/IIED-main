@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\entity_test;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Core\Cache\Cache;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -13,6 +16,8 @@ use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class EntityTestHalJsonInternalPropertyNormalizerTest extends EntityTestHalJsonAnonTest {
 
   use AnonResourceTestTrait, HalEntityNormalizationTrait;

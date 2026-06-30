@@ -26,7 +26,7 @@ class WebformElementComputedJavaScriptTest extends WebformWebDriverTestBase {
   /**
    * Tests computed element Ajax.
    */
-  public function testComputedElementAjax() {
+  public function testComputedElementAjax(): void {
     $session = $this->getSession();
     $page = $session->getPage();
     $assert_session = $this->assertSession();

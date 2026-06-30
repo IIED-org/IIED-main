@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Kernel;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\file\Entity\File;
 
 /**
@@ -9,6 +12,8 @@ use Drupal\file\Entity\File;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class FileNormalizeTest extends NormalizerTestBase {
 
   /**

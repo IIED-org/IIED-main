@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\workflows;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 use Drupal\Tests\workflows\Functional\Rest\WorkflowResourceTestBase;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class WorkflowHalJsonAnonTest extends WorkflowResourceTestBase {
 
   use AnonResourceTestTrait;
