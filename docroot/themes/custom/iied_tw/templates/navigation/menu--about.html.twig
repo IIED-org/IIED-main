@@ -34,12 +34,12 @@
   {% macro menu_links(items, attributes, menu_level) %}
     {% import _self as menus %}
     {% if items %}
-      <nav class="container flex items-start justify-between pb-2 my-6 border-b border-gray-300 lg:border-b-0">
+      <nav class="container flex items-start justify-between pb-2 my-6 border-b border-stone-300 lg:border-b-0">
         <ul{{ attributes.addClass('flex', 'flex-col', 'lg:flex-row', 'tertiary-menu', 'space-x-0', 'lg:space-x-2') }}>
           {# Always visible first item: Explicitly kept outside of any conditional visibility control #}
           {% set first_item = items|first %}
           <li{{ first_item.attributes.addClass('block') }}>
-            {{ link(first_item.title, first_item.url, { 'class':['block', 'py-2', 'px-4', 'text-gray-900', 'hover:text-gray-900', 'visited:text-gray-900', 'font-semibold', 'rounded-full', 'hover:bg-iiedgreen-10'] }) }}
+            {{ link(first_item.title, first_item.url, { 'class':['block', 'py-2', 'px-4', 'text-stone-900', 'hover:text-stone-900', 'visited:text-stone-900', 'font-semibold', 'rounded-full', 'hover:bg-iiedgreen-10'] }) }}
           </li>
           
           {# Loop through the remaining items in the menu, ensuring visibility control is correctly handled #}
@@ -48,7 +48,7 @@
             {% if not loop.first %}
               <li{{ item.attributes.addClass('block lg:block') }}
                   x-show="isOpen || isLargeScreen">
-                {{ link(item.title, item.url, { 'class':['block', 'py-2', 'px-4', 'text-gray-900', 'hover:text-gray-900', 'visited:text-gray-900', 'font-semibold', 'rounded-full', 'hover:bg-iiedgreen-10' ] }) }}
+                {{ link(item.title, item.url, { 'class':['block', 'py-2', 'px-4', 'text-stone-900', 'hover:text-stone-900', 'visited:text-stone-900', 'font-semibold', 'rounded-full', 'hover:bg-iiedgreen-10' ] }) }}
               </li>
             {% endif %}
           {% endfor %}
@@ -57,7 +57,7 @@
         {# Toggle button shown only on small screens #}
         <div class="flex items-center lg:hidden">
           <button @click="isOpen = !isOpen"
-                  class="flex items-center justify-center w-10 h-10 text-gray-900 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-iiedblue-500">
+                  class="flex items-center justify-center w-10 h-10 text-stone-900 border border-stone-300 rounded-full hover:bg-stone-100 hover:border-iiedblue-500">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
                 class="w-6 h-6 transition-transform duration-100" :class="{'rotate-180': isOpen}">
               <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />

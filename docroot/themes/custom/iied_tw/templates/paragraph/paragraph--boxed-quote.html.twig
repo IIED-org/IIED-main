@@ -55,7 +55,7 @@
 
 
 
-    <blockquote class="p-4 text-xl border border-gray-300 font-headline text-iiedpink-700 rounded-xl">
+    <blockquote class="p-4 text-xl border border-stone-300 font-headline text-iiedpink-700 rounded-xl">
 
       <div class="mb-6">{{ content.field_quote_text }}</div>
         {% if content.field_quote_citation is not empty %}
@@ -63,7 +63,7 @@
             {{ content.field_quote_citation }}
           {% endset %}
 
-        <cite class="flex items-center space-x-2 font-sans text-base not-italic font-normal text-gray-700">
+        <cite class="flex items-center space-x-2 font-sans text-base not-italic font-normal text-stone-700">
           {% if content.quote_author is not empty %}
           {{ content.quote_author }}
           {% endif %} 

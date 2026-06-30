@@ -8,7 +8,7 @@ For large 3-4 col featured card display
 
         <a href="{{ url }}" class="hover:no-underline">
           <div
-            class="flex flex-col h-full overflow-hidden transition-shadow bg-white border border-gray-300 lg:relative lg:flex-row group rounded-xl hover:shadow-lg hover:brightness-95"
+            class="flex flex-col h-full overflow-hidden transition-shadow bg-white border border-stone-300 lg:relative lg:flex-row group rounded-xl hover:shadow-lg hover:brightness-95"
           >
             <div class="relative lg:static lg:order-2">
 
@@ -20,7 +20,7 @@ For large 3-4 col featured card display
               
               {% block lglabel %}
               <div
-                class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-gray-900 lg:h-10 lg:top-0 lg:z-30 bg-iiedblue-500 rounded-tr-xl lg:rounded-tr-none lg:rounded-br-xl"
+                class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-stone-900 lg:h-10 lg:top-0 lg:z-30 bg-iiedblue-500 rounded-tr-xl lg:rounded-tr-none lg:rounded-br-xl"
               >
                {{ node.type.entity.label() }}
               </div>
@@ -52,14 +52,14 @@ For large 3-4 col featured card display
                   />
                 </svg>
               <div>  
-              <h4 class="mb-6 text-xl text-gray-900 lg:text-2xl lg:mt-8">
+              <h4 class="mb-6 text-xl text-stone-900 lg:text-2xl lg:mt-8">
                 {{ label }}
               </h4>
               {% block tagline %}
               {% endblock %}
               </div>
               {% block date %}
-              <p class="text-gray-500">{{ node.getCreatedTime|date('d F Y') }}</p>
+              <p class="text-stone-500">{{ node.getCreatedTime|date('d F Y') }}</p>
               {% endblock %}
             </div>
           </div>

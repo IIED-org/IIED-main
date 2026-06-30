@@ -47,7 +47,7 @@
     <div{{ attributes.addClass('flex flex-wrap items-center space-x-3') }}>
       {% for item in items %}
         <div{{ item.attributes }}>{{ item.content }}</div>
-        {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-gray-300"></div>' }}
+        {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-stone-300"></div>' }}
       {% endfor %}
     </div>
   {% else %}

@@ -5,5 +5,5 @@
     {% else %}
         {% set eventDate = node.getCreatedTime %}
     {% endif %}
-    <div class="text-gray-500">{{ node.type.entity.label() }}, {{ eventDate|date('d F Y') }} </div>
+    <div class="text-stone-500">{{ node.type.entity.label() }}, {{ eventDate|date('d F Y') }} </div>
 {% endblock %}
