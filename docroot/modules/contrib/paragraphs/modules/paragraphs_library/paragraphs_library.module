@@ -5,6 +5,8 @@
  * Main module file for the Paragraphs Library module.
  */
 
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -293,5 +295,45 @@ function paragraphs_library_entity_bundle_field_info_alter(&$fields, EntityTypeI
 function paragraphs_library_help($route_name, RouteMatchInterface $route_match) {
   if ($route_name === 'entity.paragraphs_library_item.version_history') {
     return '<p>' . t('Revisions allow you to track differences between multiple versions of your content, and revert to older versions.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function paragraphs_library_query_paragraphs_library_item_access_alter(AlterableInterface $query): void {
+  if ($query instanceof SelectInterface && (!\Drupal::currentUser()->hasPermission('administer paragraphs library') && !\Drupal::currentUser()->hasPermission('view any unpublished content'))) {
+    $tables = $query->getTables();
+
+    $base_alias = NULL;
+    $data_alias = $query->getMetaData('access_alias');
+
+    // If the table to filter on is not explicitly provided, try to find it
+    // prefer non-revision_tables.
+    if (!$data_alias) {
+      foreach ($tables as $table) {
+        if ($table['table'] === 'paragraphs_library_item') {
+          $base_alias = $table['alias'];
+        }
+        elseif (!$base_alias && $table['table'] === 'paragraphs_library_item_revision') {
+          $base_alias = $table['alias'];
+        }
+        elseif ($table['table'] === 'paragraphs_library_item_field_data') {
+          $data_alias = $table['alias'];
+        }
+        elseif (!$data_alias && $table['table'] === 'paragraphs_library_item_field_revision') {
+          $data_alias = $table['alias'];
+        }
+      }
+    }
+
+    if ($base_alias && !$data_alias) {
+      $data_alias = $query->innerJoin('paragraphs_library_item_field_data', 'data_table', $base_alias . '.id = %alias.id AND %alias.default_langcode = 1');
+    }
+
+    if ($data_alias) {
+      $query->condition($data_alias . '.status', 1);
+    }
+
   }
 }

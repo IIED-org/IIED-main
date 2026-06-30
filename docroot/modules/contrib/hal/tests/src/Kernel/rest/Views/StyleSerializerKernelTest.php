@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Kernel\rest\Views;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\views\Kernel\ViewsKernelTestBase;
 use Drupal\views\Entity\View;
 use Drupal\views\Tests\ViewTestData;
@@ -10,6 +13,8 @@ use Drupal\views\Tests\ViewTestData;
  * @coversDefaultClass \Drupal\rest\Plugin\views\style\Serializer
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class StyleSerializerKernelTest extends ViewsKernelTestBase {
 
   /**
@@ -34,7 +39,7 @@ class StyleSerializerKernelTest extends ViewsKernelTestBase {
   /**
    * @covers ::calculateDependencies
    */
-  public function testCalculateDepenencies() {
+  public function testCalculateDependencies() {
     /** @var \Drupal\views\Entity\View $view */
     $view = View::load('test_serializer_display_entity');
     $display = &$view->getDisplay('rest_export_1');

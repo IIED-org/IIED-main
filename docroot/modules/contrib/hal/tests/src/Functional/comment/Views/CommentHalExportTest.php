@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\comment\Views;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Component\Serialization\Json;
 use Drupal\comment\Entity\Comment;
 use Drupal\Tests\comment\Functional\Views\CommentTestBase;
@@ -11,6 +14,8 @@ use Drupal\Tests\comment\Functional\Views\CommentTestBase;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class CommentHalExportTest extends CommentTestBase {
 
   /**
@@ -36,6 +41,9 @@ class CommentHalExportTest extends CommentTestBase {
     'hal',
   ];
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp($import_test_views = TRUE, $modules = ['hal_test_views']): void {
     parent::setUp($import_test_views, $modules);
     // Add another anonymous comment.

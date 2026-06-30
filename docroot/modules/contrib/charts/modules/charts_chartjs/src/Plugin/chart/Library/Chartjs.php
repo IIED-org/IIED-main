@@ -2,10 +2,10 @@
 
 namespace Drupal\charts_chartjs\Plugin\chart\Library;
 
+use Drupal\charts\ApplyRawOptionsTrait;
 use Drupal\charts\Attribute\Chart;
 use Drupal\Component\Utility\Color;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -33,9 +33,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
     "polarArea",
     "scatter",
     "spline",
-  ]
+  ],
+  example_route: "charts_chartjs_api_example.display",
 )]
 class Chartjs extends ChartBase implements ContainerFactoryPluginInterface {
+
+  use ApplyRawOptionsTrait;
 
   /**
    * Constructs a \Drupal\views\Plugin\Block\ViewsBlockBase object.
@@ -197,12 +200,7 @@ class Chartjs extends ChartBase implements ContainerFactoryPluginInterface {
     }
 
     // Merge in chart raw options (applies to both methods).
-    if (!empty($element['#raw_options'])) {
-      $chart_definition = NestedArray::mergeDeepArray([
-        $chart_definition,
-        $element['#raw_options'],
-      ]);
-    }
+    $chart_definition = $this->applyRawOptions($element, $chart_definition);
 
     $element['#attached']['library'][] = 'charts_chartjs/chartjs';
     $element['#attributes']['class'][] = 'charts-chartjs';
@@ -524,12 +522,7 @@ class Chartjs extends ChartBase implements ContainerFactoryPluginInterface {
         }
       }
       // Merge in axis raw options.
-      if (!empty($element[$child]['#raw_options'])) {
-        $categories = NestedArray::mergeDeepArray([
-          $categories,
-          $element[$child]['#raw_options'],
-        ]);
-      }
+      $categories = $this->applyRawOptions($element[$child], $categories);
     }
     $chart_definition['data']['labels'] = $categories;
     return $chart_definition;
@@ -619,12 +612,7 @@ class Chartjs extends ChartBase implements ContainerFactoryPluginInterface {
         }
 
         // Merge in dataset raw options.
-        if (!empty($element[$key]['#raw_options'])) {
-          $dataset = NestedArray::mergeDeepArray([
-            $dataset,
-            $element[$key]['#raw_options'],
-          ]);
-        }
+        $dataset = $this->applyRawOptions($element[$key], $dataset);
 
         $datasets[] = $dataset;
       }

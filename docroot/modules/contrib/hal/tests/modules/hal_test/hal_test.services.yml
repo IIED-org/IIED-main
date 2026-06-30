@@ -1,0 +1,5 @@
+
+services:
+  Drupal\hal_test\Hook\HalTestHooks:
+    class: Drupal\hal_test\Hook\HalTestHooks
+    autowire: true

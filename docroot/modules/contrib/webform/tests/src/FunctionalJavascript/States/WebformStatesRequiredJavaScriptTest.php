@@ -30,7 +30,7 @@ class WebformStatesRequiredJavaScriptTest extends WebformWebDriverTestBase {
   /**
    * Tests webform (custom) #states required logic.
    */
-  public function testRequiredState() {
+  public function testRequiredState(): void {
 
     $session = $this->getSession();
     $page = $session->getPage();

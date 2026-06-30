@@ -11,23 +11,7 @@
   "repositories": {
     "drupal": {
       "type": "composer",
-      "url": "https://packages.drupal.org/8",
-      "exclude": [
-        "drupal/facets_country"
-      ]
-    },
-    "facets_country": {
-      "type": "package",
-      "package": {
-        "name": "drupal/facets_country",
-        "version": "dev-2.x",
-        "type": "drupal-module",
-        "source": {
-          "type": "git",
-          "url": "https://git.drupalcode.org/issue/facets_country-3392705.git",
-          "reference": "2.x"
-        }
-      }
+      "url": "https://packages.drupal.org/8"
     },
     "asset-packagist": {
       "type": "composer",

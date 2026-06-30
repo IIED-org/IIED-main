@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\media;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\media\Functional\Rest\MediaTypeResourceTestBase;
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class MediaTypeHalJsonCookieTest extends MediaTypeResourceTestBase {
 
   use CookieResourceTestTrait;

@@ -333,24 +333,27 @@
   background-color: $paragraph-hover-bg;
 }
 
-@media (min-width: map.get($grid-breakpoints, 'md')) {
-  // Basic node form sticky paragraph tabs implementation.
+// Sticky paragraph tabs - mobile first approach.
+.is-horizontal .paragraphs-tabs:first-of-type {
+  position: sticky;
+  // Toolbar bar minimum z-index is 490 so we need to be lower.
+  z-index: 489;
+  top: 0;
+  // Force horizontal layout on all screen sizes.
+  flex-direction: row;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+// Use same breakpoint value as in core navigation top-bar.css.
+// Only use --drupal-displace-offset-top on larger screens where it's reliable.
+@media (min-width: 64rem) {
   .is-horizontal .paragraphs-tabs:first-of-type {
-    position: sticky;
-    // Toolbar bar minimum z-index is 501 so we need to be lower, other way
-    // our sticky tabs will be on top of toolbar menu.
-    z-index: 500;
-    top: 0;
-    margin-top: 0;
-    padding-top: 5px !important;
-    background-color: rgba(255, 255, 255, 0.9);
+    top: var(--drupal-displace-offset-top, 0);
   }
+}
 
-  .toolbar-fixed .is-horizontal .paragraphs-tabs:first-of-type {
-    top: 39px;
-  }
-
-  .toolbar-fixed.toolbar-horizontal.toolbar-tray-open .is-horizontal .paragraphs-tabs:first-of-type {
-    top: 79px;
-  }
+// When in dialog we need to adjust top and compensate for dialog top vertical
+// padding.
+.ui-dialog > .ui-dialog-content .is-horizontal .paragraphs-tabs:first-of-type {
+  top: calc(-1 * var(--space-m));
 }

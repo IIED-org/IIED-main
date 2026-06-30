@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Kernel\rest\Entity;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\rest\Entity\RestResourceConfig;
 use Drupal\rest\RestResourceConfigInterface;
@@ -11,6 +14,8 @@ use Drupal\rest\RestResourceConfigInterface;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class RestResourceConfigTest extends KernelTestBase {
 
   /**

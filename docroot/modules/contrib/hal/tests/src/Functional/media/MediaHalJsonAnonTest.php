@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\media;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\file\Entity\File;
 use Drupal\Tests\hal\Functional\EntityResource\HalEntityNormalizationTrait;
 use Drupal\Tests\media\Functional\Rest\MediaResourceTestBase;
@@ -11,6 +14,8 @@ use Drupal\user\Entity\User;
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class MediaHalJsonAnonTest extends MediaResourceTestBase {
 
   use HalEntityNormalizationTrait;
@@ -166,7 +171,6 @@ class MediaHalJsonAnonTest extends MediaResourceTestBase {
     // Cannot use applyHalFieldNormalization() as it uses the $entity property
     // from the test class, which in the case of file upload tests, is the
     // parent entity test entity for the file that's created.
-
     // The HAL normalization adds entity reference fields to '_links' and
     // '_embedded'.
     unset($normalization['uid']);

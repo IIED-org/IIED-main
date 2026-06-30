@@ -2,23 +2,28 @@
 
 /**
  * @file
+ */
+
+use Drupal\Core\Hook\Attribute\LegacyHook;
+use Drupal\hal_test\Hook\HalTestHooks;
+
+/**
+ * @file
  * Contains hook implementations for testing HAL module.
  */
 
 /**
  * Implements hook_hal_type_uri_alter().
  */
+#[LegacyHook]
 function hal_test_hal_type_uri_alter(&$uri, $context = []) {
-  if (!empty($context['hal_test'])) {
-    $uri = 'hal_test_type';
-  }
+  \Drupal::service(HalTestHooks::class)->halTypeUriAlter($uri, $context);
 }
 
 /**
  * Implements hook_hal_relation_uri_alter().
  */
+#[LegacyHook]
 function hal_test_hal_relation_uri_alter(&$uri, $context = []) {
-  if (!empty($context['hal_test'])) {
-    $uri = 'hal_test_relation';
-  }
+  \Drupal::service(HalTestHooks::class)->halRelationUriAlter($uri, $context);
 }

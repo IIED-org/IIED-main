@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\field;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\field\Functional\Rest\FieldStorageConfigResourceTestBase;
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class FieldStorageConfigHalJsonAnonTest extends FieldStorageConfigResourceTestBase {
 
   use AnonResourceTestTrait;

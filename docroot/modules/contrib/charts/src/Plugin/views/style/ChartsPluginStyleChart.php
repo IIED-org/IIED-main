@@ -460,7 +460,9 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
               $value = $this->processNumberValueFromField($result_number, $field_key);
               $chart[$element_key]['#data'][] = $value;
               $chart[$element_key]['#mapped_data'][$xaxis_label] = $value;
-              if (strpos($field_handler['id'], 'field_charts_fields_scatter') === 0 || strpos($field_handler['id'], 'field_charts_fields_bubble') === 0) {
+              // Array-based fields (scatter, bubble, numeric array) supply
+              // their own x values, so categorical x-axis labels do not apply.
+              if ($this->fieldProvidesArrayData($field_key)) {
                 $chart['xaxis']['#labels'] = [];
               }
             }
@@ -688,10 +690,9 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
 
     $value = trim(strip_tags($value));
 
-    // Get the field plugin class to determine if a Charts-specific field
-    // is being used.
-    $field_plugin = $this->view->field[$field];
-    if ($field_plugin instanceof ChartViewsFieldInterface && $field_plugin->getChartFieldDataType() === 'array') {
+    // Charts-specific fields (scatter, bubble, numeric array) provide their
+    // value as a JSON-encoded array of numbers; decode and return it as-is.
+    if ($this->fieldProvidesArrayData($field)) {
       return Json::decode($value);
     }
 
@@ -705,6 +706,27 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
     }
 
     return $value;
+  }
+
+  /**
+   * Determines whether a views field provides array-based chart data.
+   *
+   * Array-based fields (scatter, bubble, and numeric array fields) each
+   * contribute a single multi-value data point (for example [x, y] or
+   * [x, y, z]) per row, rather than a scalar value mapped onto an x-axis
+   * label. They all implement ChartViewsFieldInterface and report a chart
+   * field data type of "array".
+   *
+   * @param string $field_key
+   *   The views field handler key.
+   *
+   * @return bool
+   *   TRUE if the field provides array data, FALSE otherwise.
+   */
+  protected function fieldProvidesArrayData(string $field_key): bool {
+    $field_plugin = $this->view->field[$field_key] ?? NULL;
+    return $field_plugin instanceof ChartViewsFieldInterface
+      && $field_plugin->getChartFieldDataType() === 'array';
   }
 
   /**
@@ -765,6 +787,10 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
     $series_index = 0;
     $element_key_prefix = $this->view->current_display . '__' . $label_field_key;
     $chart_settings = $this->options['chart_settings'];
+    // Tracks series elements whose placeholder data has been cleared before
+    // appending array-based points (scatter/bubble/numeric array), so the
+    // clearing happens once per series instead of on every row.
+    $array_series_initialized = [];
     foreach ($sets as $set_label => $data_set) {
       $name = strtolower(Html::cleanCssIdentifier('set-label-' . $set_label));
       // Remove the added prefix after processing.
@@ -791,14 +817,25 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
             continue;
           }
           $value = $this->processNumberValueFromField($result_number, $field_key);
-          if (strpos($field_handler['id'], 'field_charts_fields_scatter') === 0 || strpos($field_handler['id'], 'field_charts_fields_bubble') === 0) {
-            $chart[$element_key]['#data'] = [];
+          if ($this->fieldProvidesArrayData($field_key)) {
+            // Array-based series (scatter, bubble, numeric array) accumulate
+            // one point per row. Clear the placeholder data the first time a
+            // point is added for this series, then append each subsequent
+            // point.
+            if (empty($array_series_initialized[$element_key])) {
+              $chart[$element_key]['#data'] = [];
+              $array_series_initialized[$element_key] = TRUE;
+            }
             $chart[$element_key]['#data'][] = $value;
             $chart['xaxis'] = $original_xaxis;
           }
           else {
             $chart[$element_key]['#data'][$set_id] = $value;
-            $chart[$element_key]['#mapped_data'][$set_id] = $value;
+            // Fetch the actual string label for mapped_data to ensure
+            // alignSubChartData() can successfully match attachment data
+            // against the parent's string labels.
+            $mapped_key = $chart['xaxis']['#labels'][$set_id] ?? $set_id;
+            $chart[$element_key]['#mapped_data'][$mapped_key] = $value;
           }
         }
       }

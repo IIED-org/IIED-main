@@ -37,7 +37,7 @@ class WebformEntityTranslationTest extends WebformBrowserTestBase {
   /**
    * Tests settings translate.
    */
-  public function testSettingsTranslate() {
+  public function testSettingsTranslate(): void {
     $assert_session = $this->assertSession();
 
     // Login admin user.
@@ -63,7 +63,7 @@ class WebformEntityTranslationTest extends WebformBrowserTestBase {
   /**
    * Tests webform translate.
    */
-  public function testWebformTranslate() {
+  public function testWebformTranslate(): void {
     $assert_session = $this->assertSession();
 
     // Login admin user.
@@ -379,7 +379,7 @@ class WebformEntityTranslationTest extends WebformBrowserTestBase {
   /**
    * Tests webform translate variants.
    */
-  public function testTranslateVariants() {
+  public function testTranslateVariants(): void {
     $assert_session = $this->assertSession();
 
     // Check English webform.
@@ -456,7 +456,7 @@ class WebformEntityTranslationTest extends WebformBrowserTestBase {
   /**
    * Tests email translation.
    */
-  public function testEmailsTranslate() {
+  public function testEmailsTranslate(): void {
     // Check that the email is sent in Spanish (es).
     $this->drupalGet('/es/webform/test_translation');
     $edit = ['textfield' => 'Spanish Submission'];

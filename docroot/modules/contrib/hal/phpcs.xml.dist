@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="drupal-project">
+  <description>PHP CodeSniffer configuration for forum project.</description>
+  <rule ref="vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml"/>
+  <arg name="extensions" value="php,inc,module,install,info,test,profile,theme"/>
+  <rule ref="Drupal.Commenting.DocComment.MissingShort">
+    <severity>0</severity>
+  </rule>
+
+  <!-- We can leave the following to PHPstan. -->
+  <rule ref="Drupal.Commenting.VariableComment.MissingVar">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Drupal.Commenting.DocComment.MissingShort">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Drupal.Commenting.ClassComment.Missing">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Drupal.Commenting.FunctionComment.MissingParamType">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Drupal.InfoFiles.AutoAddedKeys.Version">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Drupal.Arrays.Array.LongLineDeclaration">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Drupal.Commenting.DocComment.LongFullStop">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Drupal.Commenting.InlineComment.SpacingAfter">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Drupal.Files.LineLength.TooLong">
+    <severity>0</severity>
+  </rule>
+</ruleset>

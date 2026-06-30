@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\image;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\image\Functional\Rest\ImageStyleResourceTestBase;
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class ImageStyleHalJsonCookieTest extends ImageStyleResourceTestBase {
 
   use CookieResourceTestTrait;

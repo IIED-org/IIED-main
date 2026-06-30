@@ -2,10 +2,10 @@
 
 namespace Drupal\charts_c3\Plugin\chart\Library;
 
+use Drupal\charts\ApplyRawOptionsTrait;
 use Drupal\charts\Attribute\Chart;
 use Drupal\charts\Plugin\chart\Library\ChartBase;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -36,6 +36,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   ]
 )]
 class C3 extends ChartBase implements ContainerFactoryPluginInterface {
+
+  use ApplyRawOptionsTrait;
 
   /**
    * The element info manager.
@@ -361,15 +363,9 @@ class C3 extends ChartBase implements ContainerFactoryPluginInterface {
       }
     }
     $chart_definition['data']['type'] = $type;
-    // Merge in chart raw options.
-    if (!empty($element['#raw_options'])) {
-      $chart_definition = NestedArray::mergeDeepArray([
-        $chart_definition,
-        $element['#raw_options'],
-      ]);
-    }
 
-    return $chart_definition;
+    // Merge in chart raw options and return the definition.
+    return $this->applyRawOptions($element, $chart_definition);
   }
 
   /**

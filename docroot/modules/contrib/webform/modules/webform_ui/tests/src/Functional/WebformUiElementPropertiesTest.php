@@ -47,7 +47,7 @@ class WebformUiElementPropertiesTest extends WebformBrowserTestBase {
   /**
    * Tests element properties.
    */
-  public function testElementProperties() {
+  public function testElementProperties(): void {
     $this->drupalLogin($this->rootUser);
 
     // Loops through all the elements, edits them via the UI, and checks that

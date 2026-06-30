@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\media_file_delete\Functional;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
 use Drupal\Tests\BrowserTestBase;
@@ -14,6 +17,8 @@ use Drupal\Tests\user\Traits\UserCreationTrait;
  *
  * @group media_file_delete
  */
+#[Group('media_file_delete')]
+#[RunTestsInSeparateProcesses]
 class MediaFileDeleteMultipleTest extends BrowserTestBase {
 
   use TestFileCreationTrait;

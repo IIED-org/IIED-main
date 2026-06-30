@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\shortcut;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Core\Cache\Cache;
 use Drupal\Tests\hal\Functional\EntityResource\HalEntityNormalizationTrait;
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
@@ -10,6 +13,8 @@ use Drupal\Tests\shortcut\Functional\Rest\ShortcutResourceTestBase;
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class ShortcutHalJsonAnonTest extends ShortcutResourceTestBase {
 
   use HalEntityNormalizationTrait;

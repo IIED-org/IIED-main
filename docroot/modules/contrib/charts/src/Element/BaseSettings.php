@@ -611,6 +611,13 @@ class BaseSettings extends FormElementBase {
     ];
 
     if ($used_in === 'config_form' && $selected_library) {
+      $trigger = $form_state->getTriggeringElement();
+      $trigger_parents = $trigger['#parents'] ?? [];
+      if ($trigger_parents && end($trigger_parents) === 'library') {
+        $input = $form_state->getUserInput();
+        unset($input['settings']['library_config']);
+        $form_state->setUserInput($input);
+      }
       $element = self::buildLibraryConfigurationForm($element, $form_state, $selected_library);
     }
 
@@ -633,6 +640,9 @@ class BaseSettings extends FormElementBase {
     if (!isset($chart_type_options[$chart_type])) {
       $chart_type = array_key_first($chart_type_options);
       $input['type'] = $chart_type;
+    }
+    if (!isset($input['library_configs'])) {
+      $input['library_configs'] = $element['#default_value']['library_configs'] ?? [];
     }
     return $input;
   }
@@ -1619,7 +1629,8 @@ class BaseSettings extends FormElementBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   private static function buildLibraryConfigurationForm(array $element, FormStateInterface $form_state, string $library) {
-    $plugin_configuration = $element['#value']['library_config'] ?? [];
+    $library_configs = $element['#value']['library_configs'] ?? [];
+    $plugin_configuration = $library_configs[$library] ?? ($element['#value']['library_config'] ?? []);
     // Using plugins to get the available installed libraries.
     /** @var \Drupal\charts\ChartManager $plugin_manager */
     $plugin_manager = \Drupal::service('plugin.manager.charts');

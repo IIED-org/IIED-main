@@ -2,6 +2,10 @@
 
 namespace Drupal\Tests\hal\Functional\page_cache;
 
+use Drupal\Component\Utility\DeprecationHelper;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\rest\Entity\RestResourceConfig;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
@@ -11,10 +15,17 @@ use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class PageCacheTest extends BrowserTestBase {
 
   use AssertPageCacheContextsAndTagsTrait;
 
+  /**
+   * @var bool
+   *
+   * Whether or not to dump headers
+   */
   protected $dumpHeaders = TRUE;
 
   /**
@@ -76,10 +87,21 @@ class PageCacheTest extends BrowserTestBase {
 
     $this->drupalGet($node_uri);
     $this->assertSession()->responseHeaderEquals('X-Drupal-Cache', 'MISS');
-    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8');
+    DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '11.4',
+      fn() => $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=utf-8'),
+      fn() => $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8'),
+    );
+
     $this->drupalGet($node_uri);
     $this->assertSession()->responseHeaderEquals('X-Drupal-Cache', 'HIT');
-    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8');
+    DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '11.4',
+      fn() => $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=utf-8'),
+      fn() => $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8'),
+    );
 
     // Now request a HAL page twice, we expect that the first request is a cache
     // miss and both requests serve 'application/hal+json'.
@@ -102,10 +124,20 @@ class PageCacheTest extends BrowserTestBase {
 
     $this->drupalGet($node_uri);
     $this->assertSession()->responseHeaderEquals('X-Drupal-Cache', 'MISS');
-    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8');
+    DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '11.4',
+      fn() => $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=utf-8'),
+      fn() => $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8'),
+    );
     $this->drupalGet($node_uri);
     $this->assertSession()->responseHeaderEquals('X-Drupal-Cache', 'HIT');
-    $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8');
+    DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '11.4',
+      fn() => $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=utf-8'),
+      fn() => $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8'),
+    );
   }
 
   /**
@@ -129,7 +161,6 @@ class PageCacheTest extends BrowserTestBase {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_USERAGENT, drupal_generate_test_ua($this->databasePrefix));
     $output = curl_exec($ch);
-    curl_close($ch);
 
     $headers = [];
     foreach (explode("\n", $output) as $header) {

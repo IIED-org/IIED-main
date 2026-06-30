@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\contact;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\contact\Functional\Rest\ContactFormResourceTestBase;
 use Drupal\Tests\rest\Functional\BasicAuthResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class ContactFormHalJsonBasicAuthTest extends ContactFormResourceTestBase {
 
   use BasicAuthResourceTestTrait;

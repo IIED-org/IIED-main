@@ -2,6 +2,11 @@
 
 namespace Drupal\Tests\hal\Functional\user;
 
+use Drupal\Component\Utility\DeprecationHelper;
+use Drupal\Core\Cache\CacheableMetadata;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Core\Url;
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 use Drupal\Tests\rest\Functional\ResourceTestBase;
@@ -14,6 +19,8 @@ use GuzzleHttp\RequestOptions;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class RestRegisterUserTest extends ResourceTestBase {
 
   use CookieResourceTestTrait;
@@ -73,6 +80,8 @@ class RestRegisterUserTest extends ResourceTestBase {
    */
   public function testRegisterUser() {
     $config = $this->config('user.settings');
+    $email_count = count($this->drupalGetMails());
+    $this->assertEquals(0, $email_count);
 
     // Test out different setting User Registration and Email Verification.
     // Allow visitors to register with no email verification.
@@ -84,13 +93,16 @@ class RestRegisterUserTest extends ResourceTestBase {
     $this->assertNotEmpty($user->getPassword());
     $email_count = count($this->drupalGetMails());
 
-    $this->assertEquals(0, $email_count);
+    DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '11.2',
+      static fn () => self::assertEquals(1, $email_count),
+      static fn () => self::assertEquals(0, $email_count),
+    );
 
     // Attempt to register without sending a password.
     $response = $this->registerRequest('Rick.Deckard', FALSE);
     $this->assertResourceErrorResponse(422, "No password provided.", $response);
 
-    // Attempt to register with a password when e-mail verification is on.
+    // Attempt to register with a password when email verification is on.
     $config->set('register', UserInterface::REGISTER_VISITORS);
     $config->set('verify_mail', 1);
     $config->save();
@@ -128,7 +140,7 @@ class RestRegisterUserTest extends ResourceTestBase {
     $this->assertMailString('body', 'Your application for an account is', 2);
     $this->assertMailString('body', 'Argaven has applied for an account', 2);
 
-    // Allow visitors to register with Admin approval and e-mail verification.
+    // Allow visitors to register with Admin approval and email verification.
     $config->set('register', UserInterface::REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL);
     $config->set('verify_mail', 1);
     $config->save();
@@ -222,7 +234,10 @@ class RestRegisterUserTest extends ResourceTestBase {
     // Verify that an anonymous user can register.
     $response = $this->registerRequest($name, $include_password, $include_email);
     $this->assertResourceResponse(200, FALSE, $response);
-    $user = user_load_by_name($name);
+    $users = \Drupal::entityTypeManager()->getStorage('user')
+      ->loadByProperties(['name' => $name]);
+    \assert(\count($users) >= 1);
+    $user = reset($users);
     $this->assertNotEmpty($user, 'User was create as expected');
     return $user;
   }
@@ -274,11 +289,15 @@ class RestRegisterUserTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getExpectedUnauthorizedAccessMessage($method) {}
+  protected function getExpectedUnauthorizedAccessMessage($method) {
+    return '';
+  }
 
   /**
    * {@inheritdoc}
    */
-  protected function getExpectedUnauthorizedAccessCacheability() {}
+  protected function getExpectedUnauthorizedAccessCacheability() {
+    return new CacheableMetadata();
+  }
 
 }

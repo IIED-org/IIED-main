@@ -2,11 +2,16 @@
 
 namespace Drupal\Tests\hal\Functional\file;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class FileHalJsonCookieTest extends FileHalJsonAnonTest {
 
   use CookieResourceTestTrait;

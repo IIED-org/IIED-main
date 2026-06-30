@@ -2,6 +2,11 @@
 
 namespace Drupal\Tests\hal\Kernel;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Url;
 use Drupal\field\Entity\FieldConfig;
@@ -14,6 +19,8 @@ use Drupal\serialization\Normalizer\CacheableNormalizerInterface;
  * @coversDefaultClass \Drupal\hal\LinkManager\LinkManager
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class HalLinkManagerTest extends KernelTestBase {
 
   /**
@@ -56,6 +63,7 @@ class HalLinkManagerTest extends KernelTestBase {
    * @covers ::getTypeUri
    * @dataProvider providerTestGetTypeUri
    */
+  #[DataProvider('providerTestGetTypeUri')]
   public function testGetTypeUri($link_domain, $entity_type, $bundle, array $context, $expected_return, array $expected_context) {
     $hal_settings = \Drupal::configFactory()->getEditable('hal.settings');
 
@@ -63,7 +71,7 @@ class HalLinkManagerTest extends KernelTestBase {
       $hal_settings->clear('link_domain');
     }
     else {
-      $hal_settings->set('link_domain', $link_domain)->save(TRUE);
+      DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '11.4.0', fn() => $hal_settings->set('link_domain', $link_domain)->save(), fn() => $hal_settings->set('link_domain', $link_domain)->save(TRUE));
     }
 
     /** @var \Drupal\hal\LinkManager\TypeLinkManagerInterface $type_manager */
@@ -74,6 +82,9 @@ class HalLinkManagerTest extends KernelTestBase {
     $this->assertEquals($context, $expected_context);
   }
 
+  /**
+   * Data provider.
+   */
   public static function providerTestGetTypeUri(): array {
     $serialization_context_collecting_cacheability = [
       CacheableNormalizerInterface::SERIALIZATION_CONTEXT_CACHEABILITY => new CacheableMetadata(),
@@ -91,7 +102,6 @@ class HalLinkManagerTest extends KernelTestBase {
     return [
       'site URL' => $base_test_case + [
         'context' => [],
-        'link_domain' => NULL,
         'expected_return' => 'BASE_URL/rest/type/node/page',
         'expected_context' => [],
       ],
@@ -137,6 +147,7 @@ class HalLinkManagerTest extends KernelTestBase {
    * @covers ::getRelationUri
    * @dataProvider providerTestGetRelationUri
    */
+  #[DataProvider('providerTestGetRelationUri')]
   public function testGetRelationUri($link_domain, $entity_type, $bundle, $field_name, array $context, $expected_return, array $expected_context) {
     $hal_settings = \Drupal::configFactory()->getEditable('hal.settings');
 
@@ -144,7 +155,7 @@ class HalLinkManagerTest extends KernelTestBase {
       $hal_settings->clear('link_domain');
     }
     else {
-      $hal_settings->set('link_domain', $link_domain)->save(TRUE);
+      DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '11.4.0', fn() => $hal_settings->set('link_domain', $link_domain)->save(), fn() => $hal_settings->set('link_domain', $link_domain)->save(TRUE));
     }
 
     /** @var \Drupal\hal\LinkManager\RelationLinkManagerInterface $relation_manager */
@@ -155,6 +166,9 @@ class HalLinkManagerTest extends KernelTestBase {
     $this->assertEquals($context, $expected_context);
   }
 
+  /**
+   * Data provider.
+   */
   public static function providerTestGetRelationUri(): array {
     $serialization_context_collecting_cacheability = [
       CacheableNormalizerInterface::SERIALIZATION_CONTEXT_CACHEABILITY => new CacheableMetadata(),
@@ -174,7 +188,6 @@ class HalLinkManagerTest extends KernelTestBase {
     return [
       'site URL' => $base_test_case + [
         'context' => [],
-        'link_domain' => NULL,
         'expected_return' => 'BASE_URL/rest/relation/node/page/' . $field_name,
         'expected_context' => [],
       ],

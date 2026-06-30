@@ -59,7 +59,6 @@ class ContentEntityNormalizer extends NormalizerBase {
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
     $this->entityTypeRepository = $entity_type_repository;
-    $this->entityTypeRepository = $entity_type_repository;
     $this->entityFieldManager = $entity_field_manager;
   }
 
@@ -216,6 +215,7 @@ class ContentEntityNormalizer extends NormalizerBase {
     if ($entity->hasLinkTemplate('canonical')) {
       $url = $entity->toUrl('canonical');
     }
+    // @phpstan-ignore-next-line globalDrupalDependencyInjection.useDependencyInjection
     elseif (\Drupal::service('router.route_provider')->getRoutesByNames([$route_name])) {
       $url = Url::fromRoute('rest.entity.' . $entity->getEntityTypeId() . '.GET', [$entity->getEntityTypeId() => $entity->id()]);
     }

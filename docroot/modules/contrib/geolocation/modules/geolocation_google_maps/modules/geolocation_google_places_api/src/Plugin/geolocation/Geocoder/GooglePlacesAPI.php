@@ -84,6 +84,13 @@ class GooglePlacesAPI extends GoogleGeocoderBase {
       $request_url .= '&language=' . $config->get('google_map_custom_url_parameters')['language'];
     }
 
+
+    // Adding session token as per Google Places API to combine both api calls in a single session to reduce billing.
+    // @see https://developers.google.com/maps/documentation/places/web-service/details#sessiontoken and
+    // https://developers.google.com/maps/documentation/places/web-service/autocomplete#sessiontokenfor for more details.
+    $session_token = \Drupal::service('uuid')->generate();
+    $request_url .= '&sessiontoken=' . $session_token;
+
     try {
       $result = Json::decode(\Drupal::httpClient()->request('GET', $request_url)->getBody());
     }
@@ -110,12 +117,22 @@ class GooglePlacesAPI extends GoogleGeocoderBase {
         $details_url = GoogleMaps::$googleMapsApiUrlBase;
       }
 
-      $details_url .= '/maps/api/place/details/json?placeid=' . $result['predictions'][0]['place_id'];
+      // Including the same session token and place_id retrieved for place details API call.
+      // @see https://developers.google.com/maps/documentation/places/web-service/details for details.
+      $details_url .= '/maps/api/place/details/json';
+      $details_query = [
+        'place_id' => $result['predictions'][0]['place_id'],
+        'fields' => "geometry,formatted_address",
+        'sessiontoken' => $session_token,
+      ];
 
       if (!empty($google_key)) {
-        $details_url .= '&key=' . $google_key;
+        $details_query['key'] = $google_key;
       }
-      $details = Json::decode(\Drupal::httpClient()->request('GET', $details_url)->getBody());
+
+      $details = Json::decode(\Drupal::httpClient()->request('GET', $details_url, [
+        'query' => $details_query,
+      ])->getBody());
 
     }
     catch (RequestException $e) {

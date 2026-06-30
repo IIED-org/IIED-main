@@ -106,14 +106,20 @@
        * @param {AddressIntegrationSettings} addressIntegrationSettings
        */
       $.each(drupalSettings.geolocation.addressIntegration, function (sourceFieldName, addressIntegrationSettings) {
-        var addressWidgetWrapper = $('.field--name-' + addressIntegrationSettings.address_field.replace(/_/g, '-'), context);
-        if (addressWidgetWrapper.length === 0) {
+        var geolocationWidgetWrapper = $('[data-drupal-selector^="edit-' + sourceFieldName + '-wrapper"]', context);
+        if (geolocationWidgetWrapper.length === 0) {
           return;
         }
 
-        var geolocationWidgetWrapper = $('.field--name-' + sourceFieldName.replace(/_/g, '-'), context);
-        if (geolocationWidgetWrapper.length === 0) {
-          return;
+        // First attempt to look for a sibling in case there are multiple
+        // instances of the same address widget.
+        var addressWidgetSelector = '.field--name-' + addressIntegrationSettings.address_field.replace(/_/g, '-');
+        var addressWidgetWrapper = geolocationWidgetWrapper.siblings(addressWidgetSelector);
+        if (addressWidgetWrapper.length === 0) {
+          addressWidgetWrapper = $(addressWidgetSelector, context);
+          if (addressWidgetWrapper.length === 0) {
+            return;
+          }
         }
 
         var widget = Drupal.geolocation.widget.getWidgetById(geolocationWidgetWrapper.attr('id').toString());

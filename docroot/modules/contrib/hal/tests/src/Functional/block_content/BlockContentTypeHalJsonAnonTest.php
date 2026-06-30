@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\block_content;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\block_content\Functional\Rest\BlockContentTypeResourceTestBase;
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class BlockContentTypeHalJsonAnonTest extends BlockContentTypeResourceTestBase {
 
   use AnonResourceTestTrait;

@@ -40,7 +40,7 @@ class WebformSubmissionBulkFormTest extends UnitTestCase {
   /**
    * Tests the constructor assignment of actions.
    */
-  public function testConstructor() {
+  public function testConstructor(): void {
 
     $actions = [];
 

@@ -2,11 +2,16 @@
 
 namespace Drupal\Tests\hal\Functional\path_alias;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class PathAliasHalJsonAnonTest extends PathAliasHalJsonTestBase {
 
   use AnonResourceTestTrait;

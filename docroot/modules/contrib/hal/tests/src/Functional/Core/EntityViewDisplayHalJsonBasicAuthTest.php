@@ -2,11 +2,16 @@
 
 namespace Drupal\Tests\hal\Functional\Core;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\BasicAuthResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class EntityViewDisplayHalJsonBasicAuthTest extends EntityViewDisplayHalJsonAnonTest {
 
   use BasicAuthResourceTestTrait;
