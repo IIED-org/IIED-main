@@ -123,10 +123,15 @@ abstract class WorkspaceResourceTestBase extends EntityResourceTestBase {
       ],
       'revision_id' => [
         [
-          'value' => 2,
+          'value' => 1,
         ],
       ],
       'parent' => [],
+      'provider' => [
+        [
+          'value' => 'default',
+        ],
+      ],
       'uid' => [
         [
           'target_id' => (int) $author->id(),

@@ -61,17 +61,44 @@ trait RecipeTestTrait {
    *   The `drupal recipe` command process, after having run.
    */
   protected function applyRecipe(string $path, int $expected_exit_code = 0, array $options = [], string $command = 'recipe'): Process {
-    assert($this instanceof BrowserTestBase);
-
-    $arguments = [
-      (new PhpExecutableFinder())->find(),
-      'core/scripts/drupal',
+    $process = $this->runDrupalCommand([
       $command,
       // Never apply recipes interactively.
       '--no-interaction',
       ...$options,
       $path,
-    ];
+    ]);
+    $this->assertSame($expected_exit_code, $process->getExitCode(), sprintf("Process exit code mismatch.\nExpected: %d\nActual: %d\n\nSTDOUT:\n%s\n\nSTDERR:\n%s", $expected_exit_code, $process->getExitCode(), $process->getOutput(), $process->getErrorOutput()));
+    // Applying a recipe:
+    // - creates new checkpoints, hence the "state" service in the test runner
+    //   is outdated
+    // - may install modules, which would cause the entire container in the test
+    //   runner to be outdated.
+    // Hence the entire environment must be rebuilt for assertions to target the
+    // actual post-recipe-application result.
+    // @see \Drupal\Core\Config\Checkpoint\LinearHistory::__construct()
+    assert($this instanceof BrowserTestBase);
+    $this->rebuildAll();
+    return $process;
+  }
+
+  /**
+   * Runs the `core/scripts/drupal` script with the given arguments.
+   *
+   * @param array<string|int> $arguments
+   *   The arguments and options to pass to the script.
+   * @param int $timeout
+   *   (optional) How long the command should run before timing out, in seconds.
+   *   Defaults to 500.
+   *
+   * @return \Symfony\Component\Process\Process
+   *   The started process.
+   */
+  protected function runDrupalCommand(array $arguments, int $timeout = 500): Process {
+    assert($this instanceof BrowserTestBase);
+
+    array_unshift($arguments, (new PhpExecutableFinder())->find(), 'core/scripts/drupal');
+
     $process = (new Process($arguments))
       ->setWorkingDirectory($this->getDrupalRoot())
       ->setEnv([
@@ -81,19 +108,9 @@ trait RecipeTestTrait {
         // @see drupal_valid_test_ua()
         'HTTP_USER_AGENT' => drupal_generate_test_ua($this->databasePrefix),
       ])
-      ->setTimeout(500);
+      ->setTimeout($timeout);
 
     $process->run();
-    $this->assertSame($expected_exit_code, $process->getExitCode(), $process->getErrorOutput());
-    // Applying a recipe:
-    // - creates new checkpoints, hence the "state" service in the test runner
-    //   is outdated
-    // - may install modules, which would cause the entire container in the test
-    //   runner to be outdated.
-    // Hence the entire environment must be rebuilt for assertions to target the
-    // actual post-recipe-application result.
-    // @see \Drupal\Core\Config\Checkpoint\LinearHistory::__construct()
-    $this->rebuildAll();
     return $process;
   }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
@@ -8,8 +10,7 @@ use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 
 /**
- * Tests setting non-default view modes for paragraphs rendered on the page and
- * rendered in the preview. Also tests setting a non-default form display mode.
+ * Tests non-default view modes and form modes.
  *
  * @group layout_paragraphs
  */
@@ -29,7 +30,7 @@ class DisplayModeTest extends BuilderTestBase {
   ];
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   protected function setUp(): void {
     parent::setUp();

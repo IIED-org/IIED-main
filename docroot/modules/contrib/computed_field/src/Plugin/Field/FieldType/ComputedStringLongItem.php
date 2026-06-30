@@ -11,7 +11,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
  *   id = "computed_string_long",
  *   label = @Translation("Computed (text, long)"),
  *   description = @Translation("This field defines a long text field whose value is computed by PHP-Code"),
- *   category = @Translation("Computed"),
+ *   category = "Computed",
  *   default_widget = "computed_string_widget",
  *   default_formatter = "computed_string"
  * )

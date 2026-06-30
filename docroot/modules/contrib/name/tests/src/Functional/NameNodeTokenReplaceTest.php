@@ -4,6 +4,8 @@ namespace Drupal\Tests\name\Functional;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 
@@ -55,8 +57,35 @@ class NameNodeTokenReplaceTest extends NameTestBase {
 
     $node_type = NodeType::create(['type' => 'article', 'name' => 'Article']);
     $node_type->save();
-    node_add_body_field($node_type);
+
+    // Create body field storage if it doesn't exist.
+    $field_storage = FieldStorageConfig::loadByName('node', 'body');
+    if (!$field_storage) {
+      $field_storage = FieldStorageConfig::create([
+        'field_name' => 'body',
+        'entity_type' => 'node',
+        'type' => 'text_with_summary',
+      ]);
+      $field_storage->save();
+    }
+
+    // Create body field configuration for the article bundle.
+    $field = FieldConfig::loadByName('node', 'article', 'body');
+    if (!$field) {
+      $field = FieldConfig::create([
+        'field_storage' => $field_storage,
+        'bundle' => 'article',
+        'label' => 'Body',
+        'settings' => [
+          'display_summary' => TRUE,
+          'allowed_formats' => [],
+        ],
+      ]);
+      $field->save();
+    }
+
     $this->createNameField('field_name', 'node', 'article');
+    $this->createNameField('field_multi', 'node', 'article', ['cardinality' => 2]);
     $this->createNameField('field_realname', 'user', 'user');
   }
 
@@ -105,6 +134,24 @@ class NameNodeTokenReplaceTest extends NameTestBase {
           'credentials' => 'Creds, MoreCreds',
         ],
       ],
+      'field_multi' => [
+        [
+          'title' => '',
+          'given' => 'Alpha',
+          'middle' => '',
+          'family' => 'One',
+          'generational' => '',
+          'credentials' => '',
+        ],
+        [
+          'title' => '',
+          'given' => 'Beta',
+          'middle' => '',
+          'family' => 'Two',
+          'generational' => '',
+          'credentials' => '',
+        ],
+      ],
     ]);
     $node->save();
 
@@ -121,8 +168,15 @@ class NameNodeTokenReplaceTest extends NameTestBase {
     $tests['[node:field_name:family]'] = $components['family'];
     $tests['[node:field_name:generational]'] = $components['generational'];
     $tests['[node:field_name:credentials]'] = $components['credentials'];
+    $tests['[node:field_name:formatted:given]'] = $this->formatter->format($components, 'given');
+    $tests['[node:formatted_field_name:given]'] = $this->formatter->format($components, 'given');
+    $tests['[node:field_name:formatted:nonexistent_format__xyz]'] = $this->formatter->format($components, 'nonexistent_format__xyz');
 
-    // @todo consider multiple value tests, "[node:field_name:1:family]".
+    /** @var \Drupal\name\Plugin\Field\FieldType\NameItem $multi_item */
+    $multi_item = $node->get('field_multi')->get(1);
+    $multi_components = $multi_item->filteredArray();
+    $tests['[node:field_multi:1:formatted:given]'] = $this->formatter->format($multi_components, 'given');
+    $tests['[node:field_multi:9:formatted:given]'] = '';
     /** @var \Drupal\name\Plugin\Field\FieldType\NameItem $item */
     $item = $account->get('field_realname')->get(0);
     $components = $item->filteredArray();
@@ -132,11 +186,9 @@ class NameNodeTokenReplaceTest extends NameTestBase {
     $tests['[node:author:display-name]'] = $account->getDisplayName();
     $tests['[node:author:field_realname]'] = $this->formatter->format($components);
     $tests['[node:author:field_realname:family]'] = $components['family'];
+    $tests['[node:author:field_realname:formatted:given]'] = $this->formatter->format($components, 'given');
 
     // @todo consider current user tests, "[current-user:display-name]".
-    // Test to make sure that we generated something for each token.
-    $this->assertFalse(in_array(0, array_map('strlen', $tests)), 'No empty tokens generated.');
-
     foreach ($tests as $input => $expected) {
       $bubbleable_metadata = new BubbleableMetadata();
       $output = $this->tokenService->replace($input, ['node' => $node], ['langcode' => $this->interfaceLanguage->getId()], $bubbleable_metadata);
@@ -148,6 +200,18 @@ class NameNodeTokenReplaceTest extends NameTestBase {
       // @todo caching tests.
       // @see NodeTokenReplaceTest.
       // $this->assertEquals($bubbleable_metadata, $metadata_tests[$input]);
+    }
+
+    $user_tests['[user:field_realname:formatted:given]'] = $this->formatter->format($components, 'given');
+    $user_tests['[user:formatted_field_realname:given]'] = $this->formatter->format($components, 'given');
+    foreach ($user_tests as $input => $expected) {
+      $bubbleable_metadata = new BubbleableMetadata();
+      $output = $this->tokenService->replace($input, ['user' => $account], ['langcode' => $this->interfaceLanguage->getId()], $bubbleable_metadata);
+      $this->assertEquals($output, (string) $expected, new FormattableMarkup('User token %token replaced with %expected, got %actual.', [
+        '%token' => $input,
+        '%expected' => $expected,
+        '%actual' => $output,
+      ]));
     }
   }
 

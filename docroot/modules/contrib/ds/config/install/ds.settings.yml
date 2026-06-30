@@ -13,3 +13,4 @@ use_field_names: true
 exclude_layout_builder_blocks_on_block_field: false
 layout_icon_image_bc: false
 layout_suggestion_bc: false
+array_merge_build_bc: false

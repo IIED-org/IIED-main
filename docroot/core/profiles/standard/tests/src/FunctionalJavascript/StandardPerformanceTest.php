@@ -6,19 +6,23 @@ namespace Drupal\Tests\standard\FunctionalJavascript;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\FunctionalJavascriptTests\PerformanceTestBase;
-use Drupal\Tests\PerformanceData;
 use Drupal\node\NodeInterface;
+use Drupal\Tests\PerformanceData;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+// cSpell:ignore mlid
 /**
  * Tests the performance of basic functionality in the standard profile.
  *
  * Stark is used as the default theme so that this test is not Olivero specific.
- *
- * @group Common
- * @group #slow
- * @requires extension apcu
  */
+#[Group('Common')]
+#[Group('#slow')]
+#[RequiresPhpExtension('apcu')]
+#[RunTestsInSeparateProcesses]
 class StandardPerformanceTest extends PerformanceTestBase {
 
   /**
@@ -55,6 +59,7 @@ class StandardPerformanceTest extends PerformanceTestBase {
    */
   public function testStandardPerformance(): void {
     $this->testAnonymous();
+    $this->testCacheInvalidation();
     $this->testLogin();
     $this->testLoginBlock();
   }
@@ -84,12 +89,11 @@ class StandardPerformanceTest extends PerformanceTestBase {
       $this->drupalGet('');
     }, 'standardFrontPage');
     $this->assertNoJavaScript($performance_data);
-    $this->assertSame(1, $performance_data->getStylesheetCount());
-    $this->assertLessThan(3500, $performance_data->getStylesheetBytes());
 
     $expected_queries = [
       'SELECT "base_table"."id" AS "id", "base_table"."path" AS "path", "base_table"."alias" AS "alias", "base_table"."langcode" AS "langcode" FROM "path_alias" "base_table" WHERE ("base_table"."status" = 1) AND ("base_table"."alias" LIKE "/node" ESCAPE ' . "'\\\\'" . ') AND ("base_table"."langcode" IN ("en", "und")) ORDER BY "base_table"."langcode" ASC, "base_table"."id" DESC',
       'SELECT "name", "route", "fit" FROM "router" WHERE "pattern_outline" IN ( "/node" ) AND "number_parts" >= 1',
+      'SELECT 1 AS "expression" FROM "path_alias" "base_table" WHERE ("base_table"."status" = 1) AND ("base_table"."path" LIKE "/rss.xml%" ESCAPE ' . "'\\\\'" . ') LIMIT 1 OFFSET 0',
       'SELECT COUNT(*) AS "expression" FROM (SELECT 1 AS "expression" FROM "node_field_data" "node_field_data" WHERE ("node_field_data"."promote" = 1) AND ("node_field_data"."status" = 1)) "subquery"',
       'SELECT "node_field_data"."sticky" AS "node_field_data_sticky", "node_field_data"."created" AS "node_field_data_created", "node_field_data"."nid" AS "nid" FROM "node_field_data" "node_field_data" WHERE ("node_field_data"."promote" = 1) AND ("node_field_data"."status" = 1) ORDER BY "node_field_data_sticky" DESC, "node_field_data_created" DESC LIMIT 10 OFFSET 0',
       'SELECT "revision"."vid" AS "vid", "revision"."langcode" AS "langcode", "revision"."revision_uid" AS "revision_uid", "revision"."revision_timestamp" AS "revision_timestamp", "revision"."revision_log" AS "revision_log", "revision"."revision_default" AS "revision_default", "base"."nid" AS "nid", "base"."type" AS "type", "base"."uuid" AS "uuid", CASE "base"."vid" WHEN "revision"."vid" THEN 1 ELSE 0 END AS "isDefaultRevision" FROM "node" "base" INNER JOIN "node_revision" "revision" ON "revision"."vid" = "base"."vid" WHERE "base"."nid" IN (1)',
@@ -111,37 +115,109 @@ class StandardPerformanceTest extends PerformanceTestBase {
       'SELECT 1 AS "expression" FROM "path_alias" "base_table" WHERE ("base_table"."status" = 1) AND ("base_table"."path" LIKE "/node%" ESCAPE ' . "'\\\\'" . ') LIMIT 1 OFFSET 0',
       'SELECT "name", "data" FROM "config" WHERE "collection" = "" AND "name" IN ( "core.entity_view_display.user.user.compact", "core.entity_view_display.user.user.default" )',
       'SELECT "name", "data" FROM "config" WHERE "collection" = "" AND "name" IN ( "filter.format.restricted_html" )',
-      'SELECT "name", "data" FROM "config" WHERE "collection" = "" AND "name" IN ( "system.image" )',
       'SELECT "name", "data" FROM "config" WHERE "collection" = "" AND "name" IN ( "user.role.authenticated" )',
       'SELECT "name", "value" FROM "key_value" WHERE "name" IN ( "theme:stark" ) AND "collection" = "config.entity.key_store.block"',
       'SELECT "menu_tree"."menu_name" AS "menu_name", "menu_tree"."route_name" AS "route_name", "menu_tree"."route_parameters" AS "route_parameters", "menu_tree"."url" AS "url", "menu_tree"."title" AS "title", "menu_tree"."description" AS "description", "menu_tree"."parent" AS "parent", "menu_tree"."weight" AS "weight", "menu_tree"."options" AS "options", "menu_tree"."expanded" AS "expanded", "menu_tree"."enabled" AS "enabled", "menu_tree"."provider" AS "provider", "menu_tree"."metadata" AS "metadata", "menu_tree"."class" AS "class", "menu_tree"."form_class" AS "form_class", "menu_tree"."id" AS "id" FROM "menu_tree" "menu_tree" WHERE ("route_name" = "view.frontpage.page_1") AND ("route_param_key" = "view_id=frontpage&display_id=page_1") AND ("menu_name" = "main") ORDER BY "depth" ASC, "weight" ASC, "id" ASC',
+      'SELECT "menu_tree"."menu_name" AS "menu_name", "menu_tree"."route_name" AS "route_name", "menu_tree"."route_parameters" AS "route_parameters", "menu_tree"."url" AS "url", "menu_tree"."title" AS "title", "menu_tree"."description" AS "description", "menu_tree"."parent" AS "parent", "menu_tree"."weight" AS "weight", "menu_tree"."options" AS "options", "menu_tree"."expanded" AS "expanded", "menu_tree"."enabled" AS "enabled", "menu_tree"."provider" AS "provider", "menu_tree"."metadata" AS "metadata", "menu_tree"."class" AS "class", "menu_tree"."form_class" AS "form_class", "menu_tree"."id" AS "id" FROM "menu_tree" "menu_tree" WHERE ("route_name" = "<front>") AND ("route_param_key" = "") AND ("menu_name" = "main") ORDER BY "depth" ASC, "weight" ASC, "id" ASC',
+      'SELECT "menu_tree"."p1" AS "p1", "menu_tree"."p2" AS "p2", "menu_tree"."p3" AS "p3", "menu_tree"."p4" AS "p4", "menu_tree"."p5" AS "p5", "menu_tree"."p6" AS "p6", "menu_tree"."p7" AS "p7", "menu_tree"."p8" AS "p8", "menu_tree"."p9" AS "p9" FROM "menu_tree" "menu_tree" WHERE "id" = "standard.front_page"',
+      'SELECT "menu_tree"."id" AS "id" FROM "menu_tree" "menu_tree" WHERE "mlid" IN ("4") ORDER BY "depth" DESC',
       'SELECT "menu_tree"."menu_name" AS "menu_name", "menu_tree"."route_name" AS "route_name", "menu_tree"."route_parameters" AS "route_parameters", "menu_tree"."url" AS "url", "menu_tree"."title" AS "title", "menu_tree"."description" AS "description", "menu_tree"."parent" AS "parent", "menu_tree"."weight" AS "weight", "menu_tree"."options" AS "options", "menu_tree"."expanded" AS "expanded", "menu_tree"."enabled" AS "enabled", "menu_tree"."provider" AS "provider", "menu_tree"."metadata" AS "metadata", "menu_tree"."class" AS "class", "menu_tree"."form_class" AS "form_class", "menu_tree"."id" AS "id" FROM "menu_tree" "menu_tree" WHERE ("route_name" = "view.frontpage.page_1") AND ("route_param_key" = "view_id=frontpage&display_id=page_1") AND ("menu_name" = "account") ORDER BY "depth" ASC, "weight" ASC, "id" ASC',
+      'SELECT "menu_tree"."menu_name" AS "menu_name", "menu_tree"."route_name" AS "route_name", "menu_tree"."route_parameters" AS "route_parameters", "menu_tree"."url" AS "url", "menu_tree"."title" AS "title", "menu_tree"."description" AS "description", "menu_tree"."parent" AS "parent", "menu_tree"."weight" AS "weight", "menu_tree"."options" AS "options", "menu_tree"."expanded" AS "expanded", "menu_tree"."enabled" AS "enabled", "menu_tree"."provider" AS "provider", "menu_tree"."metadata" AS "metadata", "menu_tree"."class" AS "class", "menu_tree"."form_class" AS "form_class", "menu_tree"."id" AS "id" FROM "menu_tree" "menu_tree" WHERE ("route_name" = "<front>") AND ("route_param_key" = "") AND ("menu_name" = "account") ORDER BY "depth" ASC, "weight" ASC, "id" ASC',
+      'SELECT "menu_tree".* FROM "menu_tree" "menu_tree" WHERE ("menu_name" = "main") AND ("depth" <= 2) ORDER BY "p1" ASC, "p2" ASC, "p3" ASC, "p4" ASC, "p5" ASC, "p6" ASC, "p7" ASC, "p8" ASC, "p9" ASC',
       'INSERT INTO "semaphore" ("name", "value", "expire") VALUES ("theme_registry:runtime:stark:Drupal\Core\Utility\ThemeRegistry", "LOCK_ID", "EXPIRE")',
       'DELETE FROM "semaphore"  WHERE ("name" = "theme_registry:runtime:stark:Drupal\Core\Utility\ThemeRegistry") AND ("value" = "LOCK_ID")',
       'INSERT INTO "semaphore" ("name", "value", "expire") VALUES ("library_info:stark:Drupal\Core\Cache\CacheCollector", "LOCK_ID", "EXPIRE")',
       'DELETE FROM "semaphore"  WHERE ("name" = "library_info:stark:Drupal\Core\Cache\CacheCollector") AND ("value" = "LOCK_ID")',
-      'INSERT INTO "semaphore" ("name", "value", "expire") VALUES ("path_alias_whitelist:Drupal\Core\Cache\CacheCollector", "LOCK_ID", "EXPIRE")',
-      'DELETE FROM "semaphore"  WHERE ("name" = "path_alias_whitelist:Drupal\Core\Cache\CacheCollector") AND ("value" = "LOCK_ID")',
+      'INSERT INTO "semaphore" ("name", "value", "expire") VALUES ("path_alias_prefix_list:Drupal\Core\Cache\CacheCollector", "LOCK_ID", "EXPIRE")',
+      'DELETE FROM "semaphore"  WHERE ("name" = "path_alias_prefix_list:Drupal\Core\Cache\CacheCollector") AND ("value" = "LOCK_ID")',
       'INSERT INTO "semaphore" ("name", "value", "expire") VALUES ("active-trail:route:view.frontpage.page_1:route_parameters:a:2:{s:10:"display_id";s:6:"page_1";s:7:"view_id";s:9:"frontpage";}:Drupal\Core\Cache\CacheCollector", "LOCK_ID", "EXPIRE")',
       'DELETE FROM "semaphore"  WHERE ("name" = "active-trail:route:view.frontpage.page_1:route_parameters:a:2:{s:10:"display_id";s:6:"page_1";s:7:"view_id";s:9:"frontpage";}:Drupal\Core\Cache\CacheCollector") AND ("value" = "LOCK_ID")',
     ];
     $recorded_queries = $performance_data->getQueries();
     $this->assertSame($expected_queries, $recorded_queries);
-    $this->assertSame(36, $performance_data->getQueryCount());
-    $this->assertSame(125, $performance_data->getCacheGetCount());
-    $this->assertSame(46, $performance_data->getCacheSetCount());
-    $this->assertSame(0, $performance_data->getCacheDeleteCount());
-    $this->assertSame(37, $performance_data->getCacheTagChecksumCount());
-    $this->assertSame(43, $performance_data->getCacheTagIsValidCount());
-    $this->assertSame(0, $performance_data->getCacheTagInvalidationCount());
+    $expected = [
+      'QueryCount' => 41,
+      'CacheGetCount' => 97,
+      'CacheGetCountByBin' => [
+        'page' => 1,
+        'config' => 20,
+        'data' => 5,
+        'discovery' => 37,
+        'bootstrap' => 10,
+        'dynamic_page_cache' => 1,
+        'render' => 13,
+        'default' => 5,
+        'entity' => 2,
+        'menu' => 3,
+      ],
+      'CacheSetCount' => 45,
+      'CacheDeleteCount' => 0,
+      'CacheTagInvalidationCount' => 0,
+      'CacheTagLookupQueryCount' => 15,
+      'CacheTagGroupedLookups' => [
+        [
+          'route_match',
+          'access_policies',
+          'routes',
+          'router',
+          'entity_types',
+          'entity_field_info',
+          'entity_bundles',
+          'local_task',
+          'library_info',
+        ],
+        ['config:core.extension', 'views_data'],
+        ['config:views.view.frontpage', 'node:1', 'node_list'],
+        ['rendered', 'user:0', 'user_view'],
+        ['config:filter.format.restricted_html', 'node_view'],
+        [
+          'block_view',
+          'config:block.block.stark_site_branding',
+          'config:system.site',
+        ],
+        [
+          'CACHE_MISS_IF_UNCACHEABLE_HTTP_METHOD:form',
+          'config:block.block.stark_search_form_narrow',
+          'config:search.settings',
+        ],
+        ['config:block.block.stark_search_form_wide'],
+        ['config:block.block.stark_messages'],
+        ['config:block.block.stark_help'],
+        ['config:block.block.stark_powered'],
+        [
+          'config:block.block.stark_account_menu',
+          'config:block.block.stark_breadcrumbs',
+          'config:block.block.stark_content',
+          'config:block.block.stark_main_menu',
+          'config:block.block.stark_page_title',
+          'config:block.block.stark_primary_admin_actions',
+          'config:block.block.stark_primary_local_tasks',
+          'config:block.block.stark_secondary_local_tasks',
+          'config:block_list',
+          'http_response',
+        ],
+        ['config:system.menu.account'],
+        ['config:system.menu.main'],
+        ['config:user.role.anonymous'],
+      ],
+      'StylesheetCount' => 1,
+      'StylesheetBytes' => 1450,
+    ];
+    $this->assertMetrics($expected, $performance_data);
+    $expected_default_cache_cids = [
+      'views_data:node_field_data:en',
+      'views_data:en',
+      'views_data:views:en',
+      'views_data:node:en',
+      'theme_registry:stark',
+    ];
+    $this->assertSame($expected_default_cache_cids, $performance_data->getCacheOperations()['get']['default']);
 
     // Test node page.
     $performance_data = $this->collectPerformanceData(function () {
       $this->drupalGet('node/1');
     }, 'standardNodePage');
     $this->assertNoJavaScript($performance_data);
-    $this->assertSame(1, $performance_data->getStylesheetCount());
-    $this->assertLessThan(3500, $performance_data->getStylesheetBytes());
 
     $expected_queries = [
       'SELECT "base_table"."id" AS "id", "base_table"."path" AS "path", "base_table"."alias" AS "alias", "base_table"."langcode" AS "langcode" FROM "path_alias" "base_table" WHERE ("base_table"."status" = 1) AND ("base_table"."alias" LIKE "/node/1" ESCAPE ' . "'\\\\'" . ') AND ("base_table"."langcode" IN ("en", "und")) ORDER BY "base_table"."langcode" ASC, "base_table"."id" DESC',
@@ -157,13 +233,61 @@ class StandardPerformanceTest extends PerformanceTestBase {
     ];
     $recorded_queries = $performance_data->getQueries();
     $this->assertSame($expected_queries, $recorded_queries);
-    $this->assertSame(10, $performance_data->getQueryCount());
-    $this->assertSame(95, $performance_data->getCacheGetCount());
-    $this->assertSame(17, $performance_data->getCacheSetCount());
-    $this->assertSame(0, $performance_data->getCacheDeleteCount());
-    $this->assertCountBetween(24, 25, $performance_data->getCacheTagChecksumCount());
-    $this->assertCountBetween(39, 40, $performance_data->getCacheTagIsValidCount());
-    $this->assertSame(0, $performance_data->getCacheTagInvalidationCount());
+    $expected = [
+      'QueryCount' => 10,
+      'CacheGetCount' => 71,
+      'CacheSetCount' => 16,
+      'CacheDeleteCount' => 0,
+      'CacheTagInvalidationCount' => 0,
+      'CacheTagLookupQueryCount' => 13,
+      'CacheTagGroupedLookups' => [
+        [
+          'route_match',
+          'access_policies',
+          'routes',
+          'router',
+          'entity_types',
+          'entity_field_info',
+          'entity_bundles',
+          'local_task',
+          'library_info',
+        ],
+        ['rendered', 'user:0', 'user_view'],
+        ['config:filter.format.restricted_html', 'node:1', 'node_view'],
+        [
+          'block_view',
+          'config:block.block.stark_site_branding',
+          'config:system.site',
+        ],
+        [
+          'CACHE_MISS_IF_UNCACHEABLE_HTTP_METHOD:form',
+          'config:block.block.stark_search_form_narrow',
+          'config:search.settings',
+        ],
+        ['config:block.block.stark_search_form_wide'],
+        ['config:block.block.stark_messages'],
+        ['config:block.block.stark_help'],
+        ['config:block.block.stark_powered'],
+        [
+          'config:block.block.stark_account_menu',
+          'config:block.block.stark_breadcrumbs',
+          'config:block.block.stark_content',
+          'config:block.block.stark_main_menu',
+          'config:block.block.stark_page_title',
+          'config:block.block.stark_primary_admin_actions',
+          'config:block.block.stark_primary_local_tasks',
+          'config:block.block.stark_secondary_local_tasks',
+          'config:block_list',
+          'http_response',
+        ],
+        ['config:system.menu.main'],
+        ['config:system.menu.account'],
+        ['config:user.role.anonymous'],
+      ],
+      'StylesheetCount' => 1,
+      'StylesheetBytes' => 1500,
+    ];
+    $this->assertMetrics($expected, $performance_data);
 
     // Test user profile page.
     $this->user = $this->drupalCreateUser();
@@ -171,8 +295,6 @@ class StandardPerformanceTest extends PerformanceTestBase {
       $this->drupalGet('user/' . $this->user->id());
     }, 'standardUserPage');
     $this->assertNoJavaScript($performance_data);
-    $this->assertSame(1, $performance_data->getStylesheetCount());
-    $this->assertLessThan(3500, $performance_data->getStylesheetBytes());
 
     $expected_queries = [
       'SELECT "base_table"."id" AS "id", "base_table"."path" AS "path", "base_table"."alias" AS "alias", "base_table"."langcode" AS "langcode" FROM "path_alias" "base_table" WHERE ("base_table"."status" = 1) AND ("base_table"."alias" LIKE "/user/2" ESCAPE ' . "'\\\\'" . ') AND ("base_table"."langcode" IN ("en", "und")) ORDER BY "base_table"."langcode" ASC, "base_table"."id" DESC',
@@ -185,20 +307,138 @@ class StandardPerformanceTest extends PerformanceTestBase {
       'SELECT "name", "value" FROM "key_value" WHERE "name" IN ( "theme:stark" ) AND "collection" = "config.entity.key_store.block"',
       'SELECT "menu_tree"."menu_name" AS "menu_name", "menu_tree"."route_name" AS "route_name", "menu_tree"."route_parameters" AS "route_parameters", "menu_tree"."url" AS "url", "menu_tree"."title" AS "title", "menu_tree"."description" AS "description", "menu_tree"."parent" AS "parent", "menu_tree"."weight" AS "weight", "menu_tree"."options" AS "options", "menu_tree"."expanded" AS "expanded", "menu_tree"."enabled" AS "enabled", "menu_tree"."provider" AS "provider", "menu_tree"."metadata" AS "metadata", "menu_tree"."class" AS "class", "menu_tree"."form_class" AS "form_class", "menu_tree"."id" AS "id" FROM "menu_tree" "menu_tree" WHERE ("route_name" = "entity.user.canonical") AND ("route_param_key" = "user=2") AND ("menu_name" = "main") ORDER BY "depth" ASC, "weight" ASC, "id" ASC',
       'SELECT "menu_tree"."menu_name" AS "menu_name", "menu_tree"."route_name" AS "route_name", "menu_tree"."route_parameters" AS "route_parameters", "menu_tree"."url" AS "url", "menu_tree"."title" AS "title", "menu_tree"."description" AS "description", "menu_tree"."parent" AS "parent", "menu_tree"."weight" AS "weight", "menu_tree"."options" AS "options", "menu_tree"."expanded" AS "expanded", "menu_tree"."enabled" AS "enabled", "menu_tree"."provider" AS "provider", "menu_tree"."metadata" AS "metadata", "menu_tree"."class" AS "class", "menu_tree"."form_class" AS "form_class", "menu_tree"."id" AS "id" FROM "menu_tree" "menu_tree" WHERE ("route_name" = "entity.user.canonical") AND ("route_param_key" = "user=2") AND ("menu_name" = "account") ORDER BY "depth" ASC, "weight" ASC, "id" ASC',
-      'SELECT "ud".* FROM "users_data" "ud" WHERE ("module" = "contact") AND ("uid" = "2") AND ("name" = "enabled")',
-      'SELECT "name", "data" FROM "config" WHERE "collection" = "" AND "name" IN ( "contact.settings" )',
       'INSERT INTO "semaphore" ("name", "value", "expire") VALUES ("active-trail:route:entity.user.canonical:route_parameters:a:1:{s:4:"user";s:1:"2";}:Drupal\Core\Cache\CacheCollector", "LOCK_ID", "EXPIRE")',
       'DELETE FROM "semaphore"  WHERE ("name" = "active-trail:route:entity.user.canonical:route_parameters:a:1:{s:4:"user";s:1:"2";}:Drupal\Core\Cache\CacheCollector") AND ("value" = "LOCK_ID")',
     ];
     $recorded_queries = $performance_data->getQueries();
     $this->assertSame($expected_queries, $recorded_queries);
-    $this->assertSame(14, $performance_data->getQueryCount());
-    $this->assertSame(79, $performance_data->getCacheGetCount());
-    $this->assertSame(17, $performance_data->getCacheSetCount());
-    $this->assertSame(0, $performance_data->getCacheDeleteCount());
-    $this->assertSame(23, $performance_data->getCacheTagChecksumCount());
-    $this->assertSame(32, $performance_data->getCacheTagIsValidCount());
-    $this->assertSame(0, $performance_data->getCacheTagInvalidationCount());
+    $expected = [
+      'QueryCount' => 12,
+      'CacheGetCount' => 57,
+      'CacheSetCount' => 16,
+      'CacheDeleteCount' => 0,
+      'CacheTagInvalidationCount' => 0,
+      'CacheTagLookupQueryCount' => 12,
+      'StylesheetCount' => 1,
+      'StylesheetBytes' => 1150,
+    ];
+    $this->assertMetrics($expected, $performance_data);
+  }
+
+  /**
+   * Tests the impact of a cache tag based invalidation.
+   */
+  protected function testCacheInvalidation(): void {
+
+    // Crate a new page, this invalidates the node_list cache tag. Need to reset
+    // the cache tag checksum service as it did not register a need to
+    // invalidate that again. Repeat this twice as some routing caches are not
+    // yet properly populated due to directly emptying the caches before.
+    \Drupal::service('cache_tags.invalidator.checksum')->reset();
+    $this->drupalCreateNode(['type' => 'page', 'title' => 'new page']);
+
+    $this->drupalGet('');
+    // Ensure everything finishes before we collect performance data.
+    $this->drupalGet('');
+    sleep(2);
+
+    \Drupal::service('cache_tags.invalidator.checksum')->reset();
+    $this->drupalCreateNode(['type' => 'page', 'title' => 'new page']);
+
+    // Visit the frontpage again.
+    $performance_data = $this->collectPerformanceData(function () {
+      $this->drupalGet('');
+    }, 'standardFrontPageAfterInvalidation');
+
+    $expected_queries = [
+      'SELECT COUNT(*) AS "expression" FROM (SELECT 1 AS "expression" FROM "node_field_data" "node_field_data" WHERE ("node_field_data"."promote" = 1) AND ("node_field_data"."status" = 1)) "subquery"',
+      'SELECT "node_field_data"."sticky" AS "node_field_data_sticky", "node_field_data"."created" AS "node_field_data_created", "node_field_data"."nid" AS "nid" FROM "node_field_data" "node_field_data" WHERE ("node_field_data"."promote" = 1) AND ("node_field_data"."status" = 1) ORDER BY "node_field_data_sticky" DESC, "node_field_data_created" DESC LIMIT 10 OFFSET 0',
+      'SELECT "name", "value" FROM "key_value" WHERE "name" IN ( "theme:stark" ) AND "collection" = "config.entity.key_store.block"',
+    ];
+    $recorded_queries = $performance_data->getQueries();
+    $this->assertSame($expected_queries, $recorded_queries);
+    $expected = [
+      'QueryCount' => 3,
+      'CacheGetCount' => 67,
+      'CacheGetCountByBin' => [
+        'page' => 1,
+        'config' => 11,
+        'data' => 5,
+        'discovery' => 21,
+        'bootstrap' => 8,
+        'dynamic_page_cache' => 2,
+        'render' => 14,
+        'default' => 3,
+        'entity' => 1,
+        'menu' => 1,
+      ],
+      'CacheSetCount' => 5,
+      'CacheSetCountByBin' => [
+        'data' => 1,
+        'render' => 2,
+        'dynamic_page_cache' => 1,
+        'page' => 1,
+      ],
+      'CacheDeleteCount' => 0,
+      'CacheTagInvalidationCount' => 0,
+      'CacheTagLookupQueryCount' => 3,
+      'CacheTagGroupedLookups' => [
+        [
+          'CACHE_MISS_IF_UNCACHEABLE_HTTP_METHOD:form',
+          'block_view',
+          'config:block.block.stark_account_menu',
+          'config:block.block.stark_breadcrumbs',
+          'config:block.block.stark_content',
+          'config:block.block.stark_help',
+          'config:block.block.stark_main_menu',
+          'config:block.block.stark_messages',
+          'config:block.block.stark_page_title',
+          'config:block.block.stark_powered',
+          'config:block.block.stark_primary_admin_actions',
+          'config:block.block.stark_primary_local_tasks',
+          'config:block.block.stark_search_form_narrow',
+          'config:block.block.stark_search_form_wide',
+          'config:block.block.stark_secondary_local_tasks',
+          'config:block.block.stark_site_branding',
+          'config:block_list',
+          'config:filter.format.restricted_html',
+          'config:search.settings',
+          'config:system.menu.account',
+          'config:system.menu.main',
+          'config:system.site',
+          'config:user.role.anonymous',
+          'config:views.view.frontpage',
+          'http_response',
+          'local_task',
+          'node:1',
+          'node_list',
+          'node_view',
+          'rendered',
+          'user:0',
+          'user_view',
+        ],
+        [
+          'route_match',
+          'access_policies',
+          'routes',
+          'router',
+          'entity_types',
+          'entity_field_info',
+          'entity_bundles',
+          'library_info',
+        ],
+        ['config:core.extension', 'views_data'],
+      ],
+      'StylesheetCount' => 1,
+      'StylesheetBytes' => 1300,
+    ];
+    $this->assertMetrics($expected, $performance_data);
+    $expected_default_cache_cids = [
+      'views_data:node_field_data:en',
+      'views_data:views:en',
+      'views_data:node:en',
+    ];
+    $this->assertSame($expected_default_cache_cids, $performance_data->getCacheOperations()['get']['default']);
   }
 
   /**
@@ -209,7 +449,7 @@ class StandardPerformanceTest extends PerformanceTestBase {
     // form so that we repeat the same steps when recording performance data. Do
     // this twice so that any caches which take two requests to warm are also
     // covered.
-    foreach (range(0, 1) as $index) {
+    for ($i = 0; $i < 2; $i++) {
       $this->drupalGet('node');
       $this->drupalGet('user/login');
       $this->submitLoginForm($this->user);
@@ -243,13 +483,72 @@ class StandardPerformanceTest extends PerformanceTestBase {
     ];
     $recorded_queries = $performance_data->getQueries();
     $this->assertSame($expected_queries, $recorded_queries);
-    $this->assertSame(17, $performance_data->getQueryCount());
-    $this->assertSame(86, $performance_data->getCacheGetCount());
-    $this->assertSame(1, $performance_data->getCacheSetCount());
-    $this->assertSame(1, $performance_data->getCacheDeleteCount());
-    $this->assertSame(1, $performance_data->getCacheTagChecksumCount());
-    $this->assertSame(37, $performance_data->getCacheTagIsValidCount());
-    $this->assertSame(0, $performance_data->getCacheTagInvalidationCount());
+    $expected = [
+      'ScriptBytes' => 6500,
+      'ScriptCount' => 1,
+      'StylesheetBytes' => 1429,
+      'StylesheetCount' => 1,
+      'QueryCount' => 17,
+      'CacheGetCount' => 72,
+      'CacheSetCount' => 1,
+      'CacheDeleteCount' => 1,
+      'CacheTagInvalidationCount' => 0,
+      'CacheTagLookupQueryCount' => 13,
+      'CacheTagGroupedLookups' => [
+        // Form submission and login.
+        [
+          'route_match',
+          'access_policies',
+          'routes',
+          'router',
+          'entity_types',
+          'entity_field_info',
+          'entity_bundles',
+          'local_task',
+          'library_info',
+        ],
+        // The user page after the redirect.
+        [
+          'route_match',
+          'access_policies',
+          'routes',
+          'router',
+          'entity_types',
+          'entity_field_info',
+          'entity_bundles',
+          'local_task',
+          'library_info',
+        ],
+        ['rendered', 'user:2', 'user_view'],
+        [
+          'block_view',
+          'config:block.block.stark_site_branding',
+          'config:system.site',
+        ],
+        [
+          'CACHE_MISS_IF_UNCACHEABLE_HTTP_METHOD:form',
+          'config:block.block.stark_search_form_narrow',
+          'config:search.settings',
+        ],
+        ['config:system.menu.account', 'config:system.menu.main'],
+        ['config:block.block.stark_search_form_wide'],
+        ['config:block.block.stark_messages'],
+        ['config:block.block.stark_help'],
+        ['config:block.block.stark_powered'],
+        ['config:block.block.stark_main_menu'],
+        [
+          'config:block.block.stark_account_menu',
+          'config:block.block.stark_breadcrumbs',
+          'config:block.block.stark_primary_admin_actions',
+        ],
+        [
+          'config:block.block.stark_primary_local_tasks',
+          'config:user.role.authenticated',
+          'config:block.block.stark_secondary_local_tasks',
+        ],
+      ],
+    ];
+    $this->assertMetrics($expected, $performance_data);
     $this->drupalLogout();
   }
 
@@ -262,7 +561,7 @@ class StandardPerformanceTest extends PerformanceTestBase {
     // we repeat the same steps when recording performance data. Do this twice
     // so that any caches which take two requests to warm are also covered.
 
-    foreach (range(0, 1) as $index) {
+    for ($i = 0; $i < 2; $i++) {
       $this->drupalGet('node');
       $this->assertSession()->responseContains('Password');
       $this->submitLoginForm($this->user);
@@ -297,19 +596,21 @@ class StandardPerformanceTest extends PerformanceTestBase {
     ];
     $recorded_queries = $performance_data->getQueries();
     $this->assertSame($expected_queries, $recorded_queries);
-    $this->assertSame(18, $performance_data->getQueryCount());
-    $this->assertSame(107, $performance_data->getCacheGetCount());
-    $this->assertSame(1, $performance_data->getCacheSetCount());
-    $this->assertSame(1, $performance_data->getCacheDeleteCount());
-    $this->assertSame(1, $performance_data->getCacheTagChecksumCount());
-    $this->assertSame(43, $performance_data->getCacheTagIsValidCount());
-    $this->assertSame(0, $performance_data->getCacheTagInvalidationCount());
+    $expected = [
+      'QueryCount' => 18,
+      'CacheGetCount' => 104,
+      'CacheSetCount' => 1,
+      'CacheDeleteCount' => 1,
+      'CacheTagInvalidationCount' => 0,
+      'CacheTagLookupQueryCount' => 19,
+    ];
+    $this->assertMetrics($expected, $performance_data);
   }
 
   /**
    * Submit the user login form.
    */
-  protected function submitLoginForm($account) {
+  protected function submitLoginForm($account): void {
     $this->submitForm([
       'name' => $account->getAccountName(),
       'pass' => $account->passRaw,
@@ -319,7 +620,7 @@ class StandardPerformanceTest extends PerformanceTestBase {
   /**
    * Passes if no JavaScript is found on the page.
    *
-   * @param Drupal\Tests\PerformanceData $performance_data
+   * @param \Drupal\Tests\PerformanceData $performance_data
    *   A PerformanceData value object.
    *
    * @internal

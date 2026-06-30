@@ -29,3 +29,5 @@ include:
 #   _CURL_TEMPLATES_REF: 'main'
 variables:
   _SHOW_ENVIRONMENT_VARIABLES: '1'
+cspell:
+  allow_failure: false

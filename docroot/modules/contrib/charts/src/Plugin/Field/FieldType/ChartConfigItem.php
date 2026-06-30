@@ -2,6 +2,7 @@
 
 namespace Drupal\charts\Plugin\Field\FieldType;
 
+use Drupal\charts\Plugin\Field\DataCollectorTableHasDataTrait;
 use Drupal\Core\Field\Attribute\FieldType;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -19,6 +20,8 @@ use Drupal\Core\TypedData\DataDefinition;
   default_formatter: "chart_config_default"
 )]
 class ChartConfigItem extends FieldItemBase {
+
+  use DataCollectorTableHasDataTrait;
 
   /**
    * {@inheritdoc}
@@ -74,7 +77,14 @@ class ChartConfigItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public function isEmpty() {
-    return empty($this->config);
+    // If it's completely empty at the base level, it's empty.
+    if (empty($this->config)) {
+      return TRUE;
+    }
+
+    // Perform a deeper check to see if actual data was entered into the table.
+    $data_collector_table = $this->config['series']['data_collector_table'] ?? [];
+    return !static::hasData($data_collector_table);
   }
 
   /**

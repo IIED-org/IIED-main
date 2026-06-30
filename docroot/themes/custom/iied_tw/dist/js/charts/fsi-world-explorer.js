@@ -160,7 +160,7 @@
             <div class="flex flex-col gap-4 mb-4">
                 <div class="flex flex-col lg:flex-row lg:items-center gap-2 flex-wrap">
                 <div class="text-sm text-gray-600 xl:w-24 shrink-0">Metric:</div>
-                <div class="inline-flex rounded-md shadow-sm overflow-hidden mr-4" role="group" aria-label="Metric selector">
+                <div class="inline-flex rounded-md shadow-xs overflow-hidden mr-4" role="group" aria-label="Metric selector">
                     <button type="button" data-metric="fsi" class="js-metric-btn inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-iiedpink-200 rounded-l-md">Overall FSI</button>
                     <button type="button" data-metric="fa" class="js-metric-btn -ml-px inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-iiedpink-200">Availability</button>
                     <button type="button" data-metric="fx" class="js-metric-btn -ml-px inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-iiedpink-200">Access</button>
@@ -169,7 +169,7 @@
                 </div>
 
                 <div class="text-sm text-gray-600 xl:w-24 shrink-0 xl:ml-4">Scenario:</div>
-                <div class="inline-flex rounded-md shadow-sm overflow-hidden" role="group" aria-label="Scenario selector">
+                <div class="inline-flex rounded-md shadow-xs overflow-hidden" role="group" aria-label="Scenario selector">
                     <button type="button" data-scenario="base" class="js-scenario-btn inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-iiedpink-200 rounded-l-md">Baseline</button>
                     <button type="button" data-scenario="15" class="js-scenario-btn -ml-px inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-iiedpink-200">1.5°C</button>
                     <button type="button" data-scenario="20" class="js-scenario-btn -ml-px inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-iiedpink-200">2.0°C</button>
@@ -179,7 +179,7 @@
 
                 <div class="flex flex-col lg:flex-row lg:items-center gap-2 flex-wrap">
                 <div class="text-sm text-gray-600 xl:w-24 shrink-0">Highlight groups:</div>
-                <div class="inline-flex rounded-md shadow-sm overflow-hidden" role="group" aria-label="Highlight groups selector">
+                <div class="inline-flex rounded-md shadow-xs overflow-hidden" role="group" aria-label="Highlight groups selector">
                     <button type="button" data-group="fcas" class="js-group-btn inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-iiedpink-200 rounded-l-md">FCAS</button>
                     <button type="button" data-group="ldc" class="js-group-btn -ml-px inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-iiedpink-200">LDC</button>
                     <button type="button" data-group="sids" class="js-group-btn -ml-px inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-iiedpink-200 rounded-r-md">SIDS</button>

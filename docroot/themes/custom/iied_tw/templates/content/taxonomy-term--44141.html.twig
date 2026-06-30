@@ -24,7 +24,7 @@
             {% if key is not empty %}
               <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.tid.value}) }}">
               {{ item.entity.label }}</a>
-              {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-gray-300"></div>' }}
+              {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-stone-300"></div>' }}
             {% endif %}
           {% endfor %}
         </div>
@@ -93,19 +93,19 @@
       "
       id="tab_wrapper"
     >
-      <nav class="border-b border-gray-300">
+      <nav class="border-b border-stone-300">
         <div class="container flex flex-row">
-          <a x-ref="research" class="block px-6 py-2 text-lg font-semibold text-gray-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'research' }" @click.prevent="tab = 'research'; window.location.hash = 'research'" href="#">Research</a>
+          <a x-ref="research" class="block px-6 py-2 text-lg font-semibold text-stone-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-stone-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'research' }" @click.prevent="tab = 'research'; window.location.hash = 'research'" href="#">Research</a>
 
-          <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-gray-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
+          <a x-ref="overview" class="block px-6 py-2 text-lg font-semibold text-stone-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-stone-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'overview' }" @click.prevent="tab = 'overview'; window.location.hash = 'overview'" href="#">Overview</a>
         
         {% if (drupal_view_result('hidden_handbrakes_display', 'block_1') is not empty) %}  
-          <a x-ref="discover" class="block px-6 py-2 text-lg font-semibold text-gray-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'discover' }" @click.prevent="tab = 'discover'; window.location.hash = 'discover'" href="#">Discover hidden handbrakes</a>
+          <a x-ref="discover" class="block px-6 py-2 text-lg font-semibold text-stone-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-stone-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'discover' }" @click.prevent="tab = 'discover'; window.location.hash = 'discover'" href="#">Discover hidden handbrakes</a>
         {% endif %}
         
         {# My HH tab
         {% if (drupal_view_result('my_hidden_handbrakes', 'block_1') is not empty) and (logged_in) %}  
-          <a x-ref="my_hh" class="block px-6 py-2 text-lg font-semibold text-gray-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'my-hh' }" @click.prevent="tab = 'my-hh'; window.location.hash = 'my-hh'" href="#">My hidden handbrakes</a>
+          <a x-ref="my_hh" class="block px-6 py-2 text-lg font-semibold text-stone-700 lg:text-xl focus:border-b-4 border-iiedblue-500 hover:text-stone-900 focus:outline-none" :class="{ 'active border-b-4': tab === 'my-hh' }" @click.prevent="tab = 'my-hh'; window.location.hash = 'my-hh'" href="#">My hidden handbrakes</a>
         {% endif %} #}
 
         </div>  

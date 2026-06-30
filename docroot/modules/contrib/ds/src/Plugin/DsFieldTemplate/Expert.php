@@ -247,7 +247,7 @@ class Expert extends DsFieldTemplateBase {
         $field_settings[$wrapper_key . '-def-at'] = !(empty($values[$wrapper_key . '-def-at']));
 
         // Token replacement for the wrappers.
-        /* @var \Drupal\Core\Entity\EntityInterface $entity */
+        /** @var \Drupal\Core\Entity\EntityInterface $entity */
         if ($entity = $this->getEntity()) {
           // Tokens.
           $apply_to = [
@@ -265,7 +265,7 @@ class Expert extends DsFieldTemplateBase {
                   'clear' => TRUE,
                   'langcode' => \Drupal::languageManager()
                     ->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
-                    ->getId()
+                    ->getId(),
                 ]
               );
             }
@@ -275,7 +275,7 @@ class Expert extends DsFieldTemplateBase {
     }
 
     // Token replacement for the prefix and suffix.
-    /* @var \Drupal\Core\Entity\EntityInterface $entity */
+    /** @var \Drupal\Core\Entity\EntityInterface $entity */
     if ($entity = $this->getEntity()) {
       $apply_to = [
         'prefix',
@@ -290,7 +290,7 @@ class Expert extends DsFieldTemplateBase {
               'clear' => TRUE,
               'langcode' => \Drupal::languageManager()
                 ->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
-                ->getId()
+                ->getId(),
             ]
           );
         }

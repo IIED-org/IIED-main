@@ -6,7 +6,6 @@ namespace Drupal\gin_lb\HookHandler;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\Core\Extension\ThemeExtensionList;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\gin_lb\Service\ContextValidatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -25,11 +24,6 @@ class PageAttachments implements ContainerInjectionInterface {
 
   /**
    * Constructor.
-   *
-   * @param \Drupal\gin_lb\Service\ContextValidatorInterface $contextValidator
-   *   The context validator.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The config factory service.
    */
   public function __construct(
     ContextValidatorInterface $contextValidator,

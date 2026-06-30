@@ -5,7 +5,8 @@
     "homepage": "https://www.drupal.org/project/rabbit_hole",
     "license": "GPL-2.0+",
     "require-dev": {
-        "drupal/commerce": "^2.39"
+        "drupal/commerce": "^2.39",
+        "drupal/group": "^1.6|^2.3"
     },
     "minimum-stability": "dev"
 }

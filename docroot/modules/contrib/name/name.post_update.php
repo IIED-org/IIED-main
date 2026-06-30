@@ -211,3 +211,96 @@ function name_post_update_field_settings_remove_inline_css() {
     ->clear('inline_styles_rtl')
     ->save();
 }
+
+/**
+ * Sets missing Name widget wrapper settings to container.
+ */
+function name_post_update_add_wrapper_type_to_name_widget() {
+  $config_storage = \Drupal::service('config.storage');
+  $config_factory = \Drupal::service('config.factory');
+  $updated_count = 0;
+
+  foreach ($config_storage->listAll('core.entity_form_display.') as $config_name) {
+    $display_config = $config_factory->getEditable($config_name);
+    $content = (array) $display_config->get('content');
+    $changed = FALSE;
+    foreach ($content as $field_name => $component) {
+      if (($component['type'] ?? '') !== 'name_default') {
+        continue;
+      }
+      $settings = (array) ($component['settings'] ?? []);
+      if (!isset($settings['wrapper_type']) || $settings['wrapper_type'] === '') {
+        $settings['wrapper_type'] = 'container';
+        $component['settings'] = $settings;
+        $content[$field_name] = $component;
+        $changed = TRUE;
+      }
+    }
+    if ($changed) {
+      $display_config->set('content', $content)->save();
+      $updated_count++;
+    }
+  }
+
+  return t('Updated @count form displays with name wrapper settings.', [
+    '@count' => $updated_count,
+  ]);
+}
+
+/**
+ * Adds autocomplete match settings to legacy Name field configurations.
+ */
+function name_post_update_add_autocomplete_match_settings() {
+  $components = [
+    'title',
+    'given',
+    'middle',
+    'family',
+    'generational',
+    'credentials',
+  ];
+  $default_overrides = array_fill_keys($components, '');
+  $updated_count = 0;
+
+  $field_storage_configs = \Drupal::entityTypeManager()
+    ->getStorage('field_storage_config')
+    ->loadByProperties(['type' => 'name']);
+
+  foreach ($field_storage_configs as $field_storage) {
+    /** @var \Drupal\field\Entity\FieldStorageConfig $field_storage */
+    $field_name = $field_storage->getName();
+    $fields = \Drupal::entityTypeManager()
+      ->getStorage('field_config')
+      ->loadByProperties(['field_name' => $field_name]);
+
+    foreach ($fields as $field) {
+      /** @var \Drupal\field\Entity\FieldConfig $field */
+      $settings = $field->getSettings();
+      $changed = FALSE;
+
+      if (!array_key_exists('autocomplete_match', $settings)) {
+        $settings['autocomplete_match'] = 'starts_with';
+        $changed = TRUE;
+      }
+
+      $overrides = $settings['autocomplete_match_overrides'] ?? [];
+      if (!is_array($overrides)) {
+        $overrides = [];
+      }
+      $merged_overrides = $overrides + $default_overrides;
+      if (!array_key_exists('autocomplete_match_overrides', $settings) || $merged_overrides !== $overrides) {
+        $settings['autocomplete_match_overrides'] = $merged_overrides;
+        $changed = TRUE;
+      }
+
+      if ($changed) {
+        $field->setSettings($settings)->save();
+        $updated_count += 1;
+      }
+    }
+  }
+
+  return t('Updated @count name fields with autocomplete match settings.', [
+    '@count' => $updated_count,
+  ]);
+}

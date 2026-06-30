@@ -44,39 +44,18 @@ variables:
   # removed when DrupalCI is decommissioned in favor of GitlabCI.
   _CSPELL_IGNORE_PATHS: '"drupalci.yml"'
 
+  # Opt-in to more tests.
+  OPT_IN_TEST_MAX_PHP: '1'
+  OPT_IN_TEST_NEXT_MAJOR: '1'
+
 #
 # Composer overrides and configuration.
 #
+
+# Require external packages dependencies to pass phpstan validation:
 composer:
   after_script:
-    # Require external packages dependencies to pass phpstan validation.
     - composer require drupal/ds
-
-#
-# CSpell overrides and configuration:
-#
-cspell:
-  # Require spellcheck to pass.
-  allow_failure: false
-
-#
-# ESLint overrides and configuration.
-#
-eslint:
-  # Require eslint to pass.
-  allow_failure: false
-
-#
-# PHPCS overrides and configuration.
-#
-phpcs:
-  # Require phpcs to pass.
-  allow_failure: false
-
-#
-# PHPSTAN overrides and configuration.
-#
-phpstan:
-  # Require phpstan to pass.
-  allow_failure: false
-
+composer (next major):
+  after_script:
+    - composer require drupal/ds

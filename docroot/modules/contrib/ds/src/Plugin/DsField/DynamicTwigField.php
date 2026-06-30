@@ -28,7 +28,7 @@ class DynamicTwigField extends TokenBase {
       '#context' => [
         $this->getEntityTypeId() => $this->entity(),
         'entity' => $this->entity(),
-      ]
+      ],
     ];
 
     try {

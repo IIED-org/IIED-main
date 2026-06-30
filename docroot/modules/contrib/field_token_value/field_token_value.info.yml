@@ -1,0 +1,12 @@
+name: Field Token Value
+type: module
+description: Provides a field allowing the value to be set using a string containing tokens.
+core_version_requirement: ^10.1 || ^11
+
+dependencies:
+  - token:token
+
+# Information added by Drupal.org packaging script on 2025-02-25
+version: '3.1.0'
+project: 'field_token_value'
+datestamp: 1740522011

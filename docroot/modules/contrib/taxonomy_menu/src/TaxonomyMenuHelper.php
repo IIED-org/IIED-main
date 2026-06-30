@@ -115,7 +115,7 @@ class TaxonomyMenuHelper {
         }
         else {
           // Remove specific menu link if vid term is different to this old vid.
-          if ($term->original->bundle() != $term->bundle()) {
+          if (isset($term->original) && $term->original instanceof TermInterface && $term->original->bundle() != $term->bundle()) {
             $this->removeTaxonomyMenuEntries($term->original);
           }
           $this->manager->addDefinition($plugin_id, $plugin_def);

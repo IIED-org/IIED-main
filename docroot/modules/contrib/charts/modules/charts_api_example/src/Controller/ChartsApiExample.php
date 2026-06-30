@@ -127,6 +127,7 @@ class ChartsApiExample extends ControllerBase {
           '@type' => ucfirst($type),
         ]),
         '#chart_type' => $type,
+        '#accessible_table' => 'collapsible',
         'series' => $series,
         'x_axis' => $xaxis,
         'y_axis' => $yaxis,
@@ -148,6 +149,7 @@ class ChartsApiExample extends ControllerBase {
         '#data' => [4330, 4413, 4212, 4431],
         '#color' => '#77b259',
       ],
+      '#accessible_table' => 'collapsible',
       'x_axis' => $xaxis,
       'y_axis' => $yaxis,
       '#raw_options' => [],
@@ -188,6 +190,7 @@ class ChartsApiExample extends ControllerBase {
         '#type' => 'chart_yaxis',
         '#title' => $this->t('Number of Installs'),
       ],
+      '#accessible_table' => 'collapsible',
       '#stacking' => TRUE,
     ];
     if ($library === 'chartjs') {
@@ -229,6 +232,7 @@ class ChartsApiExample extends ControllerBase {
         '#data' => [4330, 4413, 4212, 4431],
         '#color' => '#77b259',
       ],
+      '#accessible_table' => 'collapsible',
       'x_axis' => $xaxis,
       'y_axis' => $yaxis,
       '#stacking' => TRUE,
@@ -249,6 +253,7 @@ class ChartsApiExample extends ControllerBase {
         '#data' => [4330, 4413, 4212, 4431],
         '#color' => '#77b259',
       ],
+      '#accessible_table' => 'collapsible',
       'x_axis' => $xaxis,
       'y_axis' => $yaxis,
       '#raw_options' => [],
@@ -269,6 +274,7 @@ class ChartsApiExample extends ControllerBase {
         '#color' => '#77b259',
         '#target_axis' => 'y_axis_secondary',
       ],
+      '#accessible_table' => 'collapsible',
       'x_axis' => $xaxis,
       'y_axis' => $yaxis,
       'y_axis_secondary' => [
@@ -290,6 +296,7 @@ class ChartsApiExample extends ControllerBase {
         'x_axis' => $xaxis,
         'y_axis' => $yaxis,
         '#polar' => TRUE,
+        '#accessible_table' => 'collapsible',
         '#raw_options' => [],
       ];
     }
@@ -321,6 +328,7 @@ class ChartsApiExample extends ControllerBase {
         'series' => $boxplot_data,
         'x_axis' => $xaxis,
         'y_axis' => $yaxis,
+        '#accessible_table' => 'collapsible',
         '#raw_options' => [],
       ];
       if ($library === 'google') {
@@ -415,6 +423,7 @@ class ChartsApiExample extends ControllerBase {
         'series' => $candlestick_data,
         'x_axis' => $xaxis,
         'y_axis' => $yaxis,
+        '#accessible_table' => 'collapsible',
         '#raw_options' => [],
       ];
     }
@@ -432,6 +441,7 @@ class ChartsApiExample extends ControllerBase {
         '#title' => $this->t('@library Heatmap Chart', ['@library' => ucfirst($library)]),
         '#chart_type' => 'heatmap',
         'y_axis' => $yaxis,
+        '#accessible_table' => 'collapsible',
         '#raw_options' => [],
       ];
       if ($library === 'highcharts') {
@@ -599,6 +609,7 @@ class ChartsApiExample extends ControllerBase {
         'series' => $range_area_data_series,
         'x_axis' => $xaxis,
         'y_axis' => $yaxis,
+        '#accessible_table' => 'collapsible',
         '#raw_options' => [],
       ];
     }
@@ -625,6 +636,7 @@ class ChartsApiExample extends ControllerBase {
           '#data' => [65],
         ],
         '#raw_options' => [],
+        '#accessible_table' => 'collapsible',
       ];
     }
 
@@ -649,6 +661,7 @@ class ChartsApiExample extends ControllerBase {
         '#type' => 'chart_yaxis',
         '#title' => $this->t('Weight'),
       ],
+      '#accessible_table' => 'collapsible',
       '#stacking' => TRUE,
       '#raw_options' => [],
     ];
@@ -674,13 +687,14 @@ class ChartsApiExample extends ControllerBase {
         '#type' => 'chart_yaxis',
         '#title' => $this->t('Weight'),
       ],
+      '#accessible_table' => 'collapsible',
       '#stacking' => TRUE,
       '#raw_options' => [],
     ];
 
     if ($library === 'highcharts') {
       $charts_container['content']['php_override'] = [
-        '#chart_id' => 'exampleidphp',
+        '#chart_id' => 'example_id_php',
         '#type' => 'chart',
         '#tooltips' => $charts_settings->get('charts_default_settings.display.tooltips'),
         '#title' => $this->t('@library Chart, Overridden By PHP Hook', ['@library' => ucfirst($library)]),
@@ -689,12 +703,13 @@ class ChartsApiExample extends ControllerBase {
         'x_axis' => $xaxis,
         'y_axis' => $yaxis,
         '#color_changer' => TRUE,
+        '#accessible_table' => 'collapsible',
         '#raw_options' => [],
       ];
 
       $charts_container['content']['js_override'] = [
         '#id' => 'exampleidjs',
-        '#chart_id' => 'exampleidjschart',
+        '#chart_id' => 'example_id_js_chart',
         '#type' => 'chart',
         '#tooltips' => $charts_settings->get('charts_default_settings.display.tooltips'),
         '#title' => $this->t('@library Chart, Overridden By JS Function', ['@library' => ucfirst($library)]),
@@ -702,6 +717,7 @@ class ChartsApiExample extends ControllerBase {
         'series' => $series,
         'x_axis' => $xaxis,
         'y_axis' => $yaxis,
+        '#accessible_table' => 'collapsible',
         '#raw_options' => [],
       ];
     }
@@ -715,12 +731,12 @@ class ChartsApiExample extends ControllerBase {
    * @return array
    *   The array of rows.
    */
-  private function getCsvContents() {
+  private function getCsvContents(): array {
     $file_path = $this->moduleList->getPath('charts_api_example');
     $file_name = $file_path . '/fixtures/charts_api_example_file.csv';
     $handle = fopen($file_name, 'r');
     $all_rows = [];
-    while ($row = fgetcsv($handle)) {
+    while ($row = fgetcsv($handle, NULL, ',', '"', '')) {
       $all_rows['Week'][] = $row[0];
       $all_rows['7.x-2.x'][] = (int) $row[4];
       $all_rows['8.x-3.x'][] = (int) $row[6];

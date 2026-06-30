@@ -36,7 +36,7 @@
     {% endif %}
     {% for item in items %}
        <li{{ item.attributes.addClass('rounded-full', 'hover:bg-iiedblue-100') }}>
-        {{ link(item.title, item.url, {'class': ['px-4', 'py-2', 'block', 'lg:py-4', 'text-gray-900', 'visited:text-gray-900', 'hover:no-underline']}) }}
+        {{ link(item.title, item.url, {'class': ['px-4', 'py-2', 'block', 'lg:py-4', 'text-stone-900', 'visited:text-stone-900', 'hover:no-underline']}) }}
         {% if item.below %}
           {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
         {% endif %}

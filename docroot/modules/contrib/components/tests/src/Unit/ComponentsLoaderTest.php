@@ -1,29 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\components\Unit;
 
+use Drupal\components\Template\ComponentsRegistry;
 use Drupal\components\Template\Loader\ComponentsLoader;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\UsesClass;
 
 /**
+ * Tests the ComponentsLoader.
+ *
  * @coversDefaultClass \Drupal\components\Template\Loader\ComponentsLoader
  * @group components
  */
+#[
+  Group('components'), /* @phpstan-ignore attribute.notFound */
+  UsesClass(ComponentsRegistry::class), /* @phpstan-ignore attribute.notFound */
+  CoversClass(ComponentsLoader::class) /* @phpstan-ignore attribute.notFound */
+]
 class ComponentsLoaderTest extends UnitTestCase {
 
   /**
    * The components registry service.
    *
-   * @var \Drupal\components\Template\ComponentsRegistry|\PHPUnit\Framework\MockObject\MockObject
+   * @var \Drupal\components\Template\ComponentsRegistry
    */
-  protected $componentsRegistry;
+  protected ComponentsRegistry $componentsRegistry;
 
   /**
    * The system under test.
    *
    * @var \Drupal\components\Template\Loader\ComponentsLoader
    */
-  protected $systemUnderTest;
+  protected ComponentsLoader $systemUnderTest;
 
   /**
    * Invokes a protected or private method of an object.
@@ -40,7 +54,7 @@ class ComponentsLoaderTest extends UnitTestCase {
    *
    * @throws \ReflectionException
    */
-  public function invokeProtectedMethod(?object $obj, string $method, ...$args) {
+  public function invokeProtectedMethod(?object $obj, string $method, ...$args): mixed {
     // Use reflection to test a protected method.
     $methodUnderTest = new \ReflectionMethod($obj, $method);
     $methodUnderTest->setAccessible(TRUE);
@@ -50,10 +64,9 @@ class ComponentsLoaderTest extends UnitTestCase {
   /**
    * Tests finding a template.
    *
-   * @covers ::findTemplate
-   *
    * @dataProvider providerTestFindTemplate
    */
+  #[DataProvider('providerTestFindTemplate') /* @phpstan-ignore attribute.notFound */]
   public function testFindTemplate(string $name, bool $throw, ?string $getTemplate, ?string $expected, ?string $exception = NULL) {
     // Mock services.
     $componentsRegistry = $this->createMock('\Drupal\components\Template\ComponentsRegistry');
@@ -67,22 +80,20 @@ class ComponentsLoaderTest extends UnitTestCase {
       // Use reflection to test protected methods and properties.
       $result = $this->invokeProtectedMethod($this->systemUnderTest, 'findTemplate', $name, $throw);
 
-      if (!$exception) {
+      if ($exception) {
+        $this->fail('No Exception thrown, but "' . $exception . '" expected.');
+      }
+      else {
         $this->assertEquals($expected, $result);
       }
     }
     catch (\Exception $e) {
       if ($exception) {
         $this->assertEquals($exception, $e->getMessage());
-        $exception = '';
       }
       else {
-        $this->fail('No exception expected; "' . $e->getMessage() . '"');
+        $this->fail('No Exception expected but the following was thrown: "' . $e->getMessage() . '"');
       }
-    }
-
-    if ($exception) {
-      $this->fail('No exception thrown, but "' . $exception . '"');
     }
   }
 
@@ -93,35 +104,14 @@ class ComponentsLoaderTest extends UnitTestCase {
    */
   public static function providerTestFindTemplate(): array {
     return [
-      'error when template name has no @' => [
-        'name' => 'n/template.twig',
-        'throw' => FALSE,
-        'getTemplate' => 'not called',
-        'expected' => NULL,
-        'exception' => NULL,
-      ],
-      'error when template name has no namespace' => [
-        'name' => '@/template.twig',
-        'throw' => FALSE,
-        'getTemplate' => 'not called',
-        'expected' => NULL,
-        'exception' => NULL,
-      ],
-      'error when template name does not have an expected extension' => [
-        'name' => '@ns/template.txt',
-        'throw' => FALSE,
-        'getTemplate' => 'not called',
-        'expected' => NULL,
-        'exception' => NULL,
-      ],
-      'exception when invalid template name and $throw = TRUE' => [
-        'name' => '@ns/template.txt',
+      'returns path when template is found' => [
+        'name' => '@ns/template.twig',
         'throw' => TRUE,
-        'getTemplate' => 'not called',
-        'expected' => '',
-        'exception' => 'Malformed namespaced template name "@ns/template.txt" (expecting "@namespace/template_name.twig").',
+        'getTemplate' => 'themes/contrib/example/ns/template.twig',
+        'expected' => 'themes/contrib/example/ns/template.twig',
+        'exception' => NULL,
       ],
-      'error when template not found' => [
+      'returns NULL when template not found' => [
         'name' => '@ns/template.twig',
         'throw' => FALSE,
         'getTemplate' => NULL,
@@ -135,26 +125,12 @@ class ComponentsLoaderTest extends UnitTestCase {
         'expected' => NULL,
         'exception' => 'Unable to find template "@ns/template.twig" in the components registry.',
       ],
-      'template (.twig) found' => [
-        'name' => '@ns/template.twig',
+      'exception when invalid template name and $throw = TRUE' => [
+        'name' => '@ns/template.txt',
         'throw' => TRUE,
-        'getTemplate' => 'themes/contrib/example/ns/template.twig',
-        'expected' => 'themes/contrib/example/ns/template.twig',
-        'exception' => NULL,
-      ],
-      'template (.html) found' => [
-        'name' => '@ns/template.html',
-        'throw' => TRUE,
-        'getTemplate' => 'themes/contrib/example/ns/template.html',
-        'expected' => 'themes/contrib/example/ns/template.html',
-        'exception' => NULL,
-      ],
-      'template (.svg) found' => [
-        'name' => '@ns/icon.svg',
-        'throw' => TRUE,
-        'getTemplate' => 'themes/contrib/example/ns/icon.svg',
-        'expected' => 'themes/contrib/example/ns/icon.svg',
-        'exception' => NULL,
+        'getTemplate' => NULL,
+        'expected' => NULL,
+        'exception' => 'Malformed namespaced template name "@ns/template.txt" (expecting "@namespace/template_name.twig").',
       ],
     ];
   }
@@ -162,10 +138,9 @@ class ComponentsLoaderTest extends UnitTestCase {
   /**
    * Tests checking if a template exists.
    *
-   * @covers ::exists
-   *
    * @dataProvider providerTestExists
    */
+  #[DataProvider('providerTestExists') /* @phpstan-ignore attribute.notFound */]
   public function testExists(string $template, ?string $getTemplate, bool $expected) {
     // Mock services.
     $componentsRegistry = $this->createMock('\Drupal\components\Template\ComponentsRegistry');

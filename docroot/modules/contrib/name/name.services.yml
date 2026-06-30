@@ -1,16 +1,123 @@
 services:
   name.autocomplete:
-    class: Drupal\name\NameAutocomplete
-    arguments: ['@name.options_provider']
+    class: Drupal\name\Service\AutocompleteService
+    arguments:
+      - '@name.options_provider'
+      - '@entity_type.manager'
+
   name.options_provider:
-    class: Drupal\name\NameOptionsProvider
-    arguments: ['@entity_type.manager', '@module_handler']
+    class: Drupal\name\Service\NameOptionService
+    arguments:
+      - '@entity_type.manager'
+      - '@module_handler'
+
   name.format_parser:
-    class: Drupal\name\NameFormatParser
-    arguments: []
+    class: Drupal\name\Service\NameFormatParserService
+    arguments:
+      - '@config.factory'
+
   name.formatter:
-    class: Drupal\name\NameFormatter
-    arguments: ['@entity_type.manager', '@name.format_parser', '@language_manager', '@string_translation', '@config.factory']
+    class: Drupal\name\Service\NameFormatterService
+    arguments:
+      - '@entity_type.manager'
+      - '@name.format_parser'
+      - '@language_manager'
+      - '@string_translation'
+      - '@config.factory'
+
   name.generator:
-    class: Drupal\name\NameGenerator
-    arguments: ['@name.formatter', '@name.format_parser', '@config.factory', '@language_manager', '@string_translation']
+    class: Drupal\name\Service\GeneratorService
+    arguments:
+      - '@name.formatter'
+      - '@name.format_parser'
+      - '@config.factory'
+      - '@language_manager'
+      - '@string_translation'
+
+  name.widget_layouts:
+    class: Drupal\name\Service\WidgetLayoutService
+    arguments:
+      - '@cache.default'
+      - '@module_handler'
+
+  name.format_options:
+    class: Drupal\name\Service\FormatOptionService
+    arguments:
+      - '@entity_type.manager'
+
+  name.additional_component:
+    class: Drupal\name\Service\AdditionalComponentService
+    arguments:
+      - '@entity_type.manager'
+      - '@renderer'
+
+  name.user_realname_preload:
+    class: Drupal\name\Service\UserRealnamePreloadService
+    arguments:
+      - '@config.factory'
+      - '@entity_type.manager'
+
+  name.component_metadata:
+    class: Drupal\name\Service\NameComponentMetadataService
+    arguments:
+      - '@string_translation'
+
+  name.element_validator:
+    class: Drupal\name\Service\ElementValidatorService
+    arguments:
+      - '@module_handler'
+      - '@string_translation'
+      - '@name.component_metadata'
+
+  # Object-oriented hook implementations (Drupal 11.1+ Hook API). Each class
+  # is autowired so it picks up the aliases defined below. On Drupal 10.3-11.0
+  # the procedural shims in name.module delegate here.
+  Drupal\name\Hook\HelpHooks:
+    class: Drupal\name\Hook\HelpHooks
+    autowire: true
+
+  Drupal\name\Hook\WidgetLayoutHooks:
+    class: Drupal\name\Hook\WidgetLayoutHooks
+    autowire: true
+
+  Drupal\name\Hook\ThemeHooks:
+    class: Drupal\name\Hook\ThemeHooks
+    autowire: true
+
+  Drupal\name\Hook\UserHooks:
+    class: Drupal\name\Hook\UserHooks
+    autowire: true
+
+  Drupal\name\Hook\FieldConfigHooks:
+    class: Drupal\name\Hook\FieldConfigHooks
+    autowire: true
+
+  Drupal\name\Hook\FieldHooks:
+    class: Drupal\name\Hook\FieldHooks
+    autowire: true
+
+  Drupal\name\Hook\TokenHooks:
+    class: Drupal\name\Hook\TokenHooks
+    autowire: true
+
+  Drupal\name\Service\AutocompleteInterface: '@name.autocomplete'
+  Drupal\name\Service\NameOptionInterface: '@name.options_provider'
+  Drupal\name\Service\NameFormatParserInterface: '@name.format_parser'
+  Drupal\name\Service\NameFormatterInterface: '@name.formatter'
+  Drupal\name\Service\GeneratorInterface: '@name.generator'
+
+  # Legacy interface names for autowiring and type hints.
+  Drupal\name\NameFormatterInterface: '@name.formatter'
+  Drupal\name\NameGeneratorInterface: '@name.generator'
+
+  Drupal\name\Service\WidgetLayoutInterface: '@name.widget_layouts'
+  Drupal\name\Service\FormatOptionInterface: '@name.format_options'
+  Drupal\name\Service\AdditionalComponentInterface: '@name.additional_component'
+  Drupal\name\Service\UserRealnamePreloadInterface: '@name.user_realname_preload'
+  Drupal\name\Service\NameComponentMetadataInterface: '@name.component_metadata'
+  Drupal\name\Service\ElementValidatorInterface: '@name.element_validator'
+
+  name.twig.name_format_help:
+    class: Drupal\name\Twig\NameFormatHelpTwigExtension
+    tags:
+      - { name: twig.extension }

@@ -17,13 +17,12 @@
         'lpb-component:move.lpb',
         'lpb-component:drop.lpb',
       ].join(' ');
-      $(once('lpb-builder-form', '[data-lpb-id]', context))
-        .on(events, (e) => {
-          $(e.currentTarget)
-            .closest('[data-lpb-form-id]')
-            .find('[data-drupal-selector="edit-close"]')
-            .val(Drupal.t('Cancel'));
-        });
+      $(once('lpb-builder-form', '[data-lpb-id]', context)).on(events, (e) => {
+        e.currentTarget
+          .closest('[data-lpb-form-id]')
+          .querySelector('[data-drupal-selector="edit-close"]').value =
+          Drupal.t('Cancel');
+      });
     },
   };
 })(jQuery, Drupal, once);

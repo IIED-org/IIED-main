@@ -24,7 +24,7 @@ class NodeTitle extends Title {
     // Set the title, used to construct the field label, based on the label
     // of the node type's title field.
     if (!empty($configuration['entity'])) {
-      /* @var \Drupal\Core\Field\FieldDefinitionInterface $field */
+      /** @var \Drupal\Core\Field\FieldDefinitionInterface $field */
       $field = $configuration['entity']->getFieldDefinition('title');
       $title = $field->getLabel();
       $configuration['field']['title'] = $title;

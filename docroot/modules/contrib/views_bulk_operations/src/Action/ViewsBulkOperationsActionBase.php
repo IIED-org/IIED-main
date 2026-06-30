@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\views_bulk_operations\Action;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
@@ -7,6 +9,7 @@ use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\views\ViewExecutable;
+use Drupal\views_bulk_operations\Traits\ViewsBulkOperationsActionCompletedTrait;
 
 /**
  * Views Bulk Operations action plugin base.
@@ -73,7 +76,7 @@ abstract class ViewsBulkOperationsActionBase extends ActionBase implements Views
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return [];
   }
 
@@ -88,7 +91,7 @@ abstract class ViewsBulkOperationsActionBase extends ActionBase implements Views
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
 
   }
 
@@ -103,7 +106,7 @@ abstract class ViewsBulkOperationsActionBase extends ActionBase implements Views
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     $form_state->cleanValues();
     foreach ($form_state->getValues() as $key => $value) {
       $this->configuration[$key] = $value;
@@ -113,14 +116,14 @@ abstract class ViewsBulkOperationsActionBase extends ActionBase implements Views
   /**
    * {@inheritdoc}
    */
-  public function getConfiguration() {
+  public function getConfiguration(): array {
     return $this->configuration;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setConfiguration(array $configuration) {
+  public function setConfiguration(array $configuration): void {
     $this->configuration = $configuration;
   }
 

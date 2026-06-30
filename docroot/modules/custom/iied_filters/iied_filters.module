@@ -268,6 +268,10 @@ function _iied_filters_get_youtube_id($url)
  * @return array
  *   The video iframe render array.
  */
+
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+
 function iied_filters_handle_youtube($url, $settings) {
   $output = array();
 
@@ -290,7 +294,11 @@ function iied_filters_handle_youtube($url, $settings) {
   $id = _iied_filters_get_youtube_id($url);
   if (!$id) {
     // We can't decode the URL - just return the URL as a link.
-    $output['#markup'] = l($url, $url);
+
+    $url_object = Url::fromUri($url);
+    $link = $url_object->toString();
+    $output['#markup'] = $link;
+
     return $output;
   }
 

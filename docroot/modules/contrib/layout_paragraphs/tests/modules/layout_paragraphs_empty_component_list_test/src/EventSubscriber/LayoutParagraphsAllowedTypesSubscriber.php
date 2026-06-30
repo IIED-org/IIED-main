@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\layout_paragraphs\Event\LayoutParagraphsAllowedTypesEvent;
 
 /**
- * Class definition for LayoutParagraphsAllowedTypesSubcriber.
+ * Class definition for LayoutParagraphsAllowedTypesSubscriber.
  */
 class LayoutParagraphsAllowedTypesSubscriber implements EventSubscriberInterface {
 
@@ -31,7 +31,7 @@ class LayoutParagraphsAllowedTypesSubscriber implements EventSubscriberInterface
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
     return [

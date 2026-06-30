@@ -138,7 +138,7 @@ class LayoutPluginTest extends TestBase {
    * Test extended layout class.
    */
   public function testExtendedLayout() {
-    // Ensure schema validation passes when saving custom layout config */
+    // Ensure schema validation passes when saving custom layout config */.
     /* @see \Drupal\Core\Config\Development\ConfigSchemaChecker::onConfigSave */
     EntityViewDisplay::load('node.article.default')
       ->setThirdPartySetting('ds', 'layout', [

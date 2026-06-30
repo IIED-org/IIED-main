@@ -2,21 +2,24 @@
 
 namespace Drupal\Tests\memcache\Functional;
 
+use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\DependencyInjection\ServiceModifierInterface;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Tests\system\Functional\Lock\LockFunctionalTest;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Confirm locking works between two separate requests.
  *
  * @group memcache
  */
-class MemcacheLockFunctionalTest extends LockFunctionalTest {
+class MemcacheLockFunctionalTest extends LockFunctionalTest implements ServiceModifierInterface {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
+   * {@inheritdoc}
    */
-  protected static $modules = ['system_test', 'memcache', 'memcache_test'];
+  protected static $modules = ['memcache'];
 
   /**
    * {@inheritdoc}
@@ -38,6 +41,16 @@ class MemcacheLockFunctionalTest extends LockFunctionalTest {
     ];
 
     $this->writeSettings($settings);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function alter(ContainerBuilder $container) {
+    $definition = new Definition(LockBackendInterface::class);
+    $definition->setFactory([new Reference('memcache.lock.factory'), 'get']);
+
+    $container->setDefinition('lock', $definition);
   }
 
 }

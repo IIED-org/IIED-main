@@ -349,12 +349,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
           is_grouped: true
           group_info:
             label: Category
@@ -727,12 +721,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -1098,10 +1086,10 @@ display:
         default: '0'
       filename: iied-europe-global-research-priority-tracker-2023.csv
       automatic_download: false
-      store_in_public_file_directory: null
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false
+      export_filesystem: public
     cache_metadata:
       max-age: -1
       contexts:

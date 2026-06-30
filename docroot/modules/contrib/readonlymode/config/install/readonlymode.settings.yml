@@ -13,6 +13,7 @@ forms:
       - search_block_form
       - system_modules
       - system_site_maintenance_mode
+      - views_exposed_form
     view:
       - node_admin_content
       - comment_admin_overview

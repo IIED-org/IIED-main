@@ -12,7 +12,9 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
 use Drupal\Core\Entity\SynchronizableEntityTrait;
+use Drupal\Core\Plugin\RemovableDependentPluginInterface;
 use Drupal\Core\Plugin\PluginDependencyTrait;
+use Drupal\Core\Plugin\RemovableDependentPluginReturn;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
@@ -140,7 +142,7 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
   }
 
   /**
-   * Overrides Entity::isNew().
+   * Overrides EntityBase::isNew().
    *
    * EntityInterface::enforceIsNew() is only supported for newly created
    * configuration entities but has no effect after saving, since each
@@ -233,7 +235,7 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
   }
 
   /**
-   * Helper callback for uasort() to sort configuration entities by weight and label.
+   * Callback for uasort() to sort configuration entities by weight and label.
    */
   public static function sort(ConfigEntityInterface $a, ConfigEntityInterface $b) {
     $a_weight = $a->weight ?? 0;
@@ -283,6 +285,7 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
    * Gets the typed config manager.
    *
    * @return \Drupal\Core\Config\TypedConfigManagerInterface
+   *   The typed configuration plugin manager.
    */
   protected function getTypedConfig() {
     return \Drupal::service('config.typed');
@@ -347,7 +350,7 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
   /**
    * {@inheritdoc}
    */
-  public function __sleep() {
+  public function __sleep(): array {
     $keys_to_unset = [];
     if ($this instanceof EntityWithPluginCollectionInterface) {
       // Get the plugin collections first, so that the properties are
@@ -478,6 +481,21 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
       $old_count = count($this->third_party_settings);
       $this->third_party_settings = array_diff_key($this->third_party_settings, array_flip($dependencies['module']));
       $changed = $old_count != count($this->third_party_settings);
+    }
+    if ($this instanceof EntityWithPluginCollectionInterface) {
+      // Allow associated plugins to recalculate their dependencies and update
+      // settings on dependency removal.
+      foreach ($this->getPluginCollections() as $plugin_collection) {
+        foreach ($plugin_collection as $id => $instance) {
+          if ($instance instanceof RemovableDependentPluginInterface) {
+            $changed = match ($instance->onCollectionDependencyRemoval($dependencies)) {
+              RemovableDependentPluginReturn::Remove => $plugin_collection->removeInstanceId($id) || TRUE,
+              RemovableDependentPluginReturn::Changed => TRUE,
+              RemovableDependentPluginReturn::Unchanged => $changed,
+            };
+          }
+        }
+      }
     }
     return $changed;
   }

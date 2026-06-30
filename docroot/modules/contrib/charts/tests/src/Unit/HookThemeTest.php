@@ -4,26 +4,58 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\charts\Unit;
 
+use Drupal\charts\Hook\ChartsHooks;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ExtensionPathResolver;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Tests\UnitTestCase;
-
-require_once __DIR__ . '/../../../charts.module';
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Tests charts_theme.
+ * Tests the ChartsHooks::theme() method.
  *
+ * @coversDefaultClass \Drupal\charts\Hook\ChartsHooks
  * @group charts
  */
 class HookThemeTest extends UnitTestCase {
 
   /**
-   * Tests charts_theme().
+   * The charts hooks service.
+   *
+   * @var \Drupal\charts\Hook\ChartsHooks
    */
-  public function testViewsData() {
-    $existing = NULL;
-    $type = NULL;
-    $theme = NULL;
-    $path = NULL;
-    $data = charts_theme($existing, $type, $theme, $path);
+  protected ChartsHooks $chartsHooks;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    // 1. Mock the dependencies needed for the ChartsHooks constructor.
+    $requestStack = $this->createMock(RequestStack::class);
+    $configFactory = $this->createMock(ConfigFactoryInterface::class);
+    $extensionPathResolver = $this->createMock(ExtensionPathResolver::class);
+    $moduleHandler = $this->createMock(ModuleHandlerInterface::class);
+
+    // 2. Instantiate the class we want to test.
+    $this->chartsHooks = new ChartsHooks(
+      $requestStack,
+      $configFactory,
+      $extensionPathResolver,
+      $moduleHandler
+    );
+
+  }
+
+  /**
+   * Tests the structure of the data returned by theme().
+   *
+   * @covers ::theme
+   */
+  public function testTheme(): void {
+    // 3. Call the method directly on the object and check its output.
+    $data = $this->chartsHooks->theme();
 
     $this->assertIsArray($data);
     $this->assertCount(1, $data);

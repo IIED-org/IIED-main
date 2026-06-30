@@ -42,11 +42,6 @@ class CssAlter implements ContainerInjectionInterface {
 
   /**
    * Constructor.
-   *
-   * @param \Drupal\Core\Extension\ThemeHandlerInterface $themeHandler
-   *   The theme handler.
-   * @param \Drupal\Core\Extension\ThemeExtensionList $themeExtensionList
-   *   The module extension list.
    */
   public function __construct(
     ThemeHandlerInterface $themeHandler,
@@ -129,11 +124,11 @@ class CssAlter implements ContainerInjectionInterface {
     $whitelist = [
       'core/themes/claro/css/components/fieldset.css',
       'core/themes/claro/css/components/entity-meta.css',
-      'core/themes/claro/css/components/jquery.ui/theme.css'
+      'core/themes/claro/css/components/jquery.ui/theme.css',
     ];
     // Gin 4.
     foreach ($css as $name => $config) {
-      if (str_contains( $name, 'core/themes/claro/css/components') &&
+      if (str_contains($name, 'core/themes/claro/css/components') &&
       !in_array($name, $whitelist)
       ) {
         unset($css[$name]);

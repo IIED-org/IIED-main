@@ -27,3 +27,13 @@ function publishcontent_update_8002() {
   $config->set('unpublish_text_value', 'Unpublish');
   $config->save(TRUE);
 }
+
+/**
+ * Import additional modules' configuration for existing sites.
+ */
+function publishcontent_update_8003() {
+  $config = \Drupal::configFactory()->getEditable('publishcontent.settings');
+  $config->set('publish_markup_value', 'Published');
+  $config->set('unpublish_markup_value', 'Unpublished');
+  $config->save(TRUE);
+}

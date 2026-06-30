@@ -1,15 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\views_bulk_operations\Service;
 
 use Drupal\Core\Access\AccessResultReasonInterface;
 use Drupal\Core\Action\ActionInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
+use Drupal\views\ViewsData;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionInterface;
 use Drupal\views_bulk_operations\ViewsBulkOperationsBatch;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,14 +36,9 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
   protected bool $initialized = FALSE;
 
   /**
-   * Are we operating in exclude mode?
-   */
-  protected bool $excludeMode = FALSE;
-
-  /**
    * The processed action object.
    */
-  protected ActionInterface $action;
+  protected ?ActionInterface $action = NULL;
 
   /**
    * The current view object.
@@ -60,21 +59,14 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
 
   /**
    * Constructor.
-   *
-   * @param \Drupal\views_bulk_operations\Service\ViewsbulkOperationsViewDataInterface $viewDataService
-   *   View data provider service.
-   * @param \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionManager $actionManager
-   *   VBO action manager.
-   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
-   *   Current user object.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
-   *   Module handler service.
    */
   public function __construct(
     protected readonly ViewsBulkOperationsViewDataInterface $viewDataService,
     protected readonly ViewsBulkOperationsActionManager $actionManager,
     protected readonly AccountProxyInterface $currentUser,
-    protected readonly ModuleHandlerInterface $moduleHandler
+    protected readonly ModuleHandlerInterface $moduleHandler,
+    protected readonly ViewsData $viewsData,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**
@@ -88,13 +80,19 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $this->queue = [];
     }
 
-    $this->excludeMode = !empty($view_data['exclude_mode']);
+    if (
+      !\array_key_exists('exclude_list', $view_data) ||
+      \count($view_data['exclude_list']) === 0
+    ) {
+      // Nothing to exclude.
+      $view_data['exclude_mode'] = FALSE;
+    }
 
-    if (isset($view_data['action_id'])) {
-      if (!isset($view_data['configuration'])) {
+    if (\array_key_exists('action_id', $view_data)) {
+      if (!\array_key_exists('configuration', $view_data)) {
         $view_data['configuration'] = [];
       }
-      if (!empty($view_data['preconfiguration'])) {
+      if (\array_key_exists('preconfiguration', $view_data)) {
         $view_data['configuration'] += $view_data['preconfiguration'];
       }
 
@@ -120,7 +118,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
    * @param mixed $view
    *   The current view object or NULL.
    */
-  protected function setView($view = NULL): void {
+  private function setView($view = NULL): void {
     if (!\is_null($view)) {
       $this->view = $view;
     }
@@ -129,8 +127,12 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $this->view->setDisplay($this->bulkFormData['display_id']);
     }
     $this->view->get_total_rows = TRUE;
+    // @phpstan-ignore property.notFound
     $this->view->views_bulk_operations_processor_built = TRUE;
-    if (!empty($this->bulkFormData['arguments'])) {
+    if (
+      \array_key_exists('arguments', $this->bulkFormData) &&
+      \count($this->bulkFormData['arguments']) !== 0
+    ) {
       $this->view->setArguments($this->bulkFormData['arguments']);
     }
   }
@@ -164,32 +166,59 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     $this->viewDataService->init($this->view, $this->view->getDisplay(), $this->bulkFormData['relationship_id']);
 
     // Set exposed filters and pager parameters.
-    if (!empty($this->bulkFormData['clear_on_exposed']) && !empty($this->bulkFormData['exposed_input'])) {
+    if (
+      (\array_key_exists('clear_on_exposed', $this->bulkFormData) && $this->bulkFormData['clear_on_exposed'] !== FALSE) &&
+      (\array_key_exists('exposed_input', $this->bulkFormData) && \count($this->bulkFormData['exposed_input']) !== 0)
+    ) {
       $this->view->setExposedInput($this->bulkFormData['exposed_input']);
     }
     else {
-      $this->view->setExposedInput(['_views_bulk_operations_override' => TRUE]);
+      $this->view->setExposedInput(['_views_bulk_operations_override']);
     }
 
     $base_field = $this->view->storage->get('base_field');
+    $base_table = $this->view->storage->get('base_table');
 
-    // In some cases we may encounter nondeterministic behaviour in
+    // In some cases we may encounter nondeterministic behavior in
     // db queries with sorts allowing different order of results.
     // To fix this we're removing all sorts and setting one sorting
     // rule by the view base id field.
-    foreach (\array_keys($this->view->getHandlers('sort')) as $id) {
-      $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $id, NULL);
-    }
-    $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $base_field, [
-      'id' => $base_field,
-      'table' => $this->view->storage->get('base_table'),
-      'field' => $base_field,
+    $sort_base = [
+      'table' => $base_table,
       'order' => 'ASC',
       'relationship' => 'none',
       'group_type' => 'group',
       'exposed' => FALSE,
       'plugin_id' => 'standard',
-    ]);
+    ];
+    foreach (\array_keys($this->view->getHandlers('sort')) as $id) {
+      $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $id, NULL);
+    }
+    $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $base_field, [
+      'id' => $base_field,
+      'field' => $base_field,
+    ] + $sort_base);
+
+    // If the entity type supports translations, we need an additional sort
+    // by langcode.
+    $entity_type_id = $this
+      ->viewsData
+      ->get($base_table)['table']['entity type'] ?? NULL;
+    if ($entity_type_id !== NULL) {
+      $entity_type_definition = $this
+        ->entityTypeManager
+        ->getDefinition($entity_type_id);
+
+      if ($entity_type_definition->isTranslatable() && $entity_type_definition->hasKey('langcode')) {
+        $langcode_field = $entity_type_definition->getKey('langcode');
+
+        // Add this as another sort handler. You can give it a unique ID.
+        $this->view->setHandler($this->bulkFormData['display_id'], 'sort', $langcode_field, [
+          'id' => $langcode_field,
+          'field' => $langcode_field,
+        ] + $sort_base);
+      }
+    }
 
     $this->view->setItemsPerPage($this->bulkFormData['batch_size']);
     $this->view->setCurrentPage($page);
@@ -200,7 +229,8 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     $offset = $this->bulkFormData['batch_size'] * $page;
     // If the view doesn't start from the first result,
     // move the offset.
-    if ($pager_offset = $this->view->pager->getOffset()) {
+    // @phpstan-ignore nullsafe.neverNull
+    if ($pager_offset = $this->view->pager?->getOffset()) {
       $offset += $pager_offset;
     }
     $this->view->query->setLimit($this->bulkFormData['batch_size']);
@@ -212,7 +242,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $entity = $this->viewDataService->getEntity($row);
 
       $exclude = FALSE;
-      if ($this->excludeMode) {
+      if ($this->bulkFormData['exclude_mode']) {
         // Filter out excluded results basing on base field ID and language.
         foreach ($this->bulkFormData['exclude_list'] as $item) {
           if ($row->{$base_field} === $item[0] && $entity->language()->getId() === $item[1]) {
@@ -244,9 +274,9 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     $this->queue = [];
 
     // Determine batch size and offset.
-    if (!empty($context)) {
+    if (\array_key_exists('sandbox', $context)) {
       $batch_size = $data['batch_size'];
-      if (!isset($context['sandbox']['current_batch'])) {
+      if (!\array_key_exists('current_batch', $context['sandbox'])) {
         $context['sandbox']['current_batch'] = 0;
       }
       $current_batch = &$context['sandbox']['current_batch'];
@@ -271,13 +301,16 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     $this->view->setCurrentPage(0);
     $this->view->setOffset(0);
     $this->view->initHandlers();
-    $this->view->setExposedInput(['_views_bulk_operations_override' => TRUE]);
+    $this->view->setExposedInput(['_views_bulk_operations_override']);
 
     // Remove all exposed filters so we don't have any default filter
     // values that could make the actual selection out of range.
-    if (!empty($this->view->filter)) {
+    if (\count($this->view->filter) !== 0) {
       foreach ($this->view->filter as $id => $filter) {
-        if (!empty($filter->options['exposed'])) {
+        if (
+          \array_key_exists('exposed', $filter->options) &&
+          $filter->options['exposed'] === TRUE
+        ) {
           unset($this->view->filter[$id]);
         }
       }
@@ -291,12 +324,18 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     foreach ($batch_list as $item) {
       $base_field_values[$item[0]] = $item[0];
     }
-    if (empty($base_field_values)) {
+    if (\count($base_field_values) === 0) {
       return 0;
     }
 
-    if (isset($this->view->query->fields[$base_field])) {
-      if (!empty($this->view->query->fields[$base_field]['table'])) {
+    if (
+      \property_exists($this->view->query, 'fields') &&
+      \array_key_exists($base_field, $this->view->query->fields)
+    ) {
+      if (
+        \array_key_exists('table', $this->view->query->fields[$base_field])
+        && $this->view->query->fields[$base_field]['table'] !== ''
+      ) {
         $base_field_alias = $this->view->query->fields[$base_field]['table'] . '.' . $this->view->query->fields[$base_field]['alias'];
       }
       else {
@@ -307,7 +346,10 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $base_field_alias = $base_field;
     }
 
-    $this->view->query->addWhere(0, $base_field_alias, $base_field_values, 'IN');
+    if (!\method_exists($this->view->query, 'addWhere')) {
+      throw new \Exception(\sprintf('Unsupported query type: %s', $this->view->query::class));
+    }
+    $this->view->query->addWhere('views_bulk_operations', $base_field_alias, $base_field_values, 'IN');
 
     // Rebuild the view query.
     $this->view->query->build($this->view);
@@ -332,13 +374,13 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     // base ID field for all languages.
     $this->viewDataService->init($this->view, $this->view->getDisplay(), $this->bulkFormData['relationship_id']);
     $result_hits = [];
-    foreach ($batch_list as $item) {
+    foreach ($batch_list as $list_item) {
       foreach ($this->view->result as $row_index => $row) {
         if (\array_key_exists($row_index, $result_hits)) {
           continue;
         }
         $entity = $this->viewDataService->getEntity($row);
-        if ($row->{$base_field} === $item[0] && $entity->language()->getId() === $item[1]) {
+        if ($row->{$base_field} === $list_item[0] && $entity->language()->getId() === $list_item[1]) {
           $result_hits[$row_index] = TRUE;
           $this->queue[] = $entity;
           break;
@@ -347,9 +389,9 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     }
 
     // Extra processing when executed in a Batch API operation.
-    if (!empty($context)) {
-      if (!isset($context['sandbox']['total'])) {
-        if (empty($list)) {
+    if (\array_key_exists('sandbox', $context)) {
+      if (!\array_key_exists('total', $context['sandbox'])) {
+        if (\count($list) === 0) {
           $context['sandbox']['total'] = $this->viewDataService->getTotalResults($data['clear_on_exposed']);
         }
         else {
@@ -376,8 +418,8 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
    * @param array $context
    *   The context to be set.
    */
-  protected function setActionContext(array &$context): void {
-    if (isset($this->action) && \method_exists($this->action, 'setContext')) {
+  private function setActionContext(array &$context): void {
+    if ($this->action !== NULL && \method_exists($this->action, 'setContext')) {
       $this->action->setContext($context);
     }
   }
@@ -385,8 +427,8 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
   /**
    * Sets the current view object as the executed action parameter.
    */
-  protected function setActionView(): void {
-    if (isset($this->action) && \method_exists($this->action, 'setView')) {
+  private function setActionView(): void {
+    if ($this->action !== NULL && \method_exists($this->action, 'setView')) {
       $this->action->setView($this->view);
     }
   }
@@ -407,7 +449,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
 
     // Check entity type for multi-type views like search_api index.
     $action_definition = $this->actionManager->getDefinition($this->bulkFormData['action_id']);
-    if (!empty($action_definition['type'])) {
+    if (\array_key_exists('type', $action_definition) && $action_definition['type'] !== '') {
       foreach ($this->queue as $delta => $entity) {
         if ($entity->getEntityTypeId() !== $action_definition['type']) {
           $output[] = $this->t('Entity type not supported');
@@ -428,10 +470,10 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
         // If we're given a reason why access was denied, display it.
         if ($accessResult instanceof AccessResultReasonInterface) {
           $reason = $accessResult->getReason();
-          if (!empty($reason)) {
+          if ($reason !== '') {
             $result = [
               'message' => (string) $this->t('Access denied: @reason', [
-                '@reason' => $accessResult->getReason(),
+                '@reason' => $reason,
               ]),
               'type' => 'warning',
             ];
@@ -471,7 +513,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     }
 
     // Populate output if empty (for core actions).
-    if (empty($results)) {
+    if (\count($results) === 0) {
       $count = \count($this->queue);
       for ($i = 0; $i < $count; $i++) {
         $output[] = [
@@ -519,7 +561,11 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
    * {@inheritdoc}
    */
   public function executeProcessing(array &$data, $view = NULL): RedirectResponse {
-    if (empty($data['prepopulated']) && $data['exclude_mode'] && empty($data['exclude_list'])) {
+    if (
+      (!\array_key_exists('prepopulated', $data) || $data['prepopulated'] === FALSE) &&
+      $data['exclude_mode'] &&
+      !\array_key_exists('exclude_list', $data)
+    ) {
       $data['exclude_list'] = $data['list'];
       $data['list'] = [];
     }
@@ -557,11 +603,11 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $this->setActionContext($context);
 
       // Populate and process queue.
-      if (empty($data['list'])) {
+      if (!\array_key_exists('list', $data) || \count($data['list']) === 0) {
         $data['list'] = $this->getPageList(0);
       }
       $batch_results = [];
-      if ($this->populateQueue($data)) {
+      if ($this->populateQueue($data) !== 0) {
         $batch_results = $this->process();
       }
 

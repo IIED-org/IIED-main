@@ -322,6 +322,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:
@@ -553,14 +554,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: true
           is_grouped: false
           group_info:
@@ -668,7 +661,8 @@ display:
           buttons: false
           action_title: Action
           clear_on_exposed: true
-          force_selection_info: false
+          show_multipage_selection_box: default
+          show_select_all: default
           selected_actions:
             4:
               action_id: 'entity:unpublish_action:taxonomy_term'
@@ -1245,12 +1239,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             placeholder: ''
             autocomplete_filter: 0
             autocomplete_min_chars: '0'
@@ -1342,12 +1330,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1802,12 +1784,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             placeholder: ''
             autocomplete_filter: 0
             autocomplete_min_chars: '0'
@@ -2234,15 +2210,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              publications_manager: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:

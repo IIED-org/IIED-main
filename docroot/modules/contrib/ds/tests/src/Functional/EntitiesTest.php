@@ -52,12 +52,12 @@ class EntitiesTest extends TestBase {
     $cache = $this->container->get('cache.default')->get('ds_test_suggestions');
     $hook_suggestions = $cache->data;
     $expected_hook_suggestions = [
-      'ds_2col_stacked',
-      'ds_2col_stacked__node',
-      'ds_2col_stacked__node_full',
-      'ds_2col_stacked__node_article',
-      'ds_2col_stacked__node_article_full',
-      'ds_2col_stacked__node__1',
+    'ds_2col_stacked',
+    'ds_2col_stacked__node',
+    'ds_2col_stacked__node_full',
+    'ds_2col_stacked__node_article',
+    'ds_2col_stacked__node_article_full',
+    'ds_2col_stacked__node__1',
     ];
     $this->assertEquals($hook_suggestions, $expected_hook_suggestions);*/
 

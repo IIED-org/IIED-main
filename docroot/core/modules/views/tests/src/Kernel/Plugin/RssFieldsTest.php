@@ -9,12 +9,14 @@ use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\Tests\views\Kernel\ViewsKernelTestBase;
 use Drupal\views\Views;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests \Drupal\views\Plugin\views\row\RssFields.
- *
- * @group views
  */
+#[Group('views')]
+#[RunTestsInSeparateProcesses]
 class RssFieldsTest extends ViewsKernelTestBase {
   use NodeCreationTrait;
   use ContentTypeCreationTrait;
@@ -36,9 +38,9 @@ class RssFieldsTest extends ViewsKernelTestBase {
   protected function setUp($import_test_views = TRUE): void {
     parent::setUp($import_test_views);
 
-    $this->installConfig(['node', 'filter']);
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');
+    $this->installConfig(['node', 'filter']);
     $this->createContentType(['type' => 'article']);
   }
 

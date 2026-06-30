@@ -103,9 +103,8 @@ class CommentTest extends CommentTestBase {
 
     // Verify there are no double ID's.
     // For some reason, this test fails on the test bot, but is fine local.
-    //$xpath = $this->xpath('//a[@id="comment-1"]');
-    //$this->assertEquals(1, count($xpath),'1 ID found named comment-1');
-
+    // $xpath = $this->xpath('//a[@id="comment-1"]');
+    // $this->assertEquals(1, count($xpath),'1 ID found named comment-1');
     // Test that hidden fields aren't exposed in the config.
     $this->dsSelectLayout();
 

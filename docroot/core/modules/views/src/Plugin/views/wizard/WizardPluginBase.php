@@ -153,7 +153,12 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
 
     $entity_types = \Drupal::entityTypeManager()->getDefinitions();
     foreach ($entity_types as $entity_type_id => $entity_type) {
-      if (in_array($this->base_table, [$entity_type->getBaseTable(), $entity_type->getDataTable(), $entity_type->getRevisionTable(), $entity_type->getRevisionDataTable()], TRUE)) {
+      if (in_array($this->base_table, [
+        $entity_type->getBaseTable(),
+        $entity_type->getDataTable(),
+        $entity_type->getRevisionTable(),
+        $entity_type->getRevisionDataTable(),
+      ], TRUE)) {
         $this->entityType = $entity_type;
         $this->entityTypeId = $entity_type_id;
       }
@@ -174,6 +179,7 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
    * Gets the filters property.
    *
    * @return array
+   *   An array of filters, keyed by filter ID, containing filter information.
    */
   public function getFilters() {
     $filters = [];
@@ -207,6 +213,8 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
    * Gets the availableSorts property.
    *
    * @return array
+   *   An array whose keys are the available sort options and whose
+   *   corresponding values are human readable labels.
    */
   public function getAvailableSorts() {
     return $this->availableSorts;
@@ -216,6 +224,7 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
    * Gets the sorts property.
    *
    * @return array
+   *   An array of sorts, keyed by sort ID, containing sort information.
    */
   public function getSorts() {
     return $this->sorts;
@@ -417,7 +426,11 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
         '#options' => $style_options,
       ];
       $style_form = &$form['displays']['block']['options']['style'];
-      $style_form['style_plugin']['#default_value'] = static::getSelected($form_state, ['block', 'style', 'style_plugin'], 'default', $style_form['style_plugin']);
+      $style_form['style_plugin']['#default_value'] = static::getSelected($form_state, [
+        'block',
+        'style',
+        'style_plugin',
+      ], 'default', $style_form['style_plugin']);
       // Changing this dropdown updates $form['displays']['block']['options']
       // via AJAX.
       views_ui_add_ajax_trigger($style_form, 'style_plugin', ['displays', 'block', 'options']);
@@ -480,16 +493,16 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
   }
 
   /**
-   * Gets the current value of a #select element, from within a form constructor function.
+   * Gets the current value of a #select element.
    *
-   * This function is intended for use in highly dynamic forms (in particular the
-   * add view wizard) which are rebuilt in different ways depending on which
-   * triggering element (AJAX or otherwise) was most recently fired. For example,
-   * sometimes it is necessary to decide how to build one dynamic form element
-   * based on the value of a different dynamic form element that may not have
-   * even been present on the form the last time it was submitted. This function
-   * takes care of resolving those conflicts and gives you the proper current
-   * value of the requested #select element.
+   * This function is intended for use in highly dynamic forms (in particular
+   * the add view wizard) which are rebuilt in different ways depending on which
+   * triggering element (AJAX or otherwise) was most recently fired. For
+   * example, sometimes it is necessary to decide how to build one dynamic form
+   * element based on the value of a different dynamic form element that may not
+   * have even been present on the form the last time it was submitted. This
+   * function takes care of resolving those conflicts and gives you the proper
+   * current value of the requested #select element.
    *
    * By necessity, this function sometimes uses non-validated user input from
    * FormState::$input in making its determination. Although it performs some
@@ -502,25 +515,25 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
-   * @param $parents
+   * @param array $parents
    *   An array of parent keys that point to the part of the submitted form
-   *   values that are expected to contain the element's value (in the case where
-   *   this form element was actually submitted). In a simple case (assuming
-   *   #tree is TRUE throughout the form), if the select element is located in
-   *   $form['wrapper']['select'], so that the submitted form values would
-   *   normally be found in $form_state->getValue(array('wrapper', 'select')),
-   *   you would pass array('wrapper', 'select') for this parameter.
-   * @param $default_value
-   *   The default value to return if the #select element does not currently have
-   *   a proper value set based on the submitted input.
-   * @param $element
+   *   values that are expected to contain the element's value (in the case
+   *   where this form element was actually submitted). In a simple case
+   *   (assuming #tree is TRUE throughout the form), if the select element is
+   *   located in $form['wrapper']['select'], so that the submitted form values
+   *   would normally be found in $form_state->getValue(['wrapper', 'select']),
+   *   you would pass ['wrapper', 'select'] for this parameter.
+   * @param array|string $default_value
+   *   The default value to return if the #select element does not currently
+   *   have a proper value set based on the submitted input.
+   * @param array $element
    *   An array representing the current version of the #select element within
    *   the form.
    *
    * @return array|string
-   *   The current value of the #select element. A common use for this is to feed
-   *   it back into $element['#default_value'] so that the form will be rendered
-   *   with the correct value selected.
+   *   The current value of the #select element. A common use for this is to
+   *   feed it back into $element['#default_value'] so that the form will be
+   *   rendered with the correct value selected.
    */
   public static function getSelected(FormStateInterface $form_state, $parents, $default_value, $element) {
     // For now, don't trust this to work on anything but a #select element.
@@ -544,15 +557,15 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
     if (!empty($user_input)) {
       $key_exists = NULL;
       $submitted = NestedArray::getValue($user_input, $parents, $key_exists);
-      // Check that the user-submitted value is one of the allowed options before
-      // returning it. This is not a substitute for actual form validation;
-      // rather it is necessary because, for example, the same select element
-      // might have #options A, B, and C under one set of conditions but #options
-      // D, E, F under a different set of conditions. So the form submission
-      // might have occurred with option A selected, but when the form is rebuilt
-      // option A is no longer one of the choices. In that case, we don't want to
-      // use the value that was submitted anymore but rather fall back to the
-      // default value.
+      // Check that the user-submitted value is one of the allowed options
+      // before returning it. This is not a substitute for actual form
+      // validation; rather it is necessary because, for example, the same
+      // select element might have #options A, B, and C under one set of
+      // conditions but #options D, E, F under a different set of conditions. So
+      // the form submission might have occurred with option A selected, but
+      // when the form is rebuilt option A is no longer one of the choices. In
+      // that case, we don't want to use the value that was submitted anymore
+      // but rather fall back to the default value.
       if ($key_exists && in_array($submitted, array_keys($element['#options']))) {
         return $submitted;
       }
@@ -580,7 +593,7 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
       $options = $this->rowStyleOptions();
       $style_form['row_plugin'] = [
         '#type' => 'select',
-        '#title' => $this->t('of'),
+        '#title' => $this->t('output as'),
         '#options' => $options,
         '#access' => count($options) > 1,
       ];
@@ -624,8 +637,9 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
   protected function buildFilters(&$form, FormStateInterface $form_state) {
     \Drupal::moduleHandler()->loadInclude('views_ui', 'inc', 'admin');
 
-    $bundles = $this->bundleInfoService->getBundleInfo($this->entityTypeId);
-    // If the current base table support bundles and has more than one (like user).
+    $bundles = isset($this->entityTypeId) ? $this->bundleInfoService->getBundleInfo($this->entityTypeId) : [];
+    // If the current base table support bundles and has more than one (like
+    // user).
     if (!empty($bundles) && $this->entityType && $this->entityType->hasKey('bundle')) {
       // Get all bundles and their human readable names.
       $options = ['all' => $this->t('All')];
@@ -717,7 +731,7 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
    *   arrays of options for that display.
    */
   protected function buildDisplayOptions($form, FormStateInterface $form_state) {
-    // Display: Default
+    // Display: Default.
     $display_options['default'] = $this->defaultDisplayOptions();
     $display_options['default'] += [
       'filters' => [],
@@ -726,17 +740,17 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
     $display_options['default']['filters'] += $this->defaultDisplayFilters($form, $form_state);
     $display_options['default']['sorts'] += $this->defaultDisplaySorts($form, $form_state);
 
-    // Display: Page
+    // Display: Page.
     if (!$form_state->isValueEmpty(['page', 'create'])) {
       $display_options['page'] = $this->pageDisplayOptions($form, $form_state);
 
-      // Display: Feed (attached to the page)
+      // Display: Feed (attached to the page).
       if (!$form_state->isValueEmpty(['page', 'feed'])) {
         $display_options['feed'] = $this->pageFeedDisplayOptions($form, $form_state);
       }
     }
 
-    // Display: Block
+    // Display: Block.
     if (!$form_state->isValueEmpty(['block', 'create'])) {
       $display_options['block'] = $this->blockDisplayOptions($form, $form_state);
     }
@@ -768,13 +782,13 @@ abstract class WizardPluginBase extends PluginBase implements WizardInterface {
     // instances.
     $executable = $view->getExecutable();
 
-    // Display: Default
+    // Display: Default.
     $default_display = $executable->newDisplay('default', 'Default', 'default');
     foreach ($display_options['default'] as $option => $value) {
       $default_display->setOption($option, $value);
     }
 
-    // Display: Page
+    // Display: Page.
     if (isset($display_options['page'])) {
       $display = $executable->newDisplay('page', 'Page', 'page_1');
       // The page display is usually the main one (from the user's point of

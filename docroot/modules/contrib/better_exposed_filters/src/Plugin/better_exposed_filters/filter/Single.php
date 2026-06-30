@@ -87,14 +87,6 @@ class Single extends FilterWidgetBase {
       //   https://www.drupal.org/project/drupal/issues/288429 is fixed.
       $input_value = $input[$field_id] ?? ($input[$exposed_id] ?? NULL);
 
-      // Force checkbox submission with fallback value.
-      $form[$field_id . '_hidden'] = [
-        '#type' => 'hidden',
-        '#value' => 0,
-        '#attributes' => ['name' => $field_id],
-        '#weight' => $form[$field_id]['#weight'] ?? 0,
-      ];
-
       $form[$field_id]['#type'] = 'checkbox';
       $form[$field_id]['#attributes']['class'][] = 'single-checkbox';
       $form[$field_id]['#return_value'] = 1;

@@ -4,9 +4,10 @@ namespace Drupal\multiple_registration\Form;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\ProxyClass\Routing\RouteBuilder;
+use Drupal\Core\Routing\RouteBuilderInterface;
 use Drupal\multiple_registration\Controller\MultipleRegistrationController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -47,11 +48,11 @@ class CommonSettingsPageForm extends ConfigFormBase {
    *   The multiple registration controller.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cacheBackend
    *   The cacheBackend service.
-   * @param \Drupal\Core\ProxyClass\Routing\RouteBuilder $routerBuilder
+   * @param \Drupal\Core\Routing\RouteBuilderInterface $routerBuilder
    *   The routerBuilder service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, MultipleRegistrationController $multipleRegistrationController, CacheBackendInterface $cacheBackend, RouteBuilder $routerBuilder) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, MultipleRegistrationController $multipleRegistrationController, CacheBackendInterface $cacheBackend, RouteBuilderInterface $routerBuilder, TypedConfigManagerInterface $typed_configmanager) {
+    parent::__construct($config_factory, $typed_configmanager);
     $this->multipleRegistrationController = $multipleRegistrationController;
     $this->cacheRender = $cacheBackend;
     $this->routeBuilder = $routerBuilder;
@@ -65,7 +66,8 @@ class CommonSettingsPageForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('multiple_registration.controller_service'),
       $container->get('cache.render'),
-      $container->get('router.builder')
+      $container->get('router.builder'),
+      $container->get('config.typed')
     );
   }
 

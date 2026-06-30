@@ -23,7 +23,7 @@ class LayoutParagraphsSettingsForm extends ConfigFormBase {
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    TypedConfigManagerInterface $typedConfigManager
+    TypedConfigManagerInterface $typedConfigManager,
   ) {
     parent::__construct($config_factory, $typedConfigManager);
     $this->typedConfigManager = $typedConfigManager;

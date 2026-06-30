@@ -3,12 +3,12 @@
 namespace Drupal\geofield\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Element\FormElementBase;
 
 /**
  * Provides a base class for Geofield Form elements.
  */
-abstract class GeofieldElementBase extends FormElement {
+abstract class GeofieldElementBase extends FormElementBase {
 
   /**
    * Components Getter.

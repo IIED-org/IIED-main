@@ -3,7 +3,6 @@
 namespace Drupal\name\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
-use Drupal\name\NameListFormatInterface;
 
 /**
  * Defines the Name List Format configuration entity class.
@@ -17,8 +16,8 @@ use Drupal\name\NameListFormatInterface;
  *       "edit" = "Drupal\name\Form\NameListFormatForm",
  *       "delete" = "Drupal\name\Form\NameListFormatDeleteConfirm"
  *     },
- *     "access" = "Drupal\name\NameFormatAccessController",
- *     "list_builder" = "Drupal\name\NameListFormatListBuilder"
+ *     "access" = "Drupal\name\Access\NameFormatAccessHandler",
+ *     "list_builder" = "Drupal\name\ListBuilder\NameListFormatListBuilder"
  *   },
  *   config_prefix = "name_list_format",
  *   fieldable = FALSE,
@@ -84,7 +83,7 @@ class NameListFormat extends ConfigEntityBase implements NameListFormatInterface
   public $delimiter = ', ';
 
   /**
-   * The final delimitor type of this name list format.
+   * The final delimiter type of this name list format.
    *
    * Valid options include:
    * - text: textual (i.e. 'and').

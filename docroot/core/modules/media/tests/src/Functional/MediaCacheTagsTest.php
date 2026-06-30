@@ -8,12 +8,14 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\media\Entity\Media;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 use Drupal\Tests\system\Functional\Entity\EntityWithUriCacheTagsTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the media items cache tags.
- *
- * @group media
  */
+#[Group('media')]
+#[RunTestsInSeparateProcesses]
 class MediaCacheTagsTest extends EntityWithUriCacheTagsTestBase {
 
   use MediaTypeCreationTrait;
@@ -63,14 +65,14 @@ class MediaCacheTagsTest extends EntityWithUriCacheTagsTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getAdditionalCacheContextsForEntity(EntityInterface $media) {
+  protected function getAdditionalCacheContextsForEntity(EntityInterface $media): array {
     return ['timezone'];
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getAdditionalCacheTagsForEntity(EntityInterface $media) {
+  protected function getAdditionalCacheTagsForEntity(EntityInterface $media): array {
     // Each media item must have an author and a thumbnail.
     return [
       'user:' . $media->getOwnerId(),

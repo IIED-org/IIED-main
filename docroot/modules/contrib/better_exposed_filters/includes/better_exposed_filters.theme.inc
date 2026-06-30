@@ -111,6 +111,12 @@ function template_preprocess_bef_checkboxes(array &$variables): void {
   if (!empty($variables['element']['#bef_nested'])) {
     _bef_preprocess_nested_elements($variables);
   }
+
+  // Handle scrollable container.
+  if (!empty($element['#bef_scrollable'])) {
+    $variables['wrapper_attributes']->addClass('bef-scrollable');
+    $variables['wrapper_attributes']->setAttribute('style', 'max-height: ' . (int) $element['#bef_scrollable_height'] . 'px;');
+  }
 }
 
 /**
@@ -138,6 +144,12 @@ function template_preprocess_bef_radios(array &$variables): void {
   // Handle nested radio buttons.
   if (!empty($variables['element']['#bef_nested'])) {
     _bef_preprocess_nested_elements($variables);
+  }
+
+  // Handle scrollable container.
+  if (!empty($element['#bef_scrollable'])) {
+    $variables['wrapper_attributes']->addClass('bef-scrollable');
+    $variables['wrapper_attributes']->setAttribute('style', 'max-height: ' . (int) $element['#bef_scrollable_height'] . 'px;');
   }
 }
 
@@ -280,6 +292,9 @@ function template_preprocess_bef_links(array &$variables): void {
         });
       }
       else {
+        if (!isset($newQuery[$name]) || !is_array($newQuery[$name])) {
+          $newQuery[$name] = [];
+        }
         $newQuery[$name][$optionValue] = $optionValue;
       }
 
@@ -337,6 +352,12 @@ function template_preprocess_bef_links(array &$variables): void {
   $variables['children'] = Element::children($variables['element']);
   if (!empty($variables['element']['#bef_nested'])) {
     _bef_preprocess_nested_elements($variables);
+  }
+
+  // Handle scrollable container.
+  if (!empty($element['#bef_scrollable'])) {
+    $variables['attributes']['class'][] = 'bef-scrollable';
+    $variables['attributes']['style'] = 'max-height: ' . (int) $element['#bef_scrollable_height'] . 'px;';
   }
 }
 

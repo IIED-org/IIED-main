@@ -9,21 +9,25 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
-use Drupal\jsonapi\ResourceType\ResourceType;
 use Drupal\jsonapi\Normalizer\JsonApiDocumentTopLevelNormalizer;
+use Drupal\jsonapi\ResourceType\ResourceType;
+use Drupal\jsonapi\ResourceType\ResourceTypeRepository;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Drupal\jsonapi\ResourceType\ResourceTypeRepository;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @coversDefaultClass \Drupal\jsonapi\Normalizer\JsonApiDocumentTopLevelNormalizer
- * @group jsonapi
+ * Tests Drupal\jsonapi\Normalizer\JsonApiDocumentTopLevelNormalizer.
  *
  * @internal
  */
+#[CoversClass(JsonApiDocumentTopLevelNormalizer::class)]
+#[Group('jsonapi')]
 class JsonApiDocumentTopLevelNormalizerTest extends UnitTestCase {
 
   /**
@@ -86,9 +90,9 @@ class JsonApiDocumentTopLevelNormalizerTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::denormalize
-   * @dataProvider denormalizeProvider
+   * Tests denormalize.
    */
+  #[DataProvider('denormalizeProvider')]
   public function testDenormalize($input, $expected): void {
     $resource_type = new ResourceType('node', 'article', FieldableEntityInterface::class);
     $resource_type->setRelatableResourceTypes([]);
@@ -123,7 +127,14 @@ class JsonApiDocumentTopLevelNormalizerTest extends UnitTestCase {
           'data' => [
             'type' => 'lorem',
             'id' => '0676d1bf-55b3-4bbc-9fbc-3df10f4599d5',
-            'relationships' => ['field_dummy' => ['data' => ['type' => 'node', 'id' => '76dd5c18-ea1b-4150-9e75-b21958a2b836']]],
+            'relationships' => [
+              'field_dummy' => [
+                'data' => [
+                  'type' => 'node',
+                  'id' => '76dd5c18-ea1b-4150-9e75-b21958a2b836',
+                ],
+              ],
+            ],
           ],
         ],
         [
@@ -207,10 +218,8 @@ class JsonApiDocumentTopLevelNormalizerTest extends UnitTestCase {
    *   The input UUID. May be invalid.
    * @param bool $expect_exception
    *   Whether to expect an exception.
-   *
-   * @covers ::denormalize
-   * @dataProvider denormalizeUuidProvider
    */
+  #[DataProvider('denormalizeUuidProvider')]
   public function testDenormalizeUuid($id, $expect_exception): void {
     $data['data'] = (isset($id)) ?
       ['type' => 'node--article', 'id' => $id] :

@@ -5,6 +5,8 @@ namespace Drupal\Tests\paragraphs\Unit\migrate;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\paragraphs\MigrationPluginsAlterer;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the MigrationPluginsAlterer service.
@@ -15,6 +17,7 @@ use Drupal\Tests\UnitTestCase;
  *
  * @group paragraphs
  */
+#[Group('paragraphs')]
 class MigrationPluginsAltererTest extends UnitTestCase {
 
   /**
@@ -46,6 +49,7 @@ class MigrationPluginsAltererTest extends UnitTestCase {
    * @dataProvider providerParagraphsMigrationPrepareProcess
    * @covers ::paragraphsMigrationPrepareProcess
    */
+  #[DataProvider('providerParagraphsMigrationPrepareProcess')]
   public function testParagraphsMigrationPrepareProcess(array $input, array $expected) {
     ['process' => $process, 'property' => $property] = $input;
     $success = $this->paragraphsMigrationPluginsAlterer->paragraphsMigrationPrepareProcess($process, $property);

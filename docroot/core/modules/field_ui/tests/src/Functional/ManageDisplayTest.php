@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\field_ui\Functional;
 
+use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\Core\Entity\Entity\EntityFormMode;
-use Drupal\Core\Url;
-use Behat\Mink\Element\NodeElement;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Url;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\field_ui\Traits\FieldUiTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Field UI "Manage display" and "Manage form display" screens.
- *
- * @group field_ui
  */
+#[Group('field_ui')]
+#[RunTestsInSeparateProcesses]
 class ManageDisplayTest extends BrowserTestBase {
 
   use FieldUiTestTrait;
@@ -70,6 +72,7 @@ class ManageDisplayTest extends BrowserTestBase {
       'administer node display',
       'administer taxonomy',
       'administer taxonomy_term fields',
+      'administer taxonomy_term form display',
       'administer taxonomy_term display',
       'administer users',
       'administer account settings',
@@ -124,7 +127,8 @@ class ManageDisplayTest extends BrowserTestBase {
     ];
 
     // Check that the field is displayed with the default formatter in 'rss'
-    // mode (uses 'default'), and hidden in 'teaser' mode (uses custom settings).
+    // mode (uses 'default'), and hidden in 'teaser' mode (uses custom
+    // settings).
     $this->assertNodeViewText($node, 'rss', $output['field_test_default'], "The field is displayed as expected in view modes that use 'default' settings.");
     $this->assertNodeViewNoText($node, 'teaser', $value, "The field is hidden in view modes that use custom settings.");
 
@@ -202,9 +206,16 @@ class ManageDisplayTest extends BrowserTestBase {
   }
 
   /**
-   * Tests hiding the view modes fieldset when there's only one available.
+   * Tests view mode management screens.
    */
-  public function testSingleViewMode(): void {
+  public function testViewModeUi(): void {
+    // Tests table headers on "Manage form" and "Manage display" screens.
+    $this->drupalGet('admin/structure/taxonomy/manage/' . $this->vocabulary . '/overview/form-display');
+    $this->assertTableHeaderExistsByLabel('field-display-overview', 'Machine name');
+    $this->drupalGet('admin/structure/taxonomy/manage/' . $this->vocabulary . '/overview/display');
+    $this->assertTableHeaderExistsByLabel('field-display-overview', 'Machine name');
+
+    // Tests hiding the view modes fieldset when there's only one available.
     $this->drupalGet('admin/structure/taxonomy/manage/' . $this->vocabulary . '/display');
     $this->assertSession()->pageTextNotContains('Use custom display settings for the following view modes');
 
@@ -261,6 +272,7 @@ class ManageDisplayTest extends BrowserTestBase {
       'id' => 'node.big',
       'label' => 'Big Form',
       'targetEntityType' => 'node',
+      'description' => 'Test description',
     ])->save();
     EntityFormMode::create([
       'id' => 'node.little',
@@ -390,14 +402,14 @@ class ManageDisplayTest extends BrowserTestBase {
    * @return array
    *   An array of option values as strings.
    */
-  protected function getAllOptionsList(NodeElement $element) {
+  protected function getAllOptionsList(NodeElement $element): array {
     $options = [];
     // Add all options items.
     foreach ($element->option as $option) {
       $options[] = $option->getValue();
     }
 
-    // Loops trough all the option groups
+    // Loops trough all the option groups.
     foreach ($element->optgroup as $optgroup) {
       $options = array_merge($this->getAllOptionsList($optgroup), $options);
     }

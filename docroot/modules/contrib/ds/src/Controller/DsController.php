@@ -4,7 +4,6 @@ namespace Drupal\ds\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
-use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\field_ui\FieldUI;
@@ -69,7 +68,8 @@ class DsController extends ControllerBase {
               try {
                 $manage_display_url = Url::fromRoute("entity.entity_view_display.$entity_type.default", $route->getRouteParameters());
               }
-              catch (\Exception $ignored) { }
+              catch (\Exception $ignored) {
+              }
             }
           }
 
@@ -82,9 +82,9 @@ class DsController extends ControllerBase {
                   'manage_display' => [
                     'title' => $this->t('Manage display'),
                     'url' => $manage_display_url,
-                  ]
-                ]
-              ]
+                  ],
+                ],
+              ],
             ];
           }
           else {

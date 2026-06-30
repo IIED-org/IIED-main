@@ -285,11 +285,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             expose_fields: false
             placeholder: Search
             searched_fields_id: search_api_fulltext_searched_fields
@@ -379,10 +374,10 @@ display:
       filename: ''
       automatic_download: true
       facet_settings: none
-      store_in_public_file_directory: null
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false
+      export_filesystem: public
     cache_metadata:
       max-age: -1
       contexts:
@@ -490,15 +485,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              publications_manager: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             expose_fields: false
             placeholder: 'Search publications'
             searched_fields_id: search_api_fulltext_searched_fields
@@ -554,14 +540,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -680,13 +658,14 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
                 select_all_none: false
                 select_all_none_nested: false
                 display_inline: false
                 soft_limit: 5
                 soft_limit_label_less: 'Show less'
                 soft_limit_label_more: 'Show more'
+                scrollable: false
+                scrollable_height: 300
               facets_item_bundle:
                 plugin_id: bef
                 advanced:
@@ -699,13 +678,14 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
                 select_all_none: false
                 select_all_none_nested: false
                 display_inline: false
                 soft_limit: 5
                 soft_limit_label_less: 'Show less'
                 soft_limit_label_more: 'Show more'
+                scrollable: false
+                scrollable_height: 300
               facets_field_document_type:
                 plugin_id: bef
                 advanced:
@@ -718,13 +698,14 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
                 select_all_none: false
                 select_all_none_nested: false
                 display_inline: false
                 soft_limit: 5
                 soft_limit_label_less: 'Show less'
                 soft_limit_label_more: 'Show more'
+                scrollable: false
+                scrollable_height: 300
               facets_field_area_list:
                 plugin_id: bef
                 advanced:
@@ -737,13 +718,14 @@ display:
                   is_secondary: true
                   hide_label: false
                   field_classes: ''
-                  sort_options_unsupported: ''
                 select_all_none: false
                 select_all_none_nested: false
                 display_inline: false
                 soft_limit: 5
                 soft_limit_label_less: 'Show less'
                 soft_limit_label_more: 'Show more'
+                scrollable: false
+                scrollable_height: 300
               search_api_fulltext:
                 plugin_id: default
                 advanced:
@@ -757,7 +739,6 @@ display:
                   is_secondary: false
                   hide_label: true
                   field_classes: ''
-                  sort_options_unsupported: ''
       cache:
         type: search_api_none
       empty:
@@ -802,16 +783,6 @@ display:
             multiple: true
             remember_roles:
               authenticated: authenticated
-              0: '0'
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              publications_manager: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             facets_pretty_paths_coder: taxonomy_term_name_coder
           is_grouped: false
           group_info:
@@ -881,15 +852,6 @@ display:
             multiple: true
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              publications_manager: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             facets_pretty_paths_coder: url_encoded_coder
           is_grouped: false
           group_info:
@@ -970,16 +932,6 @@ display:
             multiple: true
             remember_roles:
               authenticated: authenticated
-              0: '0'
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              publications_manager: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             facets_pretty_paths_coder: taxonomy_term_name_coder
           is_grouped: false
           group_info:
@@ -1064,16 +1016,6 @@ display:
             multiple: true
             remember_roles:
               authenticated: authenticated
-              0: '0'
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              publications_manager: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             facets_pretty_paths_coder: url_encoded_coder
           is_grouped: false
           group_info:
@@ -1144,15 +1086,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              publications_manager: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             expose_fields: false
             placeholder: ''
             searched_fields_id: search_api_fulltext_searched_fields

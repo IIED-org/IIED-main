@@ -5,9 +5,9 @@
  * The search404 module file, does all the searching when a 404 occurs.
  */
 
+use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Link;
 
 /**
  * Implements hook_help().

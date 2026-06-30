@@ -5,43 +5,56 @@
  * Client-side data space.
  */
 
+use Drupal\Core\Hook\Attribute\LegacyHook;
+use Drupal\datalayer\Hook\DatalayerHooks;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\group\Entity\GroupContentType;
+use Drupal\datalayer\Hook\DatalayerFormHooks;
+use Drupal\datalayer\Hook\DatalayerPageHooks;
+use Drupal\group\Entity\GroupRelationship;
 use Drupal\user\Entity\User;
 
 /**
  * Implements hook_form_FORM_ID_alter() for 'field_config_edit_form'.
  */
+#[LegacyHook]
 function datalayer_form_field_config_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $datalayer_settings = \Drupal::config('datalayer.settings');
-  if ($datalayer_settings->get('output_fields')) {
-    $field = $form_state->getFormObject()->getEntity();
-    $form['third_party_settings']['datalayer']['expose'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Expose field data in JavaScript <code>dataLayer</code> variable.'),
-      '#default_value' => $field->getThirdPartySetting('datalayer', 'expose', 0),
-      '#description' => t("Checking this box will result in this field's value being included in the <code>dataLayer</code> object provided by the dataLayer module."),
-    ];
-    $form['third_party_settings']['datalayer']['label'] = [
-      '#type' => 'textfield',
-      '#title' => t('DataLayer label'),
-      '#default_value' => $field->getThirdPartySetting('datalayer', 'label', $field->get('field_name')),
-      '#description' => t('Enter the label/key to use when adding this field to the <code>datalayer</code> object. Example; <code>dataLayer.fieldName: value</code>'),
-      '#states' => [
-        'visible' => [
-          ':input[name="third_party_settings[datalayer][expose]"]' => [
-            'checked' => TRUE,
-          ],
-        ],
-      ],
-    ];
-  }
+  \Drupal::service(DatalayerFormHooks::class)->fieldConfigEditFormAlter($form, $form_state, $form_id);
+}
 
-  $form['actions']['submit']['#submit'][] = 'datalayer_field_config_submit';
+/**
+ * Implements hook_page_attachments().
+ */
+#[LegacyHook]
+function datalayer_page_attachments(array &$attachments) {
+  return \Drupal::service(DatalayerPageHooks::class)->pageAttachments($attachments);
+}
+
+/**
+ * Implements hook_page_bottom().
+ */
+#[LegacyHook]
+function datalayer_page_bottom(array &$page_bottom) {
+  \Drupal::service(DatalayerPageHooks::class)->pageBottom($page_bottom);
+}
+
+/**
+ * Implements hook_datalayer_meta().
+ */
+#[LegacyHook]
+function datalayer_datalayer_meta() {
+  return \Drupal::service(DatalayerHooks::class)->datalayerMeta();
+}
+
+/**
+ * Implements hook_datalayer_current_user_meta().
+ */
+#[LegacyHook]
+function datalayer_datalayer_current_user_meta() {
+  return \Drupal::service(DatalayerHooks::class)->datalayerCurrentUserMeta();
 }
 
 /**
@@ -104,64 +117,6 @@ function datalayer_get_data_from_page($reset = FALSE) {
 }
 
 /**
- * Implements hook_page_attachments().
- *
- * Load all meta tags for this page.
- */
-function datalayer_page_attachments(array &$attachments) {
-  $datalayer_settings = \Drupal::config('datalayer.settings');
-
-  // Optionally do not run dataLayer code on admin pages.
-  if (\Drupal::service('router.admin_context')->isAdminRoute() && $datalayer_settings->get('remove_from_admin_routes') === TRUE) {
-    return;
-  }
-
-  if (empty($attachments['#attached'])) {
-    $attachments['#attached'] = [];
-  }
-
-  // Include data-layer-helper library.
-  if ($datalayer_settings->get('lib_helper')) {
-    $attachments['#attached']['library'][] = 'datalayer/helper';
-  }
-
-  // Output configured language data.
-  $languages = \Drupal::languageManager()->getLanguages();
-  if (count($languages)) {
-    $langs = [];
-    foreach ($languages as $id => $language) {
-      $langs[$id] = [
-        'id' => $id,
-        'name' => $language->getName(),
-        'direction' => $language->getDirection(),
-        'weight' => $language->getWeight(),
-      ];
-      if ($language->isDefault()) {
-        $attachments['#attached']['drupalSettings']['dataLayer']['defaultLang'] = $id;
-      }
-    }
-    $attachments['#attached']['drupalSettings']['dataLayer']['languages'] = $langs;
-    $attachments['#cache']['contexts'][] = 'languages:language_content';
-  }
-
-  // Common datalayer JS.
-  $attachments['#attached']['library'][] = 'datalayer/behaviors';
-}
-
-/**
- * Implements hook_page_bottom().
- */
-function datalayer_page_bottom(array &$page_bottom) {
-  $page_bottom['datalayer'] = [
-    '#lazy_builder' => ['datalayer.lazy_builders:lazyScriptTag', []],
-    '#create_placeholder' => TRUE,
-    '#cache' => [
-      'contexts' => ['user'],
-    ],
-  ];
-}
-
-/**
  * Collects up meta data for output.
  *
  * @param string $type
@@ -192,38 +147,6 @@ function _datalayer_collect_meta_properties($type = '') {
   }
 
   return $properties;
-}
-
-/**
- * Implements hook_datalayer_meta().
- *
- * Defines default meta data.
- */
-function datalayer_datalayer_meta() {
-  return [
-    'created',
-    'langcode',
-    'name',
-    'status',
-    'uid',
-    'uuid',
-    'vid',
-  ];
-}
-
-/**
- * Implements hook_datalayer_current_user_meta().
- *
- * Defines current user meta data.
- */
-function datalayer_datalayer_current_user_meta() {
-  return [
-    'name',
-    'mail',
-    'roles',
-    'created',
-    'access',
-  ];
 }
 
 /**
@@ -340,8 +263,8 @@ function _datalayer_get_entity_data($entity) {
 
     // Output group name.
     if ($datalayer_settings->get('group')) {
-      if (\Drupal::moduleHandler()->moduleExists('group')) {
-        if ($entity instanceof EntityInterface && ($entity->getEntityType() == 'node')) {
+      if (\Drupal::moduleHandler()->moduleExists('group') && ($entity->getEntityType() == 'node')) {
+        if ($entity instanceof EntityInterface) {
           $groupName = datalayer_get_entity_group($entity);
           if (!is_null($groupName)) {
             $output_data[$datalayer_settings->get('group_label')] = $groupName->label();
@@ -611,21 +534,10 @@ function _datalayer_field_get_value($field_item, $field_type) {
  *   Return the Group if found, else NULL.
  */
 function datalayer_get_entity_group(EntityInterface $entity) {
-  // Load all the group content for this node.
-  $group_content_types = GroupContentType::loadByContentPluginId("group_node:{$entity->bundle()}");
-  $group_contents = \Drupal::entityTypeManager()
-    ->getStorage('group_content')
-    ->loadByProperties([
-      'type'      => array_keys($group_content_types),
-      'entity_id' => $entity->id(),
-    ]);
-
-  // Get this nodes group.
-  if (!empty($group_contents)) {
-    /** @var \Drupal\group\Entity\GroupContent $group_cotnent */
-    $group_content = reset($group_contents);
-    /** @var \Drupal\group\Entity\Group $group */
-    return $group_content->getGroup();
+  $group_relationships = GroupRelationship::loadByEntity($entity);
+  if (!empty($group_relationships)) {
+    $group_relationship = reset($group_relationships);
+    return $group_relationship->getGroup();
   }
 
   return NULL;

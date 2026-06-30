@@ -11,8 +11,7 @@
 }
 .shs-widget-container .has-children {
   margin-right: 5px;
-  background: url("../images/arrow.png") no-repeat scroll right center
-    transparent;
+  background: url("../images/arrow.png") no-repeat scroll right center transparent;
 }
 /* cspell:disable-next-line addnew */
 .shs-addnew-container {

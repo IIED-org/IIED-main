@@ -16,13 +16,14 @@ use Drupal\layout_paragraphs\Ajax\LayoutParagraphsEventCommand;
 class EditComponentForm extends ComponentFormBase {
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function buildForm(
     array $form,
     FormStateInterface $form_state,
-    LayoutParagraphsLayout $layout_paragraphs_layout = NULL,
-    string $component_uuid = NULL) {
+    ?LayoutParagraphsLayout $layout_paragraphs_layout = NULL,
+    ?string $component_uuid = NULL,
+  ) {
 
     $this->setLayoutParagraphsLayout($layout_paragraphs_layout);
     $this->paragraph = $this->layoutParagraphsLayout
@@ -58,7 +59,7 @@ class EditComponentForm extends ComponentFormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function successfulAjaxSubmit(array $form, FormStateInterface $form_state) {
 
@@ -121,7 +122,7 @@ class EditComponentForm extends ComponentFormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);

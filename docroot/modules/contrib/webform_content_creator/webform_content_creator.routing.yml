@@ -39,6 +39,14 @@ webform_content_creator.manage_fields_form:
   requirements:
     _permission: 'access webform content creator configuration'
 
+webform_content_creator.overview:
+  path: '/admin/config/webform_content_creator/overview'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Webform Content Creator Overview'
+  requirements:
+    _permission: 'access webform content creator configuration'
+
 entity.webform_content_creator.collection:
   path: '/admin/config/webform_content_creator'
   defaults:

@@ -30,7 +30,7 @@ class GeofieldFieldBuilder extends CoreFieldBuilder {
           'label' => 'hidden',
           'type' => 'geofield_latlon',
         ]);
-        $rendered_value = $this->renderer->renderPlain($value);
+        $rendered_value = $this->renderer->renderInIsolation($value);
         $result[$field_key][] = $rendered_value;
       }
     }

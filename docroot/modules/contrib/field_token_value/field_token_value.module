@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Provides a field type allowing the value to be set using tokens.
+ */
+
+/**
+ * Implements hook_entity_presave().
+ */
+function field_token_value_entity_presave($entity) {
+  /** @var Drupal\field_token_value\FieldValueGenerator $field_value_service */
+  $field_value_service = \Drupal::service('field_token_value.field_value_generator');
+  $field_value_service->generateFieldValueForEntity($entity);
+}

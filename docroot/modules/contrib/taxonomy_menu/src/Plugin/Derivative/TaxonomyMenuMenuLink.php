@@ -48,7 +48,7 @@ class TaxonomyMenuMenuLink extends DeriverBase implements ContainerDeriverInterf
     /** @var \Drupal\taxonomy_menu\TaxonomyMenuInterface[] $taxonomy_menus */
     $taxonomy_menus = $this->taxonomyMenuStorage->loadMultiple();
 
-    // MenuLinkContent entity, menulinkcontent table, look for data.
+    // MenuLinkContent entity, menu_link_content table, look for data.
     foreach ($taxonomy_menus as $taxonomy_menu) {
       /** @var \Drupal\taxonomy_menu\TaxonomyMenuInterface $taxonomy_menu */
       $taxonomy_menu->getMenu();

@@ -91,11 +91,11 @@ class ManageDisplayTest extends BrowserTestBase {
     $this->assertSession()->responseContains($this->t('New group %label successfully created.', ['%label' => $group_label]));
 
     // Test if group is in the $groups array.
-    $this->group = field_group_load_field_group($group_name, 'node', $this->type, 'form', 'default');
-    $this->assertNotNull($group, 'Group was loaded');
+    $groupEntity = field_group_load_field_group($group_name, 'node', $this->type, 'form', 'default');
+    $this->assertNotNull($groupEntity, 'Group entity was loaded');
 
     // Test if region key is set.
-    $this->assertEquals('hidden', $this->group->region);
+    $this->assertEquals('hidden', $groupEntity->region);
 
     // Add new group on the 'Manage display' page.
     $this->drupalGet('admin/structure/types/manage/' . $this->type . '/display/add-group');

@@ -4,6 +4,7 @@ namespace Drupal\Tests\paragraphs\Unit\migrate;
 
 use Drupal\paragraphs\Plugin\migrate\process\ParagraphsFieldSettings;
 use Drupal\Tests\migrate\Unit\process\MigrateProcessTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Test the ParagraphFieldSettings Process Plugin.
@@ -11,6 +12,7 @@ use Drupal\Tests\migrate\Unit\process\MigrateProcessTestCase;
  * @group paragraphs
  * @coversDefaultClass \Drupal\paragraphs\Plugin\migrate\process\ParagraphsFieldSettings
  */
+#[Group('paragraphs')]
 class ParagraphsFieldSettingsTest extends MigrateProcessTestCase {
 
   /**

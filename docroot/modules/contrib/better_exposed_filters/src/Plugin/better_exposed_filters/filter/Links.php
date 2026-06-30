@@ -25,6 +25,8 @@ class Links extends FilterWidgetBase {
       'soft_limit' => 0,
       'soft_limit_label_less' => '',
       'soft_limit_label_more' => '',
+      'scrollable' => FALSE,
+      'scrollable_height' => 300,
     ];
   }
 
@@ -44,6 +46,26 @@ class Links extends FilterWidgetBase {
       '#disabled' => !$filter->options['expose']['multiple'],
       '#description' => $this->t('Add a "Select All/None" link when rendering the exposed filter using checkboxes. If this option is disabled, edit the filter and check the "Allow multiple selections".'
       ),
+    ];
+
+    $form['scrollable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use scrollable container'),
+      '#default_value' => !empty($this->configuration['scrollable']),
+      '#description' => $this->t('Wrap the filter options in a scrollable container with a fixed height.'),
+    ];
+
+    $form['scrollable_height'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Scrollable container height (px)'),
+      '#default_value' => $this->configuration['scrollable_height'] ?: 300,
+      '#min' => 50,
+      '#field_suffix' => 'px',
+      '#states' => [
+        'visible' => [
+          ':input[name="exposed_form_options[bef][filter][' . $filter->field . '][configuration][scrollable]"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     $options = [50, 40, 30, 20, 15, 10, 5, 3];
@@ -128,6 +150,14 @@ class Links extends FilterWidgetBase {
       $form['#attached']['drupalSettings']['better_exposed_filters']['soft_limit'][$field_id]['item_selector'] = '> li';
       $form['#attached']['drupalSettings']['better_exposed_filters']['soft_limit'][$field_id]['show_less'] = $this->configuration['soft_limit_label_less'];
       $form['#attached']['drupalSettings']['better_exposed_filters']['soft_limit'][$field_id]['show_more'] = $this->configuration['soft_limit_label_more'];
+    }
+
+    // Scrollable container.
+    if (!empty($this->configuration['scrollable']) && !empty($form[$field_id])) {
+      $height = (int) ($this->configuration['scrollable_height'] ?: 300);
+      $form[$field_id]['#bef_scrollable'] = TRUE;
+      $form[$field_id]['#bef_scrollable_height'] = $height;
+      $form['#attached']['library'][] = 'better_exposed_filters/scrollable';
     }
   }
 

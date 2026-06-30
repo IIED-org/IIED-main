@@ -72,6 +72,38 @@ class BetterExposedFiltersCheckboxTest extends BetterExposedFiltersTestBase {
   }
 
   /**
+   * Tests the checkbox functionality.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Behat\Mink\Exception\ResponseTextException
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  public function testCheckbox(): void {
+    $view = Views::getView('bef_test');
+    $view->storage->getDisplay('default')['display_options']['filters']['field_bef_integer_value']['expose']['multiple'] = TRUE;
+    $view->storage->save();
+    $this->setBetterExposedOptions($view, [
+      'filter' => [
+        'field_bef_integer_value' => [
+          'plugin_id' => 'bef',
+        ],
+      ],
+    ]);
+    $session = $this->assertSession();
+
+    $this->drupalGet('/bef-test');
+    $session->pageTextContains('Page one');
+    $session->pageTextContains('Page with 0 value');
+
+    $page = $this->getSession()->getPage();
+    $page->findField('field_bef_integer_value[0]')->check();
+    $page->pressButton('Apply');
+
+    $session->pageTextNotContains('Page one');
+    $session->pageTextContains('Page with 0 value');
+  }
+
+  /**
    * Tests the soft limit feature.
    *
    * @throws \Behat\Mink\Exception\ExpectationException
@@ -133,6 +165,31 @@ class BetterExposedFiltersCheckboxTest extends BetterExposedFiltersTestBase {
     $session->pageTextContains('Donkey');
     $session->pageTextContains('Elephant');
     $session->elementTextEquals('css', '.bef-soft-limit-link', 'Less test');
+  }
+
+  /**
+   * Tests the scrollable container feature.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function testBefCheckboxScrollable(): void {
+    $view = Views::getView('bef_test');
+    $session = $this->assertSession();
+
+    $this->setBetterExposedOptions($view, [
+      'filter' => [
+        'field_bef_letters_value' => [
+          'plugin_id' => 'bef',
+          'scrollable' => TRUE,
+          'scrollable_height' => 200,
+        ],
+      ],
+    ]);
+
+    $this->drupalGet('/bef-test');
+    $session->elementExists('css', '.bef-scrollable');
+    $session->elementAttributeContains('css', '.bef-scrollable', 'style', 'max-height: 200px');
   }
 
 }

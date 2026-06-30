@@ -52,6 +52,14 @@ ds.field.properties.token:
       type: boolean
       label: 'Use View global view token'
 
+ds.field.properties.twig:
+  type: mapping
+  label: 'Display Suite twig field field properties'
+  mapping:
+    content:
+      type: string
+      label: 'The content'
+
 ds.field.properties.block:
   type: mapping
   label: 'Display Suite block field properties'

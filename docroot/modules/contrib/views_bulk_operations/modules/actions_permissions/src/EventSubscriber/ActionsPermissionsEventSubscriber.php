@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\actions_permissions\EventSubscriber;
 
-use Drupal\Component\EventDispatcher\Event;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\views_bulk_operations\ActionAlterDefinitionsEvent;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -31,41 +31,40 @@ final class ActionsPermissionsEventSubscriber implements EventSubscriberInterfac
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[ViewsBulkOperationsActionManager::ALTER_ACTIONS_EVENT][] = [
-      'alterActions',
-      self::PRIORITY,
+    return [
+      ViewsBulkOperationsActionManager::ALTER_ACTIONS_EVENT => [
+        ['alterActions', self::PRIORITY],
+      ],
     ];
-    return $events;
   }
 
   /**
    * Alter the actions' definitions.
-   *
-   * @var \Drupal\Component\EventDispatcher\Event $event
-   *   The event to respond to.
    */
-  public function alterActions(Event $event): void {
+  public function alterActions(ActionAlterDefinitionsEvent $event): void {
 
     // Don't alter definitions if this is invoked by the
     // own permissions creating method.
-    if (!empty($event->alterParameters['skip_actions_permissions'])) {
+    if (\array_key_exists('skip_actions_permissions', $event->alterParameters)) {
       return;
     }
 
     foreach ($event->definitions as $action_id => $definition) {
 
       // Only process actions that don't define their own requirements.
-      if (empty($definition['requirements'])) {
-        $permission_id = 'execute ' . $definition['id'];
-        if (empty($definition['type'])) {
-          $permission_id .= ' all';
-        }
-        else {
-          $permission_id .= ' ' . $definition['type'];
-        }
-        if (!$this->currentUser->hasPermission($permission_id)) {
-          unset($event->definitions[$action_id]);
-        }
+      if (\array_key_exists('requirements', $definition) && \count($definition['requirements']) > 0) {
+        continue;
+      }
+
+      $permission_id = 'execute ' . $definition['id'];
+      if ($definition['type'] === '') {
+        $permission_id .= ' all';
+      }
+      else {
+        $permission_id .= ' ' . $definition['type'];
+      }
+      if (!$this->currentUser->hasPermission($permission_id)) {
+        unset($event->definitions[$action_id]);
       }
     }
   }

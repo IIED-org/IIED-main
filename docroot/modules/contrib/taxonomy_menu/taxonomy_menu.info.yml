@@ -5,7 +5,7 @@ core_version_requirement: ^9.1 || ^10 || ^11
 package: Menu
 configure: entity.taxonomy_menu.collection
 
-# Information added by Drupal.org packaging script on 2025-02-06
-version: '8.x-3.7'
+# Information added by Drupal.org packaging script on 2026-05-05
+version: '8.x-3.8'
 project: 'taxonomy_menu'
-datestamp: 1738865893
+datestamp: 1777993935

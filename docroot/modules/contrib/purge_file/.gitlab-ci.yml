@@ -19,7 +19,7 @@ include:
       - "/includes/include.drupalci.workflows.yml"
 
 variables:
-  _CSPELL_WORDS: 'acquia, wildcardurl, configform'
+  _CSPELL_WORDS: 'acquia, wildcardurl, configform, wildcardpath'
 
 ################
 # Pipeline configuration variables are defined with default values and descriptions in the file

@@ -42,7 +42,7 @@
         {#-- date and share --#}
         
         <div
-          class="flex flex-col flex-wrap justify-between pb-4 border-b border-gray-300 xl:border-none sm:flex-row"
+          class="flex flex-col flex-wrap justify-between pb-4 border-b border-stone-300 xl:border-none sm:flex-row"
         >
 
           {% if content.field_date_or_caption is not empty %}
@@ -70,7 +70,7 @@
         <figure class="mb-6 -mx-4 sm:mx-0">
           {{ content.field_main_image[0] }}
           <figcaption
-            class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
+            class="px-4 mt-1 text-base leading-tight text-stone-500 sm:p-0">
             {{ content.field_image_caption }}
           </figcaption>
         </figure>
@@ -104,7 +104,7 @@
 </article>
 
   {% if drupal_view_result('related_nodes', 'block_gl') is not empty %}
-    <section class="py-12 bg-gray-100">
+    <section class="py-12 bg-stone-100">
       <div class="container">
         {{ drupal_view('related_nodes', 'block_gl') }}
     </div>

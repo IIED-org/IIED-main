@@ -15,7 +15,7 @@ class TwigRenderTest extends TestBase {
   public function testFieldNameTargeting() {
     // Create a node.
     $settings = ['type' => 'article', 'promote' => 1];
-    /* @var \Drupal\node\NodeInterface $node */
+    /** @var \Drupal\node\NodeInterface $node */
     $node = $this->drupalCreateNode($settings);
 
     // Configure layout.

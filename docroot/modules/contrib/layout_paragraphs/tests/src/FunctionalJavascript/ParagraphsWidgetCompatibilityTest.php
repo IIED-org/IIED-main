@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
@@ -68,6 +70,8 @@ class ParagraphsWidgetCompatibilityTest extends WebDriverTestBase {
     $this->submitForm([
       'settings[handler_settings][negate]' => '1',
     ], 'Save settings');
+    $this->assertNotEmpty($this->assertSession()->waitForText('Saved'));
+    $this->assertSession()->statusMessageContains('Saved');
     $this->drupalGet('admin/structure/types/manage/page/form-display');
     $page = $this->getSession()->getPage();
     $btn = $page->find('css', '#edit-fields-field-content-settings-edit');
@@ -92,7 +96,7 @@ class ParagraphsWidgetCompatibilityTest extends WebDriverTestBase {
     $this->submitForm([
       'title[0][value]' => 'Node title',
     ], 'Save');
-    $this->assertSession()->pageTextNotContains('The website encountered an unexpected error. Please try again later.');
+    $this->assertSession()->pageTextNotContains('The website encountered an unexpected error.');
 
   }
 

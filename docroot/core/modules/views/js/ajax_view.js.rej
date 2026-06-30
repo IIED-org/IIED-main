@@ -1,0 +1,22 @@
+--- modules/views/js/ajax_view.js
++++ modules/views/js/ajax_view.js
+@@ -101,14 +101,14 @@
+ 
+     // Add the ajax to exposed forms.
+     this.$exposed_form = $(
+-      `form#views-exposed-form-${settings.view_name.replace(
++      `form[id^="views-exposed-form-${settings.view_name.replace(
+         /_/g,
+         '-',
+-      )}-${settings.view_display_id.replace(/_/g, '-')}`,
+-    );
+-    once('exposed-form', this.$exposed_form).forEach(
+-      this.attachExposedFormAjax.bind(this),
++      )}-${settings.view_display_id.replace(/_/g, '-')}"]`,
+     );
++    if (once('exposed-form', this.$exposed_form).length) {
++      this.attachExposedFormAjax();
++    }
+ 
+     // Add the ajax to pagers.
+     once(

@@ -3,7 +3,6 @@
 namespace Drupal\layout_paragraphs\Plugin\paragraphs\Behavior;
 
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Layout\LayoutInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -13,7 +12,10 @@ use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\paragraphs\ParagraphsBehaviorBase;
 use Drupal\Core\Plugin\PluginWithFormsInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Plugin\PluginFormFactoryInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\layout_paragraphs\LayoutParagraphsSection;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\layout_paragraphs\LayoutParagraphsRendererService;
@@ -61,6 +63,20 @@ class LayoutParagraphsBehavior extends ParagraphsBehaviorBase {
   protected $paragraph;
 
   /**
+   * The plugin form factory.
+   *
+   * @var \Drupal\Core\Plugin\PluginFormFactoryInterface
+   */
+  protected $pluginFormFactory;
+
+  /**
+   * The logger factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected $loggerFactory;
+
+  /**
    * ParagraphsLayoutPlugin constructor.
    *
    * @param array $configuration
@@ -77,19 +93,28 @@ class LayoutParagraphsBehavior extends ParagraphsBehaviorBase {
    *   The grid discovery service.
    * @param \Drupal\layout_paragraphs\LayoutParagraphsRendererService $layout_paragraphs_renderer_service
    *   The layout paragraphs service.
+   * @param \Drupal\Core\Plugin\PluginFormFactoryInterface $plugin_form_factory
+   *   The plugin form factory.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger factory.
    */
   public function __construct(
-      array $configuration,
-      $plugin_id,
-      $plugin_definition,
-      EntityFieldManagerInterface $entity_field_manager,
-      LayoutPluginManagerInterface $layout_plugin_manager,
-      EntityTypeManagerInterface $entity_type_manager,
-      LayoutParagraphsRendererService $layout_paragraphs_renderer_service) {
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    EntityFieldManagerInterface $entity_field_manager,
+    LayoutPluginManagerInterface $layout_plugin_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+    LayoutParagraphsRendererService $layout_paragraphs_renderer_service,
+    PluginFormFactoryInterface $plugin_form_factory,
+    LoggerChannelFactoryInterface $logger_factory,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_field_manager);
     $this->layoutPluginManager = $layout_plugin_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->layoutParagraphsRendererService = $layout_paragraphs_renderer_service;
+    $this->pluginFormFactory = $plugin_form_factory;
+    $this->loggerFactory = $logger_factory;
   }
 
   /**
@@ -103,17 +128,19 @@ class LayoutParagraphsBehavior extends ParagraphsBehaviorBase {
       $container->get('entity_field.manager'),
       $container->get('plugin.manager.core.layout'),
       $container->get('entity_type.manager'),
-      $container->get('layout_paragraphs.renderer')
+      $container->get('layout_paragraphs.renderer'),
+      $container->get('plugin_form.factory'),
+      $container->get('logger.factory')
     );
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function buildBehaviorForm(
     ParagraphInterface $paragraph,
     array &$form,
-    FormStateInterface $form_state
+    FormStateInterface $form_state,
   ) {
 
     $layout_paragraphs_section = new LayoutParagraphsSection($paragraph);
@@ -289,7 +316,7 @@ class LayoutParagraphsBehavior extends ParagraphsBehaviorBase {
         return $this->pluginFormFactory->createInstance($layout, 'configure');
       }
       catch (\Exception $e) {
-        $this->loggerFactory->get('layout_paragraphs')->error('Erl, Layout Configuration', $e);
+        $this->loggerFactory->get('layout_paragraphs')->error('Erl, Layout Configuration', [$e]);
       }
     }
 

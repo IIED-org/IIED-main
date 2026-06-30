@@ -36,8 +36,5 @@
     "source": "https://git.drupal.org/project/masquerade.git"
   },
   "license": "GPL-2.0-or-later",
-  "require": {
-    "drupal/core": "^9.2 || ^10 || ^11.0"
-  },
   "minimum-stability": "dev"
 }

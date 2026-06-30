@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_builder_restrictions\FunctionalJavascript;
 
 /**
@@ -14,7 +16,7 @@ class DefaultRestrictionsTest extends LayoutBuilderRestrictionsTestBase {
    */
   public function testNewCategoriesRestricted() {
     // Create 2 custom block types, with 3 block instances.
-    $blocks = $this->generateTestBlocks();
+    $this->generateTestBlocks();
     $node_id = $this->generateTestNode();
     $assert_session = $this->assertSession();
     $page = $this->getSession()->getPage();
@@ -26,15 +28,15 @@ class DefaultRestrictionsTest extends LayoutBuilderRestrictionsTestBase {
     $element->click();
     $page->pressButton('Save');
 
-    // Enable the 'Announcements feed' module, which provides a plugin block.
-    $this->container->get('module_installer')->install(['announcements_feed']);
+    // Enable a test module, which provides a plugin block.
+    $this->container->get('module_installer')->install(['test_layout_builder_restrictions']);
 
     $this->navigateToNodeSettingsTray($node_id);
-    // The 'Announcements Feed' block is not allowed, even though there isn't a specific
+    // The 'Test' block is not allowed, even though there isn't a specific
     // restriction.
-    $assert_session->linkNotExists('Announcements Feed');
-    // Other blocks are allowed because they are listed in the allowed_blocks
-    // schema.
+    $assert_session->linkNotExists('Test Block');
+    // Other blocks are allowed because they were captured in the configuration
+    // save, above.
     $this->clickLink('Create content block');
     $this->assertNotEmpty($assert_session->waitForText('Add a new content block'));
     $assert_session->linkExists('Basic');
@@ -46,7 +48,7 @@ class DefaultRestrictionsTest extends LayoutBuilderRestrictionsTestBase {
    */
   public function testNewCategoriesAllowed() {
     // Create 2 custom block types, with 3 block instances.
-    $blocks = $this->generateTestBlocks();
+    $this->generateTestBlocks();
     $node_id = $this->generateTestNode();
     $this->getSession()->resizeWindow(1200, 2000);
     $assert_session = $this->assertSession();
@@ -59,20 +61,20 @@ class DefaultRestrictionsTest extends LayoutBuilderRestrictionsTestBase {
     $page->checkField('layout[allow_custom]');
     $page->pressButton('Save');
 
-    // Restrict all new block categories.
+    // Allow all new block categories.
     $this->navigateToManageDisplay();
     $element = $page->find('xpath', '//*[@id="edit-layout-builder-restrictions-allowed-block-categories-allowed"]');
     $element->click();
     $page->pressButton('Save');
 
-    // Enable the 'Announcements feed' module, which provides a plugin block.
-    $this->container->get('module_installer')->install(['announcements_feed']);
+    // Enable a test module, which provides a plugin block.
+    $this->container->get('module_installer')->install(['test_layout_builder_restrictions']);
 
     $this->navigateToNodeSettingsTray($node_id);
-    // The new 'Announcements Feed' block is allowed.
-    $assert_session->linkExists('Announcements Feed');
-    // Other blocks are allowed because they are listed in the allowed_blocks
-    // schema.
+    // The new test block is allowed.
+    $assert_session->linkExists('Test Block');
+    // Other blocks are allowed because they were captured in the configuration
+    // save, above.
     $this->clickLink('Create content block');
     $this->assertNotEmpty($assert_session->waitForText('Add a new content block'));
     $assert_session->linkExists('Basic');

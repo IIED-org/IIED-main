@@ -6,12 +6,13 @@ use Drupal\components\Template\ComponentsRegistry;
 use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
 
+// cspell:ignore mycomponents mythemeComponents
 /**
  * Loads namespaced templates from the filesystem.
  *
  * This loader adds module and theme defined namespaces to the Twig filesystem
  * loader so that templates can be referenced by namespace, like
- * \@mycomponents/box.html.twig or \@mythemeComponents/page.html.twig.
+ * \@mycomponents/box.twig or \@mythemeComponents/page.twig.
  */
 class ComponentsLoader extends FilesystemLoader {
 
@@ -20,7 +21,7 @@ class ComponentsLoader extends FilesystemLoader {
    *
    * @var \Drupal\components\Template\ComponentsRegistry
    */
-  protected $componentsRegistry;
+  protected ComponentsRegistry $componentsRegistry;
 
   /**
    * Constructs a new ComponentsLoader object.
@@ -38,35 +39,28 @@ class ComponentsLoader extends FilesystemLoader {
    * {@inheritdoc}
    *
    * @throws \Twig\Error\LoaderError
-   *   Thrown if a template matching $name cannot be found.
+   *   Thrown if a template matching $name cannot be found and $throw is TRUE.
    */
-  protected function findTemplate($name, $throw = TRUE) {
-    // Validate the given template.
-    $extension = substr($name, strrpos($name, '.', -1));
-    if ($name[0] !== '@' || !str_contains(substr($name, 2), '/') || $extension !== '.twig' && $extension !== '.html' && $extension !== '.svg') {
-      if (!$throw) {
-        return NULL;
-      }
+  protected function findTemplate(string $name, bool $throw = TRUE): ?string {
+    // componentsRegistry::getTemplate() returns a string or NULL, exactly
+    // what componentsLoader::findTemplate() should return.
+    $path = $this->componentsRegistry->getTemplate($name);
 
-      throw new LoaderError(sprintf('Malformed namespaced template name "%s" (expecting "@namespace/template_name.twig").', $name));
+    if ($path || !$throw) {
+      return $path;
     }
-    else {
-      // componentsRegistry::getTemplate() returns a string or NULL, exactly
-      // what componentsLoader::findTemplate() should return.
-      $path = $this->componentsRegistry->getTemplate($name);
 
-      if ($path || !$throw) {
-        return $path;
-      }
-
-      throw new LoaderError(sprintf('Unable to find template "%s" in the components registry.', $name));
-    }
+    throw new LoaderError(
+      ComponentsRegistry::isValidComponentName($name)
+      ? sprintf('Unable to find template "%s" in the components registry.', $name)
+      : sprintf('Malformed namespaced template name "%s" (expecting "@namespace/template_name.twig").', $name)
+    );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function exists($name): bool {
+  public function exists(string $name): bool {
     return (bool) $this->componentsRegistry->getTemplate($name);
   }
 

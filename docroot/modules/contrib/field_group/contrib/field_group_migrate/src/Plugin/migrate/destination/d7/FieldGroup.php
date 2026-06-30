@@ -42,7 +42,7 @@ class FieldGroup extends DestinationBase implements ContainerFactoryPluginInterf
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration = NULL) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, ?MigrationInterface $migration = NULL) {
     return new static(
       $configuration,
       $plugin_id,
@@ -103,7 +103,7 @@ class FieldGroup extends DestinationBase implements ContainerFactoryPluginInterf
   /**
    * {@inheritdoc}
    */
-  public function fields(MigrationInterface $migration = NULL) {
+  public function fields(?MigrationInterface $migration = NULL) {
     // This is intentionally left empty.
     return $migration;
   }

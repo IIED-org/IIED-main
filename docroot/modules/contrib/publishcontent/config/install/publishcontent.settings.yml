@@ -4,3 +4,5 @@ create_revision: false
 create_log_entry: false
 publish_text_value: 'Publish'
 unpublish_text_value: 'Unpublish'
+publish_markup_value: 'Published'
+unpublish_markup_value: 'Unpublished'

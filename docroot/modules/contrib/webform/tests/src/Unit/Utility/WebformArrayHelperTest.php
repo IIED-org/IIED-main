@@ -38,7 +38,7 @@ class WebformArrayHelperTest extends UnitTestCase {
    *
    * @see testToString()
    */
-  public function providerToString() {
+  public static function providerToString() {
     $tests[] = [['Jack', 'Jill'], 'and', 'Jack and Jill'];
     $tests[] = [['Jack', 'Jill'], 'or', 'Jack or Jill'];
     $tests[] = [['Jack', 'Jill', 'Bill'], 'and', 'Jack, Jill, and Bill'];
@@ -69,7 +69,7 @@ class WebformArrayHelperTest extends UnitTestCase {
    *
    * @see testIsAssociative()
    */
-  public function providerIsAssociative() {
+  public static function providerIsAssociative() {
     $tests[] = [['Jack'], FALSE];
     $tests[] = [[0 => 'Jack', 1 => 'Jill'], FALSE];
     $tests[] = [[0 => 'Jack', 2 => 'Jill'], TRUE];
@@ -104,7 +104,7 @@ class WebformArrayHelperTest extends UnitTestCase {
    *
    * @see testInArray()
    */
-  public function providerInArray() {
+  public static function providerInArray() {
     $tests[] = [[], ['A', 'B', 'C'], FALSE];
     $tests[] = [['A'], ['A', 'B', 'C'], TRUE];
     $tests[] = [['A', 'B'], ['A', 'B', 'C'], TRUE];
@@ -157,6 +157,38 @@ class WebformArrayHelperTest extends UnitTestCase {
     $this->assertEquals(WebformArrayHelper::addPrefix(['test' => 'test'], '@'), ['@test' => 'test']);
     $this->assertEquals(WebformArrayHelper::removePrefix(['#test' => 'test']), ['test' => 'test']);
     $this->assertEquals(WebformArrayHelper::removePrefix(['@test' => 'test'], '@'), ['test' => 'test']);
+  }
+
+  /**
+   * Tests array equal with WebformArrayHelper::equal().
+   *
+   * @param array $a
+   *   First array.
+   * @param array $b
+   *   Second array.
+   * @param string $expected
+   *   The expected result from calling the function.
+   *
+   * @see WebformArrayHelper::equal()
+   *
+   * @dataProvider providerEqual
+   */
+  public function testEqual(array $a, array $b, $expected) {
+    $result = WebformArrayHelper::equal($a, $b);
+    $this->assertEquals($expected, $result);
+  }
+
+  /**
+   * Data provider for testEqual().
+   *
+   * @see testEqual()
+   */
+  public static function providerEqual() {
+    $tests[] = [[], [], TRUE];
+    $tests[] = [['A', 'B'], ['A', 'B'], TRUE];
+    $tests[] = [['B', 'A'], ['A', 'B'], TRUE];
+    $tests[] = [['A', 'B', 'C'], ['A', 'B'], FALSE];
+    return $tests;
   }
 
 }

@@ -11,18 +11,21 @@ use Drupal\filter\Entity\FilterFormat;
 use Drupal\language\Plugin\LanguageNegotiation\LanguageNegotiationContentEntity;
 use Drupal\language\Plugin\LanguageNegotiation\LanguageNegotiationUrl;
 use Drupal\node\NodeInterface;
-use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Enables the page cache and tests its cache tags in various scenarios.
  *
- * @group Cache
  * @see \Drupal\Tests\page_cache\Functional\PageCacheTest
  */
+#[Group('Cache')]
+#[RunTestsInSeparateProcesses]
 class PageCacheTagsIntegrationTest extends BrowserTestBase {
 
   use AssertPageCacheContextsAndTagsTrait;
@@ -155,7 +158,6 @@ class PageCacheTagsIntegrationTest extends BrowserTestBase {
       'config:block.block.olivero_messages',
       'config:block.block.olivero_primary_local_tasks',
       'config:block.block.olivero_secondary_local_tasks',
-      'config:block.block.olivero_syndicate',
       'config:block.block.olivero_primary_admin_actions',
       'config:block.block.olivero_page_title',
       'node_view',
@@ -195,7 +197,6 @@ class PageCacheTagsIntegrationTest extends BrowserTestBase {
       'config:block.block.olivero_messages',
       'config:block.block.olivero_primary_local_tasks',
       'config:block.block.olivero_secondary_local_tasks',
-      'config:block.block.olivero_syndicate',
       'config:block.block.olivero_primary_admin_actions',
       'config:block.block.olivero_page_title',
       'node_view',

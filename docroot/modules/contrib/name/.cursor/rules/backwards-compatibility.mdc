@@ -1,0 +1,78 @@
+---
+description: Enforce backwards compatibility for 8.x-1.x minor releases
+alwaysApply: true
+---
+
+# Backwards Compatibility for 8.x-1.x
+
+This project is on the `8.x-1.x` branch. Changes are released as minor
+`8.x-1.y` releases and must preserve backwards compatibility.
+
+## PHP API
+
+- Never remove or rename a public or protected class, method, property, or
+  constant.
+- Never narrow a parameter type or widen a return type on an existing API.
+- Never add a required parameter to an existing method.
+- Never add methods to existing interfaces in `8.x-1.y` minor releases.
+- Deprecate first; remove only in the next major branch.
+
+### Interface changes
+
+Adding a method to an existing interface is a breaking change, not a minor
+enhancement.
+
+- Do not add methods to existing interfaces in `8.x-1.y` minor releases.
+- Reserve interface expansion for the next major release (`name:2.0.0`).
+
+Why this is breaking:
+
+- Other modules can decorate or replace Name services in `services.yml` and
+  must implement the interface.
+- PHP requires every implementation to declare every interface method.
+- A new interface method causes downstream implementations to fail until they
+  update.
+
+Use these alternatives in minor releases when new behavior is needed:
+
+- Add the method to the concrete service class only.
+- Introduce a new sub-interface that extends the existing one.
+- Add a new service ID for the new capability.
+- Extract new behavior into a utility class or collaborator.
+
+The `@deprecated` tag uses two different version formats intentionally:
+the **introduction** version matches the current `8.x-1.y` branch, while
+the **removal** version uses semver (`2.0.0`) because the next major
+follows Drupal's new versioning convention.
+
+```php
+// Bad: deleting the old method breaks existing callers.
+
+/**
+ * @deprecated in name:8.x-1.y and is removed from name:2.0.0.
+ *   Use NameFormatterInterface::formatName() instead.
+ */
+public function oldMethod(): string {
+  // Keep the old behavior or delegate to the replacement.
+}
+```
+
+## Services
+
+- Never remove or rename a service ID in `name.services.yml`.
+- Do not change constructor arguments in ways that break service overrides.
+- Add new dependencies carefully and prefer optional/backwards-compatible
+  wiring when changing existing services.
+
+## Configuration
+
+- Never remove or rename shipped config keys or schema keys.
+- Provide a `hook_update_N()` migration for config schema changes.
+- Preserve existing config values during updates.
+
+## Routes and Templates
+
+- Never remove or rename a route name from `name.routing.yml`.
+- Redirect old paths to new paths when changing URLs.
+- Never remove a Twig template variable that existing overrides may use.
+- New Twig variables must have safe fallbacks.

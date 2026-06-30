@@ -38,7 +38,7 @@ class Dialog {
   }
 
   /**
-   * Returns a CloseDialogComand with the correct selector.
+   * Returns a CloseDialogCommand with the correct selector.
    *
    * @param \Drupal\layout_paragraphs\LayoutParagraphsLayout $layout
    *   The layout paragraphs layout object.
@@ -59,7 +59,7 @@ class Dialog {
    * @return array
    *   The modal settings.
    */
-  public static function dialogSettings(LayoutParagraphsLayout $layout = NULL) {
+  public static function dialogSettings(?LayoutParagraphsLayout $layout = NULL) {
     $config = \Drupal::config('layout_paragraphs.modal_settings');
 
     $modal_settings = [

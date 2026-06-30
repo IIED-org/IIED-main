@@ -9,20 +9,22 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceEntityFormatter;
 use Drupal\entity_test\Entity\EntityTest;
+use Drupal\entity_test\Entity\EntityTestLabel;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
+use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
-use Drupal\entity_test\Entity\EntityTestLabel;
-use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the formatters functionality.
- *
- * @group entity_reference
  */
+#[Group('entity_reference')]
+#[RunTestsInSeparateProcesses]
 class EntityReferenceFormatterTest extends EntityKernelTestBase {
 
   use EntityReferenceFieldCreationTrait;
@@ -401,9 +403,7 @@ class EntityReferenceFormatterTest extends EntityKernelTestBase {
     $this->assertEquals($this->referencedEntity->label(), $build[0]['#plain_text'], sprintf('The markup returned by the %s formatter is correct for an item with a saved entity.', $formatter));
     $this->assertEquals($this->unsavedReferencedEntity->label(), $build[1]['#plain_text'], sprintf('The markup returned by the %s formatter is correct for an item with a unsaved entity.', $formatter));
 
-    // Test an entity type that doesn't have any link templates, which means
-    // \Drupal\Core\Entity\EntityInterface::urlInfo() will throw an exception
-    // and the label formatter will output only the label instead of a link.
+    // Test an entity type that doesn't have any link templates.
     $field_storage_config = FieldStorageConfig::loadByName($this->entityType, $this->fieldName);
     $field_storage_config->setSetting('target_type', 'entity_test_label');
     $field_storage_config->save();

@@ -3,9 +3,9 @@
 namespace Drupal\layout_builder_restrictions\Plugin;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\layout_builder\SectionStorageInterface;
 use Drupal\layout_builder_restrictions\Traits\PluginHelperTrait;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
 /**
  * Base class for Layout builder restriction plugin plugins.

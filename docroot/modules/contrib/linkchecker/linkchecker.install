@@ -115,9 +115,12 @@ function linkchecker_update_8004(&$sandbox) {
     ->execute();
 
   if (!empty($ids)) {
-    foreach ($storage_handler->loadMultiple($ids) as $linkcheckerlink) {
-      $linkcheckerlink->set('uuid', $uuid_service->generate());
-      $linkcheckerlink->save();
+    foreach ($ids as $id) {
+      \Drupal::database()
+        ->update('linkchecker_link')
+        ->fields(['uuid' => $uuid_service->generate()])
+        ->condition('lid', $id)
+        ->execute();
       $sandbox['progress']++;
     }
   }

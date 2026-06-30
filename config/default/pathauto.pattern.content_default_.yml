@@ -2,17 +2,25 @@ uuid: 9f043aec-3360-4226-8d48-7f685f304999
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.article
+    - node.type.blog
+    - node.type.event
+    - node.type.impact_story
+    - node.type.long_read
+    - node.type.news
+    - node.type.page
+    - node.type.project
   module:
     - node
 id: content_default_
 label: 'Content (default)'
 type: 'canonical_entities:node'
-pattern: '[node:title]'
+pattern: '/[node:title]'
 selection_criteria:
   b2dee824-d52f-4541-bb1d-fa8b5fcc64ed:
     id: 'entity_bundle:node'
     negate: false
-    uuid: b2dee824-d52f-4541-bb1d-fa8b5fcc64ed
     context_mapping:
       node: node
     bundles:

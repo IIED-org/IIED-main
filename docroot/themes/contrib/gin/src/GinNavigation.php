@@ -5,6 +5,7 @@ namespace Drupal\gin;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -12,6 +13,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+include_once __DIR__ . '/../gin.theme';
+_gin_include_theme_includes();
 
 /**
  * Service to handle overridden user settings.
@@ -33,6 +37,8 @@ class GinNavigation implements ContainerInjectionInterface {
    *   The current route match.
    * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menuLinkTree
    *   The menu link tree.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   The module handler.
    */
   public function __construct(
     protected AccountInterface $currentUser,
@@ -40,6 +46,7 @@ class GinNavigation implements ContainerInjectionInterface {
     protected BreadcrumbBuilderInterface $breadcrumbBuilder,
     protected RouteMatchInterface $routeMatch,
     protected MenuLinkTreeInterface $menuLinkTree,
+    protected ModuleHandlerInterface $moduleHandler,
   ) {
   }
 
@@ -53,6 +60,7 @@ class GinNavigation implements ContainerInjectionInterface {
       $container->get('breadcrumb'),
       $container->get('current_route_match'),
       $container->get('menu.link_tree'),
+      $container->get('module_handler'),
     );
   }
 
@@ -66,8 +74,10 @@ class GinNavigation implements ContainerInjectionInterface {
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-      ['callable' => 'toolbar_menu_navigation_links'],
     ];
+    if ($this->moduleHandler->moduleExists('toolbar')) {
+      $manipulators[] = ['callable' => 'toolbar_menu_navigation_links'];
+    }
     $tree = $this->menuLinkTree->transform($tree, $manipulators);
     $build = $this->menuLinkTree->build($tree);
     /** @var \Drupal\Core\Menu\MenuLinkInterface $link */
@@ -365,7 +375,7 @@ class GinNavigation implements ContainerInjectionInterface {
           'gin/navigation',
         ],
       ],
-      '#access' => $this->currentUser->hasPermission('access toolbar'),
+      '#access' => $this->currentUser->hasPermission('access toolbar') || $this->currentUser->hasPermission('access navigation'),
     ];
   }
 
@@ -377,7 +387,12 @@ class GinNavigation implements ContainerInjectionInterface {
     $links = $this->breadcrumbBuilder->build($this->routeMatch)->getLinks();
     $paths = [];
     foreach ($links as $link) {
-      $paths[] = $link->getUrl()->getInternalPath();
+      $url = $link->getUrl();
+      // Only get internal path for routed URIs
+      // to avoid UnexpectedValueException.
+      if ($url->isRouted()) {
+        $paths[] = $url->getInternalPath();
+      }
     }
 
     return $paths;

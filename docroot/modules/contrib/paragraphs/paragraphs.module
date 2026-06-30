@@ -396,49 +396,61 @@ function template_preprocess_paragraphs_actions(&$variables) {
 
 /**
  * Implements hook_preprocess_HOOK() for field_multiple_value_form().
+ *
+ * Reorganize table rows and columns added in
+ * template_preprocess_field_multiple_value_form() to suite Paragraph's needs.
+ *
+ * @see template_preprocess_field_multiple_value_form()
  */
 function paragraphs_preprocess_field_multiple_value_form(&$variables) {
-  if (!empty($variables['table']['#header']) && isset($variables['table']['#rows'][0])) {
-    // Find paragraph_actions and move to header.
-    // @see template_preprocess_field_multiple_value_form()
-    if (is_array($variables['table']['#rows'][0]['data'][1]) && !empty($variables['table']['#rows'][0]['data'][1]['data']['#paragraphs_header'])) {
-      $variables['table']['#header'][0]['data'] = [
-        'title' => $variables['table']['#header'][0]['data'],
-        'button' => $variables['table']['#rows'][0]['data'][1]['data'],
-      ];
-      unset($variables['table']['#rows'][0]);
-    }
-
-    // Add the paragraph type as a class to every row.
-    if (isset($variables['element']['#paragraphs_widget'])) {
-      foreach ($variables['table']['#rows'] as $key => $row) {
-        if (isset($row['data'][1]['data']['#paragraph_type'])) {
-          $variables['table']['#rows'][$key]['class'][] = 'paragraph-type--' . str_replace('_', '-', $row['data'][1]['data']['#paragraph_type']);
-        }
-      }
-    }
+  // Ensure we are dealing with one of the paragraphs widgets in a table.
+  $paragraph_widget = !empty($variables['element']['#paragraphs_widget']);
+  $inline_paragraph_widget = !empty($variables['element']['#inline_paragraphs_widget']);
+  if ((!$paragraph_widget && !$inline_paragraph_widget) || !isset($variables['table'])) {
+    return;
   }
 
+  // Find paragraph_actions and move to header.
+  // @see template_preprocess_field_multiple_value_form()
+  if (!empty($variables['table']['#header']) && isset($variables['table']['#rows'][0]) && is_array($variables['table']['#rows'][0]['data'][1]) && !empty($variables['table']['#rows'][0]['data'][1]['data']['#paragraphs_header'])) {
+    $variables['table']['#header'][0]['data'] = [
+      'title' => $variables['table']['#header'][0]['data'],
+      'button' => $variables['table']['#rows'][0]['data'][1]['data'],
+    ];
+    unset($variables['table']['#rows'][0]);
+  }
   // Remove the drag handler if we are translating, if the field's cardinality
-  // is 1 or if there are no paragraphs added. Passing through this will not
-  // only remove the drag handler but also the order column that is empty when
-  // no paragraphs are added and when the field is single value.
-  if ((isset($variables['element']['#allow_reference_changes']) && !$variables['element']['#allow_reference_changes']) || (isset($variables['element']['#cardinality']) && $variables['element']['#cardinality'] == 1) || (isset($variables['table']['#rows']) && count($variables['table']['#rows']) == 0)) {
-    if (isset($variables['table']['#tabledrag'])) {
-      // Remove the tabledrag.
-      unset($variables['table']['#tabledrag']);
-      unset($variables['table']['#header'][2]);
-      foreach ($variables['table']['#rows'] as $key => $value) {
-        $variables['table']['#rows'][$key]['data'][0]['class'][] = 'paragraph-bullet';
-        // Restore the removed weight and give access FALSE.
-        if (isset($value['data'][3])) {
-          $variables['table']['#rows'][$key]['data'][1]['data']['_weight'] = $value['data'][3]['data'];
-          unset($variables['table']['#rows'][$key]['data'][3]);
-          $variables['table']['#rows'][$key]['data'][1]['data']['_weight']['#access'] = FALSE;
-        }
+  // is 1 or if there are no paragraphs added.
+  $translating = isset($variables['element']['#allow_reference_changes']) && !$variables['element']['#allow_reference_changes'];
+  $cardinality = (int) ($variables['element']['#cardinality'] ?? NULL);
+  $no_paragraphs = isset($variables['table']['#rows']) && count($variables['table']['#rows']) === 0;
+  $remove_tabledrag = isset($variables['table']['#tabledrag']) && ($translating || $cardinality === 1 || $no_paragraphs);
+  if ($remove_tabledrag) {
+    unset($variables['table']['#tabledrag'], $variables['table']['#header'][2]);
+  }
+
+  foreach ($variables['table']['#rows'] as $key => $row) {
+    // Add the paragraph type as a class to every row.
+    if ($paragraph_widget && isset($row['data'][1]['data']['#paragraph_type'])) {
+      $variables['table']['#rows'][$key]['class'][] = 'paragraph-type--' . str_replace('_', '-', $row['data'][1]['data']['#paragraph_type']);
+    }
+    // Remove the row cell added for the items _actions not implemented by
+    // paragraphs.
+    unset($variables['table']['#rows'][$key]['data'][2]);
+    // Fix table drag related cells, if applicable.
+    if ($remove_tabledrag) {
+      $variables['table']['#rows'][$key]['data'][0]['class'][] = 'paragraph-bullet';
+      // Restore the removed weight and give access FALSE.
+      if (isset($row['data'][3])) {
+        $variables['table']['#rows'][$key]['data'][1]['data']['_weight'] = $row['data'][3]['data'];
+        unset($variables['table']['#rows'][$key]['data'][3]);
+        $variables['table']['#rows'][$key]['data'][1]['data']['_weight']['#access'] = FALSE;
       }
     }
   }
+  // Remove the header cell added for the _actions column not implemented by
+  // paragraphs.
+  unset($variables['table']['#header'][1]);
 }
 
 /**

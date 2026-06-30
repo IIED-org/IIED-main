@@ -22,11 +22,14 @@ class TermReferenceTree extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $element[] = [
-      '#theme' => 'term_tree_list',
-      '#data' => $items->getValue(),
-      '#attached' => ['library' => ['term_reference_tree/term_reference_tree_css']],
-    ];
+    $element = [];
+    if (!$items->isEmpty()) {
+      $element[] = [
+        '#theme' => 'term_tree_list',
+        '#data' => $items->getValue(),
+        '#attached' => ['library' => ['term_reference_tree/term_reference_tree_css']],
+      ];
+    }
     return $element;
   }
 

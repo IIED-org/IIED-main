@@ -55,7 +55,7 @@ class CommentUser extends Entity {
   public function build() {
     $view_mode = $this->getEntityViewMode();
 
-    /* @var $comment \Drupal\comment\CommentInterface */
+    /** @var \Drupal\comment\CommentInterface $comment */
     $comment = $this->entity();
     $uid = $comment->getOwnerId();
     $user = $this->entityTypeManager

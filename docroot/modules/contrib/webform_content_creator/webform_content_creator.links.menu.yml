@@ -1,5 +1,15 @@
-webform_content_creator.collection:
+webform_content_creator.overview:
   title: 'Webform Content Creator'
-  description: 'View and edit Webform content creator configurations.'
+  description: 'Add new Webform content creator configuration.'
   parent: system.admin_config
+  route_name: webform_content_creator.overview
+webform_content_creator.collection:
+  title: 'Webform Content Creator Entities'
+  description: 'View and edit Webform content creator configurations.'
+  parent: webform_content_creator.overview
   route_name: webform_content_creator.collection
+webform_content_creator.add_form:
+  title: 'Add Entity'
+  description: 'Add new Webform content creator configuration.'
+  parent: webform_content_creator.collection
+  route_name: webform_content_creator.add_form

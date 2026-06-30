@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\help\Functional;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Verify help display and user access to help based on permissions.
- *
- * @group help
  */
+#[Group('help')]
+#[RunTestsInSeparateProcesses]
 class HelpTest extends BrowserTestBase {
 
   /**
@@ -30,7 +31,6 @@ class HelpTest extends BrowserTestBase {
     'help',
     'help_page_test',
     'help_test',
-    'history',
   ];
 
   /**
@@ -99,7 +99,7 @@ class HelpTest extends BrowserTestBase {
 
     // Make sure links are properly added for modules implementing hook_help().
     foreach ($this->getModuleList() as $module => $name) {
-      $this->assertSession()->linkExists($name, 0, new FormattableMarkup('Link properly added to @name (admin/help/@module)', ['@module' => $module, '@name' => $name]));
+      $this->assertSession()->linkExists($name, 0, "Link properly added to $name (admin/help/$module)");
     }
 
     // Ensure a module which does not provide a module overview page is handled
@@ -115,7 +115,7 @@ class HelpTest extends BrowserTestBase {
     $page_text = $this->getTextContent();
     $start = strpos($page_text, 'Module overviews');
     $pos = $start;
-    $list = ['Block', 'Block Content', 'Breakpoint', 'History', 'Text Editor'];
+    $list = ['Block', 'Block Content', 'Breakpoint', 'Text Editor'];
     foreach ($list as $name) {
       $this->assertSession()->linkExists($name);
       $new_pos = strpos($page_text, $name, $start);
@@ -130,7 +130,7 @@ class HelpTest extends BrowserTestBase {
    * @param int $response
    *   (optional) An HTTP response code. Defaults to 200.
    */
-  protected function verifyHelp($response = 200) {
+  protected function verifyHelp($response = 200): void {
     $this->drupalGet('admin/index');
     $this->assertSession()->statusCodeEquals($response);
     if ($response == 200) {

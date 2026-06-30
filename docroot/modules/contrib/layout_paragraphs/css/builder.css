@@ -1,26 +1,26 @@
 .lp-builder {
-  min-height: 30px;
   position: relative;
+  min-height: 30px;
 }
 .js-lpb-region {
+  position: relative;
+  box-sizing: border-box;
   min-height: 40px;
   cursor: default;
-  box-sizing: border-box;
-  position: relative;
 }
 .lpb-empty-container__wrapper {
   position: relative;
 }
 .lpb-empty-container {
-  text-align: center;
   padding-bottom: 30px;
+  text-align: center;
 }
 .lpb-empty-toggle {
   min-height: 20px;
 }
 .lpb-empty-message {
-  text-align: center;
   padding-bottom: 40px;
+  text-align: center;
 }
 .lpb-empty-container__wrapper .lpb-section-menu__wrapper {
   bottom: 20px;
@@ -33,10 +33,10 @@
   outline: 1px dotted white;
 }
 .js-lpb-component {
+  position: relative;
+  transition: all 0.15s linear;
   outline: 1px solid blue;
   outline-color: transparent;
-  transition: all .15s linear;
-  position: relative;
 }
 .lp-builder:not(.is-navigating) .js-lpb-component:hover,
 .lp-builder:not(.is-navigating) .js-lpb-component:focus-within {
@@ -50,11 +50,11 @@
 }
 .js-lpb-component:hover .js-lpb-region,
 .js-lpb-component:focus-within .js-lpb-region {
-  outline: 1px dotted rgba(0, 0, 255, 0.5);
+  outline: 1px dotted rgb(0, 0, 255, 0.5);
 }
 .lp-builder:not(.is-navigating) .js-lpb-component:hover .js-lpb-region:hover,
 .lp-builder:not(.is-navigating) .js-lpb-component:focus-within .js-lpb-region:focus-within {
-  outline: 1px solid rgba(0, 0, 255, 0.5);
+  outline: 1px solid rgb(0, 0, 255, 0.5);
 }
 .lpb-layout {
   padding: 20px;
@@ -62,8 +62,8 @@
 .lpb-layout .lpb-layout-label {
   position: absolute;
   right: 0;
-  border: 1px dotted #ccc;
   padding: 5px 10px;
+  border: 1px dotted #ccc;
   font-size: small;
 }
 .js-lpb-btn--add {
@@ -73,30 +73,32 @@
   position: absolute;
 }
 .lpb-controls {
-  cursor: default;
-  padding: 5px;
-  display: flex;
-  z-index: 80;
   position: absolute;
-  left: 0;
+  z-index: 80;
   top: 0;
+  left: 0;
+  display: flex;
+  padding: 5px;
+  cursor: default;
   opacity: 0;
   border-radius: 0 0 6px 0;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.25);
   background-color: #fff;
+  box-shadow:
+    0 1px 1px rgb(0, 0, 0, 0.25),
+    0 1px 3px rgb(0, 0, 0, 0.25);
 }
 .lpb-controls:hover,
 .lpb-controls:focus-within {
   z-index: 90;
 }
 .lpb-controls.is-layout {
-  background-color: #00659b;
-  border-radius: 6px 6px 0 0;
-  box-shadow: none;
-  color: #fff;
   top: -40px;
-  left: auto;
   right: -1px;
+  left: auto;
+  color: #fff;
+  border-radius: 6px 6px 0 0;
+  background-color: #00659b;
+  box-shadow: none;
 }
 .lp-builder:not(.is-navigating) .js-lpb-component:hover > .lpb-controls,
 .lp-builder:not(.is-navigating) .js-lpb-component:focus-within > .lpb-controls {
@@ -106,9 +108,9 @@
   font-size: 0;
 }
 .lpb-controls-label {
+  padding: 0 5px 0 10px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 30px;
-  padding: 0 5px 0 10px;
 }
 .lpb-drag,
 .lpb-up,
@@ -116,13 +118,13 @@
 .lpb-edit,
 .lpb-duplicate,
 .lpb-delete {
-  cursor: pointer;
-  height: 30px;
   width: 30px;
-  border-radius: 3px;
+  height: 30px;
   margin: 0;
   padding: 0;
-  opacity: .5;
+  cursor: pointer;
+  opacity: 0.5;
+  border-radius: 3px;
 }
 .is-layout .lpb-drag,
 .is-layout .lpb-up,
@@ -133,9 +135,9 @@
   opacity: 1;
 }
 .lpb-drag {
+  cursor: grab;
   background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.5 11C13.3284 11 14 10.3284 14 9.5C14 8.67157 13.3284 8 12.5 8C11.6716 8 11 8.67157 11 9.5C11 10.3284 11.6716 11 12.5 11Z' fill='%23000000'/%3E%3Cpath d='M12.5 16C13.3284 16 14 15.3284 14 14.5C14 13.6716 13.3284 13 12.5 13C11.6716 13 11 13.6716 11 14.5C11 15.3284 11.6716 16 12.5 16Z' fill='%23000000'/%3E%3Cpath d='M14 19.5C14 20.3284 13.3284 21 12.5 21C11.6716 21 11 20.3284 11 19.5C11 18.6716 11.6716 18 12.5 18C13.3284 18 14 18.6716 14 19.5Z' fill='%23000000'/%3E%3Cpath d='M17.5 11C18.3284 11 19 10.3284 19 9.5C19 8.67157 18.3284 8 17.5 8C16.6716 8 16 8.67157 16 9.5C16 10.3284 16.6716 11 17.5 11Z' fill='%23000000'/%3E%3Cpath d='M19 14.5C19 15.3284 18.3284 16 17.5 16C16.6716 16 16 15.3284 16 14.5C16 13.6716 16.6716 13 17.5 13C18.3284 13 19 13.6716 19 14.5Z' fill='%23000000'/%3E%3Cpath d='M17.5 21C18.3284 21 19 20.3284 19 19.5C19 18.6716 18.3284 18 17.5 18C16.6716 18 16 18.6716 16 19.5C16 20.3284 16.6716 21 17.5 21Z' fill='%23000000'/%3E%3C/svg%3E%0A");
   background-size: cover;
-  cursor: grab;
 }
 .is-layout .lpb-drag {
   background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.5 11C13.3284 11 14 10.3284 14 9.5C14 8.67157 13.3284 8 12.5 8C11.6716 8 11 8.67157 11 9.5C11 10.3284 11.6716 11 12.5 11Z' fill='white'/%3E%3Cpath d='M12.5 16C13.3284 16 14 15.3284 14 14.5C14 13.6716 13.3284 13 12.5 13C11.6716 13 11 13.6716 11 14.5C11 15.3284 11.6716 16 12.5 16Z' fill='white'/%3E%3Cpath d='M14 19.5C14 20.3284 13.3284 21 12.5 21C11.6716 21 11 20.3284 11 19.5C11 18.6716 11.6716 18 12.5 18C13.3284 18 14 18.6716 14 19.5Z' fill='white'/%3E%3Cpath d='M17.5 11C18.3284 11 19 10.3284 19 9.5C19 8.67157 18.3284 8 17.5 8C16.6716 8 16 8.67157 16 9.5C16 10.3284 16.6716 11 17.5 11Z' fill='white'/%3E%3Cpath d='M19 14.5C19 15.3284 18.3284 16 17.5 16C16.6716 16 16 15.3284 16 14.5C16 13.6716 16.6716 13 17.5 13C18.3284 13 19 13.6716 19 14.5Z' fill='white'/%3E%3Cpath d='M17.5 21C18.3284 21 19 20.3284 19 19.5C19 18.6716 18.3284 18 17.5 18C16.6716 18 16 18.6716 16 19.5C16 20.3284 16.6716 21 17.5 21Z' fill='white'/%3E%3C/svg%3E%0A");
@@ -146,14 +148,14 @@
 .lpb-duplicate:hover,
 .lpb-delete:hover {
   opacity: 1;
-  background-color: rgba(0, 0, 0, .1);
+  background-color: rgb(0, 0, 0, 0.1);
 }
 .is-layout .lpb-up:hover,
 .is-layout .lpb-down:hover,
 .is-layout .lpb-edit:hover,
 .is-layout .lpb-duplicate:hover,
 .is-layout .lpb-delete:hover {
-  background-color: rgba(0, 0, 0, .25);
+  background-color: rgb(0, 0, 0, 0.25);
 }
 .lpb-drag:focus,
 .lpb-up:focus,
@@ -192,8 +194,8 @@
 }
 .lpb-down[tabindex="-1"],
 .lpb-up[tabindex="-1"] {
-  opacity: .3;
   cursor: default;
+  opacity: 0.3;
 }
 .lpb-edit {
   background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.284 8.63082L19.6136 7.30121C20.0152 6.8996 20.6664 6.8996 21.068 7.30121L22.6988 8.93203C23.1004 9.33365 23.1004 9.98479 22.6988 10.3864L21.3692 11.716L18.284 8.63082Z' fill='%23000000'/%3E%3Cpath d='M17.2556 9.65922L9.0284 17.8864L8 22L12.1136 20.9716L20.3408 12.7444L17.2556 9.65922Z' fill='%23000000'/%3E%3C/svg%3E%0A");
@@ -218,15 +220,15 @@
 }
 .lpb-btn {
   position: absolute;
-  display: inline-block;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, .15);
   z-index: 80;
   left: 50%;
-  transform: translateX(-50%);
+  display: inline-block;
   padding: 6px 10px;
-  transition: all .15s linear;
+  transition: all 0.15s linear;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 15px rgb(0, 0, 0, 0.15);
 }
 .lpb-btn.before {
   top: -17px;
@@ -246,26 +248,28 @@
   opacity: 1;
 }
 .lpb-btn--add {
+  position: absolute;
+  z-index: 80;
+  left: 50%;
   width: 24px;
   height: 24px;
-  left: 50%;
-  z-index: 80;
-  position: absolute;
-  border: 3px solid white;
+  margin: auto;
   cursor: pointer;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: all 0.15s linear;
+  transform: translateX(-50%);
+  border: 3px solid white;
   border-radius: 6px;
-  background-color: #ffffff;
+  background-color: #fff;
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath opacity='.5' fill-rule='evenodd' clip-rule='evenodd' d='M13 6V11H18V13H13V18H11V12.999L6 13V11L11 10.999V6H13Z' fill='%23130F13'/%3E%3C/svg%3E%0A");
   background-size: cover;
-  margin: auto;
-  transform: translateX(-50%);
-  transition: all .15s linear;
+  box-shadow:
+    0 1px 1px rgb(0, 0, 0, 0.25),
+    0 1px 3px rgb(0, 0, 0, 0.25);
 }
 .lpb-btn--add:hover {
+  opacity: 1;
   background-color: #e1e0e1;
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M13 6V11H18V13H13V18H11V12.999L6 13V11L11 10.999V6H13Z' fill='%23130F13'/%3E%3C/svg%3E%0A");
-  opacity: 1;
 }
 .lpb-btn--add:hover,
 .lpb-btn:hover,
@@ -305,14 +309,14 @@
   display: none;
 }
 .gu-mirror {
-  background: #fff;
   cursor: grabbing;
+  background: #fff;
 }
 
 form.layout-paragraphs-builder-form {
-  margin-left: -20px;
   margin-right: -20px;
-  outline: 1px solid rgba(0,0,0,.15);
+  margin-left: -20px;
+  outline: 1px solid rgb(0, 0, 0, 0.15);
 }
 
 form.layout-paragraphs-builder-form .js-lpb-component-list {
@@ -320,14 +324,14 @@ form.layout-paragraphs-builder-form .js-lpb-component-list {
 }
 
 .lpb-enable {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
   display: flex;
   justify-content: center;
-  left: 0;
-  opacity: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
   transform: translateY(-50%);
+  opacity: 0;
 }
 
 .lpb-enable__button {
@@ -335,35 +339,35 @@ form.layout-paragraphs-builder-form .js-lpb-component-list {
 }
 
 a.lpb-enable-button {
+  display: flex;
   align-items: center;
-  background-color: #00659b;
+  padding: 3px 12px 3px 0;
+  color: white;
   border: none;
   border-radius: 3px;
-  color: white;
-  display: flex;
+  background-color: #00659b;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding: 3px 12px 3px 0;
 }
 
 a.lpb-enable-button:hover,
 a.lpb-enable-button:focus {
   padding: 3px 12px 3px 0;
-  border-bottom-style: none;
   color: white;
+  border-bottom-style: none;
   outline: none;
 }
 a.lpb-enable-button::before {
-  content: "";
   display: block;
-  height: 30px;
   width: 30px;
-  border-radius: 3px;
+  height: 30px;
   margin: 0;
   padding: 0;
-  opacity: .5;
+  content: "";
+  opacity: 0.5;
+  border-radius: 3px;
   background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.284 8.63082L19.6136 7.30121C20.0152 6.8996 20.6664 6.8996 21.068 7.30121L22.6988 8.93203C23.1004 9.33365 23.1004 9.98479 22.6988 10.3864L21.3692 11.716L18.284 8.63082Z' fill='white'/%3E%3Cpath d='M17.2556 9.65922L9.0284 17.8864L8 22L12.1136 20.9716L20.3408 12.7444L17.2556 9.65922Z' fill='white'/%3E%3C/svg%3E%0A");
-  background-position: 50% 50%;
   background-repeat: no-repeat;
+  background-position: 50% 50%;
 }
 .lpb-formatter {
   position: relative;
@@ -379,26 +383,26 @@ a.lpb-enable-button::before {
 }
 
 .lpb-tooltiptext {
-  opacity: 0;
-  pointer-events: none;
-  transition: all .15s linear;
-  width: auto;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 10px;
   position: absolute;
   z-index: 90;
   bottom: 100%;
   left: -7px;
+  width: auto;
   margin-bottom: -2px;
+  padding: 10px;
+  transition: all 0.15s linear;
+  text-align: center;
   white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  color: #fff;
+  background-color: black;
 }
 .lpb-tooltiptext::after {
-  content: " ";
   position: absolute;
   top: 100%; /* At the bottom of the tooltip */
   left: 20px;
+  content: " ";
   border-width: 7px;
   border-style: solid;
   border-color: black transparent transparent transparent;
@@ -412,10 +416,10 @@ a.lpb-enable-button::before {
   opacity: 1;
 }
 .js-lpb-ui-message {
-  background-color: #000;
-  color: #fff;
-  text-align: center;
   position: static;
+  text-align: center;
+  color: #fff;
+  background-color: #000;
 }
 
 .ck.ck-balloon-panel.ck-balloon-panel_visible {

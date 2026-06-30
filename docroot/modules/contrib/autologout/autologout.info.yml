@@ -5,7 +5,7 @@ package: Security
 core_version_requirement: ^9.2 || ^10 || ^11
 configure: autologout.set_admin
 
-# Information added by Drupal.org packaging script on 2026-03-18
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2026-05-17
+version: '2.0.3'
 project: 'autologout'
-datestamp: 1773800752
+datestamp: 1778985847

@@ -32,7 +32,7 @@ class ChooseComponentController extends ControllerBase {
   /**
    * The entity type bundle info service.
    *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfo
+   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
    */
   protected $entityTypeBundleInfo;
 
@@ -57,7 +57,7 @@ class ChooseComponentController extends ControllerBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -78,11 +78,8 @@ class ChooseComponentController extends ControllerBase {
    *   The build array.
    */
   public function list(Request $request, LayoutParagraphsLayout $layout_paragraphs_layout) {
-    $route_params = [
-      'layout_paragraphs_layout' => $layout_paragraphs_layout->id(),
-    ];
     $context = $this->getContextFromRequest($request);
-    // If inserting a new item adjecent to a sibling component, the region
+    // If inserting a new item adjacent to a sibling component, the region
     // passed in the URL will be incorrect if the existing sibling component
     // was dragged into another region. In that case, always use the existing
     // sibling's region.
@@ -97,7 +94,7 @@ class ChooseComponentController extends ControllerBase {
       return $this->componentForm(key($types), $layout_paragraphs_layout, $context);
     }
     else {
-      return $this->componentMenu($types, $route_params, $context);
+      return $this->componentMenu($types);
     }
   }
 
@@ -202,7 +199,7 @@ class ChooseComponentController extends ControllerBase {
    *   The request object.
    *
    * @return array
-   *   The context into which the new component is being iserted.
+   *   The context into which the new component is being inserted.
    */
   protected function getContextFromRequest(Request $request) {
     return [
@@ -270,7 +267,6 @@ class ChooseComponentController extends ControllerBase {
           'layout_paragraphs_layout' => $layout->id(),
           'paragraph_type_id' => $paragraphs_type->id(),
         ];
-        $query_params = $context;
         $types[$bundle] = [
           'id' => $paragraphs_type->id(),
           'label' => $paragraphs_type->label(),
@@ -295,6 +291,7 @@ class ChooseComponentController extends ControllerBase {
    */
   protected function getSortedAllowedTypes(array $settings) {
     $bundles = $this->entityTypeBundleInfo->getBundleInfo('paragraph');
+    $return_bundles = [];
     if (!empty($settings['target_bundles'])) {
       if (isset($settings['negate']) && $settings['negate'] == '1') {
         $bundles = array_diff_key($bundles, $settings['target_bundles']);

@@ -73,7 +73,7 @@ class InsertComponentForm extends ComponentFormBase {
   protected $siblingUuid;
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    *
    * @param array $form
    *   The form array.
@@ -97,14 +97,14 @@ class InsertComponentForm extends ComponentFormBase {
   public function buildForm(
     array $form,
     FormStateInterface $form_state,
-    LayoutParagraphsLayout $layout_paragraphs_layout = NULL,
-    ParagraphsTypeInterface $paragraph_type = NULL,
-    string $parent_uuid = NULL,
-    string $region = NULL,
-    string $sibling_uuid = NULL,
-    string $placement = NULL,
-    array $paragraph_defaults = []
-    ) {
+    ?LayoutParagraphsLayout $layout_paragraphs_layout = NULL,
+    ?ParagraphsTypeInterface $paragraph_type = NULL,
+    ?string $parent_uuid = NULL,
+    ?string $region = NULL,
+    ?string $sibling_uuid = NULL,
+    ?string $placement = NULL,
+    array $paragraph_defaults = [],
+  ) {
 
     if (!empty($paragraph_defaults)) {
       $this->paragraphDefaults = $paragraph_defaults;
@@ -144,7 +144,7 @@ class InsertComponentForm extends ComponentFormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function successfulAjaxSubmit(array $form, FormStateInterface $form_state) {
 
@@ -180,7 +180,7 @@ class InsertComponentForm extends ComponentFormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);

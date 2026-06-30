@@ -844,6 +844,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
       query:
@@ -1519,12 +1520,6 @@ display:
             multiple: true
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -2143,12 +2138,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -3288,12 +3277,6 @@ display:
             multiple: true
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -3935,12 +3918,6 @@ display:
             multiple: true
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              publications_editor: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:

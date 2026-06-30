@@ -23,3 +23,9 @@ services:
     class: Drupal\views_bulk_operations\EventSubscriber\ViewsBulkOperationsEventSubscriber
     tags:
       - { name: event_subscriber }
+
+  logger.channel.views_bulk_operations:
+    parent: logger.channel_base
+    arguments: ['views_bulk_operations']
+
+  Drupal\views_bulk_operations\Hook\ViewsBulkOperationsHooks: ~

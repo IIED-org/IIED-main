@@ -1,0 +1,2 @@
+services:
+  purge_file.internal.invalidation_plugin_manager: '@plugin.manager.purge.invalidation'

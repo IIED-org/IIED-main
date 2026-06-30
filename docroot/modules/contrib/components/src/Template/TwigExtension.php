@@ -7,10 +7,30 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+// cspell:ignore domo ponycorn
 /**
  * A class providing components' Twig extensions.
  */
 class TwigExtension extends AbstractExtension {
+
+  /**
+   * The components registry service.
+   *
+   * @var \Drupal\components\Template\ComponentsRegistry
+   */
+  protected $componentsRegistry;
+
+  /**
+   * Constructs a new TwigExtension object.
+   *
+   * @param \Drupal\components\Template\ComponentsRegistry $componentsRegistry
+   *   The components registry service.
+   */
+  public function __construct(
+    ComponentsRegistry $componentsRegistry,
+  ) {
+    $this->componentsRegistry = $componentsRegistry;
+  }
 
   /**
    * {@inheritdoc}
@@ -36,6 +56,13 @@ class TwigExtension extends AbstractExtension {
         'Drupal\components\Template\TwigExtension', 'addFilter',
       ]),
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getNodeVisitors(): array {
+    return [new ComponentsDebugNodeVisitor($this->componentsRegistry)];
   }
 
   /**
@@ -73,7 +100,7 @@ class TwigExtension extends AbstractExtension {
    * %}
    * @endcode
    *
-   * @param string|array $_name
+   * @param array|string $_name
    *   The template name or theme hook to render. Optionally, an array of theme
    *   suggestions can be given.
    * @param array $variables
@@ -85,7 +112,7 @@ class TwigExtension extends AbstractExtension {
    * @throws \Exception
    *   When template name is prefixed with a Twig namespace, e.g. "@classy/".
    */
-  public function template($_name, array $variables = []): array {
+  public function template(array|string $_name, array $variables = []): array {
     assert(is_string($_name) || is_array($_name), 'The first argument must be a string containing the template name or theme hook to render or an array of theme suggestions.');
 
     if ($_name[0] === '@') {
@@ -112,9 +139,9 @@ class TwigExtension extends AbstractExtension {
    * {{ form|recursive_merge( {'element': {'attributes': {'placeholder': 'Label'}}} ) }}
    * @endcode
    *
-   * @param array|iterable|\Traversable $element
+   * @param iterable $element
    *   The parent renderable array to merge into.
-   * @param iterable|array $array
+   * @param array $array
    *   The array to merge.
    *
    * @return array
@@ -123,12 +150,12 @@ class TwigExtension extends AbstractExtension {
    * @throws \Twig\Error\RuntimeError
    *   When $element is not an array or "Traversable".
    */
-  public static function recursiveMergeFilter($element, $array): array {
+  public static function recursiveMergeFilter(mixed $element, array $array): array {
     if (!is_iterable($element)) {
       throw new RuntimeError(sprintf('The recursive_merge filter only works on arrays or "Traversable" objects, got "%s".', gettype($element)));
     }
 
-    return array_replace_recursive($element, $array);
+    return array_replace_recursive((array) $element, $array);
   }
 
   /**
@@ -146,7 +173,7 @@ class TwigExtension extends AbstractExtension {
    * {{ form|set( at='element.#attributes.placeholder', value='Label' ) }}
    * @endcode
    *
-   * @param array|iterable|\Traversable $element
+   * @param iterable $element
    *   The parent renderable array to set into.
    * @param string $at
    *   The dotted-path to the deeply nested element to set.
@@ -159,7 +186,7 @@ class TwigExtension extends AbstractExtension {
    * @throws \Twig\Error\RuntimeError
    *   When $element is not an array or "Traversable".
    */
-  public static function setFilter($element, string $at, $value) {
+  public static function setFilter(mixed $element, string $at, mixed $value): iterable {
     if (!is_iterable($element)) {
       throw new RuntimeError(sprintf('The "set" filter only works on arrays or "Traversable" objects, got "%s".', gettype($element)));
     }
@@ -185,13 +212,13 @@ class TwigExtension extends AbstractExtension {
    * {{ form|add( at='element.#attributes.class', values=['new-class', 'new-class-2'] ) }}
    * @endcode
    *
-   * @param array|iterable|\Traversable $element
+   * @param iterable $element
    *   The parent renderable array to merge into.
    * @param string $at
    *   The dotted-path to the deeply nested element to modify.
-   * @param mixed $value
+   * @param mixed|null $value
    *   The value to add.
-   * @param mixed $values
+   * @param mixed|null $values
    *   The values to add. If this named argument is used, the "value" argument
    *   is ignored.
    *
@@ -201,7 +228,7 @@ class TwigExtension extends AbstractExtension {
    * @throws \Twig\Error\RuntimeError
    *   When $element is not an array or "Traversable".
    */
-  public static function addFilter($element, string $at, $value = NULL, $values = NULL) {
+  public static function addFilter(mixed $element, string $at, mixed $value = NULL, mixed $values = NULL): iterable {
     if (!is_iterable($element)) {
       throw new RuntimeError(sprintf('The "add" filter only works on arrays or "Traversable" objects, got "%s".', gettype($element)));
     }
@@ -212,7 +239,7 @@ class TwigExtension extends AbstractExtension {
   /**
    * Helper function for the set/add filters.
    *
-   * @param array|iterable|\Traversable $element
+   * @param iterable $element
    *   The parent renderable array to merge into.
    * @param string $at
    *   The dotted-path to the deeply nested element to replace.
@@ -224,7 +251,7 @@ class TwigExtension extends AbstractExtension {
    * @return array
    *   The merged renderable array.
    */
-  protected static function addOrSetFilter($element, string $at, $value, $isAddFilter = FALSE) {
+  protected static function addOrSetFilter(iterable $element, string $at, mixed $value, bool $isAddFilter = FALSE): array {
     if ($element instanceof \ArrayAccess) {
       $filteredElement = clone $element;
     }

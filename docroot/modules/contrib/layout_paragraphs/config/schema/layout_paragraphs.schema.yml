@@ -13,7 +13,7 @@ layout_paragraphs.settings:
     paragraph_behaviors_label:
       type: string
       label: 'Paragraph behaviors label'
-      descripton: 'The paragraph behaviors form fieldset label'
+      description: 'The paragraph behaviors form fieldset label'
     paragraph_behaviors_position:
       type: integer
       label: 'Paragraph behaviors fieldset position'

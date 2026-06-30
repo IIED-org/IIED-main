@@ -108,7 +108,7 @@
         {#-- date and share --#}
         
          <div
-          class="flex flex-col flex-wrap justify-between pb-6 border-b border-gray-300 xl:border-none sm:flex-row"
+          class="flex flex-col flex-wrap justify-between pb-6 border-b border-stone-300 xl:border-none sm:flex-row"
         >
         {% if "On" in content.field_hide_date.0 %}          
           {{ node.type.entity.label() }}
@@ -138,7 +138,7 @@
         <figure class="mb-6 -mx-4 sm:mx-0">
           {{ content.field_main_image[0] }}
           <figcaption
-            class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
+            class="px-4 mt-1 text-base leading-tight text-stone-500 sm:p-0">
             {{ content.field_image_caption }}
           </figcaption>
         </figure>
@@ -162,7 +162,7 @@
 
     <div
       class="container lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
-      <div class="border-t border-gray-300 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
+      <div class="border-t border-stone-300 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
         {#-- tags --#}
          {{ content.field_tags }} 
         <div class="flex items-center py-4">

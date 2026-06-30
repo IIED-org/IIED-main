@@ -1,0 +1,26 @@
+---
+label: 'Name formats'
+top_level: false
+related:
+  - name
+  - name.components
+  - name.formatter_options
+---
+
+<p>{% trans %}Name formats control how a single name is shown. A format uses short tokens like <code>g</code> for given name and <code>f</code> for family name.{% endtrans %}</p>
+
+<h2>{% trans %}Simple examples{% endtrans %}</h2>
+<ul>
+  <li>{% trans %}<code>g f</code> shows "Jane Smith".{% endtrans %}</li>
+  <li>{% trans %}<code>f, g</code> shows "Smith, Jane".{% endtrans %}</li>
+  <li>{% trans %}<code>t g f</code> shows "Dr. Jane Smith".{% endtrans %}</li>
+</ul>
+
+<h2>{% trans %}Format tokens{% endtrans %}</h2>
+{{ render_var(name_format_token_help()) }}
+
+<h2>{% trans %}Tips{% endtrans %}</h2>
+<ul>
+  <li>{% trans %}Start with a short pattern and test output.{% endtrans %}</li>
+  <li>{% trans %}Use conditional tokens when some name parts may be empty.{% endtrans %}</li>
+</ul>

@@ -6,7 +6,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 
 /**
@@ -117,7 +116,7 @@ class BlockFieldForm extends FieldFormBase implements ContainerInjectionInterfac
 
     // Create an instance of the block to find out if it has a config form.
     // Redirect to the block config form if there is one.
-    /* @var $block \Drupal\Core\Block\BlockPluginInterface */
+    /** @var \Drupal\Core\Block\BlockPluginInterface $block */
     $manager = \Drupal::service('plugin.manager.block');
     $block_id = $this->field['properties']['block'];
     $block = $manager->createInstance($block_id);

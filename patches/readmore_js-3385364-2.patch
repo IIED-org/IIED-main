@@ -1,0 +1,38 @@
+diff --git a/js/selector.js b/js/selector.js
+index 3e363cd..224863d 100644
+--- a/js/selector.js
++++ b/js/selector.js
+@@ -9,7 +9,7 @@
+   Drupal.behaviors.readmore_js = {
+     attach: function (context, settings) {
+ 
+-      $('html', context).once('readmore_js').each(function () {
++      $(once('readmore_js', 'html', context)).each(function () {
+         // Iterate all fields
+         $.each( settings.readmore_js, function(index,value){
+             // Instantiate new Readmore.
+diff --git a/readmore_js.info.yml b/readmore_js.info.yml
+index 1180a43..fe0fe9f 100644
+--- a/readmore_js.info.yml
++++ b/readmore_js.info.yml
+@@ -1,7 +1,7 @@
+ name: 'Readmore.js Formatter'
+ type: module
+ description: 'Field Formatter for collapsing and expanding long blocks of text with "Read more" and "Close" links.'
+-core_version_requirement: ^8 || ^9
++core_version_requirement: ^8 || ^9 || ^10
+ package: 'Fields'
+ dependencies:
+   - drupal:field
+diff --git a/readmore_js.libraries.yml b/readmore_js.libraries.yml
+index 5d02001..9211f73 100644
+--- a/readmore_js.libraries.yml
++++ b/readmore_js.libraries.yml
+@@ -6,5 +6,6 @@ readmore_js.selector:
+   js:
+     js/selector.js: {}
+   dependencies:
++    - core/drupal
+     - core/jquery
+-    - core/jquery.once
++    - core/once

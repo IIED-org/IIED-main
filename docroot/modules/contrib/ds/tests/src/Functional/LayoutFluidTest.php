@@ -78,7 +78,7 @@ class LayoutFluidTest extends TestBase {
     $this->assertSession()->responseContains('group-right');
     $this->assertSession()->responseContains('group-one-column');
 
-    // Remove the css
+    // Remove the css.
     $fields = [
       'disable_css' => TRUE,
     ];

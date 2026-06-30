@@ -165,20 +165,27 @@ class SettingsForm extends ConfigFormBase {
     $form['fs4']['layout_suggestion_bc'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Undo layout suggestions fix'),
-      '#description' => $this->t('Layout suggestions provided by Display Suite were using the internal ID which caused problems in some cases. The theme hook is now used.') . '<br />' . $this->t('You can safely ignore this setting on new installations.') . ' '  . $this->t('Introduced in DS 8.x-3.17.'),
+      '#description' => $this->t('Layout suggestions provided by Display Suite were using the internal ID which caused problems in some cases. The theme hook is now used.') . '<br />' . $this->t('You can safely ignore this setting on new installations.') . ' ' . $this->t('Introduced in DS 8.x-3.17.'),
       '#default_value' => $config->get('layout_suggestion_bc'),
     ];
 
     $form['fs4']['ft_default_bc'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Undo default field template fix'),
-      '#description' => $this->t('When setting the default field template to something different than "Default" (e.g. Minimal), the selected template would still be the core field template in case you did not change any formatter settings for a field.') . '<br />' . $this->t('You can safely ignore this setting on new installations.') . ' ' . $this->t('This setting will be disabled in case field templates are not enabled.') . ' '  . $this->t('Introduced in DS 8.x-3.17.'),
+      '#description' => $this->t('When setting the default field template to something different than "Default" (e.g. Minimal), the selected template would still be the core field template in case you did not change any formatter settings for a field.') . '<br />' . $this->t('You can safely ignore this setting on new installations.') . ' ' . $this->t('This setting will be disabled in case field templates are not enabled.') . ' ' . $this->t('Introduced in DS 8.x-3.17.'),
       '#default_value' => $config->get('ft_default_bc'),
       '#states' => [
         'disabled' => [
           'input[name="fs1[field_template]"]' => ['checked' => FALSE],
         ],
       ],
+    ];
+
+    $form['fs4']['array_merge_build_bc'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Undo array_merge_recursive build fix'),
+      '#description' => $this->t('When merging the build and layout build arrays, information might be lost, for example data in the #source_contexts array. Instead of using array_merge, the arrays are now merged recursively.') . '<br />' . $this->t('You can ignore this setting on new installations.') . ' ' . $this->t('Introduced in DS 8.x-3.33.'),
+      '#default_value' => $config->get('array_merge_build_bc'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -204,6 +211,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('ft_default_bc', $values['fs4']['ft_default_bc'])
       ->set('layout_icon_image_bc', $values['fs4']['layout_icon_image_bc'])
       ->set('layout_suggestion_bc', $values['fs4']['layout_suggestion_bc'])
+      ->set('array_merge_build_bc', $values['fs4']['array_merge_build_bc'])
       ->save();
 
     drupal_flush_all_caches();

@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\components\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the components module in a fully loaded Drupal instance.
  *
  * @group components
  */
+#[ Group('components') /* @phpstan-ignore attribute.notFound */ ]
 class ComponentsTest extends BrowserTestBase {
 
   /**
@@ -39,7 +43,7 @@ class ComponentsTest extends BrowserTestBase {
    *   The rendered string output (typically HTML).
    */
   protected function render(array &$elements): string {
-    return $this->container->get('renderer')->renderRoot($elements);
+    return (string) $this->container->get('renderer')->renderRoot($elements);
   }
 
   /**

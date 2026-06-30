@@ -8,7 +8,7 @@ For long read featured card display
 
         <a href="{{ url }}" class="hover:no-underline">
           <div
-            class="flex flex-col h-full overflow-hidden transition-shadow bg-gray-800 border border-gray-300 rounded-xl hover:shadow-lg group"
+            class="flex flex-col h-full overflow-hidden transition-shadow bg-stone-800 border border-stone-300 rounded-xl hover:shadow-lg group"
           >
             <div class="border-b-4 border-iiedgreen-500">
 
@@ -30,7 +30,7 @@ For long read featured card display
               >
                <span>{{ node.type.entity.label() }}</span>&nbsp;
             {% block date %}
-              <span class="text-gray-300"> {{ node.field_read_length.value }}</span>
+              <span class="text-stone-300"> {{ node.field_read_length.value }}</span>
               {% endblock %}
 
               </div>

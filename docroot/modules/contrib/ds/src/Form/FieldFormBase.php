@@ -59,7 +59,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
-   *    The typed config manager.
+   *   The typed config manager.
    */
   public function __construct(ConfigFactory $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheTagsInvalidatorInterface $cache_invalidator, ModuleHandlerInterface $module_handler, TypedConfigManagerInterface $typed_config_manager) {
     parent::__construct($config_factory, $typed_config_manager);

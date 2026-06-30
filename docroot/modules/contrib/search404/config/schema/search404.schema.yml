@@ -22,7 +22,9 @@ search404.settings:
       type: boolean
     search404_ignore_extensions:
       type: string
-    search404_ignore_query:
+    search404_abort_all_file_queries:
+      type: boolean
+    search404_abort_specific_file_queries:
       type: string
     search404_first:
       type: boolean
@@ -46,3 +48,15 @@ search404.settings:
       type: string
     search404_ignore_paths:
       type: string
+    search404_ignore_language:
+      type: boolean
+    search404_search_file_entities:
+      type: boolean
+    site_404:
+      type: string
+    search404_deny_all_file_extensions:
+      type: boolean
+    search404_deny_specific_file_extensions:
+      type: string
+
+

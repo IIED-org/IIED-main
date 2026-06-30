@@ -2,10 +2,12 @@
 
 namespace Drupal\search404\Form;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,12 +41,14 @@ class Search404Settings extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The factory for configuration objects.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   The module handler service.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
+   *   The typed configuration manager.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, ModuleHandlerInterface $module_handler) {
-    parent::__construct($configFactory);
-    $this->moduleHandler = $module_handler;
+  public function __construct(ConfigFactoryInterface $configFactory, ModuleHandlerInterface $moduleHandler, TypedConfigManagerInterface $typedConfigManager) {
+    parent::__construct($configFactory, $typedConfigManager);
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -54,6 +58,7 @@ class Search404Settings extends ConfigFormBase {
     return new static(
       $container->get('config.factory'),
       $container->get('module_handler'),
+      $container->get('config.typed')
     );
   }
 
@@ -107,6 +112,8 @@ class Search404Settings extends ConfigFormBase {
       '#description' => $this->t('The custom search path: example: myownsearch/@keys. The token "@keys" will be replaced with the search keys from the URL.'),
       '#default_value' => $config->get('search404_custom_search_path'),
       '#required' => ((!empty($form_state->getValue("search404_do_custom_search")) && $form_state->getValue("search404_do_custom_search") == TRUE) ? TRUE : FALSE),
+      // Override core 128 characters #maxlength (#3331028):
+      '#maxlength' => 512,
       '#states' => [
         "visible" => [
           "input[name='search404_do_custom_search']" => ["checked" => TRUE],
@@ -143,6 +150,8 @@ class Search404Settings extends ConfigFormBase {
       '#type' => 'textfield',
       '#placeholder' => $this->t('For example, Invalid search for @keys, Sorry the page does not exist, etc.'),
       '#description' => $this->t('A custom error message instead of default Drupal message, that should be displayed when search results are shown on a 404 page, use "@keys" to insert the searched key value if necessary.'),
+      // Override core 128 characters #maxlength (#3331028):
+      '#maxlength' => 512,
       '#default_value' => $config->get('search404_custom_error_message'),
     ];
 
@@ -198,20 +207,52 @@ class Search404Settings extends ConfigFormBase {
     $form['advanced']['search404_ignore_extensions'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Extensions to ignore'),
-      '#description' => $this->t('These extensions will be ignored from the search query, e.g.: http://www.example.com/invalid/page.php will only search for "invalid page". Separate extensions with a space, e.g.: "htm html php". Do not include leading dot.'),
+      '#description' => $this->t('These extensions will be removed from the search query, e.g.: Defining "php" here and accessing "http://www.example.com/invalid/page.php" will only search for "invalid page". Separate extensions with a space, e.g.: "htm html php". Do not include leading dot.'),
       '#default_value' => $config->get('search404_ignore_extensions'),
+      // Override core 128 characters #maxlength (#3331028):
+      '#maxlength' => 512,
     ];
-    $form['advanced']['search404_ignore_query'] = [
+    $form['advanced']['search404_deny_all_file_extensions'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Deny (abort) search on all paths containing any file extensions'),
+      '#description' => $this->t('A search will not be performed for a query ending in any file extension. The user will see an "Denied file query" error. In contrast to "Extensions to ignore", the search will be canceled instead of the extension being simply removed from the search query.<br><br><strong>Note</strong>:
+        <ul>
+          <li>Search queries containing file extensions defined in "Extensions to ignore" will not be aborted.</li>
+          <li>If disabled, you can manually specify file extensions to abort search on.</li>
+        </ul>'),
+      '#default_value' => $config->get('search404_deny_all_file_extensions'),
+    ];
+    $form['advanced']['search404_deny_specific_file_extensions'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Extensions to abort search'),
-      '#description' => $this->t('A search will not be performed for a query ending in these extensions. Separate extensions with a space, e.g.: "gif jpg jpeg bmp png". Do not include leading dot.'),
-      '#default_value' => $config->get('search404_ignore_query'),
+      '#title' => $this->t('Deny (abort) search on all paths containing specified file extensions'),
+      '#description' => $this->t('A search will not be performed for a query ending in these extensions. Separate extensions with a space, e.g.: "gif jpg jpeg bmp png". Do not include leading dot.<br><br><strong>Note</strong>:
+        <ul>
+          <li>Search queries containing file extensions defined in "Extensions to ignore" will not be aborted.</li>
+          <li>Leave empty to allow any file extension.</li>
+        </ul>'),
+      '#default_value' => $config->get('search404_deny_specific_file_extensions'),
+      // Override core 128 characters #maxlength (#3331028):
+      '#maxlength' => 512,
+      '#states' => [
+        'visible' => [
+          ':input[name="search404_deny_all_file_extensions"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+    $form['advanced']['search404_search_file_entities'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Search for file entities'),
+      '#description' => $this->t('If this option is enabled and the requested path represents a managed filewhich is published, then the request gets redirected immediately to respond with the content of that file.<br><br>
+        <strong>Note:</strong> This may allow anonymous users to "query" for and find out about managed files on this Drupal site; something they could NOT do otherwise.'),
+      '#default_value' => $config->get('search404_search_file_entities'),
     ];
     $form['advanced']['search404_regex'] = [
       '#type' => 'textfield',
       '#title' => $this->t('PCRE filter'),
       '#description' => $this->t('This regular expression will be applied to filter all queries. The parts of the path that match the expression will be EXCLUDED from the search. You do NOT have to enclose the regex in forward slashes when defining the PCRE. e.g.: use "[foo]bar" instead of "/[foo]bar/". On how to use a PCRE Regex please refer <a href="http://php.net/pcre">PCRE pages in the PHP Manual</a>.'),
       '#default_value' => $config->get('search404_regex'),
+      // Override core 128 characters #maxlength (#3331028):
+      '#maxlength' => 512,
     ];
     // Show custom title for the 404 search results page.
     $form['advanced']['search404_page_title'] = [
@@ -278,8 +319,8 @@ class Search404Settings extends ConfigFormBase {
         $form_state->setErrorByName('search404_custom_search_path', $this->t('Custom search path should end with search key pattern "@keys".'));
       }
       $url_path = explode("@keys", $custom_path);
-      if (!empty(preg_match('/[\'^Ã‚Â£!`$%&*()\{}\:.;,\[\]"@#~><>,|+Ã‚Â¬-]/', $url_path[0]))) {
-        $form_state->setErrorByName('search404_custom_search_path', $this->t('Custom search path should not contain special characters other than "/?=_".'));
+      if (!UrlHelper::isValid($url_path[0])) {
+        $form_state->setErrorByName('search404_custom_search_path', $this->t('Custom search path should have a valid path.'));
       }
       if (strpos($custom_path, '/') === 0) {
         $form_state->setErrorByName('search404_custom_search_path', $this->t('Custom search path should not start with a slash.'));
@@ -302,7 +343,8 @@ class Search404Settings extends ConfigFormBase {
       ->set('search404_use_customclue', $form_state->getValue('search404_use_customclue'))
       ->set('search404_ignore', $form_state->getValue('search404_ignore'))
       ->set('search404_ignore_paths', $form_state->getValue('search404_ignore_paths'))
-      ->set('search404_ignore_query', $form_state->getValue('search404_ignore_query'))
+      ->set('search404_deny_specific_file_extensions', $form_state->getValue('search404_deny_specific_file_extensions'))
+      ->set('search404_deny_all_file_extensions', $form_state->getValue('search404_deny_all_file_extensions'))
       ->set('search404_ignore_extensions', $form_state->getValue('search404_ignore_extensions'))
       ->set('search404_page_text', $form_state->getValue('search404_page_text'))
       ->set('search404_page_title', $form_state->getValue('search404_page_title'))
@@ -312,7 +354,8 @@ class Search404Settings extends ConfigFormBase {
       ->set('search404_disable_error_message', $form_state->getValue('search404_disable_error_message'))
       ->set('search404_custom_error_message', $form_state->getValue('search404_custom_error_message'))
       ->set('search404_page_redirect', $form_state->getValue('search404_page_redirect'))
-      ->set('search404_ignore_language', $form_state->getValue('search404_ignore_language'));
+      ->set('search404_ignore_language', $form_state->getValue('search404_ignore_language'))
+      ->set('search404_search_file_entities', $form_state->getValue('search404_search_file_entities'));
 
     // Save custom path if the corresponding checkbox is checked.
     if (!empty($form_state->getValue('search404_do_custom_search'))) {

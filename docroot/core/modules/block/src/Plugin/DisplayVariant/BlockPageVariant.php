@@ -188,8 +188,8 @@ class BlockPageVariant extends VariantBase implements PageVariantInterface, Cont
       unset($build['content']['#sorted']);
     }
 
-    // The access results' cacheability is currently added to the top level of the
-    // render array. This is done to prevent issues with empty regions being
+    // The access results' cacheability is currently added to the top level of
+    // the render array. This is done to prevent issues with empty regions being
     // displayed.
     // This would need to be changed to allow caching of block regions, as each
     // region must then have the relevant cacheable metadata.
@@ -197,6 +197,7 @@ class BlockPageVariant extends VariantBase implements PageVariantInterface, Cont
     foreach ($cacheable_metadata_list as $cacheable_metadata) {
       $merged_cacheable_metadata = $merged_cacheable_metadata->merge($cacheable_metadata);
     }
+    $merged_cacheable_metadata->addCacheableDependency($this);
     $merged_cacheable_metadata->applyTo($build);
 
     return $build;

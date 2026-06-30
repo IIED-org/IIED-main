@@ -117,8 +117,8 @@ class GinLoginConfigurationForm extends ConfigFormBase {
       '#title' => $this->t('Upload image'),
       '#description' => $this->t("If you don't have direct file access to the server, use this field to upload your logo."),
       '#upload_validators' => [
-        'file_validate_extensions' => [
-          'png gif jpg jpeg apng webp avif svg',
+        'FileExtension' => [
+          'extensions' => 'png gif jpg jpeg apng webp avif svg',
         ],
       ],
     ];
@@ -153,9 +153,9 @@ class GinLoginConfigurationForm extends ConfigFormBase {
       '#title' => $this->t('Upload image'),
       '#description' => $this->t("If you don't have direct file access to the server, use this field to upload your brand image."),
       '#upload_validators' => [
-        'file_validate_is_image' => [],
-        'file_validate_extensions' => [
-          'png gif jpg jpeg apng webp avif',
+        'FileIsImage' => [],
+        'FileExtension' => [
+          'extensions' => 'png gif jpg jpeg apng webp avif',
         ],
       ],
     ];

@@ -3,6 +3,9 @@
 namespace Drupal\name\Traits;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Name settings trait.
@@ -72,6 +75,15 @@ trait NameFieldSettingsTrait {
         'generational' => ' ',
         'credentials' => ', ',
       ],
+      'autocomplete_match' => 'starts_with',
+      'autocomplete_match_overrides' => [
+        'title' => '',
+        'given' => '',
+        'middle' => '',
+        'family' => '',
+        'generational' => '',
+        'credentials' => '',
+      ],
       'title_options' => [
         t('-- --'),
         t('Mr.'),
@@ -136,7 +148,9 @@ trait NameFieldSettingsTrait {
    */
   protected function getDefaultNameFieldSettingsForm(array $settings, array &$form, FormStateInterface $form_state, $has_data = TRUE) {
 
-    $components = _name_translations();
+    $metadata = \Drupal::getContainer()
+      ->get('name.component_metadata', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+    $components = $metadata ? $metadata->getTranslations() : [];
     $field_options = [
       'select' => $this->t('Drop-down'),
       'text' => $this->t('Text field'),
@@ -147,6 +161,7 @@ trait NameFieldSettingsTrait {
     $autocomplete_sources_options = [
       'title' => $this->t('Title options'),
       'generational' => $this->t('Generational options'),
+      'data' => $this->t('Field data'),
     ];
 
     $element = [];
@@ -179,7 +194,7 @@ trait NameFieldSettingsTrait {
     ];
     $element['field_type'] = [
       '#title' => $this->t('Field type'),
-      '#description' => $this->t('The Field type controls how the field is rendered. Autocomplete is a text field with autocomplete, and the behaviour of this is controlled by the field settings.'),
+      '#description' => $this->t('The Field type controls how the field is rendered. Autocomplete is a text field with autocomplete, and the behavior of this is controlled by the field settings.'),
     ];
     $element['max_length'] = [
       '#title' => $this->t('Maximum length'),
@@ -187,23 +202,27 @@ trait NameFieldSettingsTrait {
     ];
 
     $sort_options = is_array($settings['sort_options']) ? $settings['sort_options'] : [
-      'title' => 'title',
-      'generational' => '',
+      'title' => TRUE,
+      'generational' => FALSE,
     ];
     $element['sort_options'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Sort options'),
-      '#default_value' => $sort_options,
+      '#default_value' => array_keys(array_filter($sort_options)),
       '#description' => $this->t("This enables sorting on the options after the vocabulary terms are added and duplicate values are removed."),
-      '#options' => _name_translations([
-        'title' => '',
-        'generational' => '',
-      ]),
+      '#options' => $metadata
+        ? $metadata->getTranslations([
+          'title' => '',
+          'generational' => '',
+        ])
+        : [],
     ];
 
     $element['autocomplete_source'] = [
       '#title' => $this->t('Autocomplete sources'),
-      '#description' => $this->t('At least one value must be selected before you can enable the autocomplete option on the input textfields.'),
+      '#description' => $this->t('At least one value must be selected before you can enable the autocomplete option on the input textfields. %field_data suggests values from existing entries the user is allowed to view within the same field storage.', [
+        '%field_data' => $this->t('Field data'),
+      ]),
     ];
 
     $element['autocomplete_separator'] = [
@@ -257,6 +276,42 @@ trait NameFieldSettingsTrait {
       }
     }
 
+    $element['autocomplete_match'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Default autocomplete match mode'),
+      '#description' => $this->t('Controls how typed text is matched against suggestions. %starts_with is recommended for performance; %contains is more flexible but can be slow on large datasets.', [
+        '%starts_with' => $this->t('Starts with'),
+        '%contains' => $this->t('Contains'),
+      ]),
+      '#options' => [
+        'starts_with' => $this->t('Starts with (recommended)'),
+        'contains' => $this->t('Contains'),
+      ],
+      '#default_value' => $settings['autocomplete_match'] ?? 'starts_with',
+      '#table_group' => 'none',
+    ];
+
+    $element['autocomplete_match_overrides'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Per-component match mode overrides'),
+      '#description' => $this->t('Optional. Override the default match mode for individual components.'),
+      '#open' => FALSE,
+      '#tree' => TRUE,
+      '#table_group' => 'none',
+    ];
+    foreach ($components as $key => $title) {
+      $element['autocomplete_match_overrides'][$key] = [
+        '#type' => 'select',
+        '#title' => $title,
+        '#options' => [
+          '' => $this->t('Use default'),
+          'starts_with' => $this->t('Starts with'),
+          'contains' => $this->t('Contains'),
+        ],
+        '#default_value' => $settings['autocomplete_match_overrides'][$key] ?? '',
+      ];
+    }
+
     // @todo Grouping & grouping sort
     // @todo Allow reverse free tagging back into the vocabulary.
     $title_options = implode("\n", array_filter($settings['title_options']));
@@ -283,7 +338,8 @@ trait NameFieldSettingsTrait {
       '#element_validate' => [[get_class($this), 'validateGenerationalOptions']],
       '#table_group' => 'none',
     ];
-    if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
+    $module_handler = \Drupal::moduleHandler();
+    if ($module_handler->moduleExists('taxonomy')) {
       // @todo Make the labels more generic.
       // Generational suffixes may be imported from one or more vocabularies
       // using the tag '[vocabulary:xxx]', where xxx is the vocabulary id.
@@ -296,6 +352,12 @@ trait NameFieldSettingsTrait {
       $element['generational_options']['#description'] .= ' ' . $this->t("%label_plural may be also imported from one or more vocabularies using the tag '[vocabulary:xxx]', where xxx is the vocabulary machine-name or id. Terms that exceed the maximum length of the %label are not added to the options list.", [
         '%label_plural' => $this->t('Generational suffixes'),
         '%label' => $this->t('Generational suffix'),
+      ]);
+    }
+
+    if ($module_handler->moduleExists('help')) {
+      $element['title_options']['#description'] .= ' ' . $this->t('See the help topic for a comprehensive list of @help_topic.', [
+        '@help_topic' => Link::fromTextAndUrl(t('titles'), Url::fromUri('internal:/admin/help/topic/name.titles'))->toString(),
       ]);
     }
 
@@ -343,7 +405,10 @@ trait NameFieldSettingsTrait {
     $minimum_components = $form_state->getValue(['settings', 'minimum_components']);
     $diff = array_intersect(array_keys(array_filter($minimum_components)), ['given', 'family']);
     if (count($diff) == 0) {
-      $components = array_intersect_key(_name_translations(), array_flip(['given', 'family']));
+      $service = \Drupal::getContainer()
+        ->get('name.component_metadata', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+      $translations = $service ? $service->getTranslations() : [];
+      $components = array_intersect_key($translations, array_flip(['given', 'family']));
       $form_state->setError($element, t('%label must have one of the following components: %components', [
         '%label' => t('Minimum components'),
         '%components' => implode(', ', $components),
@@ -354,7 +419,10 @@ trait NameFieldSettingsTrait {
     $minimum_components = $form_state->getValue(['settings', 'minimum_components']);
     $diff = array_diff_key(array_filter($minimum_components), array_filter($components));
     if (count($diff)) {
-      $components = array_intersect_key(_name_translations(), $diff);
+      $service = \Drupal::getContainer()
+        ->get('name.component_metadata', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+      $translations = $service ? $service->getTranslations() : [];
+      $components = array_intersect_key($translations, $diff);
       $form_state->setError($element, t('%components can not be selected for %label when they are not selected for %label2.', [
         '%label' => t('Minimum components'),
         '%label2' => t('Components'),

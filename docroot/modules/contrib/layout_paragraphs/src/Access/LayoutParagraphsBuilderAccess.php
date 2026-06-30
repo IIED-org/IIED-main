@@ -33,7 +33,7 @@ class LayoutParagraphsBuilderAccess implements AccessInterface {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    *
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The account to check access for.
@@ -46,15 +46,15 @@ class LayoutParagraphsBuilderAccess implements AccessInterface {
    * @param \Drupal\paragraphs\ParagraphsTypeInterface $paragraph_type
    *   The paragraph type of a component being added.
    *
-   * @return \Drupal\Core\Access\AccessResult
+   * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
   public function access(
     AccountInterface $account,
     LayoutParagraphsLayout $layout_paragraphs_layout,
-    string $operation = NULL,
-    string $component_uuid = NULL,
-    ParagraphsTypeInterface $paragraph_type = NULL
+    ?string $operation = NULL,
+    ?string $component_uuid = NULL,
+    ?ParagraphsTypeInterface $paragraph_type = NULL,
   ) {
 
     // Check field access.

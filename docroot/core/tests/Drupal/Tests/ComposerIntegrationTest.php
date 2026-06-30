@@ -6,13 +6,14 @@ namespace Drupal\Tests;
 
 use Drupal\Composer\Plugin\VendorHardening\Config;
 use Drupal\Tests\Composer\ComposerIntegrationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Finder\Finder;
 
 /**
  * Tests Composer integration.
- *
- * @group Composer
  */
+#[Group('Composer')]
 class ComposerIntegrationTest extends UnitTestCase {
 
   use ComposerIntegrationTrait;
@@ -49,9 +50,8 @@ class ComposerIntegrationTest extends UnitTestCase {
    *
    * @param string $path
    *   Path to a composer.json to test.
-   *
-   * @dataProvider providerTestComposerJson
    */
+  #[DataProvider('providerTestComposerJson')]
   public function testComposerTilde(string $path): void {
     if (str_ends_with($path, 'composer/Metapackage/CoreRecommended/composer.json')) {
       $this->markTestSkipped("$path has tilde");
@@ -77,6 +77,7 @@ class ComposerIntegrationTest extends UnitTestCase {
    * Data provider for all the composer.json provided by Drupal core.
    *
    * @return array
+   *   An array of composer.json file paths.
    */
   public static function providerTestComposerJson(): array {
     $data = [];
@@ -134,8 +135,9 @@ class ComposerIntegrationTest extends UnitTestCase {
    * Data provider for the scaffold files test for Drupal core.
    *
    * @return array
+   *   An array of scaffold file mappings.
    */
-  public static function providerTestExpectedScaffoldFiles() {
+  public static function providerTestExpectedScaffoldFiles(): array {
     return [
       ['.editorconfig', 'assets/scaffold/files/editorconfig', '[project-root]'],
       ['.gitattributes', 'assets/scaffold/files/gitattributes', '[project-root]'],
@@ -150,7 +152,6 @@ class ComposerIntegrationTest extends UnitTestCase {
       ['README.md', 'assets/scaffold/files/drupal.README.md'],
       ['robots.txt', 'assets/scaffold/files/robots.txt'],
       ['update.php', 'assets/scaffold/files/update.php'],
-      ['web.config', 'assets/scaffold/files/web.config'],
       ['sites/README.txt', 'assets/scaffold/files/sites.README.txt'],
       ['sites/development.services.yml', 'assets/scaffold/files/development.services.yml'],
       ['sites/example.settings.local.php', 'assets/scaffold/files/example.settings.local.php'],
@@ -178,14 +179,13 @@ class ComposerIntegrationTest extends UnitTestCase {
    * See https://www.drupal.org/project/drupal/issues/3075954
    *
    * @param string $destRelPath
-   *   Path to scaffold file destination location
+   *   Path to scaffold file destination location.
    * @param string $sourceRelPath
-   *   Path to scaffold file source location
+   *   Path to scaffold file source location.
    * @param string $expectedDestination
-   *   Named location to the destination path of the scaffold file
-   *
-   * @dataProvider providerTestExpectedScaffoldFiles
+   *   Named location to the destination path of the scaffold file.
    */
+  #[DataProvider('providerTestExpectedScaffoldFiles')]
   public function testExpectedScaffoldFiles($destRelPath, $sourceRelPath, $expectedDestination = '[web-root]'): void {
     // Grab the 'file-mapping' section of the core composer.json file.
     $json = json_decode(file_get_contents($this->root . '/core/composer.json'));
@@ -222,7 +222,7 @@ class ComposerIntegrationTest extends UnitTestCase {
   {
     $content = json_decode($composerFileContents, true);
 
-    $relevantKeys = array(
+    $relevantKeys = [
       'name',
       'version',
       'require',
@@ -234,9 +234,9 @@ class ComposerIntegrationTest extends UnitTestCase {
       'prefer-stable',
       'repositories',
       'extra',
-    );
+    ];
 
-    $relevantContent = array();
+    $relevantContent = [];
 
     foreach (array_intersect($relevantKeys, array_keys($content)) as $key) {
       $relevantContent[$key] = $content[$key];

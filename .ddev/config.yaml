@@ -13,6 +13,13 @@ use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
 corepack_enable: false
+hooks:
+  post-start:
+    - composer: install --ignore-platform-reqs
+    - exec: drush updb -y
+    - exec: "cd web/themes/custom/iied_tw && npm install ignore-warnings"
+    - exec: "cd web/themes/custom/iied_tw && npm run build:dev"
+    - exec: drush cr
 
 # Key features of DDEV's config.yaml:
 

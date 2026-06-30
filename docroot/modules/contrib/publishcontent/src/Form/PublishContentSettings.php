@@ -98,7 +98,7 @@ class PublishContentSettings extends ConfigFormBase {
     $form['create_revision'] = [
       '#type' => 'checkbox',
       '#group' => 'accountability',
-      '#title' => $this->t('Create new revision when publising/unpublishing a node'),
+      '#title' => $this->t('Create new revision when publishing/unpublishing a node'),
       '#default_value' => $config->get('create_revision'),
       '#description' => $this->t('Unpublishing or publishing a node will create a new revision automatically.'),
     ];
@@ -114,14 +114,28 @@ class PublishContentSettings extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Publish button value'),
       '#default_value' => $config->get('publish_text_value'),
-      '#description' => $this->t('Set the text value for publishing content types. Default is set to Publish'),
+      '#description' => $this->t('Set the text value for publishing content types. Default is set to Publish.'),
       '#required' => TRUE,
     ];
     $form['unpublish_text_value'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Un-publish button value'),
       '#default_value' => $config->get('unpublish_text_value'),
-      '#description' => $this->t('Set the text value for un-publishing content types. Default is set to Unpublish'),
+      '#description' => $this->t('Set the text value for un-publishing content types. Default is set to Unpublish.'),
+      '#required' => TRUE,
+    ];
+    $form['publish_markup_value'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Publish markup'),
+      '#default_value' => $config->get('publish_markup_value'),
+      '#description' => $this->t('Set the text value for the meta section. Default is set to Published.'),
+      '#required' => TRUE,
+    ];
+    $form['unpublish_markup_value'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Un-publish markup'),
+      '#default_value' => $config->get('unpublish_markup_value'),
+      '#description' => $this->t('Set the text value for the meta section. Default is set to Unpublished.'),
       '#required' => TRUE,
     ];
     return $form;
@@ -131,7 +145,6 @@ class PublishContentSettings extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-
   }
 
   /**
@@ -145,6 +158,8 @@ class PublishContentSettings extends ConfigFormBase {
     $config->set('create_log_entry', $form_state->getValue('create_log_entry'));
     $config->set('publish_text_value', $form_state->getValue('publish_text_value'));
     $config->set('unpublish_text_value', $form_state->getValue('unpublish_text_value'));
+    $config->set('publish_markup_value', $form_state->getValue('publish_markup_value'));
+    $config->set('unpublish_markup_value', $form_state->getValue('unpublish_markup_value'));
     $config->save();
     $this->cacheInvalidator->invalidateTags(['local_task']);
     return parent::submitForm($form, $form_state);

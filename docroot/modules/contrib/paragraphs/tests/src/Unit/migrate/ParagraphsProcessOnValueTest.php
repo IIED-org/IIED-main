@@ -6,6 +6,7 @@ use Drupal\migrate\MigrateExecutable;
 use Drupal\migrate\MigrateMessageInterface;
 use Drupal\migrate\Plugin\migrate\process\Get;
 use Drupal\paragraphs\Plugin\migrate\process\ParagraphsProcessOnValue;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -14,6 +15,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @group paragraphs
  * @coversDefaultClass \Drupal\paragraphs\Plugin\migrate\process\ParagraphsProcessOnValue
  */
+#[Group('paragraphs')]
 class ParagraphsProcessOnValueTest extends ProcessTestCase {
 
   /**

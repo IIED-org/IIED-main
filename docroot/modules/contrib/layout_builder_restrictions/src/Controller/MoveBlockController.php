@@ -11,6 +11,7 @@ use Drupal\layout_builder\SectionStorageInterface;
 /**
  * Defines a controller to move a block.
  *
+ * @phpstan-ignore-line
  * @internal
  *   Controller classes are internal.
  */
@@ -39,6 +40,7 @@ class MoveBlockController extends MoveBlockControllerCore {
    */
   public function build(SectionStorageInterface $section_storage, $delta_from, $delta_to, $region_to, $block_uuid, $preceding_block_uuid = NULL) {
     // Retrieve defined Layout Builder Restrictions plugins.
+    // @phpstan-ignore-line
     $layout_builder_restrictions_manager = \Drupal::service('plugin.manager.layout_builder_restriction');
     $restriction_plugins = $layout_builder_restrictions_manager->getSortedPlugins();
     foreach (array_keys($restriction_plugins) as $id) {

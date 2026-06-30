@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\components\Kernel;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
@@ -13,7 +15,7 @@ abstract class ComponentsKernelTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function register(ContainerBuilder $container) {
+  public function register(ContainerBuilder $container): void {
     parent::register($container);
     // Enable Twig debugging.
     $parameters = $container->getParameter('twig.config');
@@ -36,7 +38,7 @@ abstract class ComponentsKernelTestBase extends KernelTestBase {
       throw new \Exception(__METHOD__ . ' requires system module to be installed.');
     }
 
-    return $this->container->get('renderer')->renderRoot($elements);
+    return (string) $this->container->get('renderer')->renderRoot($elements);
   }
 
 }

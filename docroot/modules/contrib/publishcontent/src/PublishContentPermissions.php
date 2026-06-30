@@ -29,13 +29,13 @@ class PublishContentPermissions {
    *
    * @param string $pattern
    *   The pattern for FormattableMarkup.
-   * @param array $arguments
+   * @param array|null $arguments
    *   The argument for FormattableMarkup.
    *
    * @return string
    *   The name of the permission.
    */
-  public static function getPermission($pattern, array $arguments = NULL) {
+  public static function getPermission($pattern, ?array $arguments = NULL) {
     return (new FormattableMarkup($pattern, $arguments))->__toString();
   }
 

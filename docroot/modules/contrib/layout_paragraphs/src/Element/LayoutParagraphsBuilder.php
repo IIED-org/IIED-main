@@ -2,23 +2,23 @@
 
 namespace Drupal\layout_paragraphs\Element;
 
+use Drupal\Core\Url;
+use Drupal\Core\Render\Markup;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Render\RendererInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\Core\Access\AccessResultAllowed;
+use Drupal\layout_paragraphs\Utility\Dialog;
 use Drupal\Core\Access\AccessResultForbidden;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Render\Element\RenderElementBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Render\Element\RenderElement;
-use Drupal\Core\Render\Markup;
-use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\Url;
-use Drupal\layout_paragraphs\LayoutParagraphsComponent;
-use Drupal\layout_paragraphs\LayoutParagraphsLayoutTempstoreRepository;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\layout_paragraphs\LayoutParagraphsSection;
-use Drupal\layout_paragraphs\Utility\Dialog;
-use Drupal\paragraphs\ParagraphInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\layout_paragraphs\LayoutParagraphsComponent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\layout_paragraphs\LayoutParagraphsLayoutTempstoreRepository;
 
 /**
  * Defines a render element for building the Layout Builder UI.
@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @internal
  *   Plugin classes are internal.
  */
-class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryPluginInterface {
+class LayoutParagraphsBuilder extends RenderElementBase implements ContainerFactoryPluginInterface {
 
   /**
    * The layout paragraphs tempstore service.
@@ -80,7 +80,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
   protected $layoutParagraphsLayout;
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function __construct(
     array $configuration,
@@ -90,7 +90,8 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
     EntityTypeManagerInterface $entity_type_manager,
     LayoutPluginManagerInterface $layout_plugin_manager,
     RendererInterface $renderer,
-    EntityTypeBundleInfoInterface $entity_type_bundle_info) {
+    EntityTypeBundleInfoInterface $entity_type_bundle_info,
+  ) {
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->tempstore = $tempstore_repository;
@@ -101,7 +102,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
@@ -467,7 +468,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
   /**
    * Builds a translation warning message.
    *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
    *   The translation warning.
    */
   protected function translationWarning() {

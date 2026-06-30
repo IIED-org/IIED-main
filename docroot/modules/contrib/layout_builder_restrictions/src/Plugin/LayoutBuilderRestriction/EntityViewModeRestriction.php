@@ -3,11 +3,11 @@
 namespace Drupal\layout_builder_restrictions\Plugin\LayoutBuilderRestriction;
 
 use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\layout_builder_restrictions\Plugin\LayoutBuilderRestrictionBase;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\layout_builder\OverridesSectionStorageInterface;
 use Drupal\layout_builder\SectionStorageInterface;
+use Drupal\layout_builder_restrictions\Plugin\LayoutBuilderRestrictionBase;
 use Drupal\layout_builder_restrictions\Traits\PluginHelperTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -165,7 +165,11 @@ class EntityViewModeRestriction extends LayoutBuilderRestrictionBase {
    */
   public function blockAllowedinContext(SectionStorageInterface $section_storage, $delta_from, $delta_to, $region_to, $block_uuid, $preceding_block_uuid = NULL) {
     $view_display = $this->getValuefromSectionStorage([$section_storage], 'view_display');
-    $third_party_settings = $view_display->getThirdPartySetting('layout_builder_restrictions', 'entity_view_mode_restriction', []);
+
+    $third_party_settings = [];
+    if (isset($view_display) && $view_display instanceof ThirdPartySettingsInterface) {
+      $third_party_settings = $view_display->getThirdPartySetting('layout_builder_restrictions', 'entity_view_mode_restriction', []);
+    }
     if (empty($third_party_settings)) {
       // This entity has no restrictions. Look no further.
       return TRUE;
@@ -276,7 +280,11 @@ class EntityViewModeRestriction extends LayoutBuilderRestrictionBase {
    */
   public function inlineBlocksAllowedinContext(SectionStorageInterface $section_storage, $delta, $region) {
     $view_display = $this->getValuefromSectionStorage([$section_storage], 'view_display');
-    $third_party_settings = $view_display->getThirdPartySetting('layout_builder_restrictions', 'entity_view_mode_restriction', []);
+
+    $third_party_settings = [];
+    if (isset($view_display) && $view_display instanceof ThirdPartySettingsInterface) {
+      $third_party_settings = $view_display->getThirdPartySetting('layout_builder_restrictions', 'entity_view_mode_restriction', []);
+    }
     $allowlisted_blocks = (isset($third_party_settings['allowlisted_blocks'])) ? $third_party_settings['allowlisted_blocks'] : [];
     $denylisted_blocks = (isset($third_party_settings['denylisted_blocks'])) ? $third_party_settings['denylisted_blocks'] : [];
     $restricted_categories = (isset($third_party_settings['restricted_categories'])) ? $third_party_settings['restricted_categories'] : [];

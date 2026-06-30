@@ -9,6 +9,8 @@ namespace Drupal\iied_filters\Plugin\Filter;
 
 use Drupal\filter\Plugin\FilterBase;
 use Drupal\filter\FilterProcessResult;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 
 /**
  * @Filter(
@@ -67,8 +69,11 @@ class FilterVideo extends FilterBase {
       if ($handler && isset($handler['function']) && function_exists($handler['function'])) {
         $embed_code = call_user_func($handler['function'], $variables['url'], $variables['style_settings']);
         $variables['embed_code'] = ($embed_code);
-      } else {
-        $variables['embed_code'] = l($variables['url'], $variables['url']);
+      } 
+      else {
+        $url_object = Url::fromUri($variables['url']);
+        $link = $url_object->toString();
+        $variables['embed_code'] = $link;
       }
 
       // Define render array to generate the markup

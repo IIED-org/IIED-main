@@ -1,0 +1,11 @@
+{
+    "name": "drupal/field_formatter",
+    "description": "Collection of general formatters that display a single field from the referenced entity.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://drupal.org/project/field_formatter",
+    "support": {
+        "issues": "https://drupal.org/project/issues/field_formatter",
+        "source": "https://git.drupalcode.org/project/field_formatter"
+    }
+}

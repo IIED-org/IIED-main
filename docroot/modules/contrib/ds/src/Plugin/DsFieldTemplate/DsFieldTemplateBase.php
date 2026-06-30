@@ -59,7 +59,7 @@ abstract class DsFieldTemplateBase extends PluginBase implements DsFieldTemplate
       '#attributes' => [
         'class' => ['colon-checkbox'],
       ],
-      '#description' => $this->t('Note: depending on the selected template, this setting might have no effect at all.')
+      '#description' => $this->t('Note: depending on the selected template, this setting might have no effect at all.'),
     ];
     $field_classes = Ds::getClasses('field');
 

@@ -158,6 +158,7 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
         '#wrapper_attributes' => [
           'class' => ['messages', 'messages--warning'],
         ],
+        '#input' => FALSE,
       ];
     }
 
@@ -296,7 +297,9 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
       // @see \Drupal\views\Plugin\views\filter\FilterPluginBase::buildExposedForm
       // @see \Drupal\views\Plugin\views\filter\FilterPluginBase::buildValueWrapper
       if (empty($form["{$field_id}_wrapper"][$field_id])) {
-        $form[$field_id]['#title_display'] = 'invisible';
+        if (!empty($form[$field_id])) {
+          $form[$field_id]['#title_display'] = 'invisible';
+        }
       }
       else {
         $form["{$field_id}_wrapper"]['#title_display'] = 'invisible';
@@ -345,8 +348,15 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
           $details[$field_id . '_collapsible']['#open'] = TRUE;
         }
 
+        $collapsible_field_id = match(TRUE) {
+          !empty($form["{$field_id}_wrapper"]) => "{$field_id}_wrapper",
+          !empty($form[$field_id]) => $field_id,
+          // Make it safe for future changes, and use field_id as backup.
+          default => $field_id,
+        };
+
         // Retain same weight as the original fields for details.
-        $pos = array_search($field_id, array_keys($form));
+        $pos = array_search($collapsible_field_id, array_keys($form));
         $form = array_merge(array_slice($form, 0, $pos), $details, array_slice($form, $pos));
       }
     }

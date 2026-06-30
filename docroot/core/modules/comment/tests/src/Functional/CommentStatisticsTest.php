@@ -6,13 +6,16 @@ namespace Drupal\Tests\comment\Functional;
 
 use Drupal\comment\CommentInterface;
 use Drupal\comment\CommentManagerInterface;
+use Drupal\comment\CommentPreviewMode;
 use Drupal\comment\Entity\Comment;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests comment statistics on nodes.
- *
- * @group comment
  */
+#[Group('comment')]
+#[RunTestsInSeparateProcesses]
 class CommentStatisticsTest extends CommentTestBase {
 
   /**
@@ -56,7 +59,7 @@ class CommentStatisticsTest extends CommentTestBase {
   public function testCommentNodeCommentStatistics(): void {
     $node_storage = $this->container->get('entity_type.manager')->getStorage('node');
     // Set comments to have subject and preview disabled.
-    $this->setCommentPreview(DRUPAL_DISABLED);
+    $this->setCommentPreview(CommentPreviewMode::Disabled);
     $this->setCommentForm(TRUE);
     $this->setCommentSubject(FALSE);
     $this->setCommentSettings('default_mode', CommentManagerInterface::COMMENT_MODE_THREADED, 'Comment paging changed.');
@@ -75,7 +78,6 @@ class CommentStatisticsTest extends CommentTestBase {
 
     // Checks the new values of node comment statistics with comment #1.
     // The node cache needs to be reset before reload.
-    $node_storage->resetCache([$this->node->id()]);
     $node = $node_storage->load($this->node->id());
     $this->assertSame('', $node->get('comment')->last_comment_name, 'The value of node last_comment_name should be an empty string.');
     $this->assertEquals($this->webUser2->id(), $node->get('comment')->last_comment_uid, 'The value of node last_comment_uid is the comment #1 uid.');
@@ -106,7 +108,6 @@ class CommentStatisticsTest extends CommentTestBase {
     // Checks the new values of node comment statistics with comment #2 and
     // ensure they haven't changed since the comment has not been moderated.
     // The node needs to be reloaded with the cache reset.
-    $node_storage->resetCache([$this->node->id()]);
     $node = $node_storage->load($this->node->id());
     $this->assertSame('', $node->get('comment')->last_comment_name, 'The value of node last_comment_name should be an empty string.');
     $this->assertEquals($this->webUser2->id(), $node->get('comment')->last_comment_uid, 'The value of node last_comment_uid is still the comment #1 uid.');
@@ -130,7 +131,6 @@ class CommentStatisticsTest extends CommentTestBase {
 
     // Checks the new values of node comment statistics with comment #3.
     // The node needs to be reloaded with the cache reset.
-    $node_storage->resetCache([$this->node->id()]);
     $node = $node_storage->load($this->node->id());
     $this->assertEquals($comment_loaded->getAuthorName(), $node->get('comment')->last_comment_name, 'The value of node last_comment_name is the name of the anonymous user.');
     $this->assertEquals(0, $node->get('comment')->last_comment_uid, 'The value of node last_comment_uid is zero.');

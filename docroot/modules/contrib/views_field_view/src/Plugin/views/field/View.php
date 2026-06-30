@@ -13,6 +13,13 @@ use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
+ * @file
+ * Contains \Drupal\views_field_view\Plugin\views\field\View.
+ */
+
+/**
+ * Class extending FieldPluginBase.
+ *
  * @ViewsField("view")
  */
 class View extends FieldPluginBase {
@@ -110,7 +117,7 @@ class View extends FieldPluginBase {
       '#default_value' => $this->options['view'],
       '#options' => $view_options,
       '#ajax' => [
-        'path' => views_ui_build_form_url($form_state),
+        'url' => views_ui_build_form_url($form_state),
       ],
       '#submit' => [[$this, 'submitTemporaryForm']],
       '#executes_submit_callback' => TRUE,
@@ -141,7 +148,7 @@ class View extends FieldPluginBase {
         '#default_value' => $this->options['display'],
         '#options' => $display_options,
         '#ajax' => [
-          'path' => views_ui_build_form_url($form_state),
+          'url' => views_ui_build_form_url($form_state),
         ],
         '#submit' => [[$this, 'submitTemporaryForm']],
         '#executes_submit_callback' => TRUE,
@@ -151,8 +158,12 @@ class View extends FieldPluginBase {
       // Provide a way to directly access the views edit link of the child view.
       // Don't show this link if the current view is the selected child view.
       if (!empty($this->options['view']) && !empty($this->options['display']) && ($this->view->storage->id() != $this->options['view'])) {
-        // use t() here, and set HTML on #link options.
-        $link_text = $this->t('Edit "%view (@display)" view', ['%view' => $view_options[$this->options['view']], '@display' => $this->options['display']]);
+        // Use t() here, and set HTML on #link options.
+        $link_text = $this->t('Edit "%view (@display)" view',
+        [
+          '%view' => $view_options[$this->options['view']],
+          '@display' => $this->options['display'],
+        ]);
         $form['view_edit'] = [
           '#type' => 'container',
           '#fieldset' => 'views_field_view',
@@ -177,7 +188,7 @@ class View extends FieldPluginBase {
           '#suffix' => '<span>]</span>',
         ];
         $form['view_edit']['description'] = [
-          '#markup' => $this->t('Use this link to open the current child view\'s edit page in a new window.'),
+          '#markup' => $this->t("Use this link to open the current child view's edit page in a new window."),
           '#prefix' => '<div class="description">',
           '#suffix' => '</div>',
         ];
@@ -185,10 +196,11 @@ class View extends FieldPluginBase {
 
       $form['arguments'] = [
         '#title' => $this->t('Contextual filters'),
-        '#description' => $this->t('Use a comma (,) or forwardslash (/) separated list of each contextual filter which should be forwarded to the view.
+        '#description' => $this->t('Use a comma (,) or forward slash (/) separated list of each contextual filter which should be forwarded to the view.
           See below list of available replacement tokens. Static values are also be passed to child views if they do not match a token format.
           You could pass static ID\'s or taxonomy terms in this way. E.g. 123 or "my taxonomy term".'),
         '#type' => 'textfield',
+        '#maxlength' => 256,
         '#default_value' => $this->options['arguments'],
         '#fieldset' => 'views_field_view',
       ];
@@ -199,8 +211,6 @@ class View extends FieldPluginBase {
         '#fieldset' => 'views_field_view',
       ];
     }
-
-    $form['alter']['#access'] = FALSE;
   }
 
   /**
@@ -266,7 +276,7 @@ class View extends FieldPluginBase {
           }
           // Else just call render on the view object.
           else {
-            $output = $view->render();
+            $output = $view->preview();
           }
         }
 
@@ -290,15 +300,15 @@ class View extends FieldPluginBase {
    * Gets field values from tokens.
    *
    * @param string $token
-   *  The token string. E.g. explode(',', $this->options['args']);
+   *   The token string. E.g. explode(',', $this->options['args']);.
    * @param \Drupal\views\ResultRow $values
-   *  The values retrieved from a single row of a view's query result.
+   *   The values retrieved from a single row of a view's query result.
    * @param \Drupal\views\ViewExecutable $view
-   *  The full view object to get token values from.
+   *   The full view object to get token values from.
    *
    * @return array
-   *  An array of raw argument values, returned in the same order as the token
-   *  were passed in.
+   *   An array of raw argument values, returned in the same order as the token
+   *   were passed in.
    */
   public function getTokenValue($token, ResultRow $values, ViewExecutable $view) {
     $token_info = $this->getTokenArgument($token);
@@ -311,16 +321,20 @@ class View extends FieldPluginBase {
       case 'raw_fields':
         $value = $view->field[$id]->getValue($values);
         break;
+
       case 'fields':
         $values = (string) $view->field[$id]->last_render;
         $value = preg_replace('/\s/', '', $values);
         break;
+
       case 'raw_arguments':
         $value = $view->args[array_flip(array_keys($view->argument))[$id]];
         break;
+
       case 'arguments':
         $value = $view->argument[$id]->getTitle();
         break;
+
       default:
         $value = Html::escape(trim($token, '\'"'));
     }
@@ -330,26 +344,29 @@ class View extends FieldPluginBase {
 
   /**
    * Return the argument type and raw argument from a token.
-   * E.g. {{ raw_arguments.null }} will return "array('type' => 'raw_arguments', 'id' => null)".
+   *
+   * E.g. {{ raw_arguments.null }} will return
+   * "array('type' => 'raw_arguments', 'id' => null)".
    *
    * @param string $token
-   *  A single token string.
+   *   A single token string.
    *
    * @return array
-   *  An array containing type and arg (As described above).
+   *   An array containing type and arg (As described above).
    */
   protected function getTokenArgument($token) {
     // Trim whitespace and remove the brackets around the token.
     preg_match('{{\s?(?<type>[a-zA-Z_0-9]+)\.(?<id>[a-zA-Z_0-9]+)\s?}}', $token, $match);
 
     return [
-      'type' => $match['type'],
-      'id' => $match['id'],
+      'type' => $match['type'] ?? NULL,
+      'id' => $match['id'] ?? NULL,
     ];
   }
 
   /**
    * Returns array of tokens/values to be used in child views.
+   *
    * String containing tokens is split on either "," or "/" characters.
    *
    * @param string $token_string
@@ -411,10 +428,10 @@ class View extends FieldPluginBase {
               fields that come after this field; if you need a field that is not
               listed here, re-arrange  your fields.') . '</p>',
         '#suffix' => '<p><em>' . $this->t('Using rendered tokens ("fields" / "arguments") can
-              cause unexpected behaviour, as this will use the last output of
+              cause unexpected behavior, as this will use the last output of
               the field. This could be re written output also. If no prefix is
               used in the token pattern, "raw_fields" / "raw_arguments" will be used as a default.') .
-          '</em></p>',
+        '</em></p>',
       ];
     }
     else {

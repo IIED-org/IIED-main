@@ -5,6 +5,8 @@
  * Report purge file works correctly.
  */
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+
 /**
  * Implements hook_requirements().
  */
@@ -28,6 +30,19 @@ function purge_file_requirements($phase) {
   ];
 
   return $requirements;
+}
+
+/**
+ * Introduce invalidation type config.
+ */
+function purge_file_update_10002(&$sandbox = NULL): TranslatableMarkup {
+  $config = \Drupal::configFactory()->getEditable('purge_file.settings');
+  $wildcardWasEnabled = (bool) $config->get('wildcard');
+  $config
+    ->set('invalidation_type', $wildcardWasEnabled ? 'wildcardurl' : 'url')
+    ->clear('wildcard')
+    ->save(TRUE);
+  return new TranslatableMarkup('Added default value for purge_file.settings:invalidation_type');
 }
 
 /**

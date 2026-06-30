@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
 
 /**
@@ -53,7 +55,7 @@ class ValidationConstraintTest extends BuilderTestBase {
     $this->assertSession()->assertWaitOnAjaxRequest();
     // Assert the fail message exists.
     $this->assertSession()->pageTextContains('Failed Layout Paragraphs test validation.');
-    // Asser the form is still present and hasn't been closed.
+    // Assert the form is still present and hasn't been closed.
     $this->assertSession()->elementExists('css', 'form.layout-paragraphs-component-form');
     $this->htmlOutput($this->getSession()->getPage()->getHtml());
 

@@ -10,7 +10,7 @@ use Drupal\Core\Utility\Token;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManager;
-use Drupal\Core\Render\Renderer;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\views\Plugin\views\display\Page as ViewsPage;
 use Drupal\views\Views;
 use Drupal\views\ViewExecutable;
@@ -44,7 +44,7 @@ abstract class TokenBase extends DsFieldBase {
   /**
    * Drupal core Render service.
    *
-   * @var \Drupal\Core\Render\Renderer
+   * @var \Drupal\Core\Render\RendererInterface
    */
   protected $renderer;
 
@@ -65,7 +65,7 @@ abstract class TokenBase extends DsFieldBase {
   /**
    * Constructs a Display Suite field plugin.
    */
-  public function __construct($configuration, $plugin_id, $plugin_definition, Token $token_service, LanguageManager $language_manager, ModuleHandlerInterface $module_handler, Renderer $renderer, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct($configuration, $plugin_id, $plugin_definition, Token $token_service, LanguageManager $language_manager, ModuleHandlerInterface $module_handler, RendererInterface $renderer, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager) {
     $this->token = $token_service;
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;

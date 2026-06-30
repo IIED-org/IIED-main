@@ -26,7 +26,7 @@
           .toArray()
           .forEach((element) => {
             values.push(
-              Drupal.checkPlain($.trim($('.option', element).text())),
+              Drupal.checkPlain($('.option', element).text().trim()),
             );
           });
 

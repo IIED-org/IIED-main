@@ -404,4 +404,80 @@ class BetterExposedFiltersConfigUpdater {
     return $changed;
   }
 
+  /**
+   * Remove the sort_options_unsupported key.
+   *
+   * @param \Drupal\views\ViewEntityInterface $view
+   *   The View to update.
+   *
+   * @return bool
+   *   Whether the view as updated.
+   */
+  public function removeSortOptionsUnsupportedKey(ViewEntityInterface $view): bool {
+    $changed = FALSE;
+    // Go through each display on each view.
+    $displays = $view->get('display');
+    foreach ($displays as &$display) {
+      if (isset($display['display_options']['exposed_form']['type'])) {
+        if ($display['display_options']['exposed_form']['type'] == 'bef') {
+          $exposed_form = $display['display_options']['exposed_form'];
+
+          $bef_settings = $exposed_form['options']['bef'];
+          if (isset($bef_settings['filter'])) {
+            foreach ($bef_settings['filter'] as $filter_id => $settings) {
+              if (isset($settings['advanced']['sort_options_unsupported'])) {
+                unset($display['display_options']['exposed_form']['options']['bef']['filter'][$filter_id]['advanced']['sort_options_unsupported']);
+                $changed = TRUE;
+              }
+            }
+          }
+        }
+      }
+    }
+    if ($changed) {
+      $view->set('display', $displays);
+    }
+    return $changed;
+  }
+
+  /**
+   * Add scrollable params to views.
+   *
+   * @param \Drupal\views\ViewEntityInterface $view
+   *   The View to update.
+   *
+   * @return bool
+   *   Whether the view was updated.
+   */
+  public function updateScrollableParams(ViewEntityInterface $view): bool {
+    $changed = FALSE;
+    $displays = $view->get('display');
+    foreach ($displays as &$display) {
+      if (isset($display['display_options']['exposed_form']['type'])) {
+        if ($display['display_options']['exposed_form']['type'] == 'bef') {
+          $exposed_form = $display['display_options']['exposed_form'];
+
+          $bef_settings = $exposed_form['options']['bef'];
+          if (isset($bef_settings['filter'])) {
+            foreach ($bef_settings['filter'] as $filter_id => $settings) {
+              if (!in_array($settings['plugin_id'], ['bef_links', 'bef'])) {
+                continue;
+              }
+              if (isset($settings['scrollable'])) {
+                continue;
+              }
+              $display['display_options']['exposed_form']['options']['bef']['filter'][$filter_id]['scrollable'] = FALSE;
+              $display['display_options']['exposed_form']['options']['bef']['filter'][$filter_id]['scrollable_height'] = 300;
+              $changed = TRUE;
+            }
+          }
+        }
+      }
+    }
+    if ($changed) {
+      $view->set('display', $displays);
+    }
+    return $changed;
+  }
+
 }

@@ -118,3 +118,25 @@ function better_exposed_filters_post_update_slider_placement_key(?array &$sandbo
     return $config_updater->updateSliderPlacementKey($view);
   });
 }
+
+/**
+ * Remove the sort_options_unsupported key.
+ */
+function better_exposed_filters_post_update_remove_sort_options_unsupported_key(?array &$sandbox = NULL): void {
+  /** @var \Drupal\better_exposed_filters\BetterExposedFiltersConfigUpdater $config_updater */
+  $config_updater = \Drupal::classResolver(BetterExposedFiltersConfigUpdater::class);
+  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'view', function (ViewEntityInterface $view) use ($config_updater): bool {
+    return $config_updater->removeSortOptionsUnsupportedKey($view);
+  });
+}
+
+/**
+ * Add scrollable container param keys.
+ */
+function better_exposed_filters_post_update_scrollable_params(?array &$sandbox = NULL): void {
+  /** @var \Drupal\better_exposed_filters\BetterExposedFiltersConfigUpdater $config_updater */
+  $config_updater = \Drupal::classResolver(BetterExposedFiltersConfigUpdater::class);
+  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'view', function (ViewEntityInterface $view) use ($config_updater): bool {
+    return $config_updater->updateScrollableParams($view);
+  });
+}

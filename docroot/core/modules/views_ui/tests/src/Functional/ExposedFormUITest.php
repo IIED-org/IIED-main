@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Drupal\Tests\views_ui\Functional;
 
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests exposed forms UI functionality.
- *
- * @group views_ui
  */
+#[Group('views_ui')]
+#[RunTestsInSeparateProcesses]
 class ExposedFormUITest extends UITestBase {
 
   /**
@@ -268,6 +270,9 @@ class ExposedFormUITest extends UITestBase {
     $this->assertNoGroupedFilterErrors();
   }
 
+  /**
+   * Tests the error messages used in the grouped filter form.
+   */
   public function testGroupedFilterAdminUiErrors(): void {
     // Select the empty operator without a title specified.
     $this->drupalGet('admin/structure/views/nojs/handler/test_exposed_admin_ui/default/filter/body_value');

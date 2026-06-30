@@ -3,39 +3,51 @@
 namespace Drupal\name\Plugin\Field\FieldType;
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Field\Attribute\FieldType;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Security\TrustedCallbackInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\Url;
 use Drupal\name\Traits\NameAdditionalPreferredTrait;
 use Drupal\name\Traits\NameFieldSettingsTrait;
 use Drupal\name\Traits\NameFormDisplaySettingsTrait;
 use Drupal\name\Traits\NameFormSettingsHelperTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'name' field type.
  *
  * Majority of the settings handling is delegated to the traits so that these
  * can be reused.
- *
- * @FieldType(
- *   id = "name",
- *   label = @Translation("Name"),
- *   description = @Translation("Stores real name."),
- *   default_widget = "name_default",
- *   default_formatter = "name_default"
- * )
  */
+#[FieldType(
+  id: "name",
+  label: new TranslatableMarkup("Name"),
+  description: new TranslatableMarkup("Stores real name."),
+  default_widget: "name_default",
+  default_formatter: "name_default"
+)]
 class NameItem extends FieldItemBase implements TrustedCallbackInterface {
 
   use NameFieldSettingsTrait;
   use NameFormDisplaySettingsTrait;
   use NameFormSettingsHelperTrait;
   use NameAdditionalPreferredTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __sleep(): array {
+    $keys = parent::__sleep();
+    unset($keys[array_search('values', $keys)]);
+
+    return $keys;
+  }
 
   /**
    * Definition of name field components.
@@ -168,8 +180,11 @@ class NameItem extends FieldItemBase implements TrustedCallbackInterface {
    */
   public function activeComponents() {
     $settings = $this->getFieldDefinition()->getSettings();
+    $metadata = \Drupal::getContainer()
+      ->get('name.component_metadata', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+    $translations = $metadata ? $metadata->getTranslations() : [];
     $components = [];
-    foreach (_name_translations() as $key => $label) {
+    foreach ($translations as $key => $label) {
       if (!empty($settings['components'][$key])) {
         $components[$key] = empty($settings['labels'][$key]) ? $label : $settings['labels'][$key];
       }
@@ -222,7 +237,8 @@ class NameItem extends FieldItemBase implements TrustedCallbackInterface {
         '#type' => 'select',
         '#title' => $this->t('User name override format to use'),
         '#default_value' => $this->getSetting('override_format'),
-        '#options' => name_get_custom_format_options(),
+        '#options' => (\Drupal::getContainer()
+          ->get('name.format_options', ContainerInterface::NULL_ON_INVALID_REFERENCE))?->getCustomFormatOptions() ?? [],
         '#table_group' => 'above',
         '#weight' => -98,
       ];
@@ -263,15 +279,16 @@ class NameItem extends FieldItemBase implements TrustedCallbackInterface {
 
       // Retrieve the ID of all existing users.
       $query = \Drupal::entityQuery('user');
-      $uids = $query->accessCheck()->execute();
+      $uids = $query->accessCheck(FALSE)->execute();
 
       foreach ($uids as $uid) {
         // Invalidate the cache for each user so that
         // the appropriate login name will be displayed.
-        Cache::invalidateTags(['user:' . $uid]);
+        Cache::invalidateTags(["user:{$uid}"]);
+        \Drupal::logger('name')->notice('Cache cleared for data tagged as %tag.', [
+          '%tag' => "user:{$uid}",
+        ]);
       }
-
-      \Drupal::logger('name')->notice('Cache cleared for data tagged as %tag.', ['%tag' => 'user:{$uid}']);
     }
   }
 

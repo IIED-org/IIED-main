@@ -87,8 +87,7 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
 
     foreach ($items as $delta => $item) {
       $view_name = $item->getValue()['target_id'];
-      $display_id = $item->getValue()['display_id'];
-
+      $display_id = $item->getValue()['display_id'] ?? '';
       // Since no JS creating a node is a multi-step, it is possible that
       // no display ID has yet been selected.
       if (!$display_id) {
@@ -132,7 +131,7 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
         if (!empty($view->result) || !empty($view->empty) || ($exposed_form_handler?->options['input_required'] ?? FALSE) || !empty($view->exposed_widgets) || !empty($view->header) || !empty($view->footer)) {
           // Add a custom template if the title is available.
           $title = $view->getTitle();
-          if (!empty($title)) {
+          if (!empty($title) && !empty($enabled_settings['title'])) {
             // If the title contains tokens, we need to render the view to
             // populate the rowTokens.
             if (mb_strpos($title, '{{') !== FALSE) {
@@ -162,8 +161,12 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
       }
 
       // Collect cache metadata of the fully processed view, even if no results.
-      $cacheable_metadata = CacheableMetadata::createFromRenderArray($render_array);
-      $cacheability->merge($cacheable_metadata);
+      // The View build render method can return an array or null. We can
+      // only generate cacheable metadata from an array.
+      if (is_array($render_array)) {
+        $cacheable_metadata = CacheableMetadata::createFromRenderArray($render_array);
+        $cacheability->merge($cacheable_metadata);
+      }
     }
 
     $cacheability->applyTo($elements);

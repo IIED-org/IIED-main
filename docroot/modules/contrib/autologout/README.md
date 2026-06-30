@@ -74,6 +74,25 @@ See `autologout.api.php` for full documentation.
 
 ## FAQ
 
+**Q: My site's `services.yml` does not include `cookie_samesite` under `session.storage.options`. Is this a problem?**
+
+**A:** Yes — `cookie_samesite` controls the SameSite attribute on session cookies and is
+an important security measure against CSRF attacks. It was added to Drupal core's
+`default.services.yml` in Drupal 10.1 ([#3150614](https://www.drupal.org/project/drupal/issues/3150614)).
+Sites set up before that release may have a `services.yml` that predates this change.
+Because `session.storage.options` is replaced rather than merged when overridden, any
+keys absent from your `services.yml` will not inherit core's defaults. It is worth
+comparing your `sites/default/services.yml` against the current `default.services.yml`
+shipped with your version of Drupal core to ensure no other options are missing.
+At a minimum, `cookie_samesite` should be set:
+
+    session.storage.options:
+      cookie_samesite: Lax
+
+See the [Drupal services.yml documentation](https://www.drupal.org/docs/drupal-apis/services-and-dependency-injection/structure-of-a-service-file)
+for more information.
+
+
 **Q: How to upgrade between versions?**
 
 **A:** After updating the module, run database updates using **drush updb**,

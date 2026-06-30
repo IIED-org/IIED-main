@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\views_bulk_operations\Service;
 
 use Drupal\Core\Entity\EntityInterface;
@@ -91,7 +93,7 @@ interface ViewsBulkOperationsViewDataInterface {
   /**
    * Get entity data array for this view results.
    *
-   * @return array<string, string>
+   * @return array<string, array<int, string>>
    *   Bulk form keys and labels keyed by row index.
    */
   public function getViewEntityData(): array;

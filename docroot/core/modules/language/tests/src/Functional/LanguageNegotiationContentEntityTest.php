@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Drupal\Tests\language\Functional;
 
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Routing\RouteObjectInterface;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\language\Plugin\LanguageNegotiation\LanguageNegotiationContentEntity;
 use Drupal\language\Plugin\LanguageNegotiation\LanguageNegotiationUrl;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Core\Routing\RouteObjectInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -18,9 +20,9 @@ use Symfony\Component\Routing\Route;
 
 /**
  * Tests language negotiation with the language negotiator content entity.
- *
- * @group language
  */
+#[Group('language')]
+#[RunTestsInSeparateProcesses]
 class LanguageNegotiationContentEntityTest extends BrowserTestBase {
 
   /**
@@ -165,35 +167,10 @@ class LanguageNegotiationContentEntityTest extends BrowserTestBase {
   }
 
   /**
-   * Tests language negotiation fallback when there is no active language.
-   *
-   * @see entity_test_entity_display_build_alter()
-   */
-  public function testContentEntityLanguageFallback() {
-    $this->drupalGet('/es/entity_test/1');
-
-    // In entity_test_entity_display_build_alter() a 'div' is added with
-    // a data attribute populated by $entity->toUrl(), without passing any
-    // context about the current language. The ::toUrl method should fall back
-    // to the user's current language.
-    $element = $this->getSession()->getPage()->find('css', '[data-to-url]');
-
-    // Prepend the 'base path' since the Drupal test bot is running in a
-    // subdirectory.
-    $this->assertEquals($GLOBALS['base_path'] . 'es/entity_test/1', $element->getAttribute('data-to-url'));
-
-    // The same routine should work for the French language.
-    $this->drupalGet('/fr/entity_test/1');
-    $element = $this->getSession()->getPage()->find('css', '[data-to-url]');
-    $this->assertEquals($GLOBALS['base_path'] . 'fr/entity_test/1', $element->getAttribute('data-to-url'));
-
-  }
-
-  /**
    * Creates a translated entity.
    */
-  protected function createTranslatableEntity() {
-    $this->entity = EntityTest::create(['type' => 'language_test']);
+  protected function createTranslatableEntity(): void {
+    $this->entity = EntityTest::create();
     $this->entity->addTranslation('es', ['name' => 'name spanish']);
     $this->entity->addTranslation('fr', ['name' => 'name french']);
     $this->entity->save();
@@ -208,7 +185,7 @@ class LanguageNegotiationContentEntityTest extends BrowserTestBase {
    *   The route name for which the route object for the request should be
    *   created.
    */
-  protected function setCurrentRequestForRoute($path, $route_name) {
+  protected function setCurrentRequestForRoute($path, $route_name): void {
     $request = Request::create($path);
     $request->attributes->set(RouteObjectInterface::ROUTE_NAME, $route_name);
     $request->attributes->set(RouteObjectInterface::ROUTE_OBJECT, new Route($path));

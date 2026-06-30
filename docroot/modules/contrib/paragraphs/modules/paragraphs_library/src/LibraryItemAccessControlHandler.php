@@ -7,6 +7,7 @@ use Drupal\Core\Entity\Entity;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\paragraphs_library\Entity\LibraryItem;
 
 /**
  * Access control handler for the paragraphs_library_item entity type.
@@ -23,6 +24,7 @@ class LibraryItemAccessControlHandler extends EntityAccessControlHandler {
     // administrative permission. Ensure to collect the required cacheability
     // metadata and combine both the published and the referenced access check
     // together, both must allow access if unpublished.
+    assert($library_item instanceof LibraryItem);
     $access = AccessResult::allowed()->addCacheableDependency($library_item);
     if ($operation === 'view' && !$library_item->isPublished()) {
       $access = $access->andIf(AccessResult::allowedIfHasPermission($account, $this->entityType->getAdminPermission()));
@@ -39,7 +41,7 @@ class LibraryItemAccessControlHandler extends EntityAccessControlHandler {
     }
 
     /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
-    if ($referenced_paragraph = $library_item->paragraphs->entity) {
+    if ($referenced_paragraph = $library_item->get('paragraphs')->first()?->get('entity')->getValue()) {
       // Forward the access check to the referenced paragraph.
       $access = $access->andIf($referenced_paragraph->access($operation, $account, TRUE));
     }

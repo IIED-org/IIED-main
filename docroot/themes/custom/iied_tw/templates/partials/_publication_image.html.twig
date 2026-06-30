@@ -4,11 +4,11 @@
 {% if content.field_cover_image[0] and node.field_cover_image|file_uri %}
 	{% set image_uri = node.field_cover_image|file_uri %}
 	{% if (content.field_cover_image['#items'].entity.field_media_image.alt is empty)  %}
-		{% set image_alt = "Preview of \'" ~ alt_text ~ "\'" %}
+		{% set image_alt = "Preview of '" ~ alt_text ~ "'" %}
 	{% else %}
 		{% set image_alt = content.field_cover_image['#items'].entity.field_media_image.alt %}
 	{% endif %}
-	<img src="{{ image_uri|image_style(img_style) }}" alt="{{ image_alt }}"/>
+	<img src="{{ image_uri|image_style(img_style) }}" alt="Preview of {{ image_alt }}"/>
 {% else %}
   {% set media_uri = node.field_media[0]|file_uri %}
   {% if (media_uri is not null) %}

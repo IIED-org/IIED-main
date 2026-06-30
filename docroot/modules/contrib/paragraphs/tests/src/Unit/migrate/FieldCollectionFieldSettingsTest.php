@@ -4,6 +4,7 @@ namespace Drupal\Tests\paragraphs\Unit\migrate;
 
 use Drupal\paragraphs\Plugin\migrate\process\FieldCollectionFieldSettings;
 use Drupal\Tests\migrate\Unit\process\MigrateProcessTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Test the FieldCollectionFieldSettings Process Plugin.
@@ -11,6 +12,7 @@ use Drupal\Tests\migrate\Unit\process\MigrateProcessTestCase;
  * @group paragraphs
  * @coversDefaultClass \Drupal\paragraphs\Plugin\migrate\process\FieldCollectionFieldSettings
  */
+#[Group('paragraphs')]
 class FieldCollectionFieldSettingsTest extends MigrateProcessTestCase {
 
   /**

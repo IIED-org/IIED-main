@@ -68,7 +68,7 @@ class SwitchField extends DsFieldBase {
     $settings = $this->getConfiguration();
 
     if (!empty($settings)) {
-      /* @var \Drupal\Core\Entity\EntityInterface $entity */
+      /** @var \Drupal\Core\Entity\EntityInterface $entity */
       $entity = $this->entity();
 
       // Basic route parameters.
@@ -94,8 +94,8 @@ class SwitchField extends DsFieldBase {
         // If the label is empty, do not create a link.
         if (!empty($value)) {
           $route_parameters['viewMode'] = $key == 'default' ? 'full' : $key;
-          $url= Url::fromRoute('ds_extras.switch_view_mode', $route_parameters, $route_options);
-          $items[] =  Link::fromTextAndUrl($value, $url)->toString();
+          $url = Url::fromRoute('ds_extras.switch_view_mode', $route_parameters, $route_options);
+          $items[] = Link::fromTextAndUrl($value, $url)->toString();
         }
       }
     }

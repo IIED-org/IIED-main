@@ -3,18 +3,18 @@
 namespace Drupal\name\Plugin\migrate\field;
 
 use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate_drupal\Attribute\MigrateField;
 use Drupal\migrate_drupal\Plugin\migrate\field\FieldPluginBase;
 
 /**
  * Name migrate plugin.
- *
- * @MigrateField(
- *   id = "name",
- *   core = {7},
- *   source_module = "name",
- *   destination_module = "name",
- * )
  */
+#[MigrateField(
+  id: 'name',
+  core: [7],
+  source_module: 'name',
+  destination_module: 'name',
+)]
 class NameField extends FieldPluginBase {
 
   /**

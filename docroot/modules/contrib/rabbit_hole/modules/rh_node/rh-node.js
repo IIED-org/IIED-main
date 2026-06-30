@@ -13,7 +13,7 @@
             '.rabbit-hole-action-setting input:checked',
             context,
           );
-          return Drupal.checkPlain($action.next('label').textContent());
+          return Drupal.checkPlain($action.next('label').text());
         });
     },
   };

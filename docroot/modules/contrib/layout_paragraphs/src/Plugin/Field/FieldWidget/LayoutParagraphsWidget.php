@@ -119,7 +119,14 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
   protected $isTranslating;
 
   /**
-   * {@inheritDoc}
+   * The optional content translation service.
+   *
+   * @var \Drupal\content_translation\ContentTranslationManagerInterface|null
+   */
+  protected $contentTranslationManager;
+
+  /**
+   * {@inheritdoc}
    */
   public function __construct(
     $plugin_id,
@@ -133,8 +140,9 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
     FormBuilderInterface $form_builder,
     EntityDisplayRepositoryInterface $entity_display_repository,
     ConfigFactoryInterface $config_factory,
-    EntityRepositoryInterface $entity_repository
-    ) {
+    EntityRepositoryInterface $entity_repository,
+    $content_translation_manager,
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
 
     $this->tempstore = $tempstore;
@@ -144,7 +152,7 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
     $this->entityDisplayRepository = $entity_display_repository;
     $this->entityRepository = $entity_repository;
     $this->config = $config_factory->get('layout_paragraphs.settings');
-
+    $this->contentTranslationManager = $content_translation_manager;
   }
 
   /**
@@ -163,7 +171,8 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
       $container->get('form_builder'),
       $container->get('entity_display.repository'),
       $container->get('config.factory'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->has('content_translation.manager') ? $container->get('content_translation.manager') : NULL
     );
   }
 
@@ -305,11 +314,10 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
             // if no paragraph entity field is translatable,
             // even if the host is.
             if ($paragraph->hasField('content_translation_source')) {
-              // Initialise the translation with source language values.
+              // Initialize the translation with source language values.
               $paragraph->addTranslation($this->langcode, $paragraph->toArray());
               $translation = $paragraph->getTranslation($this->langcode);
-              $manager = \Drupal::service('content_translation.manager');
-              $manager->getTranslationMetadata($translation)
+              $this->contentTranslationManager->getTranslationMetadata($translation)
                 ->setSource($paragraph->language()->getId());
             }
           }
@@ -331,7 +339,7 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
    */
   public function extractFormValues(FieldItemListInterface $items, array $form, FormStateInterface $form_state) {
     $field_name = $this->fieldDefinition->getName();
-    // Load the correct layout paragraphs layout instnace using the value
+    // Load the correct layout paragraphs layout instance using the value
     // passed in the layout_instance_id hidden field.
     $path = array_merge($form['#parents'], [$field_name]);
     $layout_paragraphs_storage_key = $form_state->getValue(array_merge($path, ['layout_paragraphs_storage_key']));
@@ -365,13 +373,13 @@ class LayoutParagraphsWidget extends WidgetBase implements ContainerFactoryPlugi
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $entity_type_id = $this->getFieldSetting('target_type');
     $element = parent::settingsForm($form, $form_state);
-    $element['view_mode'] = array(
+    $element['view_mode'] = [
       '#type' => 'select',
       '#title' => $this->t('View mode'),
       '#default_value' => $this->getSetting('view_mode'),
       '#options' => $this->entityDisplayRepository->getViewModeOptions($entity_type_id),
       '#required' => TRUE,
-    );
+    ];
     $element['preview_view_mode'] = [
       '#type' => 'select',
       '#title' => $this->t('Preview view mode'),

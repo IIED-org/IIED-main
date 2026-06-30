@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
 
 /**
@@ -171,14 +173,14 @@ class BuilderTest extends BuilderTestBase {
     $this->addSectionComponent(2, '.lpb-layout > .lpb-btn--add.after');
 
     // Click the new item's drag button.
-    // This should create a <div> with the id 'lpb-navigatin-msg'.
+    // This should create a <div> with the id 'lpb-navigating-msg'.
     $drag_handle = $page->find('css', '.layout__region--content .lpb-drag');
     $first_region = $page->find('css', '.layout__region--first');
     $drag_handle->dragTo($first_region);
     $this->htmlOutput($this->getSession()->getPage()->getHtml());
 
     $this->assertSession()->elementExists('css', '.layout__region--first .js-lpb-component');
-//    $this->assertSession()->assertWaitOnAjaxRequest();
+    // $this->assertSession()->assertWaitOnAjaxRequest();
     $this->getSession()->wait(1000);
     $this->submitForm([
       'title[0][value]' => 'Node title',
@@ -203,7 +205,7 @@ class BuilderTest extends BuilderTestBase {
     $this->addTextComponent('Third item', '.layout__region--third .lpb-btn--add');
 
     // Click the new item's drag button.
-    // This should create a <div> with the id 'lpb-navigatin-msg'.
+    // This should create a <div> with the id 'lpb-navigating-msg'.
     $button = $page->find('css', '.layout__region--third .lpb-drag');
     $button->click();
     $this->assertSession()->elementExists('css', '#lpb-navigating-msg');
@@ -226,7 +228,7 @@ class BuilderTest extends BuilderTestBase {
 
     // Add a fifth item above the third item, which has been moved to the first
     // region, and ensure the fifth item is correctly added to the first region,
-    // hiding the controls ui first so it doesn't overlapp the + button.
+    // hiding the controls ui first so it doesn't overlap the + button.
     // @see https://www.drupal.org/project/layout_paragraphs/issues/3281169
     $this->forceHidden('.layout__region--first .lpb-controls');
     $this->addTextComponent('Fifth item', '.layout__region--first .lpb-btn--add');
@@ -268,7 +270,7 @@ class BuilderTest extends BuilderTestBase {
     $this->addTextComponent('Third item', '.layout__region--third .lpb-btn--add');
 
     // Click the new item's drag button.
-    // This should create a <div> with the id 'lpb-navigatin-msg'.
+    // This should create a <div> with the id 'lpb-navigating-msg'.
     $button = $page->find('css', '.layout__region--third .lpb-drag');
     $button->click();
     $this->assertSession()->elementExists('css', '#lpb-navigating-msg');

@@ -71,7 +71,7 @@ function autologout_post_update_9502(&$sandbox) {
 }
 
 /**
- * Implements hook_post_update_NAME().
+ * Post update hook to set cookie_secure and cookie_httponly to FALSE.
  */
 function autologout_post_update_10101(&$sandbox) {
   // Issue #3308456: Autologout cookie is not secure.

@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\name\Kernel;
 
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\user\Entity\User;
 
 /**

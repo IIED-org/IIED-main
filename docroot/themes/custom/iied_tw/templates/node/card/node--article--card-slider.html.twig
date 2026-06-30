@@ -6,7 +6,7 @@ Card for use in a slider only
   <article{{ attributes.addClass('h-full') }}>
 
     <a href="{{ url }}" class="hover:no-underline">
-      <div class="flex flex-col content-start h-full overflow-hidden transition-shadow bg-white border border-gray-300 hover:shadow-md grow group rounded-xl">
+      <div class="flex flex-col content-start h-full overflow-hidden transition-shadow bg-white border border-stone-300 hover:shadow-md grow group rounded-xl">
       
         {# image #}
           {% block image %}
@@ -18,15 +18,15 @@ Card for use in a slider only
           {% endblock %}
         
           <div class="flex flex-col p-4">
-            <h5 class="mb-4 text-gray-900 sm:text-xl sm:leading-relaxed">
+            <h5 class="mb-4 text-stone-900 sm:text-xl sm:leading-relaxed">
                 {{ label }}
             </h5>
           
           {% block label %}
                 {% if node.field_alternative_label is not empty %}
-                <p class="text-gray-500">{{ node.field_alternative_label.0.value|striptags }}</p>
+                <p class="text-stone-500">{{ node.field_alternative_label.0.value|striptags }}</p>
                 {% else %}
-                <p class="text-gray-500">{{ node.type.entity.label() }}</p>
+                <p class="text-stone-500">{{ node.type.entity.label() }}</p>
                 {% endif %}
 
           {% endblock %}

@@ -40,7 +40,7 @@ See https://www.drupal.org/docs/drupal-apis/layout-api
   /admin/structure/ds/settings.
   See https://www.drupal.org/project/ds/issues/3198320 and
   https://www.drupal.org/project/ds/issues/3313688
-- Layout suggestions where using the id of the layout but this caused problems
+- Layout suggestions were using the id of the layout but this caused problems
   for some templates. They are now using the theme hook value. This is
   fixed, but with a BC layer which is set to TRUE when you upgrade. New
   installations can safely ignore this setting, which defaults to FALSE then.
@@ -49,6 +49,12 @@ See https://www.drupal.org/docs/drupal-apis/layout-api
   configure to use this option to preview the layout instead of the original
   icons Display Suite ships with. On fresh installs, the icon maps are used.
   This can be configured at /admin/structure/ds/settings.
+- When merging the build and layout build arrays, information might be lost,
+  for example data in the #source_contexts array. Instead of using array_merge,
+  the arrays are now merged recursively. This is fixed, but with a BC layer
+  which is set to TRUE when you upgrade. New installations can safely ignore
+  this setting, which defaults to FALSE then.
+  See https://www.drupal.org/project/ds/issues/3529867
 
 ## Known issues
 

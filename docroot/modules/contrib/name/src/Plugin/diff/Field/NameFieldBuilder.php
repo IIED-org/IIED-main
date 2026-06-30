@@ -7,7 +7,8 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\diff\DiffEntityParser;
 use Drupal\diff\FieldDiffBuilderBase;
-use Drupal\name\NameFormatterInterface;
+use Drupal\name\Service\FormatOptionInterface;
+use Drupal\name\Service\NameFormatterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -29,6 +30,11 @@ class NameFieldBuilder extends FieldDiffBuilderBase {
   protected NameFormatterInterface $formatter;
 
   /**
+   * The name format options service.
+   */
+  protected ?FormatOptionInterface $formatOptions;
+
+  /**
    * Constructs a Name Field diff builder instance.
    *
    * @param array $configuration
@@ -41,12 +47,15 @@ class NameFieldBuilder extends FieldDiffBuilderBase {
    *   The entity type manager.
    * @param \Drupal\diff\DiffEntityParser $entity_parser
    *   The entity parser.
-   * @param \Drupal\name\NameFormatterInterface $formatter
+   * @param \Drupal\name\Service\NameFormatterInterface $formatter
    *   The name formatter.
+   * @param \Drupal\name\Service\FormatOptionInterface|null $format_options
+   *   The name format options service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, DiffEntityParser $entity_parser, NameFormatterInterface $formatter) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, DiffEntityParser $entity_parser, NameFormatterInterface $formatter, ?FormatOptionInterface $format_options) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $entity_parser);
     $this->formatter = $formatter;
+    $this->formatOptions = $format_options;
   }
 
   /**
@@ -59,7 +68,8 @@ class NameFieldBuilder extends FieldDiffBuilderBase {
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('diff.entity_parser'),
-      $container->get('name.formatter')
+      $container->get('name.formatter'),
+      $container->get('name.format_options', ContainerInterface::NULL_ON_INVALID_REFERENCE)
     );
   }
 
@@ -94,7 +104,7 @@ class NameFieldBuilder extends FieldDiffBuilderBase {
       '#type' => 'select',
       '#title' => $this->t('Name format'),
       '#default_value' => $this->configuration['compare_format'],
-      '#options' => name_get_custom_format_options(),
+      '#options' => $this->formatOptions?->getCustomFormatOptions() ?? [],
       '#empty_option' => $this->t('-- components --'),
     ];
 

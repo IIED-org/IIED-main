@@ -57,5 +57,6 @@ include:
 variables:
   SKIP_CSPELL: '1'
   SKIP_ESLINT: '1'
+  SKIP_PHPSTAN: '1'
   OPT_IN_TEST_CURRENT_MAJOR: '1'
   OPT_IN_TEST_NEXT_MAJOR: '1'

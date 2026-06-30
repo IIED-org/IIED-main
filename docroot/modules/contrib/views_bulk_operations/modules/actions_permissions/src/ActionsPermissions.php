@@ -28,7 +28,7 @@ final class ActionsPermissions implements ContainerInjectionInterface {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('plugin.manager.views_bulk_operations_action'),
       $container->get('entity_type.manager')
@@ -52,22 +52,22 @@ final class ActionsPermissions implements ContainerInjectionInterface {
     ]) as $definition) {
 
       // Skip actions that define their own requirements.
-      if (!empty($definition['requirements'])) {
+      if (\array_key_exists('requirements', $definition) && \count($definition['requirements']) !== 0) {
         continue;
       }
 
       $id = 'execute ' . $definition['id'];
       $entity_type = NULL;
-      if (empty($definition['type'])) {
+      if ($definition['type'] === '') {
         $entity_type = $this->t('all entity types');
         $id .= ' all';
       }
-      elseif (isset($entity_type_definitions[$definition['type']])) {
+      elseif (\array_key_exists($definition['type'], $entity_type_definitions)) {
         $entity_type = $entity_type_definitions[$definition['type']]->getLabel();
         $id .= ' ' . $definition['type'];
       }
 
-      if (isset($entity_type)) {
+      if ($entity_type !== NULL) {
         $permissions[$id] = [
           'title' => $this->t('Execute the %action action on %type.', [
             '%action' => $definition['label'],

@@ -65,6 +65,7 @@ abstract class RowPluginBase extends PluginBase {
    * Returns the usesFields property.
    *
    * @return bool
+   *   TRUE if fields are used by this row plugin, FALSE otherwise.
    */
   public function usesFields() {
     return $this->usesFields;
@@ -161,7 +162,7 @@ abstract class RowPluginBase extends PluginBase {
   /**
    * Allow the style to do stuff before each row is rendered.
    *
-   * @param $result
+   * @param array $result
    *   The full array of results from the query.
    */
   public function preRender($result) {}

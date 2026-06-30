@@ -1,7 +1,7 @@
 {% extends '@iied_tw/node/card/node--card-solo.html.twig' %}
 
   {% block date %}
-    <p class="text-gray-500">
+    <p class="text-stone-500">
     {% if node.field_alternative_label is not empty %}
     {{ node.field_alternative_label.0.value|striptags }},
     {% else %}

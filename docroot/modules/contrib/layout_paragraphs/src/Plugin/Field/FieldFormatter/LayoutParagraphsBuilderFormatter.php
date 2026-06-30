@@ -10,6 +10,8 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\layout_paragraphs\LayoutParagraphsLayout;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -54,13 +56,21 @@ class LayoutParagraphsBuilderFormatter extends LayoutParagraphsFormatter impleme
   protected $account;
 
   /**
-   * {@inheritDoc}
+   * The field widget plugin manager.
+   *
+   * @var \Drupal\Core\Plugin\PluginManagerInterface
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, LoggerChannelFactoryInterface $logger_factory, EntityDisplayRepositoryInterface $entity_display_repository, LayoutParagraphsLayoutTempstoreRepository $tempstore, AccessInterface $layout_paragraphs_builder_access, AccountProxyInterface $current_user) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $logger_factory, $entity_display_repository);
+  protected $fieldWidgetPluginManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, LoggerChannelFactoryInterface $logger_factory, EntityDisplayRepositoryInterface $entity_display_repository, EntityRepositoryInterface $entity_repository, LayoutParagraphsLayoutTempstoreRepository $tempstore, AccessInterface $layout_paragraphs_builder_access, AccountProxyInterface $current_user, PluginManagerInterface $field_widget_plugin_manager) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $logger_factory, $entity_display_repository, $entity_repository);
     $this->tempstore = $tempstore;
     $this->layoutParagraphsBuilderAccess = $layout_paragraphs_builder_access;
     $this->account = $current_user->getAccount();
+    $this->fieldWidgetPluginManager = $field_widget_plugin_manager;
   }
 
   /**
@@ -77,14 +87,16 @@ class LayoutParagraphsBuilderFormatter extends LayoutParagraphsFormatter impleme
       $configuration['third_party_settings'],
       $container->get('logger.factory'),
       $container->get('entity_display.repository'),
+      $container->get('entity.repository'),
       $container->get('layout_paragraphs.tempstore_repository'),
       $container->get('layout_paragraphs.builder_access'),
-      $container->get('current_user')
-    );
+      $container->get('current_user'),
+      $container->get('plugin.manager.field.widget')
+      );
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function view(FieldItemListInterface $items, $langcode = NULL) {
 
@@ -93,7 +105,7 @@ class LayoutParagraphsBuilderFormatter extends LayoutParagraphsFormatter impleme
       '#root_components' => parent::view($items, $langcode),
     ];
     $entity = $items->getEntity();
-    /** @var \Drupal\Core\Entity\EntityDefintion $definition */
+    /** @var \Drupal\Core\Entity\EntityDefinition $definition */
     $definition = $items->getFieldDefinition();
     $layout = new LayoutParagraphsLayout($items, $this->getSettings() + ['reference_field_view_mode' => $this->viewMode]);
 
@@ -182,8 +194,7 @@ class LayoutParagraphsBuilderFormatter extends LayoutParagraphsFormatter impleme
    *   The widget instance.
    */
   protected function widgetInstance() {
-    $plugin_manager = \Drupal::service('plugin.manager.field.widget');
-    $widget = $plugin_manager->getInstance([
+    $widget = $this->fieldWidgetPluginManager->getInstance([
       'field_definition' => $this->fieldDefinition,
       'form_mode' => 'layout_paragraphs_editor',
       'prepare' => TRUE,

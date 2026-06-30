@@ -1,12 +1,11 @@
 name: 'Search 404'
 description: 'Automatically search for the keywords in URLs that result in 404 errors and show results instead of Page-Not-Found.'
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^10.3 || ^11
 type: module
 package: Search
-
 configure: search404.settings
 
-# Information added by Drupal.org packaging script on 2023-02-22
-version: '2.1.2'
+# Information added by Drupal.org packaging script on 2025-01-14
+version: '2.2.0-rc3'
 project: 'search404'
-datestamp: 1677067810
+datestamp: 1736859065

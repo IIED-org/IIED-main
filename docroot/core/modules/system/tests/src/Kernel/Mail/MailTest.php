@@ -14,14 +14,15 @@ use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\system_mail_failure_test\Plugin\Mail\TestPhpMailFailure;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 // cspell:ignore drépal
-
 /**
  * Performs tests on the pluggable mailing framework.
- *
- * @group Mail
  */
+#[Group('Mail')]
+#[RunTestsInSeparateProcesses]
 class MailTest extends KernelTestBase {
 
   /**
@@ -29,7 +30,6 @@ class MailTest extends KernelTestBase {
    */
   protected static $modules = [
     'file',
-    'image',
     'mail_cancel_test',
     'mail_html_test',
     'system',
@@ -387,7 +387,7 @@ class MailTest extends KernelTestBase {
    * @param string $mail_interface
    *   The mail interface to configure.
    */
-  protected function configureDefaultMailInterface($mail_interface) {
+  protected function configureDefaultMailInterface($mail_interface): void {
     $GLOBALS['config']['system.mail']['interface']['default'] = $mail_interface;
   }
 

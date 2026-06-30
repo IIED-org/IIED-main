@@ -170,15 +170,42 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
   }
 
   /**
-   * Tests if of menu links from taxonony_menu is expanded.
+   * Tests if of menu links from taxonomy_menu is expanded.
    */
   public function testTaxMenuLinkExpanded() {
     $this->drupalGet('admin/structure/menu/link/taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.1/edit');
     // We should expect to see expanded value for menu based on taxonomy term 1.
     $this->assertSession()->fieldValueEquals(
       'expanded',
-      1
+      '1'
     );
+  }
+
+  /**
+   * Test of disabling the Taxonomy term module.
+   */
+  public function testDisableModule() {
+    // Uninstall the module.
+    $this->container->get('module_installer')->uninstall(['taxonomy_menu']);
+
+    // Rebuild the container after uninstalling the module.
+    $this->rebuildContainer();
+
+    // Ensure the service provider's service is not registered.
+    $this->assertFalse($this->container->has('taxonomy_menu.helper'), 'The taxonomy_menu.helper service does not exist in the DIC.');
+
+    // We should expect not to find this page.
+    $this->container->get('router.builder')->rebuild();
+    $this->drupalGet('admin/structure/taxonomy_menu');
+    $this->assertSession()->pageTextContains('Page not found');
+
+    // We should expect to see the Test menu in list of menu.
+    $this->drupalGet('admin/structure/menu');
+    $this->assertSession()->pageTextContains('Test');
+
+    // We should expect to see the Test menu in list of taxonomy vocabularies.
+    $this->drupalGet('admin/structure/taxonomy');
+    $this->assertSession()->pageTextContains('Test');
   }
 
   /**
@@ -193,6 +220,20 @@ class TaxonomyMenuOperationsTest extends BrowserTestBase {
     $this->submitForm($edit, 'Save');
 
     $this->drupalGet('admin/structure/menu/manage/test-menu');
+
+    $this->assertSession()->checkboxNotChecked('links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.3][enabled]');
+  }
+
+  /**
+   * Tests that published term can be unpublished in menu.
+   */
+  public function testUnpublishedMenuItem() {
+    $this->drupalGet('admin/structure/menu/manage/test-menu');
+    $edit = [
+      'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.3][enabled]' => FALSE,
+    ];
+
+    $this->submitForm($edit, 'Save');
 
     $this->assertSession()->checkboxNotChecked('links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.3][enabled]');
   }

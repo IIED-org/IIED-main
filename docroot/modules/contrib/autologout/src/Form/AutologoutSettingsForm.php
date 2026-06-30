@@ -291,9 +291,9 @@ class AutologoutSettingsForm extends ConfigFormBase {
 
     $form['enforce_admin'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Enforce auto logout on admin pages'),
+      '#title' => $this->t('Enable Automated Logout on admin pages'),
       '#default_value' => $config->get('enforce_admin'),
-      '#description' => $this->t('If checked, then users will be automatically logged out when administering the site.'),
+      '#description' => $this->t('By default, Automated Logout keeps the session alive on administration pages like /admin/config/people. Enable this to apply Automated Logout there as well. Editing pages like node/add and node/*/edit, will also be affected if the "Use the administration theme when editing or creating content" setting is checked under /admin/appearance.'),
     ];
     $form['whitelisted_ip_addresses'] = [
       '#type' => 'textarea',

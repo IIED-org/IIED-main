@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\nightwatch_theme_install_utility\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Extension\ThemeInstallerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides an easier way for Nightwatch tests to install themes.
@@ -33,16 +34,6 @@ class ThemeInstallController extends ControllerBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('theme_installer')
-    );
-  }
-
-  /**
    * Install a theme as default.
    *
    * @param string $theme
@@ -57,6 +48,7 @@ class ThemeInstallController extends ControllerBase {
 
   /**
    * Install a theme as the admin theme.
+   *
    * @param string $theme
    *   The theme to install as the admin theme.
    *

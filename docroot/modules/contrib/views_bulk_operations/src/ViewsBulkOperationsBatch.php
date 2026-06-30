@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\views_bulk_operations;
 
 use Drupal\Core\Url;
-use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionCompletedTrait;
+use Drupal\views_bulk_operations\Traits\ViewsBulkOperationsActionCompletedTrait;
 
 /**
  * Defines module Batch API methods.
@@ -24,7 +26,10 @@ class ViewsBulkOperationsBatch {
    */
   public static function getList(array $data, array &$context): void {
     // Initialize batch.
-    if (empty($context['sandbox'])) {
+    if (
+      !\array_key_exists('sandbox', $context) ||
+      !\array_key_exists('processed', $context['sandbox'])
+    ) {
       $context['sandbox']['processed'] = 0;
       $context['sandbox']['page'] = 0;
       $context['sandbox']['total'] = $data['exclude_mode'] ? $data['total_results'] - \count($data['exclude_list']) : $data['total_results'];
@@ -75,7 +80,7 @@ class ViewsBulkOperationsBatch {
       $current_user = \Drupal::service('current_user');
       $tempstore_name = 'views_bulk_operations_' . $results['view_id'] . '_' . $results['display_id'];
       $results['prepopulated'] = TRUE;
-      $tempstore_factory->get($tempstore_name)->set($current_user->id(), $results);
+      $tempstore_factory->get($tempstore_name)->set((string) $current_user->id(), $results);
     }
   }
 
@@ -89,7 +94,10 @@ class ViewsBulkOperationsBatch {
    */
   public static function operation(array $data, array &$context): void {
     // Initialize batch.
-    if (empty($context['sandbox'])) {
+    if (
+      !\array_key_exists('sandbox', $context) ||
+      !\array_key_exists('processed', $context['sandbox'])
+    ) {
       $context['sandbox']['processed'] = 0;
       $context['results']['operations'] = [];
       $context['sandbox']['page'] = 0;
@@ -133,7 +141,10 @@ class ViewsBulkOperationsBatch {
     $current_class = static::class;
 
     // Prepopulate results.
-    if (empty($view_data['list'])) {
+    if (
+      !\array_key_exists('list', $view_data) ||
+      \count($view_data['list']) === 0
+    ) {
       // Redirect this batch to the processing URL and set
       // previous redirect under a different key for later use.
       $view_data['redirect_after_processing'] = $view_data['redirect_url'];

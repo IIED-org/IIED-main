@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\layout_paragraphs\FunctionalJavascript;
 
 use Behat\Mink\Exception\ExpectationException;
@@ -100,7 +102,7 @@ class TranslationTest extends BuilderTestBase {
   /**
    * Tests adding paragraphs in the correct language.
    */
-  public function testAddedInCorrectLanugage() {
+  public function testAddedInCorrectLanguage() {
     $this->testSwitchLanguage();
     $this->drupalGet('node/1/edit');
     $this->addTextComponent('Language should be "de".', '.layout__region--first .lpb-btn--add.after');
@@ -169,7 +171,7 @@ class TranslationTest extends BuilderTestBase {
   }
 
   /**
-   * Tests symmetric or assymetric translations.
+   * Tests symmetric or asymmetric translations.
    */
   protected function testContentTranslations($asymmetric = FALSE) {
 
@@ -235,7 +237,7 @@ class TranslationTest extends BuilderTestBase {
     }
     else {
       // If in symmetric mode, deleting component from the primary language
-      // deletes it everyhere.
+      // deletes it everywhere.
       $this->assertSession()->pageTextNotContains('third (de)');
     }
 

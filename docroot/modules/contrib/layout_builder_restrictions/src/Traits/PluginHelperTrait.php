@@ -4,11 +4,11 @@ namespace Drupal\layout_builder_restrictions\Traits;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Plugin\Context\EntityContext;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\layout_builder\Context\LayoutBuilderContextTrait;
 use Drupal\layout_builder\Entity\LayoutEntityDisplayInterface;
 use Drupal\layout_builder\OverridesSectionStorageInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Methods to help Layout Builder Restrictions plugins.
@@ -116,18 +116,23 @@ trait PluginHelperTrait {
    *
    * This is based on CategorizingPluginManagerTrait::getGroupedDefinitions.
    *
-   * @param array $definitions
-   *   The definitions as provided by the Block Plugin Manager.
+   * @param array|null $definitions
+   *   (optional) The definitions as provided by the Block Plugin Manager.
    * @param string $label_key
    *   The key to use if a block does not have a category defined.
    *
    * @return array
    *   Definitions grouped by untranslated category.
    */
-  public function getGroupedDefinitions(array $definitions = NULL, $label_key = 'label') {
+  public function getGroupedDefinitions(?array $definitions = NULL, $label_key = 'label') {
+    $menu_block_active = \Drupal::moduleHandler()->moduleExists('menu_block');
     $definitions = $this->getSortedDefinitions($definitions, $label_key);
     $grouped_definitions = [];
     foreach ($definitions as $id => $definition) {
+      // If the Menu Block module is active, suppress duplicative core menus.
+      if ($menu_block_active && $definition['id'] === 'system_menu_block') {
+        continue;
+      }
       // If the block category is a translated string, get the
       // untranslated equivalent to create an unchanging category ID, not
       // affected by multilingual translations.
@@ -203,15 +208,15 @@ trait PluginHelperTrait {
   /**
    * Sort block categories alphabetically.
    *
-   * @param array $definitions
-   *   The block definitions, with category values.
+   * @param array|null $definitions
+   *   (optional) The block definitions, with category values.
    * @param string $label_key
    *   The module name, if no category value is present on the block.
    *
    * @return array
    *   The alphabetically sorted categories with definitions.
    */
-  protected function getSortedDefinitions(array $definitions = NULL, $label_key = 'label') {
+  protected function getSortedDefinitions(?array $definitions = NULL, $label_key = 'label') {
     uasort($definitions, function ($a, $b) use ($label_key) {
       if ($a['category'] != $b['category']) {
         $a['category'] = $a['category'] ?? '';
@@ -252,6 +257,13 @@ trait PluginHelperTrait {
     // contexts, below. We need a fallback since some entity types (such as
     // Layout entities) do not implement a view mode.
     $view_mode = 'default';
+
+    // Initialize the $bundle variable to avoid 'Undefined variable' warnings.
+    $bundle = NULL;
+
+    // Initialize $entity_type variable to avoid 'Undefined variable' warnings.
+    $entity_type = NULL;
+
     if ($requested_value == 'contexts') {
       return $contexts;
     }

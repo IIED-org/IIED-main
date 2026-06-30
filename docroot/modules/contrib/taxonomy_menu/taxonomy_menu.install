@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Taxonomy menu module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function taxonomy_menu_uninstall() {
+  $query = Drupal::database()->delete('menu_tree');
+  $query->condition('id', 'taxonomy_menu', 'LIKE');
+  $query->execute();
+}

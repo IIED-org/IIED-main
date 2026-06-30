@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Image\ImageFactory;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
 use Drupal\pdfpreview\PDFPreviewGenerator;
+use Drupal\media\MediaInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -170,6 +171,7 @@ class PDFPreviewFormatter extends ImageFormatter {
     }
 
     $image_style_setting = $this->getSetting('image_style');
+    $parent_entity = $items->getEntity();
 
     // Collect cache tags to be added for each item in the field.
     $cache_tags = [];
@@ -200,14 +202,17 @@ class PDFPreviewFormatter extends ImageFormatter {
       unset($item->_attributes);
 
       if (!empty($item->description)) {
-        $item_attributes['alt'] = $item->description;
-        $item_attributes['title'] = 'Cover image';
+        $item_attributes['alt'] = "Preview of " . $item->description;
+        $item_attributes['title'] = $item->description;
+      }
+      elseif ($parent_entity instanceof MediaInterface) {
+        $item_attributes['alt'] = "Preview of " . $parent_entity->getName();
+        $item_attributes['title'] = $parent_entity->getName();
       }
       else {
-        // Use filename without extension as fallback for accessibility.
         $filename = pathinfo($file->getFilename(), PATHINFO_FILENAME);
         $item_attributes['alt'] = $this->t('Preview of @filename', ['@filename' => $filename]);
-        $item_attributes['title'] = 'Cover image';
+        $item_attributes['title'] = $this->t('Preview of @filename', ['@filename' => $filename]);
       }
       $item_attributes['class'][] = 'pdfpreview-file';
 

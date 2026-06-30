@@ -20,12 +20,22 @@
     "drupal/core": "^10.3 || ^11"
   },
   "require-dev": {
-    "drush/drush": "^12 || ^13"
+    "drupal/coder": "^8.3.16",
+    "drush/drush": "^12 || ^13",
+    "phpstan/phpstan-strict-rules": "^2",
+    "phpstan/phpstan-deprecation-rules": "^2"
   },
   "suggest": {
     "drush/drush": "^12 || ^13"
   },
   "conflict": {
     "drush/drush": "<12.5.1"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "php-http/discovery": true,
+      "tbachert/spi": false
+    }
   }
 }

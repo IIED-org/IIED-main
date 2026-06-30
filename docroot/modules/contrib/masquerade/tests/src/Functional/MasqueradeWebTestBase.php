@@ -9,8 +9,8 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\block\Functional\AssertBlockAppearsTrait;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\user\Entity\Role;
 use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
+use Drupal\user\Entity\Role;
 
 /**
  * Base test class for Masquerade module web tests.
@@ -248,7 +248,9 @@ abstract class MasqueradeWebTestBase extends BrowserTestBase {
   }
 
   /**
-   * Unmasquerades the current user.
+   * Visiting Unmasquerade link for the current user.
+   *
+   * @todo Improve by passing session token.
    *
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user account to unmasquerade from.

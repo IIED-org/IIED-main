@@ -1,4 +1,19 @@
+parameters:
+  datalayer.hooks_converted: true
+  
 services:
   datalayer.lazy_builders:
     class: Drupal\datalayer\DatalayerLazyBuilders
     arguments: ['@config.factory', '@router.admin_context']
+
+  Drupal\datalayer\Hook\DatalayerHooks:
+    class: Drupal\datalayer\Hook\DatalayerHooks
+    autowire: true
+
+  Drupal\datalayer\Hook\DatalayerFormHooks:
+    class: Drupal\datalayer\Hook\DatalayerFormHooks
+    autowire: true
+
+  Drupal\datalayer\Hook\DatalayerPageHooks:
+    class: Drupal\datalayer\Hook\DatalayerPageHooks
+    autowire: true

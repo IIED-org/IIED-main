@@ -3,15 +3,17 @@
 namespace Drupal\Core\Render\Element;
 
 use Drupal\Core\Render\Attribute\RenderElement;
+use Drupal\Core\Render\Component\Exception\InvalidComponentDataException;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Security\DoTrustedCallbackTrait;
-use Drupal\Core\Render\Component\Exception\InvalidComponentDataException;
+use Drupal\Core\Template\Attribute;
 
 /**
  * Provides a Single-Directory Component render element.
  *
  * Properties:
  * - #component: The machine name of the component.
+ * - #variant: (optional) The variant to be used for the component.
  * - #props: an associative array where the keys are the names of the
  *   component props, and the values are the prop values.
  * - #slots: an associative array where the keys are the slot names, and the
@@ -49,7 +51,13 @@ class ComponentElement extends RenderElementBase {
    * @throws \Drupal\Core\Render\Component\Exception\InvalidComponentDataException
    */
   public function preRenderComponent(array $element): array {
+    $this->mergeElementAttributesToPropAttributes($element);
+
     $props = $element['#props'];
+    if (isset($element["#variant"]) && !isset($props['variant'])) {
+      $props['variant'] = $element["#variant"];
+    }
+
     $props_alter_callbacks = $element['#propsAlter'];
     // This callback can be used to prepare the context. For instance to replace
     // tokens in the props.
@@ -62,6 +70,14 @@ class ComponentElement extends RenderElementBase {
       ),
       $props
     );
+
+    // Handle children as slots.
+    $children = Element::children($element, TRUE);
+    foreach ($children as $key) {
+      $element['#slots'][$key] = $element[$key];
+      unset($element[$key]);
+    }
+
     $inline_template = $this->generateComponentTemplate(
       $element['#component'],
       $element['#slots'],
@@ -73,6 +89,7 @@ class ComponentElement extends RenderElementBase {
       '#template' => $inline_template,
       '#context' => $props,
     ];
+
     return $element;
   }
 
@@ -135,6 +152,35 @@ class ComponentElement extends RenderElementBase {
   }
 
   /**
+   * Merge element attributes with props attributes.
+   *
+   * #attributes property is an universal property of the Render API, used by
+   * many Drupal mechanisms from Core and Contrib, so we need to inject the
+   * values in template.
+   *
+   * @param array $element
+   *   The render element.
+   */
+  private function mergeElementAttributesToPropAttributes(array &$element): void {
+    // Prepare #props attributes to be both mergeable and renderable.
+    $prop_attributes = $element['#props']['attributes'] ?? [];
+    $prop_attributes = is_array($prop_attributes) ? new Attribute($prop_attributes) : $prop_attributes;
+
+    if (!isset($element['#attributes'])) {
+      $element['#props']['attributes'] = $prop_attributes;
+      return;
+    }
+
+    // If attributes value is an array, convert it to an Attribute object as
+    // \Drupal\Core\Template\Attribute::merge() expects an Attribute object.
+    $element_attributes = is_array($element['#attributes']) ? new Attribute($element['#attributes']) : $element['#attributes'];
+
+    // Merge ['#attributes'] with the ['#props']['attributes']. So that #props
+    // attributes take precedence.
+    $element['#props']['attributes'] = $element_attributes->merge($prop_attributes);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getInfo(): array {
@@ -143,6 +189,7 @@ class ComponentElement extends RenderElementBase {
         [$this, 'preRenderComponent'],
       ],
       '#component' => '',
+      '#variant' => '',
       '#props' => [],
       '#slots' => [],
       '#propsAlter' => [],

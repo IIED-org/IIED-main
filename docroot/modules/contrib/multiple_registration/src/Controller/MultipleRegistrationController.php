@@ -7,15 +7,17 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
-use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\multiple_registration\AvailableUserRolesService;
-use Drupal\path_alias\AliasManager;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\user\Access\RegisterAccessCheck;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -77,14 +79,14 @@ class MultipleRegistrationController extends ControllerBase {
    *   AvailableUserRoles Service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
-   * @param \Drupal\path_alias\AliasManager $aliasManager
+   * @param \Drupal\path_alias\AliasManagerInterface $aliasManager
    *   Alias manager.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $routeMatch
    *   RouteMatch service.
-   * @param \Drupal\Core\Messenger\Messenger $messengerService
+   * @param \Drupal\Core\Messenger\MessengerInterface $messengerService
    *   Messenger service.
    */
-  public function __construct(AvailableUserRolesService $availableUserRolesService, ConfigFactoryInterface $configFactory, AliasManager $aliasManager, CurrentRouteMatch $routeMatch, Messenger $messengerService) {
+  public function __construct(AvailableUserRolesService $availableUserRolesService, ConfigFactoryInterface $configFactory, AliasManagerInterface $aliasManager, CurrentRouteMatch $routeMatch, MessengerInterface $messengerService) {
     $this->regPagesConfig = $configFactory->getEditable('multiple_registration.create_registration_page_form_config');
     $this->availableUserRolesService = $availableUserRolesService;
     $this->aliasManager = $aliasManager;
@@ -407,7 +409,8 @@ class MultipleRegistrationController extends ControllerBase {
    */
   public function getRegisterPageTitle(RouteMatchInterface $route) {
     $role = $route->getRawParameter('rid');
-    $roles = user_role_names();
+    $roles = Role::loadMultiple();
+    $roles = array_map(fn(RoleInterface $role) => $role->label(), $roles);
     if (isset($roles[$role])) {
       return $this->t('Create new @role account', ['@role' => $roles[$role]]);
     }

@@ -4,7 +4,7 @@ type: module
 package: 'Performance and scalability'
 core_version_requirement: '^9.5 || ^10 || ^11'
 
-# Information added by Drupal.org packaging script on 2024-08-14
-version: '8.x-2.7'
+# Information added by Drupal.org packaging script on 2026-04-15
+version: '8.x-2.8'
 project: 'memcache'
-datestamp: 1723657821
+datestamp: 1776218690

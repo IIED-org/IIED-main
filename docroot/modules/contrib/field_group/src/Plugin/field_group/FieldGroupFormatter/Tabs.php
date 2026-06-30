@@ -59,6 +59,9 @@ class Tabs extends FieldGroupFormatterBase {
     if ($width_breakpoint = $this->getSetting('width_breakpoint')) {
       $element['#attached']['drupalSettings']['widthBreakpoint'] = $width_breakpoint;
     }
+
+    // Add tabs validation behavior.
+    $element['#attached']['library'][] = 'field_group/tabs_validation';
   }
 
   /**

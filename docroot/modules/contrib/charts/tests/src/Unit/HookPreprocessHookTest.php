@@ -34,6 +34,9 @@ class HookPreprocessHookTest extends UnitTestCase {
     $string_translation = $this->getStringTranslationStub();
     $container->set('string_translation', $string_translation);
 
+    $table_builder = $this->createMock('Drupal\charts\Service\ChartTableBuilder');
+    $container->set('charts.table_builder', $table_builder);
+
     $this->configFactory = $this->createMock('Drupal\Core\Config\ConfigFactoryInterface');
     $container->set('config.factory', $this->configFactory);
 
@@ -67,7 +70,6 @@ class HookPreprocessHookTest extends UnitTestCase {
     ];
     template_preprocess_charts_chart($variables);
 
-    $this->assertArrayHasKey('content', $variables);
     $this->assertArrayHasKey('content_prefix', $variables);
     $this->assertArrayHasKey('content_suffix', $variables);
     $this->assertArrayHasKey('debug', $variables);

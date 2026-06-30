@@ -39,7 +39,7 @@ class EmergencyForm extends ConfigFormBase {
    * @param \Drupal\Core\State\StateInterface $state
    *   The state key value store.
    * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
-   *     The typed config manager.
+   *   The typed config manager.
    */
   public function __construct(ConfigFactory $config_factory, ModuleHandlerInterface $module_handler, StateInterface $state, TypedConfigManagerInterface $typed_config_manager) {
     parent::__construct($config_factory, $typed_config_manager);
@@ -154,7 +154,7 @@ class EmergencyForm extends ConfigFormBase {
             $ids = \Drupal::entityQuery('block')
               ->condition('plugin', 'ds_region_block:' . $key)
               ->execute();
-            /* @var \Drupal\block\BlockInterface $block_storage */
+            /** @var \Drupal\block\BlockInterface $block_storage */
             $block_storage = \Drupal::service('entity_type.manager')->getStorage('block');
             foreach ($block_storage->loadMultiple($ids) as $block) {
               $block->delete();

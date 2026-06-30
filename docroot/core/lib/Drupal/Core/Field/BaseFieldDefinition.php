@@ -486,7 +486,8 @@ class BaseFieldDefinition extends ListDataDefinition implements FieldDefinitionI
    *
    * @return array
    *   The initial value for the field, as a numerically indexed array of items,
-   *   each item being a property/value array (array() for no default value).
+   *   each item being a property/value array. An empty array when there is no
+   *   default value.
    */
   public function getInitialValue() {
     return $this->normalizeValue($this->definition['initial_value'], $this->getMainPropertyName());
@@ -572,7 +573,10 @@ class BaseFieldDefinition extends ListDataDefinition implements FieldDefinitionI
   /**
    * {@inheritdoc}
    */
-  public function getPropertyDefinition($name) {
+  public function getPropertyDefinition(/* string */ $name) {
+    if (!is_string($name)) {
+      @trigger_error('Calling ' . __CLASS__ . '::getPropertyDefinition() with a non-string $name is deprecated in drupal:11.3.0 and throws an exception in drupal:12.0.0. See https://www.drupal.org/node/3557373', E_USER_DEPRECATED);
+    }
     if (!isset($this->propertyDefinitions)) {
       $this->getPropertyDefinitions();
     }
@@ -610,7 +614,7 @@ class BaseFieldDefinition extends ListDataDefinition implements FieldDefinitionI
   /**
    * {@inheritdoc}
    */
-  public function __sleep() {
+  public function __sleep(): array {
     // Do not serialize the statically cached property definitions.
     $vars = get_object_vars($this);
     unset($vars['propertyDefinitions'], $vars['typedDataManager']);

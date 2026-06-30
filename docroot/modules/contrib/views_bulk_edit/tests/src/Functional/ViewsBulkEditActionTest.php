@@ -4,9 +4,9 @@ namespace Drupal\Tests\views_bulk_edit\Functional;
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityFormMode;
-use Drupal\field\FieldStorageConfigInterface;
 use Drupal\Tests\field\Traits\EntityReferenceFieldCreationTrait;
 use Drupal\Tests\node\Functional\Views\NodeTestBase;
+use Drupal\field\FieldStorageConfigInterface;
 
 /**
  * Tests the core edit action.
@@ -131,6 +131,8 @@ class ViewsBulkEditActionTest extends NodeTestBase {
   }
 
   /**
+   * Tests that only selected values are changed in the bulk edit form.
+   *
    * @todo The bulk edit form was only tested, using the "replace" method. Also
    * test the "append" method.
    */

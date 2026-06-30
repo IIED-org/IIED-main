@@ -13,8 +13,8 @@
   outline: 1px solid #ccc;
 }
 .layout-select__item input:checked + label.option {
+  transition: 0.1s all;
   outline: 2px solid blue;
-  transition: .1s all;
   font-weight: bold;
 }
 .layout-select__item-icon {

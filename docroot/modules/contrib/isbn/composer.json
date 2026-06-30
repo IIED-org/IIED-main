@@ -33,7 +33,7 @@
         "source": "http://git.drupal.org/project/isbn.git"
     },
     "require": {
-        "nicebooks/isbn": "~0.0"
+        "nicebooks/isbn": "<0.7"
     },
     "require-dev": {
         "drupal/feeds": "^3.0"

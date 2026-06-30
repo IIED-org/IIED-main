@@ -4,6 +4,7 @@ namespace Drupal\name\Plugin\views\filter;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Attribute\ViewsFilter;
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -11,9 +12,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Filter by fulltext search.
  *
  * @ingroup views_filter_handlers
- *
- * @ViewsFilter("name_fulltext")
  */
+#[ViewsFilter("name_fulltext")]
 class Fulltext extends FilterPluginBase {
 
   /**
@@ -131,8 +131,15 @@ class Fulltext extends FilterPluginBase {
    * @param string $fulltext_field
    *   The db field.
    */
-  public function op_contains($fulltext_field) {
+  public function op_contains($fulltext_field) {// phpcs:ignore Drupal.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     $value = mb_strtolower($this->value[0]);
+
+    // Escape LIKE wildcards first.
+    $escaped_value = $this->connection->escapeLike($value);
+    if (is_string($escaped_value)) {
+      $value = $escaped_value;
+    }
+
     $value = str_replace(' ', '%', $value);
     $placeholder = $this->placeholder();
     $this->query->addWhereExpression($this->options['group'], "$fulltext_field LIKE $placeholder", [$placeholder => '% ' . $value . '%']);
@@ -144,7 +151,7 @@ class Fulltext extends FilterPluginBase {
    * @param string $fulltext_field
    *   The db field.
    */
-  public function op_word($fulltext_field) {
+  public function op_word($fulltext_field) {// phpcs:ignore Drupal.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     $where = $this->connection->condition($this->operator == 'word' ? 'OR' : 'AND');
     $value = mb_strtolower($this->value[0]);
 

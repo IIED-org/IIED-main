@@ -21,6 +21,25 @@
       });
 
       // eslint-disable-next-line no-shadow
+      $('#edit-fs3', context).drupalSetSummary((context) => {
+        const values = [];
+
+        $('input:checked', context)
+          .parent()
+          .toArray()
+          .forEach((element) => {
+            values.push(
+              Drupal.checkPlain($('.option', element).text().trim()),
+            );
+          });
+
+        if (values.length > 0) {
+          return values.join(', ');
+        }
+        return Drupal.t('Disabled');
+      });
+
+      // eslint-disable-next-line no-shadow
       $('#edit-fs4', context).drupalSetSummary((context) => {
         const values = [];
 
@@ -29,7 +48,7 @@
           .toArray()
           .forEach((element) => {
             values.push(
-              Drupal.checkPlain($.trim($('.option', element).text())),
+              Drupal.checkPlain($('.option', element).text().trim()),
             );
           });
 

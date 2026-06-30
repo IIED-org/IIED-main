@@ -15,7 +15,7 @@ use Drupal\Core\TypedData\DataDefinition;
  *   id = "computed_integer",
  *   label = @Translation("Computed (integer)"),
  *   description = @Translation("This field defines an integer field whose value is computed by PHP-Code"),
- *   category = @Translation("Computed"),
+ *   category = "Computed",
  *   default_widget = "computed_number_widget",
  *   default_formatter = "computed_integer"
  * )

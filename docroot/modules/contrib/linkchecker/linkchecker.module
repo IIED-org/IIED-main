@@ -65,8 +65,9 @@ function linkchecker_help($route_name, RouteMatchInterface $route_match) {
  * @see watchdog()
  */
 function linkchecker_watchdog_log($type, $message, array $variables = [], $severity = RfcLogLevel::NOTICE, $link = NULL) {
+  $logging_level = \Drupal::config('linkchecker.settings')->get('logging.level');
   // @FIXME: $link is missing, could be in $variables.
-  if ($severity <= \Drupal::config('linkchecker.settings')->get('logging.level')) {
+  if ($severity <= $logging_level && $logging_level >= 0) {
     $logger = \Drupal::logger($type);
     $logger->log($severity, $message, $variables);
   }

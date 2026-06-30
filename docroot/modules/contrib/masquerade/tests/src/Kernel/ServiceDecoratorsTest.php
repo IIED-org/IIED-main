@@ -3,12 +3,14 @@
 namespace Drupal\Tests\masquerade\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Class ServiceDecoratorsTest.
+ * Tests decorated service and metadata bag.
  *
  * @group masquerade
  */
+#[RunTestsInSeparateProcesses]
 class ServiceDecoratorsTest extends KernelTestBase {
 
   /**

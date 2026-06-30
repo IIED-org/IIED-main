@@ -54,7 +54,8 @@ class LayoutSelect extends Radios {
   public static function processLayoutSelect(
     &$element,
     FormStateInterface $form_state,
-    &$complete_form) {
+    &$complete_form,
+  ) {
     foreach (Element::children($element) as $key) {
       $layout_name = $key;
       $definition = \Drupal::service('plugin.manager.core.layout')->getDefinition($layout_name);

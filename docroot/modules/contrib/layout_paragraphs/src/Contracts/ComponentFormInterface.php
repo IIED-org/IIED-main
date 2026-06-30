@@ -57,7 +57,7 @@ interface ComponentFormInterface extends FormInterface {
    *
    * @param array $element
    *   The form element.
-   * @param Drupal\Core\Form\FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    * @param array $form
    *   The complete form array.
@@ -74,7 +74,7 @@ interface ComponentFormInterface extends FormInterface {
    *
    * @param array $element
    *   The form element.
-   * @param Drupal\Core\Form\FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    * @param array $form
    *   The complete form array.
@@ -85,7 +85,7 @@ interface ComponentFormInterface extends FormInterface {
   public function behaviorPluginsForm(array $element, FormStateInterface $form_state, array &$form);
 
   /**
-   * Provides an Ajax reponse to inject the new / editing component.
+   * Provides an Ajax response to inject the new / editing component.
    *
    * @param array $form
    *   The form array.

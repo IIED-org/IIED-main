@@ -1,17 +1,20 @@
 {
   "private": true,
   "scripts": {
-    "dev": "npx tailwindcss -i src/tailwind.pcss -o dist/styles.css --watch",
-    "build": "npx tailwindcss -i src/tailwind.pcss -o dist/styles.css --minify",
+    "dev": "tailwindcss -i src/tailwind.pcss -o dist/styles.css --watch",
+    "build:dev": "tailwindcss -i src/tailwind.pcss -o dist/styles.css",
+    "build:prod": "tailwindcss -i src/tailwind.pcss -o dist/styles.css --minify",
     "browser-sync": "browser-sync start --config 'browser-sync.cjs' --http",
     "watch": "run-p dev browser-sync"
   },
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.0",
+    "@tailwindcss/cli": "^4",
     "browser-sync": "^3.0",
-     "npm-run-all": "^4.1.5",
+    "ignore-warnings": "^0.2.1",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.4.5",
-    "tailwindcss": "^3.1"
+    "tailwindcss": "^4"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.6",

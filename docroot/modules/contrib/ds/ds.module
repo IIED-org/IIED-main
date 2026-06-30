@@ -11,10 +11,11 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityDisplayInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FormatterInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\Context\EntityContext;
+use Drupal\Core\Plugin\ContextAwarePluginInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Template\Attribute;
@@ -114,13 +115,17 @@ function ds_theme_registry_alter(&$theme_registry) {
           // Variable holding the preprocess functions to add later.
           $preprocess_functions_to_add = [];
 
-          // Overrides don't get the template_preprocess_field function.
-          if (!in_array('template_preprocess_field', $theme_registry[$hook_field_name]['preprocess functions'])) {
+          // See https://www.drupal.org/node/3501136
+          if (isset($theme_registry['field']['initial preprocess'])) {
+            $theme_registry[$hook_field_name]['initial preprocess'] = $theme_registry['field']['initial preprocess'];
+          }
+          // Overrides don't get the template_preprocess_field function < D11.2
+          elseif (!in_array('template_preprocess_field', $theme_registry[$hook_field_name]['preprocess functions'])) {
             $preprocess_functions_to_add[] = 'template_preprocess_field';
           }
 
           // Overrides don't get the ds_preprocess_field function.
-          if (!in_array('ds_preprocess_field', $theme_registry[$hook_field_name]['preprocess functions'])) {
+          if (!isset($theme_registry[$hook_field_name]['preprocess functions']) || !in_array('ds_preprocess_field', $theme_registry[$hook_field_name]['preprocess functions'])) {
             $preprocess_functions_to_add[] = 'ds_preprocess_field';
           }
 
@@ -149,10 +154,10 @@ function ds_theme_registry_alter(&$theme_registry) {
   //
   // @see
   //   - https://www.drupal.org/node/2862683 (core queue)
+  //   - https://www.drupal.org/node/2911996 (core queue)
   //   - https://www.drupal.org/node/2802429 (DS queue)
-  //      (and maybe others)
+  //     (and maybe others)
   // ------------------------------------------------------------------------
-
   // Merge layout and field hooks.
   $all_ds_theme_hooks = $layout_theme_hooks + $field_theme_hooks;
 
@@ -201,6 +206,10 @@ function ds_theme_registry_alter(&$theme_registry) {
               'type' => 'theme_engine',
               'theme path' => $theme_path,
             ];
+            // See https://www.drupal.org/node/3501136
+            if (isset($theme_registry[$hook]['initial preprocess'])) {
+              $implementations[$new_hook]['initial preprocess'] = $theme_registry[$hook]['initial preprocess'];
+            }
             if (isset($theme_registry[$hook]['preprocess functions'])) {
               $implementations[$new_hook]['preprocess functions'] = $theme_registry[$hook]['preprocess functions'];
             }
@@ -219,7 +228,10 @@ function ds_theme_registry_alter(&$theme_registry) {
   // ------------------------------------------------------------------------
 
   // Run field group preprocess before ds_entity_view.
-  if (function_exists('field_group_build_entity_groups')) {
+  if (function_exists('field_group_build_entity_groups')
+    && isset($theme_registry['ds_entity_view'])
+    && isset($theme_registry['ds_entity_view']['preprocess functions'])
+    && is_array($theme_registry['ds_entity_view']['preprocess functions'])) {
     array_unshift($theme_registry['ds_entity_view']['preprocess functions'], 'field_group_build_entity_groups');
   }
 
@@ -403,7 +415,6 @@ function ds_entity_view_alter(&$build, EntityInterface $entity, EntityDisplayInt
       }
     }
   }
-
   // Defer to ds_entity_view theme hook to actually render the layout.
   $build['#theme'] = 'ds_entity_view';
 }
@@ -456,9 +467,20 @@ function template_preprocess_ds_entity_view(&$variables) {
     }
   }
 
-  /* @var \Drupal\Core\Layout\LayoutInterface $layout */
+  /** @var \Drupal\Core\Layout\LayoutInterface $layout */
   $layout = \Drupal::service('plugin.manager.core.layout')->createInstance($configuration['layout']['id'], $configuration['layout']['settings']);
-  $build = array_merge($build, $layout->build($regions));
+  // Set context if needed.
+  if ($layout instanceof ContextAwarePluginInterface && isset($build['#entity'])) {
+    $layout->setContext('entity', EntityContext::fromEntity($build['#entity']));
+  }
+
+  // Build the layout, with backwards compatibility for array merge.
+  if (\Drupal::config('ds.settings')->get('array_merge_build_bc')) {
+    $build = array_merge($build, $layout->build($regions));
+  }
+  else {
+    $build = array_merge_recursive($build, $layout->build($regions));
+  }
 
   // Disable CSS files when needed.
   if ($build['#ds_configuration']['layout']['disable_css'] ?? FALSE) {
@@ -478,8 +500,9 @@ function template_preprocess_ds_entity_view(&$variables) {
  * This function is added in ds_theme_registry_alter().
  */
 function ds_preprocess_ds_layout(&$variables) {
-  $layout_settings = $variables['settings'];
+  $layout_settings = $variables['settings'] ?? [];
   $layout_settings += ['wrappers' => []];
+  $variables['settings'] = $layout_settings;
 
   // Fetch the entity type.
   $bundle = FALSE;
@@ -519,7 +542,7 @@ function ds_preprocess_ds_layout(&$variables) {
       $classes = !empty($layout_settings['classes'][$region_name]) ? $layout_settings['classes'][$region_name] : [];
       if (!empty($classes)) {
         $variables[$region_name . '_attributes'] = new Attribute(['class' => $classes]);
-        // Add the classes to the core region attributes as well
+        // Add the classes to the core region attributes as well.
         if (!empty($variables['region_attributes'][$region_name])) {
           $variables['region_attributes'][$region_name]->addClass($classes);
         }
@@ -585,7 +608,7 @@ function ds_preprocess_ds_layout(&$variables) {
       if (is_string($url)) {
         $uri_parts = parse_url($url);
         if (empty($uri_parts['scheme'])) {
-          $url = 'internal:/' . ltrim($url,'/');
+          $url = 'internal:/' . ltrim($url, '/');
         }
         $url = Url::fromUri($url);
       }
@@ -616,7 +639,7 @@ function ds_preprocess_ds_layout(&$variables) {
 
       // RDF support.
       if ($entity_type_id == 'node' && function_exists('rdf_preprocess_node')) {
-        $entity = $variables[$entity_type_id] ?? (isset($variables['content']['#' . $entity_type_id]) ? $variables['content']['#' . $entity_type_id] : '');
+        $entity = $variables[$entity_type_id] ?? ($variables['content']['#' . $entity_type_id] ?? '');
         if ($entity) {
           $variables['node'] = $entity;
           // We disable the date feature for now as it throws notices.
@@ -638,7 +661,7 @@ function ds_preprocess_ds_layout(&$variables) {
 
       // Special case for User entity, because $variables['user'] contains the
       // currently logged in user.
-      if($entity_type_id !== 'user' && isset($variables[$entity_type_id])) {
+      if ($entity_type_id !== 'user' && isset($variables[$entity_type_id])) {
         $context['entity'] = $variables[$entity_type_id];
       }
       elseif (isset($variables['content']['#' . $entity_type_id])) {
@@ -741,9 +764,9 @@ function ds_preprocess_field(&$variables) {
   $bundle = $variables['element']['#bundle'];
   $view_mode = $variables['element']['#ds_view_mode'] ?? $variables['element']['#view_mode'];
 
-  /* @var $entity_display EntityDisplayInterface */
+  /** @var \Drupal\Core\Entity\Display\EntityDisplayInterface $entity_display */
   $entity_display = Ds::getDisplay($entity_type, $bundle, $view_mode);
-  // Check if this field is being rendered as a layout builder FieldBlock
+  // Check if this field is being rendered as a layout builder FieldBlock.
   // @see Drupal\layout_builder\Plugin\Block\FieldBlock::build();
   $is_layout_builder = (!empty($variables['element']['#third_party_settings']['layout_builder']['view_mode']) && \Drupal::config('ds.settings')->get('ft_layout_builder'));
   if (($entity_display && $entity_display->getThirdPartySetting('ds', 'layout') || $is_layout_builder)) {
@@ -788,7 +811,7 @@ function ds_preprocess_field(&$variables) {
       // When dealing with a field template we need to massage to values before
       // printing to prevent layout issues.
       if (isset($config['id']) && $config['id'] != 'default' && !empty($variables['ds-config']['settings'])) {
-        /* @var \Drupal\ds\Plugin\DsFieldTemplate\DsFieldTemplateInterface $layout_instance */
+        /** @var \Drupal\ds\Plugin\DsFieldTemplate\DsFieldTemplateInterface $layout_instance */
         $layout_instance = \Drupal::service('plugin.manager.ds.field.layout')->createInstance($config['id']);
         if (isset($variables['element']['#object'])) {
           $layout_instance->setEntity($variables['element']['#object']);
@@ -830,10 +853,10 @@ function ds_theme_suggestions_field_alter(&$suggestions, $variables) {
   $bundle = $variables['element']['#bundle'];
   $view_mode = $variables['element']['#ds_view_mode'] ?? $variables['element']['#view_mode'];
 
-  /* @var $entity_display EntityDisplayInterface */
+  /** @var \Drupal\Core\Entity\Display\EntityDisplayInterface $entity_display */
   $entity_display = Ds::getDisplay($entity_type, $bundle, $view_mode);
   // Check if this field is being rendered as a layout builder FieldBlock and
-  // that layout builder field templates are enabled
+  // that layout builder field templates are enabled.
   // @see Drupal\layout_builder\Plugin\Block\FieldBlock::build();
   $is_layout_builder = (!empty($variables['element']['#third_party_settings']['layout_builder']['view_mode']) && \Drupal::config('ds.settings')->get('ft_layout_builder'));
   if ($entity_display && ($entity_display->getThirdPartySetting('ds', 'layout') || $is_layout_builder)) {
@@ -948,7 +971,7 @@ function ds_field_template_settings_form(array &$form, FormStateInterface &$form
     $key = $context['instance']->getName();
   }
 
-  // Check if this is the layout builder field block form
+  // Check if this is the layout builder field block form.
   $is_layout_builder = ($form_state->getBuildInfo()['base_form_id'] == 'layout_builder_configure_block');
 
   // Field (plugin) setting. If it's an array, this is a DS field, otherwise,
@@ -991,7 +1014,7 @@ function ds_field_template_settings_form(array &$form, FormStateInterface &$form
     '#default_value' => $field_function,
   ];
 
-  // Support layout builder field blocks
+  // Support layout builder field blocks.
   if ($is_layout_builder) {
     $form['ft']['id']['#ajax'] = [
       'callback' => 'ds_layout_builder_multistep_js',
@@ -1055,7 +1078,7 @@ function ds_field_formatter_third_party_settings_form(FormatterInterface $plugin
   }
 
   // Don't process the form if it's a layout builder FieldBlock and field
-  // template support is disabled
+  // template support is disabled.
   if (isset($form_state->getBuildInfo()['base_form_id']) && $form_state->getBuildInfo()['base_form_id'] == 'layout_builder_configure_block' && !\Drupal::config('ds.settings')->get('ft_layout_builder')) {
     return $element;
   }
@@ -1063,9 +1086,9 @@ function ds_field_formatter_third_party_settings_form(FormatterInterface $plugin
   // Don't process the form if there's no layout selected or if we are not on a
   // layout builder block.
   if (isset($form_state->getBuildInfo()['base_form_id']) && $form_state->getBuildInfo()['base_form_id'] != 'layout_builder_configure_block') {
-    /* @var \Drupal\Core\Entity\EntityFormInterface $entity_form */
+    /** @var \Drupal\Core\Entity\EntityFormInterface $entity_form */
     $entity_form = $form_state->getFormObject();
-    /* @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display */
+    /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display */
     $display = $entity_form->getEntity();
     if (!$display->getThirdPartySetting('ds', 'layout')) {
       return $element;
@@ -1130,10 +1153,10 @@ function ds_field_formatter_settings_summary_alter(&$summary, $context) {
     $field = $context['field_definition'];
 
     if (isset($context['form_state'])) {
-      /* @var $form_state FormStateInterface */
+      /** @var \Drupal\Core\Form\FormStateInterface $form_state */
       $form_state = $context['form_state'];
       $plugin_settings = $form_state->get('plugin_settings');
-      $field_function = isset($plugin_settings[$field->getName()]['ft']['id']) ? $plugin_settings[$field->getName()]['ft']['id'] : $default_field_function;
+      $field_function = $plugin_settings[$field->getName()]['ft']['id'] ?? $default_field_function;
     }
     else {
       $plugin_settings = $context['formatter']->getThirdPartySetting('ds', 'ft');
@@ -1203,7 +1226,7 @@ function template_preprocess_field__ds_field_expert(&$variables) {
     // Add attributes.
     if (!empty($variables['settings'][$key . '-at'])) {
       $attributes = explode(' ', $variables['settings'][$key . '-at']);
-      foreach ($attributes as $key => $attribute) {
+      foreach ($attributes as $attribute) {
         if (str_contains($attribute, '=')) {
           $attribute_parts = explode('=', $attribute, 2);
           $var_attributes[$attribute_parts[0]] = trim($attribute_parts[1], '\"');
@@ -1239,7 +1262,7 @@ function ds_ds_field_operations_alter(&$operations, $field) {
  */
 function ds_entity_type_alter(array &$entity_types) {
   if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
-    /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+    /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
     foreach ($entity_types as $entity_type) {
       $base_table = $entity_type->getBaseTable();
       if ($entity_type->get('field_ui_base_route') && !empty($base_table)) {
@@ -1281,7 +1304,7 @@ function ds_layout_alter(&$definitions) {
     return;
   }
   /** @var \Drupal\Core\Layout\LayoutDefinition $definition */
-  foreach ($definitions as $key => $definition) {
+  foreach ($definitions as $definition) {
     if ($definition->getProvider() == 'ds') {
       $definition->setIconPath(NULL);
     }

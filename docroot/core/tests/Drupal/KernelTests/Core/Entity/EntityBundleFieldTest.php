@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\KernelTests\Core\Entity;
 
+use Drupal\entity_test\EntityTestHelper;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
 /**
  * Tests adding a custom bundle field.
- *
- * @group Entity
  */
+#[Group('Entity')]
+#[RunTestsInSeparateProcesses]
 class EntityBundleFieldTest extends EntityKernelTestBase {
 
   /**
@@ -45,7 +49,7 @@ class EntityBundleFieldTest extends EntityKernelTestBase {
    * Tests making use of a custom bundle field.
    */
   public function testCustomBundleFieldUsage(): void {
-    entity_test_create_bundle('custom', NULL, 'entity_test_update');
+    EntityTestHelper::createBundle('custom', NULL, 'entity_test_update');
 
     // Check that an entity with bundle entity_test does not have the custom
     // field.
@@ -92,7 +96,7 @@ class EntityBundleFieldTest extends EntityKernelTestBase {
     // bundle is deleted.
     $entity = $storage->create(['type' => 'custom', 'custom_bundle_field' => 'new']);
     $entity->save();
-    entity_test_delete_bundle('custom', 'entity_test_update');
+    EntityTestHelper::deleteBundle('custom', 'entity_test_update');
 
     $table = $table_mapping->getDedicatedDataTableName($entity->getFieldDefinition('custom_bundle_field')->getFieldStorageDefinition(), TRUE);
     $result = $this->database->select($table, 'f')

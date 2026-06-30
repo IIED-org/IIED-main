@@ -13,6 +13,8 @@ use Drupal\Tests\paragraphs\Traits\ParagraphsLastEntityQueryTrait;
  *
  * @group paragraphs
  */
+#[RunTestsInSeparateProcesses]
+#[Group('paragraphs')]
 class ParagraphsClientsideButtonsClaroTest extends ParagraphsClientsideButtonsTest {
 
   /**

@@ -6,12 +6,16 @@ namespace Drupal\Tests\field_layout\FunctionalJavascript;
 
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests using field layout for entity displays.
- *
- * @group field_layout
  */
+#[Group('field_layout')]
+#[IgnoreDeprecations]
+#[RunTestsInSeparateProcesses]
 class FieldLayoutTest extends WebDriverTestBase {
 
   /**
@@ -292,7 +296,7 @@ class FieldLayoutTest extends WebDriverTestBase {
    * @return string[]
    *   An array of region titles.
    */
-  protected function getRegionTitles() {
+  protected function getRegionTitles(): array {
     $region_titles = [];
     $region_title_elements = $this->getSession()->getPage()->findAll('css', '.region-title td');
     /** @var \Behat\Mink\Element\NodeElement[] $region_title_elements */

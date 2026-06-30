@@ -98,7 +98,7 @@ class PublishContentAccess implements AccessInterface {
   }
 
   /**
-   * Process all acess hooks.
+   * Process all access hooks.
    *
    * We grant access if both of these conditions are met:
    * - No modules say to deny access.

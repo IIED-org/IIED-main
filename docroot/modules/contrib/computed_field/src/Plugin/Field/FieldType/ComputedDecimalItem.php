@@ -16,7 +16,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *   id = "computed_decimal",
  *   label = @Translation("Computed (decimal)"),
  *   description = @Translation("This field defines a decimal field whose value is computed by PHP-Code"),
- *   category = @Translation("Computed"),
+ *   category = "Computed",
  *   default_widget = "computed_number_widget",
  *   default_formatter = "computed_decimal",
  *   permission = "administer computed field",

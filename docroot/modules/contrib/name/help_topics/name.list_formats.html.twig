@@ -1,0 +1,19 @@
+---
+label: 'Name list formats'
+top_level: false
+related:
+  - name
+  - name.formatter_options
+---
+
+<p>{% trans %}List formats control how many names are joined together. This is used for multi-value fields or lists like author names.{% endtrans %}</p>
+
+<h2>{% trans %}Main choices{% endtrans %}</h2>
+<ul>
+  <li>{% trans %}<strong>Delimiter</strong>: Text between most names, such as a comma and space.{% endtrans %}</li>
+  <li>{% trans %}<strong>Last delimiter type</strong>: How to join the last two names, like "and".{% endtrans %}</li>
+  <li>{% trans %}<strong>Delimiter precedes last</strong>: Choose never, always, or contextual behavior.{% endtrans %}</li>
+  <li>{% trans %}<strong>Reduce list and append et al</strong>: Shorten long lists after a limit.{% endtrans %}</li>
+</ul>
+
+<p>{% trans %}Example: "Jane Smith, John Lee, and Pat Kim".{% endtrans %}</p>

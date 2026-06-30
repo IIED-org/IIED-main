@@ -2,9 +2,9 @@
 
 /**
  * @file
- * Code required only when fetching information about available updates.
  */
 
+use Drupal\Core\Extension\Requirement\RequirementSeverity;
 use Drupal\update\UpdateManagerInterface;
 
 /**
@@ -16,16 +16,15 @@ use Drupal\update\UpdateManagerInterface;
  *
  * @see update_requirements()
  */
-function _update_cron_notify() {
+function _update_cron_notify(): void {
   $update_config = \Drupal::config('update.settings');
-  \Drupal::moduleHandler()->loadInclude('update', 'install');
-  $status = update_requirements('runtime');
+  $status = \Drupal::moduleHandler()->invoke('update', 'runtime_requirements');
   $params = [];
   $notify_all = ($update_config->get('notification.threshold') == 'all');
   foreach (['core', 'contrib'] as $report_type) {
     $type = 'update_' . $report_type;
     if (isset($status[$type]['severity'])
-        && ($status[$type]['severity'] == REQUIREMENT_ERROR || ($notify_all && $status[$type]['reason'] == UpdateManagerInterface::NOT_CURRENT))) {
+        && ($status[$type]['severity'] == RequirementSeverity::Error || ($notify_all && $status[$type]['reason'] == UpdateManagerInterface::NOT_CURRENT))) {
       $params[$report_type] = $status[$type]['reason'];
     }
   }

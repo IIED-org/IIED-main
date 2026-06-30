@@ -25,10 +25,13 @@
     "source": "http://cgit.drupalcode.org/name"
   },
   "license": "GPL-2.0+",
-  "require": { },
+  "require": {
+    "drupal/core": "^11.0 || ^10.3"
+  },
   "require-dev": {
-    "drupal/token": "^1.0",
     "drupal/diff": "^2@beta",
-    "drupal/feeds": "^3@rc"
+    "drupal/feeds": "^3.0",
+    "drupal/token": "^1.0",
+    "drush/drush": ">=9.0"
   }
 }

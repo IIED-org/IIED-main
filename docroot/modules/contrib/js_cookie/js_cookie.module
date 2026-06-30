@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Hooks for the JavaScript Cookie library module.
+ */
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function js_cookie_library_info_alter(array &$libraries, $extension) {
+  if ($extension !== 'js_cookie') {
+    return;
+  }
+
+  /** @var \Drupal\Core\Asset\LibrariesDirectoryFileFinder $library_file_finder */
+  $library_file_finder = \Drupal::service('library.libraries_directory_file_finder');
+  $is_locally_installed = file_exists($library_file_finder->find('js-cookie/dist/js.cookie.min.js'));
+
+  // Use CDN if not installed locally:
+  if (!$is_locally_installed && isset($libraries['js-cookie'])) {
+    $libraries['js-cookie']['js'] = $libraries['js-cookie']['cdn']['js'];
+  }
+}

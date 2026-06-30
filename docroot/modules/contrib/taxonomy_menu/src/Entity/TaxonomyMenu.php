@@ -264,13 +264,13 @@ class TaxonomyMenu extends ConfigEntityBase implements TaxonomyMenuInterface {
     $parents = $termStorage->loadParents($term_id);
     $parents = array_values($parents);
 
-    if (is_array($parents) && count($parents) && !is_null($parents[0]) && $parents[0] != '0') {
+    if (count($parents) && !is_null($parents[0]) && $parents[0] != '0') {
       $menu_parent_id = $this->buildMenuPluginId($parents[0]);
     }
 
     // Note:
     // if menu_parent_id is NULL, it will not update the hierarchy properly.
-    if (empty($menu_parent_id)) {
+    if (empty($menu_parent_id) && !$this->getMenuParent()) {
       $menu_parent_id = str_replace($this->getMenu() . ':', '', $this->getMenuParent());
     }
 

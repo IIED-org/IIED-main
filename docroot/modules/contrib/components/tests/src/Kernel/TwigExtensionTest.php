@@ -1,11 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\components\Kernel;
 
+use Drupal\components\Template\ComponentsDebugNodeVisitor;
+use Drupal\components\Template\TwigExtension;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+
 /**
+ * Tests the TwigExtension.
+ *
  * @coversDefaultClass \Drupal\components\Template\TwigExtension
  * @group components
  */
+#[
+  Group('components'), /* @phpstan-ignore attribute.notFound */
+  CoversClass(TwigExtension::class), /* @phpstan-ignore attribute.notFound */
+  CoversClass(ComponentsDebugNodeVisitor::class) /* @phpstan-ignore attribute.notFound */
+]
 class TwigExtensionTest extends ComponentsKernelTestBase {
 
   /**
@@ -22,8 +37,6 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
   /**
    * Ensures the Twig template() function works inside a Drupal instance.
    *
-   * @covers ::template
-   *
    * @throws \Exception
    */
   public function testTemplateFunction() {
@@ -38,7 +51,7 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
       $result = $this->render($element);
     }
     catch (\Exception $e) {
-      $this->fail('No Exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
+      $this->fail('No Exception expected but the following was thrown: "' . $e->getMessage() . '"');
     }
     $this->assertStringContainsString('<ul><li>first item</li><li>second item</li></ul>', $result);
   }
@@ -46,10 +59,9 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
   /**
    * Ensures the Twig "recursive_merge" filter works inside a Drupal instance.
    *
-   * @covers ::recursiveMergeFilter
-   *
    * @dataProvider providerTestRecursiveMergeFilter
    */
+  #[DataProvider('providerTestRecursiveMergeFilter') /* @phpstan-ignore attribute.notFound */]
   public function testRecursiveMergeFilter(string $theme_hook, string $expected) {
     try {
       $element = [
@@ -70,13 +82,13 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
       $result = $this->render($element);
     }
     catch (\Exception $e) {
-      $this->fail('No Exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
+      $this->fail('No Exception expected but the following was thrown: "' . $e->getMessage() . '"');
     }
     $this->assertStringContainsString($expected, $result);
   }
 
   /**
-   * Data provider for testRecursiveMergeFilter().
+   * Data provider for ::testRecursiveMergeFilter().
    *
    * @see testRecursiveMergeFilter()
    */
@@ -96,10 +108,9 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
   /**
    * Ensures the Twig "set" filter works inside a Drupal instance.
    *
-   * @covers ::setFilter
-   *
    * @dataProvider providerTestSetFilter
    */
+  #[DataProvider('providerTestSetFilter') /* @phpstan-ignore attribute.notFound */]
   public function testSetFilter(string $theme_hook, string $expected) {
     try {
       $element = [
@@ -120,13 +131,13 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
       $result = $this->render($element);
     }
     catch (\Exception $e) {
-      $this->fail('No Exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
+      $this->fail('No Exception expected but the following was thrown: "' . $e->getMessage() . '"');
     }
     $this->assertStringContainsString($expected, $result);
   }
 
   /**
-   * Data provider for testSetFilter().
+   * Data provider for ::testSetFilter().
    *
    * @see testSetFilter()
    */
@@ -146,10 +157,9 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
   /**
    * Ensures the Twig "add" filter works inside a Drupal instance.
    *
-   * @covers ::addFilter
-   *
    * @dataProvider providerTestAddFilter
    */
+  #[DataProvider('providerTestAddFilter') /* @phpstan-ignore attribute.notFound */]
   public function testAddFilter(string $theme_hook, string $expected) {
     try {
       $element = [
@@ -169,13 +179,13 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
       $result = $this->render($element);
     }
     catch (\Exception $e) {
-      $this->fail('No Exception expected; "' . $e->getMessage() . '" thrown during: ' . $this->getName());
+      $this->fail('No Exception expected but the following was thrown: "' . $e->getMessage() . '"');
     }
     $this->assertStringContainsString($expected, $result);
   }
 
   /**
-   * Data provider for testAddFilter().
+   * Data provider for ::testAddFilter().
    *
    * @see testAddFilter()
    */
@@ -194,6 +204,34 @@ class TwigExtensionTest extends ComponentsKernelTestBase {
         'expected' => '<div class="original-container-class new-class-1 new-class-2"></div>',
       ],
     ];
+  }
+
+  /**
+   * Ensures the Twig debug comments works inside a Drupal instance.
+   */
+  public function testComponentsDebugNodeVisitor() {
+    try {
+      $element = [
+        '#theme' => 'components_twig_extension_test_debug_comments',
+      ];
+      $result = $this->render($element);
+    }
+    catch (\Exception $e) {
+      $this->fail('No Exception expected but the following was thrown: "' . $e->getMessage() . '"');
+    }
+
+    foreach ([
+      'This is the template for the components_twig_extension_test_debug_comments hook.',
+      'This is the components-twig-extension-debug.twig file.',
+      "<!-- THEME DEBUG -->\n"
+      . "<!-- COMPONENT: @components_twig_extension_test_ns/components-twig-extension-debug.twig -->\n"
+      . "<!-- 💡 BEGIN ⚙️ COMPONENT TEMPLATE OUTPUT from '",
+      "tests/modules/components_twig_extension_test/components/components-twig-extension-debug.twig' -->\n<p>\n",
+      "<!-- END ⚙️ COMPONENT TEMPLATE OUTPUT from '",
+      "tests/modules/components_twig_extension_test/components/components-twig-extension-debug.twig' -->\n\n",
+    ] as $foundString) {
+      $this->assertStringContainsString($foundString, $result);
+    }
   }
 
 }

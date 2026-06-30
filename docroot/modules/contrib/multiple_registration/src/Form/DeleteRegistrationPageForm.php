@@ -5,6 +5,8 @@ namespace Drupal\multiple_registration\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\multiple_registration\Controller\MultipleRegistrationController;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -55,7 +57,8 @@ class DeleteRegistrationPageForm extends FormBase {
     if (!isset($rid)) {
       return FALSE;
     }
-    $roles = user_role_names();
+    $roles = Role::loadMultiple();
+    $roles = array_map(fn(RoleInterface $role) => $role->label(), $roles);
     if (!isset($roles[$rid])) {
       return FALSE;
     }

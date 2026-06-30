@@ -88,7 +88,6 @@ function multiple_registration_form_field_config_edit_form_alter(&$form, FormSta
   $field_object = $form_state->getFormObject();
   /** @var \Drupal\field\Entity\FieldConfig $instance */
   $instance = $field_object->getEntity();
-
   if ($instance->get('entity_type') === 'user' && !$instance->isDeleted() && !$instance->isReadonly()) {
 
     $reg_pages = \Drupal::service('multiple_registration.service')->getRegistrationPages();
@@ -242,7 +241,7 @@ function _multiple_registration_rid(array $form, FormStateInterface $form_state)
         'uid' => $uid,
         'rid' => $rid,
       ]
-    )
+      )
       ->key('uid')
       ->execute();
   }
@@ -555,7 +554,8 @@ function multiple_registration_views_pre_view(ViewExecutable $view, $display_id,
     $available_roles = $service->getRegistrationPages();
 
     foreach ($available_roles as $role) {
-      $result[] = '<a class="button button-action button--primary button--small" href="' . $role["url"] . '">Add new ' . $role["role_name"] . '</a>';
+      $link_label = t('Add new @role', ['@role' => $role['role_name']], ['context' => 'multiple_registration']);
+      $result[] = '<a class="button button-action button--primary button--small" href="' . $role["url"] . '">' . $link_label . '</a>';
     }
 
     $options = [

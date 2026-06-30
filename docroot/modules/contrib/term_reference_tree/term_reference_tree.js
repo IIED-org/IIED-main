@@ -30,6 +30,11 @@
           tree.find('.form-checkbox').parent().addClass('select-parents');
         }
 
+        // On page load, check if the user wants to add the "select all" option:
+        if (tree.hasClass('term-reference-tree-select-all')) {
+          createCheckAllCheckboxesOption(tree);
+        }
+
         //On page load, check if the user wants a track list. If so, add the
         //currently selected items to it.
         if (tree.hasClass('term-reference-tree-track-list-shown')) {
@@ -144,6 +149,56 @@
   };
 
   /**
+   * Creates the select all option.
+   *
+   * @param term_reference_tree Term reference tree element.
+   */
+  function createCheckAllCheckboxesOption(term_reference_tree) {
+    const id_name = term_reference_tree.attr('id') + '-select-all'
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = id_name;
+    checkbox.name = id_name;
+    checkbox.className = 'form-checkbox';
+    checkbox.value = 'all';
+    checkbox.addEventListener('click', function (event) {
+      changeAll(checkbox, event.target.checked)
+    });
+
+    const label = document.createElement('label');
+    label.htmlFor = id_name;
+    label.className = 'option';
+    label.innerHTML = ' ' + Drupal.t('Select all');
+
+    const container = document.createElement('div');
+    container.className = 'js-form-item form-item js-form-type-checkbox form-type-checkbox';
+    container.appendChild(checkbox);
+    container.appendChild(label);
+
+    term_reference_tree.prepend(container);
+
+    changeSelectAll(checkbox);
+    checkbox.parentNode.parentNode.querySelectorAll('ul input[type=checkbox]').forEach(function (element) {
+      element.addEventListener('change', function (event) {
+        changeSelectAll(checkbox);
+      });
+    });
+  }
+
+  function changeAll(checkbox, is_checked) {
+    checkbox.parentNode.parentNode.querySelectorAll('ul input[type=checkbox]').forEach(function (element) {
+      element.checked = is_checked;
+    }, is_checked);
+  }
+
+  function changeSelectAll(checkbox) {
+    const checked = checkbox.parentNode.parentNode.querySelectorAll('ul input:checked').length;
+    const all_checkbox = checkbox.parentNode.parentNode.querySelectorAll('ul input[type=checkbox]').length;
+    checkbox.checked = (checked === all_checkbox);
+  }
+
+  /**
    * Add a new item to the track list.
    * If more than one item can be selected, the new item is positioned to
    * match the order of the terms in the checkbox tree.
@@ -256,9 +311,9 @@
     track_list_container.find('.term_ref_tree_nothing_message').remove();
   }
 
-// This helper function checks if the maximum number of choices is already
-// selected. If so, it disables all the other options.  If not, it enables
-// them.
+  // This helper function checks if the maximum number of choices is already
+  // selected. If so, it disables all the other options.  If not, it enables
+  // them.
   function checkMaxChoices(item, checkbox) {
     var maxChoices = -1;
     try {

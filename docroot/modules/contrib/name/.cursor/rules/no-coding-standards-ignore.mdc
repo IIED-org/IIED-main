@@ -1,0 +1,34 @@
+---
+description: Forbids suppressing coding standards violations with ignore comments
+alwaysApply: true
+---
+
+# Never Suppress Coding Standards
+
+Using ignore annotations to silence coding standards violations is
+forbidden. Suppression defeats the purpose of having standards.
+
+## Banned annotations
+
+- `// @codingStandardsIgnore`
+- `// @codingStandardsIgnoreStart` / `// @codingStandardsIgnoreEnd`
+- `// phpcs:ignore`
+- `// phpcs:disable` / `// phpcs:enable`
+- `/* phpcs:ignore */`
+- `/* phpcs:disable */`
+
+## What to do instead
+
+Fix the underlying violation. If the code genuinely cannot conform:
+
+1. Refactor so it does conform.
+2. If a rule is wrong for this project, disable it globally in
+   `phpcs.xml.dist` with a documented justification — never inline.
+
+```php
+// ❌ BAD – silences the violation without fixing it
+$x = $foo; // phpcs:ignore
+
+// ✅ GOOD – fix the code to meet the standard
+$x = $foo;
+```

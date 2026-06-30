@@ -9,12 +9,14 @@ use Drupal\Core\Extension\ModuleUninstallValidatorException;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\NodeType;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests comment module uninstall.
- *
- * @group comment
  */
+#[Group('comment')]
+#[RunTestsInSeparateProcesses]
 class CommentUninstallTest extends KernelTestBase {
 
   use CommentTestTrait;
@@ -37,6 +39,7 @@ class CommentUninstallTest extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
 
+    $this->installEntitySchema('node');
     $this->installEntitySchema('comment');
     $this->installConfig(['comment']);
     $this->installSchema('user', ['users_data']);

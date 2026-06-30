@@ -2,7 +2,6 @@
 
 namespace Drupal\field_formatter\Plugin\Field\FieldFormatter;
 
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
@@ -123,7 +122,7 @@ class FieldFormatterFromViewDisplay extends FieldFormatterBase implements Contai
       $options = $display_repository->getViewModeOptions($er_target_entity_type);
     }
 
-    // Sort options in alphabetcial order:
+    // Sort options in alphabetical order:
     asort($options);
     $form['view_mode'] = [
       '#title' => $this->t('View mode'),
@@ -151,7 +150,7 @@ class FieldFormatterFromViewDisplay extends FieldFormatterBase implements Contai
     if (!isset($this->viewDisplay[$bundle_id])) {
       $field_name = $this->getSetting('field_name');
       $entity_type_id = $this->fieldDefinition->getSetting('target_type');
-      if (($view_mode = $this->getSetting('view_mode')) && $view_display = EntityViewDisplay::load($entity_type_id . '.' . $bundle_id . '.' . $view_mode)) {
+      if (($view_mode = $this->getSetting('view_mode')) && $view_display = $this->entityDisplayRepository->getViewDisplay($entity_type_id, $bundle_id, $view_mode)) {
         /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $view_display */
         $components = $view_display->getComponents();
         foreach ($components as $component_name => $component) {

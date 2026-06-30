@@ -3,6 +3,7 @@
 namespace Drupal\name\Traits;
 
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Name form display settings trait.
@@ -79,7 +80,9 @@ trait NameFormDisplaySettingsTrait {
    */
   protected function getDefaultNameFormDisplaySettingsForm(array $settings, array &$form, FormStateInterface $form_state, $has_data = TRUE) {
 
-    $components = _name_translations();
+    $metadata = \Drupal::getContainer()
+      ->get('name.component_metadata', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+    $components = $metadata ? $metadata->getTranslations() : [];
 
     $title_display_options = [
       'title' => $this->t('above'),
@@ -126,7 +129,7 @@ trait NameFormDisplaySettingsTrait {
     ];
     $element['size'] = [
       '#title' => $this->t('HTML size'),
-      '#description' => $this->t('The HTML size property tells the browser what the width of the field should be when it is rendered. This gets overriden by the themes CSS properties. This must be between 1 and 255.'),
+      '#description' => $this->t('The HTML size property tells the browser what the width of the field should be when it is rendered. This gets overridden by the themes CSS properties. This must be between 1 and 255.'),
     ];
 
     $element['credentials_inline'] = [
@@ -181,8 +184,12 @@ trait NameFormDisplaySettingsTrait {
     ];
 
     $widget_layout_options = [];
-    foreach (name_widget_layouts() as $layout => $info) {
-      $widget_layout_options[$layout] = $info['label'];
+    $widget_layouts = \Drupal::getContainer()
+      ->get('name.widget_layouts', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+    if ($widget_layouts) {
+      foreach ($widget_layouts->getLayouts() as $layout => $info) {
+        $widget_layout_options[$layout] = $info['label'];
+      }
     }
     $element['widget_layout'] = [
       '#type' => 'radios',

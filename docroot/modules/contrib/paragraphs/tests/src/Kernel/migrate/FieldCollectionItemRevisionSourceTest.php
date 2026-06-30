@@ -17,7 +17,7 @@ class FieldCollectionItemRevisionSourceTest extends MigrateSqlSourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['migrate_drupal', 'paragraphs'];
+  protected static $modules = ['migrate_drupal', 'paragraphs', 'entity_reference_revisions', 'user'];
 
   /**
    * {@inheritdoc}

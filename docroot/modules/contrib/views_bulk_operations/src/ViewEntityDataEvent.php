@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\views_bulk_operations;
 
 use Drupal\Component\EventDispatcher\Event;
@@ -15,7 +17,7 @@ class ViewEntityDataEvent extends Event {
   /**
    * Entity data array - bulk form keys and labels keyed by row index.
    *
-   * @var array<string, string>
+   * @var array<string, array<int, string>>
    */
   protected array $viewEntityData = [];
 
@@ -32,7 +34,7 @@ class ViewEntityDataEvent extends Event {
   public function __construct(
     protected string $provider,
     protected array $viewData,
-    protected ViewExecutable $view
+    protected ViewExecutable $view,
   ) {}
 
   /**
@@ -68,7 +70,7 @@ class ViewEntityDataEvent extends Event {
   /**
    * Get view entity data.
    *
-   * @return array<string, string>
+   * @return array<string, array<int, string>>
    *   See ViewsBulkOperationsViewDataInterface::getViewEntityData().
    */
   public function getViewEntityData(): array {
@@ -78,10 +80,10 @@ class ViewEntityDataEvent extends Event {
   /**
    * Set view entity data.
    *
-   * @param array<string, string> $data
+   * @param array<string, array<int, string>> $data
    *   See ViewsBulkOperationsViewDataInterface::getViewEntityData().
    */
-  public function setViewEntityData(array $data) {
+  public function setViewEntityData(array $data): void {
     $this->viewEntityData = $data;
   }
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\charts\Plugin\views\style;
 
+use Drupal\charts\ColorHelperTrait;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Xss;
@@ -36,6 +37,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactoryPluginInterface {
 
   use LibraryRetrieverTrait;
+  use ColorHelperTrait;
 
   /**
    * {@inheritdoc}
@@ -286,7 +288,10 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
 
     $title = !empty($chart_settings['display']['title']) ? $chart_settings['display']['title'] : '';
     $subtitle = !empty($chart_settings['display']['subtitle']) ? $chart_settings['display']['subtitle'] : '';
-    if (!empty($title) || !empty($subtitle)) {
+    $figure_caption = !empty($chart_settings['display']['figure_caption']) ? $chart_settings['display']['figure_caption'] : '';
+    $chart_summary = !empty($chart_settings['display']['chart_summary']) ? $chart_settings['display']['chart_summary'] : '';
+    // Check if any of our text fields have content to tokenize.
+    if ($title || $subtitle || $figure_caption || $chart_summary) {
       $tokens = [];
       $global_tokens = [];
       foreach ($field_handlers as $field_id => $field_handler) {
@@ -307,6 +312,8 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
         $title = $this->viewsTokenReplace($title, $tokens);
         // Allow argument tokens in the subtitle.
         $subtitle = $this->viewsTokenReplace($subtitle, $tokens);
+        $figure_caption = $this->viewsTokenReplace($figure_caption, $tokens);
+        $chart_summary = $this->viewsTokenReplace($chart_summary, $tokens);
       }
     }
 
@@ -330,6 +337,11 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       '#title' => $title,
       '#title_position' => $chart_settings['display']['title_position'],
       '#subtitle' => $subtitle,
+      '#figure_caption' => $figure_caption,
+      '#chart_summary' => $chart_summary,
+      '#accessible_table' => $chart_settings['display']['accessible_table'] ?? 'disabled',
+      '#accessible_table_button_text' => $chart_settings['display']['accessible_table_button_text'] ?? '',
+      '#accessible_table_button_class' => $chart_settings['display']['accessible_table_button_class'] ?? '',
       '#tooltips' => $chart_settings['display']['tooltips'],
       '#data_labels' => $chart_settings['display']['data_labels'],
       '#data_markers' => $chart_settings['display']['data_markers'],
@@ -591,6 +603,10 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
               $set[$grouping]['color'] = $this->extractGroupedSelectedColorByEntity($grouping_entity_field, $row, $group_field_name);
               break;
 
+            case 'by_entity_field_property_value':
+              $set[$grouping]['color'] = $this->extractGroupedSelectedColorOnPropertyValueColorsEntityField($grouping_entity_field, $row, $group_field_name);
+              break;
+
             case 'by_field_on_referenced_entity':
               $set[$grouping]['color'] = $this->extractGroupedSelectedColorOnReferencedEntityField($grouping_entity_field, $row, $group_field_name);
               break;
@@ -849,8 +865,10 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
    *
    * @return string
    *   The color.
+   *
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
-  private function extractGroupedSelectedColorOnReferencedEntityField(EntityField $view_entity_field, ResultRow $row, string $group_field_name) {
+  private function extractGroupedSelectedColorOnReferencedEntityField(EntityField $view_entity_field, ResultRow $row, string $group_field_name): string {
     $chart_settings = $this->options['chart_settings'];
     $color_field_name = $chart_settings['fields']['entity_grouping']['selected_method']['color_field_name'] ?? '';
     if (!$color_field_name) {
@@ -860,7 +878,7 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
     $host_entity = $view_entity_field->getEntity($row);
     /** @var \Drupal\Core\Entity\ContentEntityInterface $referenced_entity */
     $referenced_entity = $host_entity->get($group_field_name)->entity;
-    $field_item_list = $referenced_entity ? $referenced_entity->get($color_field_name) : NULL;
+    $field_item_list = $referenced_entity?->get($color_field_name);
     if (!$field_item_list || $field_item_list->isEmpty()) {
       return '';
     }
@@ -931,6 +949,48 @@ class ChartsPluginStyleChart extends StylePluginBase implements ContainerFactory
       }
     }
     return $grouping_colors;
+  }
+
+  /**
+   * Extracts the grouped selected color based on a property value of a field.
+   *
+   * This method processes the provided entity field and row data to determine
+   * the color associated with the given property value, using the chart
+   * settings configuration to match values and return the corresponding color.
+   *
+   * @param \Drupal\views\Plugin\views\field\EntityField $view_entity_field
+   *   The entity field from which to extract the property value.
+   * @param \Drupal\views\ResultRow $row
+   *   The result row that contains the contextual data for the field.
+   * @param string $group_field_name
+   *   The name of the grouping field that determines the context of property
+   *   value selection.
+   *
+   * @return string
+   *   Returns the matched color if found in the configuration; otherwise, a
+   *   random color.
+   */
+  private function extractGroupedSelectedColorOnPropertyValueColorsEntityField(EntityField $view_entity_field, ResultRow $row, string $group_field_name): string {
+    $chart_settings = $this->options['chart_settings'];
+    $color_field_property = $chart_settings['fields']['entity_grouping']['selected_method']['color_field_property'];
+    $field_name = $view_entity_field->configuration['field_name'];
+    $entity = $view_entity_field->getEntity($row);
+    $property_value = $entity->{$field_name}->{$color_field_property} ?? NULL;
+    if (!is_scalar($property_value)) {
+      // @todo pick from the default site settings.
+      return static::randomColor();
+    }
+
+    $property_value = is_string($property_value) ? mb_strtolower(trim(strip_tags(htmlspecialchars_decode($property_value)))) : $property_value;
+    foreach ($chart_settings['fields']['entity_grouping']['selected_method']['colors'] as $selected_property_value_color) {
+      $selected_property_value = !is_numeric($selected_property_value_color['property_value']) ? mb_strtolower(trim(strip_tags(htmlspecialchars_decode($selected_property_value_color['property_value'])))) : $selected_property_value_color['property_value'];
+      if ($property_value === $selected_property_value) {
+        return $selected_property_value_color['color'];
+      }
+    }
+
+    // @todo pick from the default site settings.
+    return static::randomColor();
   }
 
 }

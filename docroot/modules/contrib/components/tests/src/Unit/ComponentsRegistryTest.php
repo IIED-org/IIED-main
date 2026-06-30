@@ -1,32 +1,52 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\components\Unit;
 
 use Drupal\components\Template\ComponentsRegistry;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\Extension\Extension;
+use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Extension\ThemeExtensionList;
 use Drupal\Core\File\Exception\NotRegularDirectoryException;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Logger\LoggerChannel;
+use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
+ * Tests the ComponentsRegistry.
+ *
  * @coversDefaultClass \Drupal\components\Template\ComponentsRegistry
  * @group components
  */
+#[
+  Group('components'), /* @phpstan-ignore attribute.notFound */
+  CoversClass(ComponentsRegistry::class) /* @phpstan-ignore attribute.notFound */
+]
 class ComponentsRegistryTest extends UnitTestCase {
 
   /**
    * The logger channel service.
    *
-   * @var \Drupal\Core\Logger\LoggerChannel|\PHPUnit\Framework\MockObject\MockObject
+   * @var \Drupal\Core\Logger\LoggerChannel
    */
-  protected $loggerChannel;
+  protected LoggerChannel $loggerChannel;
 
   /**
    * The system under test.
    *
    * @var \Drupal\components\Template\ComponentsRegistry
    */
-  protected $systemUnderTest;
+  protected ComponentsRegistry $systemUnderTest;
 
   /**
    * {@inheritdoc}
@@ -58,7 +78,7 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @throws \ReflectionException
    */
-  public function invokeProtectedMethod(?object $obj, string $method, ...$args) {
+  public function invokeProtectedMethod(?object $obj, string $method, ...$args): mixed {
     // Use reflection to test a protected method.
     $methodUnderTest = new \ReflectionMethod($obj, $method);
     $methodUnderTest->setAccessible(TRUE);
@@ -78,7 +98,7 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @throws \ReflectionException
    */
-  public function getProtectedProperty(object $obj, string $property) {
+  public function getProtectedProperty(object $obj, string $property): mixed {
     $propertyUnderTest = new \ReflectionProperty($obj, $property);
     $propertyUnderTest->setAccessible(TRUE);
     return $propertyUnderTest->getValue($obj);
@@ -96,7 +116,7 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @throws \ReflectionException
    */
-  public function setProtectedProperty(object $obj, string $property, $value): void {
+  public function setProtectedProperty(object $obj, string $property, mixed $value): void {
     $propertyUnderTest = new \ReflectionProperty($obj, $property);
     $propertyUnderTest->setAccessible(TRUE);
     $propertyUnderTest->setValue($obj, $value);
@@ -105,29 +125,32 @@ class ComponentsRegistryTest extends UnitTestCase {
   /**
    * Creates a ComponentsRegistry service after the dependencies are set up.
    *
-   * @param null|\Drupal\Core\Extension\ModuleExtensionList|\PHPUnit\Framework\MockObject\MockObject $moduleExtensionList
+   * @param \Drupal\Core\Extension\ModuleExtensionList|null $moduleExtensionList
    *   The mocked module extension list service.
-   * @param null|\Drupal\Core\Extension\ThemeExtensionList|\PHPUnit\Framework\MockObject\MockObject $themeExtensionList
+   * @param \Drupal\Core\Extension\ThemeExtensionList|null $themeExtensionList
    *   The mocked theme extension list service.
-   * @param null|\Drupal\Core\Extension\ModuleHandlerInterface|\PHPUnit\Framework\MockObject\MockObject $moduleHandler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface|null $moduleHandler
    *   The mocked module handler service.
-   * @param null|\Drupal\Core\Theme\ThemeManagerInterface|\PHPUnit\Framework\MockObject\MockObject $themeManager
+   * @param \Drupal\Core\Theme\ThemeManagerInterface|null $themeManager
    *   The mocked theme manager service.
-   * @param null|\Drupal\Core\Cache\CacheBackendInterface|\PHPUnit\Framework\MockObject\MockObject $cacheBackend
+   * @param \Drupal\Core\Cache\CacheBackendInterface|null $cacheBackend
    *   The mocked caching service.
-   * @param null|\Drupal\Core\File\FileSystemInterface|\PHPUnit\Framework\MockObject\MockObject $fileSystem
+   * @param \Drupal\Core\File\FileSystemInterface|null $fileSystem
    *   The mocked file system service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface|null $configFactory
+   *   The mocked config factory service.
    *
    * @return \Drupal\components\Template\ComponentsRegistry
    *   A new ComponentsRegistry object.
    */
   public function newSystemUnderTest(
-    $moduleExtensionList = NULL,
-    $themeExtensionList = NULL,
-    $moduleHandler = NULL,
-    $themeManager = NULL,
-    $cacheBackend = NULL,
-    $fileSystem = NULL
+    ?ModuleExtensionList $moduleExtensionList = NULL,
+    ?ThemeExtensionList $themeExtensionList = NULL,
+    ?ModuleHandlerInterface $moduleHandler = NULL,
+    ?ThemeManagerInterface $themeManager = NULL,
+    ?CacheBackendInterface $cacheBackend = NULL,
+    ?FileSystemInterface $fileSystem = NULL,
+    ?ConfigFactoryInterface $configFactory = NULL,
   ): ComponentsRegistry {
     // Generate mock objects with the minimum mocking to run the constructor.
     if (is_null($moduleExtensionList)) {
@@ -138,7 +161,6 @@ class ComponentsRegistryTest extends UnitTestCase {
       $themeExtensionList = $this->createMock('\Drupal\Core\Extension\ThemeExtensionList');
       $themeExtensionList->method('getAllInstalledInfo')->willReturn([]);
       $themeExtensionList->method('getList')->willReturn([]);
-      $themeExtensionList->method('getBaseThemes')->willReturn([]);
     }
     if (is_null($moduleHandler)) {
       $moduleHandler = $this->createMock('\Drupal\Core\Extension\ModuleHandlerInterface');
@@ -153,6 +175,9 @@ class ComponentsRegistryTest extends UnitTestCase {
       $fileSystem = $this->createMock('\Drupal\Core\File\FileSystemInterface');
       $fileSystem->method('scanDirectory')->willReturn([]);
     }
+    if (is_null($configFactory)) {
+      $configFactory = $this->createMock('\Drupal\Core\Config\ConfigFactoryInterface');
+    }
 
     return new ComponentsRegistry(
       $moduleExtensionList,
@@ -160,8 +185,34 @@ class ComponentsRegistryTest extends UnitTestCase {
       $moduleHandler,
       $themeManager,
       $cacheBackend,
-      $fileSystem
+      $fileSystem,
+      $configFactory,
     );
+  }
+
+  /**
+   * Helper function to set the base_themes array on a themeExtensionList.
+   *
+   * @param \Drupal\Core\Extension\Extension $extension
+   *   The extension to optionally set the base_themes property on.
+   * @param array $themeList
+   *   An array returned by extensionList::getAllInstalledInfo().
+   * @param string $themeName
+   *   The machine name of the theme to get base themes for.
+   */
+  public function setBaseThemes(Extension &$extension, array $themeList, string $themeName): void {
+    $base_themes = [];
+
+    $theme = $themeList[$themeName];
+    while (isset($theme['base theme'])) {
+      $base_theme = $theme['base theme'];
+      $theme = $themeList[$base_theme] ?? [];
+      $base_themes[$base_theme] = $theme['name'] ?? NULL;
+    }
+
+    if (!empty($base_themes)) {
+      $extension->base_themes = array_reverse($base_themes);
+    }
   }
 
   /**
@@ -169,10 +220,9 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @throws \ReflectionException
    *
-   * @covers ::getTemplate
-   *
    * @dataProvider providerTestGetTemplate
    */
+  #[DataProvider('providerTestGetTemplate') /* @phpstan-ignore attribute.notFound */]
   public function testGetTemplate(string $name, string $activeTheme, array $registry, bool $needsLoad, ?string $expected): void {
     $cacheBackend = $this->createMock('\Drupal\Core\Cache\CacheBackendInterface');
     if ($needsLoad) {
@@ -180,6 +230,16 @@ class ComponentsRegistryTest extends UnitTestCase {
         ->method('get')
         ->willReturnOnConsecutiveCalls((object) ['data' => $registry]);
     }
+
+    $configObject = $this->createMock('\Drupal\Core\Config\ImmutableConfig');
+    $configObject
+      ->method('get')
+      ->willReturn($activeTheme);
+    $configFactory = $this->createMock('\Drupal\Core\Config\ConfigFactoryInterface');
+    $configFactory
+      ->method('get')
+      ->with('system.theme')
+      ->willReturn($configObject);
 
     $themeManager = $this->createMock('\Drupal\Core\Theme\ThemeManagerInterface');
     $activeThemeObject = $this->createMock('\Drupal\Core\Theme\ActiveTheme');
@@ -190,7 +250,7 @@ class ComponentsRegistryTest extends UnitTestCase {
       ->method('getActiveTheme')
       ->willReturn($activeThemeObject);
 
-    $this->systemUnderTest = $this->newSystemUnderTest(NULL, NULL, NULL, $themeManager, $cacheBackend, NULL);
+    $this->systemUnderTest = $this->newSystemUnderTest(NULL, NULL, NULL, $themeManager, $cacheBackend, NULL, $configFactory);
 
     if (!$needsLoad) {
       $this->setProtectedProperty($this->systemUnderTest, 'registry', [$activeTheme => $registry]);
@@ -238,13 +298,66 @@ class ComponentsRegistryTest extends UnitTestCase {
   }
 
   /**
+   * Tests checking the validity of template names.
+   *
+   * @dataProvider providerIsValidComponentName
+   */
+  #[DataProvider('providerIsValidComponentName') /* @phpstan-ignore attribute.notFound */]
+  public function testsIsValidComponentName(string $name, bool $expected) {
+    $result = ComponentsRegistry::isValidComponentName($name);
+    $this->assertEquals($expected, $result);
+  }
+
+  /**
+   * Provides test data to ::testsIsValidComponentName().
+   *
+   * @see testsIsValidComponentName()
+   */
+  public static function providerIsValidComponentName(): array {
+    return [
+      'TRUE when template name has a @' => [
+        'name' => '@n/p/t.twig',
+        'expected' => TRUE,
+      ],
+      'FALSE when template name has no @' => [
+        'name' => 'n/p/t.twig',
+        'expected' => FALSE,
+      ],
+      'TRUE when namespace between @ and /' => [
+        'name' => '@n/p/t.twig',
+        'expected' => TRUE,
+      ],
+      'FALSE when no namespace between @ and /' => [
+        'name' => '@/p/t.twig',
+        'expected' => FALSE,
+      ],
+      'TRUE when name ends in .twig' => [
+        'name' => '@n/p/t.twig',
+        'expected' => TRUE,
+      ],
+      'TRUE when name ends in .html' => [
+        'name' => '@n/p/t.html',
+        'expected' => TRUE,
+      ],
+      'TRUE when name ends in .svg' => [
+        'name' => '@n/p/t.svg',
+        'expected' => TRUE,
+      ],
+      'FALSE when name does not end in .twig/html/svg' => [
+        'name' => '@n/p/t.html.',
+        'expected' => FALSE,
+      ],
+    ];
+  }
+
+  /**
    * Tests loading the components registry.
    *
    * @param string $themeName
    *   The name of the active theme.
    * @param array $namespaces
    *   The cache of the active theme's namespaces.
-   * @param string|array $scanDirectory
+   * @param array|string $scanDirectory
    *   An array of file paths to return for $fileSystem::scanDirectory(), keyed
    *   by the directory path. If a string is given, the mock will throw an
    *   exception.
@@ -259,11 +372,10 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @throws \ReflectionException
    *
-   * @covers ::load
-   *
    * @dataProvider providerTestLoad
    */
-  public function testLoad(string $themeName, array $namespaces, $scanDirectory, ?array $cache, bool $isLoaded, array $expected, array $expectedWarnings = []): void {
+  #[DataProvider('providerTestLoad') /* @phpstan-ignore attribute.notFound */]
+  public function testLoad(string $themeName, array $namespaces, array|string $scanDirectory, ?array $cache, bool $isLoaded, array $expected, array $expectedWarnings = []): void {
 
     $moduleHandler = $this->createMock('\Drupal\Core\Extension\ModuleHandlerInterface');
     $moduleHandler
@@ -398,9 +510,7 @@ class ComponentsRegistryTest extends UnitTestCase {
           '@components/tubman.twig' => 'themes/activeTheme/components/harriet/tubman.twig',
           '@components/robert/tubman.twig' => 'themes/activeTheme/components/robert/tubman.twig',
         ],
-        'expectedWarnings' => [
-          'Found multiple files for the "@components/tubman.twig" template; it is recommended to only have one "tubman.twig" file in the "components" namespace’s "themes/activeTheme/components" directory. Found: themes/activeTheme/components/harriet/tubman.twig, themes/activeTheme/components/robert/tubman.twig',
-        ],
+        'expectedWarnings' => [],
       ],
       'sorts namespace paths per directory' => [
         'themeName' => 'activeTheme',
@@ -424,9 +534,7 @@ class ComponentsRegistryTest extends UnitTestCase {
           '@components/harriet/tubman.twig' => 'themes/activeTheme/components/harriet/tubman.twig',
           '@components/robert/tubman.twig' => 'themes/activeTheme/components/robert/tubman.twig',
         ],
-        'expectedWarnings' => [
-          'Found multiple files for the "@components/tubman.twig" template; it is recommended to only have one "tubman.twig" file in the "components" namespace’s "themes/activeTheme/components" directory. Found: themes/activeTheme/components/bob/tubman.twig, themes/activeTheme/components/harriet/tubman.twig, themes/activeTheme/components/robert/tubman.twig',
-        ],
+        'expectedWarnings' => [],
       ],
       'saves the template registry' => [
         'themeName' => 'activeTheme',
@@ -468,10 +576,9 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @throws \ReflectionException
    *
-   * @covers ::getNamespaces
-   *
    * @dataProvider providerTestGetNamespaces
    */
+  #[DataProvider('providerTestGetNamespaces') /* @phpstan-ignore attribute.notFound */]
   public function testGetNamespaces(string $themeName, array $themeInfo, array $getPath, array $themeCache, array $allNamespacesCache, array $expected): void {
     $moduleHandler = $this->createMock('\Drupal\Core\Extension\ModuleHandlerInterface');
     $moduleHandler
@@ -485,28 +592,17 @@ class ComponentsRegistryTest extends UnitTestCase {
       ->method('getPath')
       ->willReturnMap($getPath);
     $themeList = [];
-    foreach ($themeInfo as $info) {
+    foreach ($themeInfo as $name => $info) {
       $extension = $this->createMock('\Drupal\Core\Extension\Extension');
       $extension->method('getName')->willReturn($info['name']);
       $extension->method('getType')->willReturn('theme');
-      $themeList[] = $extension;
-    }
-    $valueMap = [];
-    foreach ($themeInfo as $key => $theme) {
-      $valueMap[] = [
-        $themeList,
-        $key,
-        !isset($theme['base theme']) ? [] : [
-          $theme['base theme'] => $themeInfo[$theme['base theme']]['name'],
-        ],
-      ];
+      $this->setBaseThemes($extension, $themeInfo, $name);
+
+      $themeList[$name] = $extension;
     }
     $themeExtensionList
       ->method('getList')
       ->willReturn($themeList);
-    $themeExtensionList
-      ->method('getBaseThemes')
-      ->willReturnMap($valueMap);
 
     $activeThemes = [];
     foreach (array_keys($themeInfo) as $activeThemeName) {
@@ -530,8 +626,9 @@ class ComponentsRegistryTest extends UnitTestCase {
         !empty($themeCache) ? (object) ['data' => $themeCache] : FALSE,
         !empty($allNamespacesCache) ? (object) ['data' => $allNamespacesCache] : FALSE,
       );
-    $protected = [];
-    if (empty($allNamespacesCache)) {
+
+    if (empty($themeCache) || empty($allNamespacesCache) || !isset($allNamespacesCache[$themeName])) {
+      $protected = [];
       foreach ($themeInfo as $key => $value) {
         $protected[$key] = [
           'name' => $value['name'],
@@ -539,19 +636,18 @@ class ComponentsRegistryTest extends UnitTestCase {
           'package' => $value['package'] ?? '',
         ];
       }
-    }
-    if (empty($allNamespacesCache) || empty($themeCache)) {
+
       $cacheBackend
         ->method('set')
         ->with(
-          $this->callback(function ($value) use ($themeName, $allNamespacesCache, $expected) {
+          $this->callback(function ($value) use ($themeName) {
             return $value === 'components:namespaces' || $value === ('components:namespaces:' . $themeName);
           }),
-          $this->callback(function ($value) use ($themeName, $allNamespacesCache, $expected) {
+          $this->callback(function ($value) use ($themeName, $expected) {
             return $value === $expected || $value === $expected[$themeName] ?? [];
           }),
           Cache::PERMANENT,
-          ['theme_registry'],
+          ['components_registry'],
         );
 
       foreach ([$moduleHandler, $themeManager] as $extensionHandler) {
@@ -562,7 +658,7 @@ class ComponentsRegistryTest extends UnitTestCase {
               return $value === 'protected_twig_namespaces' || $value === 'components_namespaces';
             }),
             $this->callback(function ($value) use ($themeName, $allNamespacesCache, $expected, $protected) {
-              return $value === $protected || $value === ($allNamespacesCache[$themeName] ?? []) || ($value === $expected[$themeName] ?? []);
+              return $value === $protected || $value === ($allNamespacesCache[$themeName] ?? []) || $value === ($expected[$themeName] ?? []);
             }),
             $this->callback(function ($value) use ($themeName) {
               return $value === NULL || $value === $themeName;
@@ -613,6 +709,7 @@ class ComponentsRegistryTest extends UnitTestCase {
         'themeCache' => [],
         'allNamespacesCache' => [],
         'expected' => [
+          '$moduleNamespaces' => [],
           'activeTheme' => [
             'components' => [
               'themes/contrib/activeTheme/path1',
@@ -637,26 +734,27 @@ class ComponentsRegistryTest extends UnitTestCase {
             'components' => [
               'themes/contrib/activeTheme/path1',
               'themes/contrib/activeTheme/path2',
-              'themes/contrib/baseTheme/path1',
+              'themes/contrib/baseTheme/path3',
             ],
           ],
           'baseTheme' => [
             'components' => [
-              'themes/contrib/baseTheme/path1',
+              'themes/contrib/baseTheme/path3',
             ],
           ],
         ],
         'expected' => [
+          '$moduleNamespaces' => [],
           'activeTheme' => [
             'components' => [
               'themes/contrib/activeTheme/path1',
               'themes/contrib/activeTheme/path2',
-              'themes/contrib/baseTheme/path1',
+              'themes/contrib/baseTheme/path3',
             ],
           ],
           'baseTheme' => [
             'components' => [
-              'themes/contrib/baseTheme/path1',
+              'themes/contrib/baseTheme/path3',
             ],
           ],
         ],
@@ -681,6 +779,57 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
       ],
+      'gets namespaces after cache miss' => [
+        'themeName' => 'activeTheme',
+        'themeInfo' => [
+          'activeTheme' => [
+            'name' => 'Active theme',
+            'type' => 'theme',
+            'base theme' => 'baseTheme',
+            'components' => [
+              'namespaces' => [
+                'components' => ['path1', 'path2'],
+              ],
+            ],
+          ],
+          'baseTheme' => [
+            'name' => 'Base theme',
+            'type' => 'theme',
+            'components' => [
+              'namespaces' => [
+                'components' => ['path3'],
+              ],
+            ],
+          ],
+        ],
+        'getPath' => [
+          ['activeTheme', 'themes/contrib/activeTheme'],
+          ['baseTheme', 'themes/contrib/baseTheme'],
+        ],
+        'themeCache' => [],
+        'allNamespacesCache' => [
+          'baseTheme' => [
+            'components' => [
+              'themes/contrib/baseTheme/path3',
+            ],
+          ],
+        ],
+        'expected' => [
+          '$moduleNamespaces' => [],
+          'activeTheme' => [
+            'components' => [
+              'themes/contrib/activeTheme/path1',
+              'themes/contrib/activeTheme/path2',
+              'themes/contrib/baseTheme/path3',
+            ],
+          ],
+          'baseTheme' => [
+            'components' => [
+              'themes/contrib/baseTheme/path3',
+            ],
+          ],
+        ],
+      ],
     ];
   }
 
@@ -693,9 +842,6 @@ class ComponentsRegistryTest extends UnitTestCase {
    *   The array returned by themeExtensionList::getAllInstalledInfo().
    * @param array $getPath
    *   The PHPUnit returnValueMap array for extensionList::getPath().
-   * @param array $getBaseThemes
-   *   A theme-name-keyed array of return values for
-   *   themeExtensionList::getBaseThemes().
    * @param array $expected
    *   The expected result.
    * @param array $expectedWarnings
@@ -703,11 +849,10 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @throws \ReflectionException
    *
-   * @covers ::findNamespaces
-   *
    * @dataProvider providerTestFindNamespaces
    */
-  public function testFindNamespaces(array $moduleInfo, array $themeInfo, array $getPath, array $getBaseThemes, array $expected, array $expectedWarnings = []) {
+  #[DataProvider('providerTestFindNamespaces') /* @phpstan-ignore attribute.notFound */]
+  public function testFindNamespaces(array $moduleInfo, array $themeInfo, array $getPath, array $expected, array $expectedWarnings = []) {
     // Mock the method params with the test data.
     $moduleExtensionList = $this->createMock('\Drupal\Core\Extension\ModuleExtensionList');
     $themeExtensionList = $this->createMock('\Drupal\Core\Extension\ThemeExtensionList');
@@ -726,22 +871,17 @@ class ComponentsRegistryTest extends UnitTestCase {
         ->willReturnMap($getPath);
     }
     $themeList = [];
-    foreach ($themeInfo as $info) {
+    foreach ($themeInfo as $name => $info) {
       $extension = $this->createMock('\Drupal\Core\Extension\Extension');
       $extension->method('getName')->willReturn($info['name']);
       $extension->method('getType')->willReturn('theme');
-      $themeList[] = $extension;
-    }
-    $valueMap = [];
-    foreach (array_keys($themeInfo) as $themeName) {
-      $valueMap[] = [$themeList, $themeName, $getBaseThemes[$themeName]];
+      $this->setBaseThemes($extension, $themeInfo, $name);
+
+      $themeList[$name] = $extension;
     }
     $themeExtensionList
       ->method('getList')
       ->willReturn($themeList);
-    $themeExtensionList
-      ->method('getBaseThemes')
-      ->willReturnMap($valueMap);
     if (!empty($expectedWarnings)) {
       $this->loggerChannel
         ->expects($this->exactly(count($expectedWarnings)))
@@ -826,11 +966,23 @@ class ComponentsRegistryTest extends UnitTestCase {
           ['activeTheme', 'themes/contrib/activeTheme'],
           ['baseTheme', 'themes/contrib/baseTheme'],
         ],
-        'getBaseThemes' => [
-          'activeTheme' => ['baseTheme' => 'Base theme'],
-          'baseTheme' => [],
-        ],
         'expected' => [
+          '$moduleNamespaces' => [
+            'components' => [
+              'modules/contrib/weight2/path1',
+              'modules/contrib/weight2/path2',
+              'modules/contrib/weight1/path1',
+              'modules/contrib/weight1/path2',
+              'modules/contrib/components/path1',
+              'modules/contrib/components/path2',
+            ],
+            'baseTheme' => [
+              'modules/contrib/weight2/path3',
+              'modules/contrib/weight2/path4',
+              'modules/contrib/weight1/path3',
+              'modules/contrib/weight1/path4',
+            ],
+          ],
           'activeTheme' => [
             'components' => [
               'themes/contrib/activeTheme/path1',
@@ -916,11 +1068,8 @@ class ComponentsRegistryTest extends UnitTestCase {
           ['components', 'modules/contrib/components'],
           ['zen', 'themes/contrib/zen'],
         ],
-        'getBaseThemes' => [
-          'classy' => [],
-          'zen' => [],
-        ],
         'expected' => [
+          '$moduleNamespaces' => [],
           'zen' => [
             'zen' => [
               'themes/contrib/zen/zen-namespace',
@@ -977,11 +1126,10 @@ class ComponentsRegistryTest extends UnitTestCase {
           ['components', 'modules/contrib/components'],
           ['zen', 'themes/contrib/zen'],
         ],
-        'getBaseThemes' => [
-          'classy' => [],
-          'zen' => [],
-        ],
         'expected' => [
+          '$moduleNamespaces' => [
+            'components' => ['modules/contrib/components/default-namespace'],
+          ],
           'zen' => [
             'zen' => [
               'themes/contrib/zen/zen-namespace',
@@ -1041,11 +1189,8 @@ class ComponentsRegistryTest extends UnitTestCase {
           ['components', 'modules/contrib/components'],
           ['zen', 'themes/contrib/zen'],
         ],
-        'getBaseThemes' => [
-          'classy' => [],
-          'zen' => [],
-        ],
         'expected' => [
+          '$moduleNamespaces' => [],
           'zen' => [
             'zen' => [
               'themes/contrib/zen/zen-namespace',
@@ -1071,24 +1216,21 @@ class ComponentsRegistryTest extends UnitTestCase {
    *   The array returned by extensionList::getAllInstalledInfo().
    * @param array $getPath
    *   The PHPUnit returnValueMap array for extensionList::getPath().
-   * @param null|array $getBaseThemes
-   *   A theme-name-keyed array of return values for
-   *   themeExtensionList::getBaseThemes().
    * @param array $expected
    *   The expected result.
    *
    * @throws \ReflectionException
    *
-   * @covers ::normalizeExtensionListInfo
-   *
    * @dataProvider providerTestNormalizeExtensionListInfo
    */
-  public function testNormalizeExtensionListInfo(array $getAllInstalledInfo, array $getPath, ?array $getBaseThemes, array $expected) {
+  #[DataProvider('providerTestNormalizeExtensionListInfo') /* @phpstan-ignore attribute.notFound */]
+  public function testNormalizeExtensionListInfo(array $getAllInstalledInfo, array $getPath, array $expected) {
     $this->systemUnderTest = $this->newSystemUnderTest();
+    $isThemeList = isset($getAllInstalledInfo['activeTheme']);
 
     // Mock the method param with the test data.
     $extensionList = $this->createMock(
-      is_null($getBaseThemes)
+      !$isThemeList
         ? '\Drupal\Core\Extension\ModuleExtensionList'
         : '\Drupal\Core\Extension\ThemeExtensionList'
     );
@@ -1100,24 +1242,19 @@ class ComponentsRegistryTest extends UnitTestCase {
         ->method('getPath')
         ->willReturnMap($getPath);
     }
-    if (!is_null($getBaseThemes)) {
+    if ($isThemeList) {
       $themeList = [];
-      foreach ($getAllInstalledInfo as $info) {
+      foreach ($getAllInstalledInfo as $name => $info) {
         $extension = $this->createMock('\Drupal\Core\Extension\Extension');
         $extension->method('getName')->willReturn($info['name']);
         $extension->method('getType')->willReturn('theme');
-        $themeList[] = $extension;
-      }
-      $valueMap = [];
-      foreach ($getAllInstalledInfo as $themeName => $info) {
-        $valueMap[] = [$themeList, $themeName, $getBaseThemes[$themeName]];
+        $this->setBaseThemes($extension, $getAllInstalledInfo, $name);
+
+        $themeList[$name] = $extension;
       }
       $extensionList
         ->method('getList')
         ->willReturn($themeList);
-      $extensionList
-        ->method('getBaseThemes')
-        ->willReturnMap($valueMap);
     }
 
     // Use reflection to test a protected method.
@@ -1142,7 +1279,6 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [],
-        'getBaseThemes' => NULL,
         'expected' => [
           'system' => [
             'extensionInfo' => [
@@ -1163,7 +1299,6 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [],
-        'getBaseThemes' => NULL,
         'expected' => [
           'system' => [
             'extensionInfo' => [
@@ -1189,7 +1324,6 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [],
-        'getBaseThemes' => NULL,
         'expected' => [
           'harriet_tubman' => [
             'extensionInfo' => [
@@ -1225,7 +1359,6 @@ class ComponentsRegistryTest extends UnitTestCase {
         'getPath' => [
           ['phillis_wheatley', 'modules/contrib/phillis_wheatley'],
         ],
-        'getBaseThemes' => NULL,
         'expected' => [
           'phillis_wheatley' => [
             'extensionInfo' => [
@@ -1256,7 +1389,6 @@ class ComponentsRegistryTest extends UnitTestCase {
           ],
         ],
         'getPath' => [],
-        'getBaseThemes' => NULL,
         'expected' => [
           'components' => [
             'extensionInfo' => [
@@ -1306,16 +1438,6 @@ class ComponentsRegistryTest extends UnitTestCase {
           ['activeTheme', 'themes/contrib/activeTheme'],
           ['baseTheme', 'themes/contrib/baseTheme'],
           ['basestTheme', 'themes/contrib/basestTheme'],
-        ],
-        'getBaseThemes' => [
-          'activeTheme' => [
-            'basestTheme' => 'Basest Theme',
-            'baseTheme' => 'Base Theme',
-          ],
-          'baseTheme' => [
-            'basestTheme' => 'Basest Theme',
-          ],
-          'basestTheme' => [],
         ],
         'expected' => [
           'activeTheme' => [
@@ -1385,15 +1507,6 @@ class ComponentsRegistryTest extends UnitTestCase {
           ['activeTheme', 'themes/contrib/activeTheme'],
           ['baseTheme', 'themes/contrib/baseTheme'],
         ],
-        'getBaseThemes' => [
-          'activeTheme' => [
-            'basestTheme' => NULL,
-            'baseTheme' => 'Base Theme',
-          ],
-          'baseTheme' => [
-            'basestTheme' => NULL,
-          ],
-        ],
         'expected' => [
           'activeTheme' => [
             'extensionInfo' => [
@@ -1435,10 +1548,9 @@ class ComponentsRegistryTest extends UnitTestCase {
    *
    * @throws \ReflectionException
    *
-   * @covers ::findProtectedNamespaces
-   *
    * @dataProvider providerTestFindProtectedNamespaces
    */
+  #[DataProvider('providerTestFindProtectedNamespaces') /* @phpstan-ignore attribute.notFound */]
   public function testFindProtectedNamespaces(array $extensionInfo, array $expected): void {
     // Test that hook_protected_twig_namespaces_alter() is called for modules.
     $moduleHandler = $this->createMock('\Drupal\Core\Extension\ModuleHandlerInterface');
@@ -1532,6 +1644,78 @@ class ComponentsRegistryTest extends UnitTestCase {
             'package' => '',
           ],
         ],
+      ],
+    ];
+  }
+
+  /**
+   * Test getting a template from the default theme when it's not active.
+   *
+   * This covers the use case where we need a template from the default theme,
+   * but we're looking at content in the admin theme. Such configuration is
+   * possible, e.g. when using a views preview of rendered content.
+   *
+   * @throws \ReflectionException
+   *
+   * @dataProvider providerTestGetTemplateFromDefaultNonActiveTheme
+   */
+  #[DataProvider('providerTestGetTemplateFromDefaultNonActiveTheme') /* @phpstan-ignore attribute.notFound */]
+  public function testGetTemplateFromDefaultNonActiveTheme(string $name, string $activeTheme, string $defaultTheme, array $registry, bool $needsLoad, ?string $expected): void {
+    $cacheBackend = $this->createMock('\Drupal\Core\Cache\CacheBackendInterface');
+    if ($needsLoad) {
+      $cacheBackend
+        ->method('get')
+        ->willReturnOnConsecutiveCalls((object) ['data' => $registry]);
+    }
+
+    $configObject = $this->createMock('\Drupal\Core\Config\ImmutableConfig');
+    $configObject
+      ->method('get')
+      ->willReturn($defaultTheme);
+    $configFactory = $this->createMock('\Drupal\Core\Config\ConfigFactoryInterface');
+    $configFactory
+      ->method('get')
+      ->with('system.theme')
+      ->willReturn($configObject);
+    $themeManager = $this->createMock('\Drupal\Core\Theme\ThemeManagerInterface');
+    $activeThemeObject = $this->createMock('\Drupal\Core\Theme\ActiveTheme');
+    $activeThemeObject
+      ->method('getName')
+      ->willReturn($activeTheme);
+    $themeManager
+      ->method('getActiveTheme')
+      ->willReturn($activeThemeObject);
+
+    $this->systemUnderTest = $this->newSystemUnderTest(NULL, NULL, NULL, $themeManager, $cacheBackend, NULL, $configFactory);
+
+    if (!$needsLoad) {
+      $this->setProtectedProperty($this->systemUnderTest, 'registry', $registry);
+    }
+
+    $result = $this->systemUnderTest->getTemplate($name);
+
+    $this->assertEquals($expected, $result);
+  }
+
+  /**
+   * Provides test data to ::testGetTemplate().
+   *
+   * @see testGetTemplate()
+   */
+  public static function providerTestGetTemplateFromDefaultNonActiveTheme(): array {
+    return [
+      'gets the template from registry' => [
+        'name' => '@components/tubman.twig',
+        'activeTheme' => 'activeTheme',
+        'defaultTheme' => 'defaultTheme',
+        'registry' => [
+          'activeTheme' => [],
+          'defaultTheme' => [
+            '@components/tubman.twig' => 'themes/defaultTheme/components/tubman.twig',
+          ],
+        ],
+        'needsLoad' => FALSE,
+        'expected' => 'themes/defaultTheme/components/tubman.twig',
       ],
     ];
   }

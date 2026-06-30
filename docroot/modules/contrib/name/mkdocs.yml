@@ -1,0 +1,100 @@
+site_name: Name Field - Developer Documentation
+site_description: API documentation for the Drupal Name module
+site_author: Name Field Maintainers
+site_url: https://drupal.org/project/name
+
+repo_url: https://git.drupalcode.org/project/name
+repo_name: drupal/name
+
+theme:
+  name: material
+  logo: logo.png
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - API Overview: api/overview.md
+  - Services:
+      - Overview: services/index.md
+      - Formatter: services/formatter.md
+      - Parser: services/parser.md
+      - Generator: services/generator.md
+      - Autocomplete: services/autocomplete.md
+      - Options Provider: services/options-provider.md
+  - Hooks:
+      - Widget Layouts: hooks/widget-layouts.md
+  - Classes: classes/index.md
+  - Examples:
+      - Overview: examples/index.md
+      - Widget: examples/widget.md
+      - Formatter: examples/formatter.md
+  - Extending: extending/index.md
+  - Integrations:
+      - Devel: integrations/devel.md
+      - Diff: integrations/diff.md
+      - Feeds: integrations/feeds.md
+      - Help: integrations/help.md
+      - Inline Form Errors: integrations/inline-form-errors.md
+      - Migrate: integrations/migrate.md
+      - Taxonomy: integrations/taxonomy.md
+      - Token: integrations/token.md
+      - Views: integrations/views.md
+  - Thank You: thank-you.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      extend_pygments_lang:
+        - name: php-inline
+          lang: php
+          options:
+            startinline: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+  - attr_list
+  - md_in_html
+
+plugins:
+  - search
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/drupal
+      link: https://www.drupal.org/project/name
+      name: Drupal.org Project Page
+    - icon: fontawesome/brands/gitlab
+      link: https://git.drupalcode.org/project/name
+      name: GitLab Repository

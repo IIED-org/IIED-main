@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Drupal\Tests\field_layout\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests using field layout for entity displays.
- *
- * @group field_layout
  */
+#[Group('field_layout')]
+#[IgnoreDeprecations]
+#[RunTestsInSeparateProcesses]
 class FieldLayoutTest extends BrowserTestBase {
 
   /**
@@ -91,7 +95,7 @@ class FieldLayoutTest extends BrowserTestBase {
    * @return string[]
    *   An array of region titles.
    */
-  protected function getRegionTitles() {
+  protected function getRegionTitles(): array {
     $region_titles = [];
     $region_title_elements = $this->getSession()->getPage()->findAll('css', '.region-title td');
     /** @var \Behat\Mink\Element\NodeElement[] $region_title_elements */

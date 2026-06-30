@@ -31,7 +31,7 @@ node_modules
 
 # Dev mode: don't include output css 
 tailwind.css
-# styles.css
+styles.css
 
 # Remove flexslider pending review
 docroot/libraries/flexslider
@@ -39,3 +39,6 @@ docroot/libraries/flexslider
 # Ignore environment-specific .htaccess
 .htaccess
 .DS_Store
+
+# Drupal 11: ignore /vendor directory
+/vendor/

@@ -159,7 +159,7 @@ class CacheContextsManager {
    *   A set of cache context tokens.
    *
    * @return string[]
-   *   A representative subset of the given set of cache context tokens..
+   *   A representative subset of the given set of cache context tokens.
    */
   public function optimizeTokens(array $context_tokens) {
     $optimized_content_tokens = [];
@@ -320,7 +320,7 @@ class CacheContextsManager {
     try {
       $this->validateTokens($context_tokens);
     }
-    catch (\LogicException $e) {
+    catch (\LogicException) {
       return FALSE;
     }
 

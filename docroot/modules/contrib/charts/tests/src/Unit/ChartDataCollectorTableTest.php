@@ -30,7 +30,8 @@ class ChartDataCollectorTableTest extends UnitTestCase {
   protected function setUp(): void {
     parent::setUp();
     $container = new ContainerBuilder();
-
+    $element_info_manager = $this->prophesize('Drupal\Core\Render\ElementInfoManagerInterface');
+    $container->set('plugin.manager.element_info', $element_info_manager->reveal());
     \Drupal::setContainer($container);
 
     $configuration = [];
@@ -84,7 +85,7 @@ class ChartDataCollectorTableTest extends UnitTestCase {
   }
 
   /**
-   * Tests processDataCollectorTable() when .
+   * Tests processDataCollectorTable().
    *
    * @covers ::processDataCollectorTable
    */

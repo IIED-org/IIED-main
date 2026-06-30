@@ -1,7 +1,8 @@
 global-styling:
   version: 5.1
   css:
-    base:
+    theme:
+      dist/fonts.css: {}
       dist/styles.css: { minified: true }
 alpine:
   js:

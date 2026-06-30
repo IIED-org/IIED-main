@@ -54,7 +54,7 @@ abstract class RendererBase extends EntityTranslationRendererBase {
   }
 
   /**
-  * Renders entity data.
+   * Renders entity data.
    *
    * @param \Drupal\views\ResultRow $row
    *   A single row of the query result.

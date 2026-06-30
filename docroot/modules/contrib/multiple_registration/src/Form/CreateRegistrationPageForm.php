@@ -4,11 +4,14 @@ namespace Drupal\multiple_registration\Form;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\ProxyClass\Routing\RouteBuilder;
+use Drupal\Core\Routing\RouteBuilderInterface;
 use Drupal\multiple_registration\Controller\MultipleRegistrationController;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -55,13 +58,13 @@ class CreateRegistrationPageForm extends ConfigFormBase {
    *   The multiple registration controller.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cacheBackend
    *   The cacheBackend service.
-   * @param \Drupal\Core\ProxyClass\Routing\RouteBuilder $routerBuilder
+   * @param \Drupal\Core\Routing\RouteBuilderInterface $routerBuilder
    *   The routerBuilder service.
    * @param \Drupal\Core\Entity\EntityDisplayRepository $entityDisplayRepository
    *   EntityDisplayRepository service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, MultipleRegistrationController $multipleRegistrationController, CacheBackendInterface $cacheBackend, RouteBuilder $routerBuilder, EntityDisplayRepository $entityDisplayRepository) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, MultipleRegistrationController $multipleRegistrationController, CacheBackendInterface $cacheBackend, RouteBuilderInterface $routerBuilder, EntityDisplayRepository $entityDisplayRepository, TypedConfigManagerInterface $typedConfigManager) {
+    parent::__construct($config_factory, $typedConfigManager);
     $this->multipleRegistrationController = $multipleRegistrationController;
     $this->cacheRender = $cacheBackend;
     $this->routeBuilder = $routerBuilder;
@@ -77,7 +80,8 @@ class CreateRegistrationPageForm extends ConfigFormBase {
       $container->get('multiple_registration.controller_service'),
       $container->get('cache.render'),
       $container->get('router.builder'),
-      $container->get('entity_display.repository')
+      $container->get('entity_display.repository'),
+      $container->get('config.typed')
     );
   }
 
@@ -104,7 +108,8 @@ class CreateRegistrationPageForm extends ConfigFormBase {
     if (!isset($rid)) {
       return FALSE;
     }
-    $roles = user_role_names();
+    $roles = Role::loadMultiple();
+    $roles = array_map(fn(RoleInterface $role) => $role->label(), $roles);
     if (!isset($roles[$rid])) {
       return FALSE;
     }
@@ -188,17 +193,14 @@ class CreateRegistrationPageForm extends ConfigFormBase {
     $formModeRegister = $form_state->getValue('multiple_registration_form_mode_register_' . $rid);
     $formModeEdit = $form_state->getValue('multiple_registration_form_mode_edit_' . $rid);
     $data = [
-      $rid => [
-        'path' => $alias,
-        'url' => $source,
-        'redirect_path' => $redirectPath,
-        'hidden' => $isHidden,
-        'form_mode_register' => $formModeRegister,
-        'form_mode_edit' => $formModeEdit,
-      ],
+      'path'               => $alias,
+      'url'                => $source,
+      'redirect_path'      => $redirectPath,
+      'hidden'             => $isHidden,
+      'form_mode_register' => $formModeRegister,
+      'form_mode_edit'     => $formModeEdit,
     ];
-    $config
-      ->set($rid, array_merge($config->getOriginal() ?? [], $data[$rid]))
+    $config->set($rid, $data)
       ->save();
     $this->multipleRegistrationController->addRegisterPageAlias($source, $alias);
     $this->routeBuilder->rebuild();

@@ -14,14 +14,14 @@ use Drupal\Core\Form\FormStateInterface;
 class TestForm extends FormBase {
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'layout_paragraphs_test_form';
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Intentionally named "title" to test for conflict with node title.
@@ -39,7 +39,7 @@ class TestForm extends FormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
   }

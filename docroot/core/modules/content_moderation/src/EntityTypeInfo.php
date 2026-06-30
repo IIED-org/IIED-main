@@ -263,8 +263,8 @@ class EntityTypeInfo implements ContainerInjectionInterface {
 
     $fields = [];
     $fields['moderation_state'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Moderation state'))
-      ->setDescription(t('The moderation state of this piece of content.'))
+      ->setLabel($this->t('Moderation state'))
+      ->setDescription($this->t('The moderation state of this piece of content.'))
       ->setComputed(TRUE)
       ->setClass(ModerationStateFieldItemList::class)
       ->setDisplayOptions('view', [
@@ -337,7 +337,7 @@ class EntityTypeInfo implements ContainerInjectionInterface {
     if ($form_object instanceof BundleEntityFormBase) {
       $config_entity = $form_object->getEntity();
       $bundle_of = $config_entity->getEntityType()->getBundleOf();
-      if ($bundle_of
+      if (!$config_entity->isNew() && $bundle_of
           && ($bundle_of_entity_type = $this->entityTypeManager->getDefinition($bundle_of))
           && $this->moderationInfo->shouldModerateEntitiesOfBundle($bundle_of_entity_type, $config_entity->id())) {
         $this->entityTypeManager->getHandler($bundle_of, 'moderation')->enforceRevisionsBundleFormAlter($form, $form_state, $form_id);

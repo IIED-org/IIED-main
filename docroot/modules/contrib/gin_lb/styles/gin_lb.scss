@@ -34,6 +34,7 @@ div[data-off-canvas-main-canvas] {
 @import "components/button";
 @import "components/toolbar";
 @import "components/top-bar";
+@import "components/toolbar_secondary";
 @import "components/colorwidget";
 @import "components/messages";
 @import "components/preview-regions";
@@ -54,3 +55,4 @@ div[data-off-canvas-main-canvas] {
 @import "components/canvas-form";
 @import "components/pager";
 @import "components/image-preview";
+@import "layout/classic_toolbar";

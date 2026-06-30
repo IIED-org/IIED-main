@@ -24,6 +24,8 @@ class ReadOnlyModeTest extends BrowserTestBase {
    */
   protected static $modules = ['readonlymode'];
 
+  /**
+   * {@inheritdoc} */
   protected $profile = 'minimal';
 
   /**

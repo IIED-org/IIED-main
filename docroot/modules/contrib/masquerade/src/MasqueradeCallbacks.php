@@ -32,7 +32,7 @@ class MasqueradeCallbacks implements TrustedCallbackInterface {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\masquerade\Masquerade $masquerade
-   *   The masuerade.
+   *   The masquerade.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, Masquerade $masquerade) {
     $this->entityTypeManager = $entity_type_manager;
@@ -75,7 +75,7 @@ class MasqueradeCallbacks implements TrustedCallbackInterface {
    * Lazy builder callback for switch-back link.
    *
    * @return array|string
-   *   Render array or an emty string.
+   *   Render array or an empty string.
    */
   public function renderSwitchBackLink() {
     if ($this->masquerade->isMasquerading()) {

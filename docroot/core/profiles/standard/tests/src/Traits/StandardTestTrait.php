@@ -6,7 +6,6 @@ namespace Drupal\Tests\standard\Traits;
 
 use Drupal\ckeditor5\Plugin\Editor\CKEditor5;
 use Drupal\Component\Utility\Html;
-use Drupal\contact\Entity\ContactForm;
 use Drupal\Core\Url;
 use Drupal\dynamic_page_cache\EventSubscriber\DynamicPageCacheSubscriber;
 use Drupal\editor\Entity\Editor;
@@ -44,6 +43,7 @@ trait StandardTestTrait {
 
     // Test anonymous user can access 'Main navigation' block.
     $this->adminUser = $this->drupalCreateUser([
+      'administer nodes',
       'administer blocks',
       'administer block content',
       'post comments',
@@ -93,6 +93,15 @@ trait StandardTestTrait {
     $this->drupalGet('rss.xml');
     $this->assertSession()->responseContains('Foobar');
     $this->assertSession()->responseNotContains('Then she picked out two somebodies, Sally and me');
+
+    // Test promote and sticky fields are hidden by default for the page content
+    // type and visible for the article content type.
+    $this->drupalGet('node/add/page');
+    $this->assertSession()->fieldNotExists('promote[value]');
+    $this->assertSession()->fieldNotExists('sticky[value]');
+    $this->drupalGet('node/add/article');
+    $this->assertSession()->fieldExists('promote[value]');
+    $this->assertSession()->fieldExists('sticky[value]');
 
     // Ensure block body exists.
     $this->drupalGet('block/add');
@@ -147,10 +156,6 @@ trait StandardTestTrait {
     \Drupal::service('module_installer')->uninstall(['editor', 'ckeditor5']);
     $this->rebuildContainer();
     \Drupal::service('module_installer')->install(['editor']);
-    /** @var \Drupal\contact\ContactFormInterface $contact_form */
-    $contact_form = ContactForm::load('feedback');
-    $recipients = $contact_form->getRecipients();
-    $this->assertEquals(['simpletest@example.com'], $recipients);
 
     $role = Role::create([
       'id' => 'admin_theme',
@@ -192,18 +197,13 @@ trait StandardTestTrait {
     foreach (ImageStyle::loadMultiple() as $style) {
       $effects = $style->getEffects()->getInstanceIds();
       $last = $style->getEffects()->get(end($effects));
-      $this->assertSame('image_convert', $last->getConfiguration()['id']);
+      $this->assertSame('image_convert_avif', $last->getConfiguration()['id']);
       $this->assertSame('webp', $last->getConfiguration()['data']['extension']);
     }
 
     // Verify certain routes' responses are cacheable by Dynamic Page Cache, to
     // ensure these responses are very fast for authenticated users.
     $this->drupalLogin($this->adminUser);
-    $url = Url::fromRoute('contact.site_page');
-    $this->drupalGet($url);
-    // Verify that site-wide contact page cannot be cached by Dynamic Page
-    // Cache.
-    $this->assertSession()->responseHeaderEquals(DynamicPageCacheSubscriber::HEADER, 'UNCACHEABLE (poor cacheability)');
 
     $url = Url::fromRoute('<front>');
     $this->drupalGet($url);
@@ -254,7 +254,6 @@ trait StandardTestTrait {
     $role->save();
     $this->adminUser->addRole($role->id())->save();
     $assert_session = $this->assertSession();
-    $page = $this->getSession()->getPage();
     /** @var \Drupal\media\Entity\MediaType $media_type */
     foreach (MediaType::loadMultiple() as $media_type) {
       $media_type_machine_name = $media_type->id();

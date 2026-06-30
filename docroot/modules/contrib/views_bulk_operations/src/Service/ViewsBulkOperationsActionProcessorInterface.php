@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\views_bulk_operations\Service;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;

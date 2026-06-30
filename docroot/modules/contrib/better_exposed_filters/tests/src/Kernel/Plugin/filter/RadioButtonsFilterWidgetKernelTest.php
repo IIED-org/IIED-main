@@ -52,7 +52,7 @@ class RadioButtonsFilterWidgetKernelTest extends BetterExposedFiltersKernelTestB
 
     // Check our "FIELD_BEF_INTEGER" filter is rendered as checkboxes.
     $actual = $this->xpath('//form//input[@type="checkbox" and starts-with(@name, "field_bef_integer_value")]');
-    $this->assertCount(5, $actual);
+    $this->assertCount(6, $actual);
 
     // Check our "TERM_NODE_TID_DEPTH" filter is rendered as nested checkboxes.
     $actual = $this->xpath("//form//div[contains(concat(' ',normalize-space(@class),' '),' bef-nested ')]");

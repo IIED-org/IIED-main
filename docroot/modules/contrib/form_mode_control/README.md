@@ -60,10 +60,3 @@ information, see
   Of course, the user must have the right permission for it.
   Ex. if you want to access to super_2, go to
   www.your-site.com/node/add/article?display=super_2.
-
-
-## Maintainers
-
-- Wilfrid Roze - [eme](https://www.drupal.org/u/eme)
-- Martin Anderson-Clutz - [mandclu](https://www.drupal.org/u/mandclu)
-- Dakwamine - [Dakwamine](https://www.drupal.org/u/dakwamine)

@@ -152,7 +152,7 @@ display:
           set_precision: false
           precision: 0
           decimal: .
-          format_plural: 0
+          format_plural: false
           format_plural_string: !!binary MQNAY291bnQ=
           prefix: ''
           suffix: ''
@@ -504,7 +504,7 @@ display:
           set_precision: false
           precision: 0
           decimal: .
-          format_plural: 0
+          format_plural: false
           format_plural_string: !!binary MQNAY291bnQ=
           prefix: ''
           suffix: ''
@@ -764,10 +764,10 @@ display:
         block_1: '0'
       filename: 'alltags_[date:html_datetime].csv'
       automatic_download: true
-      store_in_public_file_directory: null
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false
+      export_filesystem: public
     cache_metadata:
       max-age: -1
       contexts:
@@ -1170,7 +1170,7 @@ display:
           set_precision: false
           precision: 0
           decimal: .
-          format_plural: 0
+          format_plural: false
           format_plural_string: !!binary MQNAY291bnQ=
           prefix: ''
           suffix: ''
@@ -1235,11 +1235,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1384,6 +1379,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:
@@ -1680,6 +1676,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:
@@ -1945,7 +1942,7 @@ display:
           set_precision: false
           precision: 0
           decimal: .
-          format_plural: 0
+          format_plural: false
           format_plural_string: !!binary MQNAY291bnQ=
           prefix: ''
           suffix: ''
@@ -2021,6 +2018,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:
@@ -2290,7 +2288,7 @@ display:
           set_precision: false
           precision: 0
           decimal: .
-          format_plural: 0
+          format_plural: false
           format_plural_string: !!binary MQNAY291bnQ=
           prefix: ''
           suffix: ''
@@ -2384,15 +2382,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              publications_manager: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -2537,6 +2526,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:
@@ -2892,15 +2882,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              hh_contributor: '0'
-              hh_reviewer: '0'
-              publications_editor: '0'
-              publications_manager: '0'
-              editor: '0'
-              manager: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -2963,6 +2944,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:

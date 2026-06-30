@@ -2,11 +2,11 @@
 
 namespace Drupal\layout_builder_restrictions\Form;
 
+use Drupal\Core\Config\ConfigManager;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\layout_builder_restrictions\Plugin\LayoutBuilderRestrictionManager;
-use Drupal\Core\Config\ConfigManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * The form for the restriction plugin.
@@ -31,7 +31,7 @@ class RestrictionPluginConfigForm extends ConfigFormBase {
    */
   public function __construct(
     LayoutBuilderRestrictionManager $plugin_manager_layout_builder_restriction,
-    ConfigManager $config_manager
+    ConfigManager $config_manager,
   ) {
     $this->pluginManagerLayoutBuilderRestriction = $plugin_manager_layout_builder_restriction;
     $this->configManager = $config_manager;

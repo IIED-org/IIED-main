@@ -34,7 +34,7 @@
       const packages = ['corechart', 'gauge', 'table'];
       if (
         useMaterialDesign === 'true' &&
-        materialDesignPackages.indexOf(chartType) !== -1
+        materialDesignPackages.includes(chartType)
       ) {
         if (chartType === 'spline') {
           chartType = 'line';
@@ -74,6 +74,11 @@
         if (element.dataset.hasOwnProperty('chart')) {
           const chartId = element.id;
           const dataAttributes = contents.getData(chartId);
+          Drupal.googleCharts.charts[chartId] = {
+            options: dataAttributes.options,
+            instance: null,
+            dataTable: null,
+          };
           google.charts.setOnLoadCallback(
             Drupal.googleCharts.drawChart(
               chartId,
@@ -193,6 +198,10 @@
       const options = googleChartOptions;
       const googleChartTypeFormatted = chartType;
 
+      if (Drupal.googleCharts.charts[chartId]) {
+        Drupal.googleCharts.charts[chartId].dataTable = data;
+      }
+
       let visualizationNamespace = 'visualization';
       let visualizationClass = chartType;
       // Replace the 'Spline' chart type with 'Line'.
@@ -269,6 +278,10 @@
           chart = new google.visualization.Table(
             document.getElementById(chartId),
           );
+      }
+
+      if (Drupal.googleCharts.charts[chartId]) {
+        Drupal.googleCharts.charts[chartId].instance = chart;
       }
 
       const colorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;

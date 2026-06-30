@@ -18,12 +18,7 @@
     }
   ],
   "require": {
-    "drupal/core": "^9.3 || ^10"
-  },
-  "require-dev": {
-    "drupal/dashboards": "^2",
-    "drupal/layout_library": "dev-1.x",
-    "drupal/mini_layouts": "dev-2.0.x"
+    "drupal/core": "^10 || ^11"
   },
   "support": {
     "issues": "https://www.drupal.org/project/issues/layout_builder_restrictions",

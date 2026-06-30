@@ -4,6 +4,7 @@
 
 # Ignore compiled assets.
 # /dist/
+/dist/styles.css
 
 # Ignore lock files.
 /package-lock.json

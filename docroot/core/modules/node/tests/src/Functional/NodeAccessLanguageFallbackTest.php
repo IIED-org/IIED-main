@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Drupal\Tests\node\Functional;
 
 use Drupal\language\Entity\ConfigurableLanguage;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests that the node_access system stores the proper fallback marker.
- *
- * @group node
  */
+#[Group('node')]
+#[RunTestsInSeparateProcesses]
 class NodeAccessLanguageFallbackTest extends NodeTestBase {
 
   /**
@@ -120,10 +122,10 @@ class NodeAccessLanguageFallbackTest extends NodeTestBase {
    * @param int $count
    *   The number of rows expected by the query (equal to the translation
    *   count).
-   * @param $langcode
+   * @param string $langcode
    *   The expected language code set as the fallback property.
    */
-  public function checkRecords($count, $langcode = 'hu') {
+  public function checkRecords($count, $langcode = 'hu'): void {
     $select = \Drupal::database()
       ->select('node_access', 'na')
       ->fields('na', ['nid', 'fallback', 'langcode', 'grant_view'])

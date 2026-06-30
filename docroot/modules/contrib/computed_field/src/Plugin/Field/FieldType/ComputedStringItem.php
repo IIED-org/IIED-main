@@ -13,7 +13,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *   id = "computed_string",
  *   label = @Translation("Computed (text)"),
  *   description = @Translation("This field defines a text field whose value is computed by PHP-Code"),
- *   category = @Translation("Computed"),
+ *   category = "Computed",
  *   default_widget = "computed_string_widget",
  *   default_formatter = "computed_string"
  * )

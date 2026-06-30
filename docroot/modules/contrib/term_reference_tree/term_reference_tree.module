@@ -141,6 +141,10 @@ function template_preprocess_checkbox_tree(array &$variables) {
     $attributes['class'][] = 'term-reference-tree-select-parents';
   }
 
+  if (!empty($variables['element']['#select_all'])) {
+    $attributes['class'][] = 'term-reference-tree-select-all';
+  }
+
   if ($variables['element']['#cascading_selection'] != TermReferenceTree::CASCADING_SELECTION_NONE) {
     $attributes['class'][] = 'term-reference-tree-cascading-selection';
   }
@@ -343,7 +347,7 @@ function _term_reference_tree_get_children($tid, $vid) {
       $default_langcode,
     ], 'IN');
   }
-  
+
   $result = $query->execute();
 
   $terms = [];
@@ -422,6 +426,7 @@ function _term_reference_tree_get_options(&$terms, &$allowed, $filter) {
  * is built.
  */
 function _term_reference_tree_build_level($element, $term, $form_state, $value, $max_choices, $parent_tids, $depth) {
+  $user = \Drupal::currentUser();
   $start_minimized = TRUE;
   $leaves_only = FALSE;
   $container = [
@@ -435,7 +440,7 @@ function _term_reference_tree_build_level($element, $term, $form_state, $value, 
   $container['#level_start_minimized'] = $depth > 1 && $element['#start_minimized'] && !($term->children_selected);
 
   foreach ($term->children as $child) {
-    if ($child->status == 1) {
+    if ($child->status == 1 || $user->hasPermission('administer taxonomy')) {
       $container[$child->tid] = _term_reference_tree_build_item($element, $child, $form_state, $value, $max_choices, $parent_tids, $container, $depth);
     }
   }
@@ -461,6 +466,7 @@ function _term_reference_tree_build_item($element, $term, $form_state, $value, $
     '#term_name' => $term->name,
     '#level_start_minimized' => FALSE,
     '#select_parents' => $element['#select_parents'],
+    '#select_all' => $element['#select_all'],
     '#depth' => $depth,
   ];
 
@@ -488,7 +494,7 @@ function _term_reference_tree_build_item($element, $term, $form_state, $value, $
   else {
     $e = [
       '#type' => 'checkbox_tree_label',
-      '#value' =>  $term->name,
+      '#value' => $term->name,
     ];
   }
 
@@ -580,7 +586,7 @@ function _term_reference_tree_get_parent($tid) {
 
 /**
  * Helper function to output a single level of the term reference tree display.
- * 
+ *
  * @throws \Drupal\Core\Entity\EntityMalformedException
  */
 function _term_reference_tree_output_list_level(&$element, &$tree) {
@@ -608,7 +614,7 @@ function _term_reference_tree_output_list_level(&$element, &$tree) {
         }
 
         $class = $item['selected'] ? 'selected' : 'unselected';
-        
+
         $tree_element['#items'][] = [
           '#type' => 'link',
           '#title' => $term->label(),

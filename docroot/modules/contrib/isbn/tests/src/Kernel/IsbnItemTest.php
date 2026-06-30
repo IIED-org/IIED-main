@@ -8,7 +8,6 @@ use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Tests\field\Kernel\FieldKernelTestBase;
-use PHPUnit\Framework\AssertionFailedError;
 
 /**
  * Tests the isbn field type.
@@ -84,11 +83,10 @@ class IsbnItemTest extends FieldKernelTestBase {
    * @dataProvider isbnValidationProvider
    */
   public function testIsbnValidation($value) {
-    $this->expectException(AssertionFailedError::class);
-
     $entity = EntityTest::create();
     $entity->set('field_isbn', $value);
-    $this->entityValidateAndSave($entity);
+    $violations = $entity->validate();
+    $this->assertCount(1, $violations);
   }
 
   /**
