@@ -6,6 +6,7 @@ dependencies:
     - search_api.index.acquia_search_index
     - views.view.search
   module:
+    - search_api_solr_autocomplete
     - views
 id: search
 label: Search
@@ -32,14 +33,14 @@ suggester_settings:
         collection: ''
         person: ''
         theme: ''
-  server:
+  search_api_solr_terms:
     fields: {  }
 suggester_weights:
   live_results: 0
-  server: 0
+  search_api_solr_terms: 0
 suggester_limits:
   live_results: 10
-  server: 10
+  search_api_solr_terms: 10
 search_settings:
   'views:search':
     displays:
