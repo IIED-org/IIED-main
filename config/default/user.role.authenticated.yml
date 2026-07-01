@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - filter.format.webform_default
-    - search_api_autocomplete.search.acquia_search
+    - search_api_autocomplete.search.search
   module:
     - comment
     - contact
@@ -34,6 +34,6 @@ permissions:
   - 'setup own tfa'
   - 'skip comment approval'
   - 'use klaro'
-  - 'use search_api_autocomplete for acquia_search'
+  - 'use search_api_autocomplete for search'
   - 'use text format webform_default'
   - 'view media'
