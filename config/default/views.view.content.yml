@@ -2,6 +2,13 @@ uuid: 41332174-1bba-4cba-9211-52e3e43b628a
 langcode: en
 status: true
 dependencies:
+  config:
+    - user.role.administrator
+    - user.role.editor
+    - user.role.hh_reviewer
+    - user.role.manager
+    - user.role.publications_editor
+    - user.role.publications_manager
   module:
     - node
     - user
@@ -325,13 +332,13 @@ display:
       pager:
         type: full
         options:
+          pagination_heading_level: h4
           items_per_page: 50
           tags:
             next: 'Next ›'
             previous: '‹ Previous'
             first: '« First'
             last: 'Last »'
-          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -343,9 +350,15 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: perm
+        type: role
         options:
-          perm: 'access content overview'
+          role:
+            hh_reviewer: hh_reviewer
+            publications_editor: publications_editor
+            publications_manager: publications_manager
+            editor: editor
+            manager: manager
+            administrator: administrator
       cache:
         type: tag
       empty:
@@ -652,7 +665,18 @@ display:
           plugin_id: standard
           required: true
       show_admin_links: false
-      display_extenders: {  }
+      display_extenders:
+        matomo:
+          enabled: false
+          keyword_gets: ''
+          keyword_behavior: first
+          keyword_concat_separator: ' '
+          category_behavior: none
+          category_gets: ''
+          category_concat_separator: ' '
+          category_fallback: ''
+          category_facets: {  }
+          category_facets_concat_separator: ', '
     cache_metadata:
       max-age: 0
       contexts:
@@ -662,7 +686,7 @@ display:
         - url.query_args
         - user
         - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags: {  }
   page_1:
     id: page_1
@@ -694,5 +718,5 @@ display:
         - url.query_args
         - user
         - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags: {  }
