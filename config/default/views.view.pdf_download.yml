@@ -11,7 +11,6 @@ dependencies:
     - media
     - node
     - options
-    - user
 id: pdf_download
 label: 'PDF download'
 module: views
@@ -169,9 +168,8 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: perm
-        options:
-          perm: 'access content'
+        type: none
+        options: {  }
       cache:
         type: tag
         options: {  }
@@ -403,7 +401,18 @@ display:
       css_class: my-3
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        matomo:
+          enabled: false
+          keyword_gets: ''
+          keyword_behavior: first
+          keyword_concat_separator: ' '
+          category_behavior: none
+          category_gets: ''
+          category_concat_separator: ' '
+          category_fallback: ''
+          category_facets: {  }
+          category_facets_concat_separator: ', '
     cache_metadata:
       max-age: -1
       contexts:
@@ -412,7 +421,6 @@ display:
         - url
         - user
         - 'user.node_grants:view'
-        - user.permissions
       tags:
         - 'config:field.storage.media.field_media_document'
         - 'config:field.storage.node.field_media'
@@ -432,7 +440,6 @@ display:
         - url
         - user
         - 'user.node_grants:view'
-        - user.permissions
       tags:
         - 'config:field.storage.media.field_media_document'
         - 'config:field.storage.node.field_media'

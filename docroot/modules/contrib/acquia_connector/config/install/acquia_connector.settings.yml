@@ -1,5 +1,0 @@
-debug: false
-cron_interval: 30
-cron_interval_override: 0
-hide_signup_messages: 0
-third_party_settings: {  }

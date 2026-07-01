@@ -1,4 +1,4 @@
-uuid: 0cfd6a49-2413-407b-abdd-c8dfe48bc47a
+uuid: 6d7512f7-6ae5-4094-b4f1-1edc82871fef
 langcode: en
 status: true
 dependencies:
@@ -6,6 +6,7 @@ dependencies:
     - search_api.index.acquia_search_index
     - views.view.search
   module:
+    - search_api_solr_autocomplete
     - views
 id: search
 label: Search
@@ -22,6 +23,7 @@ suggester_settings:
         article: ''
         blog: ''
         event: ''
+        impact_story: ''
         long_read: ''
         news: ''
         page: ''
@@ -31,9 +33,14 @@ suggester_settings:
         collection: ''
         person: ''
         theme: ''
+  search_api_solr_terms:
+    fields: {  }
 suggester_weights:
   live_results: 0
-suggester_limits: {  }
+  search_api_solr_terms: 0
+suggester_limits:
+  live_results: 10
+  search_api_solr_terms: 10
 search_settings:
   'views:search':
     displays:
@@ -43,6 +50,6 @@ options:
   limit: 10
   min_length: 2
   show_count: false
-  delay: 500
+  delay: null
   submit_button_selector: ':submit'
   autosubmit: true
