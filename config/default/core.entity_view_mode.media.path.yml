@@ -1,0 +1,11 @@
+uuid: fd0b1fc7-c477-429e-b84f-18276d77b6af
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.path
+label: Path
+description: null
+targetEntityType: media
+cache: true

@@ -313,6 +313,9 @@
       "drupal/pdfpreview": {
         "3344262 test for empty alt": "patches/3344262-pdfpreview-missing-alt-text.patch"
        },
+       "drupal/views_data_export": {
+        "3200974": "https://www.drupal.org/files/issues/2021-03-01/allow-configurable-filesystems_3200974-6.patch"
+       },
       "drupal/webform_shs": {
         "3435681 d11 compatibility":"https://www.drupal.org/files/issues/2024-03-25/webform_shs.2.0.0-beta1.rector.patch"
       }

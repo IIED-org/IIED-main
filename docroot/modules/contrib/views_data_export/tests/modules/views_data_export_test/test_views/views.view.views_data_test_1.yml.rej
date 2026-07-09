@@ -1,0 +1,11 @@
+--- tests/modules/views_data_export_test/test_views/views.view.views_data_test_1.yml
++++ tests/modules/views_data_export_test/test_views/views.view.views_data_test_1.yml
+@@ -208,7 +208,7 @@ display:
+               company: ''
+       export_method: batch
+       export_batch_size: 4
+-      store_in_public_file_directory: true
++      export_filesystem: public
+       redirect_to_display: none
+       custom_redirect_path: false
+       include_query_params: false

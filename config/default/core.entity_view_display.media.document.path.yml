@@ -1,0 +1,40 @@
+uuid: 9cafb9da-c98d-4ab4-b717-6c8b60a81620
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.path
+    - field.field.media.document.field_media_document
+    - field.field.media.document.field_pdf_pages
+    - field.field.media.document.field_size
+    - media.type.document
+  module:
+    - file
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
+id: media.document.path
+targetEntityType: media
+bundle: document
+mode: path
+content:
+  field_media_document:
+    type: file_url_plain
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_pdf_pages: true
+  field_size: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
