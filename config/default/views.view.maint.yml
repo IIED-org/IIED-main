@@ -3143,7 +3143,7 @@ display:
       automatic_download: true
       export_method: batch
       export_batch_size: 500
-      export_filesystem: private
+      export_filesystem: public
       custom_redirect_path: false
       redirect_to_display: page_14
       include_query_params: true
