@@ -11,6 +11,7 @@ use Drupal\facets\Entity\Facet;
 use Drupal\facets\FacetInterface;
 use Drupal\facets_exposed_filters\Plugin\views\filter\FacetsFilter;
 use Drupal\facets_pretty_paths\Coder\CoderPluginManager;
+use Drupal\views\ContextualLinksHelper;
 use Drupal\views\Routing\ViewPageController as CoreViewPageController;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -64,8 +65,11 @@ class ViewPageController extends CoreViewPageController implements ContainerInje
    *   The coder plugin manager.
    * @param \Symfony\Component\HttpFoundation\Request $current_request
    *   The current request.
+   * @param \Drupal\views\ContextualLinksHelper $contextual_links_helper
+   *   The contextual links helper.
    */
-  public function __construct(CoderPluginManager $coder_plugin_manager, Request $current_request) {
+  public function __construct(CoderPluginManager $coder_plugin_manager, Request $current_request, ContextualLinksHelper $contextual_links_helper) {
+    parent::__construct($contextual_links_helper);
     $this->coderPluginManager = $coder_plugin_manager;
     $this->currentRequest = $current_request;
   }
@@ -76,7 +80,8 @@ class ViewPageController extends CoreViewPageController implements ContainerInje
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('plugin.manager.facets_pretty_paths.coder'),
-      $container->get('request_stack')->getCurrentRequest()
+      $container->get('request_stack')->getCurrentRequest(),
+      $container->get(ContextualLinksHelper::class)
     );
   }
 

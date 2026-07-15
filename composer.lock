@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2c6d8b2ebd8cba172f7f11a0dfda961",
+    "content-hash": "4d9453e6fefe0f6553204ae93eac44da",
     "packages": [
         {
             "name": "apvarun/toastify-js",
@@ -18015,16 +18015,6 @@
                 "source": "https://github.com/wikimedia/composer-merge-plugin/tree/v2.1.0"
             },
             "time": "2023-04-15T19:07:00+00:00"
-        },
-        {
-            "name": "woocommerce/flexslider",
-            "version": "2.7.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/woocommerce/FlexSlider.git",
-                "reference": "2.7.2"
-            },
-            "type": "drupal-library"
         }
     ],
     "packages-dev": [
