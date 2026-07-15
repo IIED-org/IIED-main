@@ -298,7 +298,7 @@
       },
       "drupal/pdfpreview": {
         "3344262 test for empty alt": "patches/3344262-pdfpreview-missing-alt-text.patch"
-       },
+      },
       "drupal/webform_shs": {
         "3435681 d11 compatibility":"https://www.drupal.org/files/issues/2024-03-25/webform_shs.2.0.0-beta1.rector.patch"
       }
