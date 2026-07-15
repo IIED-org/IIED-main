@@ -3,6 +3,7 @@
 namespace Drupal\svg_image_responsive\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\responsive_image\Plugin\Field\FieldFormatter\ResponsiveImageFormatter;
 use Drupal\svg_image\Plugin\Field\FieldFormatter\SvgImageFormatterTrait;
@@ -37,11 +38,11 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
   private $logger;
 
   /**
-   * File Url Generator service.
+   * The file URL generator.
    *
    * @var \Drupal\Core\File\FileUrlGeneratorInterface
    */
-  protected $fileUrlGenerator;
+  protected FileUrlGeneratorInterface $fileUrlGenerator;
 
   /**
    * {@inheritdoc}

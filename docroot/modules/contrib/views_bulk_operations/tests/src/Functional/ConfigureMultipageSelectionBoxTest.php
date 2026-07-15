@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Drupal\Tests\views_bulk_operations\Functional;
 
 use Drupal\Core\Url;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Test that we can configure the Multi - page Selection Box.
- *
- * @group views_bulk_operations
  */
+#[Group('views_bulk_operations')]
 final class ConfigureMultipageSelectionBoxTest extends ConfigureSelectionInfoTestBase {
 
   /**
@@ -40,6 +41,7 @@ final class ConfigureMultipageSelectionBoxTest extends ConfigureSelectionInfoTes
    *
    * @dataProvider dataShowMultipageSelectionBox
    */
+  #[DataProvider('dataShowMultipageSelectionBox')]
   public function testShowMultipageSelectionBox(string $settingValue, int $countWhenZeroResults, int $countWhen1PageOfResults, int $countWhen2PageOfResults): void {
     // Setup: Always show the Select All Results checkbox in this test, to
     // demonstrate its independence from the Multipage Selection Box setting.

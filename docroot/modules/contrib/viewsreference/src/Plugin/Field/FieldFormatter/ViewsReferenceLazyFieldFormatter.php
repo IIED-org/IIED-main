@@ -107,6 +107,7 @@ class ViewsReferenceLazyFieldFormatter extends FormatterBase implements TrustedC
             $parent_field_name,
             $parent_revision_id,
             $delta,
+            $langcode,
           ],
         ],
         '#create_placeholder' => TRUE,
@@ -148,8 +149,10 @@ class ViewsReferenceLazyFieldFormatter extends FormatterBase implements TrustedC
    *   The parent revision ID.
    * @param int|null $delta
    *   The field item delta.
+   * @param string|null $parent_entity_langcode
+   *   The langcode the parent entity was rendered in.
    */
-  public static function lazyBuilder(string $view_name, string $display_id, string $data, string $enabled_settings, bool $plugin_types, ?string $parent_entity_type, ?string $parent_entity_id, ?string $parent_field_name, ?string $parent_revision_id, ?int $delta): array {
+  public static function lazyBuilder(string $view_name, string $display_id, string $data, string $enabled_settings, bool $plugin_types, ?string $parent_entity_type, ?string $parent_entity_id, ?string $parent_field_name, ?string $parent_revision_id, ?int $delta, ?string $parent_entity_langcode = NULL): array {
     // Double-check that a display ID has been selected.
     if (!$display_id) {
       return [];
@@ -175,6 +178,7 @@ class ViewsReferenceLazyFieldFormatter extends FormatterBase implements TrustedC
       'enabled_settings' => $unserialized_enabled_settings,
       'parent_entity_type' => $parent_entity_type,
       'parent_entity_id' => $parent_entity_id,
+      'parent_entity_langcode' => $parent_entity_langcode,
       'parent_field_name' => $parent_field_name,
       'parent_revision_id' => $parent_revision_id,
       'field_item_delta' => $delta,

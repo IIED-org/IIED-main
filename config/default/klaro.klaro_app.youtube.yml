@@ -25,6 +25,9 @@ javascripts:
   - ytimg.com
   - doubleclick.net
 callback_code: ''
+on_init: ''
+on_accept: ''
+on_decline: ''
 wrapper_identifier: {  }
 attachments: {  }
 weight: -7

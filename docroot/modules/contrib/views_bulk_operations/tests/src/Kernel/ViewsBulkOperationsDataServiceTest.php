@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace Drupal\Tests\views_bulk_operations\Kernel;
 
 use Drupal\views\Views;
+use Drupal\views_bulk_operations\Service\ViewsBulkOperationsViewData;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @coversDefaultClass \Drupal\views_bulk_operations\Service\ViewsBulkOperationsViewData
- * @group views_bulk_operations
+ * VBO Views Data service test.
  */
+#[CoversClass(ViewsBulkOperationsViewData::class)]
+#[Group('views_bulk_operations')]
 final class ViewsBulkOperationsDataServiceTest extends ViewsBulkOperationsKernelTestBase {
 
   /**
@@ -28,8 +32,6 @@ final class ViewsBulkOperationsDataServiceTest extends ViewsBulkOperationsKernel
 
   /**
    * Tests the getEntityDefault() method.
-   *
-   * @covers ::getEntityDefault
    */
   public function testViewsBulkOperationsViewDataEntityGetter(): void {
     // Initialize and execute the test view with all items displayed.
