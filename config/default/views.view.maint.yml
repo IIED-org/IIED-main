@@ -2727,7 +2727,7 @@ display:
           type: datetime_default
           settings:
             timezone_override: ''
-            format_type: published_date
+            format_type: html_date
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -2813,7 +2813,7 @@ display:
           exclude: false
           alter:
             alter_text: false
-            text: ''
+            text: 'www.iied.org{{- field_media -}}'
             make_link: false
             path: ''
             absolute: false
@@ -2845,7 +2845,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -6044,7 +6044,7 @@ display:
           type: datetime_default
           settings:
             timezone_override: ''
-            format_type: published_date
+            format_type: html_date
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -6130,7 +6130,7 @@ display:
           exclude: false
           alter:
             alter_text: false
-            text: ''
+            text: 'www.iied.org{{- field_media -}} '
             make_link: false
             path: ''
             absolute: false
@@ -6151,7 +6151,7 @@ display:
             more_link: false
             more_link_text: ''
             more_link_path: ''
-            strip_tags: false
+            strip_tags: true
             trim: false
             preserve_tags: ''
             html: false
@@ -6162,7 +6162,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
