@@ -17,19 +17,6 @@
       "type": "composer",
       "url": "https://asset-packagist.org"
     },
-    "flexslider": {
-      "type": "package",
-      "package": {
-        "name": "woocommerce/flexslider",
-        "version": "2.7.2",
-        "type": "drupal-library",
-        "source": {
-          "url": "https://github.com/woocommerce/FlexSlider.git",
-          "type": "git",
-          "reference": "2.7.2"
-        }
-      }
-    },
     "apvarun/toastify-js": {
       "type": "package",
       "package": {
@@ -178,8 +165,7 @@
     "mglaman/composer-drupal-lenient": "^1.0",
     "npm-asset/imagesloaded": "^4.1",
     "npm-asset/masonry-layout": "^4.2",
-    "wikimedia/composer-merge-plugin": "^2.1",
-    "woocommerce/flexslider": "~2.0"
+    "wikimedia/composer-merge-plugin": "^2.1"
   },
   "require-dev": {
     "drupal/core-dev": "^11",
@@ -273,8 +259,8 @@
       "drupal/facets": {
         "Update aborted 3492410": "https://www.drupal.org/files/issues/2024-12-11/264.patch"
       },
-      "drupal/media_thumbnails": {
-        "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"
+      "drupal/facets_pretty_paths": {
+        "3608564":"https://www.drupal.org/files/issues/2026-07-14/facets_pretty_paths_contextual_links_constructor.patch"
       },
       "drupal/configurable_views_filter_block": {
         "3527929 Configurable filter-block instance ID": "https://www.drupal.org/files/issues/2025-06-02/configurable_views_filter_block-3527929-2.patch",
@@ -312,7 +298,7 @@
       },
       "drupal/pdfpreview": {
         "3344262 test for empty alt": "patches/3344262-pdfpreview-missing-alt-text.patch"
-       },
+      },
       "drupal/webform_shs": {
         "3435681 d11 compatibility":"https://www.drupal.org/files/issues/2024-03-25/webform_shs.2.0.0-beta1.rector.patch"
       }
