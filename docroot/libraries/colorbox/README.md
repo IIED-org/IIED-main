@@ -1,7 +1,27 @@
 ## About Colorbox:
-A customizable lightbox plugin for jQuery.  See the [project page](http://jacklmoore.com/colorbox/) for documentation and a demonstration, and the [FAQ](http://jacklmoore.com/colorbox/faq/) for solutions and examples to common issues.  Released under the [MIT license](http://www.opensource.org/licenses/mit-license.php).
+Colorbox is customizable lightbox plugin for jQuery.
+
+## About This Fork of Colorbox
+This is a fork of the [original Colorbox project](https://github.com/jackmoore/colorbox),
+which was archived in September 2025 when the original developer ended support for it.
+
+This fork is a commitment to maintain compatibility of Colorbox with
+evolving versions of jQuery, and to maintain its feature set as of version 1.6.4.
+We do not intend to add new features to Colorbox.
+
+* [Original project page](http://jacklmoore.com/colorbox/)
+* [Original FAQ](http://jacklmoore.com/colorbox/faq/)
+
+Released under the [MIT license](http://www.opensource.org/licenses/mit-license.php).
 
 ## Changelog:
+
+##### Version 1.7.0 - 2026/01/24
+
+* Update for compatibility with jQuery 4.
+* Remove bower.json.
+* Use terser to minify javascript.
+* Update README to describe this fork and intent for this project going forward.
 
 ##### Version 1.6.4 - 2016/05/10
 
@@ -556,7 +576,7 @@ Files Changed: jquery.colorbox.js, jquery.colorbox-min.js
 
 ##### Version 1.1.5 - April 11 2009
 * Fixed minor issues with exiting Colorbox.
- 
+
 ##### Version 1.1.4 - April 08 2009
 * Fixed a bug in the fade transition where Colorbox not close completely if instructed to close during the fade-in portion of the transition.
 
@@ -584,7 +604,7 @@ Files Changed: jquery.colorbox.js, jquery.colorbox-min.js
 * Added support for % sizing.
 * Callback option added.
 * Inline content now preserves JavaScript events, and changes made while Colorbox is open are also preserved.
-* Added 'href' setting to add the ability to set an alternative href for any anchor, or to assign the Colorbox event to non-anchors. 
+* Added 'href' setting to add the ability to set an alternative href for any anchor, or to assign the Colorbox event to non-anchors.
   Example: $('button').colorbox({'href':'process.php'})
   Example: $('a[href='http://msn.com']).colorbox({'href':'http://google.com', iframe:true});
 * Photos are now horizontally centered if they are smaller than the lightbox size.  Also vertically centered for browsers newer than IE7.
