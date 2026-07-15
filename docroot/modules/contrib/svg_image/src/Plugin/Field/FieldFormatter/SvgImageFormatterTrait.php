@@ -127,7 +127,7 @@ trait SvgImageFormatterTrait {
     // the image style.
     $element['#theme'] = 'image_formatter';
     $element['#image_style'] = NULL;
-    $element['#item_attributes'] += $attributes;
+    $element['#item_attributes'] = ($element['#item_attributes'] ?? []) + $attributes;
     if ($cacheTags) {
       $element['#cache']['tags'] = Cache::mergeTags(
         $element['#cache']['tags'],

@@ -35,6 +35,9 @@ javascripts:
   - gtag.js
   - 'https://www.googletagmanager.com/ns.html'
 callback_code: "if (consent) {\r\n  gtag('consent', 'update', {\r\n    ad_storage: 'granted',\r\n    ad_user_data: 'granted',\r\n    ad_personalization: 'granted',\r\n    analytics_storage: 'granted'\r\n  })\r\n} else {\r\n  gtag('consent', 'update', {\r\n    ad_storage: 'denied',\r\n    ad_user_data: 'denied',\r\n    ad_personalization: 'denied',\r\n    analytics_storage: 'denied'\r\n  })\r\n}"
+on_init: ''
+on_accept: ''
+on_decline: ''
 wrapper_identifier: {  }
 attachments: {  }
 weight: -8

@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Drupal\Tests\views_bulk_operations\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\views_bulk_operations\Drush\Commands\ViewsBulkOperationsCommands;
 use Drush\TestTraits\DrushTestTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @coversDefaultClass \Drupal\views_bulk_operations\Drush\Commands\ViewsBulkOperationsCommands
- * @group views_bulk_operations
+ * Test Drush commands.
  */
+#[CoversClass(ViewsBulkOperationsCommands::class)]
+#[Group('views_bulk_operations')]
 final class DrushCommandsTest extends BrowserTestBase {
   use DrushTestTrait;
 

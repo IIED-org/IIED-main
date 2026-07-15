@@ -2,6 +2,31 @@
   "name": "drupal/better_passwords",
   "description": "Attempts to ensure better passwords according to recommendations from groups like NIST.",
   "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "keywords": ["Drupal"],
+  "homepage": "https://www.drupal.org/project/better_passwords",
+  "authors": [
+    {
+      "name": "David Hunt (dnotes)",
+      "homepage": "https://www.drupal.org/u/dnotes",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Edouard Cunibil (duaelfr)",
+      "homepage": "https://www.drupal.org/u/duaelfr",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Viktor Holovachek (AstonVictor)",
+      "homepage": "https://www.drupal.org/u/astonvictor",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/better_passwords",
+    "source": "https://git.drupalcode.org/project/better_passwords"
+  },
   "require": {
     "bjeavons/zxcvbn-php": "*"
   }

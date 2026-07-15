@@ -18,7 +18,7 @@ views.field.views_bulk_operations_bulk_form:
       type: boolean
       label: 'Display action options as buttons'
     action_title:
-      type: string
+      type: label
       label: 'Title of the action selector form element'
     clear_on_exposed:
       type: boolean

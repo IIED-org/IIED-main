@@ -24,6 +24,9 @@ info_url: 'internal:/website-terms-conditions'
 privacy_policy_url: 'internal:/privacy-policy'
 javascripts: {  }
 callback_code: ''
+on_init: ''
+on_accept: ''
+on_decline: ''
 wrapper_identifier: {  }
 attachments: {  }
 weight: -9

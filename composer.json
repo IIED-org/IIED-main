@@ -205,6 +205,7 @@
       "mglaman/composer-drupal-lenient": true,
       "php-http/discovery": true,
       "phpstan/extension-installer": true,
+      "symfony/runtime": true,
       "tbachert/spi": true,
       "wikimedia/composer-merge-plugin": true
     }
@@ -280,7 +281,6 @@
         "3374162 Make it work with AJAX enabled": "https://www.drupal.org/files/issues/2023-08-17/3374162-allow-core-to-set-unique-block-ids.patch"
       },
       "drupal/core": {
-        "Media Thumbnail Formatter doesn't translate the title attribute correctly": "https://www.drupal.org/files/issues/2023-05-12/media-thumbnail-formatter-title-not-translated-3089216.patch",
         "3208030": "https://www.drupal.org/files/issues/2022-07-08/3208030_16.patch",
         "3209204": "https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch",
         "3062441": "https://www.drupal.org/files/issues/2024-03-27/3062441-patch-41.patch"

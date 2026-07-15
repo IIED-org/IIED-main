@@ -5,3 +5,5 @@ package: Views
 core_version_requirement: ^9 || ^10 || ^11
 dependencies:
   - drupal:views
+# Information added by cb 20260715
+version: "2.0"
