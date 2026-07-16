@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\views_bulk_operations\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\views_bulk_operations\WatchdogTestTrait;
 use Drupal\views_bulk_operations\Drush\Commands\ViewsBulkOperationsCommands;
 use Drush\TestTraits\DrushTestTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -17,6 +18,7 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('views_bulk_operations')]
 final class DrushCommandsTest extends BrowserTestBase {
   use DrushTestTrait;
+  use WatchdogTestTrait;
 
   private const TEST_NODE_COUNT = 15;
 
@@ -36,6 +38,7 @@ final class DrushCommandsTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    'dblog',
     'node',
     'views',
     'views_bulk_operations',
