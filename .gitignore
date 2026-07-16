@@ -3,44 +3,44 @@
 /bin/
 /drush/contrib/
 /vendor/
-/web/core/
-/web/modules/contrib/
-/web/themes/contrib/
-/web/profiles/contrib/
-/web/libraries/
+/docroot/core/
+/docroot/modules/contrib/
+/docroot/themes/contrib/
+/docroot/profiles/contrib/
+/docroot/libraries/
 
 # Ignore Drupal's file directory
-/web/sites/*/files/
+/docroot/sites/*/files/
 
 # Ignore scaffold files
 /.editorconfig
 /.gitattributes
-/web/.csslintrc
-/web/.eslintignore
-/web/.eslintrc.json
-/web/.gitignore
-/web/.ht.router.php
-/web/.htaccess
-/web/INSTALL.txt
-/web/README.md
-/web/README.txt
-/web/autoload.php
-/web/example.gitignore
-/web/index.php
-/web/modules/README.txt
-/web/profiles/README.txt
-/web/robots.txt
-/web/sites/README.txt
-/web/sites/default/default.services.yml
-/web/sites/default/default.settings.php
-/web/sites/example.settings.local.php
-/web/sites/example.sites.php
-/web/themes/README.txt
-/web/update.php
-/web/web.config
+/docroot/.csslintrc
+/docroot/.eslintignore
+/docroot/.eslintrc.json
+/docroot/.gitignore
+/docroot/.ht.router.php
+/docroot/.htaccess
+/docroot/INSTALL.txt
+/docroot/README.md
+/docroot/README.txt
+/docroot/autoload.php
+/docroot/example.gitignore
+/docroot/index.php
+/docroot/modules/README.txt
+/docroot/profiles/README.txt
+/docroot/robots.txt
+/docroot/sites/README.txt
+/docroot/sites/default/default.services.yml
+/docroot/sites/default/default.settings.php
+/docroot/sites/example.settings.local.php
+/docroot/sites/example.sites.php
+/docroot/themes/README.txt
+/docroot/update.php
+/docroot/docroot.config
 
 # Ignore local settings
-/web/sites/*/settings.local.php
+/docroot/sites/*/settings.local.php
 
 # Ignore xdebug log file genearted by lando
 xdebug.log
@@ -64,7 +64,7 @@ node_modules
 styles.css
 
 # Ignore settings.local.php for local developer ocverrides. 
-web/sites/default/settings.local.php
+docroot/sites/default/settings.local.php
 
 # Ignore IDE files
 /.env

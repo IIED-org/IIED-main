@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\views\Plugin\ViewsPluginManager;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionInterface;
@@ -71,6 +72,8 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     private readonly \Closure $invokeAll,
     #[AutowireCallable(service: EntityTypeManagerInterface::class, method: 'getDefinition', lazy: TRUE)]
     private readonly \Closure $getEntityTypeDefinition,
+    #[Autowire(service: 'plugin.manager.views.style')]
+    protected readonly ViewsPluginManager $stylePluginManager,
   ) {}
 
   /**
@@ -206,7 +209,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     // If the entity type supports translations, we need an additional sort
     // by langcode.
     $entity_type_ids = $this->viewDataService->getEntityTypeIds();
-    $entity_type_id = \count($entity_type_ids) === 1 ? $entity_type_ids[0] : NULL;
+    $entity_type_id = \count($entity_type_ids) === 1 ? \reset($entity_type_ids) : NULL;
     if ($entity_type_id !== NULL) {
       $entity_type_definition = ($this->getEntityTypeDefinition)($entity_type_id);
 
@@ -223,7 +226,7 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
 
     $this->view->setItemsPerPage($this->bulkFormData['batch_size']);
     $this->view->setCurrentPage($page);
-    $this->view->style_plugin = Views::pluginManager('style')->createInstance('default');
+    $this->view->style_plugin = $this->stylePluginManager->createInstance('default');
     $this->view->style_plugin->init($this->view, $this->view->getDisplay());
     $this->view->build();
 
@@ -347,6 +350,17 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
       $base_field_alias = $base_field;
     }
 
+    // Narrow the query to the selected base field values: add directly to a
+    // built SQL query (its root is always AND), otherwise via the query
+    // plugin's addWhere() before the rebuild (e.g. for Search API).
+    $built_query = $this->view->build_info['query'];
+    if (!($built_query instanceof SelectInterface)) {
+      if (!\method_exists($this->view->query, 'addWhere')) {
+        throw new \Exception(\sprintf('Unsupported query type: %s', $this->view->query::class));
+      }
+      $this->view->query->addWhere('views_bulk_operations', $base_field_alias, $base_field_values, 'IN');
+    }
+
     // Rebuild the view query.
     $this->view->query->build($this->view);
 
@@ -354,15 +368,10 @@ class ViewsBulkOperationsActionProcessor implements ViewsBulkOperationsActionPro
     // query. Give those modules the opportunity to alter the query again.
     $this->view->query->alter($this->view);
 
-    if (!($this->view->build_info['query'] instanceof SelectInterface)) {
-      throw new \Exception(\sprintf('Unsupported query type: %s', $this->view->query::class));
+    $built_query = $this->view->build_info['query'];
+    if ($built_query instanceof SelectInterface) {
+      $built_query->condition($base_field_alias, $base_field_values, 'IN');
     }
-
-    // Add the IN condition directly to the built DB query rather than via
-    // addWhere(). Using addWhere() is unreliable here because the type of
-    // conjunction (OR or AND) relies on many factors regardless of the filter
-    // group used. The SelectQuery root condition is always AND.
-    $this->view->build_info['query']->condition($base_field_alias, $base_field_values, 'IN');
 
     // Use a different pager ID so we don't break the real pager.
     // @todo Check if we can use something else to set this value.

@@ -46,3 +46,6 @@ parameters:
     - '#Variable property access on Drupal\\views\\ResultRow#'
     # This persists even with a property_exists() check.
     - '#Access to an undefined property Drupal\\views\\Plugin\\views\\query\\QueryPluginBase::\$fields#'
+    # \PDO::FETCH_ASSOC is needed as long as Drupal 10 is supported, the
+    # FetchAs enum doesn't exist there. @todo Remove when 10.x support ends.
+    - '#Parameter \#1 \$mode of method Drupal\\Core\\Database\\StatementInterface::fetchAll\(\) expects Drupal\\Core\\Database\\Statement\\FetchAs\|null, int given\.#'

@@ -606,7 +606,7 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
       // Update list data with the current page selection.
       $selected_keys = [];
       $user_input = $form_state->getUserInput()[$this->options['id']] ?? [];
-      foreach (\array_filter($user_input, static fn ($value) => $value !== 0) as $bulk_form_key) {
+      foreach (\array_filter($user_input, static fn ($value) => $value !== 0 && $value !== NULL) as $bulk_form_key) {
         $selected_keys[$bulk_form_key] = $bulk_form_key;
       }
 

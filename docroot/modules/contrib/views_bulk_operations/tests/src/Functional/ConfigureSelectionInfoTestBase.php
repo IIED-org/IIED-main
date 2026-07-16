@@ -6,16 +6,19 @@ namespace Drupal\Tests\views_bulk_operations\Functional;
 
 use Drupal\Core\Config\Config;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\views_bulk_operations\WatchdogTestTrait;
 
 /**
  * Base class for tests for the Selection Info controls.
  */
 abstract class ConfigureSelectionInfoTestBase extends BrowserTestBase {
 
+  use WatchdogTestTrait;
+
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['views_bulk_operations_test'];
+  protected static $modules = ['dblog', 'views_bulk_operations_test'];
 
   /**
    * {@inheritdoc}
