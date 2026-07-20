@@ -17,19 +17,6 @@
       "type": "composer",
       "url": "https://asset-packagist.org"
     },
-    "flexslider": {
-      "type": "package",
-      "package": {
-        "name": "woocommerce/flexslider",
-        "version": "2.7.2",
-        "type": "drupal-library",
-        "source": {
-          "url": "https://github.com/woocommerce/FlexSlider.git",
-          "type": "git",
-          "reference": "2.7.2"
-        }
-      }
-    },
     "apvarun/toastify-js": {
       "type": "package",
       "package": {
@@ -62,7 +49,7 @@
     "drupal/chosen": "^3.0",
     "drupal/clamav": "^2.1",
     "drupal/color_field": "^3.0",
-    "drupal/colorbox": "^2.1",
+    "drupal/colorbox": "^2.2",
     "drupal/colorbox_load": "^2.0",
     "drupal/components": "^3.0@beta",
     "drupal/computed_field": "^3.0",
@@ -178,8 +165,7 @@
     "mglaman/composer-drupal-lenient": "^1.0",
     "npm-asset/imagesloaded": "^4.1",
     "npm-asset/masonry-layout": "^4.2",
-    "wikimedia/composer-merge-plugin": "^2.1",
-    "woocommerce/flexslider": "~2.0"
+    "wikimedia/composer-merge-plugin": "^2.1"
   },
   "require-dev": {
     "drupal/core-dev": "^11",
@@ -205,6 +191,7 @@
       "mglaman/composer-drupal-lenient": true,
       "php-http/discovery": true,
       "phpstan/extension-installer": true,
+      "symfony/runtime": true,
       "tbachert/spi": true,
       "wikimedia/composer-merge-plugin": true
     }
@@ -272,15 +259,14 @@
       "drupal/facets": {
         "Update aborted 3492410": "https://www.drupal.org/files/issues/2024-12-11/264.patch"
       },
-      "drupal/media_thumbnails": {
-        "Make thumbnails editable": "https://www.drupal.org/files/issues/2020-08-06/media_thumbnails-3149842-4.patch"
+      "drupal/facets_pretty_paths": {
+        "3608564":"https://www.drupal.org/files/issues/2026-07-14/facets_pretty_paths_contextual_links_constructor.patch"
       },
       "drupal/configurable_views_filter_block": {
         "3527929 Configurable filter-block instance ID": "https://www.drupal.org/files/issues/2025-06-02/configurable_views_filter_block-3527929-2.patch",
         "3374162 Make it work with AJAX enabled": "https://www.drupal.org/files/issues/2023-08-17/3374162-allow-core-to-set-unique-block-ids.patch"
       },
       "drupal/core": {
-        "Media Thumbnail Formatter doesn't translate the title attribute correctly": "https://www.drupal.org/files/issues/2023-05-12/media-thumbnail-formatter-title-not-translated-3089216.patch",
         "3208030": "https://www.drupal.org/files/issues/2022-07-08/3208030_16.patch",
         "3209204": "https://www.drupal.org/files/issues/2021-09-07/3209204-adding-existing-translation_0.patch",
         "3062441": "https://www.drupal.org/files/issues/2024-03-27/3062441-patch-41.patch"
@@ -312,7 +298,7 @@
       },
       "drupal/pdfpreview": {
         "3344262 test for empty alt": "patches/3344262-pdfpreview-missing-alt-text.patch"
-       },
+      },
       "drupal/webform_shs": {
         "3435681 d11 compatibility":"https://www.drupal.org/files/issues/2024-03-25/webform_shs.2.0.0-beta1.rector.patch"
       }

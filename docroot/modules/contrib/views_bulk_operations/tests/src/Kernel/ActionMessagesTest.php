@@ -5,22 +5,24 @@ declare(strict_types=1);
 namespace Drupal\Tests\views_bulk_operations\Kernel;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @coversDefaultClass \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor
- * @group views_bulk_operations
+ * Action messages test.
  */
+#[CoversClass(ViewsBulkOperationsActionProcessor::class)]
+#[Group('views_bulk_operations')]
 final class ActionMessagesTest extends ViewsBulkOperationsKernelTestBase {
 
   /**
    * Tests messages displayed by different actions.
    *
-   * @covers ::getPageList
-   * @covers ::populateQueue
-   * @covers ::process
-   *
    * @dataProvider actionDataProvider
    */
+  #[DataProvider('actionDataProvider')]
   public function testViewsBulkOperationsActionMessages(int $nodes_count, string $action_id, array $result_messages): void {
     $this->createTestNodes([
       'page' => [

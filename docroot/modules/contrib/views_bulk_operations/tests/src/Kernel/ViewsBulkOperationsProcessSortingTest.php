@@ -6,11 +6,15 @@ namespace Drupal\Tests\views_bulk_operations\Kernel;
 
 use Drupal\node\Entity\NodeType;
 use Drupal\views\Views;
+use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @coversDefaultClass \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor
- * @group views_bulk_operations
+ * Correct result sorting test.
  */
+#[CoversClass(ViewsBulkOperationsActionProcessor::class)]
+#[Group('views_bulk_operations')]
 final class ViewsBulkOperationsProcessSortingTest extends ViewsBulkOperationsKernelTestBase {
 
   /**
@@ -58,8 +62,6 @@ final class ViewsBulkOperationsProcessSortingTest extends ViewsBulkOperationsKer
    * Default view execution should follow that ordering but
    * ViewsBulkOperationsActionProcessor::getPageList should force ordering
    * based on id.
-   *
-   * @covers ::getPageList
    */
   public function testViewsBulkOperationsIdOrderIsForcedOnTableStylePlugin(): void {
     $view_name = 'batch_with_date_default_tablesort';

@@ -14,11 +14,16 @@ cookies: {  }
 required: false
 opt_out: false
 only_once: false
+contextual_consent_only: null
+contextual_consent_text: null
 info_url: 'https://about.linkedin.com/'
 privacy_policy_url: 'https://www.linkedin.com/legal/privacy-policy'
 javascripts:
   - www.linkedin.com
 callback_code: ''
+on_init: ''
+on_accept: ''
+on_decline: ''
 wrapper_identifier: {  }
 attachments: {  }
 weight: -2

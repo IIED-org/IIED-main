@@ -15,6 +15,7 @@ use Drupal\views\Views;
 use Drupal\views_bulk_operations\Traits\ViewsBulkOperationsBulkFormKeyTrait;
 use Drupal\views_bulk_operations\ViewEntityDataEvent;
 use Drupal\views_bulk_operations\ViewsBulkOperationsEvent;
+use Symfony\Component\DependencyInjection\Attribute\AutowireCallable;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -62,15 +63,12 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
 
   /**
    * Object constructor.
-   *
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-   *   The event dispatcher service.
-   * @param \Drupal\Core\Pager\PagerManagerInterface $pagerManager
-   *   Pager manager service.
    */
   public function __construct(
-    protected readonly EventDispatcherInterface $eventDispatcher,
-    protected readonly PagerManagerInterface $pagerManager,
+    #[AutowireCallable(service: EventDispatcherInterface::class, method: 'dispatch')]
+    private readonly \Closure $dispatch,
+    #[AutowireCallable(service: PagerManagerInterface::class, method: 'createPager', lazy: TRUE)]
+    private readonly \Closure $createPager,
   ) {}
 
   /**
@@ -93,7 +91,7 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
     // Get view entity types and results fetcher callable.
     $event = new ViewsBulkOperationsEvent($this->getViewProvider(), $this->getData(), $view);
 
-    $this->eventDispatcher->dispatch($event, ViewsBulkOperationsEvent::NAME);
+    ($this->dispatch)($event, ViewsBulkOperationsEvent::NAME);
 
     $this->entityTypeIds = $event->getEntityTypeIds();
     $this->entityGetter = $event->getEntityGetter();
@@ -190,6 +188,7 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
     if (!$clear_on_exposed && \count($this->view->getExposedInput()) !== 0) {
       $pager = $this->view->getPager();
       if ($pager !== NULL) {
+        /** @var array<string, mixed> $pager_options */
         $pager_options = $pager->options;
         $pager_options['total_items'] = $pager->getTotalItems();
       }
@@ -223,7 +222,7 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
     }
 
     if (\is_array($pager_options) && \array_key_exists('id', $pager_options)) {
-      $this->pagerManager->createPager($pager_options['total_items'], $pager_options['items_per_page'], $pager_options['id']);
+      ($this->createPager)($pager_options['total_items'], $pager_options['items_per_page'], $pager_options['id']);
     }
 
     return (int) $total_results;
@@ -288,7 +287,7 @@ class ViewsBulkOperationsViewData implements ViewsBulkOperationsViewDataInterfac
     // Allow other modules to get bulk form keys and entity labels for
     // possible performance improvements on non-standard views.
     $event = new ViewEntityDataEvent($this->getViewProvider(), $this->getData(), $this->view);
-    $this->eventDispatcher->dispatch($event, ViewEntityDataEvent::NAME);
+    ($this->dispatch)($event, ViewEntityDataEvent::NAME);
     $view_entity_data = $event->getViewEntityData();
     if (\count($view_entity_data) !== 0) {
       return $view_entity_data;

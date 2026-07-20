@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\views_bulk_operations\Kernel;
 
+use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+
 /**
- * @coversDefaultClass \Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessor
- * @group views_bulk_operations
+ * Action processor test.
  */
+#[CoversClass(ViewsBulkOperationsActionProcessor::class)]
+#[Group('views_bulk_operations')]
 final class ViewsBulkOperationsActionProcessorTest extends ViewsBulkOperationsKernelTestBase {
 
   /**
@@ -61,10 +66,6 @@ final class ViewsBulkOperationsActionProcessorTest extends ViewsBulkOperationsKe
 
   /**
    * Tests general functionality of ViewsBulkOperationsActionProcessor.
-   *
-   * @covers ::getPageList
-   * @covers ::populateQueue
-   * @covers ::process
    */
   public function testViewsBulkOperationsActionProcessor(): void {
     $vbo_data = [
@@ -107,11 +108,6 @@ final class ViewsBulkOperationsActionProcessorTest extends ViewsBulkOperationsKe
 
   /**
    * Tests exclude mode of ViewsBulkOperationsActionProcessor.
-   *
-   * @covers ::getPageList
-   * @covers ::populateQueue
-   * @covers ::process
-   * @covers ::initialize
    */
   public function testViewsBulkOperationsActionProcessorExclude(): void {
     $vbo_data = [

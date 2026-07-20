@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Drupal\Tests\views_bulk_operations\Functional;
 
 use Drupal\Core\Url;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Test that we can configure "Select / Deselect all results (all pages)".
- *
- * @group views_bulk_operations
  */
+#[Group('views_bulk_operations')]
 final class ConfigureSelectAllResultsAllPagesTest extends ConfigureSelectionInfoTestBase {
 
   /**
@@ -40,6 +41,7 @@ final class ConfigureSelectAllResultsAllPagesTest extends ConfigureSelectionInfo
    *
    * @dataProvider dataProviderShowSelectAll
    */
+  #[DataProvider('dataProviderShowSelectAll')]
   public function testShowSelectAll(string $settingValue, int $countWhenZeroResults, int $countWhen1PageOfResults, int $countWhen2PageOfResults): void {
     // Setup: Always show the Multi - page Selection Box in this test, to
     // demonstrate its independence from the Select All Results checkbox.

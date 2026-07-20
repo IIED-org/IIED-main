@@ -1,0 +1,51 @@
+includes:
+  - phpstan-baseline.neon
+parameters:
+  level: 6
+  # Unfortunately some doc types are not correct in Views.
+  treatPhpDocTypesAsCertain: false
+  fileExtensions:
+    - php
+    - module
+    - inc
+    - install
+    - theme
+    - profile
+  reportUnmatchedIgnoredErrors: false
+  ignoreErrors:
+    # new static() is a best practice in Drupal, so we cannot fix that.
+    - '#^Unsafe usage of new static#'
+    # No point creating more time-consuming solutions.
+    - '#(Method|Function) [a-zA-Z0-9\\_]+(::[a-zA-Z0-9\\_]+){0,1}\(\) has a nullable return type declaration#'
+    # No point creating more time-consuming solutions.
+    - '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with a nullable type declaration#'
+    # Those messages just add additional work and don't bring much added
+    # value, especially in case of form or rendeable arrays and extended
+    # methods that are not properly defined.
+    - '#no value type specified in iterable type [a-zA-Z0-9\\_]+#'
+    - '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with generic interface [a-zA-Z0-9\\_]+ but does not specify its types: T#'
+    - '#extends generic class [a-zA-Z0-9\\_]+ but does not specify its types: T#'
+    # This is not clear. @todo Find some docs about this phpstan message type.
+    - '#is not allowed to extend#'
+    # We need to be able to provide overrideable methods.
+    - '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) is not final, but since the containing class is abstract, it should be#'
+    # What's wrong with null default values?
+    - '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with null as default value#'
+    # Allow extending all classes.
+    - '#Class Drupal\\views_bulk_operations\\[a-zA-Z0-9\\]+ is neither abstract nor final#'
+    # What's wrong with constructor default values, especially if it's
+    # an extension of a PHP class that HAS constructor default values?
+    - '#Constructor in [a-zA-Z0-9\\]+ has parameter \$[a-zA-Z0-9\\_]+ with default value#'
+    # That's not true, container is always a parameter of create, createInstance and injectServices methods.
+    - '#Method [a-zA-Z0-9\\_]+::(create(Instance){0,1}|injectServices)\(\) has a parameter \$container with a type declaration of Symfony\\Component\\DependencyInjection\\ContainerInterface, but containers should not be injected#'
+    # TranslatableMarkup doesn't require explicit casting to string.
+    - '#expects array\|string, Drupal\\Core\\StringTranslation\\TranslatableMarkup given#'
+    # Not true.
+    - '#Call to method Drupal\\Core\\Entity\\Query\\QueryInterface::accessCheck\(\) with (false|true) will always evaluate to true#'
+    # No core API to do it otherwise.
+    - '#Variable property access on Drupal\\views\\ResultRow#'
+    # This persists even with a property_exists() check.
+    - '#Access to an undefined property Drupal\\views\\Plugin\\views\\query\\QueryPluginBase::\$fields#'
+    # \PDO::FETCH_ASSOC is needed as long as Drupal 10 is supported, the
+    # FetchAs enum doesn't exist there. @todo Remove when 10.x support ends.
+    - '#Parameter \#1 \$mode of method Drupal\\Core\\Database\\StatementInterface::fetchAll\(\) expects Drupal\\Core\\Database\\Statement\\FetchAs\|null, int given\.#'

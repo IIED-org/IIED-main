@@ -9,12 +9,15 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\StringTranslation\TranslationManager;
 use Drupal\Tests\UnitTestCase;
 use Drupal\views_bulk_operations\ViewsBulkOperationsBatch;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @coversDefaultClass \Drupal\views_bulk_operations\ViewsBulkOperationsBatch
- * @group views_bulk_operations
+ * Batch processing methods test.
  */
+#[CoversClass(ViewsBulkOperationsBatch::class)]
+#[Group('views_bulk_operations')]
 final class ViewsBulkOperationsBatchTest extends UnitTestCase {
 
   /**
@@ -79,8 +82,6 @@ final class ViewsBulkOperationsBatchTest extends UnitTestCase {
 
   /**
    * Tests the getBatch() method.
-   *
-   * @covers ::getBatch
    */
   public function testGetBatch(): void {
     $data = [
@@ -97,8 +98,6 @@ final class ViewsBulkOperationsBatchTest extends UnitTestCase {
 
   /**
    * Tests the finished() method.
-   *
-   * @covers ::finished
    */
   public function testFinished(): void {
     $results = [

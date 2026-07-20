@@ -57,6 +57,7 @@ class ViewsReferenceArgument extends PluginBase implements ViewsReferenceSetting
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    /** @phpstan-ignore-next-line */
     return new static(
       $configuration,
       $plugin_id,
