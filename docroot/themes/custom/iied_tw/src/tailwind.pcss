@@ -68,7 +68,7 @@
   }
 
   /* Elements -- twig partials */
-  /* Buttons */
+  /* Buttons legacy*/
   .btn {
     @apply px-3 py-2 transition rounded-full shadow-sm;
   }
@@ -111,17 +111,6 @@
   /* [id$="-local-tasks"] ul {
     @apply list-disc list-inside;
   } */
-
-  .box {
-    @apply border border-stone-300 p-4 rounded-xl;
-  }
-
-  .box h2,
-  .box h3,
-  .box h4,
-  .box h5 {
-    @apply mt-2;
-  }
 
   .bg-fill {
     @apply bg-stone-100;
@@ -299,7 +288,7 @@
   }
   .clickdform.mainDiv {
     height: 100% !important;
-}
+  }
 
   .tracker-select select, .search-select select {
     -webkit-appearance: none;
@@ -466,19 +455,6 @@
       @apply mb-2;
     }
 
-  .search-page .filter-chip, .views-filters-summary {
-    @apply text-balance my-1 flex;
-    .item {
-      @apply inline-flex items-center ml-2 mt-1 space-x-1 border border-stone-300 rounded-full;
-      .value {
-        @apply leading-[1.5] border-none ml-1 my-1 align-middle;
-      }
-      a.remove-filter {
-        @apply leading-[1.5]  mr-1 pl-0 pb-2 bg-transparent text-2xl hover:text-link-hover text-iiedblue-500 font-light;
-      }
-  }
-  }
-
   /*-- animations --*/
   @keyframes bounce-x {
     0%, 100% {
@@ -603,7 +579,7 @@
       @apply overflow-x-auto;
     }
 
-}
+} /*-- end layer components --*/
 
   /* over rides moved outside @layer */
 
@@ -641,5 +617,28 @@
     background-image: none;
   }
 
+  .search-page .filter-chip, .views-filters-summary {
+    @apply text-balance my-1 flex;
+    .item {
+      @apply inline-flex items-center ml-2 mt-1 space-x-1 border border-stone-300 rounded-full;
+      .value {
+        @apply leading-[1.5] border-none ml-1 my-1 align-middle;
+      }
+      a.remove-filter {
+        @apply leading-[1.5]  mr-1 pl-0 pb-2 bg-transparent text-2xl hover:text-link-hover text-iiedblue-500 font-light;
+      }
+    }
+  }
+
+  .box {
+    @apply border border-stone-300 p-4 rounded-xl;
+  }
+
+  .box h2,
+  .box h3,
+  .box h4,
+  .box h5 {
+    @apply mt-2;
+  }
 
 @import "./compat-display.pcss";
