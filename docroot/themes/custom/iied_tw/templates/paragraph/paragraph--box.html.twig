@@ -50,14 +50,23 @@
   ]
 %}
 
-{% set bg_colour = content.field_background_colour.0 %}
+{% set selected_colour = paragraph.field_background_colour.value %}
+{% set bg_colour = '' %}
+
+{% if selected_colour %}
+  {% set colour_map = {
+    'bg-gray-100': 'bg-stone-100'
+  } %}
+
+  {% set bg_colour = colour_map[selected_colour]|default(selected_colour) %}
+{% endif %}
 
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
       <aside class="box {{ bg_colour }}">
-      {{ content.field_basic_text }}
-      </aside>  
+        {{ content.field_basic_text }}
+      </aside>
     {% endblock %}
   </div>
 {% endblock paragraph %}
