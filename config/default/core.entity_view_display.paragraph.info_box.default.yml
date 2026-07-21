@@ -6,7 +6,6 @@ dependencies:
     - field.field.paragraph.info_box.field_basic_text
     - paragraphs.paragraphs_type.info_box
   module:
-    - ds
     - readmore_js
 id: paragraph.info_box.default
 targetEntityType: paragraph
@@ -19,19 +18,12 @@ content:
     settings:
       more_link: '+ Show'
       close_link: '- Hide'
-      more_link_classes: 'absolute left-0 px-4 py-2 text-gray-900 rounded-full -bottom-12 hover:text-gray-900 bg-iiedblue-500 hover:bg-iiedblue-600'
-      close_link_classes: 'absolute left-0 px-4 py-2 text-gray-900 rounded-full -bottom-12 hover:text-gray-900 bg-iiedblue-500 hover:bg-iiedblue-600'
+      more_link_classes: 'absolute left-0 px-4 py-2 text-stone-900 rounded-full -bottom-12 bg-iiedblue-500 hover:bg-iiedblue-600'
+      close_link_classes: 'absolute left-0 px-4 py-2 text-stone-900 rounded-full -bottom-12 bg-iiedblue-500 hover:bg-iiedblue-600'
       speed: '75'
       collapsed_height: 200px
       height_margin: 16px
-    third_party_settings:
-      ds:
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
+    third_party_settings: {  }
     weight: 0
     region: content
 hidden:

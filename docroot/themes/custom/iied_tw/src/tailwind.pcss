@@ -62,20 +62,16 @@
   .node__content ol {
     @apply mb-4 leading-normal;
   }
-  /* fix for custom block cards height */
-  .grid-h-full > div:first-child {
-    @apply h-full;
-  }
 
   /* Elements -- twig partials */
-  /* Buttons */
+  /* Buttons legacy*/
   .btn {
-    @apply px-3 py-2 transition rounded-full shadow-sm;
+    @apply px-3 py-2 transition rounded-full;
   }
   .btn-outline {
-    @apply px-3 py-2 transition bg-white border border-stone-300 rounded-full shadow-sm;
+    @apply px-3 py-2 transition bg-white border border-stone-300 rounded-full;
     &:hover {
-      @apply shadow-none bg-stone-100 border-iiedblue-500;
+      @apply bg-stone-100 border-iiedblue-500;
     }
   }
   .btn-icon {
@@ -111,17 +107,6 @@
   /* [id$="-local-tasks"] ul {
     @apply list-disc list-inside;
   } */
-
-  .box {
-    @apply border border-stone-300 p-4 rounded-xl;
-  }
-
-  .box h2,
-  .box h3,
-  .box h4,
-  .box h5 {
-    @apply mt-2;
-  }
 
   .bg-fill {
     @apply bg-stone-100;
@@ -285,21 +270,6 @@
   .eu-cookie-compliance-message {
     @apply my-2;
   }
-
-  /*-- ClickD form hacks --*/
-  #clickdimform .clickdform input[type="text"], 
-  .clickdimensions .clickdform input[type="text"] 
-  {
-    @apply h-9 border border-stone-300 rounded-lg px-4 py-2;
-  }
-  #clickdimform #btnSubmit,
-  .clickdimensions #btnSubmit
-   {
-    @apply px-3 py-2 border-none rounded-full bg-iiedorange-500 cursor-pointer font-sans text-stone-800 transition-colors duration-150 shadow-sm hover:shadow-none hover:bg-iiedorange-600;
-  }
-  .clickdform.mainDiv {
-    height: 100% !important;
-}
 
   .tracker-select select, .search-select select {
     -webkit-appearance: none;
@@ -466,19 +436,6 @@
       @apply mb-2;
     }
 
-  .search-page .filter-chip, .views-filters-summary {
-    @apply text-balance my-1 flex;
-    .item {
-      @apply inline-flex items-center ml-2 mt-1 space-x-1 border border-stone-300 rounded-full;
-      .value {
-        @apply leading-[1.5] border-none ml-1 my-1 align-middle;
-      }
-      a.remove-filter {
-        @apply leading-[1.5]  mr-1 pl-0 pb-2 bg-transparent text-2xl hover:text-link-hover text-iiedblue-500 font-light;
-      }
-  }
-  }
-
   /*-- animations --*/
   @keyframes bounce-x {
     0%, 100% {
@@ -521,11 +478,11 @@
 
   /*-- sign up forms --*/
   #mc_embed_signup .input-group li input {
-    @apply mr-2 border border-stone-300 rounded-sm shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-100;
+    @apply mr-2 border border-stone-300 rounded-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-100;
   }
 
  #mc_embed_signup #mc-embedded-subscribe {
-  @apply h-12 max-w-xs px-6 py-2 mb-6 text-lg cursor-pointer font-semibold text-stone-800 transition-colors duration-150 rounded-full shadow-sm hover:shadow-none bg-iiedorange-500 hover:bg-iiedorange-600;
+  @apply h-12 max-w-xs px-6 py-2 mb-6 text-lg cursor-pointer font-semibold text-stone-800 transition-colors duration-150 rounded-full bg-iiedorange-500 hover:bg-iiedorange-600;
  }
  #mce-success-response {
   @apply my-6 p-4 bg-iiedorange-50 rounded-xl text-stone-700;
@@ -603,7 +560,7 @@
       @apply overflow-x-auto;
     }
 
-}
+} /*-- end layer components --*/
 
   /* over rides moved outside @layer */
 
@@ -641,5 +598,48 @@
     background-image: none;
   }
 
+  .search-page .filter-chip, .views-filters-summary {
+    @apply text-balance my-1 flex;
+    .item {
+      @apply inline-flex items-center ml-2 mt-1 space-x-1 border border-stone-300 rounded-full;
+      .value {
+        @apply leading-[1.5] border-none ml-1 my-1 align-middle;
+      }
+      a.remove-filter {
+        @apply leading-[1.5]  mr-1 pl-0 pb-2 bg-transparent text-2xl hover:text-link-hover text-iiedblue-500 font-light;
+      }
+    }
+  }
+
+  /* fix for custom block cards height */
+  .grid-h-full > div:first-child {
+    @apply h-full;
+  }
+
+  .box {
+    @apply border border-stone-300 p-4 rounded-xl;
+  }
+
+  .box h2,
+  .box h3,
+  .box h4,
+  .box h5 {
+    @apply mt-2;
+  }
+
+  /*-- ClickD form hacks --*/
+  #clickdimform .clickdform input[type="text"], 
+  .clickdimensions .clickdform input[type="text"] 
+  {
+    @apply h-9 border border-stone-300 rounded-lg px-4 py-2;
+  }
+  #clickdimform #btnSubmit,
+  .clickdimensions #btnSubmit
+   {
+    @apply px-3 py-2 border-none rounded-full bg-iiedorange-500 cursor-pointer font-sans text-stone-800 transition-colors duration-150 hover:shadow-none hover:bg-iiedorange-600;
+  }
+  .clickdform.mainDiv {
+    height: 100% !important;
+  }
 
 @import "./compat-display.pcss";
