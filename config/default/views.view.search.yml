@@ -253,7 +253,7 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: '<a class="h-10 px-3 py-2 mb-4 transition bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500" href="javascript:history.back();">Go back to previous page</a>'
+            value: '<a class="hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500 h-10 px-3 py-2 mb-4 transition bg-white border border-gray-300 rounded-full shadow-sm" href="javascript:history.back();">Go back to previous page</a>'
             format: full_html
           tokenize: false
       sorts: {  }
@@ -752,7 +752,7 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: "<div class=\"my-2\">No results found</div>\r\n<a class=\"h-10 px-3 py-2 mt-3 mb-4 transition bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500\" href=\"javascript:history.back();\">Go back to previous page</a></p>"
+            value: "<div class=\"m-2 p-2 pb-3\">No results found</div>\r\n<a class=\"h-10 px-3 py-2 mt-3 mb-4 transition bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500\" href=\"javascript:history.back();\">Go back to previous page</a></p>"
             format: full_html
           tokenize: false
       sorts: {  }
