@@ -663,6 +663,7 @@ display:
         type: mini
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 100
           total_pages: null
           id: 0
@@ -677,7 +678,6 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          pagination_heading_level: h4
       exposed_form:
         type: bef
         options:
@@ -693,44 +693,44 @@ display:
           bef:
             general:
               autosubmit: false
+              auto_submit_sort_only: false
+              autosubmit_breakpoint: ''
               autosubmit_exclude_textfield: false
               autosubmit_textfield_delay: 500
+              autosubmit_textfield_minimum_length: 3
               autosubmit_hide: false
               input_required: false
               allow_secondary: false
               secondary_label: 'Advanced options'
               secondary_open: false
               reset_button_always_show: true
-              autosubmit_textfield_minimum_length: 3
-              autosubmit_breakpoint: ''
-              auto_submit_sort_only: false
             filter:
               field_publisher_target_id:
                 plugin_id: default
                 advanced:
+                  sort_options_method: alphabetical_asc
+                  sort_options_natural: true
                   rewrite:
                     filter_rewrite_values: ''
                     filter_rewrite_values_key: false
                   collapsible: false
-                  is_secondary: false
                   collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
                   hide_label: false
                   field_classes: ''
-                  open_by_default: false
-                  sort_options_method: alphabetical_asc
-                  sort_options_natural: true
               delta:
                 plugin_id: default
                 advanced:
-                  placeholder_text: ''
-                  collapsible: false
-                  is_secondary: false
-                  collapsible_disable_automatic_open: false
-                  hide_label: false
-                  field_classes: ''
-                  open_by_default: false
                   sort_options_method: alphabetical_asc
                   sort_options_natural: true
+                  placeholder_text: ''
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  open_by_default: false
+                  is_secondary: false
+                  hide_label: false
+                  field_classes: ''
       access:
         type: role
         options:
@@ -1434,6 +1434,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 1000
           total_pages: null
           id: 0
@@ -1451,7 +1452,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       sorts:
         field_date_published_value:
           id: field_date_published_value
@@ -3191,6 +3191,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 1000
           total_pages: null
           id: 0
@@ -3208,7 +3209,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       sorts:
         field_date_published_value:
           id: field_date_published_value

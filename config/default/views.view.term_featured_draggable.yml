@@ -189,6 +189,7 @@ display:
         type: mini
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 25
           total_pages: null
           id: 0
@@ -203,7 +204,6 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -240,7 +240,7 @@ display:
           exposed: false
           draggable_views_reference: this
           draggable_views_null_order: after
-          draggable_views_pass_arguments: false
+          draggable_views_pass_arguments: 0
         created:
           id: created
           table: node_field_data
