@@ -10,6 +10,7 @@ dependencies:
     - field.field.taxonomy_term.organisation.field_location
     - field.field.taxonomy_term.organisation.field_location_legacy
     - field.field.taxonomy_term.organisation.field_logo
+    - field.field.taxonomy_term.organisation.field_tags
     - field.field.taxonomy_term.organisation.field_type
     - field.field.taxonomy_term.organisation.field_url
     - field.field.taxonomy_term.organisation.field_valid
@@ -136,4 +137,5 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_tags: true

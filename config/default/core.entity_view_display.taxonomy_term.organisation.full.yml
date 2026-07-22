@@ -10,6 +10,7 @@ dependencies:
     - field.field.taxonomy_term.organisation.field_location
     - field.field.taxonomy_term.organisation.field_location_legacy
     - field.field.taxonomy_term.organisation.field_logo
+    - field.field.taxonomy_term.organisation.field_tags
     - field.field.taxonomy_term.organisation.field_type
     - field.field.taxonomy_term.organisation.field_url
     - field.field.taxonomy_term.organisation.field_valid
@@ -87,12 +88,12 @@ content:
     settings:
       image_link: ''
       image_style: page
+      image_loading:
+        attribute: lazy
       svg_attributes:
         width: null
         height: null
       svg_render_as_image: true
-      image_loading:
-        attribute: lazy
     third_party_settings:
       ds:
         ft:
@@ -140,6 +141,7 @@ hidden:
   field_alias: true
   field_email: true
   field_location_legacy: true
+  field_tags: true
   field_type: true
   field_valid: true
   langcode: true
