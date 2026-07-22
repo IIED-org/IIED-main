@@ -41,8 +41,8 @@ AddType image/webp .webp
   # Cache all files for 1 year after access.
   ExpiresDefault "access plus 1 year"
 
-  # Only cache PDFs for 3 hours.
-  ExpiresByType application/pdf "access plus 3 hours"
+  # Only cache PDFs for 2 hours.
+  ExpiresByType application/pdf "access plus 2 hours"
 
   <FilesMatch \.php$>
     # Do not allow PHP scripts to be cached unless they explicitly send cache
@@ -66,29 +66,44 @@ AddType image/webp .webp
 <IfModule mod_rewrite.c>
   RewriteEngine on
 
-  # Rewrite pubs.iied.org to www.iied.org/publications
-  RewriteCond %{HTTP_HOST} ^pubs\.iied\.org$
-  RewriteRule ^$ https://www.iied.org/publications [L,R=301]
-
-  # Rewrite pubs.iied.org/anything to www.iied.org/anything
-  RewriteCond %{HTTP_HOST} ^pubs\.iied\.org
-  RewriteRule ^(.*)$ https://www.iied.org/$1 [L,R=301]
-
-  # Redirect old pubs links before setting https
-  RewriteCond %{QUERY_STRING} ^o=(.*)$
-  RewriteRule ^pubs/display\.php$ http://www.iied.org/%1/ [QSD,L,R=302]
-
-  # Redirect HTTP to HTTPS
-  RewriteCond %{HTTPS} off
-  RewriteCond %{HTTP:X-Forwarded-Proto} !https
-  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
   # Set "protossl" to "s" if we were accessed via https://.  This is used later
   # if you enable "www." stripping or enforcement, in order to ensure that
   # you don't bounce between http and https.
   RewriteRule ^ - [E=protossl]
   RewriteCond %{HTTPS} on
   RewriteRule ^ - [E=protossl:s]
+
+  # Make sure Authorization HTTP header is available to PHP
+  # even when running as CGI or FastCGI.
+  RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+  # Block access to "hidden" directories whose names begin with a period. This
+  # includes directories used by version control systems such as Subversion or
+  # Git to store control files. Files whose names begin with a period, as well
+  # as the control files used by CVS, are protected by the FilesMatch directive
+  # above.
+  #
+  # NOTE: This only works when mod_rewrite is loaded. Without mod_rewrite, it is
+  # not possible to block access to entire directories from .htaccess because
+  # <DirectoryMatch> is not allowed here.
+  #
+  # If you do not have mod_rewrite installed, you should remove these
+  # directories from your webroot or otherwise protect them from being
+  # downloaded.
+  RewriteRule "/\.|^\.(?!well-known/)" - [F]
+
+# prod.iied.org
+  # Rewrite pubs.iied.org to www.iied.org/publications
+  RewriteCond %{HTTP_HOST} ^pubs\.iied\.org$
+  RewriteRule ^$ https://www.iied.org/publications [L,R=301]
+
+  # Rewrite pubs.iied.org/anything to www.iied.org/anything
+  RewriteCond %{HTTP_HOST} ^pubs\.iied\.org
+  RewriteRule ^(.*)$ https://www.iied.org/$1 [R=301]
+
+  # Redirect old pubs links before setting https
+  RewriteCond %{QUERY_STRING} ^o=(.*)$
+  RewriteRule ^pubs/display\.php$ http://www.iied.org/%1/ [QSD,R=302]
 
   # Strip off html suffix if exists
   RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
@@ -145,25 +160,6 @@ AddType image/webp .webp
   RewriteCond %{HTTP_HOST} ^(www\.)?planotes.org$
   RewriteRule ^(.*) https://www.iied.org/participatory-learning-action-archive [R=301,L]
 
-  # Make sure Authorization HTTP header is available to PHP
-  # even when running as CGI or FastCGI.
-  RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-  # Block access to "hidden" directories whose names begin with a period. This
-  # includes directories used by version control systems such as Subversion or
-  # Git to store control files. Files whose names begin with a period, as well
-  # as the control files used by CVS, are protected by the FilesMatch directive
-  # above.
-  #
-  # NOTE: This only works when mod_rewrite is loaded. Without mod_rewrite, it is
-  # not possible to block access to entire directories from .htaccess because
-  # <DirectoryMatch> is not allowed here.
-  #
-  # If you do not have mod_rewrite installed, you should remove these
-  # directories from your webroot or otherwise protect them from being
-  # downloaded.
-  RewriteRule "/\.|^\.(?!well-known/)" - [F]
-
   # If your site can be accessed both with and without the 'www.' prefix, you
   # can use one of the following settings to redirect users to your preferred
   # URL, either WITH or WITHOUT the 'www.' prefix. Choose ONLY one option:
@@ -171,19 +167,16 @@ AddType image/webp .webp
   # To redirect all users to access the site WITH the 'www.' prefix,
   # (http://example.com/foo will be redirected to http://www.example.com/foo)
   # uncomment the following:
-  # RewriteCond %{HTTP_HOST} .
-  # RewriteCond %{HTTP_HOST} !^www\. [NC]
-  # RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-  #
+
+   RewriteCond %{HTTP_HOST} .
+   RewriteCond %{HTTP_HOST} !^www\. [NC]
+   RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  
   # To redirect all users to access the site WITHOUT the 'www.' prefix,
   # (http://www.example.com/foo will be redirected to http://example.com/foo)
   # uncomment the following:
   # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
   # RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
-
-  RewriteCond %{HTTP_HOST} .
-  RewriteCond %{HTTP_HOST} !^www\.iied\.org$ [NC]
-  RewriteRule ^ https://www.iied.org%{REQUEST_URI} [L,R=301]
 
   # Modify the RewriteBase if you are using Drupal in a subdirectory or in a
   # VirtualDocumentRoot and the rewrite rules are not working properly.
@@ -224,7 +217,7 @@ AddType image/webp .webp
   # Specifically, disallow autoload.php from being served directly.
   RewriteRule "^(.+/.*|autoload)\.php($|/)" - [F]
 
-  # Rules to correctly serve brotli and gzip compressed CSS and JS files.
+  # Rules to correctly serve gzip compressed CSS and JS files.
   # Requires both mod_rewrite and mod_headers to be enabled.
   <IfModule mod_headers.c>
     # Serve brotli compressed CSS files if they exist and the client accepts brotli.
@@ -241,7 +234,7 @@ AddType image/webp .webp
     RewriteCond %{HTTP:Accept-encoding} br
     RewriteCond %{REQUEST_FILENAME}\.br -s
     RewriteRule ^(.*js_[a-zA-Z0-9-_]+)\.js$ $1\.js\.br [QSA]
-  
+
     # Serve gzip compressed JS files if they exist and the client accepts gzip.
     RewriteCond %{HTTP:Accept-encoding} gzip
     RewriteCond %{REQUEST_FILENAME}\.gz -s
@@ -252,7 +245,7 @@ AddType image/webp .webp
     RewriteRule \.js\.gz$ - [T=text/javascript,E=no-gzip:1,E=no-brotli:1]
     RewriteRule \.css\.br$ - [T=text/css,E=no-gzip:1,E=no-brotli:1]
     RewriteRule \.js\.br$ - [T=text/javascript,E=no-gzip:1,E=no-brotli:1]
-    
+
     <FilesMatch "(\.js\.gz|\.css\.gz)$">
       # Serve correct encoding type.
       Header set Content-Encoding gzip
