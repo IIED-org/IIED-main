@@ -301,6 +301,9 @@
       },
       "drupal/webform_shs": {
         "3435681 d11 compatibility":"https://www.drupal.org/files/issues/2024-03-25/webform_shs.2.0.0-beta1.rector.patch"
+      },
+      "drupal/computed_field": {
+        "3606495":"https://git.drupalcode.org/project/computed_field/-/merge_requests/29.diff"
       }
     },
     "drupal-lenient": {
