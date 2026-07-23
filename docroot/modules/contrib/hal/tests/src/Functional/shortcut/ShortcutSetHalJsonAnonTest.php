@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\shortcut;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 use Drupal\Tests\shortcut\Functional\Rest\ShortcutSetResourceTestBase;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class ShortcutSetHalJsonAnonTest extends ShortcutSetResourceTestBase {
 
   use AnonResourceTestTrait;

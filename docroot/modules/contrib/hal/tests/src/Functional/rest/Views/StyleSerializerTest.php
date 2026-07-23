@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\rest\Views;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Core\Cache\Cache;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
@@ -18,6 +21,8 @@ use Drupal\views\Tests\ViewTestData;
  * @see \Drupal\rest\Plugin\views\row\DataEntityRow
  * @see \Drupal\rest\Plugin\views\row\DataFieldRow
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class StyleSerializerTest extends ViewTestBase {
 
   use AssertPageCacheContextsAndTagsTrait;
@@ -47,7 +52,7 @@ class StyleSerializerTest extends ViewTestBase {
   public static $testViews = ['test_serializer_display_entity'];
 
   /**
-   * A user with administrative privileges to look at test entity and configure views.
+   * A user with administrative privileges.
    */
   protected $adminUser;
 
@@ -58,6 +63,9 @@ class StyleSerializerTest extends ViewTestBase {
    */
   protected $renderer;
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp($import_test_views = TRUE, $modules = ['views_test_config']): void {
     parent::setUp($import_test_views);
 

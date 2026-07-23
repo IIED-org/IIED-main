@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Kernel;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Core\Url;
 use Drupal\entity_test\Entity\EntitySerializedField;
 use Drupal\field\Entity\FieldConfig;
@@ -12,6 +15,8 @@ use Symfony\Component\Serializer\Exception\UnexpectedValueException;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class DenormalizeTest extends NormalizerTestBase {
 
   /**

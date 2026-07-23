@@ -48,3 +48,7 @@ services:
   hal.link_manager.relation:
     class: Drupal\hal\LinkManager\RelationLinkManager
     arguments: ['@cache.default', '@entity_type.manager', '@module_handler', '@config.factory', '@request_stack', '@entity_type.bundle.info', '@entity_field.manager']
+
+  Drupal\hal\Hook\HalHooks:
+    class: Drupal\hal\Hook\HalHooks
+    autowire: true

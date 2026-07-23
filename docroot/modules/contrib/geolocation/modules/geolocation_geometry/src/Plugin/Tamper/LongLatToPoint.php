@@ -53,7 +53,7 @@ class LongLatToPoint extends TamperBase {
   /**
    * {@inheritdoc}
    */
-  public function tamper($data, TamperableItemInterface $item = NULL) {
+  public function tamper($data, ?TamperableItemInterface $item = NULL) {
     $source = $item->getSource();
 
     $longitude = $source[$this->getSetting(self::SETTING_LONGITUDE_FIELD)];

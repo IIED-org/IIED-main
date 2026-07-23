@@ -64,7 +64,7 @@ abstract class ViewsBulkOperationsActionBase extends ActionBase implements Views
   /**
    * {@inheritdoc}
    */
-  public function executeMultiple(array $objects) {
+  public function executeMultiple(array $objects): array {
     $results = [];
     foreach ($objects as $entity) {
       $results[] = $this->execute($entity);

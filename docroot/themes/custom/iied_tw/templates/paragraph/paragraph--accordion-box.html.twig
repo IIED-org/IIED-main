@@ -48,7 +48,7 @@
     'my-6',
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     'space-y-0',
-    'bg-white border border-gray-300 rounded-xl overflow-hidden',
+    'bg-white border border-stone-300 rounded-xl overflow-hidden',
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     not paragraph.isPublished() ? 'paragraph--unpublished'
   ]
@@ -60,7 +60,7 @@
     {% block content %}
 
       {% for key, accordion_title in accordion_titles %}
-      <div class="py-2 border-b border-gray-300">
+      <div class="py-2 border-b border-stone-300">
 
         <div class="text-xl font-headline">
           <button

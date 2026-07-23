@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\views\Functional\Plugin;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
 use Drupal\entity_test\Entity\EntityTest;
+use Drupal\filter\FilterFormatRepositoryInterface;
 use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
 use Drupal\Tests\views\Functional\ViewTestBase;
 use Drupal\views\Entity\View;
@@ -169,8 +169,8 @@ class ExposedFormTest extends ViewTestBase {
 
     $errors = $view->validate();
     $expected = [
-      'default' => ['This identifier has illegal characters.'],
-      'page_1' => ['This identifier has illegal characters.'],
+      'default' => ['This identifier has invalid characters.'],
+      'page_1' => ['This identifier has invalid characters.'],
     ];
     $this->assertEquals($expected, $errors);
 
@@ -305,9 +305,9 @@ class ExposedFormTest extends ViewTestBase {
     $this->assertSession()->elementNotExists('xpath', $xpath);
 
     // Test there is only one views exposed form on the page.
-    $css_selector = 'form[id^="' . $this->getExpectedExposedFormId($view) . '"]';
-    $this->assertSession()->elementsCount('css', $css_selector, 1);
-    $element = $this->assertSession()->elementExists('css', $css_selector);
+    $xpath = '//form[@id="' . $this->getExpectedExposedFormId($view) . '"]';
+    $this->assertSession()->elementsCount('xpath', $xpath, 1);
+    $element = $this->assertSession()->elementExists('xpath', $xpath);
 
     // Test that the correct option is selected after form submission.
     $this->assertCacheContext('url');
@@ -339,20 +339,6 @@ class ExposedFormTest extends ViewTestBase {
       'page_display' => ['page_1'],
       'block_display' => ['block_1'],
     ];
-  }
-
-  /**
-   * Test placing the same form twice on the same page.
-   */
-  public function testNoDoubleIdsForSameExposedForm(): void {
-    $view = Views::getView('test_exposed_block');
-    $view->setDisplay('page_1');
-    $this->drupalPlaceBlock('views_exposed_filter_block:test_exposed_block-page_1');
-    $this->drupalPlaceBlock('views_exposed_filter_block:test_exposed_block-page_1');
-
-    $this->drupalGet('test_exposed_block');
-
-    $this->assertNoDuplicateIds();
   }
 
   /**
@@ -399,7 +385,7 @@ class ExposedFormTest extends ViewTestBase {
     // @see https://www.drupal.org/node/535868
     $on_demand_text = 'Select any filter and click Apply to see results.';
     $display['display_options']['exposed_form']['options']['text_input_required'] = $on_demand_text;
-    $display['display_options']['exposed_form']['options']['text_input_required_format'] = filter_default_format();
+    $display['display_options']['exposed_form']['options']['text_input_required_format'] = \Drupal::service(FilterFormatRepositoryInterface::class)->getDefaultFormat()->id();
     $view->save();
 
     // Ensure that the "on demand text" is displayed when no exposed filters are
@@ -588,31 +574,6 @@ class ExposedFormTest extends ViewTestBase {
         $this->assertSession()->pageTextNotContains($node->label());
       }
     }
-  }
-
-  /**
-   * Asserts that each HTML ID is used for just a single element on the page.
-   */
-  protected function assertNoDuplicateIds(): void {
-    $args = ['@url' => $this->getUrl()];
-
-    if (!$elements = $this->xpath('//*[@id]')) {
-      $this->fail(new FormattableMarkup('The page @url contains no HTML IDs.', $args));
-      return;
-    }
-
-    $message = new FormattableMarkup('The page @url contains duplicate HTML IDs', $args);
-
-    $seen_ids = [];
-    foreach ($elements as $element) {
-      $id = $element->getAttribute('id');
-      if (isset($seen_ids[$id])) {
-        $this->fail((string) $message);
-        return;
-      }
-      $seen_ids[$id] = TRUE;
-    }
-    $this->assertTrue(TRUE, (string) $message);
   }
 
   /**

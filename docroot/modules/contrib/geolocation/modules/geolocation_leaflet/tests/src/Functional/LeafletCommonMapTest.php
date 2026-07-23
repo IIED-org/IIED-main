@@ -14,6 +14,11 @@ class LeafletCommonMapTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $profile = 'standard';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'node',
     'field',

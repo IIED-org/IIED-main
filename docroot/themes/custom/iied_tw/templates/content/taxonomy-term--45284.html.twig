@@ -9,7 +9,7 @@
 #}
 
 {% block header %}
-  <div class="mb-8 border-b border-gray-100">
+  <div class="mb-8 border-b border-stone-100">
     <div class="container overflow-hidden xl:grid xl:grid-cols-12 xl:gap-x-12 xl:items-center">
       <div class="xl:col-span-6">
         {{ title_prefix }}
@@ -67,14 +67,14 @@
       window.addEventListener('hashchange', () => setTabFromHash());
     "
   >
-    <nav class="border-b border-gray-300" aria-label="Collection tabs">
+    <nav class="border-b border-stone-300" aria-label="Collection tabs">
       <div class="container flex flex-row" role="tablist">
         <a
           x-ref="inthiscollection"
           role="tab"
           :aria-selected="tab === 'inthiscollection' ? 'true' : 'false'"
           aria-controls="panel-inthiscollection"
-          class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none"
+          class="block px-6 py-2 text-lg font-semibold text-stone-700 focus:border-b-2 border-iiedblue-500 hover:text-stone-900 focus:outline-none"
           :class="{ 'active border-b-2': tab === 'inthiscollection' }"
           @click.prevent="changeTab('inthiscollection')"
           href="#inthiscollection"
@@ -87,7 +87,7 @@
           role="tab"
           :aria-selected="tab === 'overview' ? 'true' : 'false'"
           aria-controls="panel-overview"
-          class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none"
+          class="block px-6 py-2 text-lg font-semibold text-stone-700 focus:border-b-2 border-iiedblue-500 hover:text-stone-900 focus:outline-none"
           :class="{ 'active border-b-2': tab === 'overview' }"
           @click.prevent="changeTab('overview')"
           href="#overview"

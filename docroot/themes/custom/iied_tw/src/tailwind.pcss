@@ -1,8 +1,5 @@
-@import url("fonts.css");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer base {
   h1 {
@@ -65,20 +62,16 @@
   .node__content ol {
     @apply mb-4 leading-normal;
   }
-  /* fix for custom block cards height */
-  .grid-h-full > div:first-child {
-    @apply h-full;
-  }
 
   /* Elements -- twig partials */
-  /* Buttons */
+  /* Buttons legacy*/
   .btn {
-    @apply px-3 py-2 transition rounded-full shadow-sm;
+    @apply px-3 py-2 transition rounded-full;
   }
   .btn-outline {
-    @apply px-3 py-2 transition bg-white border border-gray-300 rounded-full shadow-sm;
+    @apply px-3 py-2 transition bg-white border border-stone-300 rounded-full;
     &:hover {
-      @apply shadow-none bg-gray-100 border-iiedblue-500;
+      @apply bg-stone-100 border-iiedblue-500;
     }
   }
   .btn-icon {
@@ -94,7 +87,7 @@
     @apply border-b-2 border-iiedblue-500;
   }
   .keypoint {
-    @apply list-none pl-0 !important;
+    @apply list-none! pl-0!;
   }
   .keypoint li {
     @apply before:content-keypoint before:mr-2;
@@ -108,26 +101,15 @@
   /* Components -- twig templates */
   /* Cards */
   .card {
-    @apply border border-gray-300 p-4 rounded-xl;
+    @apply border border-stone-300 p-4 rounded-xl;
   }
 
   /* [id$="-local-tasks"] ul {
     @apply list-disc list-inside;
   } */
 
-  .box {
-    @apply border border-gray-300 p-4 rounded-xl;
-  }
-
-  .box h2,
-  .box h3,
-  .box h4,
-  .box h5 {
-    @apply mt-2;
-  }
-
   .bg-fill {
-    @apply bg-gray-100;
+    @apply bg-stone-100;
   }
 
   .bg-green {
@@ -142,7 +124,7 @@
   .figure-caption,
   .image-caption,
   .caption {
-    @apply mt-1 text-base leading-tight text-gray-500;
+    @apply mt-1 text-base leading-tight text-stone-500;
   }
 
   .lead {
@@ -202,18 +184,6 @@
     @apply bg-white;
   }
 
-  #block-exposedformsearchpage-2-5 .bef--secondary,
-  #edit-submit-search--2,
-  #edit-submit-search,
-  #edit-submit-search--3,
-  #edit-submit-search--4 {
-    display: none;
-  }
-
-  .js input.form-autocomplete {
-    background-image: none;
-  }
-
   /*-- rotate 4 colour borders for publications grid  --*/
   .grid .views-row:nth-child(8n + 1) .color-rotate {
     @apply border-iiedpink-500;
@@ -256,7 +226,7 @@
     @apply border-iiedblue-500;
   }
   .people-menu .is-active {
-    @apply bg-gray-100 rounded-full;
+    @apply bg-stone-100 rounded-full;
   }
   .tertiary-menu .is-active {
     @apply bg-iiedgreen-10;
@@ -275,11 +245,11 @@
 
   /*-- highcharts --*/
   .highcharts-title {
-    @apply text-xl font-headline !important;
+    @apply text-xl! font-headline!;
   }
 
   .highcharts-subtitle {
-    @apply text-lg !important;
+    @apply text-lg!;
   }
 
   .hc-dimmed {
@@ -291,7 +261,7 @@
     color: #1173b3;
   }
   .sliding-popup-bottom {
-    @apply bg-gray-100 py-2 w-full shadow-[0px_-3px_5px_-5px_#00000040];
+    @apply bg-stone-100 py-2 w-full shadow-[0px_-3px_5px_-5px_#00000040];
   }
   .eu-cookie-compliance-secondary-button {
     @apply px-3 py-2 border-none transition rounded-full shadow-sm bg-iiedblue-500 cursor-pointer mr-2 font-semibold hover:bg-iiedblue-600;
@@ -300,21 +270,6 @@
   .eu-cookie-compliance-message {
     @apply my-2;
   }
-
-  /*-- ClickD form hacks --*/
-  #clickdimform .clickdform input[type="text"], 
-  .clickdimensions .clickdform input[type="text"] 
-  {
-    @apply h-9 border border-gray-300 rounded-lg px-4 py-2;
-  }
-  #clickdimform #btnSubmit,
-  .clickdimensions #btnSubmit
-   {
-    @apply px-3 py-2 border-none rounded-full bg-iiedorange-500 cursor-pointer font-sans text-gray-800 transition-colors duration-150 shadow-sm hover:shadow-none hover:bg-iiedorange-600;
-  }
-  .clickdform.mainDiv {
-    height: 100% !important;
-}
 
   .tracker-select select, .search-select select {
     -webkit-appearance: none;
@@ -344,7 +299,7 @@
     @apply after:content-['_(required)'];
   }
   .text-count-message {
-    @apply text-gray-500 text-sm;
+    @apply text-stone-500 text-sm;
   }
   /*-- Webform progress tracker --*/
   .progress-step.is-active .progress-marker::before {
@@ -445,28 +400,7 @@
   .mm-wrapper--position-left .mm-slideout {
     transform: none;
   }
-  /*-- search --*/
 
-  .ui-widget.search-api-autocomplete-search { 
-    @apply bg-white text-base; 
-  } 
-  .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper {
-    @apply p-0 bg-none;
-  }
- 
- .js input.form-autocomplete.ui-autocomplete-loading {
-    @apply bg-throbber;
-    background-position: right 2.2em center;   
- }
-  .search-page .srp-w {
-      @apply w-full max-w-screen-sm px-5;
-    }
-  .search-page .srp-h {
-      @apply h-14;
-    }
-  .search-page .srp-text {
-    @apply text-base;
-  }  
   .item-list__checkbox, .form-checkboxes, .form-radios { 
     @apply mb-3;
    } 
@@ -480,16 +414,16 @@
   }
 
   details {
-      @apply lg:block hidden rounded-xl p-4 my-1 border border-gray-300 bg-gray-100;
+      @apply lg:block hidden rounded-xl p-4 my-1 border border-stone-300 bg-stone-100;
       summary {
         @apply text-xl font-serif text-iiedpink-900;
       }
   }
 
   details details {
-      @apply -mx-1 mt-4 border-none bg-white lg:block rounded-xl hidden p-3 text-gray-700;
+      @apply -mx-1 mt-4 border-none bg-white lg:block rounded-xl hidden p-3 text-stone-700;
           summary {
-        @apply text-base text-gray-500 font-sans;
+        @apply text-base text-stone-500 font-sans;
       }
   }
   summary::after {
@@ -501,19 +435,6 @@
       content: url(/themes/custom/iied_tw/templates/layout/icons/chevron-down.svg);
       @apply mb-2;
     }
-
-  .search-page .filter-chip, .views-filters-summary {
-    @apply text-balance my-1 flex inline-flex;
-    .item {
-      @apply inline-flex items-center ml-2 mt-1 space-x-1 border border-gray-300 rounded-full;
-      .value {
-        @apply leading-[1.5] border-none ml-1 my-1 align-middle;
-      }
-      a.remove-filter {
-        @apply leading-[1.5]  mr-1 pl-0 pb-2 bg-transparent text-2xl hover:text-link-hover text-iiedblue-500 font-light;
-      }
-  }
-  }
 
   /*-- animations --*/
   @keyframes bounce-x {
@@ -557,14 +478,14 @@
 
   /*-- sign up forms --*/
   #mc_embed_signup .input-group li input {
-    @apply mr-2 border border-gray-300 rounded shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-200 focus:ring-opacity-50;
+    @apply mr-2 border border-stone-300 rounded-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-100;
   }
 
  #mc_embed_signup #mc-embedded-subscribe {
-  @apply h-12 max-w-xs px-6 py-2 mb-6 text-lg cursor-pointer font-semibold text-gray-800 transition-colors duration-150 rounded-full shadow-sm hover:shadow-none bg-iiedorange-500 hover:bg-iiedorange-600;
+  @apply h-12 max-w-xs px-6 py-2 mb-6 text-lg cursor-pointer font-semibold text-stone-800 transition-colors duration-150 rounded-full bg-iiedorange-500 hover:bg-iiedorange-600;
  }
  #mce-success-response {
-  @apply my-6 p-4 bg-iiedorange-50 rounded-xl text-gray-700;
+  @apply my-6 p-4 bg-iiedorange-50 rounded-xl text-stone-700;
  }
 
   /* Dynamic colour change */
@@ -607,7 +528,7 @@
   /* Klaro override default styles */
   #klaro {
     #klaro-cookie-notice {
-      @apply border border-gray-300 rounded-xl shadow-none outline-none;
+      @apply border border-stone-300 rounded-xl shadow-none outline-none;
     }
     .cn-body {
       @apply text-base;
@@ -619,7 +540,7 @@
       @apply text-link-text;
     }
     .cm-btn {
-      @apply px-3 py-2 border-none rounded-full bg-iiedblue-400 cursor-pointer font-sans text-gray-800 transition-colors duration-150 shadow-sm hover:shadow-none hover:bg-iiedblue-500;
+      @apply px-3 py-2 border-none rounded-full bg-iiedblue-400 cursor-pointer font-sans text-stone-800 transition-colors duration-150 shadow-sm hover:shadow-none hover:bg-iiedblue-500;
     }
   
     .cookie-modal .cm-modal.cm-klaro {
@@ -639,5 +560,86 @@
       @apply overflow-x-auto;
     }
 
-}
+} /*-- end layer components --*/
 
+  /* over rides moved outside @layer */
+
+  /*-- search --*/
+  .ui-widget.search-api-autocomplete-search { 
+    @apply bg-white text-base; 
+  } 
+  .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper {
+    @apply p-0 bg-none;
+  }
+ 
+ .js input.form-autocomplete.ui-autocomplete-loading {
+    @apply bg-throbber;
+    background-position: right 2.2em center;   
+ }
+  .search-page .srp-w {
+      @apply w-full max-w-screen-sm px-5;
+    }
+  .search-page .srp-h {
+      @apply h-14;
+    }
+  .search-page .srp-text {
+    @apply text-base;
+  }  
+  
+  #block-exposedformsearchpage-2-5 .bef--secondary,
+  #edit-submit-search--2,
+  #edit-submit-search,
+  #edit-submit-search--3,
+  #edit-submit-search--4 {
+    display: none;
+  }
+
+  .js input.form-autocomplete {
+    background-image: none;
+  }
+
+  .search-page .filter-chip, .views-filters-summary {
+    @apply text-balance my-1 flex;
+    .item {
+      @apply inline-flex items-center ml-2 mt-1 space-x-1 border border-stone-300 rounded-full;
+      .value {
+        @apply leading-[1.5] border-none ml-1 my-1 align-middle;
+      }
+      a.remove-filter {
+        @apply leading-[1.5]  mr-1 pl-0 pb-2 bg-transparent text-2xl hover:text-link-hover text-iiedblue-500 font-light;
+      }
+    }
+  }
+
+  /* fix for custom block cards height */
+  .grid-h-full > div:first-child {
+    @apply h-full;
+  }
+
+  .box {
+    @apply border border-stone-300 p-4 rounded-xl;
+  }
+
+  .box h2,
+  .box h3,
+  .box h4,
+  .box h5 {
+    @apply mt-2;
+  }
+
+  /*-- ClickD form hacks --*/
+  #clickdimform .clickdform input[type="text"], 
+  .clickdimensions .clickdform input[type="text"] 
+  {
+    @apply h-9 border border-stone-300 rounded-lg px-4 py-2;
+  }
+  #clickdimform #btnSubmit,
+  .clickdimensions #btnSubmit
+   {
+    @apply px-3 py-2 border-none rounded-full bg-iiedorange-500 cursor-pointer font-sans text-stone-800 transition-colors duration-150 hover:shadow-none hover:bg-iiedorange-600;
+  }
+  .clickdform.mainDiv {
+    height: 100% !important;
+  }
+
+@import "./compat-display.pcss";

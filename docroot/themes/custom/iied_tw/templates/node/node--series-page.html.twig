@@ -26,7 +26,7 @@ Series page node template.
           <div class="mb-4 sm:order-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
 
               {% set label = not node.page_label.isEmpty() ? node.page_label.value : node.type.entity.label %}
-              <div class="text-base font-medium leading-tight tracking-wider text-gray-500 uppercase">
+              <div class="text-base font-medium leading-tight tracking-wider uppercase text-stone-500">
                 {{ label }}
               </div>
         </div>
@@ -37,7 +37,7 @@ Series page node template.
         {#-- standfirst --#}
         {% if node.field_standfirst.value %}
           <div
-            class="mb-4 prose prose-lg border-b border-gray-300 lg:prose-xl"
+            class="mb-4 prose prose-lg border-b border-stone-300 lg:prose-xl"
           >
             {{ content.field_standfirst }}
           </div>
@@ -88,7 +88,7 @@ Series page node template.
             src="{{ file_url(logo_file.uri.value) }}"
             alt=""
             aria-hidden="true"
-            class="object-contain mb-6 pointer-events-none select-none max-h-7"
+            class="object-contain mb-6 pointer-events-none select-none max-h-8"
           >
         {% endif %}
 
@@ -111,11 +111,11 @@ Series page node template.
           {% if "On" in content.field_display_image.0 %}   
           {% if node.field_main_image.target_id %}
           <figure class="mb-6 -mx-4 sm:mx-0">
-            <div class="overflow-hidden bg-gray-300 border rounded-xl">
+            <div class="overflow-hidden border bg-stone-300 border-stone-300 rounded-xl">
               {{ content.field_main_image[0] }}
             </div>
             <figcaption
-              class="px-4 mt-1 text-base leading-tight text-gray-500 sm:p-0">
+              class="px-4 mt-1 text-base leading-tight text-stone-500 sm:p-0">
               {{ content.field_image_caption }}
             </figcaption>
           </figure>
@@ -140,7 +140,7 @@ Series page node template.
 
     {# <div
       class="container lg:px-8 xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12">
-      <div class="border-t border-gray-300 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
+      <div class="border-t border-stone-300 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4 md:order-2">
   
          {{ content.field_tags }} 
         <div class="flex items-center py-4">

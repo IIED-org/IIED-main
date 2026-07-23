@@ -86,7 +86,7 @@ third_party_settings:
 _core:
   default_config_hash: m3BA7ry9oerhED2EXWWHra57A4vZj7Eobsr5-29dq4M
 id: acquia_search_index
-name: 'Acquia Search Solr Index'
+name: 'Search Solr Index'
 description: ''
 read_only: false
 field_settings:

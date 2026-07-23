@@ -9,7 +9,6 @@ use Drupal\Core\Language\Language;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\Core\TypedData\TranslatableInterface as TranslatableDataInterface;
 use Drupal\Core\TypedData\TranslationStatusInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
 use Drupal\Core\Url;
@@ -127,13 +126,6 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
    * @var bool
    */
   protected $translationInitialize = FALSE;
-
-  /**
-   * Whether or not this content entity is language aware.
-   *
-   * @var bool
-   */
-  protected $languageAware = FALSE;
 
   /**
    * Boolean indicating whether a new revision should be created on save.
@@ -901,10 +893,6 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
    * {@inheritdoc}
    */
   public function getTranslation($langcode) {
-    if ($langcode != LanguageInterface::LANGCODE_DEFAULT && $langcode != LanguageInterface::LANGCODE_NOT_SPECIFIED && $this->defaultLangcode != NULL) {
-      $this->setLanguageAware();
-    }
-
     // Ensure we always use the default language code when dealing with the
     // original entity language.
     if ($langcode != LanguageInterface::LANGCODE_DEFAULT && $langcode == $this->defaultLangcode) {
@@ -1570,35 +1558,6 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
     $bundle_info = \Drupal::service('entity_type.bundle.info')
       ->getBundleInfo($this->getEntityTypeId());
     return !empty($bundle_info[$bundle_name]['untranslatable_fields.default_translation_affected']);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function toUrl($rel = 'canonical', array $options = []) {
-    if ($this->languageManager()->isMultilingual() && $this instanceof TranslatableDataInterface && !in_array($rel, ['collection', 'add-page', 'add-form'], TRUE) && !isset($options['language']) && !$this->isLanguageAware()) {
-      $currentLanguage = $this->languageManager()->getCurrentLanguage(LanguageInterface::TYPE_CONTENT);
-      $options['language'] = $currentLanguage;
-
-      // Make sure no hreflang gets added by EntityBase::toUrl, since no
-      // specific language is requested here.
-      $options['attributes']['hreflang'] = FALSE;
-    }
-    return parent::toUrl($rel, $options);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isLanguageAware() {
-    return $this->languageAware;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setLanguageAware($flag = TRUE) {
-    $this->languageAware = $flag;
   }
 
 }

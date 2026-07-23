@@ -27,6 +27,10 @@ views.style.geolocation_source:
       type: string
       label: 'Path to marker icon'
 
+views.display.geolocation_layer:
+  type: views.display.attachment
+  label: 'Geolocation Layer'
+
 views.style.geolocation_layer:
   type: views.style.geolocation_source
   label: 'Geolocation Layer'

@@ -20,10 +20,10 @@
     "drupal/core": "^10.3 || ^11"
   },
   "require-dev": {
-    "drupal/coder": "^8.3.16",
+    "drupal/search_api": "^1.35",
     "drush/drush": "^12 || ^13",
-    "phpstan/phpstan-strict-rules": "^2",
-    "phpstan/phpstan-deprecation-rules": "^2"
+    "phpstan/phpstan-strict-rules": "^1",
+    "phpstan/phpstan-deprecation-rules": "^1"
   },
   "suggest": {
     "drush/drush": "^12 || ^13"

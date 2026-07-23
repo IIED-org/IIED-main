@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\file;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\file\Functional\Rest\FileResourceTestBase;
 use Drupal\Tests\hal\Functional\EntityResource\HalEntityNormalizationTrait;
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
@@ -9,6 +12,8 @@ use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class FileHalJsonAnonTest extends FileResourceTestBase {
 
   use HalEntityNormalizationTrait;

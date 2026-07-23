@@ -1,7 +1,6 @@
 _core:
   default_config_hash: RaRd9EIcwA4u3qCSRLL8EnCicbda1kV__ASmVbyehvQ
 display_extenders:
-  - matomo
   - metatag_display_extender
 sql_signature: false
 ui:
@@ -14,7 +13,7 @@ ui:
       enabled: false
       where: above
     display_embed: false
-  always_live_preview: true
+  always_live_preview: false
   exposed_filter_any_label: new_any
 field_rewrite_elements:
   div: DIV

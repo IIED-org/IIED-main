@@ -21,7 +21,7 @@ class WebformElementValidateUniqueTest extends WebformElementBrowserTestBase {
   /**
    * Tests element validate unique.
    */
-  public function testValidateUnique() {
+  public function testValidateUnique(): void {
     $assert_session = $this->assertSession();
 
     $this->drupalLogin($this->rootUser);

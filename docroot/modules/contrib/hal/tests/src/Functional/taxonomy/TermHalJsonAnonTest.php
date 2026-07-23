@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\taxonomy;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\hal\Functional\EntityResource\HalEntityNormalizationTrait;
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
@@ -10,6 +13,8 @@ use Drupal\Tests\taxonomy\Functional\Rest\TermResourceTestBase;
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class TermHalJsonAnonTest extends TermResourceTestBase {
 
   use HalEntityNormalizationTrait;
@@ -69,7 +74,7 @@ class TermHalJsonAnonTest extends TermResourceTestBase {
       case [2]:
         $expected_parent_normalization_links = [
           [
-          'href' => $this->baseUrl . '/taxonomy/term/2?_format=hal_json',
+            'href' => $this->baseUrl . '/taxonomy/term/2?_format=hal_json',
           ],
         ];
         $expected_parent_normalization_embedded = [

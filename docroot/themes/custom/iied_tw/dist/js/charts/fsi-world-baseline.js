@@ -142,7 +142,7 @@
       if (controlsEl) {
         controlsEl.innerHTML = `
           <label class="inline-flex items-center gap-2 text-gray-700 mb-2">
-            <input type="checkbox" class="js-advanced-chart-labels-toggle border border-gray-300 rounded shadow-sm text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-200 focus:ring-opacity-50" aria-label="Show country labels" />
+            <input type="checkbox" class="js-advanced-chart-labels-toggle border border-gray-300 rounded-sm shadow-xs text-iiedpink-800 focus:border-iiedpink-300 focus:ring focus:ring-offset-0 focus:ring-iiedpink-200/50" aria-label="Show country labels" />
             Show country labels
           </label>
         `;

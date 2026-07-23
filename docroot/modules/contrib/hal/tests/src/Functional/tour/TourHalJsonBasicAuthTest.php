@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\tour;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\BasicAuthResourceTestTrait;
 use Drupal\Tests\tour\Functional\Rest\TourResourceTestBase;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class TourHalJsonBasicAuthTest extends TourResourceTestBase {
 
   use BasicAuthResourceTestTrait;

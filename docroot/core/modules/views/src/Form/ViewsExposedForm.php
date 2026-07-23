@@ -124,7 +124,7 @@ class ViewsExposedForm extends FormBase implements WorkspaceSafeFormInterface {
     if (!$view->hasUrl()) {
       // On any non views.ajax route, use the current route for the form action.
       if ($this->getRouteMatch()->getRouteName() !== 'views.ajax') {
-        $form_action = Url::fromRoute('<current>')->toString();
+        $form_action = $view->display_handler->getPath() ?: Url::fromRoute('<current>')->toString();
       }
       else {
         // On the views.ajax route, set the action to the page we were on.
@@ -137,10 +137,7 @@ class ViewsExposedForm extends FormBase implements WorkspaceSafeFormInterface {
 
     $form['#action'] = $form_action;
     $form['#theme'] = $view->buildThemeFunctions('views_exposed_form');
-    $clean_form_id = Html::cleanCssIdentifier('views_exposed_form-' . $view->storage->id() . '-' . $display['id']);
-    $form['#attributes']['class'][] = $clean_form_id;
-    // The form can be possibly rendered twice on a page, make the id unique.
-    $form['#id'] = Html::getUniqueId($clean_form_id);
+    $form['#id'] = Html::cleanCssIdentifier('views_exposed_form-' . $view->storage->id() . '-' . $display['id']);
     // Labels are built too late for inline form errors to work, resulting
     // in duplicated messages.
     $form['#disable_inline_form_errors'] = TRUE;

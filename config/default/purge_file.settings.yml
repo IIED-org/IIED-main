@@ -1,5 +1,5 @@
 base_urls: ''
 workflow: immediate
 debug: false
-processor: lateruntime
 invalidation_type: wildcardurl
+processor: lateruntime

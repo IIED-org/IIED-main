@@ -71,7 +71,7 @@ class LeafletMarkerZoomAndAnimate extends MapFeatureBase {
 
       if (isset($location['#attributes']['data-views-row-index'])) {
         $anchor_id = $view->getStyle()->tokenizeValue($anchor_id, (int) $location['#attributes']['data-views-row-index']);
-        $location['#attributes']['data-marker-zoom-anchor-id'] = $anchor_id;
+        $location['#attributes']['data-marker-zoom-anchor-id'] = trim($anchor_id);
       }
     }
 

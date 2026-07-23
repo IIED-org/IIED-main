@@ -83,25 +83,25 @@
     <main>
         {#-- grid --#}
       <div
-          class="container mx-auto xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
+          class="xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12 container mx-auto"
         >
             <!-- header -->
-            <div class="pt-6 xl:col-span-3 xl:row-span-2">
+            <div class="xl:col-span-3 xl:row-span-2 pt-6">
               <header class="">
               <nav aria-label="themes">
-                <div class="mb-4 sm:justify-between sm:flex xl:flex-col">
-                  <div class="order-1 mb-2 xl:order-1 sm:order-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
-                  <div class="mb-2 xl:order-2">{{ content.field_theme_s_}}</div>
+                <div class="sm:justify-between sm:flex xl:flex-col mb-4">
+                  <div class="xl:order-1 sm:order-2 order-1 mb-2">{{ drupal_block('language_block:language_interface', wrapper=false) }}</div>
+                  <div class="xl:order-2 mb-2">{{ content.field_theme_s_}}</div>
                 </div>
               </nav>
-                <div class="border-b-2 border-iiedpink-500">
+                <div class="border-iiedpink-500 border-b-2">
                   <h1 class="mb-6">{{ node.label }}</h1>
-                  <h2 class="mb-6 text-xl text-iiedpink-700">
+                  <h2 class="text-iiedpink-700 mb-6 text-xl">
                     {{ content.field_subheading }}
                   </h2>
                 </div>
                 <div
-                  class="flex flex-wrap justify-between py-4 border-b border-gray-300 sm:flex-row xl:flex-col"
+                  class="border-stone-300 sm:flex-row xl:flex-col flex flex-wrap justify-between py-4 border-b"
                 >
                 {% if content.field_author_s_ is not empty %} 
               <div class="flex mb-2"><span class="mr-1">Long read by</span> {{ content.field_author_s_ }}</div>
@@ -110,15 +110,17 @@
                 </div>
     
                 <!-- share -->
-                <div class="flex flex-wrap justify-between py-4 sm:flex-row">
-                  <div class="flex items-center xl:mb-4">
+                <div class="sm:flex-row flex flex-wrap justify-between py-4">
+                  <div class="xl:mb-4 flex items-center">
                     {% include '@iied_tw/partials/_share_links.html.twig' %}
                   </div>
                   <!-- end date and share -->
+                  <!-- copy & print buttons -->
+                  {% include '@iied_tw/partials/_copy_print_links.html.twig' %} 
                   <!-- utility buttons -->
-                  <div class="flex flex-wrap sm:flex-row">
+                  {# <div class="sm:flex-row flex flex-wrap">
                     <button
-                      class="flex items-center px-3 py-2 mb-2 mr-2 transition bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500"
+                      class="border-stone-300 hover:shadow-none hover:bg-stone-100 hover:border-iiedblue-500 flex items-center px-3 py-2 mb-2 mr-2 transition bg-white border rounded-full shadow-sm"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +137,7 @@
                       Copy link
                     </button>
                     <button
-                      class="items-center hidden px-3 py-2 mb-2 mr-2 transition bg-white border border-gray-300 rounded-full shadow-sm md:flex hover:shadow-none hover:bg-gray-100 hover:border-iiedblue-500"
+                      class="border-stone-300 md:flex hover:shadow-none hover:bg-stone-100 hover:border-iiedblue-500 items-center hidden px-3 py-2 mb-2 mr-2 transition bg-white border rounded-full shadow-sm"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -151,23 +153,23 @@
                       </svg>
                       Print/PDF
                     </button>
-                  </div>
+                  </div> #}
                 </div>
               </header>
             </div>
             <!-- image -->
-            <div class="relative xl:col-span-9 xl:col-start-4">
-              <figure class="-mx-4 overflow-hidden xl:mb-2 xl:rounded-bl-xl sm:mx-0">
+            <div class="xl:col-span-9 xl:col-start-4 relative">
+              <figure class="xl:mb-2 xl:rounded-bl-xl sm:mx-0 -mx-4 overflow-hidden">
               {{ content.field_main_image }}
               </figure>
     
-              <figcaption class="right-0 text-sm text-gray-500 border-gray-300 xl:pl-2 xl:border-l xl:-mt-2 xl:absolute xl:w-48 2xl:w-80 xl:pt-2">
+              <figcaption class="text-stone-500 border-stone-300 xl:pl-2 xl:border-l xl:-mt-2 xl:absolute xl:w-48 2xl:w-80 xl:pt-2 right-0 text-sm">
                 {{ content.field_image_caption }}
               </figcaption>
             </div>
     
             <div class="xl:-mt-8 xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
-              <div class="prose md:prose-lg first-letter:text-8xl first-letter:float-left first-letter:font-serif first-letter:mr-2 first-letter:text-iiedpink-700">
+              <div class="md:prose-lg first-letter:text-8xl first-letter:float-left first-letter:font-serif first-letter:mr-2 first-letter:text-iiedpink-700 prose">
               {{ content.body }}
               </div>
             </div>
@@ -177,7 +179,7 @@
       {{ content.field_content }}
 
       {#-- tags --#}
-      <div class="container mx-auto xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12"
+      <div class="xl:grid xl:gap-6 md:max-w-3xl xl:max-w-screen-xl 2xl:max-w-screen-2xl xl:grid-cols-12 2xl:grid-cols-12 container mx-auto"
         >
       <div class="xl:col-span-7 2xl:col-span-6 xl:col-start-4 2xl:col-start-4">
       {{ content.field_tags }} 

@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api_autocomplete.search.acquia_search
     - search_api_autocomplete.search.search
   module:
     - comment
@@ -27,6 +26,5 @@ permissions:
   - 'export tablefield'
   - 'readonlymode access messages'
   - 'use klaro'
-  - 'use search_api_autocomplete for acquia_search'
   - 'use search_api_autocomplete for search'
   - 'view media'

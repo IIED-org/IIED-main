@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\menu_link_content;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Core\Cache\Cache;
 use Drupal\Tests\hal\Functional\EntityResource\HalEntityNormalizationTrait;
 use Drupal\Tests\menu_link_content\Functional\Rest\MenuLinkContentResourceTestBase;
@@ -10,6 +13,8 @@ use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class MenuLinkContentHalJsonAnonTest extends MenuLinkContentResourceTestBase {
 
   use HalEntityNormalizationTrait;

@@ -245,11 +245,12 @@ class ProximityFilter extends NumericFilter implements ContainerFactoryPluginInt
   protected function opBetween($expression) {
     /** @var \Drupal\views\Plugin\views\query\Sql $query */
     $query = $this->query;
+    $args = [':geoloc_min' => (float) $this->value['min'], ':geoloc_max' => (float) $this->value['max']];
     if ($this->operator == 'between') {
-      $query->addWhereExpression($this->options['group'], $expression . ' BETWEEN ' . $this->value['min'] . ' AND ' . $this->value['max']);
+      $query->addWhereExpression($this->options['group'], $expression . ' BETWEEN :geoloc_min AND :geoloc_max', $args);
     }
     else {
-      $query->addWhereExpression($this->options['group'], $expression . ' NOT BETWEEN ' . $this->value['min'] . ' AND ' . $this->value['max']);
+      $query->addWhereExpression($this->options['group'], $expression . ' NOT BETWEEN :geoloc_min AND :geoloc_max', $args);
     }
   }
 
@@ -259,7 +260,9 @@ class ProximityFilter extends NumericFilter implements ContainerFactoryPluginInt
   protected function opSimple($expression) {
     /** @var \Drupal\views\Plugin\views\query\Sql $query */
     $query = $this->query;
-    $query->addWhereExpression($this->options['group'], $expression . ' ' . $this->operator . ' ' . $this->value['value']);
+    $allowed_operators = ['<', '<=', '=', '>=', '>'];
+    $op = in_array($this->operator, $allowed_operators, TRUE) ? $this->operator : '<';
+    $query->addWhereExpression($this->options['group'], $expression . ' ' . $op . ' :geoloc_val', [':geoloc_val' => (float) $this->value['value']]);
   }
 
   /**
@@ -284,7 +287,7 @@ class ProximityFilter extends NumericFilter implements ContainerFactoryPluginInt
   protected function opRegex($expression) {
     /** @var \Drupal\views\Plugin\views\query\Sql $query */
     $query = $this->query;
-    $query->addWhereExpression($this->options['group'], $expression . ' ~* ' . $this->value['value']);
+    $query->addWhereExpression($this->options['group'], $expression . ' ~* :geoloc_regex', [':geoloc_regex' => $this->value['value']]);
   }
 
 }

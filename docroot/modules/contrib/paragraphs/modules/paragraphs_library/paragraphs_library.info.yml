@@ -11,7 +11,7 @@ dependencies:
 test_dependencies:
   - entity_browser:entity_browser
 
-# Information added by Drupal.org packaging script on 2026-01-01
-version: '8.x-1.20'
+# Information added by Drupal.org packaging script on 2026-06-24
+version: '8.x-1.21'
 project: 'paragraphs'
-datestamp: 1767269544
+datestamp: 1782312930

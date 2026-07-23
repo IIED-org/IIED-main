@@ -2,6 +2,10 @@
 
 namespace Drupal\Tests\hal\Functional\dblog;
 
+use Drupal\Core\Cache\CacheableMetadata;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Url;
@@ -13,6 +17,8 @@ use Drupal\Tests\rest\Functional\ResourceTestBase;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class DbLogResourceTest extends ResourceTestBase {
 
   use CookieResourceTestTrait;
@@ -77,14 +83,20 @@ class DbLogResourceTest extends ResourceTestBase {
     $request_options = $this->getAuthenticationRequestOptions('GET');
 
     $response = $this->request('GET', $url, $request_options);
-    $this->assertResourceErrorResponse(403, "The 'restful get dblog' permission is required.", $response, ['4xx-response', 'http_response'], ['user.permissions'], FALSE, FALSE);
+    $this->assertResourceErrorResponse(403, "The 'restful get dblog' permission is required.", $response, [
+      '4xx-response',
+      'http_response',
+    ], ['user.permissions'], FALSE, FALSE);
 
     // Create a user account that has the required permissions to read
     // the watchdog resource via the REST API.
     $this->setUpAuthorization('GET');
 
     $response = $this->request('GET', $url, $request_options);
-    $this->assertResourceResponse(200, FALSE, $response, ['config:rest.resource.dblog', 'http_response'], ['user.permissions'], FALSE, 'MISS');
+    $this->assertResourceResponse(200, FALSE, $response, [
+      'config:rest.resource.dblog',
+      'http_response',
+    ], ['user.permissions'], FALSE, 'MISS');
     $log = Json::decode((string) $response->getBody());
     $this->assertEquals($id, $log['wid'], 'Log ID is correct.');
     $this->assertEquals('rest', $log['type'], 'Type of log message is correct.');
@@ -95,7 +107,8 @@ class DbLogResourceTest extends ResourceTestBase {
     $response = $this->request('GET', $url, $request_options);
     $this->assertResourceErrorResponse(404, "Log entry with ID '9999' was not found", $response);
 
-    // Make a bad request (a true malformed request would never be a route match).
+    // Make a bad request (a true malformed request would never be a route
+    // match).
     $url->setRouteParameter('id', 0);
     $response = $this->request('GET', $url, $request_options);
     $this->assertResourceErrorResponse(400, 'No log entry ID was provided', $response);
@@ -123,11 +136,15 @@ class DbLogResourceTest extends ResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getExpectedUnauthorizedAccessMessage($method) {}
+  protected function getExpectedUnauthorizedAccessMessage($method) {
+    return '';
+  }
 
   /**
    * {@inheritdoc}
    */
-  protected function getExpectedUnauthorizedAccessCacheability() {}
+  protected function getExpectedUnauthorizedAccessCacheability() {
+    return new CacheableMetadata();
+  }
 
 }

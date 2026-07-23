@@ -18,7 +18,6 @@ use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Psr\Log\LogLevel;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Defines Drush commands for the module.
@@ -48,12 +47,10 @@ final class ViewsBulkOperationsCommands extends DrushCommands {
    *   VBO Action manager service.
    */
   public function __construct(
-    protected AccountProxyInterface $currentUser,
-    protected EntityTypeManagerInterface $entityTypeManager,
-    #[Autowire(service: 'views_bulk_operations.data')]
-    protected ViewsBulkOperationsViewDataInterface $viewData,
-    #[Autowire(service: 'plugin.manager.views_bulk_operations_action')]
-    protected ViewsBulkOperationsActionManager $actionManager,
+    private readonly AccountProxyInterface $currentUser,
+    EntityTypeManagerInterface $entityTypeManager,
+    private readonly ViewsBulkOperationsViewDataInterface $viewData,
+    private readonly ViewsBulkOperationsActionManager $actionManager,
   ) {
     parent::__construct();
     $this->userStorage = $entityTypeManager->getStorage('user');
@@ -149,7 +146,7 @@ final class ViewsBulkOperationsCommands extends DrushCommands {
     if (\count($vbo_data['arguments']) !== 0) {
       $view->setArguments($vbo_data['arguments']);
     }
-    if ($vbo_data['exposed_input'] !== NULL && \count($vbo_data['exposed_input']) !== 0) {
+    if (\count($vbo_data['exposed_input']) !== 0) {
       $view->setExposedInput($vbo_data['exposed_input']);
     }
 

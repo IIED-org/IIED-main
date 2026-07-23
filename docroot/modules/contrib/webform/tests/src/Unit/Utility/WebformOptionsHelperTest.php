@@ -28,7 +28,7 @@ class WebformOptionsHelperTest extends UnitTestCase {
    *
    * @dataProvider providerHasOption
    */
-  public function testHasOption($value, array $options, $expected) {
+  public function testHasOption($value, array $options, $expected): void {
     $result = WebformOptionsHelper::hasOption($value, $options);
     $this->assertEquals($expected, $result);
   }
@@ -63,7 +63,7 @@ class WebformOptionsHelperTest extends UnitTestCase {
    *
    * @dataProvider providerGetOptionText
    */
-  public function testGetOptionText($value, array $options, $options_description, $expected) {
+  public function testGetOptionText($value, array $options, $options_description, $expected): void {
     $result = WebformOptionsHelper::getOptionText($value, $options, $options_description);
     $this->assertEquals($expected, $result);
   }
@@ -149,7 +149,7 @@ class WebformOptionsHelperTest extends UnitTestCase {
    *
    * @dataProvider providerGetOptionsText
    */
-  public function testGetOptionsText(array $values, array $options, $expected) {
+  public function testGetOptionsText(array $values, array $options, $expected): void {
     $result = WebformOptionsHelper::getOptionsText($values, $options);
     $this->assertEquals($expected, $result);
   }
@@ -178,7 +178,7 @@ class WebformOptionsHelperTest extends UnitTestCase {
    *
    * @dataProvider providerConvertOptionsToString
    */
-  public function testConvertOptionsToString(array $options, $expected) {
+  public function testConvertOptionsToString(array $options, $expected): void {
     $result = WebformOptionsHelper::convertOptionsToString($options);
     $this->assertEquals($expected, $result);
   }
@@ -206,7 +206,7 @@ class WebformOptionsHelperTest extends UnitTestCase {
    *
    * @dataProvider providerRange
    */
-  public function testRange(array $element, $expected) {
+  public function testRange(array $element, $expected): void {
     $element += [
       '#min' => 1,
       '#max' => 100,
@@ -251,7 +251,7 @@ class WebformOptionsHelperTest extends UnitTestCase {
    *
    * @dataProvider providerEncodeConfig
    */
-  public function testEncodeConfig(array $options, $expected) {
+  public function testEncodeConfig(array $options, $expected): void {
     $result = WebformOptionsHelper::encodeConfig($options);
     $this->assertEquals($expected, $result);
   }
@@ -285,7 +285,7 @@ class WebformOptionsHelperTest extends UnitTestCase {
    *
    * @dataProvider providerDecodeConfig
    */
-  public function testDecodeConfig(array $options, $expected) {
+  public function testDecodeConfig(array $options, $expected): void {
     $result = WebformOptionsHelper::decodeConfig($options);
     $this->assertEquals($expected, $result);
   }

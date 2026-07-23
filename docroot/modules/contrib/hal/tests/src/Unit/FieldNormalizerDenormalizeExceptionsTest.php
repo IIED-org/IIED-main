@@ -2,8 +2,11 @@
 
 namespace Drupal\Tests\hal\Unit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Core\Field\FieldItemBase;
-use Drupal\Core\Field\Plugin\DataType\FieldItem;
 use Drupal\hal\Normalizer\FieldItemNormalizer;
 use Drupal\hal\Normalizer\FieldNormalizer;
 use Drupal\Tests\UnitTestCase;
@@ -14,6 +17,8 @@ use Symfony\Component\Serializer\Exception\InvalidArgumentException;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class FieldNormalizerDenormalizeExceptionsTest extends UnitTestCase {
 
   /**
@@ -23,6 +28,7 @@ class FieldNormalizerDenormalizeExceptionsTest extends UnitTestCase {
    *
    * @dataProvider providerNormalizerDenormalizeExceptions
    */
+  #[DataProvider('providerNormalizerDenormalizeExceptions')]
   public function testFieldNormalizerDenormalizeExceptions(bool $with_context) {
     $field_item_normalizer = new FieldNormalizer();
     $data = [];
@@ -32,7 +38,7 @@ class FieldNormalizerDenormalizeExceptionsTest extends UnitTestCase {
     $context = [];
     if ($with_context) {
       $mock = $this->createMock(FieldItemBase::class);
-      $mock->expects($this->any())
+      $mock->expects($this->atLeastOnce())
         ->method('getParent')
         ->willReturn(NULL);
       $context['target_instance'] = $mock;
@@ -48,6 +54,7 @@ class FieldNormalizerDenormalizeExceptionsTest extends UnitTestCase {
    *
    * @dataProvider providerNormalizerDenormalizeExceptions
    */
+  #[DataProvider('providerNormalizerDenormalizeExceptions')]
   public function testFieldItemNormalizerDenormalizeExceptions(bool $with_context) {
     $field_item_normalizer = new FieldItemNormalizer();
     $data = [];
@@ -57,7 +64,7 @@ class FieldNormalizerDenormalizeExceptionsTest extends UnitTestCase {
     $context = [];
     if ($with_context) {
       $mock = $this->createMock(FieldItemBase::class);
-      $mock->expects($this->any())
+      $mock->expects($this->atLeastOnce())
         ->method('getParent')
         ->willReturn(NULL);
       $context['target_instance'] = $mock;

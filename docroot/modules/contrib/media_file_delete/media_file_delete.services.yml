@@ -8,3 +8,7 @@ services:
     arguments: ['@file.usage']
     tags:
       - { name: media_file_delete_file_usage_resolver, priority: -100}
+
+  Drupal\media_file_delete\Hook\MediaFileDeleteHooks:
+    class: Drupal\media_file_delete\Hook\MediaFileDeleteHooks
+    autowire: true

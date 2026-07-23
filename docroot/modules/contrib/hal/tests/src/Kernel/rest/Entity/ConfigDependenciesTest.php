@@ -2,6 +2,10 @@
 
 namespace Drupal\Tests\hal\Kernel\rest\Entity;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\rest\Entity\ConfigDependencies;
 use Drupal\rest\Entity\RestResourceConfig;
@@ -12,18 +16,27 @@ use Drupal\rest\RestResourceConfigInterface;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class ConfigDependenciesTest extends KernelTestBase {
 
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['rest', 'entity_test', 'serialization'];
+  protected static $modules = [
+    'rest',
+    'entity_test',
+    'serialization',
+    'user',
+    'system',
+  ];
 
   /**
    * @covers ::calculateDependencies
    *
    * @dataProvider providerBasicDependencies
    */
+  #[DataProvider('providerBasicDependencies')]
   public function testCalculateDependencies(array $configuration) {
     $config_dependencies = new ConfigDependencies(['hal_json' => 'hal', 'json' => 'serialization'], ['basic_auth' => 'basic_auth']);
 
@@ -42,6 +55,7 @@ class ConfigDependenciesTest extends KernelTestBase {
    *
    * @dataProvider providerBasicDependencies
    */
+  #[DataProvider('providerBasicDependencies')]
   public function testOnDependencyRemovalRemoveUnrelatedDependency(array $configuration) {
     $config_dependencies = new ConfigDependencies(['hal_json' => 'hal', 'json' => 'serialization'], ['basic_auth' => 'basic_auth']);
 
@@ -201,6 +215,7 @@ class ConfigDependenciesTest extends KernelTestBase {
    *
    * @dataProvider providerOnDependencyRemovalForResourceGranularity
    */
+  #[DataProvider('providerOnDependencyRemovalForResourceGranularity')]
   public function testOnDependencyRemovalForResourceGranularity(array $configuration, $module, $expected_configuration) {
     assert(is_string($module));
     assert($expected_configuration === FALSE || is_array($expected_configuration));

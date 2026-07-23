@@ -6,12 +6,10 @@ namespace Drupal\views_bulk_operations\Controller;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\views_bulk_operations\Service\ViewsBulkOperationsActionProcessorInterface;
 use Drupal\views_bulk_operations\Traits\ViewsBulkOperationsFormTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -19,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Defines VBO controller class.
  */
-class ViewsBulkOperationsController extends ControllerBase implements ContainerInjectionInterface {
+class ViewsBulkOperationsController extends ControllerBase {
 
   use ViewsBulkOperationsFormTrait;
 
@@ -38,17 +36,6 @@ class ViewsBulkOperationsController extends ControllerBase implements ContainerI
     protected readonly ViewsBulkOperationsActionProcessorInterface $actionProcessor,
     protected readonly RendererInterface $renderer,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('tempstore.private'),
-      $container->get('views_bulk_operations.processor'),
-      $container->get('renderer')
-    );
-  }
 
   /**
    * The actual page callback.

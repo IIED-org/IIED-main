@@ -45,3 +45,4 @@ sites/simpletest
 CHANGELOG.txt
 
 .DS_Store
+/autoload_runtime.php

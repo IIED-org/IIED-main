@@ -18,8 +18,22 @@ content:
     type: image_url
     label: hidden
     settings:
-      image_style: card_370
-    third_party_settings: {  }
+      responsive_image_style: hero
+      image_link: ''
+      image_loading:
+        attribute: eager
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
     weight: 1
     region: content
 hidden:

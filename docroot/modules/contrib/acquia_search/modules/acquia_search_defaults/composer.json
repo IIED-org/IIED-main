@@ -1,6 +1,0 @@
-{
-    "name": "drupal/acquia_search_defaults",
-    "description": "Provides default search index and view for Acquia Search.",
-    "license": "GPL-2.0-or-later",
-    "type": "drupal-module"
-}

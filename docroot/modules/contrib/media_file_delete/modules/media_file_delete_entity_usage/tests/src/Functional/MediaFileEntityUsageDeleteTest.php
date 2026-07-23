@@ -10,12 +10,16 @@ use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 use Drupal\Tests\TestFileCreationTrait;
 use Drupal\Tests\user\Traits\UserCreationTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Defines a class for testing media_file_delete module with entity usage.
  *
  * @group media_file_delete
  */
+#[Group('media_file_delete')]
+#[RunTestsInSeparateProcesses]
 class MediaFileEntityUsageDeleteTest extends BrowserTestBase {
 
   use TestFileCreationTrait;

@@ -27,6 +27,11 @@ trait BoundaryTrait {
    *   The fragment to enter to actual query.
    */
   public static function getBoundaryQueryFragment($table_name, $field_id, $filter_lat_north_east, $filter_lng_north_east, $filter_lat_south_west, $filter_lng_south_west) {
+    $filter_lat_north_east = (float) $filter_lat_north_east;
+    $filter_lng_north_east = (float) $filter_lng_north_east;
+    $filter_lat_south_west = (float) $filter_lat_south_west;
+    $filter_lng_south_west = (float) $filter_lng_south_west;
+
     // Define the field name.
     $field_lat = "{$table_name}.{$field_id}_lat";
     $field_lng = "{$table_name}.{$field_id}_lng";

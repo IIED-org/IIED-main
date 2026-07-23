@@ -5,11 +5,11 @@
   {% set title_text = node.label %}
 {% endif %}
 {% block image %} 
-    <div class="max-w-[75%] w-[170px] h-auto mx-auto rounded shadow-md">
+    <div class="max-w-[75%] w-[170px] h-auto mx-auto rounded-sm shadow-md">
        {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'search_cover', 'img_style':'search_cover', 'alt_text': title_text|striptags } %} 
     </div>
   {% endblock %}
 
   {% block meta %}
-      <div class="text-gray-500">{{ node.type.entity.label() }}, {{ node.field_date_published.value|date('d F Y') }} </div>
+      <div class="text-stone-500">{{ node.type.entity.label() }}, {{ node.field_date_published.value|date('d F Y') }} </div>
   {% endblock %}

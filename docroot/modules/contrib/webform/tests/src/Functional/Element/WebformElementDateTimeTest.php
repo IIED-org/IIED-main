@@ -30,7 +30,7 @@ class WebformElementDateTimeTest extends WebformElementBrowserTestBase {
   /**
    * Test datetime element.
    */
-  public function testDateTime() {
+  public function testDateTime(): void {
     $assert_session = $this->assertSession();
 
     $webform = Webform::load('test_element_datetime');

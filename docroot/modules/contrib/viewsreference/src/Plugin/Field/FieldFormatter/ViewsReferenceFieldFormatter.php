@@ -112,6 +112,7 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
         'enabled_settings' => $enabled_settings,
         'parent_entity_type' => $parent_entity_type,
         'parent_entity_id' => $parent_entity_id,
+        'parent_entity_langcode' => $langcode,
         'parent_field_name' => $parent_field_name,
         'parent_revision_id' => $parent_revision_id,
         'field_item_delta' => $delta,
@@ -150,7 +151,9 @@ class ViewsReferenceFieldFormatter extends FormatterBase {
           $render_array['#view_id'] = $view->storage->id();
           $render_array['#view_display_show_admin_links'] = $view->getShowAdminLinks();
           $render_array['#view_display_plugin_id'] = $view->getDisplay()->getPluginId();
-          views_add_contextual_links($render_array, $render_array['#view_display_plugin_id'], $display_id);
+          $plugin_id = $render_array['#view_display_plugin_id'];
+          $location = in_array($plugin_id, ['block', 'page', 'view']) ? $plugin_id : 'view';
+          views_add_contextual_links($render_array, $location, $display_id);
 
           $elements[$delta]['contents'] = $render_array;
         }

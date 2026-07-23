@@ -27,7 +27,7 @@
                 {% if key is not empty %}
                   <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.tid.value}) }}">
                   {{ item.entity.label }}</a>
-                  {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-gray-300"></div>' }}
+                  {{ not loop.last ? '<div aria-hidden="true" class="w-px h-4 bg-stone-300"></div>' }}
                 {% endif %}
               {% endfor %}
             </div>
@@ -72,17 +72,17 @@
 
    {# {{ attach_library('iied_tw/alpine') }}
   {% block main %}
-    <div class="pb-12 mb-12 border-b border-gray-300">
+    <div class="pb-12 mb-12 border-b border-stone-300">
       <div class="tab-wrapper" 
         x-data="{ tab: window.location.hash ? window.location.hash.substring(1) : 'inthiscollection' }"
         x-init="$refs[tab].focus()"
         id="tab_wrapper"
         >
-        <nav class="border-b border-gray-300">
+        <nav class="border-b border-stone-300">
           <div class="container flex flex-row">
-            <a x-ref="inthiscollection" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'inthiscollection' }" @click.prevent="tab = 'inthiscollection'; window.location.hash = 'inthiscollection'" href="#">All content</a>
-            <a x-ref="map" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'map' }" @click.prevent="tab = 'map'; window.location.hash = 'map'" href="#">Map</a>
-            <a x-ref="summaries" class="block px-6 py-2 text-lg font-semibold text-gray-700 focus:border-b-2 border-iiedblue-500 hover:text-gray-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'summaries' }" @click.prevent="tab = 'summaries'; window.location.hash = 'summaries'" href="#">Summaries</a>
+            <a x-ref="inthiscollection" class="block px-6 py-2 text-lg font-semibold text-stone-700 focus:border-b-2 border-iiedblue-500 hover:text-stone-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'inthiscollection' }" @click.prevent="tab = 'inthiscollection'; window.location.hash = 'inthiscollection'" href="#">All content</a>
+            <a x-ref="map" class="block px-6 py-2 text-lg font-semibold text-stone-700 focus:border-b-2 border-iiedblue-500 hover:text-stone-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'map' }" @click.prevent="tab = 'map'; window.location.hash = 'map'" href="#">Map</a>
+            <a x-ref="summaries" class="block px-6 py-2 text-lg font-semibold text-stone-700 focus:border-b-2 border-iiedblue-500 hover:text-stone-900 focus:outline-none" :class="{ 'active border-b-2': tab === 'summaries' }" @click.prevent="tab = 'summaries'; window.location.hash = 'summaries'" href="#">Summaries</a>
           </div>  
         </nav>
           <div class="pt-6 tab-panel" x-show="tab === 'inthiscollection'" x-transition:enter.duration.750ms>

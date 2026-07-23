@@ -1,0 +1,37 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method Drupal\\Core\\Executable\\ExecutableInterface\:\:execute\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: src/Action/ViewsBulkOperationsActionBase.php
+
+		-
+			message: '#^Access to an undefined property Drupal\\views\\ResultRow\:\:\$nid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/src/Kernel/ViewsBulkOperationsProcessSortingTest.php
+
+		-
+			message: '#^Parameter \#1 \$message of static method Drupal\\views_bulk_operations\\Action\\ViewsBulkOperationsActionBase\:\:message\(\) expects string\|null, Drupal\\Core\\StringTranslation\\TranslatableMarkup given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/views_bulk_operations_test/src/Plugin/Action/ViewsBulkOperationsTestActionV2.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 2
+			path: views_bulk_operations.install
+
+		-
+			message: '#^Language construct isset\(\) should not be used\.$#'
+			identifier: ergebnis.noIsset
+			count: 3
+			path: views_bulk_operations.install
+
+		-
+			message: '#^PHPDoc tag @var with type Drupal\\Core\\Entity\\EntityStorageInterface is not subtype of type Drupal\\Core\\Config\\Entity\\ConfigEntityStorage\.$#'
+			identifier: varTag.type
+			count: 1
+			path: views_bulk_operations.install

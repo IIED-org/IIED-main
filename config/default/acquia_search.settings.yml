@@ -1,8 +1,0 @@
-_core:
-  default_config_hash: kVdYL0s7HSheIGw8N1eNw6Wv1WVI_c2ZznSKINU_QqU
-api_host: 'https://api.sr-prod02.acquia.com'
-extract_query_handler_option: update/extract
-read_only: false
-flood_limit:
-  select:
-    limit: '100'

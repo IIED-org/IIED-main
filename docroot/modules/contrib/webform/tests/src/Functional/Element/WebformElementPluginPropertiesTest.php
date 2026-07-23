@@ -42,7 +42,7 @@ class WebformElementPluginPropertiesTest extends WebformElementBrowserTestBase {
   /**
    * Test element default properties.
    */
-  public function testElementDefaultProperties() {
+  public function testElementDefaultProperties(): void {
     // Comparing all element's expected and actual default properties ensures
     // that there are not unexpected changes to any element's
     // default properties.

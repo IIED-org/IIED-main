@@ -18,7 +18,7 @@ class FieldNormalizer extends SerializationFieldNormalizer {
   /**
    * {@inheritdoc}
    */
-  public function normalize($field_items, $format = NULL, array $context = []): array|string|int|float|bool|\ArrayObject|NULL {
+  public function normalize($field_items, $format = NULL, array $context = []): array {
     $normalized_field_items = [];
 
     // Get the field definition.

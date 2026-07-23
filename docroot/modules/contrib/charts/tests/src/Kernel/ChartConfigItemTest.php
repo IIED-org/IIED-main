@@ -76,8 +76,8 @@ class ChartConfigItemTest extends ChartsKernelTestBase {
             'type' => 'line',
           ],
         ],
-        TRUE,
-        'Field is empty when no data collector table is present.',
+        FALSE,
+        'Field is not empty when config has chart settings.',
       ],
       'config has an empty data collector table' => [
         [
@@ -89,8 +89,8 @@ class ChartConfigItemTest extends ChartsKernelTestBase {
             ],
           ],
         ],
-        TRUE,
-        'Field is empty when data collector table has no data.',
+        FALSE,
+        'Field is not empty when config exists, even without data.',
       ],
       'config has data in data collector table' => [
         [

@@ -24,7 +24,7 @@ class GeolocationContains extends JoinPluginBase implements JoinPluginInterface 
     $latitude_field = $this->leftTable . '.' . $this->leftField . '_lat';
     $longitude_field = $this->leftTable . '.' . $this->leftField . '_lng';
 
-    $condition = "ST_Contains(" . $geometry_field . ", ST_PointFromText(CONCAT('POINT(', " . $longitude_field . ", ' ', " . $latitude_field . ", ')'), 4326))";
+    $condition = "ST_Contains(" . $geometry_field . ", ST_PointFromText(CONCAT('POINT(', " . $longitude_field . ", ' ', " . $latitude_field . ", ')')))";
 
     $select_query->addJoin($this->type, $this->table, $table['alias'], $condition);
   }

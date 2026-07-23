@@ -14,6 +14,11 @@ use Drupal\Tests\BrowserTestBase;
 class GeolocationFieldTest extends BrowserTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'standard';
+
+  /**
    * Modules to enable.
    *
    * @var array

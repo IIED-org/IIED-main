@@ -7,12 +7,19 @@ namespace Drupal\Tests\views_bulk_operations\FunctionalJavascript;
 use Behat\Mink\Element\DocumentElement;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\FunctionalJavascriptTests\JSWebAssert;
+use Drupal\Tests\views_bulk_operations\WatchdogTestTrait;
+use Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @coversDefaultClass \Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm
- * @group views_bulk_operations
+ * VBO Bulk Form Views plugin JS test.
  */
+#[CoversClass(ViewsBulkOperationsBulkForm::class)]
+#[Group('views_bulk_operations')]
 final class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
+
+  use WatchdogTestTrait;
 
   private const TEST_NODE_COUNT = 15;
 
@@ -60,6 +67,7 @@ final class ViewsBulkOperationsBulkFormTest extends WebDriverTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    'dblog',
     'node',
     'views',
     'views_bulk_operations',

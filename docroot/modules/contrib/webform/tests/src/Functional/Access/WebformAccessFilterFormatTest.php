@@ -40,7 +40,7 @@ class WebformAccessFilterFormatTest extends WebformBrowserTestBase {
   /**
    * Tests webform default filter format access.
    */
-  public function testFilterFormatAccess() {
+  public function testFilterFormatAccess(): void {
     $assert_session = $this->assertSession();
 
     /** @var \Drupal\Core\Session\AccountSwitcherInterface $account_switcher */

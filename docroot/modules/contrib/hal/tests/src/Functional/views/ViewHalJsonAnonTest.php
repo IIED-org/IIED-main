@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\views;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 use Drupal\Tests\views\Functional\Rest\ViewResourceTestBase;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class ViewHalJsonAnonTest extends ViewResourceTestBase {
 
   use AnonResourceTestTrait;

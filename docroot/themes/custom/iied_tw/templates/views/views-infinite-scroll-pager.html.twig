@@ -6,9 +6,9 @@
 #}
 
 {% if items.next %}
-<ul{{ attributes.addClass('border-t border-gray-300') }}>
+<ul{{ attributes.addClass('border-t border-stone-300') }}>
   <li class="flex justify-center pager__item">
-    <a class="flex items-center px-4 py-2 text-gray-900 transition bg-white border button rounded-b-2xl hover:bg-gray-100 border-grey-300" href="{{ items.next.href }}" title="{{ 'Load more items'|t }}" rel="next">{{ options.button_text }}       
+    <a class="flex items-center px-4 py-2 transition bg-white border text-stone-900 button rounded-b-2xl hover:bg-stone-100 border-stone-300" href="{{ items.next.href }}" title="{{ 'Load more items'|t }}" rel="next">{{ options.button_text }}       
     <svg
         xmlns="http://www.w3.org/2000/svg"
         class="w-6 h-6 mx-2"

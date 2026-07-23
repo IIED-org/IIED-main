@@ -35,8 +35,8 @@
       <ul>
     {% endif %}
     {% for item in items %}
-      <li{{ item.attributes.addClass('flex-shrink-0 transition-colors ease-out border border-gray-300 rounded-full hover:bg-gray-100') }}>
-        {{ link(item.title, item.url, { 'class':['block', 'py-1.5', 'px-4', 'text-gray-900', 'hover:text-gray-900','visited:text-gray-900']}) }}
+      <li{{ item.attributes.addClass('flex-shrink-0 transition-colors ease-out border border-stone-300 rounded-full hover:bg-stone-100') }}>
+        {{ link(item.title, item.url, { 'class':['block', 'py-1.5', 'px-4', 'text-stone-900', 'hover:text-stone-900','visited:text-stone-900']}) }}
         {% if item.below %}
           {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
         {% endif %}

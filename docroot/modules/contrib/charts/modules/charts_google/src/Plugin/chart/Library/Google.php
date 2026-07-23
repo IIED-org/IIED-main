@@ -2,9 +2,9 @@
 
 namespace Drupal\charts_google\Plugin\chart\Library;
 
+use Drupal\charts\ApplyRawOptionsTrait;
 use Drupal\charts\Attribute\Chart;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -37,9 +37,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
     "pie",
     "scatter",
     "spline",
-  ]
+  ],
+  example_route: "charts_google_api_example.display",
 )]
 class Google extends ChartBase implements ContainerFactoryPluginInterface {
+
+  use ApplyRawOptionsTrait;
 
   /**
    * The element info manager.
@@ -354,15 +357,8 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
     $chart_definition['options']['animation']['duration'] = 10000;
     $chart_definition['options']['animation']['easing'] = 'out';
 
-    // Merge in chart raw options.
-    if (!empty($element['#raw_options'])) {
-      $chart_definition = NestedArray::mergeDeepArray([
-        $chart_definition,
-        $element['#raw_options'],
-      ]);
-    }
-
-    return $chart_definition;
+    // Merge in chart raw options and return the definition.
+    return $this->applyRawOptions($element, $chart_definition);
   }
 
   /**
@@ -411,12 +407,7 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
         $axis['viewWindow']['min'] = !empty($element[$key]['#min']) ? (int) $element[$key]['#min'] : NULL;
 
         // Merge in axis raw options.
-        if (!empty($element[$key]['#raw_options'])) {
-          $axis = NestedArray::mergeDeepArray([
-            $axis,
-            $element[$key]['#raw_options'],
-          ]);
-        }
+        $axis = $this->applyRawOptions($element[$key], $axis);
 
         // Multi-axis support only applies to the major axis in Google charts.
         $chart_type = $this->chartTypeManager->getDefinition($element['#chart_type']);
@@ -582,13 +573,8 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
           $series['type'] = $data_chart_type;
         }
 
-        // Merge in point raw options.
-        if (!empty($data_item['#raw_options'])) {
-          $series = NestedArray::mergeDeepArray([
-            $series,
-            $data_item['#raw_options'],
-          ]);
-        }
+        // Merge in series raw options.
+        $series = $this->applyRawOptions($element[$key], $series);
 
         // Add the series to the main chart definition.
         ChartElement::trimArray($series);
@@ -613,12 +599,7 @@ class Google extends ChartBase implements ContainerFactoryPluginInterface {
             $chart_definition['_data'][$sub_key + 1][$series_number + 1]['tooltip'] = $data_item['#title'];
 
             // Merge in data point raw options.
-            if (!empty($data_item['#raw_options'])) {
-              $chart_definition['_data'][$sub_key + 1][$series_number + 1] = NestedArray::mergeDeepArray([
-                $chart_definition['_data'][$sub_key + 1][$series_number + 1],
-                $data_item['#raw_options'],
-              ]);
-            }
+            $chart_definition['_data'][$sub_key + 1][$series_number + 1] = $this->applyRawOptions($data_item, $chart_definition['_data'][$sub_key + 1][$series_number + 1]);
 
             ChartElement::trimArray($chart_definition['_data'][$sub_key + 1][$series_number + 1]);
           }

@@ -1,6 +1,7 @@
 services:
   _defaults:
     autowire: true
+    autoconfigure: true
 
   views_bulk_operations.data:
     class: Drupal\views_bulk_operations\Service\ViewsBulkOperationsViewData
@@ -21,8 +22,6 @@ services:
 
   views_bulk_operations.view_data_provider:
     class: Drupal\views_bulk_operations\EventSubscriber\ViewsBulkOperationsEventSubscriber
-    tags:
-      - { name: event_subscriber }
 
   logger.channel.views_bulk_operations:
     parent: logger.channel_base

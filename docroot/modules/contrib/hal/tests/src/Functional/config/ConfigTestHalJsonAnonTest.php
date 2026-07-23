@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\config;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\config_test\Functional\Rest\ConfigTestResourceTestBase;
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class ConfigTestHalJsonAnonTest extends ConfigTestResourceTestBase {
 
   use AnonResourceTestTrait;

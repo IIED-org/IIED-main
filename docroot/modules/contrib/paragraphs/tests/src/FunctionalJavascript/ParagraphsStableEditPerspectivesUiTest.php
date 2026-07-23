@@ -81,7 +81,7 @@ class ParagraphsStableEditPerspectivesUiTest extends WebDriverTestBase {
     $this->assertFalse($style_selector->isVisible());
 
     // Assert scroll position when switching tabs.
-    $this->getSession()->resizeWindow(800, 600);
+    $this->getSession()->resizeWindow(1100, 600);
     $this->drupalGet('node/add/testcontent');
     $button = $this->getSession ()->getPage()->findButton('Add TestPlugin');
     $button->press();

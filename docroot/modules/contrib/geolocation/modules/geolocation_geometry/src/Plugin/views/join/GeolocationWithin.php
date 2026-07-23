@@ -24,7 +24,7 @@ class GeolocationWithin extends JoinPluginBase implements JoinPluginInterface {
     $latitude_field = $this->leftTable . '.' . $this->leftField . '_lat';
     $longitude_field = $this->leftTable . '.' . $this->leftField . '_lng';
 
-    $condition = "ST_Within(ST_PointFromText(CONCAT('POINT(', " . $longitude_field . ", ' ', " . $latitude_field . ", ')'), 4326), " . $geometry_field . ")";
+    $condition = "ST_Within(ST_PointFromText(CONCAT('POINT(', " . $longitude_field . ", ' ', " . $latitude_field . ", ')')), " . $geometry_field . ")";
 
     $select_query->addJoin($this->type, $this->table, $table['alias'], $condition);
   }

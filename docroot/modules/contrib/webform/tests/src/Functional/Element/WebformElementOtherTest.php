@@ -21,7 +21,7 @@ class WebformElementOtherTest extends WebformElementBrowserTestBase {
   /**
    * Tests options with other elements.
    */
-  public function testBuildingOtherElements() {
+  public function testBuildingOtherElements(): void {
     $assert_session = $this->assertSession();
 
     $this->drupalGet('/webform/test_element_other');
@@ -108,7 +108,7 @@ class WebformElementOtherTest extends WebformElementBrowserTestBase {
   /**
    * Tests value processing for other elements.
    */
-  public function testProcessingOtherElements() {
+  public function testProcessingOtherElements(): void {
     $assert_session = $this->assertSession();
 
     $webform = Webform::load('test_element_other');

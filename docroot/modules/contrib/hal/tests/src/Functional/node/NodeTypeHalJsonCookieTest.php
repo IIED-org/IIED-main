@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\node;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\node\Functional\Rest\NodeTypeResourceTestBase;
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class NodeTypeHalJsonCookieTest extends NodeTypeResourceTestBase {
 
   use CookieResourceTestTrait;

@@ -87,7 +87,7 @@ abstract class FieldMappingBase extends PluginBase implements FieldMappingInterf
       if (sizeOf($key_parts) > 1) {
         $element_type = $webform_field_types[$key_parts[1]];
         //Webform field vs user added fields
-        if ($key_parts[0] == "1") {
+        if ($key_parts[0] == "1" && is_array($element_type)) {
           $element_type = $element_type['type'];
         }
         if (in_array($element_type, $supported_types)) {

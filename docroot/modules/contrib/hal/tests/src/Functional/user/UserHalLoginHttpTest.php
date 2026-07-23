@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\user;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\user\Functional\UserLoginHttpTest;
 use GuzzleHttp\Cookie\CookieJar;
 use Drupal\hal\Encoder\JsonEncoder as HALJsonEncoder;
@@ -12,6 +15,8 @@ use Symfony\Component\Serializer\Serializer;
  *
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class UserHalLoginHttpTest extends UserLoginHttpTest {
 
   /**

@@ -1,6 +1,6 @@
 '*':
   paths:
-    drush-script: /var/www/${env-name}.iied.org/gitroot/bin/drush
+    drush-script: /var/www/${env-name}.iied.org/gitroot/vendor/bin/drush
     files: sites/default/files
     private: ../private_files
 local:

@@ -2,6 +2,9 @@
 
 namespace Drupal\Tests\hal\Functional\contact;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\contact\Functional\Rest\MessageResourceTestBase;
 use Drupal\Tests\hal\Functional\EntityResource\HalEntityNormalizationTrait;
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
@@ -9,6 +12,8 @@ use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class MessageHalJsonAnonTest extends MessageResourceTestBase {
 
   use HalEntityNormalizationTrait;
@@ -45,6 +50,26 @@ class MessageHalJsonAnonTest extends MessageResourceTestBase {
         ],
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function testGet(?bool $run = NULL): void {
+    if ($run !== TRUE && \version_compare(\Drupal::VERSION, '11.3.999', '>=')) {
+      $this->markTestSkipped('This has been replaced with doTestGet.');
+    }
+    parent::testGet();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function doTestGet(): void {
+    if (\method_exists($this, 'testGet')) {
+      $this->testGet(TRUE);
+    }
+    $this->fail('Contact module has removed ::testGet()');
   }
 
 }

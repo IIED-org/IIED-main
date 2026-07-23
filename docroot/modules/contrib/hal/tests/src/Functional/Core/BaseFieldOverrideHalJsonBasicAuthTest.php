@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\Core;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\FunctionalTests\Rest\BaseFieldOverrideResourceTestBase;
 use Drupal\Tests\rest\Functional\BasicAuthResourceTestTrait;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class BaseFieldOverrideHalJsonBasicAuthTest extends BaseFieldOverrideResourceTestBase {
 
   use BasicAuthResourceTestTrait;

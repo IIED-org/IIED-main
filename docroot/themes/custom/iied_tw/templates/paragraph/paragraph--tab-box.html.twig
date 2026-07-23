@@ -55,14 +55,14 @@
 
     {% block content %}
 
-      <div class="p-4 mb-8 prose border border-gray-300 max-w-none tab-wrapper rounded-xl" 
+      <div class="p-4 mb-8 prose border border-stone-300 max-w-none tab-wrapper rounded-xl" 
         x-data="{ activeTab: 0 }">
 
-        <nav class="flex flex-col mb-4 border-b border-gray-300 sm:flex-row">
+        <nav class="flex flex-col mb-4 border-b border-stone-300 sm:flex-row">
           {% for key, tab_title in tab_titles %}
           <button 
             @click="activeTab = {{ key }}"
-            class="block px-6 py-2 font-semibold text-gray-700 tab-control hover:text-gray-900 focus:outline-none" 
+            class="block px-6 py-2 font-semibold text-stone-700 tab-control hover:text-stone-900 focus:outline-none" 
             :class="{ 'active': activeTab === {{ key }} }">
             {{ tab_title }}
           </button>
@@ -102,11 +102,11 @@
 
     {% block content %}
 
-      <div class="p-4 mb-8 prose border border-gray-300 max-w-none tab-wrapper rounded-xl" x-data="{ activeTab:  0 }">
+      <div class="p-4 mb-8 prose border border-stone-300 max-w-none tab-wrapper rounded-xl" x-data="{ activeTab:  0 }">
 
-        <nav class="flex flex-col mb-4 border-b border-gray-300 sm:flex-row">
+        <nav class="flex flex-col mb-4 border-b border-stone-300 sm:flex-row">
           {% for key, tab_title in tab_titles %}
-          <button @click="activeTab = {{key}}" class="block px-6 py-2 font-semibold text-gray-700 tab-control hover:text-gray-900 focus:outline-none" :class="{ 'active': activeTab === {{key}} }">{{ tab_title }}</button>
+          <button @click="activeTab = {{key}}" class="block px-6 py-2 font-semibold text-stone-700 tab-control hover:text-stone-900 focus:outline-none" :class="{ 'active': activeTab === {{key}} }">{{ tab_title }}</button>
           {% endfor %}
         </nav>
 

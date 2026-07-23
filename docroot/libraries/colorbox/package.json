@@ -1,7 +1,7 @@
 {
 	"name": "jquery-colorbox",
 	"description": "jQuery lightbox and modal window plugin.",
-	"version": "1.6.4",
+	"version": "1.7.0",
 	"keywords": [
 		"modal",
 		"lightbox",
@@ -11,9 +11,9 @@
 		"jquery-plugin"
 	],
 	"author": {
-		"name": "Jack Moore",
-		"url": "http://www.jacklmoore.com",
-		"email": "hello@jacklmoore.com"
+		"name": "Paul McKibben",
+		"url": "https://www.turbojettech.com",
+		"email": "paul@turbojettech.com"
 	},
 	"main": "jquery.colorbox.js",
 	"license": "MIT",
@@ -21,9 +21,15 @@
 	"demo": "http://www.jacklmoore.com/colorbox",
 	"repository": {
 		"type": "git",
-		"url": "http://github.com/jackmoore/colorbox.git"
+		"url": "https://github.com/TurbojetTechnologies/colorbox.git"
+	},
+	"scripts": {
+		"minify": "terser jquery.colorbox.js -o jquery.colorbox-min.js"
 	},
 	"peerDependencies": {
 		"jquery": ">=1.3.2"
+	},
+	"devDependencies": {
+		"terser": "^5.44.1"
 	}
 }

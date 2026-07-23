@@ -2,12 +2,17 @@
 
 namespace Drupal\Tests\hal\Functional\views;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\Group;
+
 use Drupal\Tests\rest\Functional\CookieResourceTestTrait;
 use Drupal\Tests\views\Functional\Rest\ViewResourceTestBase;
 
 /**
  * @group hal
  */
+#[Group('hal')]
+#[RunTestsInSeparateProcesses]
 class ViewHalJsonCookieTest extends ViewResourceTestBase {
 
   use CookieResourceTestTrait;

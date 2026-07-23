@@ -2,6 +2,7 @@
 
 namespace Drupal\charts\Element;
 
+use Drupal\charts\Service\ChartTableBuilder;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -28,34 +29,6 @@ class Chart extends RenderElementBase implements ContainerFactoryPluginInterface
   use LibraryRetrieverTrait;
 
   /**
-   * The config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * The chart plugin manager.
-   *
-   * @var \Drupal\charts\ChartManager
-   */
-  protected $chartsManager;
-
-  /**
-   * The chart type info service.
-   *
-   * @var \Drupal\charts\Plugin\chart\Type\TypeInterface
-   */
-  protected $chartsTypeManager;
-
-  /**
-   * The module handler service.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * Constructs a Chart object.
    *
    * @param array $configuration
@@ -64,22 +37,30 @@ class Chart extends RenderElementBase implements ContainerFactoryPluginInterface
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory service.
-   * @param \Drupal\charts\ChartManager $chart_manager
+   * @param \Drupal\charts\ChartManager $chartsManager
    *   The chart plugin manager.
-   * @param \Drupal\charts\TypeManager $type_manager
+   * @param \Drupal\charts\TypeManager $chartsTypeManager
    *   The chart type manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   The module handler service.
+   * @param \Drupal\charts\Service\ChartTableBuilder|null $tableBuilder
+   *   The chart table builder service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ChartManager $chart_manager, TypeManager $type_manager, ModuleHandlerInterface $module_handler) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected ConfigFactoryInterface $configFactory,
+    protected ChartManager $chartsManager,
+    protected TypeManager $chartsTypeManager,
+    protected ModuleHandlerInterface $moduleHandler,
+    protected ?ChartTableBuilder $tableBuilder = NULL,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->configFactory = $config_factory;
-    $this->chartsManager = $chart_manager;
-    $this->chartsTypeManager = $type_manager;
-    $this->moduleHandler = $module_handler;
+    // @phpstan-ignore-next-line
+    $this->tableBuilder ??= \Drupal::service('charts.table_builder');
   }
 
   /**
@@ -93,7 +74,8 @@ class Chart extends RenderElementBase implements ContainerFactoryPluginInterface
       $container->get('config.factory'),
       $container->get('plugin.manager.charts'),
       $container->get('plugin.manager.charts_type'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('charts.table_builder')
     );
   }
 
@@ -510,9 +492,7 @@ class Chart extends RenderElementBase implements ContainerFactoryPluginInterface
     $visibility = $element['#accessible_table'] ?? 'collapsible';
 
     if ($visibility !== 'disabled') {
-      /** @var \Drupal\charts\Service\ChartTableBuilder $table_builder */
-      $table_builder = \Drupal::service('charts.table_builder');
-      $raw_table = $table_builder->buildTable($element);
+      $raw_table = $this->tableBuilder->buildTable($element);
 
       if ($visibility === 'collapsible') {
         $unique_id = Html::getUniqueId('charts-table-' . $element['#id']);

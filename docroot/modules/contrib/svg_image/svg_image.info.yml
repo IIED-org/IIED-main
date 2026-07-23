@@ -7,7 +7,7 @@ core_version_requirement: ^10.3 || ^11
 dependencies:
   - drupal:image
 
-# Information added by Drupal.org packaging script on 2025-08-26
-version: '3.2.2'
+# Information added by Drupal.org packaging script on 2026-07-02
+version: '3.2.4'
 project: 'svg_image'
-datestamp: 1756226413
+datestamp: 1783014077

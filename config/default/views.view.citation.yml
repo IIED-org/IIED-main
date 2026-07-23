@@ -15,7 +15,6 @@ dependencies:
     - computed_field
     - node
     - taxonomy
-    - user
     - views_field_view
 id: citation
 label: Citation
@@ -670,9 +669,8 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: perm
-        options:
-          perm: 'access content'
+        type: none
+        options: {  }
       cache:
         type: tag
         options: {  }
@@ -907,7 +905,18 @@ display:
           required: false
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        matomo:
+          enabled: false
+          keyword_gets: ''
+          keyword_behavior: first
+          keyword_concat_separator: ' '
+          category_behavior: none
+          category_gets: ''
+          category_concat_separator: ' '
+          category_fallback: ''
+          category_facets: {  }
+          category_facets_concat_separator: ', '
     cache_metadata:
       max-age: -1
       contexts:
@@ -916,7 +925,6 @@ display:
         - url
         - user
         - 'user.node_grants:view'
-        - user.permissions
       tags:
         - 'config:field.storage.node.field_author_s_'
         - 'config:field.storage.node.field_editor_s_'
@@ -1633,7 +1641,6 @@ display:
         - url
         - user
         - 'user.node_grants:view'
-        - user.permissions
       tags:
         - 'config:field.storage.node.field_author_s_'
         - 'config:field.storage.node.field_editor_s_'
@@ -1774,7 +1781,6 @@ display:
         - url
         - user
         - 'user.node_grants:view'
-        - user.permissions
       tags:
         - 'config:field.storage.node.field_publisher'
   embed_1:
@@ -1860,6 +1866,5 @@ display:
         - url
         - user
         - 'user.node_grants:view'
-        - user.permissions
       tags:
         - 'config:field.storage.node.field_product_code_new'
