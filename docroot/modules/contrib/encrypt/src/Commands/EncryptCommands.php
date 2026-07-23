@@ -2,7 +2,7 @@
 
 namespace Drupal\encrypt\Commands;
 
-use Drupal\encrypt\EncryptService;
+use Drupal\encrypt\EncryptServiceInterface;
 use Drupal\encrypt\Entity\EncryptionProfile;
 use Drush\Commands\DrushCommands;
 
@@ -16,17 +16,17 @@ class EncryptCommands extends DrushCommands {
   /**
    * Encrypt service.
    *
-   * @var \Drupal\encrypt\EncryptService
+   * @var \Drupal\encrypt\EncryptServiceInterface
    */
   protected $encrypt;
 
   /**
    * EncryptCommands constructor.
    *
-   * @param \Drupal\encrypt\EncryptService $encrypt
-   *   The encrypt service object.
+   * @param \Drupal\encrypt\EncryptServiceInterface $encrypt
+   *   The encryption service.
    */
-  public function __construct(EncryptService $encrypt) {
+  public function __construct(EncryptServiceInterface $encrypt) {
     $this->encrypt = $encrypt;
   }
 
@@ -51,7 +51,7 @@ class EncryptCommands extends DrushCommands {
    *
    * @throws \Exception
    */
-  public function encrypt($encryption_profile_name, $text, array $options = ['base64' => FALSE]) {
+  public function encrypt($encryption_profile_name, #[\SensitiveParameter] $text, array $options = ['base64' => FALSE]) {
     $encryption_profile = EncryptionProfile::load($encryption_profile_name);
     if (!$encryption_profile) {
       throw new \Exception(dt("Encryption profile @profile could not be loaded.", ['@profile' => $encryption_profile]));
@@ -85,7 +85,7 @@ class EncryptCommands extends DrushCommands {
    *
    * @throws \Exception
    */
-  public function decrypt($encryption_profile_name, $text, array $options = ['base64' => FALSE]) {
+  public function decrypt($encryption_profile_name, #[\SensitiveParameter] $text, array $options = ['base64' => FALSE]) {
     $encryption_profile = EncryptionProfile::load($encryption_profile_name);
     if (!$encryption_profile) {
       throw new \Exception('error', dt('Encryption profile "@name" could not be loaded.', ['@name' => $encryption_profile_name]));

@@ -6,12 +6,12 @@ use Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface;
 use Drupal\purge\Plugin\Purge\Queue\TxBuffer;
 use Drupal\purge\Plugin\Purge\Queue\TxBufferInterface;
 use Drupal\Tests\purge\Kernel\KernelTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge\Plugin\Purge\Queue\TxBuffer.
- *
- * @group purge
  */
+#[Group('purge')]
 class TxBufferTest extends KernelTestBase {
 
   /**

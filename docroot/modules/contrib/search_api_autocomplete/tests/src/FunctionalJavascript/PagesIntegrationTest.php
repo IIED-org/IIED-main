@@ -6,6 +6,7 @@ use Drupal\search_api_autocomplete\Entity\Search;
 use Drupal\search_api_autocomplete\SearchInterface;
 use Drupal\search_api_autocomplete\Tests\TestsHelper;
 use Drupal\search_api_page\Entity\SearchApiPage;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests integration with the Search API Pages module.
@@ -13,6 +14,7 @@ use Drupal\search_api_page\Entity\SearchApiPage;
  * @requires module search_api_page
  * @group search_api_autocomplete
  */
+#[RunTestsInSeparateProcesses]
 class PagesIntegrationTest extends IntegrationTestBase {
 
   /**
@@ -202,7 +204,7 @@ class PagesIntegrationTest extends IntegrationTestBase {
     $this->assertEquals($expected, $suggestions);
 
     /** @var \Drupal\search_api\Query\QueryInterface $query */
-    list($query) = $this->getMethodArguments('backend', 'getAutocompleteSuggestions');
+    [$query] = $this->getMethodArguments('backend', 'getAutocompleteSuggestions');
     $this->assertEquals(['name'], $query->getFulltextFields());
 
     $this->drupalGet($this->getAdminPath('edit'));
@@ -218,7 +220,7 @@ class PagesIntegrationTest extends IntegrationTestBase {
     $elements = $this->getAutocompleteSuggestions();
     $this->assertCount(5, $elements);
 
-    list($query) = $this->getMethodArguments('backend', 'getAutocompleteSuggestions');
+    [$query] = $this->getMethodArguments('backend', 'getAutocompleteSuggestions');
     $this->assertEquals(['body'], $query->getFulltextFields());
   }
 

@@ -119,7 +119,7 @@ class PurgeBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#type' => 'radios',
       '#title' => $this->t('Execution'),
       '#default_value' => $config['execution'],
-      '#description' => $this->t('With direct execution, the user gets immedate feedback whether the cache invalidation succeeded or failed. The drawback is that failures, will not be queued for later retries.'),
+      '#description' => $this->t('With direct execution, the user gets immediate feedback whether the cache invalidation succeeded or failed. The drawback is that failures, will not be queued for later retries.'),
       '#options' => [
         'direct' => $this->t("Direct execution"),
         'queue' => $this->t("Through queue"),

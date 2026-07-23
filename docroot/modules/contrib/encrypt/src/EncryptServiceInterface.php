@@ -34,7 +34,7 @@ interface EncryptServiceInterface {
    * @throws \Drupal\encrypt\Exception\EncryptException
    *   Can throw an EncryptException.
    */
-  public function encrypt($text, EncryptionProfileInterface $encryption_profile);
+  public function encrypt(#[\SensitiveParameter] $text, EncryptionProfileInterface $encryption_profile);
 
   /**
    * Main decrypt function.
@@ -52,6 +52,6 @@ interface EncryptServiceInterface {
    * @throws \Drupal\encrypt\Exception\EncryptionMethodCanNotDecryptException
    *   Thrown when method can not decrypt (i.e. use a public key).
    */
-  public function decrypt($text, EncryptionProfileInterface $encryption_profile);
+  public function decrypt(#[\SensitiveParameter] $text, EncryptionProfileInterface $encryption_profile);
 
 }

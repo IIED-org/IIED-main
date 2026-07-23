@@ -10,12 +10,14 @@ use Drupal\search_api_autocomplete\SearchInterface;
 use Drupal\search_api_test\MethodOverrides;
 use Drupal\search_api_test\PluginTestTrait;
 use Drupal\user\Entity\Role;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests saving a Search API autocomplete config entity.
  *
  * @group search_api_autocomplete
  */
+#[RunTestsInSeparateProcesses]
 class SearchCrudTest extends KernelTestBase {
 
   use PluginTestTrait;

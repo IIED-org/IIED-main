@@ -44,7 +44,7 @@ class InvalidateCommand extends DrushCommands {
   protected $purgeInvalidationFactory;
 
   /**
-   * Construct a Invalidatecommand object.
+   * Construct an InvalidateCommand object.
    *
    * @param \Drupal\purge\Plugin\Purge\Invalidation\InvalidationsServiceInterface $purge_invalidation_factory
    *   The purge invalidation factory service.

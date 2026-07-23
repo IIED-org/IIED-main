@@ -3,7 +3,7 @@
 namespace Drupal\purge\Logger;
 
 /**
- * Provides a subchannel whichs logs to a single main channel with permissions.
+ * Provides a subchannel which logs to a single main channel with permissions.
  *
  * Supports psr/log:^3.
  */

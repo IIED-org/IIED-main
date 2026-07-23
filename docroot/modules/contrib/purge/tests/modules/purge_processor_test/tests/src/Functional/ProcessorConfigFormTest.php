@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge_processor_test\Functional;
 
 use Drupal\purge_processor_test\Form\ProcessorConfigForm;
 use Drupal\Tests\purge_ui\FunctionalJavascript\Form\Config\ProcessorConfigFormTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge_processor_test\Form\ProcessorConfigForm.
- *
- * @group purge
  */
+#[Group('purge')]
 class ProcessorConfigFormTest extends ProcessorConfigFormTestBase {
 
   /**

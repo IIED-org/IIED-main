@@ -3,12 +3,14 @@
 namespace Drupal\Tests\search_api_autocomplete\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests correctness of our Twig templates.
  *
  * @group search_api_autocomplete
  */
+#[RunTestsInSeparateProcesses]
 class TemplateTest extends KernelTestBase {
 
   /**

@@ -356,7 +356,7 @@ abstract class PluginTestBase extends KernelTestBase {
   }
 
   /**
-   * Test overal state storage and retrieval.
+   * Test overall state storage and retrieval.
    *
    * @see \Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface::setState
    * @see \Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface::setStateContext

@@ -113,6 +113,7 @@ class QueuerAddForm extends ConfigFormBase {
       $enabled = $this->purgeQueuers->getPluginsEnabled();
       $enabled[] = $id;
       $this->purgeQueuers->setPluginsEnabled($enabled);
+      $this->messenger()->addStatus($this->t('The configuration options have been saved.'));
       $response->addCommand(new ReloadConfigFormCommand('edit-queue'));
     }
     return $response;

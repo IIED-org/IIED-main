@@ -147,7 +147,7 @@ class DatabaseQueue extends CoreDatabaseQueue implements QueueInterface {
 
         // If there are affected rows, this update succeeded.
         if ($update->execute()) {
-          $item->data = unserialize($item->data);
+          $item->data = unserialize($item->data, ['allowed_classes' => FALSE]);
           return $item;
         }
       }
@@ -176,7 +176,7 @@ class DatabaseQueue extends CoreDatabaseQueue implements QueueInterface {
       $item_ids[] = $item->item_id;
       $item->item_id = (int) $item->item_id;
       $item->expire = (int) $item->expire;
-      $item->data = unserialize($item->data);
+      $item->data = unserialize($item->data, ['allowed_classes' => FALSE]);
       $returned_items[] = $item;
     }
 
@@ -329,7 +329,7 @@ class DatabaseQueue extends CoreDatabaseQueue implements QueueInterface {
       }
       $item->item_id = (int) $item->item_id;
       $item->expire = (int) $item->expire;
-      $item->data = unserialize($item->data);
+      $item->data = unserialize($item->data, ['allowed_classes' => FALSE]);
       $items[] = $item;
     }
     return $items;

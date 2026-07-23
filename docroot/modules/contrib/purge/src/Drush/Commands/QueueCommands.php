@@ -248,12 +248,14 @@ class QueueCommands extends DrushCommands implements SiteAliasManagerAwareInterf
    * @return null|\Consolidation\OutputFormatters\StructuredData\RowsOfFields
    *   Row-based structure of data.
    */
-  public function queueBrowse(array $options = [
-    'format' => 'table',
-    'limit' => 30,
-    'page' => 1,
-    'no-translations' => FALSE,
-  ]) {
+  public function queueBrowse(
+    array $options = [
+      'format' => 'table',
+      'limit' => 30,
+      'page' => 1,
+      'no-translations' => FALSE,
+    ],
+  ) {
     $options['limit'] = (int) $options['limit'];
     $options['page'] = (int) $options['page'];
 
@@ -404,10 +406,12 @@ class QueueCommands extends DrushCommands implements SiteAliasManagerAwareInterf
    * @command p:queue-stats
    * @aliases pqs,p-queue-stats
    */
-  public function queueStatistics(array $options = [
-    'format' => 'table',
-    'reset-totals' => FALSE,
-  ]) {
+  public function queueStatistics(
+    array $options = [
+      'format' => 'table',
+      'reset-totals' => FALSE,
+    ],
+  ) {
 
     // Reset the total counters if requested to.
     if ($options['reset-totals'] && ($options['format'] === 'table')) {
@@ -506,10 +510,12 @@ class QueueCommands extends DrushCommands implements SiteAliasManagerAwareInterf
    * @command p:queue-work
    * @aliases pqw,p-queue-work
    */
-  public function queueWork(array $options = [
-    'format' => 'string',
-    'finish' => FALSE,
-  ]) {
+  public function queueWork(
+    array $options = [
+      'format' => 'string',
+      'finish' => FALSE,
+    ],
+  ) {
     // Process one chunk outside of a fork and without result interpretation.
     if (($options['finish'] === FALSE) && $options['no-interaction']) {
       return $this->queueWorkChunk();

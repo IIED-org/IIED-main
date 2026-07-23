@@ -9,12 +9,14 @@ use Drupal\search_api_autocomplete\Entity\Search;
 use Drupal\search_api_autocomplete\Search\SearchPluginManager;
 use Drupal\search_api_autocomplete\Utility\PluginHelper;
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests Views integration of the Autocomplete module.
  *
  * @group search_api_autocomplete
  */
+#[RunTestsInSeparateProcesses]
 class ViewsTest extends KernelTestBase {
 
   /**
@@ -278,6 +280,7 @@ class ViewsTest extends KernelTestBase {
 
     View::create([
       'id' => 'second_test_view',
+      'label' => 'Second test view',
       'base_field' => 'search_api_id',
       'base_table' => 'search_api_index_autocomplete_search_index',
       'core' => '8.x',

@@ -2,15 +2,17 @@
 
 namespace Drupal\purge_drush\Commands;
 
-@trigger_error('The ' . __NAMESPACE__ . '\ProcessorCommands is deprecated. Instead, use \Drupal\purge\Commands\ProcessorCommands', E_USER_DEPRECATED);
+@trigger_error(__NAMESPACE__ . '\ProcessorCommands is deprecated in purge:8.x-3.6 and is removed from purge:2.0.0. Use \Drupal\purge\Drush\Commands\ProcessorCommands instead. See https://www.drupal.org/node/3565396', E_USER_DEPRECATED);
 
-use Drupal\purge\Commands\ProcessorCommands as ProcessorCommandsBase;
+use Drupal\purge\Drush\Commands\ProcessorCommands as ProcessorCommandsBase;
 
 /**
  * Configure Purge processors from the command line.
  *
  * Note: This code has moved to Purge Core, see the parent class.
  *
- * @deprecated in Purge 8.x-1.x and will be removed before 2.0
+ * @deprecated in purge:8.x-3.6 and is removed from purge:2.0.0. Use
+ *   \Drupal\purge\Drush\Commands\ProcessorCommands instead.
+ * @see https://www.drupal.org/node/3565396
  */
 class ProcessorCommands extends ProcessorCommandsBase {}

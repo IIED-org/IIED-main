@@ -2,11 +2,12 @@
 
 namespace Drupal\Tests\purge\Kernel\Invalidation;
 
+use PHPUnit\Framework\Attributes\Group;
+
 /**
  * Tests \Drupal\purge\Plugin\Purge\Invalidation\RegularExpressionInvalidation.
- *
- * @group purge
  */
+#[Group('purge')]
 class RegularExpressionInvalidationTest extends PluginTestBase {
 
   /**

@@ -6,6 +6,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\purge\Plugin\Purge\Processor\ProcessorsServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -104,7 +105,8 @@ class ProcessorDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return NULL;
+    // Rendered as a modal dialog; cancel is handled via AJAX close button.
+    return Url::fromRoute('purge_ui.dashboard');
   }
 
   /**

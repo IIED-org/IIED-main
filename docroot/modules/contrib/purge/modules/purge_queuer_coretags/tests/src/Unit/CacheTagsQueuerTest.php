@@ -10,14 +10,19 @@ use Drupal\purge\Plugin\Purge\Queuer\QueuerBase;
 use Drupal\purge\Plugin\Purge\Queuer\QueuersServiceInterface;
 use Drupal\purge_queuer_coretags\CacheTagsQueuer;
 use Drupal\Tests\UnitTestCase;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @coversDefaultClass \Drupal\purge_queuer_coretags\CacheTagsQueuer
+ * Tests the CacheTagsQueuer class.
  *
+ * @coversDefaultClass \Drupal\purge_queuer_coretags\CacheTagsQueuer
  * @group purge
  */
+#[CoversClass(CacheTagsQueuer::class)]
+#[Group('purge')]
 class CacheTagsQueuerTest extends UnitTestCase {
 
   /**
@@ -66,9 +71,10 @@ class CacheTagsQueuerTest extends UnitTestCase {
    * {@inheritdoc}
    */
   protected function setUp(): void {
-    $this->purgeQueue = $this->getMockBuilder(QueueServiceInterface::class)->onlyMethods([])->getMock();
+    parent::setUp();
+    $this->purgeQueue = $this->createMock(QueueServiceInterface::class);
     $this->purgeQueuers = $this->createMock(QueuersServiceInterface::class);
-    $this->purgeInvalidationFactory = $this->getMockForAbstractClass(InvalidationsServiceInterface::class);
+    $this->purgeInvalidationFactory = $this->createMock(InvalidationsServiceInterface::class);
 
     // Create a container with all dependent services in it.
     $this->container = new ContainerBuilder();
@@ -82,7 +88,7 @@ class CacheTagsQueuerTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::initialize
+   * Tests that initialization does not load services when queuer is disabled.
    */
   public function testInitializeDoesntLoadWhenQueuerDisabled(): void {
     $this->purgeInvalidationFactory->expects($this->never())->method('get');
@@ -96,10 +102,11 @@ class CacheTagsQueuerTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::invalidateTags
+   * Tests cache tag invalidation with various configurations.
    *
-   * @dataProvider providerTestInvalidateTags()
+   * @dataProvider providerTestInvalidateTags
    */
+  #[DataProvider('providerTestInvalidateTags')]
   public function testInvalidateTags($config, array $sets): void {
     $this->container->set('config.factory', $this->getConfigFactoryStub($config));
     // Assert that the queuer plugin is loaded exactly once.
@@ -107,7 +114,7 @@ class CacheTagsQueuerTest extends UnitTestCase {
       ->expects($this->once())
       ->method('get')
       ->with('coretags')
-      ->willReturn($this->getMockBuilder(QueuerBase::class)->disableOriginalConstructor()->getMock()
+      ->willReturn($this->createStub(QueuerBase::class)
     );
     // Assert how InvalidationsServiceInterface::get() is called.
     $invs_added_total = array_sum(array_map(
@@ -120,7 +127,7 @@ class CacheTagsQueuerTest extends UnitTestCase {
       ->expects($this->exactly($invs_added_total))
       ->method('get')
       ->with('tag')
-      ->willReturn($this->createMock(InvalidationInterface::class)
+      ->willReturn($this->createStub(InvalidationInterface::class)
     );
     // Assert the precise calls to QueueServiceInterface::add().
     $number_queue_add_calls = count(array_filter($sets, function ($set) {
@@ -158,7 +165,7 @@ class CacheTagsQueuerTest extends UnitTestCase {
   /**
    * Provides test data for testInvalidateTags().
    */
-  public function providerTestInvalidateTags(): array {
+  public static function providerTestInvalidateTags(): array {
     $blacklist = [
       'purge_queuer_coretags.settings' => [
         'blacklist' => [

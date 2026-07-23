@@ -3,12 +3,12 @@
 namespace Drupal\Tests\purge\Kernel\DiagnosticCheck;
 
 use Drupal\Tests\purge\Kernel\KernelTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests that purge_requirements() passes on our diagnostic checks.
- *
- * @group purge
  */
+#[Group('purge')]
 class HookRequirementsTest extends KernelTestBase {
 
   /**

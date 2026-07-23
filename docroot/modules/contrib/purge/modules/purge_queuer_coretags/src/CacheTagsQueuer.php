@@ -2,7 +2,6 @@
 
 namespace Drupal\purge_queuer_coretags;
 
-use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\purge\Plugin\Purge\Invalidation\Exception\TypeUnsupportedException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -60,9 +59,9 @@ class CacheTagsQueuer implements CacheTagsInvalidatorInterface {
   protected $purgeQueue;
 
   /**
-   * The queuer plugin or FALSE when disabled.
+   * The queuer plugin or FALSE when disabled, NULL when not yet initialized.
    *
-   * @var false|\Drupal\purge_queuer_coretags\Plugin\Purge\Queuer\CoreTagsQueuer
+   * @var null|false|\Drupal\purge_queuer_coretags\Plugin\Purge\Queuer\CoreTagsQueuer
    */
   protected $queuer;
 
@@ -97,7 +96,7 @@ class CacheTagsQueuer implements CacheTagsInvalidatorInterface {
   /**
    * {@inheritdoc}
    *
-   * Queues invalidated cache tags as tag purgables.
+   * Queues invalidated cache tags as tag purgeables.
    */
   public function invalidateTags(array $tags) {
     if (!$this->initialize()) {
@@ -122,13 +121,7 @@ class CacheTagsQueuer implements CacheTagsInvalidatorInterface {
             $this->invalidatedTags[] = $tag;
           }
           catch (TypeUnsupportedException $e) {
-            // When there's no purger enabled for it, don't bother queuing tags.
-            return;
-          }
-          catch (PluginNotFoundException $e) {
-            // When Drupal uninstalls Purge, rebuilds plugin caches it might
-            // run into the condition where the tag plugin isn't available. In
-            // these scenarios we want the queuer to silently fail.
+            // When there's no purger enabled, don't bother queueing tags.
             return;
           }
         }

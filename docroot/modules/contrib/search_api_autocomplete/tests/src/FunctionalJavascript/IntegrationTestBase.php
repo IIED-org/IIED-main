@@ -6,10 +6,12 @@ use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Element\NodeElement;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\search_api_test\PluginTestTrait;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Provides a base class for integration tests of this module.
  */
+#[RunTestsInSeparateProcesses]
 abstract class IntegrationTestBase extends WebDriverTestBase {
 
   use PluginTestTrait;

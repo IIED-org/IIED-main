@@ -32,7 +32,7 @@ class MemoryQueue extends QueueBase implements QueueInterface {
   protected $buffer;
 
   /**
-   * Define constants for the array indiced in our buffer.
+   * Define constants for the array indices in our buffer.
    */
   const DATA = 0;
   const EXPIRE = 1;
@@ -114,7 +114,7 @@ class MemoryQueue extends QueueBase implements QueueInterface {
       $this->buffer[$id][self::EXPIRE] = time() + $lease_time;
       $item = new \stdClass();
       $item->item_id = $id;
-      $item->data = unserialize($this->buffer[$id][self::DATA]);
+      $item->data = unserialize($this->buffer[$id][self::DATA], ['allowed_classes' => FALSE]);
       $item->expire = $this->buffer[$id][self::EXPIRE];
       $item->created = $this->buffer[$id][self::CREATED];
       return $item;
@@ -221,7 +221,7 @@ class MemoryQueue extends QueueBase implements QueueInterface {
       }
       $item = new \stdClass();
       $item->item_id = $id;
-      $item->data = unserialize($this->buffer[$id][self::DATA]);
+      $item->data = unserialize($this->buffer[$id][self::DATA], ['allowed_classes' => FALSE]);
       $item->expire = $this->buffer[$id][self::EXPIRE];
       $item->created = $this->buffer[$id][self::CREATED];
       $items[] = $item;

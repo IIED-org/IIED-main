@@ -2,14 +2,22 @@
 
 namespace Drupal\Tests\purge\Unit\Logger;
 
+use Drupal\purge\Logger\LoggerChannelPart;
 use Drupal\purge\Logger\LoggerChannelPartFactory;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use Psr\Log\LoggerInterface;
 
 /**
- * @coversDefaultClass \Drupal\purge\Logger\LoggerChannelPartFactory
+ * Tests the LoggerChannelPartFactory class.
  *
+ * @coversDefaultClass \Drupal\purge\Logger\LoggerChannelPartFactory
  * @group purge
  */
+#[CoversClass(LoggerChannelPartFactory::class)]
+#[Group('purge')]
 class LoggerChannelPartFactoryTest extends UnitTestCase {
 
   /**
@@ -30,18 +38,20 @@ class LoggerChannelPartFactoryTest extends UnitTestCase {
    * {@inheritdoc}
    */
   protected function setUp(): void {
-    $this->loggerChannelPurge = $this->createMock('\Psr\Log\LoggerInterface');
+    parent::setUp();
+    $this->loggerChannelPurge = $this->createStub(LoggerInterface::class);
     $this->loggerChannelPartFactory = new LoggerChannelPartFactory($this->loggerChannelPurge);
   }
 
   /**
-   * @covers ::create
+   * Tests creating a logger channel part.
    *
-   * @dataProvider providerTestCreate()
+   * @dataProvider providerTestCreate
    */
+  #[DataProvider('providerTestCreate')]
   public function testCreate($id, array $grants = []): void {
     $this->assertInstanceOf(
-      '\Drupal\purge\Logger\LoggerChannelPart',
+      LoggerChannelPart::class,
       $this->loggerChannelPartFactory->create($id, $grants)
     );
   }
@@ -49,7 +59,7 @@ class LoggerChannelPartFactoryTest extends UnitTestCase {
   /**
    * Provides test data for testCreate().
    */
-  public function providerTestCreate(): array {
+  public static function providerTestCreate(): array {
     return [
       ['foo', [0, 1, 2]],
       ['bar', [1, 2, 3]],

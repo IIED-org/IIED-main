@@ -3,26 +3,27 @@
 namespace Drupal\encrypt_test\Plugin\EncryptionMethod;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\encrypt\Attribute\EncryptionMethod;
 use Drupal\encrypt\EncryptionMethodInterface;
 use Drupal\encrypt\Plugin\EncryptionMethod\EncryptionMethodBase;
 use Drupal\encrypt\Plugin\EncryptionMethodPluginFormInterface;
 
 /**
  * ConfigTestEncryptionMethod testing class.
- *
- * @EncryptionMethod(
- *   id = "config_test_encryption_method",
- *   title = @Translation("Config Test Encryption method"),
- *   description = "A test encryption method with configuration.",
- *   key_type = {"encryption"}
- * )
  */
+#[EncryptionMethod(
+  id: 'config_test_encryption_method',
+  title: new TranslatableMarkup('Config Test Encryption method'),
+  description: new TranslatableMarkup('A test encryption method with configuration.'),
+  key_type: ['encryption'],
+)]
 class ConfigTestEncryptionMethod extends EncryptionMethodBase implements EncryptionMethodInterface, EncryptionMethodPluginFormInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function checkDependencies($text = NULL, $key = NULL) {
+  public function checkDependencies(#[\SensitiveParameter] $text = NULL, #[\SensitiveParameter] $key = NULL) {
     $errors = [];
     return $errors;
   }
@@ -30,7 +31,7 @@ class ConfigTestEncryptionMethod extends EncryptionMethodBase implements Encrypt
   /**
    * {@inheritdoc}
    */
-  public function encrypt($text, $key, $options = []) {
+  public function encrypt(#[\SensitiveParameter] $text, #[\SensitiveParameter] $key, $options = []) {
     $prefix = $key . $this->getConfiguration()['mode'];
     return str_rot13($prefix . $text);
   }
@@ -38,7 +39,7 @@ class ConfigTestEncryptionMethod extends EncryptionMethodBase implements Encrypt
   /**
    * {@inheritdoc}
    */
-  public function decrypt($text, $key, $options = []) {
+  public function decrypt(#[\SensitiveParameter] $text, #[\SensitiveParameter] $key, $options = []) {
     $decoded = str_rot13($text);
     $prefix = $key . $this->getConfiguration()['mode'];
     // Strip out key, to retrieve original text.

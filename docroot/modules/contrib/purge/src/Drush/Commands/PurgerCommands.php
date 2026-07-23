@@ -55,10 +55,13 @@ class PurgerCommands extends DrushCommands {
    * @command p:purger-add
    * @aliases ppadd,p-purger-add
    */
-  public function purgerAdd($id, array $options = [
-    'format' => 'string',
-    'if-not-exists' => FALSE,
-  ]) {
+  public function purgerAdd(
+    $id,
+    array $options = [
+      'format' => 'string',
+      'if-not-exists' => FALSE,
+    ],
+  ) {
     $enabled = $this->purgePurgers->getPluginsEnabled();
 
     // Verify that the plugin exists.

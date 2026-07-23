@@ -491,6 +491,7 @@ class QueueService extends ServiceBase implements QueueServiceInterface, Destruc
     }
     $this->buffer->deleteEverything();
     // phpcs:ignore DrupalPractice.Objects.GlobalDrupal.GlobalDrupal -- We're already injecting, this is needed for tests to work.
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
     $this->configFactory = \Drupal::configFactory();
     $this->queue = NULL;
   }

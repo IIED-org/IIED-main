@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge\Kernel\Queue;
 
 use Drupal\purge\Plugin\Purge\Queue\PluginManager;
 use Drupal\Tests\purge\Kernel\KernelPluginManagerTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge\Plugin\Purge\Queue\PluginManager.
- *
- * @group purge
  */
+#[Group('purge')]
 class PluginManagerTest extends KernelPluginManagerTestBase {
 
   /**

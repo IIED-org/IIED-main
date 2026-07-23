@@ -37,7 +37,7 @@ class ConfigurationForm extends QueuerConfigFormBase {
       '#description' => $this->t('You can exclude tags that Drupal invalidated by listing them here, only change this <b>if you know what you are doing!</b> The strings are matched as prefixes, so for example <code>config:</code> will match tags as <code>config:core.extension</code> and <code>config:block_list</code>.'),
     ];
 
-    // Retrieve the existing blacklist and initiatlize the counter.
+    // Retrieve the existing blacklist and initialize the counter.
     $blacklist = $config->get('blacklist');
     if (is_null($form_state->get('blacklist_items_count'))) {
       if (empty($blacklist)) {

@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 
 /**
- * Provides a subchannel whichs logs to a single main channel with permissions.
+ * Provides a subchannel which logs to a single main channel with permissions.
  */
 abstract class LoggerChannelPartBase extends LoggerChannel implements LoggerChannelPartInterface {
   use LoggerTrait;
@@ -83,14 +83,15 @@ abstract class LoggerChannelPartBase extends LoggerChannel implements LoggerChan
   /**
    * Logger Channel Message.
    *
-   * @param $level
+   * @param string|int $level
    *   Log Level.
-   * @param $message
+   * @param string|\Stringable $message
    *   The message.
-   * @param $context
+   * @param array $context
    *   Context for the message.
    *
    * @return void
+   *   No return value.
    */
   protected function doLog($level, $message, $context = []): void {
     if ($this->access[$this->levelTranslation[$level]]) {
@@ -99,4 +100,5 @@ abstract class LoggerChannelPartBase extends LoggerChannel implements LoggerChan
       parent::log($level, $message, $context);
     }
   }
+
 }

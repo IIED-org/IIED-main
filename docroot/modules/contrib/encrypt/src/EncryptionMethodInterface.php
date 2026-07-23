@@ -25,7 +25,7 @@ interface EncryptionMethodInterface extends PluginInspectionInterface {
    * @throws \Drupal\encrypt\Exception\EncryptException
    *   Thrown when encryption fails.
    */
-  public function encrypt($text, $key);
+  public function encrypt(#[\SensitiveParameter] $text, #[\SensitiveParameter] $key);
 
   /**
    * Decrypt text.
@@ -44,7 +44,7 @@ interface EncryptionMethodInterface extends PluginInspectionInterface {
    *   The method should throw this exception when the plugin can not decrypt
    *   (i.e. use a public key).
    */
-  public function decrypt($text, $key);
+  public function decrypt(#[\SensitiveParameter] $text, #[\SensitiveParameter] $key);
 
   /**
    * Check dependencies for the encryption method.
@@ -57,7 +57,7 @@ interface EncryptionMethodInterface extends PluginInspectionInterface {
    * @return array
    *   An array of error messages, providing info on missing dependencies.
    */
-  public function checkDependencies($text = NULL, $key = NULL);
+  public function checkDependencies(#[\SensitiveParameter] $text = NULL, #[\SensitiveParameter] $key = NULL);
 
   /**
    * Get the label.

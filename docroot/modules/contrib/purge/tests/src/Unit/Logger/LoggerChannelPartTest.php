@@ -5,13 +5,20 @@ namespace Drupal\Tests\purge\Unit\Logger;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\purge\Logger\LoggerChannelPart;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
 /**
- * @coversDefaultClass \Drupal\purge\Logger\LoggerChannelPart
+ * Tests the LoggerChannelPart class.
  *
+ * @coversDefaultClass \Drupal\purge\Logger\LoggerChannelPart
  * @group purge
  */
+#[CoversClass(LoggerChannelPart::class)]
+#[Group('purge')]
 class LoggerChannelPartTest extends UnitTestCase {
 
   /**
@@ -25,7 +32,8 @@ class LoggerChannelPartTest extends UnitTestCase {
    * {@inheritdoc}
    */
   protected function setUp(): void {
-    $this->loggerChannelPurge = $this->createMock('\Psr\Log\LoggerInterface');
+    parent::setUp();
+    $this->loggerChannelPurge = $this->createMock(LoggerInterface::class);
   }
 
   /**
@@ -58,18 +66,20 @@ class LoggerChannelPartTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::__construct
+   * Tests that the class implements LoggerInterface.
    */
   public function testInstance(): void {
-    $part = new LoggerChannelPart($this->loggerChannelPurge, 'id', []);
-    $this->assertInstanceOf('\Psr\Log\LoggerInterface', $part);
+    $logger = $this->createStub(LoggerInterface::class);
+    $part = new LoggerChannelPart($logger, 'id', []);
+    $this->assertInstanceOf(LoggerInterface::class, $part);
   }
 
   /**
-   * @covers ::getGrants
+   * Tests retrieving the configured grants.
    *
-   * @dataProvider providerTestGetGrants()
+   * @dataProvider providerTestGetGrants
    */
+  #[DataProvider('providerTestGetGrants')]
   public function testGetGrants(array $grants): void {
     $part = new LoggerChannelPart($this->loggerChannelPurge, 'id', $grants);
     $this->assertEquals(count($grants), count($part->getGrants()));
@@ -83,7 +93,7 @@ class LoggerChannelPartTest extends UnitTestCase {
   /**
    * Provides test data for testGetGrants().
    */
-  public function providerTestGetGrants(): array {
+  public static function providerTestGetGrants(): array {
     return [
       [[]],
       [[RfcLogLevel::EMERGENCY]],
@@ -99,10 +109,11 @@ class LoggerChannelPartTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::emergency
+   * Tests the emergency log level.
    *
-   * @dataProvider providerTestEmergency()
+   * @dataProvider providerTestEmergency
    */
+  #[DataProvider('providerTestEmergency')]
   public function testEmergency($id, array $grants, $output): void {
     $this->helperForSeverityMethods($id, $grants, $output, 'emergency');
   }
@@ -110,7 +121,7 @@ class LoggerChannelPartTest extends UnitTestCase {
   /**
    * Provides test data for testEmergency().
    */
-  public function providerTestEmergency(): array {
+  public static function providerTestEmergency(): array {
     return [
       ['good', [RfcLogLevel::EMERGENCY], 'bazinga!'],
       ['bad', [-1], NULL],
@@ -118,10 +129,11 @@ class LoggerChannelPartTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::alert
+   * Tests the alert log level.
    *
-   * @dataProvider providerTestAlert()
+   * @dataProvider providerTestAlert
    */
+  #[DataProvider('providerTestAlert')]
   public function testAlert($id, array $grants, $output): void {
     $this->helperForSeverityMethods($id, $grants, $output, 'alert');
   }
@@ -129,7 +141,7 @@ class LoggerChannelPartTest extends UnitTestCase {
   /**
    * Provides test data for testAlert().
    */
-  public function providerTestAlert(): array {
+  public static function providerTestAlert(): array {
     return [
       ['good', [RfcLogLevel::ALERT], 'bazinga!'],
       ['bad', [-1], NULL],
@@ -137,10 +149,11 @@ class LoggerChannelPartTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::critical
+   * Tests the critical log level.
    *
-   * @dataProvider providerTestCritical()
+   * @dataProvider providerTestCritical
    */
+  #[DataProvider('providerTestCritical')]
   public function testCritical($id, array $grants, $output): void {
     $this->helperForSeverityMethods($id, $grants, $output, 'critical');
   }
@@ -148,7 +161,7 @@ class LoggerChannelPartTest extends UnitTestCase {
   /**
    * Provides test data for testCritical().
    */
-  public function providerTestCritical(): array {
+  public static function providerTestCritical(): array {
     return [
       ['good', [RfcLogLevel::CRITICAL], 'bazinga!'],
       ['bad', [-1], NULL],
@@ -156,10 +169,11 @@ class LoggerChannelPartTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::error
+   * Tests the error log level.
    *
-   * @dataProvider providerTestError()
+   * @dataProvider providerTestError
    */
+  #[DataProvider('providerTestError')]
   public function testError($id, array $grants, $output): void {
     $this->helperForSeverityMethods($id, $grants, $output, 'error');
   }
@@ -167,7 +181,7 @@ class LoggerChannelPartTest extends UnitTestCase {
   /**
    * Provides test data for testError().
    */
-  public function providerTestError(): array {
+  public static function providerTestError(): array {
     return [
       ['good', [RfcLogLevel::ERROR], 'bazinga!'],
       ['bad', [-1], NULL],
@@ -175,10 +189,11 @@ class LoggerChannelPartTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::warning
+   * Tests the warning log level.
    *
-   * @dataProvider providerTestWarning()
+   * @dataProvider providerTestWarning
    */
+  #[DataProvider('providerTestWarning')]
   public function testWarning($id, array $grants, $output): void {
     $this->helperForSeverityMethods($id, $grants, $output, 'warning');
   }
@@ -186,7 +201,7 @@ class LoggerChannelPartTest extends UnitTestCase {
   /**
    * Provides test data for testWarning().
    */
-  public function providerTestWarning(): array {
+  public static function providerTestWarning(): array {
     return [
       ['good', [RfcLogLevel::WARNING], 'bazinga!'],
       ['bad', [-1], NULL],
@@ -194,10 +209,11 @@ class LoggerChannelPartTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::notice
+   * Tests the notice log level.
    *
-   * @dataProvider providerTestNotice()
+   * @dataProvider providerTestNotice
    */
+  #[DataProvider('providerTestNotice')]
   public function testNotice($id, array $grants, $output): void {
     $this->helperForSeverityMethods($id, $grants, $output, 'notice');
   }
@@ -205,7 +221,7 @@ class LoggerChannelPartTest extends UnitTestCase {
   /**
    * Provides test data for testNotice().
    */
-  public function providerTestNotice(): array {
+  public static function providerTestNotice(): array {
     return [
       ['good', [RfcLogLevel::NOTICE], 'bazinga!'],
       ['bad', [-1], NULL],
@@ -213,10 +229,11 @@ class LoggerChannelPartTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::info
+   * Tests the info log level.
    *
-   * @dataProvider providerTestInfo()
+   * @dataProvider providerTestInfo
    */
+  #[DataProvider('providerTestInfo')]
   public function testInfo($id, array $grants, $output): void {
     $this->helperForSeverityMethods($id, $grants, $output, 'info');
   }
@@ -224,7 +241,7 @@ class LoggerChannelPartTest extends UnitTestCase {
   /**
    * Provides test data for testInfo().
    */
-  public function providerTestInfo(): array {
+  public static function providerTestInfo(): array {
     return [
       ['good', [RfcLogLevel::INFO], 'bazinga!'],
       ['bad', [-1], NULL],
@@ -232,10 +249,11 @@ class LoggerChannelPartTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::debug
+   * Tests the debug log level.
    *
-   * @dataProvider providerTestDebug()
+   * @dataProvider providerTestDebug
    */
+  #[DataProvider('providerTestDebug')]
   public function testDebug($id, array $grants, $output): void {
     $this->helperForSeverityMethods($id, $grants, $output, 'debug');
   }
@@ -243,7 +261,7 @@ class LoggerChannelPartTest extends UnitTestCase {
   /**
    * Provides test data for testDebug().
    */
-  public function providerTestDebug(): array {
+  public static function providerTestDebug(): array {
     return [
       ['good', [RfcLogLevel::DEBUG], 'bazinga!'],
       ['bad', [-1], NULL],
@@ -251,10 +269,11 @@ class LoggerChannelPartTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::log
+   * Tests the generic log method.
    *
-   * @dataProvider providerTestLog()
+   * @dataProvider providerTestLog
    */
+  #[DataProvider('providerTestLog')]
   public function testLog($id, $message, $output): void {
     $this->loggerChannelPurge
       ->expects($this->once())
@@ -275,7 +294,7 @@ class LoggerChannelPartTest extends UnitTestCase {
   /**
    * Provides test data for testLog().
    */
-  public function providerTestLog(): array {
+  public static function providerTestLog(): array {
     return [
       ['id1', 'message @placeholder', ['@placeholder' => 'foo']],
       ['id2', 'message @placeholder', ['@placeholder' => 'bar']],

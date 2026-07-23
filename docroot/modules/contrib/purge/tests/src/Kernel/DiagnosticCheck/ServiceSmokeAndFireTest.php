@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge\Kernel\DiagnosticCheck;
 
 use Drupal\purge\Plugin\Purge\DiagnosticCheck\DiagnosticCheckInterface;
 use Drupal\Tests\purge\Kernel\KernelServiceTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge\Plugin\Purge\DiagnosticCheck\DiagnosticsService.
- *
- * @group purge
  */
+#[Group('purge')]
 class ServiceSmokeAndFireTest extends KernelServiceTestBase {
 
   /**

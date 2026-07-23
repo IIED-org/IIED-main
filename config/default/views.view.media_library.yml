@@ -4,11 +4,10 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.media_library
-    - image.style.media_library
   module:
     - media
     - media_library
-    - svg_image
+    - media_pdf_thumbnail
     - user
   enforced:
     module:
@@ -473,6 +472,7 @@ display:
     cache_metadata:
       max-age: 0
       contexts:
+        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
@@ -1116,16 +1116,155 @@ display:
           table: media_field_data
           field: thumbnail__target_id
           relationship: none
+          group_type: group
+          admin_label: ''
           entity_type: media
           entity_field: thumbnail
           plugin_id: field
           label: Thumbnail
-          type: image
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: media_pdf_thumbnail_image_field_formatter
           settings:
-            image_link: ''
-            image_style: media_library
             image_loading:
               attribute: lazy
+            default_bundle:
+              default_bundle_image_style: media_library
+              default_bundle_link: ''
+            audio:
+              audio_image_style: ''
+              audio_field: field_media_audio_file
+              audio_page: '1'
+              audio_format: jpg
+              audio_link: ''
+              audio_attributes_download: 0
+              audio_attributes_target: ''
+              audio_attributes_rel: ''
+              audio_use_cron: 0
+              audio_enable: 0
+            document:
+              document_image_style: media_library
+              document_field: field_media_document
+              document_page: '1'
+              document_format: jpg
+              document_link: ''
+              document_attributes_download: 0
+              document_attributes_target: ''
+              document_attributes_rel: ''
+              document_use_cron: 0
+              document_enable: 1
+            video:
+              video_image_style: ''
+              video_field: field_media_video_file
+              video_page: '1'
+              video_format: jpg
+              video_link: ''
+              video_attributes_download: 0
+              video_attributes_target: ''
+              video_attributes_rel: ''
+              video_use_cron: 0
+              video_enable: 0
+            default_bundle_link: ''
+            default_bundle_image_style: media_library
+            audio_field: field_media_audio_file
+            audio_page: '1'
+            audio_link: ''
+            audio_attributes_download: null
+            audio_attributes_target: ''
+            audio_attributes_rel: ''
+            audio_format: jpg
+            audio_image_style: ''
+            audio_use_cron: null
+            audio_enable: null
+            document_field: field_media_document
+            document_page: '1'
+            document_link: ''
+            document_attributes_download: null
+            document_attributes_target: ''
+            document_attributes_rel: ''
+            document_format: jpg
+            document_image_style: media_library
+            document_use_cron: null
+            document_enable: '1'
+            image_field: null
+            image_page: null
+            image_link: ''
+            image_attributes_download: null
+            image_attributes_target: null
+            image_attributes_rel: null
+            image_format: null
+            image_image_style: null
+            image_use_cron: null
+            image_enable: null
+            remote_video_field: null
+            remote_video_page: null
+            remote_video_link: null
+            remote_video_attributes_download: null
+            remote_video_attributes_target: null
+            remote_video_attributes_rel: null
+            remote_video_format: null
+            remote_video_image_style: null
+            remote_video_use_cron: null
+            remote_video_enable: null
+            video_field: field_media_video_file
+            video_page: '1'
+            video_link: ''
+            video_attributes_download: null
+            video_attributes_target: ''
+            video_attributes_rel: ''
+            video_format: jpg
+            video_image_style: ''
+            video_use_cron: null
+            video_enable: null
+          group_column: ''
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         name:
           id: name
           table: media_field_data

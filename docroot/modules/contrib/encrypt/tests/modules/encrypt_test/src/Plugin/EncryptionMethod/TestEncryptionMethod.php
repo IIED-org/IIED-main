@@ -8,6 +8,8 @@ use Drupal\encrypt\Plugin\EncryptionMethod\EncryptionMethodBase;
 /**
  * TestEncryptionMethod testing class.
  *
+ * Use an annotation (not an attribute) until annotation support is dropped.
+ *
  * @EncryptionMethod(
  *   id = "test_encryption_method",
  *   title = @Translation("Test Encryption method"),
@@ -20,7 +22,7 @@ class TestEncryptionMethod extends EncryptionMethodBase implements EncryptionMet
   /**
    * {@inheritdoc}
    */
-  public function checkDependencies($text = NULL, $key = NULL) {
+  public function checkDependencies(#[\SensitiveParameter] $text = NULL, #[\SensitiveParameter] $key = NULL) {
     $errors = [];
     return $errors;
   }
@@ -28,14 +30,14 @@ class TestEncryptionMethod extends EncryptionMethodBase implements EncryptionMet
   /**
    * {@inheritdoc}
    */
-  public function encrypt($text, $key, $options = []) {
+  public function encrypt(#[\SensitiveParameter] $text, #[\SensitiveParameter] $key, $options = []) {
     return str_rot13($key . $text);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function decrypt($text, $key, $options = []) {
+  public function decrypt(#[\SensitiveParameter] $text, #[\SensitiveParameter] $key, $options = []) {
     $decoded = str_rot13($text);
     // Strip out key, to retrieve original text.
     if (substr($decoded, 0, strlen($key)) == $key) {

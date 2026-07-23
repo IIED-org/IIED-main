@@ -7,37 +7,19 @@ use Drupal\search_api_autocomplete\SearchApiAutocompleteException;
 use Drupal\search_api_autocomplete\SearchInterface;
 use Drupal\search_api_autocomplete\Suggester\SuggesterManager;
 use Drupal\search_api_autocomplete\Search\SearchPluginManager;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides methods for creating autocomplete search plugins.
  */
 class PluginHelper implements PluginHelperInterface {
 
-  /**
-   * The suggester plugin manager.
-   *
-   * @var \Drupal\search_api_autocomplete\Suggester\SuggesterManager
-   */
-  protected $suggesterPluginManager;
-
-  /**
-   * The search plugin manager.
-   *
-   * @var \Drupal\search_api_autocomplete\Search\SearchPluginManager
-   */
-  protected $searchPluginManager;
-
-  /**
-   * Constructs a PluginHelper object.
-   *
-   * @param \Drupal\search_api_autocomplete\Suggester\SuggesterManager $suggester_plugin_manager
-   *   The suggester plugin manager.
-   * @param \Drupal\search_api_autocomplete\Search\SearchPluginManager $search_plugin_manager
-   *   The search plugin manager.
-   */
-  public function __construct(SuggesterManager $suggester_plugin_manager, SearchPluginManager $search_plugin_manager) {
-    $this->suggesterPluginManager = $suggester_plugin_manager;
-    $this->searchPluginManager = $search_plugin_manager;
+  public function __construct(
+    #[Autowire(service: 'plugin.manager.search_api_autocomplete.suggester')]
+    protected SuggesterManager $suggesterPluginManager,
+    #[Autowire(service: 'plugin.manager.search_api_autocomplete.search')]
+    protected SearchPluginManager $searchPluginManager,
+  ) {
   }
 
   /**

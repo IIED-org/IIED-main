@@ -90,9 +90,6 @@ class PurgeBlockForm extends FormBase {
    *   The purge queuers service.
    */
   final public function __construct(array $config, MessengerInterface $messenger, ProcessorsServiceInterface $purge_processors, PurgersServiceInterface $purge_purgers, InvalidationsServiceInterface $purge_invalidation_factory, QueueServiceInterface $purge_queue, QueuersServiceInterface $purge_queuers) {
-    if (is_null($config)) {
-      throw new \LogicException('\Drupal\purge_ui\Form\PurgeBlockForm should be directly instantiated with block configuration passed in.');
-    }
     $this->config = $config;
     $this->messenger = $messenger;
     $this->processor = $purge_processors->get('purge_ui_block_processor');
@@ -110,7 +107,7 @@ class PurgeBlockForm extends FormBase {
    * @param string[] $config
    *   The form's configuration array, which determines how and what we purge.
    */
-  public static function create(ContainerInterface $container, array $config = NULL) {
+  public static function create(ContainerInterface $container, array $config = []) {
     return new static(
       $config,
       $container->get('messenger'),

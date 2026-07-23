@@ -15,6 +15,7 @@ dependencies:
     - filter
     - form_mode_control
     - media
+    - media_pdf_thumbnail
     - node
     - paragraphs
     - pathauto
@@ -31,6 +32,8 @@ is_admin: null
 permissions:
   - 'access toolbar'
   - 'access user profiles'
+  - 'add pdf image entity entities'
+  - 'administer pdf image entity entities'
   - 'create document media'
   - 'create image media'
   - 'create publication content'
@@ -69,6 +72,8 @@ permissions:
   - 'view any unpublished content'
   - 'view own unpublished content'
   - 'view own unpublished media'
+  - 'view private pdf thumbnails'
   - 'view publication revisions'
   - 'view the administration theme'
   - 'view unpublished paragraphs'
+  - 'view unpublished pdf image entity entities'

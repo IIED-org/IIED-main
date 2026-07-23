@@ -99,10 +99,12 @@ class ProcessorsService extends ServiceBase implements ProcessorsServiceInterfac
     // Without this, the tests will throw "failed to instantiate user-supplied
     // statement class: CREATE TABLE {cache_config}".
     // phpcs:ignore DrupalPractice.Objects.GlobalDrupal.GlobalDrupal
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
     $this->configFactory = \Drupal::configFactory();
     // Drush commands appreciate it when the config cache gets cleared.
     if (php_sapi_name() === 'cli') {
       // phpcs:ignore DrupalPractice.Objects.GlobalDrupal.GlobalDrupal
+      // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
       \Drupal::cache('config')->deleteAll();
     }
     $this->reloadIterator();

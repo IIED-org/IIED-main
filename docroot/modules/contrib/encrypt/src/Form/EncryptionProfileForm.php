@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\encrypt\EncryptService;
+use Drupal\encrypt\EncryptServiceInterface;
 use Drupal\encrypt\Plugin\EncryptionMethodPluginFormInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -25,9 +25,9 @@ class EncryptionProfileForm extends EntityForm {
   protected $configFactory;
 
   /**
-   * The EncryptService definition.
+   * The encryption service.
    *
-   * @var \Drupal\encrypt\EncryptService
+   * @var \Drupal\encrypt\EncryptServiceInterface
    */
   protected $encryptService;
 
@@ -51,10 +51,10 @@ class EncryptionProfileForm extends EntityForm {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
-   * @param \Drupal\Encrypt\EncryptService $encrypt_service
-   *   The lazy context repository service.
+   * @param \Drupal\Encrypt\EncryptServiceInterface $encrypt_service
+   *   The encryption service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EncryptService $encrypt_service) {
+  public function __construct(ConfigFactoryInterface $config_factory, EncryptServiceInterface $encrypt_service) {
     $this->configFactory = $config_factory;
     $this->encryptService = $encrypt_service;
   }
@@ -150,12 +150,21 @@ class EncryptionProfileForm extends EntityForm {
     foreach ($encryption_methods as $plugin_id => $definition) {
       $method_options[$plugin_id] = (string) $definition['title'];
     }
+
+    if (empty($method_options)) {
+      $no_encryption_method_warning = $this->t('There are no encryption methods available. See the <a href=":module-page">Encrypt project page</a> and the <a href=":docs-link">module documentation</a> for recommended encryption method modules to install and enable.', [
+        ':module-page' => 'https://www.drupal.org/project/encrypt',
+        ':docs-link' => 'https://www.drupal.org/docs/contributed-modules/encrypt',
+      ]);
+      $this->messenger()->addWarning($no_encryption_method_warning);
+    }
+
     $form['encryption']['encryption_method'] = [
       '#type' => 'select',
       '#title' => $this->t('Encryption Method'),
-      '#description' => $this->t('Select the method used for encryption'),
+      '#description' => $this->t('Select the method used for encryption.'),
       '#options' => $method_options,
-      '#required' => TRUE,
+      '#required' => !empty($method_options),
       '#default_value' => $encryption_profile->getEncryptionMethodId(),
       '#ajax' => [
         'callback' => [$this, 'ajaxUpdateSettings'],

@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge_ui\FunctionalJavascript\Form;
 
 use Drupal\purge_queuer_test\Form\QueuerConfigForm;
 use Drupal\Tests\purge_ui\FunctionalJavascript\Form\Config\QueuerConfigFormTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the drop-in configuration form for queuers.
- *
- * @group purge
  */
+#[Group('purge')]
 class QueuerConfigFormTest extends QueuerConfigFormTestBase {
 
   /**

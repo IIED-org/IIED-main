@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge_ui\FunctionalJavascript\Form;
 
 use Drupal\Core\Url;
 use Drupal\purge_ui\Form\QueueChangeForm;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge_ui\Form\QueueChangeForm.
- *
- * @group purge
  */
+#[Group('purge')]
 class QueueChangeFormTest extends FormTestBase {
 
   /**
@@ -67,4 +67,5 @@ class QueueChangeFormTest extends FormTestBase {
     $this->assertSession()->responseContains('Change queue engine');
     $this->assertSession()->checkboxChecked('edit-plugin-id-b');
   }
+
 }

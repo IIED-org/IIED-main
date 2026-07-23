@@ -18,16 +18,44 @@ parameters:
 
     # Specific errors we don't want to or cannot fix.
 
+    - # The LegacyRequirementsHook attribute was added in Drupal 11.3.
+      # @todo Remove once we depend on Drupal 11.3+.
+      message: "#^Attribute class Drupal\\\\Core\\\\Hook\\\\Attribute\\\\LegacyRequirementsHook does not exist\\.$#"
+      path: search_api_autocomplete.install
+      reportUnmatched: false
+
     - # Defined in the Search API Solr module, which we don't depend on.
       message: "#^Access to undefined constant Drupal\\\\search_api_solr\\\\SolrBackendInterface::SEARCH_API_SOLR_SCHEMA_VERSION.$#"
       paths:
         - src/Form/IndexOverviewForm.php
-        - search_api_autocomplete.install
+        - src/Hook/SearchApiAutocompleteHooks.php
       # For some reason, GitLab CI does seem to find that constant, so we don't
       # want to report an error if this message was not matched.
       reportUnmatched: false
 
+    - # The entity type attributes were not introduced until Drupal 11.1.
+      # @todo Remove once we depend on Drupal 11.1+.
+      message: "#^Attribute class Drupal\\\\Core\\\\Entity\\\\Attribute\\\\ConfigEntityType does not exist\\.$#"
+      paths:
+        - src/Entity/Search.php
+      reportUnmatched: false
+
+    - # The enum was newly introduced in Drupal 11.2.
+      # @todo Remove once we depend on Drupal 11.2+.
+      message: "#^Access to constant Warning on an unknown class Drupal\\\\Core\\\\Extension\\\\Requirement\\\\RequirementSeverity\\.#"
+      path: src/Hook/SearchApiAutocompleteHooks.php
+      reportUnmatched: false
+
     - # We want to keep supporting the old interface, too, for now.
       message: "#^Instanceof references deprecated interface Drupal\\\\search_api_autocomplete\\\\AutocompleteBackendInterface:#"
-      count: 1
       path: src/Plugin/search_api_autocomplete/suggester/Server.php
+      # Not matched in Drupal 10, for some reason.
+      # @todo Remove once we depend on Drupal 11.
+      reportUnmatched: false
+
+    - # Tests in Drupal 10 still use PHPUnit 9 which does not support
+      # attributes.
+      # @todo Remove once we depend on Drupal 11.0+.
+      message: "#^Attribute class PHPUnit\\\\Framework\\\\Attributes\\\\RunTestsInSeparateProcesses does not exist\\.$#"
+      path: tests/src
+      reportUnmatched: false

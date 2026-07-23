@@ -74,7 +74,7 @@ class CapacityTracker implements CapacityTrackerInterface {
   protected $spentExecutionTime;
 
   /**
-   * Counter representing the number of invalidation objects touched this request.
+   * Counter for the number of invalidation objects touched this request.
    *
    * @var \Drupal\purge\Counter\CounterInterface
    */

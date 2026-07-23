@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge_queuer_coretags\Functional;
 
 use Drupal\purge_queuer_coretags\Form\ConfigurationForm;
 use Drupal\Tests\purge_ui\FunctionalJavascript\Form\Config\QueuerConfigFormTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge_queuer_coretags\Form\ConfigurationForm.
- *
- * @group purge
  */
+#[Group('purge')]
 class QueuerConfigFormTest extends QueuerConfigFormTestBase {
 
   /**

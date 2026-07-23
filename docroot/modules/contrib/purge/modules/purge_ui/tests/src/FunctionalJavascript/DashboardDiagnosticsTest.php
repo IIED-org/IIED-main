@@ -2,11 +2,12 @@
 
 namespace Drupal\Tests\purge_ui\FunctionalJavascript;
 
+use PHPUnit\Framework\Attributes\Group;
+
 /**
  * Tests \Drupal\purge_ui\Controller\DashboardController::buildDiagnosticReport.
- *
- * @group purge
  */
+#[Group('purge')]
 class DashboardDiagnosticsTest extends DashboardTestBase {
 
   /**

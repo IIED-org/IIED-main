@@ -2,11 +2,12 @@
 
 namespace Drupal\Tests\purge\Kernel\Invalidation;
 
+use PHPUnit\Framework\Attributes\Group;
+
 /**
  * Tests \Drupal\purge\Plugin\Purge\Invalidation\UrlInvalidation.
- *
- * @group purge
  */
+#[Group('purge')]
 class UrlInvalidationTest extends PluginTestBase {
 
   /**

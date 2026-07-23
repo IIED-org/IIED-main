@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge\Functional\TagsHeader;
 
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge\EventSubscriber\CacheableResponseSubscriber.
- *
- * @group purge
  */
+#[Group('purge')]
 class CacheableResponseSubscriberTest extends BrowserTestBase {
 
   use AssertPageCacheContextsAndTagsTrait;

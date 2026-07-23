@@ -120,7 +120,7 @@ interface PurgerCapacityDataInterface {
    * a realistic time limit in which your code executes at all times. This is so
    * complex, because real-world circumstances (e.g. HTTP delays) can cause
    * sudden drops in productivity, which cannot come at the expense of Drupal's
-   * overal stability. This is why Purge rather throttles its own work, than
+   * overall stability. This is why Purge rather throttles its own work, than
    * letting things explode in front of the end-user.
    *
    * @return bool

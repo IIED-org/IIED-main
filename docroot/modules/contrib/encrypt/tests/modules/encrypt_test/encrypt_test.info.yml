@@ -5,7 +5,7 @@ package: Testing
 dependencies:
   - encrypt:encrypt
 
-# Information added by Drupal.org packaging script on 2024-09-29
-version: '8.x-3.2'
+# Information added by Drupal.org packaging script on 2026-07-21
+version: '8.x-3.3'
 project: 'encrypt'
-datestamp: 1727640044
+datestamp: 1784634624

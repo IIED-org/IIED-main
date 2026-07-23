@@ -188,7 +188,7 @@ class EncryptionProfile extends ConfigEntityBase implements EncryptionProfileInt
   /**
    * {@inheritdoc}
    */
-  public function validate($text = NULL) {
+  public function validate(#[\SensitiveParameter] $text = NULL) {
     $errors = [];
 
     // Check if the object properties are set correctly.

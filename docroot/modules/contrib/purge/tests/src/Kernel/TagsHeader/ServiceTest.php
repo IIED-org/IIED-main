@@ -3,12 +3,12 @@
 namespace Drupal\Tests\purge\Kernel\TagsHeader;
 
 use Drupal\Tests\purge\Kernel\KernelServiceTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge\Plugin\Purge\TagsHeader\TagsHeadersService.
- *
- * @group purge
  */
+#[Group('purge')]
 class ServiceTest extends KernelServiceTestBase {
 
   /**

@@ -113,6 +113,7 @@ class ProcessorAddForm extends ConfigFormBase {
       $enabled = $this->purgeProcessors->getPluginsEnabled();
       $enabled[] = $id;
       $this->purgeProcessors->setPluginsEnabled($enabled);
+      $this->messenger()->addStatus($this->t('The configuration options have been saved.'));
       $response->addCommand(new ReloadConfigFormCommand('edit-queue'));
     }
     return $response;

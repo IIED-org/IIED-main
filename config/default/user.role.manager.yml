@@ -50,6 +50,7 @@ dependencies:
     - layout_builder
     - masquerade
     - media
+    - media_pdf_thumbnail
     - node
     - paragraphs
     - path
@@ -90,6 +91,7 @@ permissions:
   - 'access webform submission log'
   - 'access webform submission user'
   - access_all_form_modes
+  - 'add pdf image entity entities'
   - 'addrow tablefield'
   - 'administer block classes'
   - 'administer block content'
@@ -102,6 +104,7 @@ permissions:
   - 'administer media'
   - 'administer menu'
   - 'administer nodes'
+  - 'administer pdf image entity entities'
   - 'administer redirects'
   - 'administer taxonomy'
   - 'administer url aliases'
@@ -313,10 +316,12 @@ permissions:
   - 'view own unpublished content'
   - 'view own unpublished media'
   - 'view page revisions'
+  - 'view private pdf thumbnails'
   - 'view project revisions'
   - 'view publication revisions'
   - 'view series_page revisions'
   - 'view the administration theme'
   - 'view unpublished paragraphs'
+  - 'view unpublished pdf image entity entities'
   - 'view user email addresses'
   - 'view webform revisions'

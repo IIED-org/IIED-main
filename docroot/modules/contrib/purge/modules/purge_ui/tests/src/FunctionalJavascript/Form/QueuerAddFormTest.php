@@ -3,12 +3,12 @@
 namespace Drupal\Tests\purge_ui\FunctionalJavascript\Form;
 
 use Drupal\purge_ui\Form\QueuerAddForm;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge_ui\Form\QueuerAddForm.
- *
- * @group purge
  */
+#[Group('purge')]
 class QueuerAddFormTest extends AjaxFormTestBase {
 
   /**

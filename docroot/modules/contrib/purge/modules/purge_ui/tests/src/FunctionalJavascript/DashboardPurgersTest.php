@@ -3,12 +3,12 @@
 namespace Drupal\Tests\purge_ui\FunctionalJavascript;
 
 use Drupal\Core\Url;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge_ui\Controller\DashboardController::buildPurgers().
- *
- * @group purge
  */
+#[Group('purge')]
 class DashboardPurgersTest extends DashboardTestBase {
 
   /**

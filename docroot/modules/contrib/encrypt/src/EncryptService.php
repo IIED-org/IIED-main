@@ -76,7 +76,7 @@ class EncryptService implements EncryptServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function encrypt($text, EncryptionProfileInterface $encryption_profile) {
+  public function encrypt(#[\SensitiveParameter] $text, EncryptionProfileInterface $encryption_profile) {
     // If validate fails, an exception is thrown, so nothing will be returned.
     // @phpstan-ignore-next-line should return string but return statement is missing
     if ($this->validate($text, $encryption_profile)) {
@@ -88,7 +88,7 @@ class EncryptService implements EncryptServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function decrypt($text, EncryptionProfileInterface $encryption_profile) {
+  public function decrypt(#[\SensitiveParameter] $text, EncryptionProfileInterface $encryption_profile) {
     if (!$encryption_profile->getEncryptionMethod()->canDecrypt()) {
       throw new EncryptionMethodCanNotDecryptException();
     }
@@ -114,7 +114,7 @@ class EncryptService implements EncryptServiceInterface {
    * @throws \Drupal\encrypt\Exception\EncryptException
    *   Error with validation failures.
    */
-  protected function validate($text, EncryptionProfileInterface $encryption_profile) {
+  protected function validate(#[\SensitiveParameter] $text, EncryptionProfileInterface $encryption_profile) {
     $errors = $encryption_profile->validate($text);
     if (!empty($errors)) {
       // Throw an exception with the errors from the encryption method.

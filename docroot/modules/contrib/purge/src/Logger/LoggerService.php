@@ -100,6 +100,7 @@ class LoggerService extends ServiceProviderBase implements LoggerServiceInterfac
    */
   public function destruct() {
     // Do not change data while config import in progress.
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
     if ($this->write && !\Drupal::isConfigSyncing()) {
       $this->configFactory
         ->getEditable(self::CONFIG)

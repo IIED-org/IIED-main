@@ -5,7 +5,7 @@ namespace Drupal\purge\Logger;
 use Psr\Log\LoggerInterface;
 
 /**
- * Describes a subchannel whichs logs to a single main channel with permissions.
+ * Describes a subchannel which logs to a single main channel with permissions.
  */
 interface LoggerChannelPartInterface extends LoggerInterface {
 

@@ -5,6 +5,6 @@ dependencies: {  }
 id: media__document
 label: 'Media: Document'
 tags:
-  image_src: '[media_pdf_thumbnail:field_media_document:1:image_url]'
+  image_src: '[media_pdf_thumbnail:field_media_document:1:image_uri]'
   og_image: '[media_pdf_thumbnail:field_media_document:1:image_url]'
   twitter_cards_image: '[media_pdf_thumbnail:field_media_document:1:image_url]'

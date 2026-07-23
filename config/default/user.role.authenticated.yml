@@ -12,6 +12,7 @@ dependencies:
     - filter
     - klaro
     - media
+    - media_pdf_thumbnail
     - readonlymode
     - search_api_autocomplete
     - shortcut
@@ -37,3 +38,4 @@ permissions:
   - 'use search_api_autocomplete for search'
   - 'use text format webform_default'
   - 'view media'
+  - 'view published pdf image entity entities'

@@ -3,12 +3,12 @@
 namespace Drupal\Tests\purge_ui\FunctionalJavascript\Form;
 
 use Drupal\purge_ui\Form\PurgerAddForm;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge_ui\Form\PurgerAddForm.
- *
- * @group purge
  */
+#[Group('purge')]
 class PurgerAddFormTest extends AjaxFormTestBase {
 
   /**
@@ -85,6 +85,7 @@ class PurgerAddFormTest extends AjaxFormTestBase {
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->getSession()->getPage()->find("xpath", "//input[@value = 'c']")->selectOption("c");
     $this->pressDialogButton('Add');
+    $this->assertSession()->waitForText('The configuration options have been saved.');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
     $this->assertSession()->linkExists('Purger C');
     $this->purgePurgers->reload();

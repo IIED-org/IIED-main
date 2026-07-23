@@ -174,7 +174,7 @@ class DashboardController extends ControllerBase {
     extract($this->getRenderLocals());
     // phpcs:disable DrupalPractice.CodeAnalysis.VariableAnalysis.UndefinedVariable -- PHP's extract() isn't understood by this sniffer..
     $build = $details($this->t('Logging'));
-    $build['#open'] = $this->request->get('edit-logging', FALSE);
+    $build['#open'] = $this->request->query->get('edit-logging', FALSE);
     $build['configure'] = $buttonlink(
       $this->t("Configure logging behavior"), 'logging', '90%');
     // phpcs:enable DrupalPractice.CodeAnalysis.VariableAnalysis.UndefinedVariable -- PHP's extract() isn't understood by this sniffer..
@@ -327,7 +327,7 @@ class DashboardController extends ControllerBase {
     // phpcs:disable DrupalPractice.CodeAnalysis.VariableAnalysis.UndefinedVariable -- PHP's extract() isn't understood by this sniffer..
     $build = $details($this->t('Queue'));
     $build['#description'] = $p($this->t("The queue holds items that need refreshing, hold your mouse over the column titles for more details."));
-    $build['#open'] = $this->request->get('edit-queue', FALSE) || (!count($this->purgeQueuers)) || (!count($this->purgeProcessors));
+    $build['#open'] = $this->request->query->get('edit-queue', FALSE) || (!count($this->purgeQueuers)) || (!count($this->purgeProcessors));
     $build['t'] = $table([
       'queuers' => [
         'data' => $this->t('Queuers'),

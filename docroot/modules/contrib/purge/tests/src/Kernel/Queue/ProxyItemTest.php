@@ -7,12 +7,12 @@ use Drupal\purge\Plugin\Purge\Queue\Exception\InvalidPropertyException;
 use Drupal\purge\Plugin\Purge\Queue\ProxyItem;
 use Drupal\purge\Plugin\Purge\Queue\TxBuffer;
 use Drupal\Tests\purge\Kernel\KernelTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge\Tests\Queue\ProxyItem.
- *
- * @group purge
  */
+#[Group('purge')]
 class ProxyItemTest extends KernelTestBase {
 
   /**

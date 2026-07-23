@@ -10,12 +10,14 @@ use Drupal\search_api_autocomplete\Tests\TestsHelper;
 use Drupal\Tests\search_api\Functional\ExampleContentTrait;
 use Drupal\user\Entity\Role;
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the functionality of the whole module from a user's perspective.
  *
  * @group search_api_autocomplete
  */
+#[RunTestsInSeparateProcesses]
 class IntegrationTest extends IntegrationTestBase {
 
   use ExampleContentTrait;
@@ -266,7 +268,7 @@ class IntegrationTest extends IntegrationTestBase {
 
     // Make sure the query looks as it should.
     /** @var \Drupal\search_api\Query\QueryInterface $query */
-    list($query) = $this->getMethodArguments('backend', 'getAutocompleteSuggestions');
+    [$query] = $this->getMethodArguments('backend', 'getAutocompleteSuggestions');
     $this->assertFalse($query->wasAborted());
     $this->assertEquals(['body'], $query->getFulltextFields());
     $this->assertEquals(['en'], array_values($query->getLanguages()));
@@ -292,7 +294,7 @@ class IntegrationTest extends IntegrationTestBase {
     // Check that autocomplete in the "Name" filter works, too, and that it sets
     // the correct fields on the query.
     $this->getAutocompleteSuggestions('edit-name-value');
-    list($query) = $this->getMethodArguments('suggester', 'getAutocompleteSuggestions');
+    [$query] = $this->getMethodArguments('suggester', 'getAutocompleteSuggestions');
     $this->assertEquals(['name'], $query->getFulltextFields());
   }
 

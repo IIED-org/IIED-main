@@ -1,3 +1,9 @@
+Search API Autocomplete 1.12 (2026-07-22):
+------------------------------------------
+- ci: #3594171 Fixed failing pipelines.
+- chore: #3562995 Adapted to the deprecation of hook_requirements().
+- ci: #3560576 Fixed failing tests against Drupal 11.2 and 11.3.
+
 Search API Autocomplete 1.11 (2025-11-01):
 ------------------------------------------
 - [#3542804] ci: Enabled deprecation testing.

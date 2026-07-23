@@ -8,12 +8,14 @@ use Drupal\search_api_autocomplete\Entity\Search;
 use Drupal\search_api_autocomplete\Tests\TestsHelper;
 use Drupal\search_api_test\PluginTestTrait;
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests dependency handling of the search entity.
  *
  * @group search_api_autocomplete
  */
+#[RunTestsInSeparateProcesses]
 class DependencyRemovalTest extends KernelTestBase {
 
   use PluginTestTrait;
@@ -23,12 +25,14 @@ class DependencyRemovalTest extends KernelTestBase {
    */
   protected static $modules = [
     'entity_test',
+    'field',
     'search_api_autocomplete',
     'search_api_autocomplete_test',
     'search_api',
     'search_api_test',
     'search_api_test_example_content',
     'system',
+    'text',
     'user',
     'views',
   ];
@@ -65,6 +69,7 @@ class DependencyRemovalTest extends KernelTestBase {
     $this->installEntitySchema('user');
     $this->installSchema('search_api', ['search_api_item']);
     $this->installConfig('search_api');
+    $this->installConfig('search_api_test_example_content');
     $this->installConfig('search_api_autocomplete_test');
 
     // Create our test search, but don't save it yet so individual tests can

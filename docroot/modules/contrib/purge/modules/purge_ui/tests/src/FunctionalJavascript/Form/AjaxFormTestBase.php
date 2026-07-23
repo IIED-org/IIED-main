@@ -49,8 +49,11 @@ abstract class AjaxFormTestBase extends FormTestBase {
    * Toggles the Drop Button widget.
    *
    * @param string $primary_action
+   *   The primary action link text to locate the dropbutton widget.
    *
    * @return void
+   *   No return value.
+   *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
   protected function toggleDropbutton(string $primary_action): void {

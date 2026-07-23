@@ -1,4 +1,8 @@
 services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
   logger.channel.search_api_autocomplete:
     parent: logger.channel_base
     arguments: ['search_api_autocomplete']
@@ -18,4 +22,6 @@ services:
 
   search_api_autocomplete.plugin_helper:
     class: Drupal\search_api_autocomplete\Utility\PluginHelper
-    arguments: ['@plugin.manager.search_api_autocomplete.suggester', '@plugin.manager.search_api_autocomplete.search']
+
+  Drupal\search_api_autocomplete\Hook\SearchApiAutocompleteHooks:
+    class: Drupal\search_api_autocomplete\Hook\SearchApiAutocompleteHooks

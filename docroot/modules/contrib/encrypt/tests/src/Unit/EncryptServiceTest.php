@@ -206,7 +206,7 @@ class EncryptServiceTest extends UnitTestCase {
    * @return array
    *   An array with data for the test method.
    */
-  public function encryptionDataProvider() {
+  public static function encryptionDataProvider() {
     return [
       'normal' => ["validkey", TRUE],
       'exception' => ["invalidkey", FALSE],

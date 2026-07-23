@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge\Kernel\Queuer;
 
 use Drupal\purge\Plugin\Purge\Queuer\QueuerInterface;
 use Drupal\Tests\purge\Kernel\KernelServiceTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge\Plugin\Purge\Queuer\QueuersService.
- *
- * @group purge
  */
+#[Group('purge')]
 class ServiceTest extends KernelServiceTestBase {
 
   /**

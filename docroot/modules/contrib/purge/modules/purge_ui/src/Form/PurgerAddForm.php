@@ -118,6 +118,7 @@ class PurgerAddForm extends ConfigFormBase {
     if (in_array($plugin_id, $this->purgePurgers->getPluginsAvailable())) {
       $enabled[$this->purgePurgers->createId()] = $plugin_id;
       $this->purgePurgers->setPluginsEnabled($enabled);
+      $this->messenger()->addStatus($this->t('The configuration options have been saved.'));
       $response->addCommand(new ReloadConfigFormCommand('edit-purgers'));
     }
     return $response;

@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge_ui\FunctionalJavascript\Form;
 
 use Drupal\purge_processor_test\Form\ProcessorConfigForm;
 use Drupal\Tests\purge_ui\FunctionalJavascript\Form\Config\ProcessorConfigFormTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the drop-in configuration form for processors (modal dialog).
- *
- * @group purge
  */
+#[Group('purge')]
 class ProcessorConfigDialogFormTest extends ProcessorConfigFormTestBase {
 
   /**

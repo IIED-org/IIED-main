@@ -4,7 +4,7 @@ namespace Drupal\encrypt\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\encrypt\EncryptService;
+use Drupal\encrypt\EncryptServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -13,19 +13,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class EncryptionProfileTestForm extends EntityForm {
 
   /**
-   * The encrypt service.
+   * The encryption service.
    *
-   * @var \Drupal\encrypt\EncryptService
+   * @var \Drupal\encrypt\EncryptServiceInterface
    */
   protected $encryptService;
 
   /**
    * Constructs the test form.
    *
-   * @param \Drupal\encrypt\EncryptService $encrypt_service
+   * @param \Drupal\encrypt\EncryptServiceInterface $encrypt_service
    *   The encryption service.
    */
-  public function __construct(EncryptService $encrypt_service) {
+  public function __construct(EncryptServiceInterface $encrypt_service) {
     $this->encryptService = $encrypt_service;
   }
 

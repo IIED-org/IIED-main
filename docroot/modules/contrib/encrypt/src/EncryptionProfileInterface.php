@@ -67,6 +67,6 @@ interface EncryptionProfileInterface extends ConfigEntityInterface {
    * @return array
    *   An array of validation errors. Empty if no errors.
    */
-  public function validate($text = NULL);
+  public function validate(#[\SensitiveParameter] $text = NULL);
 
 }

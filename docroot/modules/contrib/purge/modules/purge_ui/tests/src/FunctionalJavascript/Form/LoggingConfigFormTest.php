@@ -3,13 +3,16 @@
 namespace Drupal\Tests\purge_ui\FunctionalJavascript\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\purge\Logger\LoggerServiceInterface;
 use Drupal\purge_ui\Form\LoggingConfigForm;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge_ui\Form\LoggingConfigForm.
- *
- * @group purge
  */
+#[CoversClass(LoggingConfigForm::class)]
+#[Group('purge')]
 class LoggingConfigFormTest extends AjaxFormTestBase {
 
   /**
@@ -45,17 +48,17 @@ class LoggingConfigFormTest extends AjaxFormTestBase {
     ];
 
     // Set a mocked logger as service.
-    $this->purgeLogger = $this->createMock('Drupal\purge\Logger\LoggerServiceInterface');
+    $this->purgeLogger = $this->createMock(LoggerServiceInterface::class);
     $this->purgeLogger->method('getChannels')->willReturn($defaults);
     $this->purgeLogger->method('hasChannel')
-      ->will($this->returnCallback(function ($subject) {
+      ->willReturnCallback(function ($subject) {
         return ($subject === 'testchannel');
-      }));
+      });
     $this->container->set('purge.logger', $this->purgeLogger);
   }
 
   /**
-   * @covers \Drupal\purge_ui\Form\LoggingConfigForm::buildForm
+   * Tests buildForm().
    */
   public function testBuildForm(): void {
     $form = $this->formInstance()->buildForm([], $this->getFormStateInstance());
@@ -88,7 +91,7 @@ class LoggingConfigFormTest extends AjaxFormTestBase {
   }
 
   /**
-   * @covers \Drupal\purge_ui\Form\LoggingConfigForm::setChannels
+   * Tests setChannels().
    */
   public function testSetChannels(): void {
     $form = $this->formInstance()->buildForm([], $this->getFormStateInstance());
@@ -118,7 +121,7 @@ class LoggingConfigFormTest extends AjaxFormTestBase {
   }
 
   /**
-   * @covers \Drupal\purge_ui\Form\LoggingConfigForm::submitForm
+   * Tests submitForm().
    */
   public function testSubmitForm(): void {
     $form = $this->formInstance()->buildForm([], $this->getFormStateInstance());

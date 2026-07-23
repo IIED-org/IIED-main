@@ -3,12 +3,12 @@
 namespace Drupal\Tests\purge_ui\FunctionalJavascript\Form;
 
 use Drupal\purge_ui\Form\PluginDetailsForm;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge_ui\Form\PluginDetailsForm (for processors).
- *
- * @group purge
  */
+#[Group('purge')]
 class ProcessorDetailsFormTest extends AjaxFormTestBase {
 
   /**

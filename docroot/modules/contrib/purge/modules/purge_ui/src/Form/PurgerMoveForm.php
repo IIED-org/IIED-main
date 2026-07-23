@@ -6,6 +6,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\purge\Plugin\Purge\Purger\PurgersServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -120,14 +121,15 @@ class PurgerMoveForm extends ConfirmFormBase {
     elseif ($this->direction === 'down') {
       return $this->t('Do you want to move @label down in the execution order?', $label);
     }
-    return '';
+    return $this->t('Do you want to move @label in the execution order?', $label);
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return NULL;
+    // Rendered as a modal dialog; cancel is handled via AJAX close button.
+    return Url::fromRoute('purge_ui.dashboard');
   }
 
   /**

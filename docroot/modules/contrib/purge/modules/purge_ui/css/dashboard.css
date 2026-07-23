@@ -14,18 +14,17 @@
 
 /* Wide screens */
 @media screen and (min-width: 1020px), (orientation: landscape) and (min-device-height: 780px) {
-
   .layout-region-purgeui-main {
     float: left; /* LTR */
+    box-sizing: border-box;
     width: 65%;
     padding-right: 2em; /* LTR */
-    box-sizing: border-box;
   }
 
   [dir="rtl"] .layout-region-purgeui-main {
     float: right;
-    padding-left: 2em;
     padding-right: 0;
+    padding-left: 2em;
   }
 
   .layout-region-purgeui-secondary {
@@ -38,7 +37,7 @@
   }
 
   /* @todo File an issue to add a standard class to all text-like inputs */
-  /*.layout-region-purgeui-secondary .form-autocomplete,
+  /* .layout-region-purgeui-secondary .form-autocomplete,
   .layout-region-purgeui-secondary .form-text,
   .layout-region-purgeui-secondary .form-tel,
   .layout-region-purgeui-secondary .form-email,
@@ -50,7 +49,7 @@
     box-sizing:         border-box;
     width: 100%;
     max-width: 100%;
-  }*/
+  } */
 }
 
 /**

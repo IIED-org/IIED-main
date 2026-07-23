@@ -21,7 +21,7 @@ abstract class PurgerConfigFormTestBase extends PluginConfigFormTestBase {
       $this->route = 'purge_ui.purger_config_dialog_form';
     }
 
-    // Purgers are refered to by instance id.
+    // Purgers are referred to by instance id.
     $this->routeParameters['id'] = $this->instanceId;
     $this->formArgs[0]['id'] = $this->instanceId;
 

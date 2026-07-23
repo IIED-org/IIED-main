@@ -2,11 +2,12 @@
 
 namespace Drupal\Tests\purge\Kernel\Queue;
 
+use PHPUnit\Framework\Attributes\Group;
+
 /**
  * Tests \Drupal\purge\Plugin\Purge\Queue\MemoryQueue.
- *
- * @group purge
  */
+#[Group('purge')]
 class MemoryQueueTest extends PluginTestBase {
 
   /**

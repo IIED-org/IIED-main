@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge\Kernel\Queue;
 
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge\Plugin\Purge\Queue\FileQueue.
- *
- * @group purge
  */
+#[Group('purge')]
 class FileQueueTest extends PluginTestBase {
 
   /**

@@ -2,6 +2,7 @@
 
 namespace Drupal\encrypt\Controller;
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
@@ -115,9 +116,9 @@ class EncryptionProfileListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOperations(EntityInterface $entity) {
+  public function getDefaultOperations(EntityInterface $entity, ?CacheableMetadata $cacheability = NULL) {
     /** @var \Drupal\Core\Config\Entity\ConfigEntityInterface $entity */
-    $operations = parent::getDefaultOperations($entity);
+    $operations = parent::getDefaultOperations($entity, $cacheability);
 
     if ($entity->hasLinkTemplate('test-form')) {
       $operations['test'] = [

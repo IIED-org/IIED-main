@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge_purger_test\Functional;
 
 use Drupal\purge_purger_test\Form\PurgerConfigForm;
 use Drupal\Tests\purge_ui\FunctionalJavascript\Form\Config\PurgerConfigFormTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge_purger_test\Form\PurgerConfigForm.
- *
- * @group purge
  */
+#[Group('purge')]
 class PurgerConfigFormTest extends PurgerConfigFormTestBase {
 
   /**

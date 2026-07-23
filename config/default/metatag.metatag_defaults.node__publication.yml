@@ -6,20 +6,19 @@ id: node__publication
 label: 'Content: Publication'
 tags:
   book_isbn: '[node:field_isbn]'
-  image_src: '[node:field_media]'
-  og_image: '[node:field_media]'
-  robots: nosnippet
+  og_description: '[node:field_media:entity:media_pdf_thumbnail:field_media_document:1:image_uri]'
+  robots: 'max-image-preview:standard'
   schema_article_about: '[node:field_theme_s_]'
   schema_article_author: 'a:4:{s:5:"@type";s:6:"Person";s:5:"pivot";s:1:"1";s:4:"name";s:22:"[node:field_author_s_]";s:3:"url";s:107:"[node:field_author_s_:0:entity:url],[node:field_author_s_:1:entity:url],[node:field_author_s_:2:entity:url]";}'
   schema_article_date_published: '[node:field_date_published:date:html_datetime]'
   schema_article_description: '[node:body]'
   schema_article_headline: '[node:title]'
   schema_article_id: '[current-page:url:absolute]'
-  schema_article_image: 'a:5:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:4:"True";s:3:"url";s:113:"[node:field_cover_image:entity:field_media_image:card_370:url],[node:field_media:entity:field_media_document:url]";s:5:"width";s:64:"[node:field_cover_image:entity:field_media_image:card_370:width]";s:6:"height";s:65:"[node:field_cover_image:entity:field_media_image:card_370:height]";}'
+  schema_article_image: 'a:3:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:4:"True";s:3:"url";s:64:"[node:field_media:entity:field_media_document:entity:card_cover]";}'
   schema_article_is_accessible_for_free: 'True'
   schema_article_main_entity_of_page: '[node:url:absolute]'
   schema_article_name: '[current-page:title]'
   schema_article_publisher: 'a:4:{s:5:"@type";s:12:"Organization";s:4:"name";s:22:"[node:field_publisher]";s:3:"url";s:39:"[node:field_publisher:entity:field_url]";s:4:"logo";a:5:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:5:"False";s:3:"url";s:49:"[node:field_publisher:entity:field_logo:page:url]";s:5:"width";s:51:"[node:field_publisher:entity:field_logo:page:width]";s:6:"height";s:52:"[node:field_publisher:entity:field_logo:page:height]";}}'
   schema_article_type: Article
   title: '[current-page:title] | IIED Publications Library'
-  twitter_cards_image: '[node:field_media]'
+  twitter_cards_type: summary

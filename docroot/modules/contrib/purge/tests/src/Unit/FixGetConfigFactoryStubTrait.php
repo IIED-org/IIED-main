@@ -2,6 +2,10 @@
 
 namespace Drupal\Tests\purge\Unit;
 
+use Drupal\Core\Config\Config;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
+
 /**
  * Overrides ::getConfigFactoryStub().
  *
@@ -30,37 +34,27 @@ trait FixGetConfigFactoryStubTrait {
       // Also allow to pass in no argument.
       $map[] = ['', $config_values];
 
-      $immutable_config_object = $this->getMockBuilder('Drupal\Core\Config\ImmutableConfig')
-        ->disableOriginalConstructor()
-        ->getMock();
-      $immutable_config_object->expects($this->any())
-        ->method('get')
-        ->will($this->returnValueMap($map));
+      $immutable_config_object = $this->createStub(ImmutableConfig::class);
+      $immutable_config_object->method('get')
+        ->willReturnMap($map);
       $config_get_map[] = [$config_name, $immutable_config_object];
 
-      $mutable_config_object = $this->getMockBuilder('Drupal\Core\Config\Config')
-        ->disableOriginalConstructor()
-        ->getMock();
-      $mutable_config_object->expects($this->any())
-        ->method('get')
-        ->will($this->returnValueMap($map));
-      $mutable_config_object->expects($this->any())
-        ->method('set')
-        ->will($this->returnValue($mutable_config_object));
-      $mutable_config_object->expects($this->any())
-        ->method('save')
-        ->will($this->returnValue($mutable_config_object));
+      $mutable_config_object = $this->createStub(Config::class);
+      $mutable_config_object->method('get')
+        ->willReturnMap($map);
+      $mutable_config_object->method('set')
+        ->willReturn($mutable_config_object);
+      $mutable_config_object->method('save')
+        ->willReturn($mutable_config_object);
       $config_editable_map[] = [$config_name, $mutable_config_object];
     }
     // Construct a config factory with the array of configuration object stubs
     // as its return map.
-    $config_factory = $this->createMock('Drupal\Core\Config\ConfigFactoryInterface');
-    $config_factory->expects($this->any())
-      ->method('get')
-      ->will($this->returnValueMap($config_get_map));
-    $config_factory->expects($this->any())
-      ->method('getEditable')
-      ->will($this->returnValueMap($config_editable_map));
+    $config_factory = $this->createMock(ConfigFactoryInterface::class);
+    $config_factory->method('get')
+      ->willReturnMap($config_get_map);
+    $config_factory->method('getEditable')
+      ->willReturnMap($config_editable_map);
     return $config_factory;
   }
 

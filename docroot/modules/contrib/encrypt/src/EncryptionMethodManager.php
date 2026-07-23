@@ -23,7 +23,14 @@ class EncryptionMethodManager extends DefaultPluginManager {
    *   The module handler to invoke the alter hook with.
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
-    parent::__construct('Plugin/EncryptionMethod', $namespaces, $module_handler, 'Drupal\encrypt\EncryptionMethodInterface', 'Drupal\encrypt\Annotation\EncryptionMethod');
+    parent::__construct(
+      'Plugin/EncryptionMethod',
+      $namespaces,
+      $module_handler,
+      'Drupal\encrypt\EncryptionMethodInterface',
+      'Drupal\encrypt\Attribute\EncryptionMethod',
+      'Drupal\encrypt\Annotation\EncryptionMethod',
+    );
     $this->setCacheBackend($cache_backend, 'encryption_method');
   }
 

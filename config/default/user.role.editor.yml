@@ -84,6 +84,7 @@ dependencies:
     - form_mode_control
     - help
     - media
+    - media_pdf_thumbnail
     - node
     - paragraphs
     - path
@@ -106,8 +107,10 @@ permissions:
   - 'access help pages'
   - 'access toolbar'
   - 'access user profiles'
+  - 'add pdf image entity entities'
   - 'administer comments'
   - 'administer nodes'
+  - 'administer pdf image entity entities'
   - 'create article content'
   - 'create blog content'
   - 'create content translations'
@@ -269,7 +272,9 @@ permissions:
   - 'view media'
   - 'view own unpublished content'
   - 'view own unpublished media'
+  - 'view private pdf thumbnails'
   - 'view publication revisions'
   - 'view the administration theme'
   - 'view unpublished paragraphs'
+  - 'view unpublished pdf image entity entities'
   - 'view user email addresses'

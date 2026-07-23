@@ -1,34 +1,34 @@
 /* Diagnostic report. */
 .purge-ui-diagnostic-report__status-title {
   position: relative;
-  vertical-align: top;
+  box-sizing: border-box;
   width: 30%;
   padding: 10px 6px 10px 40px; /* LTR */
-  box-sizing: border-box;
-  font-weight: bold;
+  vertical-align: top;
   background-color: transparent;
+  font-weight: bold;
 }
 [dir="rtl"] .purge-ui-diagnostic-report__status-title {
   padding: 10px 40px 10px 6px;
 }
-.purge-ui-diagnostic-report__status-icon:before {
+.purge-ui-diagnostic-report__status-icon::before {
+  position: absolute;
+  top: 12px;
+  left: 12px; /* LTR */
+  display: block;
+  width: 16px;
+  height: 16px;
   content: "";
   background-repeat: no-repeat;
-  height: 16px;
-  width: 16px;
-  display: block;
-  position: absolute;
-  left: 12px; /* LTR */
-  top: 12px;
 }
-[dir="rtl"] .purge-ui-diagnostic-report__status-icon:before {
-  left: auto;
+[dir="rtl"] .purge-ui-diagnostic-report__status-icon::before {
   right: 12px;
+  left: auto;
 }
-.purge-ui-diagnostic-report__status-icon--error:before {
+.purge-ui-diagnostic-report__status-icon--error::before {
   background-image: url(../images/error.svg);
 }
-.purge-ui-diagnostic-report__status-icon--warning:before {
+.purge-ui-diagnostic-report__status-icon--warning::before {
   background-image: url(../images/warning.svg);
 }
 .purge-ui-diagnostic-report__entry {
@@ -39,8 +39,8 @@
   border-bottom: 1px solid #bebfb9;
 }
 .purge-ui-diagnostic-report__entry__value {
-  font-weight: bolder;
-  font-family: "Lucida Console", Monaco, monospace;
   padding-top: 6px;
   padding-bottom: 1em;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-weight: bolder;
 }

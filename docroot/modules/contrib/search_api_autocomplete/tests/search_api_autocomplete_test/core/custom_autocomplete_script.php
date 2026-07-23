@@ -21,14 +21,17 @@ search_api_autocomplete_test_custom_autocomplete_callback();
  * Outputs some autocomplete suggestions as JSON, for testing purposes.
  */
 function search_api_autocomplete_test_custom_autocomplete_callback() {
+  header('Content-type: application/json');
   $suggestions = [];
   foreach ($_GET as $key => $value) {
+    if (!is_string($value)) {
+      continue;
+    }
     $suggestions[] = [
       'value' => $value,
       'label' => htmlentities("$key: $value"),
     ];
   }
-  header('Content-type: application/json');
   echo json_encode($suggestions, JSON_PRETTY_PRINT);
   exit;
 }

@@ -179,7 +179,7 @@ class EncryptionProfileTest extends UnitTestCase {
   /**
    * Data provider for validate() function.
    */
-  public function validateDataProvider() {
+  public static function validateDataProvider() {
     $valid_definition = [
       'id' => 'test_encryption_method',
       'title' => "Test encryption method",

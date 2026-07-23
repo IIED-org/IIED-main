@@ -5,12 +5,14 @@ namespace Drupal\Tests\search_api_autocomplete\Functional;
 use Drupal\search_api_autocomplete\Entity\Search;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\views\Entity\View;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests whether caches are always invalidated correctly.
  *
  * @group search_api_autocomplete
  */
+#[RunTestsInSeparateProcesses]
 class CacheInvalidationTest extends BrowserTestBase {
 
   /**

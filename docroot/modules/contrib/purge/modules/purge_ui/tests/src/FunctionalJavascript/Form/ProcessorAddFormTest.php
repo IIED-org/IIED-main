@@ -3,12 +3,12 @@
 namespace Drupal\Tests\purge_ui\FunctionalJavascript\Form;
 
 use Drupal\purge_ui\Form\ProcessorAddForm;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge_ui\Form\ProcessorAddForm.
- *
- * @group purge
  */
+#[Group('purge')]
 class ProcessorAddFormTest extends AjaxFormTestBase {
 
   /**

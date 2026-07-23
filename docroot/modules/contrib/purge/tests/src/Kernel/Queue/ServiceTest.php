@@ -4,12 +4,12 @@ namespace Drupal\Tests\purge\Kernel\Queue;
 
 use Drupal\purge\Plugin\Purge\Invalidation\InvalidationInterface;
 use Drupal\Tests\purge\Kernel\KernelServiceTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests \Drupal\purge\Plugin\Purge\Queue\QueueService.
- *
- * @group purge
  */
+#[Group('purge')]
 class ServiceTest extends KernelServiceTestBase {
 
   /**
@@ -211,7 +211,7 @@ class ServiceTest extends KernelServiceTestBase {
     $this->service->handleResults($claims);
     sleep(3);
 
-    // Claim for 2s, mark all as not-successfull and assert releases.
+    // Claim for 2s, mark all as not-successful and assert releases.
     $claims = $this->service->claim(10, 2);
     $this->assertTrue(4 === count($claims));
     foreach ($claims as $claim) {

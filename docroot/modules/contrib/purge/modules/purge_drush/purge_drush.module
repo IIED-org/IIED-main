@@ -5,35 +5,62 @@
  * Sets the Drush Purge plugins to enabled by default.
  */
 
+/**
+ * Implements hook_purge_queuers_alter().
+ */
 function purge_drush_purge_queuers_alter(&$definitions) {
   _purge_drush_alter_definition($definitions);
 }
 
+/**
+ * Implements hook_purge_tagsheader_alter().
+ */
 function purge_drush_purge_tagsheader_alter(&$definitions) {
   _purge_drush_alter_definition($definitions);
 }
 
+/**
+ * Implements hook_purge_queues_alter().
+ */
 function purge_drush_purge_queues_alter(&$definitions) {
   _purge_drush_alter_definition($definitions);
 }
 
+/**
+ * Implements hook_purge_invalidation_alter().
+ */
 function purge_drush_purge_invalidation_alter(&$definitions) {
   _purge_drush_alter_definition($definitions);
 }
 
+/**
+ * Implements hook_purge_diagnostic_alter().
+ */
 function purge_drush_purge_diagnostic_alter(&$definitions) {
   _purge_drush_alter_definition($definitions);
 }
 
+/**
+ * Implements hook_purge_purgers_alter().
+ */
 function purge_drush_purge_purgers_alter(&$definitions) {
   _purge_drush_alter_definition($definitions);
 }
 
+/**
+ * Implements hook_purge_processor_alter().
+ */
 function purge_drush_purge_processor_alter(&$definitions) {
   _purge_drush_alter_definition($definitions);
 }
 
-function _purge_drush_alter_definition(&$definitions) {
+/**
+ * Alters definitions to enable drush_purge plugins by default.
+ *
+ * @param array $definitions
+ *   The plugin definitions to alter.
+ */
+function _purge_drush_alter_definition(array &$definitions) {
   foreach ($definitions as $key => $def) {
     if (strpos($key, 'drush_purge') === 0) {
       $definitions[$key]['enable_by_default'] = TRUE;
