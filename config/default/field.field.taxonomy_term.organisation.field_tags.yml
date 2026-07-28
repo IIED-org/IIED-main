@@ -1,0 +1,29 @@
+uuid: aea77edb-2756-4aac-bfb0-d1895c8bbda8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_tags
+    - taxonomy.vocabulary.organisation
+    - taxonomy.vocabulary.tags
+id: taxonomy_term.organisation.field_tags
+field_name: field_tags
+entity_type: taxonomy_term
+bundle: organisation
+label: Tags
+description: 'Add tags if you want to create a list'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      tags: tags
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,20 @@
+display:
+  default:
+    display_title: Default
+    display_options:
+      fields:
+        type:
+          label: အမျိုးအစား
+        timestamp:
+          label: ရက်စွဲ
+        name:
+          label: အသုံးပြုသူ
+        link:
+          label: လုပ်ဆောင်ချက်များ
+      exposed_form:
+        options:
+          submit_button: Filter
+      filters:
+        type:
+          expose:
+            label: အမျိုးအစား

@@ -14,7 +14,7 @@ use Drupal\Core\TypedData\DataDefinition;
  *   id = "computed_float",
  *   label = @Translation("Computed (float)"),
  *   description = @Translation("This field defines a float field whose value is computed by PHP-Code"),
- *   category = "Computed",
+ *   category = "computed",
  *   default_widget = "computed_number_widget",
  *   default_formatter = "computed_decimal"
  * )

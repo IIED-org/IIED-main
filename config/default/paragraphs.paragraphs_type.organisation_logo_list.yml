@@ -1,0 +1,10 @@
+uuid: fc4d631e-9367-4c7e-82c7-444cf4fdfa70
+langcode: en
+status: true
+dependencies: {  }
+id: organisation_logo_list
+label: 'Organisation logo list'
+icon_uuid: null
+icon_default: null
+description: 'Add list of tagged of partner logos via organisation view'
+behavior_plugins: {  }

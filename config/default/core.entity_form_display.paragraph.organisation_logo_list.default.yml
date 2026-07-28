@@ -1,0 +1,23 @@
+uuid: 89e5da7f-f8f6-4739-a573-9f211e0d167d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.organisation_logo_list.field_logo_view
+    - paragraphs.paragraphs_type.organisation_logo_list
+  module:
+    - viewsreference
+id: paragraph.organisation_logo_list.default
+targetEntityType: paragraph
+bundle: organisation_logo_list
+mode: default
+content:
+  field_logo_view:
+    type: viewsreference_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
