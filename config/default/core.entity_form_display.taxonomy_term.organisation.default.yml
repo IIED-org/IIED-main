@@ -9,6 +9,7 @@ dependencies:
     - field.field.taxonomy_term.organisation.field_location
     - field.field.taxonomy_term.organisation.field_location_legacy
     - field.field.taxonomy_term.organisation.field_logo
+    - field.field.taxonomy_term.organisation.field_tags
     - field.field.taxonomy_term.organisation.field_type
     - field.field.taxonomy_term.organisation.field_url
     - field.field.taxonomy_term.organisation.field_valid
@@ -36,6 +37,7 @@ third_party_settings:
         - langcode
         - field_alias
         - status
+        - field_tags
       label: 'Add new Organisation'
       region: content
       parent_name: ''
@@ -98,6 +100,16 @@ content:
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_tags:
+    type: entity_reference_autocomplete
+    weight: 13
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_type:
     type: boolean_checkbox

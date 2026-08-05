@@ -10,6 +10,7 @@ dependencies:
     - field.field.taxonomy_term.organisation.field_location
     - field.field.taxonomy_term.organisation.field_location_legacy
     - field.field.taxonomy_term.organisation.field_logo
+    - field.field.taxonomy_term.organisation.field_tags
     - field.field.taxonomy_term.organisation.field_type
     - field.field.taxonomy_term.organisation.field_url
     - field.field.taxonomy_term.organisation.field_valid
@@ -384,6 +385,22 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 20
             additional: {  }
+          7dab7ead-7f23-4ab4-af5d-de170906280e:
+            uuid: 7dab7ead-7f23-4ab4-af5d-de170906280e
+            region: content
+            configuration:
+              id: 'field_block:taxonomy_term:organisation:field_tags'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: hidden
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 21
+            additional: {  }
         third_party_settings: {  }
   layout_builder_restrictions:
     allowed_block_categories: {  }
@@ -452,6 +469,14 @@ content:
         attribute: lazy
     third_party_settings: {  }
     weight: 5
+    region: content
+  field_tags:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 8
     region: content
   field_type:
     type: boolean

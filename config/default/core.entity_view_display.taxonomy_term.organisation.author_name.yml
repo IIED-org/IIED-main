@@ -10,6 +10,7 @@ dependencies:
     - field.field.taxonomy_term.organisation.field_location
     - field.field.taxonomy_term.organisation.field_location_legacy
     - field.field.taxonomy_term.organisation.field_logo
+    - field.field.taxonomy_term.organisation.field_tags
     - field.field.taxonomy_term.organisation.field_type
     - field.field.taxonomy_term.organisation.field_url
     - field.field.taxonomy_term.organisation.field_valid
@@ -28,6 +29,7 @@ third_party_settings:
       disable_css: false
       entity_classes: all_classes
       settings:
+        label: ''
         classes:
           layout_class: {  }
           ds_content: {  }
@@ -37,7 +39,6 @@ third_party_settings:
         attributes: ''
         link_attribute: ''
         link_custom: ''
-        label: ''
     regions:
       ds_content:
         - taxonomy_term_title
@@ -68,6 +69,7 @@ hidden:
   field_location: true
   field_location_legacy: true
   field_logo: true
+  field_tags: true
   field_type: true
   field_url: true
   field_valid: true

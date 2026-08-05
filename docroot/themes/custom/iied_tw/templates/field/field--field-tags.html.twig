@@ -57,26 +57,50 @@
 {% if label_hidden %}
   {% if multiple %}
     <div{{ attributes.addClass(tags_classes) }}>
-      {% for item in items %}
-      <a class="h-10 px-4 py-2 text-base text-stone-700 truncate transition-colors duration-200 bg-stone-100 rounded-full focus:shadow-outline hover:bg-stone-200" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
+      {% for delta, item in items %}
+        {% set term = element['#items'][delta].entity %}
+
+        {% if term and term.field_importance.value != '4' %}
+          <a class="h-10 px-4 py-2 text-base truncate transition-colors duration-200 rounded-full text-stone-700 bg-stone-100 focus:shadow-outline hover:bg-stone-200"
+             href="{{ item.content['#url'] }}">
+            {{ item.content['#title'] }}
+          </a>
+        {% endif %}
       {% endfor %}
     </div>
   {% else %}
-    {% for item in items %}
-      <a class="h-10 px-4 py-2 text-base text-stone-700 truncate transition-colors duration-200 bg-stone-100 rounded-full focus:shadow-outline hover:bg-stone-200" href="{{ item.content['#url'] }}">{{ item.content['#title']}}</a>
+    {% for delta, item in items %}
+      {% set term = element['#items'][delta].entity %}
+
+      {% if term and term.field_importance.value != '4' %}
+        <a class="h-10 px-4 py-2 text-base truncate transition-colors duration-200 rounded-full text-stone-700 bg-stone-100 focus:shadow-outline hover:bg-stone-200"
+           href="{{ item.content['#url'] }}">
+          {{ item.content['#title'] }}
+        </a>
+      {% endif %}
     {% endfor %}
   {% endif %}
 {% else %}
   <div{{ attributes }}>
     <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
+
     {% if multiple %}
       <div>
     {% endif %}
-    {% for item in items %}
-      <div{{ item.attributes }}>{{ item.content }}</div>
+
+    {% for delta, item in items %}
+      {% set term = element['#items'][delta].entity %}
+
+      {% if term and term.field_importance.value != '4' %}
+        <div{{ item.attributes }}>
+          {{ item.content }}
+        </div>
+      {% endif %}
     {% endfor %}
+
     {% if multiple %}
       </div>
     {% endif %}
   </div>
 {% endif %}
+

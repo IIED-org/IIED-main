@@ -23,6 +23,7 @@ dependencies:
     - paragraphs.paragraphs_type.media_embed
     - paragraphs.paragraphs_type.media_list
     - paragraphs.paragraphs_type.modal_image
+    - paragraphs.paragraphs_type.organisation_logo_list
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.related_card
     - paragraphs.paragraphs_type.related_content
@@ -85,6 +86,7 @@ settings:
       related_content_no_image: related_content_no_image
       related_card: related_card
       sticky_box: sticky_box
+      organisation_logo_list: organisation_logo_list
     negate: 0
     target_bundles_drag_drop:
       about_the_author:
@@ -152,6 +154,9 @@ settings:
         enabled: true
       modal_image:
         weight: -68
+        enabled: true
+      organisation_logo_list:
+        weight: 69
         enabled: true
       quote:
         weight: -72

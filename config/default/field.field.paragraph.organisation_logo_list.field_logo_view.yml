@@ -1,0 +1,39 @@
+uuid: a07459ce-ffc3-4425-a1da-e9e251291b9a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_logo_view
+    - paragraphs.paragraphs_type.organisation_logo_list
+    - views.view.organisation_logos
+  module:
+    - viewsreference
+id: paragraph.organisation_logo_list.field_logo_view
+field_name: field_logo_view
+entity_type: paragraph
+bundle: organisation_logo_list
+label: 'Logo view'
+description: 'Add a tag ID to the argument under options'
+required: false
+translatable: false
+default_value:
+  -
+    target_uuid: d80a1d76-8332-40bd-a127-1806318e817a
+    display_id: block_1
+    data: 'a:6:{s:6:"offset";N;s:8:"argument";N;s:5:"title";N;s:5:"limit";s:0:"";s:6:"header";N;s:5:"pager";N;}'
+    options:
+      argument: ''
+      limit: ''
+default_value_callback: ''
+settings:
+  handler: 'default:view'
+  handler_settings:
+    target_bundles: null
+    auto_create: false
+  plugin_types:
+    block: block
+  preselect_views:
+    organisation_logos: organisation_logos
+  enabled_settings:
+    argument: argument
+field_type: viewsreference
