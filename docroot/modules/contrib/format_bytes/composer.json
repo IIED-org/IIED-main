@@ -1,9 +1,0 @@
-{
-    "name": "ramsalt/format_bytes",
-    "description": "Twig extension to format raw bytes value to a readable output.",
-    "authors": [{
-        "name": "Sohail Lajevardi",
-        "email": "sohail@ramsalt.com"
-    }],
-    "minimum-stability": "dev"
-}

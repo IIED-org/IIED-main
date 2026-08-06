@@ -1,8 +1,0 @@
-parameters:
-  menu_link_content.skip_procedural_hook_scan: true
-
-services:
-  _defaults:
-    autoconfigure: true
-    autowire: true
-  Drupal\menu_link_content\EventSubscriber\DefaultContentSubscriber: ~

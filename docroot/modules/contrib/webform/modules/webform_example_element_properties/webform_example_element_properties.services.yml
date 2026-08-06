@@ -1,5 +1,0 @@
-
-services:
-  Drupal\webform_example_element_properties\Hook\WebformExampleElementPropertiesHooks:
-    class: Drupal\webform_example_element_properties\Hook\WebformExampleElementPropertiesHooks
-    autowire: true

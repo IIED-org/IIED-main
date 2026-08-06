@@ -1,5 +1,0 @@
-purge_file.settings:
-  title: Purge file
-  route_name: purge_file.settings
-  weight: 10
-  parent: system.performance_settings

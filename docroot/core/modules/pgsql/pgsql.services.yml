@@ -1,7 +1,0 @@
-parameters:
-  pgsql.skip_procedural_hook_scan: true
-
-services:
-  pgsql.entity.query.sql:
-    class: Drupal\pgsql\EntityQuery\QueryFactory
-    arguments: ['@database']

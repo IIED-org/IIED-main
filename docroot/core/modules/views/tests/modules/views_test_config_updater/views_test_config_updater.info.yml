@@ -1,6 +1,0 @@
-name: 'Views Test Config Updater'
-type: module
-package: Testing
-version: VERSION
-dependencies:
-  - drupal:views

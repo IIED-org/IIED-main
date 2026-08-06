@@ -1,5 +1,0 @@
-lp_host_entity.add_form:
-  route_name: entity.lp_host_entity.add_form
-  title: 'Add lp host entity'
-  appears_on:
-    - entity.lp_host_entity.collection

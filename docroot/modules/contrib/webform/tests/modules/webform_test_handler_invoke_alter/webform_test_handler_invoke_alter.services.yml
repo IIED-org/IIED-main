@@ -1,5 +1,0 @@
-
-services:
-  Drupal\webform_test_handler_invoke_alter\Hook\WebformTestHandlerInvokeAlterHooks:
-    class: Drupal\webform_test_handler_invoke_alter\Hook\WebformTestHandlerInvokeAlterHooks
-    autowire: true

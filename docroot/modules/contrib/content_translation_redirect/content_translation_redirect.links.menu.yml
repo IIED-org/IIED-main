@@ -1,6 +1,0 @@
-entity.content_translation_redirect.collection:
-  title: 'Content translation redirects'
-  description: 'Configure redirects for non-existent content translations.'
-  route_name: entity.content_translation_redirect.collection
-  parent: system.admin_config_regional
-  weight: 11

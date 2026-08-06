@@ -1,7 +1,0 @@
-form_mode_control.configuration:
-  path: '/admin/structure/display-modes/form/config-form-modes'
-  defaults:
-    _form: '\Drupal\form_mode_control\Form\FormModeConfigForm'
-    _title: 'Form Mode Control'
-  requirements:
-    _permission: 'administer site configuration'

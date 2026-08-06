@@ -1,4 +1,0 @@
-type: theme
-base theme: false
-name: 'Test theme with a too long name'
-version: VERSION

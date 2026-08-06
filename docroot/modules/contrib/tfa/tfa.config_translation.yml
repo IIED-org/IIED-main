@@ -1,5 +1,0 @@
-tfa.settings:
-  title: 'TFA Settings'
-  base_route_name: tfa.settings
-  names:
-    - tfa.settings

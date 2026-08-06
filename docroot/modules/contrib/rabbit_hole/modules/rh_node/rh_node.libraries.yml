@@ -1,5 +1,0 @@
-node-form:
-  js:
-    rh-node.js: {}
-  dependencies:
-    - core/jquery

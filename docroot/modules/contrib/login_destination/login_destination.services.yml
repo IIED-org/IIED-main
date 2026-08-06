@@ -1,9 +1,0 @@
-services:
-  login_destination.manager:
-    class: Drupal\login_destination\LoginDestinationManager
-    arguments: ['@entity_type.manager', '@path_alias.manager', '@path.matcher', '@path.current', '@config.factory', '@request_stack', '@language_manager', '@token']
-  login_destination.toolbar_link_builder:
-    class: Drupal\login_destination\LoginDestinationToolbarLinkBuilder
-    decorates: user.toolbar_link_builder
-    decoration_priority: 5
-    arguments: ['@login_destination.toolbar_link_builder.inner', '@path.current', '@current_user']

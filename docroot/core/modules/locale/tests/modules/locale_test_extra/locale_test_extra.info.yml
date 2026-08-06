@@ -1,7 +1,0 @@
-name: 'Locale test extra'
-type: module
-description: 'Extra test module for locale translation testing.'
-package: Testing
-version: '1.0'
-hidden: true
-'interface translation project': locale_test_extra

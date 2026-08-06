@@ -1,2 +1,0 @@
-parameters:
-  mysql.skip_procedural_hook_scan: true

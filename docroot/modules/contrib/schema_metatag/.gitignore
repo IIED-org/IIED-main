@@ -1,6 +1,0 @@
-# Dependencies
-composer.lock
-/vendor/
-
-# IDEs
-/.idea/

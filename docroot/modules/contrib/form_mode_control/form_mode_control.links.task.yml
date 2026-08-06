@@ -1,4 +1,0 @@
-form_mode_control.configuration:
-  title: Form Mode Control
-  route_name: form_mode_control.configuration
-  base_route: entity.entity_form_mode.collection

@@ -1,7 +1,0 @@
-name: 'Entity Test with storage config'
-type: module
-description: 'Extends entity_test module to provide a storage config.'
-package: Testing
-version: VERSION
-dependencies:
-  - drupal:entity_test

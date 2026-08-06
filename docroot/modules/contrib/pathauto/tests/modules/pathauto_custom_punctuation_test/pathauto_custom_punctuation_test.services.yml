@@ -1,5 +1,0 @@
-
-services:
-  Drupal\pathauto_custom_punctuation_test\Hook\PathautoCustomPunctuationTestHooks:
-    class: Drupal\pathauto_custom_punctuation_test\Hook\PathautoCustomPunctuationTestHooks
-    autowire: true

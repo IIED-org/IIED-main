@@ -1,9 +1,0 @@
-name: Facets Pretty Paths test
-description: Test module for Facets Pretty Paths
-type: module
-package: Testing
-
-# Information added by Drupal.org packaging script on 2025-10-15
-version: '2.0.4'
-project: 'facets_pretty_paths'
-datestamp: 1760530790

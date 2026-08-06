@@ -1,3 +1,0 @@
-media.source.slideshow:
-  type: media.source.field_aware
-  label: '"Slideshow" media source configuration'

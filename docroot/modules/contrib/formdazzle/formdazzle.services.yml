@@ -1,4 +1,0 @@
-services:
-  Drupal\formdazzle\Hook\FormdazzleHooks:
-    class: Drupal\formdazzle\Hook\FormdazzleHooks
-    autowire: true

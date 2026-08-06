@@ -1,5 +1,0 @@
-polarArea:
-  label: 'Polar Area'
-  axis: 'y_only'
-  axis_inverted: false
-  stacking: false

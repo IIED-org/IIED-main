@@ -1,8 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: stories_web_video
-label: 'Web Video'
-icon_uuid: null
-description: ''
-behavior_plugins: {  }

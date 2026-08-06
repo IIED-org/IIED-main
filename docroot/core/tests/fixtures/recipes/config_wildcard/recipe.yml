@@ -1,8 +1,0 @@
-name: 'Config wildcard'
-type: 'Testing'
-install:
-  - config_test
-  - system
-config:
-  import:
-    config_test: '*'

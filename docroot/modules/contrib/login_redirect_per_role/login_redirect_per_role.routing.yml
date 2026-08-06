@@ -1,9 +1,0 @@
-login_redirect_per_role.redirect_url_admin_settings:
-  path: '/admin/people/login-and-logout-redirect-per-role'
-  defaults:
-    _form: '\Drupal\login_redirect_per_role\Form\RedirectURLSettingsForm'
-    _title: 'Login and Logout redirect per role settings'
-  requirements:
-    _permission: 'administer site configuration'
-  options:
-    _admin_route: TRUE

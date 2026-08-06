@@ -1,5 +1,0 @@
-name: 'Dialog Test'
-type: module
-description: 'Test config entity form.'
-package: Testing
-version: VERSION

@@ -1,8 +1,0 @@
-name: Format Bytes
-description: Twig extension to format raw bytes value to a readable output.
-type: module
-core_version_requirement: ^10.2 || ^11
-# Information added by Drupal.org packaging script on 2025-02-25
-version: '2.0.3'
-project: 'format_bytes'
-datestamp: 1740473957

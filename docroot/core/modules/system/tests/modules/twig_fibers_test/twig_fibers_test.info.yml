@@ -1,5 +1,0 @@
-name: 'Twig Fibers Test'
-type: module
-description: 'Test module for Twig fiber suspend support'
-package: Testing
-version: VERSION

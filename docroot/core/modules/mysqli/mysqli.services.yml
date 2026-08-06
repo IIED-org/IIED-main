@@ -1,7 +1,0 @@
-parameters:
-  mysqli.skip_procedural_hook_scan: true
-
-services:
-  mysqli.views.cast_sql:
-    class: Drupal\mysqli\Plugin\views\query\MysqliCastSql
-    public: false

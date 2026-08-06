@@ -1,4 +1,0 @@
-administer matomo tag manager:
-  title: 'Administer Matomo Tag Manager'
-  description: 'Configure the website integration with Matomo Tag Manager.'
-  restrict access: true

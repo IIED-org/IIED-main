@@ -1,4 +1,0 @@
-name: 'Search API sorts hooks test'
-type: module
-description: 'Support module for Search API tests, tests all the hooks.'
-package: Testing

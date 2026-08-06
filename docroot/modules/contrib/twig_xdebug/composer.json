@@ -1,7 +1,0 @@
-{
-  "name": "drupal/twig_xdebug",
-  "type": "drupal-module",
-  "require": {
-    "ajgl/breakpoint-twig-extension": "^0.3.4"
-  }
-}
