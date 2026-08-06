@@ -46,15 +46,24 @@ interface SolrBackendInterface extends AutocompleteBackendInterface {
    * Get preferred schema version.
    *
    * @return string
+<<<<<<< HEAD
    *   The preferred schema version.
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    */
   public function getPreferredSchemaVersion(): string;
 
   /**
+<<<<<<< HEAD
    * Get the minimal required schema version.
    *
    * @return string
    *   The minimal required schema version.
+=======
+   * Get minmal required schema version.
+   *
+   * @return string
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    */
   public function getMinimalRequiredSchemaVersion(): string;
 
@@ -406,6 +415,12 @@ interface SolrBackendInterface extends AutocompleteBackendInterface {
    * @param object $event
    *   The object to process.
    *
+<<<<<<< HEAD
+=======
+   * @return object
+   *   The Event that was passed, now modified by listeners.
+   *
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    * @see \Psr\EventDispatcher\EventDispatcherInterface
    */
   public function dispatch(object $event): void;

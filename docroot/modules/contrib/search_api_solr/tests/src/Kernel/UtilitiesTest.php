@@ -2,11 +2,15 @@
 
 namespace Drupal\Tests\search_api_solr\Kernel;
 
+<<<<<<< HEAD
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\search_api\Entity\Index;
+=======
+use Drupal\KernelTests\KernelTestBase;
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 use Drupal\search_api_solr\Utility\Utility;
 
 /**
@@ -171,6 +175,7 @@ class UtilitiesTest extends KernelTestBase {
     $this->assertEquals([], $highlighted_keys);
   }
 
+<<<<<<< HEAD
   /**
    * Tests preserving third-party settings missing from the index form.
    */
@@ -268,4 +273,6 @@ class UtilitiesTest extends KernelTestBase {
     $this->assertSame('new', $index->getThirdPartySetting('submitted_module', 'changed'));
   }
 
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 }

@@ -419,7 +419,11 @@ interface SolrConnectorInterface extends ConfigurableInterface {
   /**
    * Creates a result from a response.
    *
+<<<<<<< HEAD
    * @param \Solarium\Core\Query\QueryInterface $query
+=======
+   * @param \Solarium\Core\ConfigurableInterface|QueryInterface $query
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    *   The Solarium query object.
    * @param \Solarium\Core\Client\Response $response
    *   The Solarium response object.
@@ -575,7 +579,11 @@ interface SolrConnectorInterface extends ConfigurableInterface {
    * @param string $key
    *   The endpoint ID.
    * @param array $additional_configuration
+<<<<<<< HEAD
    *   Configuration in addition to the default configuration.
+=======
+   *   Configuration in addtion to the default configuration.
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    *
    * @return \Solarium\Core\Client\Endpoint
    *   The Solarium endpoint object.

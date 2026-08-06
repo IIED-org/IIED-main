@@ -12,7 +12,11 @@ class StreamDocument extends AbstractDocument {
   /**
    * Constructor.
    *
+<<<<<<< HEAD
    * @param array<string, mixed> $fields
+=======
+   * @param array $fields
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    *   The array of fields.
    */
   public function __construct(array $fields) {
@@ -31,10 +35,19 @@ class StreamDocument extends AbstractDocument {
     $this->fields[$name] = $value;
   }
 
+<<<<<<< HEAD
   /**
    * {@inheritdoc}
    */
   public function jsonSerialize(): array {
+=======
+  #[\ReturnTypeWillChange]
+
+  /**
+   * {@inheritdoc}
+   */
+  public function jsonSerialize() {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     return $this->getFields();
   }
 

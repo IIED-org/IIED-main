@@ -1,7 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 // phpcs:ignoreFile SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
 
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 namespace Drupal\Tests\search_api_solr\Kernel;
 
 use Drupal\Core\Language\LanguageInterface;
@@ -456,7 +459,11 @@ class SearchApiSolrTest extends SolrBackendTestBase {
         'edismax'
       );
     }
+<<<<<<< HEAD
     catch (SearchApiSolrException) {
+=======
+    catch (SearchApiSolrException $e) {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       $exception = TRUE;
     }
     $this->assertTrue($exception);
@@ -470,7 +477,11 @@ class SearchApiSolrTest extends SolrBackendTestBase {
         'direct'
       );
     }
+<<<<<<< HEAD
     catch (SearchApiSolrException) {
+=======
+    catch (SearchApiSolrException $e) {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       $exception = TRUE;
     }
     $this->assertTrue($exception);
@@ -664,7 +675,11 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     // Test tagging of a single filter query of a facet query.
     $query = $this->buildSearch();
     $query->setLanguages([LanguageInterface::LANGCODE_NOT_SPECIFIED]);
+<<<<<<< HEAD
     $conditions = $query->createConditionGroup('OR', ['facet:tagtosearchfor']);
+=======
+    $conditions = $query->createConditionGroup('OR', ['facet:' . 'tagtosearchfor']);
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $conditions->addCondition('category', 'article_category');
     $query->addConditionGroup($conditions);
     $conditions = $query->createConditionGroup('AND');
@@ -970,10 +985,17 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     foreach ($results as $result) {
       $this->assertStringContainsString('<strong>foobar</strong>', (string) $result->getExtraData('highlighted_fields', ['body' => ['']])['body'][0]);
       $this->assertEquals(['foobar'], $result->getExtraData('highlighted_keys', []));
+<<<<<<< HEAD
       $this->assertEquals('… test <strong>foobar</strong> Case …', $result->getExcerpt());
     }
 
     // Test highlighting with stemming.
+=======
+      $this->assertEquals('… bar … test <strong>foobar</strong> Case …', $result->getExcerpt());
+    }
+
+    // Test highlghting with stemming.
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $query = $this->buildSearch('foobars');
     $results = $query->execute();
     $this->assertEquals(1, $results->getResultCount(), 'Search for »foobar« returned correct number of results.');
@@ -981,7 +1003,11 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     foreach ($results as $result) {
       $this->assertStringContainsString('<strong>foobar</strong>', (string) $result->getExtraData('highlighted_fields', ['body' => ['']])['body'][0]);
       $this->assertEquals(['foobar'], $result->getExtraData('highlighted_keys', []));
+<<<<<<< HEAD
       $this->assertEquals('… test <strong>foobar</strong> Case …', $result->getExcerpt());
+=======
+      $this->assertEquals('… bar … test <strong>foobar</strong> Case …', $result->getExcerpt());
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     }
   }
 
@@ -1279,6 +1305,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     $this->indexItems($this->indexId);
 
     $index = $this->getIndex();
+<<<<<<< HEAD
     /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
     $backend = $index->getServerInstance()->getBackend();
     $connector = $backend->getSolrConnector();
@@ -1286,6 +1313,9 @@ class SearchApiSolrTest extends SolrBackendTestBase {
       $connector instanceof \Drupal\search_api_solr_test\Plugin\SolrConnector\BasicAuthTestSolrConnector
       || $connector instanceof \Drupal\search_api_solr_test\Plugin\SolrConnector\BasicAuthTestSolrCloudConnector
     );
+=======
+    $connector = $index->getServerInstance()->getBackend()->getSolrConnector();
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 
     $results = $this->buildSearch()->execute();
     $this->assertEquals(6, $results->getResultCount(), 'Number of indexed entities is correct.');
@@ -1417,6 +1447,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
   }
 
   /**
+<<<<<<< HEAD
    * Tests language undefined fallback fulltext values are indexed once.
    */
   public function testLanguageUndefinedFallbackFulltextValuesIndexedOnce() {
@@ -1462,6 +1493,8 @@ class SearchApiSolrTest extends SolrBackendTestBase {
   }
 
   /**
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    * Creates several test entities.
    */
   protected function insertMultilingualExampleContent() {
@@ -1744,6 +1777,7 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     // @codingStandardsIgnoreEnd
   }
 
+<<<<<<< HEAD
   /**
    * Test index status is not reset on config save.
    */
@@ -1770,4 +1804,6 @@ class SearchApiSolrTest extends SolrBackendTestBase {
     \Drupal::state()->set($key, $value);
   }
 
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 }

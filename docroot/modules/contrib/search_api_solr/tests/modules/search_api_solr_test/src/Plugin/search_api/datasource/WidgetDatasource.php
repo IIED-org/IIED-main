@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 // phpcs:ignoreFile SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
 
 namespace Drupal\search_api_solr_test\Plugin\search_api\datasource;
@@ -10,10 +11,16 @@ use Drupal\Core\TypedData\TypedDataManagerInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\search_api\Attribute\SearchApiDatasource;
+=======
+namespace Drupal\search_api_solr_test\Plugin\search_api\datasource;
+
+use Drupal\Core\TypedData\ComplexDataInterface;
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 use Drupal\search_api\Datasource\DatasourcePluginBase;
 
 /**
  * Represents a datasource which exposes widgets.
+<<<<<<< HEAD
  */
 #[SearchApiDatasource(
   id: 'search_api_solr_test_widget',
@@ -44,6 +51,22 @@ class WidgetDatasource extends DatasourcePluginBase {
     $definition = $this->typedDataManager->createDataDefinition('search_api_solr_test_widget');
     assert($definition instanceof ComplexDataDefinitionInterface);
     return $definition->getPropertyDefinitions();
+=======
+ *
+ * @SearchApiDatasource(
+ *   id = "search_api_solr_test_widget",
+ *   label = @Translation("Widgets"),
+ *   description = @Translation("A test widget."),
+ * )
+ */
+class WidgetDatasource extends DatasourcePluginBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPropertyDefinitions() {
+    return \Drupal::typedDataManager()->createDataDefinition('search_api_solr_test_widget')->getPropertyDefinitions();
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
   }
 
   /**

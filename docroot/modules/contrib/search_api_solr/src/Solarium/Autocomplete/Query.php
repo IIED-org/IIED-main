@@ -27,9 +27,15 @@ class Query extends AbstractQuery implements ComponentAwareQueryInterface {
   /**
    * Default options.
    *
+<<<<<<< HEAD
    * @var array<string, mixed>
    */
   protected array $options = [
+=======
+   * @var array
+   */
+  protected $options = [
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     'handler' => 'autocomplete',
     'resultclass' => Result::class,
   ];
@@ -37,7 +43,11 @@ class Query extends AbstractQuery implements ComponentAwareQueryInterface {
   /**
    * Constructs a Query object.
    */
+<<<<<<< HEAD
   public function __construct(?array $options = NULL) {
+=======
+  public function __construct($options = NULL) {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $this->componentTypes = [
       ComponentAwareQueryInterface::COMPONENT_SPELLCHECK => Spellcheck::class,
       ComponentAwareQueryInterface::COMPONENT_SUGGESTER => Suggester::class,

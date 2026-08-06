@@ -205,7 +205,11 @@ interface SolrFieldTypeInterface extends SolrConfigInterface {
    * The XML format is used as part of classic Solr schema.
    *
    * @param bool $add_comment
+<<<<<<< HEAD
    *   Wether to add a comment to the XML or not to explain the purpose of this
+=======
+   *   Wether to add a comment to the XML or not to explain the purpose of thid
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    *   Solr Field Type.
    *
    * @return string
@@ -259,7 +263,11 @@ interface SolrFieldTypeInterface extends SolrConfigInterface {
    *   doesn't exist.
    *
    * @return self
+<<<<<<< HEAD
    *   Unstemmed field type as json.
+=======
+   *   Untemmed field type as json.
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    */
   public function setUnstemmedFieldTypeAsJson($unstemmed_field_type);
 

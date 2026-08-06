@@ -1,7 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 // phpcs:ignoreFile SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
 
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 namespace Drupal\Tests\search_api_solr\Kernel;
 
 /**
@@ -39,7 +42,11 @@ class SearchApiSolrTechproductsTest extends SolrBackendTestBase {
     try {
       $this->firstSearch();
     }
+<<<<<<< HEAD
     catch (\Exception) {
+=======
+    catch (\Exception $e) {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       $this->markTestSkipped('Techproducts example not reachable.');
     }
 
@@ -120,7 +127,11 @@ class SearchApiSolrTechproductsTest extends SolrBackendTestBase {
     try {
       $this->firstSearch();
     }
+<<<<<<< HEAD
     catch (\Exception) {
+=======
+    catch (\Exception $e) {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       $this->markTestSkipped('Techproducts example not reachable.');
     }
 
@@ -198,9 +209,15 @@ class SearchApiSolrTechproductsTest extends SolrBackendTestBase {
    * Executes a test search on the Solr server and assert the response data.
    */
   protected function firstSearch() {
+<<<<<<< HEAD
     $query = $this->buildSearch(NULL, [], NULL, FALSE)
       ->sort('search_api_id');
     /** @var \Drupal\search_api\Query\ResultSet $result */
+=======
+    /** @var \Drupal\search_api\Query\ResultSet $result */
+    $query = $this->buildSearch(NULL, [], NULL, FALSE)
+      ->sort('search_api_id');
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $result = $query->execute();
     $this->assertEquals([
       "solr_document/0579B002",

@@ -1,7 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 // phpcs:ignoreFile SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
 
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 namespace Drupal\Tests\search_api_solr\Kernel\Processor;
 
 use Drupal\Tests\search_api\Kernel\Processor\ProcessorTestBase;
@@ -104,11 +107,17 @@ class DoubleQuoteWorkaroundTest extends ProcessorTestBase {
       $streaming_expression
     );
 
+<<<<<<< HEAD
     /** @var \Drupal\search_api_solr\SolrProcessorInterface $processor */
     $processor = $this->processor;
     $this->assertEquals(
       'double "quotes" within the text',
       $processor->decodeStreamingExpressionValue('double ' . $replacement . 'quotes' . $replacement . ' within the text')
+=======
+    $this->assertEquals(
+      'double "quotes" within the text',
+      $this->processor->decodeStreamingExpressionValue('double ' . $replacement . 'quotes' . $replacement . ' within the text')
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     );
   }
 

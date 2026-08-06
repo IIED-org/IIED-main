@@ -79,7 +79,11 @@
     return $('<li tabindex="-1"></li>')
       .addClass(settings.class)
       .append($('<a href="#"></a>').addClass(settings.class).attr('data-button-id', settings.id)
+<<<<<<< HEAD
       .append(Drupal.checkPlain(settings.title))
+=======
+      .append(settings.title)
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     );
   };
 

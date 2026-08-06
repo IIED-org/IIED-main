@@ -1,8 +1,12 @@
 <?php
 
+<<<<<<< HEAD
 /**
  * @file
  * Test hooks for Search API Solr.
  */
 
 declare(strict_types=1);
+=======
+$_search_api_solr_test_index_fallback_test = FALSE;
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)

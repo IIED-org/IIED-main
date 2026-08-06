@@ -6,6 +6,10 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\UseCacheBackendTrait;
+<<<<<<< HEAD
+=======
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\LoggerTrait;
@@ -29,10 +33,19 @@ class SolrFieldManager implements SolrFieldManagerInterface {
   protected $fieldDefinitions;
 
   /**
+<<<<<<< HEAD
    * Whether discovered field definitions should be written to cache.
    *
    * @var bool
    */
+=======
+   * Storage for Search API servers.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $serverStorage;
+
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
   protected bool $writeCache = TRUE;
 
   /**
@@ -40,11 +53,25 @@ class SolrFieldManager implements SolrFieldManagerInterface {
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_backend
    *   The cache backend.
+<<<<<<< HEAD
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger for Search API.
    */
   public function __construct(CacheBackendInterface $cache_backend, LoggerInterface $logger) {
     $this->cacheBackend = $cache_backend;
+=======
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger for Search API.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   */
+  public function __construct(CacheBackendInterface $cache_backend, EntityTypeManagerInterface $entityTypeManager, LoggerInterface $logger) {
+    $this->cacheBackend = $cache_backend;
+    $this->serverStorage = $entityTypeManager->getStorage('search_api_server');
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $this->setLogger($logger);
   }
 

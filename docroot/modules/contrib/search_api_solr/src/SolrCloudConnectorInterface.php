@@ -23,7 +23,11 @@ interface SolrCloudConnectorInterface extends SolrConnectorInterface {
   /**
    * Temporarily set a different collection name for the connection.
    *
+<<<<<<< HEAD
    * @param \Solarium\Core\Client\Endpoint $endpoint
+=======
+   * @param \Solarium\Core\Client\Endpoint|null $endpoint
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    *   Solr endpoint.
    */
   public function setCollectionNameFromEndpoint(Endpoint $endpoint);

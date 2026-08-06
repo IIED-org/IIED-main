@@ -2,11 +2,16 @@
 
 namespace Drupal\search_api_solr\Utility;
 
+<<<<<<< HEAD
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\State\StateInterface;
+=======
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 use Drupal\search_api\ConsoleException;
 use Drupal\search_api\SearchApiException;
 use Drupal\search_api\ServerInterface;
@@ -15,8 +20,13 @@ use Drupal\search_api_solr\Controller\SolrConfigSetController;
 use Drupal\search_api_solr\Plugin\search_api\tracker\IndexParallel;
 use Drupal\search_api_solr\SearchApiSolrException;
 use Drupal\search_api_solr\SolrBackendInterface;
+<<<<<<< HEAD
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+=======
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use ZipStream\Option\Archive;
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 
 /**
  * Provides functionality to be used by CLI tools.
@@ -30,6 +40,7 @@ class SolrCommandHelper extends CommandHelper {
    */
   protected $configsetController;
 
+<<<<<<< HEAD
   /**
    * Running child process handles keyed by process ID.
    *
@@ -66,6 +77,11 @@ class SolrCommandHelper extends CommandHelper {
   protected ?ContainerInterface $container = NULL;
 
   /**
+=======
+  protected $processes = [];
+
+  /**
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    * Constructs a CommandHelper object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -90,6 +106,7 @@ class SolrCommandHelper extends CommandHelper {
   }
 
   /**
+<<<<<<< HEAD
    * Sets supporting services for command execution.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -109,6 +126,8 @@ class SolrCommandHelper extends CommandHelper {
   }
 
   /**
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    * Re-install all Solr Field Types from their yml files.
    */
   public function reinstallFieldtypesCommand() {
@@ -147,7 +166,21 @@ class SolrCommandHelper extends CommandHelper {
       $stream = fopen($file_name, 'w+b');
     }
 
+<<<<<<< HEAD
     $zip = $this->configsetController->getConfigZip($stream);
+=======
+    if (class_exists('\ZipStream\Option\Archive')) {
+      // Version 2.x.
+      $archive_options_or_ressource = new Archive();
+      $archive_options_or_ressource->setOutputStream($stream);
+    }
+    else {
+      // Version 3.x.
+      $archive_options_or_ressource = $stream;
+    }
+
+    $zip = $this->configsetController->getConfigZip($archive_options_or_ressource);
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $zip->finish();
 
     if ($stream) {
@@ -169,14 +202,18 @@ class SolrCommandHelper extends CommandHelper {
    * @throws \Drupal\search_api_solr\SearchApiSolrException
    */
   public function finalizeIndexCommand(?array $indexIds = NULL, $force = FALSE) {
+<<<<<<< HEAD
     if ($indexIds === [NULL]) {
       $indexIds = NULL;
     }
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $servers = search_api_solr_get_servers();
 
     if ($force) {
       // It's important to mark all indexes as "dirty" before the first
       // finalization runs because there might be dependencies between the
+<<<<<<< HEAD
       // indexes. Therefore, we do the loop two times.
       foreach ($servers as $server) {
         foreach ($server->getIndexes() as $index) {
@@ -187,6 +224,13 @@ class SolrCommandHelper extends CommandHelper {
               'search_api_solr.' . $index->id() . '.last_update',
               $this->time->getRequestTime(),
             );
+=======
+      // indexes. Therefor we do the loop two times.
+      foreach ($servers as $server) {
+        foreach ($server->getIndexes() as $index) {
+          if ($index->status() && !$index->isReadOnly() && (!$indexIds || in_array($index->id(), $indexIds))) {
+            \Drupal::state()->set('search_api_solr.' . $index->id() . '.last_update', \Drupal::time()->getRequestTime());
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
           }
         }
       }
@@ -262,9 +306,12 @@ class SolrCommandHelper extends CommandHelper {
    *   Thrown if one of the affected indexes had an invalid tracker set.
    */
   public function indexParallelCommand(?array $indexIds = NULL, $threads = 2, $batchSize = NULL): array {
+<<<<<<< HEAD
     if ($indexIds === [NULL]) {
       $indexIds = NULL;
     }
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $indexes = $this->loadIndexes($indexIds);
     if (!$indexes) {
       return [];
@@ -274,8 +321,12 @@ class SolrCommandHelper extends CommandHelper {
 
     /** @var \Drupal\search_api_solr\Entity\Index $index */
     foreach ($indexes as $index) {
+<<<<<<< HEAD
       if (!$index->status() || $index->isReadOnly() || (empty($indexIds) && !($index->getServerInstance()->getBackend() instanceof SolrBackendInterface))) {
         // If the list of indexes is not limited, only handle Solr backends.
+=======
+      if (!$index->status() || $index->isReadOnly() || !($index->getServerInstance()->getBackend() instanceof SolrBackendInterface)) {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
         continue;
       }
       $tracker = $index->getTrackerInstance();
@@ -300,8 +351,12 @@ class SolrCommandHelper extends CommandHelper {
       $currentBatchSize = $batchSize;
       if (!$currentBatchSize) {
         $cron_limit = $index->getOption('cron_limit');
+<<<<<<< HEAD
         assert($this->configFactory instanceof ConfigFactoryInterface);
         $currentBatchSize = $cron_limit ?: $this->configFactory
+=======
+        $currentBatchSize = $cron_limit ?: \Drupal::configFactory()
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
           ->get('search_api.settings')
           ->get('default_cron_limit');
       }
@@ -330,6 +385,7 @@ class SolrCommandHelper extends CommandHelper {
 
       // Create the batch.
       try {
+<<<<<<< HEAD
         assert($this->container instanceof ContainerInterface);
         /** @var \Drupal\search_api_solr\Utility\IndexParallelBatchHelper $batchHelper */
         $batchHelper = $this->container->get('search_api_solr.index_parallel_batch_helper');
@@ -338,6 +394,11 @@ class SolrCommandHelper extends CommandHelper {
       }
       catch (SearchApiException $e) {
         throw new ConsoleException("Couldn't create all batches, check the batch size and other parameters.", 0, $e);
+=======
+        $ids[$index->id()] = IndexParallelBatchHelper::create($index, $currentBatchSize, $currentThreads);
+      } catch (SearchApiException $e) {
+        throw new ConsoleException($this->t("Couldn't create all batches, check the batch size and other parameters."), 0, $e);
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       }
     }
 
@@ -366,12 +427,15 @@ class SolrCommandHelper extends CommandHelper {
     return $shuffled_ids;
   }
 
+<<<<<<< HEAD
   /**
    * Resets the empty-index state for the provided indexes.
    *
    * @param array<int, string> $indexIds
    *   The Search API index IDs.
    */
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
   public function resetEmptyIndexState(array $indexIds): void {
     if ($indexes = $this->loadIndexes($indexIds)) {
       /** @var \Drupal\search_api_solr\Entity\Index $index */

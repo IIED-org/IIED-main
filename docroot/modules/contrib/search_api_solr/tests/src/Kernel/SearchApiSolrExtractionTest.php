@@ -9,7 +9,10 @@ use Solarium\QueryType\Extract\Query;
  * Test tika extension based PDF extraction.
  *
  * @group search_api_solr
+<<<<<<< HEAD
  * @group not_solr10
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
  */
 class SearchApiSolrExtractionTest extends SolrBackendTestBase {
 

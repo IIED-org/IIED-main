@@ -1,7 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 // phpcs:ignoreFile SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
 
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 namespace Drupal\Tests\search_api_solr\Kernel\Processor;
 
 use Drupal\node\Entity\NodeType;
@@ -59,9 +62,13 @@ class HtmlFilterTest extends ProcessorTestBase {
    * Tests term boosts.
    */
   public function testBoostTerms() {
+<<<<<<< HEAD
     /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
     $backend = $this->server->getBackend();
     $solr_major_version = $backend->getSolrConnector()->getSolrMajorVersion();
+=======
+    $solr_major_version = $this->server->getBackend()->getSolrConnector()->getSolrMajorVersion();
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     if (version_compare($solr_major_version, '6', '<')) {
       $this->markTestSkipped('Term boosting requires Solr >= 6.');
       return;
@@ -183,7 +190,11 @@ class HtmlFilterTest extends ProcessorTestBase {
     $this->indexItems();
 
     $query = new Query($this->index);
+<<<<<<< HEAD
     $query->keys(['VeryLongStingsWithMoreThanOneHundredCharactersShouldNotNeitherBeIndexedAsTextNorAsBoostedTokenAndShouldNotLeadToExceptionsDuringIndexing']);
+=======
+    $query->keys(['VeryLongStingsWithMoreThanOneHoundredCharactersShouldNotNeitherBeIndexedAsTextNorAsBoostedTokenAndShouldNotLeadToExceptionsDuringIndexing']);
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $query->sort('search_api_relevance', QueryInterface::SORT_DESC);
     $query->sort('search_api_id');
     $query->getParseMode()->setConjunction('OR');

@@ -2,6 +2,7 @@
 
 namespace Drupal\search_api_solr\SolrConnector;
 
+<<<<<<< HEAD
 use Drupal\Component\Plugin\Factory\FactoryInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
@@ -9,12 +10,20 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\State\StateInterface;
 use Solarium\Core\Query\Helper;
+=======
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Plugin\DefaultPluginManager;
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 
 /**
  * A plugin manager for Solr connector plugins.
  *
  * @see \Drupal\search_api_solr\Annotation\SolrConnector
+<<<<<<< HEAD
  * @see \Drupal\search_api_solr\Attribute\SolrConnector
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
  * @see \Drupal\search_api_solr\SolrConnector\SolrConnectorInterface
  * @see \Drupal\search_api_solr\SolrConnector\SolrConnectorPluginBase
  *
@@ -37,6 +46,7 @@ class SolrConnectorPluginManager extends DefaultPluginManager {
     $this->alterInfo('search_api_solr_connector_info');
     $this->setCacheBackend($cache_backend, 'search_api_solr_connector_plugins');
 
+<<<<<<< HEAD
     parent::__construct(
       'Plugin/SolrConnector',
       $namespaces,
@@ -96,6 +106,9 @@ class SolrConnectorPluginManager extends DefaultPluginManager {
     }
 
     return $this->factory;
+=======
+    parent::__construct('Plugin/SolrConnector', $namespaces, $module_handler, 'Drupal\search_api_solr\SolrConnectorInterface', 'Drupal\search_api_solr\Annotation\SolrConnector');
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
   }
 
 }

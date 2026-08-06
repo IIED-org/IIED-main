@@ -2,6 +2,7 @@
 
 namespace Drupal\search_api_solr\Utility;
 
+<<<<<<< HEAD
 // phpcs:disable Drupal.Commenting.Deprecated.DeprecatedVersionFormat
 // phpcs:disable Drupal.Commenting.Deprecated.DeprecatedWrongSeeUrlFormat
 /**
@@ -15,3 +16,11 @@ namespace Drupal\search_api_solr\Utility;
 class CommandHelper extends SolrCommandHelper {}
 // phpcs:enable Drupal.Commenting.Deprecated.DeprecatedWrongSeeUrlFormat
 // phpcs:enable Drupal.Commenting.Deprecated.DeprecatedVersionFormat
+=======
+/**
+ * Provides functionality to be used by CLI tools.
+ *
+ * @deprecated Use \Drupal\search_api_solr\Utility\SolrCommandHelper instead.
+ */
+class CommandHelper extends SolrCommandHelper {}
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)

@@ -102,7 +102,11 @@ class FacetsTest extends SearchApiBrowserTestBase {
    * @throws \Drupal\search_api\SearchApiException
    */
   protected function indexItems($index_id) {
+<<<<<<< HEAD
     $index_status = $this->doIndexItems($index_id);
+=======
+    $index_status = $this->doindexItems($index_id);
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $index = Index::load($this->indexId);
     $this->ensureCommit($index);
     return $index_status;

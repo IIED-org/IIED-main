@@ -1,12 +1,18 @@
 <?php
 
+<<<<<<< HEAD
 // phpcs:ignoreFile SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
 
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 namespace Drupal\Tests\search_api_solr\Kernel;
 
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
+<<<<<<< HEAD
 use Drupal\search_api\Query\QueryInterface;
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 use Drupal\search_api_solr\Utility\SolrCommitTrait;
 use Drupal\search_api_solr_test\Logger\InMemoryLogger;
 use Drupal\Tests\search_api\Kernel\BackendTestBase;
@@ -49,7 +55,11 @@ abstract class SolrBackendTestBase extends BackendTestBase {
   /**
    * The in-memory logger.
    *
+<<<<<<< HEAD
    * @var \Drupal\search_api_solr_test\Logger\InMemoryLogger
+=======
+   * @var \Psr\Log\LoggerInterface
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    */
   protected $logger;
 
@@ -165,7 +175,10 @@ abstract class SolrBackendTestBase extends BackendTestBase {
     $index = parent::checkIndexWithoutFields();
     $index->clear();
     $this->ensureCommit($index);
+<<<<<<< HEAD
     return $index;
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
   }
 
   /**

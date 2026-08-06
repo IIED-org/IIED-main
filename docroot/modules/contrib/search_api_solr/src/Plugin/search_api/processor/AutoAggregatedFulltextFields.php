@@ -2,8 +2,11 @@
 
 namespace Drupal\search_api_solr\Plugin\search_api\processor;
 
+<<<<<<< HEAD
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\search_api\Attribute\SearchApiProcessor;
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Plugin\search_api\data_type\value\TextValue;
@@ -14,6 +17,7 @@ use Drupal\search_api_solr\Plugin\search_api\processor\Property\AutoAggregatedFu
  * Adds customized aggregations of existing fields to the index.
  *
  * @see \Drupal\search_api\Plugin\search_api\processor\Property\AggregatedFieldProperty
+<<<<<<< HEAD
  */
 #[SearchApiProcessor(
   id: 'auto_aggregated_fulltext_field',
@@ -25,6 +29,20 @@ use Drupal\search_api_solr\Plugin\search_api\processor\Property\AutoAggregatedFu
   locked: TRUE,
   hidden: TRUE,
 )]
+=======
+ *
+ * @SearchApiProcessor(
+ *   id = "auto_aggregated_fulltext_field",
+ *   label = @Translation("Auto aggregated fulltext fields"),
+ *   description = @Translation("Add automatic aggregations of all language-specific fulltext fields of the same kind to the index."),
+ *   stages = {
+ *     "add_properties" = 100,
+ *   },
+ *   locked = true,
+ *   hidden = true,
+ * )
+ */
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 class AutoAggregatedFulltextFields extends ProcessorPluginBase {
 
   /**

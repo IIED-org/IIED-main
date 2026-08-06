@@ -71,7 +71,10 @@ class SolrDocumentDefinition extends ComplexDataDefinitionBase implements SolrDo
       if (!empty($this->getIndexId())) {
         $index = Index::load($this->getIndexId());
         /** @var \Drupal\search_api_solr\SolrFieldManagerInterface $field_manager */
+<<<<<<< HEAD
         // phpcs:ignore DrupalPractice.Objects.GlobalDrupal.GlobalDrupal
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
         $field_manager = \Drupal::getContainer()->get('solr_field.manager');
         $this->propertyDefinitions = $field_manager->getFieldDefinitions($index);
       }

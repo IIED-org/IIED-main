@@ -4,11 +4,17 @@ namespace Drupal\search_api_solr\SolrConnector;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Component\Serialization\Json;
+<<<<<<< HEAD
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\State\StateInterface;
+=======
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Plugin\PluginFormInterface;
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 use Drupal\Core\Url;
 use Drupal\search_api\LoggerTrait;
 use Drupal\search_api\Plugin\ConfigurablePluginBase;
@@ -23,7 +29,10 @@ use Solarium\Core\Client\Adapter\TimeoutAwareInterface;
 use Solarium\Core\Client\Endpoint;
 use Solarium\Core\Client\Request;
 use Solarium\Core\Client\Response;
+<<<<<<< HEAD
 use Solarium\Core\Query\Helper;
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 use Solarium\Core\Query\QueryInterface;
 use Solarium\Exception\HttpException;
 use Solarium\QueryType\Analysis\Query\AbstractQuery;
@@ -83,6 +92,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   protected $solr;
 
   /**
+<<<<<<< HEAD
    * The state service.
    */
   protected StateInterface $state;
@@ -98,6 +108,8 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   protected Helper $queryHelper;
 
   /**
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    * {@inheritdoc}
    */
   public function setEventDispatcher(EventDispatcherInterface $eventDispatcher) : SolrConnectorInterface {
@@ -106,6 +118,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   }
 
   /**
+<<<<<<< HEAD
    * Sets the state service.
    */
   public function setState(StateInterface $state): static {
@@ -130,6 +143,8 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   }
 
   /**
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
@@ -173,6 +188,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   /**
    * {@inheritdoc}
    */
+<<<<<<< HEAD
   public function getConfiguration() {
     return $this->configuration;
   }
@@ -180,6 +196,8 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   /**
    * {@inheritdoc}
    */
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form['scheme'] = [
       '#type' => 'select',
@@ -283,13 +301,19 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
       '#description' => $this->t('Specify the Solr version manually in case it cannot be retrieved automatically. The version can be found in the Solr admin interface under "Solr Specification Version" or "solr-spec"'),
       '#options' => [
         '' => $this->t('Determine automatically'),
+<<<<<<< HEAD
         // phpcs:disable DrupalPractice.General.OptionsT.TforValue
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
         '6' => '6.x',
         '7' => '7.x',
         '8' => '8.x',
         '9' => '9.x',
+<<<<<<< HEAD
         '10' => '10.x',
         // phpcs:enable
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       ],
       '#default_value' => $this->configuration['solr_version'] ?? '',
     ];
@@ -365,7 +389,11 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
       try {
         $this->getServerLink();
       }
+<<<<<<< HEAD
       catch (\InvalidArgumentException) {
+=======
+      catch (\InvalidArgumentException $e) {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
         foreach (['scheme', 'host', 'port', 'path', 'core'] as $part) {
           $form_state->setError($form[$part], $this->t('The server link generated from the form values is illegal.'));
         }
@@ -513,11 +541,19 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     try {
       $info = $this->getCoreInfo();
     }
+<<<<<<< HEAD
     catch (\Exception) {
       try {
         $info = $this->getServerInfo();
       }
       catch (SearchApiSolrException) {
+=======
+    catch (\Exception $e) {
+      try {
+        $info = $this->getServerInfo();
+      }
+      catch (SearchApiSolrException $e) {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       }
     }
 
@@ -541,11 +577,19 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     try {
       $info = $this->getCoreInfo();
     }
+<<<<<<< HEAD
     catch (\Exception) {
       try {
         $info = $this->getServerInfo();
       }
       catch (SearchApiSolrException) {
+=======
+    catch (\Exception $e) {
+      try {
+        $info = $this->getServerInfo();
+      }
+      catch (SearchApiSolrException $e) {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       }
     }
 
@@ -565,6 +609,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
       [$major, $minor] = explode('.', $version);
       return $major . '.' . $minor;
     }
+<<<<<<< HEAD
     if (version_compare($version, '9.0.0', '>=') && version_compare($version, '10.0.0', '<')) {
       if (version_compare($version, '9.2.0', '<')) {
         return '9.1.0';
@@ -587,6 +632,22 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
 
     // Solr 10.0.0 uses lucene 10.3.
     return '10.3.0';
+=======
+    else {
+      if (version_compare($version, '9.2.0', '>=')) {
+        if (version_compare($version, '9.4.0', '<')) {
+          return '9.4.2';
+        }
+        if (version_compare($version, '9.6.0', '<')) {
+          return '9.8.0';
+        }
+        // Solr 9.6.0 uses lucene 9.10.0.
+        return '9.10.0';
+      }
+    }
+
+    return '9.1.0';
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
   }
 
   /**
@@ -700,7 +761,12 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     // access parts of this data even if Solr is temporarily not reachable and
     // caches have been cleared.
     $state_key = 'search_api_solr.endpoint.data';
+<<<<<<< HEAD
     $endpoint_data = $this->state->get($state_key);
+=======
+    $state = \Drupal::state();
+    $endpoint_data = $state->get($state_key);
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $server_uri = $this->getServerUri();
 
     if (!isset($previous_calls[$server_uri][$handler]) || !isset($endpoint_data[$server_uri][$handler]) || $reset) {
@@ -713,7 +779,11 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
           'version' => Request::API_V1,
         ]);
         $endpoint_data[$server_uri][$handler] = $this->execute($query)->getData();
+<<<<<<< HEAD
         $this->state->set($state_key, $endpoint_data);
+=======
+        $state->set($state_key, $endpoint_data);
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       }
     }
 
@@ -751,7 +821,11 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
         return (microtime(TRUE) - $start) + 1E-6;
       }
     }
+<<<<<<< HEAD
     catch (HttpException) {
+=======
+    catch (HttpException $e) {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       // Don't handle the exception. Just return FALSE below.
     }
 
@@ -778,8 +852,12 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     ];
 
     $query = $this->solr->createPing();
+<<<<<<< HEAD
     $query->setResponseWriter(Query::WT_JSON);
     $query->addParam('json.nl', 'map');
+=======
+    $query->setResponseWriter(Query::WT_PHPS);
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $query->setHandler('admin/mbeans?stats=true');
     $stats = $this->execute($query)->getData();
     if (!empty($stats)) {
@@ -803,17 +881,33 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
         $summary['@deletes_by_id'] = (int) $update_handler_stats['deletesById'];
         $summary['@deletes_by_query'] = (int) $update_handler_stats['deletesByQuery'];
         $summary['@core_name'] = $stats['solr-mbeans']['CORE']['core']['stats']['coreName'] ?? $this->t('No information available.');
+<<<<<<< HEAD
         if (version_compare($solr_version, '6.4', '>=')) {
           // @see https://issues.apache.org/jira/browse/SOLR-3990
           $summary['@index_size'] = $stats['solr-mbeans']['CORE']['core']['stats']['size'] ?? $this->t('No information available.');
         }
         else {
           $summary['@index_size'] = $stats['solr-mbeans']['QUERYHANDLER']['/replication']['stats']['indexSize'] ?? $this->t('No information available.');
+=======
+        ;
+        if (version_compare($solr_version, '6.4', '>=')) {
+          // @see https://issues.apache.org/jira/browse/SOLR-3990
+          $summary['@index_size'] = $stats['solr-mbeans']['CORE']['core']['stats']['size'] ?? $this->t('No information available.');
+          ;
+        }
+        else {
+          $summary['@index_size'] = $stats['solr-mbeans']['QUERYHANDLER']['/replication']['stats']['indexSize'] ?? $this->t('No information available.');
+          ;
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
         }
       }
 
       $summary['@autocommit_time_seconds'] = $max_time / 1000;
+<<<<<<< HEAD
       $summary['@autocommit_time'] = $this->dateFormatter->formatInterval($max_time / 1000);
+=======
+      $summary['@autocommit_time'] = \Drupal::service('date.formatter')->formatInterval($max_time / 1000);
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
       $summary['@deletes_total'] = $summary['@deletes_by_id'] + $summary['@deletes_by_query'];
       $summary['@schema_version'] = $this->getSchemaVersionString(TRUE);
     }
@@ -954,7 +1048,11 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
       return $query->getHelper();
     }
 
+<<<<<<< HEAD
     return $this->queryHelper;
+=======
+    return \Drupal::service('solarium.query_helper');
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
   }
 
   /**
@@ -1125,7 +1223,10 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     }
     catch (HttpException $e) {
       $this->handleHttpException($e, $endpoint);
+<<<<<<< HEAD
       throw new \LogicException('Unreachable');
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     }
   }
 
@@ -1144,7 +1245,10 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     }
     catch (HttpException $e) {
       $this->handleHttpException($e, $endpoint);
+<<<<<<< HEAD
       throw new \LogicException('Unreachable');
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     }
   }
 
@@ -1158,6 +1262,10 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     $this->solr->removePlugin($plugin);
   }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
   /**
    * Converts a HttpException in an easier to read SearchApiSolrException.
    *
@@ -1272,7 +1380,10 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
    *   (optional) The Solarium endpoint object.
    *
    * @return mixed
+<<<<<<< HEAD
    *   The previously configured timeout value.
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    */
   protected function useTimeout(string $timeout = self::QUERY_TIMEOUT, ?Endpoint $endpoint = NULL) {
     $this->connect();
@@ -1425,7 +1536,11 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   public function __sleep(): array {
     // It's safe to unset the solr client completely before serialization
     // because connect() will set it up again correctly after deserialization.
+<<<<<<< HEAD
     $this->solr = NULL;
+=======
+    unset($this->solr);
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     return parent::__sleep();
   }
 
@@ -1449,6 +1564,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   public function alterConfigZip(ZipStream $zip, string $lucene_match_version, string $server_id = '') {
   }
 
+<<<<<<< HEAD
   /**
    * Removes Solarium plugin listeners from the shared event dispatcher.
    */
@@ -1460,4 +1576,6 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     }
   }
 
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 }

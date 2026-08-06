@@ -2,12 +2,16 @@
 
 namespace Drupal\search_api_solr\Utility;
 
+<<<<<<< HEAD
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\search_api\Query\Query;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ResultSetInterface;
+=======
+use Drupal\search_api\Query\QueryInterface;
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 use Drupal\search_api\Utility\QueryHelper;
 
 /**
@@ -16,6 +20,7 @@ use Drupal\search_api\Utility\QueryHelper;
 class StreamingExpressionQueryHelper extends QueryHelper {
 
   /**
+<<<<<<< HEAD
    * Cached builder instances keyed by index ID.
    *
    * @var \Drupal\search_api_solr\Utility\StreamingExpressionBuilder[]
@@ -50,6 +55,8 @@ class StreamingExpressionQueryHelper extends QueryHelper {
   }
 
   /**
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
    * Builds a streaming expression for the given Search API query.
    *
    * @param \Drupal\search_api\Query\QueryInterface $query
@@ -61,6 +68,7 @@ class StreamingExpressionQueryHelper extends QueryHelper {
    * @throws \Drupal\search_api\SearchApiException
    * @throws \Drupal\search_api_solr\SearchApiSolrException
    */
+<<<<<<< HEAD
   public function getStreamingExpressionBuilder(QueryInterface $query): StreamingExpressionBuilder {
     $index_id = $query->getIndex()->id();
 
@@ -80,6 +88,10 @@ class StreamingExpressionQueryHelper extends QueryHelper {
     }
 
     return self::$instances[$index_id];
+=======
+  public function getStreamingExpressionBuilder(QueryInterface $query) {
+    return new StreamingExpressionBuilder($query->getIndex());
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
   }
 
   /**
@@ -87,18 +99,28 @@ class StreamingExpressionQueryHelper extends QueryHelper {
    *
    * @param \Drupal\search_api\Query\QueryInterface $query
    *   The Search API query.
+<<<<<<< HEAD
    * @param string $streaming_expression
    *   The streaming expression to set for this query.
    * @param string $comment
    *   A comment of the streaming expression.
    */
   public function setStreamingExpression(QueryInterface $query, string $streaming_expression, string $comment = ''): void {
+=======
+   * @param \Drupal\search_api_solr\Utility\string $streaming_expression
+   *   The streaming expression to set for this query.
+   * @param \Drupal\search_api_solr\Utility\string $comment
+   *   A comment of the streaming expression.
+   */
+  public function setStreamingExpression(QueryInterface $query, string $streaming_expression, string $comment = '') {
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     if ($comment) {
       $query->setOption('solr_streaming_expression_comment', $comment);
     }
     $query->setOption('solr_streaming_expression', $streaming_expression);
   }
 
+<<<<<<< HEAD
   /**
    * {@inheritdoc}
    *
@@ -138,4 +160,6 @@ class StreamingExpressionQueryHelper extends QueryHelper {
     }
   }
 
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 }

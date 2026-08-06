@@ -3,12 +3,16 @@
 namespace Drupal\search_api_solr\Plugin\search_api\processor;
 
 use Drupal\Core\Form\FormStateInterface;
+<<<<<<< HEAD
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\search_api\Attribute\SearchApiProcessor;
+=======
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 use Drupal\search_api\Processor\FieldsProcessorPluginBase;
 
 /**
  * Perform replacements based on regular expressions.
+<<<<<<< HEAD
  */
 #[SearchApiProcessor(
   id: 'solr_regex_replace',
@@ -20,6 +24,20 @@ use Drupal\search_api\Processor\FieldsProcessorPluginBase;
     'postprocess_query' => 0,
   ],
 )]
+=======
+ *
+ * @SearchApiProcessor(
+ *   id = "solr_regex_replace",
+ *   label = @Translation("Regular expression based replacements"),
+ *   description = @Translation("Regular expression based replacements."),
+ *   stages = {
+ *     "preprocess_index" = -16,
+ *     "preprocess_query" = -16,
+ *     "postprocess_query" = 0,
+ *   },
+ * )
+ */
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
 class RegexReplace extends FieldsProcessorPluginBase {
 
   /**
@@ -69,6 +87,11 @@ class RegexReplace extends FieldsProcessorPluginBase {
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::validateConfigurationForm($form, $form_state);
 
+<<<<<<< HEAD
+=======
+    $regex_replace = $form_state->getValue('regex_replace');
+
+>>>>>>> parent of 3b9f439507 (remove gitignored directories)
     $regexes = [];
     $value = rtrim(preg_replace('/\r\n|\r|\n/', "\n", $form_state->getValue('regexes')), "\n");
     if (!empty($value)) {
