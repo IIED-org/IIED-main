@@ -22,16 +22,13 @@ content:
     label: hidden
     settings:
       image_style: media_library
-      image_link: ''
+      pdf_file_field: ''
+      pdf_page: 1
+      image_link_attributes_download: ''
       image_link_attributes_target: ''
       image_link_attributes_rel: ''
-      pdf_file_field: field_media_document
-      pdf_page: '1'
-      image_format: jpg
-      image_loading:
-        attribute: lazy
-      image_link_attributes_download: 0
-      use_cron: 0
+      use_cron: ''
+      image_format: ''
       default_bundle_image_style: ''
       default_bundle_link: ''
       audio_page: ''
@@ -57,6 +54,7 @@ content:
       image_page: ''
       image_field: ''
       image_enable: ''
+      image_link: ''
       image_attributes_download: ''
       image_attributes_target: ''
       image_attributes_rel: ''
@@ -82,6 +80,8 @@ content:
       video_use_cron: ''
       video_format: ''
       video_image_style: ''
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
     weight: 0
     region: content

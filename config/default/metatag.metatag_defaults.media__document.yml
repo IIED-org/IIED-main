@@ -1,10 +1,11 @@
 uuid: 3ae38968-19f9-49dd-a7dc-323766d4d21c
 langcode: en
-status: true
+status: false
 dependencies: {  }
 id: media__document
 label: 'Media: Document'
 tags:
+  description: '[media:thumbnail:entity:url]'
   image_src: '[media_pdf_thumbnail:field_media_document:1:image_uri]'
   og_image: '[media_pdf_thumbnail:field_media_document:1:image_url]'
   twitter_cards_image: '[media_pdf_thumbnail:field_media_document:1:image_url]'
