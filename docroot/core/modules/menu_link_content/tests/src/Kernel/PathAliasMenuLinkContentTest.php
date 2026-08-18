@@ -1,0 +1,94 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\Tests\menu_link_content\Kernel;
+
+use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\KernelTests\KernelTestBase;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\Tests\Traits\Core\PathAliasTestTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
+/**
+ * Ensures that the menu tree adapts to path alias changes.
+ */
+#[Group('menu_link_content')]
+#[Group('path')]
+#[RunTestsInSeparateProcesses]
+class PathAliasMenuLinkContentTest extends KernelTestBase {
+
+  use PathAliasTestTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected static $modules = [
+    'menu_link_content',
+    'link',
+    'path_alias',
+    'test_page_test',
+    'user',
+  ];
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->installEntitySchema('user');
+    $this->installEntitySchema('menu_link_content');
+    $this->installEntitySchema('path_alias');
+
+    // Ensure that the weight of module_link_content is higher than system.
+    // @see menu_link_content_install()
+    module_set_weight('menu_link_content', 1);
+  }
+
+  /**
+   * Tests the path aliasing changing.
+   */
+  public function testPathAliasChange(): void {
+    $path_alias = $this->createPathAlias('/test-page', '/my-blog');
+    $menu_link_content = MenuLinkContent::create([
+      'title' => 'Menu title',
+      'link' => ['uri' => 'internal:/my-blog'],
+      'menu_name' => 'tools',
+    ]);
+    $menu_link_content->save();
+
+    $tree = \Drupal::menuTree()->load('tools', new MenuTreeParameters());
+    $this->assertEquals('test_page_test.test_page', $tree[$menu_link_content->getPluginId()]->link->getPluginDefinition()['route_name']);
+
+    // Saving an alias should clear the alias manager cache.
+    $path_alias->setPath('/test-render-title');
+    $path_alias->setAlias('/my-blog');
+    $path_alias->save();
+
+    $tree = \Drupal::menuTree()->load('tools', new MenuTreeParameters());
+    $this->assertEquals('test_page_test.render_title', $tree[$menu_link_content->getPluginId()]->link->getPluginDefinition()['route_name']);
+
+    // Delete the alias.
+    $path_alias->delete();
+    $tree = \Drupal::menuTree()->load('tools', new MenuTreeParameters());
+    $this->assertTrue(isset($tree[$menu_link_content->getPluginId()]));
+    $this->assertEquals('', $tree[$menu_link_content->getPluginId()]->link->getRouteName());
+    // Verify the plugin now references a path that does not match any route.
+    $this->assertEquals('base:my-blog', $tree[$menu_link_content->getPluginId()]->link->getUrlObject()->getUri());
+
+    // An entity can exist while its definition is absent from the menu tree
+    // (e.g. during content import, or before the tree has been rebuilt). Saving
+    // an alias matching its internal path should not throw an exception, and
+    // must not re-add the missing definition.
+    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+    $plugin_id = $menu_link_content->getPluginId();
+    $menu_link_manager->removeDefinition($plugin_id, FALSE);
+    $this->assertFalse($menu_link_manager->hasDefinition($plugin_id));
+    $path_alias = $this->createPathAlias('/test-page', '/my-blog');
+    $this->assertNotNull($path_alias->id());
+    $this->assertFalse($menu_link_manager->hasDefinition($plugin_id));
+  }
+
+}

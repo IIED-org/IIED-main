@@ -1,0 +1,6 @@
+file_upload:
+  label: 'File upload'
+  description: 'Upload any type of files'
+  weight: -15
+  libraries:
+    - file/drupal.file-icon

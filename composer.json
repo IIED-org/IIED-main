@@ -80,7 +80,7 @@
     "drupal/formdazzle": "^4",
     "drupal/geofield": "^1.64",
     "drupal/geolocation": "^3.2",
-    "drupal/gin": "^5",
+    "drupal/gin": "^5.0",
     "drupal/gin_lb": "^3.0@beta",
     "drupal/gin_login": "^2.0",
     "drupal/gin_toolbar": "^3.0",
@@ -118,6 +118,7 @@
     "drupal/pathauto": "^1.8",
     "drupal/pdfpreview": "^1.2",
     "drupal/publishcontent": "^1.2",
+    "drupal/purge": "^3.7",
     "drupal/purge_file": "^1.2",
     "drupal/rabbit_hole": "^1.0@beta",
     "drupal/readmore_js": "^2.0",
@@ -128,7 +129,7 @@
     "drupal/search404": "^2.2@RC",
     "drupal/search_api": "^1.23",
     "drupal/search_api_autocomplete": "^1.6",
-    "drupal/search_api_solr": "^4.3.10",
+    "drupal/search_api_solr": "^4.4",
     "drupal/search_api_sorts": "1.x-dev@dev",
     "drupal/search_api_sorts_widget": "^1.0",
     "drupal/serial": "^2.0",
@@ -303,6 +304,9 @@
       },
       "drupal/computed_field": {
         "3606495":"https://git.drupalcode.org/project/computed_field/-/merge_requests/29.diff"
+      },
+      "drupal/search_api": {
+        "SearchApiException 3352150":"https://www.drupal.org/files/issues/2025-03-26/3352150-15--add_field_instance_dependencies.patch"
       }
     },
     "drupal-lenient": {

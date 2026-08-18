@@ -1,0 +1,586 @@
+<?php
+
+/**
+ * @file
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\filter\FilterFormatInterface;
+use Drupal\filter\FilterFormatRepositoryInterface;
+use Drupal\filter\Hook\FilterThemeHooks;
+
+/**
+ * Retrieves a list of enabled text formats, ordered by weight.
+ *
+ * @param \Drupal\Core\Session\AccountInterface|null $account
+ *   (optional) If provided, only those formats that are allowed for this user
+ *   account will be returned. All enabled formats will be returned otherwise.
+ *   Defaults to NULL.
+ *
+ * @return \Drupal\filter\FilterFormatInterface[]
+ *   An array of text format objects, keyed by the format ID and ordered by
+ *   weight.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the
+ *   Drupal\filter\FilterFormatRepositoryInterface service with the
+ *   ::getAllFormats() method to get all formats, or with the
+ *   ::getFormatsForAccount() method to get all formats that a user is able to
+ *   access.
+ *
+ * @see https://www.drupal.org/node/3035368
+ */
+function filter_formats(?AccountInterface $account = NULL) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the Drupal\filter\FilterFormatRepositoryInterface service with the ::getAllFormats() method to get all formats, or with the ::getFormatsForAccount() method to get all formats that a user is able to access. See https://www.drupal.org/node/3035368', E_USER_DEPRECATED);
+  $filter_format_repository = \Drupal::service(FilterFormatRepositoryInterface::class);
+
+  // If no user was specified, return all formats.
+  if (!isset($account)) {
+    return $filter_format_repository->getAllFormats();
+  }
+
+  return $filter_format_repository->getFormatsForAccount($account);
+}
+
+/**
+ * Resets the text format caches.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Invalidate
+ *   'filter_formats' entity type list cache tags instead.
+ *
+ * @see https://www.drupal.org/node/3035368
+ */
+function filter_formats_reset(): void {
+  @trigger_error(__FUNCTION__ . "() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Invalidate 'filter_formats' entity type list cache tags instead. See https://www.drupal.org/node/3035368", E_USER_DEPRECATED);
+  $tags = \Drupal::entityTypeManager()->getDefinition('filter_format')->getListCacheTags();
+  \Drupal::cache('memory')->invalidateTags($tags);
+}
+
+/**
+ * Retrieves a list of roles that are allowed to use a given text format.
+ *
+ * @param \Drupal\filter\FilterFormatInterface $format
+ *   An object representing the text format.
+ *
+ * @return array
+ *   An array of role names, keyed by role ID.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the
+ *   \Drupal\filter\FilterFormatInterface::getRoles() method instead.
+ *
+ * @see https://www.drupal.org/node/3035368
+ */
+function filter_get_roles_by_format(FilterFormatInterface $format): array {
+  @trigger_error('filter_get_roles_by_format() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the \Drupal\filter\FilterFormatInterface::getRoles() method instead. See https://www.drupal.org/node/3035368', E_USER_DEPRECATED);
+  return $format->getRoles();
+}
+
+/**
+ * Retrieves a list of text formats that are allowed for a given role.
+ *
+ * @param string $rid
+ *   The user role ID to retrieve text formats for.
+ *
+ * @return \Drupal\filter\FilterFormatInterface[]
+ *   An array of text format objects that are allowed for the role, keyed by
+ *   the text format ID and ordered by weight.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the
+ *   \Drupal\filter\FilterFormatRepositoryInterface service with the
+ *   ::getFormatsByRole() method instead.
+ *
+ * @see https://www.drupal.org/node/3035368
+ */
+function filter_get_formats_by_role($rid): array {
+  @trigger_error('filter_get_formats_by_role() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the Drupal\filter\FilterFormatRepositoryInterface service with the ::getFormatsByRole() method instead. See https://www.drupal.org/node/3035368', E_USER_DEPRECATED);
+  return \Drupal::service(FilterFormatRepositoryInterface::class)->getFormatsByRole($rid);
+}
+
+/**
+ * Returns the ID of the default text format for a particular user.
+ *
+ * The default text format is the first available format that the user is
+ * allowed to access, when the formats are ordered by weight. It should
+ * generally be used as a default choice when presenting the user with a list
+ * of possible text formats (for example, in a node creation form).
+ *
+ * Conversely, when existing content that does not have an assigned text format
+ * needs to be filtered for display, the default text format is the wrong
+ * choice, because it is not guaranteed to be consistent from user to user, and
+ * some trusted users may have an unsafe text format set by default, which
+ * should not be used on text of unknown origin. Instead, the fallback format
+ * returned by filter_fallback_format() should be used, since that is intended
+ * to be a safe, consistent format that is always available to all users.
+ *
+ * @param \Drupal\Core\Session\AccountInterface|null $account
+ *   (optional) The user account to check. Defaults to the currently logged-in
+ *   user. Defaults to NULL.
+ *
+ * @return string
+ *   The ID of the user's default text format.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the
+ *   \Drupal\filter\FilterFormatRepositoryInterface service with the
+ *   ::getDefaultFormat() method instead.
+ *
+ * @see https://www.drupal.org/node/3035368
+ */
+function filter_default_format(?AccountInterface $account = NULL) {
+  @trigger_error('filter_default_format() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the Drupal\filter\FilterFormatRepositoryInterface service with the ::getDefaultFormat() method instead. See https://www.drupal.org/node/3035368', E_USER_DEPRECATED);
+  return \Drupal::service(FilterFormatRepositoryInterface::class)->getDefaultFormat($account)->id();
+}
+
+/**
+ * Returns the ID of the fallback text format that all users have access to.
+ *
+ * The fallback text format is a regular text format in every respect, except
+ * it does not participate in the filter permission system and cannot be
+ * disabled. It needs to exist because any user who has permission to create
+ * formatted content must always have at least one text format they can use.
+ *
+ * Because the fallback format is available to all users, it should always be
+ * configured securely. For example, when the Filter module is installed, this
+ * format is initialized to output plain text. Installation profiles and site
+ * administrators have the freedom to configure it further.
+ *
+ * Note that the fallback format is completely distinct from the default format,
+ * which differs per user and is simply the first format which that user has
+ * access to. The default and fallback formats are only guaranteed to be the
+ * same for users who do not have access to any other format; otherwise, the
+ * fallback format's weight determines its placement with respect to the user's
+ * other formats.
+ *
+ * Any modules implementing a format deletion functionality must not delete this
+ * format.
+ *
+ * @return string|null
+ *   The ID of the fallback text format.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the
+ *   \Drupal\filter\FilterFormatRepositoryInterface service with the
+ *   ::getFallbackFormatId() method instead.
+ *
+ * @see https://www.drupal.org/node/3035368
+ * @see hook_filter_format_disable()
+ */
+function filter_fallback_format() {
+  @trigger_error('filter_fallback_format() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the Drupal\filter\FilterFormatRepositoryInterface service with the ::getFallbackFormatId() method instead. See https://www.drupal.org/node/3035368', E_USER_DEPRECATED);
+  return \Drupal::service(FilterFormatRepositoryInterface::class)->getFallbackFormatId();
+}
+
+/**
+ * Runs all the enabled filters on a piece of text.
+ *
+ * Note: Because filters can inject JavaScript or execute PHP code, security is
+ * vital here. When a user supplies a text format, you should validate it using
+ * $format->access() before accepting/using it. This is normally done in the
+ * validation stage of the Form API. You should for example never make a
+ * preview of content in a disallowed format.
+ *
+ * Note: this function should only be used when filtering text for use elsewhere
+ * than on a rendered HTML page. If this is part of an HTML page, then a
+ * renderable array with a #type 'processed_text' element should be used instead
+ * of this, because that will allow cacheability metadata to be set and bubbled
+ * up and attachments to be associated (assets, placeholders, etc.). In other
+ * words: if you are presenting the filtered text in an HTML page, the only way
+ * this will be presented correctly, is by using the 'processed_text' element.
+ *
+ * @param string $text
+ *   The text to be filtered.
+ * @param string|null $format_id
+ *   (optional) The machine name of the filter format to be used to filter the
+ *   text. Defaults to the fallback format. See filter_fallback_format().
+ * @param string $langcode
+ *   (optional) The language code of the text to be filtered, e.g. 'en' for
+ *   English. This allows filters to be language-aware so language-specific
+ *   text replacement can be implemented. Defaults to an empty string.
+ * @param array $filter_types_to_skip
+ *   (optional) An array of filter types to skip, or an empty array (default)
+ *   to skip no filter types. All of the format's filters will be applied,
+ *   except for filters of the types that are marked to be skipped.
+ *   FilterInterface::TYPE_HTML_RESTRICTOR is the only type that cannot be
+ *   skipped.
+ *
+ * @return \Drupal\Component\Render\MarkupInterface
+ *   The filtered text.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. There is no
+ *   direct replacement. It's recommended to always return a renderable array
+ *   without flattening as markup to pass the cacheability metadata.
+ *
+ * @see https://www.drupal.org/node/3588040
+ * @see \Drupal\filter\Plugin\FilterInterface::process()
+ *
+ * @ingroup sanitization
+ */
+function check_markup($text, $format_id = NULL, $langcode = '', $filter_types_to_skip = []) {
+  @trigger_error(__FUNCTION__ . "() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. There is no direct replacement. It's recommended to always return a renderable array without flattening as markup to pass the cacheability metadata. See https://www.drupal.org/node/3588040", E_USER_DEPRECATED);
+  $build = [
+    '#type' => 'processed_text',
+    '#text' => $text,
+    '#format' => $format_id,
+    '#filter_types_to_skip' => $filter_types_to_skip,
+    '#langcode' => $langcode,
+  ];
+  return \Drupal::service('renderer')->renderInIsolation($build);
+}
+
+/**
+ * Retrieves the filter tips.
+ *
+ * @param string $format_id
+ *   The ID of the text format for which to retrieve tips, or -1 to return tips
+ *   for all formats accessible to the current user.
+ *
+ * @return array
+ *   An associative array of filtering tips, keyed by filter name. Each
+ *   filtering tip is an associative array with elements:
+ *   - tip: Tip text.
+ *   - id: Filter ID.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. There is no
+ *   replacement.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function _filter_tips($format_id): array {
+  if (func_num_args() > 1) {
+    @trigger_error('The $long argument to _filter_tips() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. Only short tips are used. See https://www.drupal.org/node/3567879', E_USER_DEPRECATED);
+  }
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. There is no replacement. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  $formats = \Drupal::service(FilterFormatRepositoryInterface::class)->getFormatsForAccount(\Drupal::currentUser());
+
+  $tips = [];
+
+  // If only listing one format, extract it from the $formats array.
+  if ($format_id != -1) {
+    $formats = [$formats[$format_id]];
+  }
+
+  foreach ($formats as $format) {
+    foreach ($format->filters() as $name => $filter) {
+      if ($filter->status) {
+        $method = new \ReflectionMethod($filter, 'tips');
+        if ($method->getNumberOfParameters() > 0) {
+          @trigger_error(sprintf('The $long argument to %s::tips() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. Only short tips are used. See https://www.drupal.org/node/3567879', $filter::class), E_USER_DEPRECATED);
+          $tip = $filter->tips(func_num_args() > 1 ? func_get_arg(1) : FALSE);
+        }
+        else {
+          $tip = $filter->tips();
+        }
+        if (isset($tip)) {
+          $tips[$format->label()][$name] = [
+            'tip' => ['#markup' => $tip],
+            'id' => $name,
+          ];
+        }
+      }
+    }
+  }
+
+  return $tips;
+}
+
+/**
+ * Prepares variables for text format guideline templates.
+ *
+ * Default template: filter-guidelines.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - format: An object representing a text format.
+ *
+ * @deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. Initial
+ *   template_preprocess functions are registered directly in hook_theme().
+ *
+ * @see https://www.drupal.org/node/3504125
+ */
+function template_preprocess_filter_guidelines(&$variables): void {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. Initial template_preprocess functions are registered directly in hook_theme(). See https://www.drupal.org/node/3504125', E_USER_DEPRECATED);
+  \Drupal::service(FilterThemeHooks::class)->preprocessFilterGuidelines($variables);
+}
+
+/**
+ * Prepares variables for text format wrapper templates.
+ *
+ * Default template: text-format-wrapper.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - attributes: An associative array containing properties of the element.
+ *
+ * @deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. Initial
+ *   template_preprocess functions are registered directly in hook_theme().
+ *
+ * @see https://www.drupal.org/node/3504125
+ */
+function template_preprocess_text_format_wrapper(&$variables): void {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. Initial template_preprocess functions are registered directly in hook_theme(). See https://www.drupal.org/node/3504125', E_USER_DEPRECATED);
+  \Drupal::service(FilterThemeHooks::class)->preprocessTextFormatWrapper($variables);
+}
+
+/**
+ * Prepares variables for filter tips templates.
+ *
+ * Default template: filter-tips.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - tips: An array containing descriptions and a CSS ID in the form of
+ *     'module-name/filter-id' (only used when $long is TRUE) for each
+ *     filter in one or more text formats. Example:
+ *     @code
+ *       [
+ *         'Full HTML' => [
+ *           0 => [
+ *             'tip' => 'Web page addresses and email addresses turn into links automatically.',
+ *             'id' => 'filter/2',
+ *           ],
+ *         ],
+ *       ];
+ *     @endcode
+ *   - long: (optional) Whether the passed-in filter tips contain extended
+ *     explanations, i.e. intended to be output on the path 'filter/tips'
+ *     (TRUE), or are in a short format, i.e. suitable to be displayed below a
+ *     form element. Defaults to FALSE.
+ *
+ * @deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. Initial
+ *   template_preprocess functions are registered directly in hook_theme().
+ *
+ * @see https://www.drupal.org/node/3504125
+ */
+function template_preprocess_filter_tips(&$variables): void {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. Initial template_preprocess functions are registered directly in hook_theme(). See https://www.drupal.org/node/3504125', E_USER_DEPRECATED);
+  \Drupal::service(FilterThemeHooks::class)->preprocessFilterTips($variables);
+}
+
+/**
+ * @defgroup standard_filters Standard filters
+ * @{
+ * Filters implemented by the Filter module.
+ */
+
+/**
+ * Converts text into hyperlinks automatically.
+ *
+ * This filter identifies and makes clickable three types of "links".
+ * - URLs like http://example.com.
+ * - Email addresses like name@example.com.
+ * - Web addresses without the "http://" protocol defined, like
+ *   www.example.com.
+ * Each type must be processed separately, as there is no one regular
+ * expression that could possibly match all of the cases in one pass.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has
+ *   been included in \Drupal\filter\Plugin\Filter\FilterUrl::process() and no
+ *   replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function _filter_url($text, $filter) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has been included in \Drupal\filter\Plugin\Filter\FilterUrl::process() and no replacement is provided. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  return \Drupal::service('plugin.manager.filter')
+    ->createInstance('filter_url', ['settings' => $filter->settings])
+    ->process($text, $langcode)
+    ->getProcessedText();
+}
+
+/**
+ * Makes links out of absolute URLs.
+ *
+ * Callback for preg_replace_callback() within _filter_url().
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has
+ *   been included in \Drupal\filter\Plugin\Filter\FilterUrl::parseFullLinks()
+ *   and no replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function _filter_url_parse_full_links($match) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has been included in \Drupal\filter\Plugin\Filter\FilterUrl::parseFullLinks() and no replacement is provided. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  // The $i:th parenthesis in the regexp contains the URL.
+  $i = 1;
+
+  $match[$i] = Html::decodeEntities($match[$i]);
+  $caption = Html::escape(_filter_url_trim($match[$i]));
+  $match[$i] = Html::escape($match[$i]);
+  return '<a href="' . $match[$i] . '">' . $caption . '</a>';
+}
+
+/**
+ * Makes links out of email addresses.
+ *
+ * Callback for preg_replace_callback() within _filter_url().
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has
+ *   been included in \Drupal\filter\Plugin\Filter\FilterUrl::parseEmailLinks()
+ *   and no replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function _filter_url_parse_email_links($match) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has been included in \Drupal\filter\Plugin\Filter\FilterUrl::parseEmailLinks() and no replacement is provided. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  // The $i:th parenthesis in the regexp contains the URL.
+  $i = 0;
+
+  $match[$i] = Html::decodeEntities($match[$i]);
+  $caption = Html::escape(_filter_url_trim($match[$i]));
+  $match[$i] = Html::escape($match[$i]);
+  return '<a href="mailto:' . $match[$i] . '">' . $caption . '</a>';
+}
+
+/**
+ * Makes links out of domain names starting with "www.".
+ *
+ * Callback for preg_replace_callback() within _filter_url().
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has
+ *   been included in
+ *   \Drupal\filter\Plugin\Filter\FilterUrl::parsePartialLinks() and no
+ *   replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function _filter_url_parse_partial_links($match) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has been included in \Drupal\filter\Plugin\Filter\FilterUrl::parsePartialLinks() and no replacement is provided. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  // The $i:th parenthesis in the regexp contains the URL.
+  $i = 1;
+
+  $match[$i] = Html::decodeEntities($match[$i]);
+  $caption = Html::escape(_filter_url_trim($match[$i]));
+  $match[$i] = Html::escape($match[$i]);
+  return '<a href="http://' . $match[$i] . '">' . $caption . '</a>';
+}
+
+/**
+ * Escapes the contents of HTML comments.
+ *
+ * Callback for preg_replace_callback() within _filter_url().
+ *
+ * @param array $match
+ *   An array containing matches to replace from preg_replace_callback(),
+ *   whereas $match[1] is expected to contain the content to be filtered.
+ * @param bool|null $escape
+ *   (optional) A Boolean indicating whether to escape (TRUE) or unescape
+ *   comments (FALSE). Defaults to NULL, indicating neither. If TRUE, statically
+ *   cached $comments are reset.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has
+ *   been split between \Drupal\filter\Plugin\Filter\FilterUrl::escapeComments()
+ *   and \Drupal\filter\Plugin\Filter\FilterUrl::unescapeComments(), and no
+ *   replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function _filter_url_escape_comments($match, $escape = NULL) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has been split between \Drupal\filter\Plugin\Filter\FilterUrl::escapeComments() and \Drupal\filter\Plugin\Filter\FilterUrl::unescapeComments(), and no replacement is provided. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  static $mode, $comments = [];
+
+  if (isset($escape)) {
+    $mode = $escape;
+    if ($escape) {
+      $comments = [];
+    }
+    return;
+  }
+
+  // Replace all HTML comments with a '<!-- [hash] -->' placeholder.
+  if ($mode) {
+    $content = $match[1];
+    $hash = hash('sha256', $content);
+    $comments[$hash] = $content;
+    return "<!-- $hash -->";
+  }
+  // Or replace placeholders with actual comment contents.
+  else {
+    $hash = $match[1];
+    $hash = trim($hash);
+    $content = $comments[$hash];
+    return "<!--$content-->";
+  }
+}
+
+/**
+ * Shortens a long URL to a given length ending with an ellipsis.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has
+ *   been included in \Drupal\filter\Plugin\Filter\FilterUrl::trimUrl() and no
+ *   replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function _filter_url_trim($text, $length = NULL) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has been included in \Drupal\filter\Plugin\Filter\FilterUrl::trimUrl() and no replacement is provided. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  static $_length;
+  if ($length !== NULL) {
+    $_length = $length;
+  }
+
+  if (isset($text) && isset($_length)) {
+    $text = Unicode::truncate($text, $_length, FALSE, TRUE);
+  }
+
+  return $text;
+}
+
+/**
+ * Converts line breaks into <p> and <br> in an intelligent fashion.
+ *
+ * Based on: http://photomatt.net/scripts/autop
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has
+ *   been included in \Drupal\filter\Plugin\Filter\FilterAutoP::process() and no
+ *   replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function _filter_autop($text) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has been included in \Drupal\filter\Plugin\Filter\FilterAutoP::process() and no replacement is provided. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  return \Drupal::service('plugin.manager.filter')
+    ->createInstance('filter_autop')
+    ->process($text, $langcode)
+    ->getProcessedText();
+}
+
+/**
+ * Escapes all HTML tags, so they will be visible instead of being effective.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has
+ *   been included in \Drupal\filter\Plugin\Filter\FilterHtmlEscape::process()
+ *   and no replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function _filter_html_escape($text) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic has been included in \Drupal\filter\Plugin\Filter\FilterHtmlEscape::process() and no replacement is provided. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  return \Drupal::service('plugin.manager.filter')
+    ->createInstance('filter_html_escape')
+    ->process($text, $langcode)
+    ->getProcessedText();
+}
+
+/**
+ * Process callback for local image filter.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic is
+ *   included in \Drupal\filter\Plugin\Filter\FilterHtmlImageSecure::process()
+ *   and no replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function _filter_html_image_secure_process($text) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. The logic is included in \Drupal\filter\Plugin\Filter\FilterHtmlImageSecure::process() and no replacement is provided. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  return \Drupal::service('plugin.manager.filter')
+    ->createInstance('filter_html_image_secure')
+    ->process($text, $langcode)
+    ->getProcessedText();
+}
+
+/**
+ * @} End of "defgroup standard_filters".
+ */

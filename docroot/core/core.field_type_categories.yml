@@ -1,0 +1,20 @@
+plain_text:
+  label: 'Plain text'
+  description: 'Text without markup and formatting'
+  weight: -50
+number:
+  label: 'Number'
+  description: 'Numeric value like quantity or radio frequency'
+  weight: -40
+reference:
+  label: 'Reference'
+  description: 'Reference other content'
+  weight: -30
+date_time:
+  label: 'Date and time'
+  description: 'A date and/or time value'
+  summary: 'The field types use different formats to store date and time in the database. All field types can be displayed in various ways.'
+  weight: -10
+general:
+  label: 'General'
+  class: \Drupal\Core\Field\FallbackFieldTypeCategory

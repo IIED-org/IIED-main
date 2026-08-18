@@ -1,0 +1,91 @@
+<?php
+
+namespace Drupal\menu_ui;
+
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
+
+/**
+ * Defines a class to build a listing of menu entities.
+ *
+ * @see \Drupal\system\Entity\Menu
+ * @see menu_entity_info()
+ */
+class MenuListBuilder extends ConfigEntityListBuilder {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected const SORT_KEY = 'label';
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildHeader() {
+    $header['title'] = $this->t('Title');
+    $header['description'] = [
+      'data' => $this->t('Description'),
+      'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+    ];
+    return $header + parent::buildHeader();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildRow(EntityInterface $entity) {
+    $row['title'] = [
+      'data' => $entity->label(),
+      'class' => ['menu-label'],
+    ];
+    $row['description']['data'] = ['#markup' => $entity->getDescription()];
+    return $row + parent::buildRow($entity);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getDefaultOperations(EntityInterface $entity/* , ?CacheableMetadata $cacheability = NULL */) {
+    $args = func_get_args();
+    $cacheability = $args[1] ?? new CacheableMetadata();
+    $operations = parent::getDefaultOperations($entity, $cacheability);
+
+    if (isset($operations['edit'])) {
+      $operations['edit']['title'] = $this->t('Edit menu');
+      $operations['add'] = [
+        'title' => $this->t('Add link'),
+        'weight' => 20,
+        'url' => $entity->toUrl('add-link-form'),
+        'query' => [
+          'destination' => $entity->toUrl('edit-form')->toString(),
+        ],
+      ];
+    }
+    if (isset($operations['delete'])) {
+      $operations['delete']['title'] = $this->t('Delete menu');
+    }
+    return $operations;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function ensureDestination(Url $url) {
+    // We don't want to add the destination URL here, as it means we get
+    // redirected back to the list-builder after adding/deleting menu links from
+    // a menu.
+    return $url;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function render() {
+    $build = parent::render();
+    $build['#attached']['library'][] = "menu_ui/drupal.menu_ui.adminforms";
+    return $build;
+  }
+
+}

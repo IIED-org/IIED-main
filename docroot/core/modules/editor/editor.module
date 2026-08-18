@@ -1,0 +1,274 @@
+<?php
+
+/**
+ * @file
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\editor\Entity\Editor;
+use Drupal\editor\Hook\EditorHooks;
+use Drupal\filter\FilterFormatInterface;
+use Drupal\text\Plugin\Field\FieldType\TextItemBase;
+
+/**
+ * Button submit handler for filter_format_form()'s 'editor_configure' button.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. Use
+ *   EditorHooks::editorFormFilterAdminFormatEditorConfigure() instead.
+ *
+ * @see https://www.drupal.org/node/3566774
+ * @see \Drupal\editor\Hook\EditorHooks::editorFormFilterAdminFormatEditorConfigure()
+ */
+function editor_form_filter_admin_format_editor_configure($form, FormStateInterface $form_state): void {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. Use \Drupal\editor\Hook\EditorHooks::editorFormFilterAdminFormatEditorConfigure() instead. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  \Drupal::service(EditorHooks::class)->editorFormFilterAdminFormatEditorConfigure($form, $form_state);
+}
+
+/**
+ * AJAX callback handler for filter_format_form().
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. Use
+ *   \Drupal\editor\Hook\EditorHooks::editorFormFilterAdminFormAjax() instead.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function editor_form_filter_admin_form_ajax($form, FormStateInterface $form_state) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. Use \Drupal\editor\Hook\EditorHooks::editorFormFilterAdminFormAjax() instead. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  return \Drupal::service(EditorHooks::class)->editorFormFilterAdminFormAjax($form, $form_state);
+}
+
+/**
+ * Additional validate handler for filter_format_form().
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. Use
+ *   \Drupal\editor\Hook\EditorHooks::editorFormFilterAdminFormatValidate()
+ *   instead.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function editor_form_filter_admin_format_validate($form, FormStateInterface $form_state): void {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. Use \Drupal\editor\Hook\EditorHooks::editorFormFilterAdminFormatValidate() instead. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  \Drupal::service(EditorHooks::class)->editorFormFilterAdminFormatValidate($form, $form_state);
+}
+
+/**
+ * Additional submit handler for filter_format_form().
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. Use
+ *   \Drupal\editor\Hook\EditorHooks::editorFormFilterAdminFormatSubmit()
+ *   instead.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function editor_form_filter_admin_format_submit($form, FormStateInterface $form_state): void {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. Use \Drupal\editor\Hook\EditorHooks::editorFormFilterAdminFormatSubmit() instead. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  \Drupal::service(EditorHooks::class)->editorFormFilterAdminFormatSubmit($form, $form_state);
+}
+
+/**
+ * Loads an individual configured text editor based on text format ID.
+ *
+ * @param string $format_id
+ *   A text format ID.
+ *
+ * @return \Drupal\editor\Entity\Editor|null
+ *   A text editor object, or NULL.
+ *
+ * @deprecated in drupal:11.2.0 and is removed from drupal:12.0.0. Use
+ *   \Drupal::entityTypeManager()->getStorage('editor')->load($format_id)
+ *   instead.
+ * @see https://www.drupal.org/node/3509245
+ */
+function editor_load($format_id) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.2.0 and is removed from drupal:12.0.0. Use \Drupal::entityTypeManager()->getStorage(\'editor\')->load($format_id) instead. See https://www.drupal.org/node/3509245', E_USER_DEPRECATED);
+  // While loading multiple editors at once is a more efficient query, on warm
+  // caches, loading editor configuration from APCu is fast and avoids a call to
+  // ConfigFactory::listAll() in a loadMultiple() call with no IDs passed.
+  // @see Drupal\Core\Config\Entity\ConfigEntityStorage::doLoadMultiple()
+  return $format_id ? Editor::load($format_id) : NULL;
+}
+
+/**
+ * Applies text editor XSS filtering.
+ *
+ * @param string $html
+ *   The HTML string that will be passed to the text editor.
+ * @param \Drupal\filter\FilterFormatInterface|null $format
+ *   The text format whose text editor will be used or NULL if the previously
+ *   defined text format is now disabled.
+ * @param \Drupal\filter\FilterFormatInterface|null $original_format
+ *   (optional) The original text format (i.e. when switching text formats,
+ *   $format is the text format that is going to be used, $original_format is
+ *   the one that was being used initially, the one that is stored in the
+ *   database when editing).
+ *
+ * @return string|false
+ *   The XSS filtered string or FALSE when no XSS filtering needs to be applied,
+ *   because one of the next conditions might occur:
+ *   - No text editor is associated with the text format,
+ *   - The previously defined text format is now disabled,
+ *   - The text editor is safe from XSS,
+ *   - The text format does not use any XSS protection filters.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Instead, use
+ *   the method ::filterXss() from the element.editor service.
+ *
+ * @see https://www.drupal.org/node/3568146
+ * @see https://www.drupal.org/node/2099741
+ */
+function editor_filter_xss($html, ?FilterFormatInterface $format = NULL, ?FilterFormatInterface $original_format = NULL) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Instead, use the method ::filterXss() from the element.editor service. See https://www.drupal.org/node/3568146', E_USER_DEPRECATED);
+  return \Drupal::service('element.editor')->filterXss($html, $format, $original_format);
+}
+
+/**
+ * Records file usage of files referenced by formatted text fields.
+ *
+ * Every referenced file that is temporally saved will be resaved as permanent.
+ *
+ * @param array $uuids
+ *   An array of file entity UUIDs.
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   An entity whose fields to inspect for file references.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. No
+ *   replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3568136
+ */
+function _editor_record_file_usage(array $uuids, EntityInterface $entity): void {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. No replacement is provided. See https://www.drupal.org/node/3568136', E_USER_DEPRECATED);
+  foreach ($uuids as $uuid) {
+    if ($file = \Drupal::service('entity.repository')->loadEntityByUuid('file', $uuid)) {
+      /** @var \Drupal\file\FileInterface $file */
+      if ($file->isTemporary()) {
+        $file->setPermanent();
+        $file->save();
+      }
+      \Drupal::service('file.usage')->add($file, 'editor', $entity->getEntityTypeId(), $entity->id());
+    }
+  }
+}
+
+/**
+ * Deletes file usage of files referenced by formatted text fields.
+ *
+ * @param array $uuids
+ *   An array of file entity UUIDs.
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   An entity whose fields to inspect for file references.
+ * @param int $count
+ *   The number of references to delete. Should be 1 when deleting a single
+ *   revision and 0 when deleting an entity entirely.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. No
+ *   replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3568136
+ * @see \Drupal\file\FileUsage\FileUsageInterface::delete()
+ */
+function _editor_delete_file_usage(array $uuids, EntityInterface $entity, $count): void {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. No replacement is provided. See https://www.drupal.org/node/3568136', E_USER_DEPRECATED);
+  foreach ($uuids as $uuid) {
+    if ($file = \Drupal::service('entity.repository')->loadEntityByUuid('file', $uuid)) {
+      \Drupal::service('file.usage')->delete($file, 'editor', $entity->getEntityTypeId(), $entity->id(), $count);
+    }
+  }
+}
+
+/**
+ * Finds all files referenced (data-entity-uuid) by formatted text fields.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   An entity whose fields to analyze.
+ *
+ * @return array
+ *   An array of file entity UUIDs.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. No
+ *    replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3568136
+ */
+function _editor_get_file_uuids_by_field(EntityInterface $entity): array {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. No replacement is provided. See https://www.drupal.org/node/3568136', E_USER_DEPRECATED);
+  $uuids = [];
+
+  $formatted_text_fields = _editor_get_formatted_text_fields($entity);
+  foreach ($formatted_text_fields as $formatted_text_field) {
+    $text = '';
+    $field_items = $entity->get($formatted_text_field);
+    foreach ($field_items as $field_item) {
+      $text .= $field_item->value;
+      if ($field_item->getFieldDefinition()->getType() == 'text_with_summary') {
+        $text .= $field_item->summary;
+      }
+    }
+    $uuids[$formatted_text_field] = _editor_parse_file_uuids($text);
+  }
+  return $uuids;
+}
+
+/**
+ * Determines the formatted text fields on an entity.
+ *
+ * A field type is considered to provide formatted text if its class is a
+ * subclass of Drupal\text\Plugin\Field\FieldType\TextItemBase.
+ *
+ * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+ *   An entity whose fields to analyze.
+ *
+ * @return array
+ *   The names of the fields on this entity that support formatted text.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. No
+ *    replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3568136
+ */
+function _editor_get_formatted_text_fields(FieldableEntityInterface $entity) {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. No replacement is provided. See https://www.drupal.org/node/3568136', E_USER_DEPRECATED);
+  $field_definitions = $entity->getFieldDefinitions();
+  if (empty($field_definitions)) {
+    return [];
+  }
+
+  // Only return formatted text fields.
+  // @todo improve as part of https://www.drupal.org/node/2732429
+  $field_type_manager = \Drupal::service('plugin.manager.field.field_type');
+  return array_keys(array_filter($field_definitions, function (FieldDefinitionInterface $definition) use ($field_type_manager) {
+    $type = $definition->getType();
+    $plugin_class = $field_type_manager->getPluginClass($type);
+    return is_subclass_of($plugin_class, TextItemBase::class);
+  }));
+}
+
+/**
+ * Parse an HTML snippet for any linked file with data-entity-uuid attributes.
+ *
+ * @param string $text
+ *   The partial (X)HTML snippet to load. Invalid markup will be corrected on
+ *   import.
+ *
+ * @return array
+ *   An array of all found UUIDs.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. No
+ *     replacement is provided.
+ *
+ * @see https://www.drupal.org/node/3568136
+ */
+function _editor_parse_file_uuids($text): array {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. No replacement is provided. See https://www.drupal.org/node/3568136', E_USER_DEPRECATED);
+  $dom = Html::load($text);
+  $xpath = new \DOMXPath($dom);
+  $uuids = [];
+  foreach ($xpath->query('//*[@data-entity-type="file" and @data-entity-uuid]') as $node) {
+    $uuids[] = $node->getAttribute('data-entity-uuid');
+  }
+  return $uuids;
+}

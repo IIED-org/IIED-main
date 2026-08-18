@@ -1,0 +1,13 @@
+contextual_test:
+  path: '/contextual-tests'
+  defaults:
+    _controller: '\Drupal\contextual_test\Controller\TestController::render'
+  requirements:
+    _access: 'TRUE'
+
+contextual_test.duplicate_links:
+  path: '/contextual-tests/duplicate-links'
+  defaults:
+    _controller: '\Drupal\contextual_test\Controller\TestController::duplicateContextualLinks'
+  requirements:
+    _access: 'TRUE'
