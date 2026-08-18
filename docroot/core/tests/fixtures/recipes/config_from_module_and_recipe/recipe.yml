@@ -1,0 +1,8 @@
+name: 'Config from module and recipe'
+type: 'Testing'
+install:
+  - config_test
+  - system
+config:
+  import:
+    config_test: '*'

@@ -1,0 +1,61 @@
+@use "../../variables" as v;
+
+:root {
+    --mm-size: 80%;
+    --mm-min-size: 240px;
+    --mm-max-size: 440px;
+}
+
+//	Menu
+.mm-menu--offcanvas {
+    position: fixed;
+    z-index: 0;
+    transition: visibility 0s linear v.$transDr;
+
+    &.mm-menu--opened {
+        transition-delay: 0s;
+    }
+
+    &:not(.mm-menu--opened) {
+        visibility: hidden;
+        pointer-events: none;
+
+        // Visible panels undo the hidden menu :/
+        //  Use inherit so the transition-delay works down the DOM tree.
+        * {
+            visibility: inherit;
+        }
+    }
+}
+
+//	Page node
+.mm-page {
+    box-sizing: border-box;
+    min-height: 100vh;
+    background: inherit;
+}
+
+//  All sliding out nodes
+:where(.mm-slideout) {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    transition-duration: v.$transDr;
+    transition-timing-function: v.$transFn;
+    transition-property: width, transform;
+}
+
+//	Wrapper
+.mm-wrapper--opened {
+    &,
+    body {
+        overflow: hidden;
+    }
+}
+
+//  UI Blocker
+.mm-wrapper__blocker {
+    background: #00000066;
+}
+
+@import "positions";

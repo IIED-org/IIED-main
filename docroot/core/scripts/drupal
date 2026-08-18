@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * @file
+ * Deprecated shim that forwards to the `dr` CLI entry point.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the `dr`
+ *   script instead.
+ *
+ * @see https://www.drupal.org/node/3584928
+ */
+
+declare(strict_types=1);
+
+trigger_error('Calling drupal is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. Use the `dr` script instead. See https://www.drupal.org/node/3584928', E_USER_DEPRECATED);
+
+// The Symfony Runtime requires SCRIPT_FILENAME during startup. Without this,
+// it re-requires this deprecated shim instead of the replacement entry point,
+// triggering the deprecation twice.
+$_SERVER['SCRIPT_FILENAME'] = __DIR__ . '/dr';
+
+return include __DIR__ . '/dr';

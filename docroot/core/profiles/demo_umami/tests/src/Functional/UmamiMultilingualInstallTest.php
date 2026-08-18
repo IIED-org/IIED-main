@@ -1,0 +1,94 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\Tests\demo_umami\Functional;
+
+use Drupal\FunctionalTests\Installer\InstallerTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
+/**
+ * Tests the multilingual installer installing the Umami profile.
+ */
+#[Group('Installer')]
+#[Group('#slow')]
+#[RunTestsInSeparateProcesses]
+class UmamiMultilingualInstallTest extends InstallerTestBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'demo_umami';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $langcode = 'es';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function installParameters(): array {
+    $parameters = parent::installParameters();
+
+    // Set 'enable_update_status_module' flag to test that
+    // SiteConfigureForm::submitForm() handles the container rebuild correctly after
+    // the Update Status module is installed.
+    $parameters['forms']['install_configure_form']['enable_update_status_module'] = TRUE;
+    return $parameters;
+  }
+
+  /**
+   * Ensures that Umami can be installed with Spanish as the default language.
+   */
+  public function testUmami(): void {
+    // First, confirm the update module was installed per install parameters.
+    $this->assertTrue(\Drupal::moduleHandler()->moduleExists('update'));
+    $this->drupalGet('');
+    // cSpell:disable-next-line
+    $this->assertSession()->pageTextContains('Crema catalana');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUpLanguage(): void {
+    // Place custom local translations in the translations directory to avoid
+    // getting translations from localize.drupal.org.
+    mkdir(DRUPAL_ROOT . '/' . $this->siteDirectory . '/files/translations', 0777, TRUE);
+    file_put_contents(DRUPAL_ROOT . '/' . $this->siteDirectory . '/files/translations/drupal-' . \Drupal::VERSION . '.es.po', $this->getPo('es'));
+
+    parent::setUpLanguage();
+  }
+
+  /**
+   * Returns the string for the test .po file.
+   *
+   * @param string $langcode
+   *   The language code.
+   *
+   * @return string
+   *   Contents for the test .po file.
+   */
+  protected function getPo($langcode): string {
+    return <<<PO
+msgid ""
+msgstr ""
+
+msgid "Save and continue"
+msgstr "Save and continue $langcode"
+
+msgid "Anonymous"
+msgstr "Anonymous $langcode"
+
+msgid "Language"
+msgstr "Language $langcode"
+
+#: Testing site name configuration during the installer.
+msgid "Drupal"
+msgstr "Drupal"
+PO;
+  }
+
+}

@@ -1,0 +1,242 @@
+/**
+ *
+ * Common JS managing behavior of admin-toolbar.
+ *
+ * Init Toolbar triggers.
+ *
+ * One trigger is button in Toolbar.
+ * Another button in control panel on mobile.
+ * Third is mobile shadow.
+ * Fourth is close sidebar button on mobile.
+ *
+ * @type {Drupal~behavior}
+ *
+ * @prop {Drupal~behaviorAttach} attach
+ */
+
+(
+  (Drupal, once) => {
+    /**
+     * Constant representing the event name for toggling the admin toolbar state.
+     * @type {string}
+     */
+    const HTML_TRIGGER_EVENT = 'toggle-admin-toolbar';
+
+    /**
+     * Constant representing the event name for toggling the admin toolbar content.
+     * @type {string}
+     */
+    const SIDEBAR_CONTENT_EVENT = 'toggle-admin-toolbar-content';
+
+    /**
+     * Mobile mediaQuery
+     */
+    const mobileMediaQuery = window.matchMedia('(max-width: 1023px)');
+
+    /**
+     * Selector for primary mobile toolbar trigger.
+     * @type {string}
+     */
+    const mobileTriggerSelector =
+      '[data-drupal-selector="admin-toolbar-mobile-trigger"]';
+
+    /**
+     * Creates a focus trap for the admin toolbar by adding an `inert` attribute
+     * to direct children of the `<body>` other than the admin toolbar.
+     *
+     * @param {boolean} toState The new state of the sidebar.
+     */
+    function toggleFocusTrap(newState) {
+      const contentElements = document.querySelectorAll(
+        'body > *:not(:is(.admin-toolbar, .admin-toolbar-overlay))',
+      );
+
+      contentElements.forEach((el) => {
+        el.toggleAttribute('inert', newState === true);
+        el.toggleAttribute('data-admin-toolbar-inert', newState === true);
+      });
+    }
+
+    if (
+      once('admin-toolbar-document-triggers-listener', document.documentElement)
+        .length
+    ) {
+      const doc = document.documentElement;
+
+      // This is special attribute which added to apply css
+      // with animations and avoid layout shift.
+      setTimeout(() => {
+        doc.setAttribute('data-admin-toolbar-transitions', true);
+      }, 100);
+
+      // If window is resized, ensure focus trap is placed or removed.
+      mobileMediaQuery.addEventListener('change', () => {
+        if (!mobileMediaQuery.matches) {
+          toggleFocusTrap(false);
+        } else if (doc.getAttribute('data-admin-toolbar') === 'expanded') {
+          toggleFocusTrap(true);
+        }
+      });
+
+      doc.addEventListener(HTML_TRIGGER_EVENT, (e) => {
+        // Prevents multiple triggering while transitioning.
+        const newState = e.detail.state;
+        const isUserInput = e.detail.manual;
+
+        document.documentElement.setAttribute(
+          'data-admin-toolbar',
+          newState ? 'expanded' : 'collapsed',
+        );
+
+        // Set [data-admin-toolbar-body-scroll='locked']
+        // See css/components/body-scroll-lock.pcss.css.
+
+        document.documentElement.setAttribute(
+          'data-admin-toolbar-body-scroll',
+          newState ? 'locked' : 'unlocked',
+        );
+
+        if (mobileMediaQuery.matches) {
+          toggleFocusTrap(newState);
+        }
+
+        doc.querySelector('.admin-toolbar')?.dispatchEvent(
+          new CustomEvent(SIDEBAR_CONTENT_EVENT, {
+            detail: {
+              state: newState,
+            },
+          }),
+        );
+
+        // If sidebar is closed manually, move focus to trigger button.
+        if (newState === false && isUserInput) {
+          document.querySelector(mobileTriggerSelector).focus();
+        }
+
+        if (isUserInput) {
+          document.documentElement.setAttribute(
+            'data-admin-toolbar-animating',
+            true,
+          );
+        }
+
+        setTimeout(() => {
+          document.documentElement.removeAttribute(
+            'data-admin-toolbar-animating',
+          );
+        }, 200);
+
+        Drupal.displace(true);
+      });
+
+      doc.addEventListener('keydown', (e) => {
+        if (
+          e.key === 'Escape' &&
+          doc.getAttribute('data-admin-toolbar') === 'expanded'
+        ) {
+          document.querySelector(mobileTriggerSelector).click();
+        }
+      });
+    }
+
+    /**
+     * Initialize Drupal.displace()
+     *
+     * We add the displace attribute to a separate full width element because we
+     * don't want this element to have transitions. Note that this element and the
+     * navbar share the same exact width.
+     *
+     * @param {HTMLElement} el - The admin toolbar wrapper.
+     */
+    const initDisplace = (el) => {
+      const displaceElement = el.querySelector(
+        '.admin-toolbar__displace-placeholder',
+      );
+      const edge = document.documentElement.dir === 'rtl' ? 'right' : 'left';
+      displaceElement?.setAttribute(`data-offset-${edge}`, '');
+      Drupal.displace(true);
+    };
+
+    // Any triggers on page. Inside or outside sidebar.
+    // For now button in sidebar + mobile header and background.
+
+    Drupal.behaviors.navigationProcessToolbarTriggers = {
+      attach: (context) => {
+        once('navigation-displace', '.admin-toolbar', context).forEach(
+          initDisplace,
+        );
+
+        const triggers = once(
+          'admin-toolbar-trigger',
+          '[aria-controls="admin-toolbar"], [admin-toolbar-trigger]',
+          context,
+        );
+
+        /**
+         * Updates the state of all trigger elements based on the provided state.
+         *
+         * @param {boolean} toState The new state of the sidebar.
+         */
+        const toggleTriggers = (toState) => {
+          triggers.forEach((trigger) => {
+            // We should only set `aria-expanded` on `<button>` elements.
+            // This excludes the overlay `<div>`, which should not have
+            // ARIA attributes.
+            if (trigger.matches('button')) {
+              trigger.setAttribute('aria-expanded', toState);
+            }
+            const text =
+              trigger.querySelector('[data-toolbar-text]') ||
+              trigger.querySelector('[data-toolbar-action]');
+            if (text) {
+              text.textContent = toState
+                ? Drupal.t('Collapse sidebar')
+                : Drupal.t('Expand sidebar');
+            }
+          });
+          localStorage.setItem('Drupal.navigation.sidebarExpanded', toState);
+        };
+
+        if (triggers.length) {
+          let firstState =
+            localStorage.getItem('Drupal.navigation.sidebarExpanded') !==
+            'false';
+
+          // We need to display closed sidebar on init on mobile.
+          if (mobileMediaQuery.matches) {
+            firstState = false;
+          }
+
+          // Set values on load.
+          toggleTriggers(firstState);
+          document.documentElement.dispatchEvent(
+            new CustomEvent(HTML_TRIGGER_EVENT, {
+              bubbles: true,
+              detail: {
+                state: firstState,
+                manual: false,
+              },
+            }),
+          );
+
+          triggers.forEach((trigger) => {
+            trigger.addEventListener('click', (e) => {
+              const state =
+                e.currentTarget.getAttribute('aria-expanded') === 'false';
+              trigger.dispatchEvent(
+                new CustomEvent(HTML_TRIGGER_EVENT, {
+                  bubbles: true,
+                  detail: {
+                    state,
+                    manual: true,
+                  },
+                }),
+              );
+              toggleTriggers(state);
+            });
+          });
+        }
+      },
+    };
+  }
+)(Drupal, once);

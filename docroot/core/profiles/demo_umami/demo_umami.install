@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the demo_umami profile.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Perform actions to set up the site for this profile.
+ *
+ * @see system_install()
+ */
+function demo_umami_install(): void {
+  // We install some menu links, so we have to rebuild the router, to ensure the
+  // menu links are valid.
+  \Drupal::service('router.builder')->rebuildIfNeeded();
+
+  // Enable the demo content module. This can't be specified as a dependency
+  // in the demo_umami.info.yml file, as it requires configuration provided by
+  // the profile (fields etc.).
+  \Drupal::service('module_installer')->install(['demo_umami_content'], TRUE);
+}

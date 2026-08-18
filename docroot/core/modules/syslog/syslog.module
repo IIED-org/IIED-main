@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Form submission handler for system_logging_settings().
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. There
+ *   is no replacement.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function syslog_logging_settings_submit($form, FormStateInterface $form_state): void {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:12.0.0. There is no replacement. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  \Drupal::configFactory()->getEditable('syslog.settings')
+    ->set('identity', $form_state->getValue('syslog_identity'))
+    ->set('facility', $form_state->getValue('syslog_facility'))
+    ->set('format', $form_state->getValue('syslog_format'))
+    ->save();
+}
+
+/**
+ * Lists all possible syslog facilities for UNIX/Linux.
+ *
+ * @return array
+ *   An array of syslog facilities for UNIX/Linux.
+ *
+ * @deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. There
+ *   is no replacement.
+ *
+ * @see https://www.drupal.org/node/3566774
+ */
+function syslog_facility_list() {
+  @trigger_error(__FUNCTION__ . '() is deprecated in drupal:11.4.0 and is removed from drupal:13.0.0. There is no replacement. See https://www.drupal.org/node/3566774', E_USER_DEPRECATED);
+  return [
+    LOG_LOCAL0 => 'LOG_LOCAL0',
+    LOG_LOCAL1 => 'LOG_LOCAL1',
+    LOG_LOCAL2 => 'LOG_LOCAL2',
+    LOG_LOCAL3 => 'LOG_LOCAL3',
+    LOG_LOCAL4 => 'LOG_LOCAL4',
+    LOG_LOCAL5 => 'LOG_LOCAL5',
+    LOG_LOCAL6 => 'LOG_LOCAL6',
+    LOG_LOCAL7 => 'LOG_LOCAL7',
+  ];
+}

@@ -1,0 +1,10 @@
+name: Navigation
+description: 'Provides a sidebar navigation for site administration.'
+package: Core
+version: VERSION
+configure: navigation.settings
+type: module
+dependencies:
+  - drupal:block
+  - drupal:file
+  - drupal:layout_builder
