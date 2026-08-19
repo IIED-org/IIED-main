@@ -33,7 +33,7 @@ content:
       image_link_attributes_rel: ''
       pdf_file_field: field_media_document
       pdf_page: '1'
-      image_format: jpg
+      image_format: png
       image_loading:
         attribute: lazy
       image_link_attributes_download: 0

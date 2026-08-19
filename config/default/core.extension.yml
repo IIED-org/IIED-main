@@ -126,16 +126,9 @@ module:
   password_policy_username: 0
   path: 0
   path_alias: 0
-  pdfpreview: 0
+  pdf_thumbnail_token: 0
   phpass: 0
   publishcontent: 0
-  purge: 0
-  purge_drush: 0
-  purge_file: 0
-  purge_processor_cron: 0
-  purge_queuer_coretags: 0
-  purge_tokens: 0
-  purge_ui: 0
   rabbit_hole: 0
   readmore_js: 0
   real_aes: 0
@@ -179,14 +172,12 @@ module:
   text: 0
   tfa: 0
   token: 0
+  token_or: 0
   toolbar: 0
   twig_field_value: 0
   twig_tweak: 0
   update: 0
   user: 0
-  varnish_focal_point_purge: 0
-  varnish_purge_tags: 0
-  varnish_purger: 0
   video_embed_field: 0
   video_embed_wysiwyg: 0
   view_unpublished: 0
