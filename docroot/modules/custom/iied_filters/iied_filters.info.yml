@@ -4,5 +4,5 @@ type: module
 package: IIED
 core_version_requirement: ^9 || ^10 || ^11
 
-# Information added by cb 20260604
-version: '2.0'
+# Information added by cb 20260817
+version: '2.1'

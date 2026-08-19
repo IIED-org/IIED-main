@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains readmore_js.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function readmore_js_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the readmore_js module.
+    case 'help.page.readmore_js':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Field Formatter for collapsing and expanding long blocks of text with "Read more" and "Close" links.') . '</p>';
+      return $output;
+
+    default:
+  }
+}

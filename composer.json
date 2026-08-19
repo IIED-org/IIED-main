@@ -121,7 +121,6 @@
     "drupal/purge": "^3.7",
     "drupal/purge_file": "^1.2",
     "drupal/rabbit_hole": "^1.0@beta",
-    "drupal/readmore_js": "^2.0",
     "drupal/readonlymode": "^1.1",
     "drupal/real_aes": "^2.5",
     "drupal/redirect": "^1.7",
@@ -277,11 +276,6 @@
       },
       "drupal/responsive_menu": {
         "Add 'front' options to menu position": "https://www.drupal.org/files/issues/2022-06-20/responsive_menu-menuposition-3274889-3.diff"
-      },
-      "drupal/readmore_js": {
-        "Fix readmore_js to prevent scroll to top.": "patches/readmore_js-3312818.patch",
-        "3385364": "patches/readmore_js-3385364-2.patch",
-        "d11 update":"patches/readmore_js-d11.patch"
       },
       "drupal/search_api_solr": {
         "Fix search_api_solr to avoid 'can not use FieldCache on multivalued field'.": "https://git.drupalcode.org/issue/search_api_solr-3326515/-/commit/c8293cc85563c52b17357c7f1ccea2f4c9f359f1.patch"

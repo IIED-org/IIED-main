@@ -8,7 +8,7 @@
   {% endblock %}
   {% block image %}
     {# Insert publication image with default settings #}
-    <div class="object-cover w-3/12 h-auto">
+    <div class="md:p-4 md:w-3/12 self-center object-cover w-4/12 h-auto p-2 m-auto transition duration-300 ease-out">
       {% include '@iied_tw/partials/_publication_image.html.twig' with { 'display_mode':'card_cover', 'img_style':'card_cover', 'alt_text': title_text|striptags } %}
     </div>
   {% endblock %} 

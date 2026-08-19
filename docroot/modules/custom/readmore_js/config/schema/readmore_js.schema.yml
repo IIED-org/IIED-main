@@ -1,0 +1,16 @@
+field.formatter.settings.readmore_js:
+  type: mapping
+  label: 'Read More link labels'
+  mapping:
+    more_link:
+      type: string
+      label: 'More Label'
+    close_link:
+      type: string
+      label: 'Close Label'
+    more_link_classes:
+      type: string
+      label: 'More link classes'
+    close_link_classes:
+      type: string
+      label: 'Close link classes'
