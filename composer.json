@@ -307,8 +307,7 @@
     "drupal-lenient": {
       "allowed-list": [
         "drupal/responsive_menu",
-        "drupal/search_api_sorts_widget",
-        "drupal/readmore_js"
+        "drupal/search_api_sorts_widget"
       ]
     },
     "merge-plugin": {
