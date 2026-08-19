@@ -106,9 +106,8 @@ function pdf_thumbnail_token_tokens($type, $tokens, array $data, array $options,
   // Guard against file entities whose underlying file is missing from
   // disk (e.g. after a DB sync that didn't bring sites/default/files
   // along). Without this check, media_pdf_thumbnail_tokens() will try
-  // to read the missing file and return FALSE from createThumbnail(),
-  // which triggers a PHP 8.3 "array offset on false" warning on its
-  // own line 100 when it does $infos[$value].
+  // to read the missing file and return FALSE from createThumbnail(), which
+  // triggers a PHP 8.3 "array offset on false" warning when it does $infos[$value].
   $real_path = \Drupal::service('file_system')->realpath($file->getFileUri());
   if (!$real_path || !file_exists($real_path)) {
     \Drupal::logger('pdf_thumbnail_token')->warning('PDF file @uri (fid @fid) referenced by media @mid is missing from disk; skipping thumbnail generation.', [
