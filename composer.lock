@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d870c13faa2ab0cdfd2731c02ac9d045",
+    "content-hash": "a270b1222b155aa4808cd59ac19262f2",
     "packages": [
         {
             "name": "apvarun/toastify-js",
@@ -9278,26 +9278,26 @@
         },
         {
             "name": "drupal/session_limit",
-            "version": "2.0.2",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/session_limit.git",
-                "reference": "2.0.2"
+                "reference": "3.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/session_limit-2.0.2.zip",
-                "reference": "2.0.2",
-                "shasum": "ff0334f1a11dc9664c43d348db5f87b0184fba21"
+                "url": "https://ftp.drupal.org/files/projects/session_limit-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "97936a6002127e69f5311b4e49949dcbaf001145"
             },
             "require": {
-                "drupal/core": "^10 || ^11"
+                "drupal/core": "^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.2",
-                    "datestamp": "1720956748",
+                    "version": "3.0.0",
+                    "datestamp": "1785439078",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
