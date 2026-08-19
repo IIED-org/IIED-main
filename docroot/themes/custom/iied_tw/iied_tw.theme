@@ -476,8 +476,30 @@ function iied_tw_preprocess_taxonomy_term(&$variables)
   }
 }
 
-// function iied_tw_preprocess_image(&$variables) {
-//   if (empty($variables['attributes']['alt'])) {
-//     $variables['attributes']['alt'] = "Cover image";
-//   }
-// }
+/**
+ * Implements hook_preprocess_image_formatter().
+ */
+function iied_tw_preprocess_image_formatter(&$variables) {
+  // Check if we are dealing with a media entity
+  if (isset($variables['item']) && $variables['item']->getEntity() instanceof \Drupal\media\Entity\Media) {
+    /** @var \Drupal\media\Entity\Media $media */
+    $media = $variables['item']->getEntity();
+    
+    // Check if the media bundle utilizes the pdf thumbnail formatter
+    if ($media->bundle() == 'document' || $media->bundle() == 'file') {
+      // Fetch the Media Name/Title to use as descriptive Alt text
+      $media_title = $media->getName();
+      
+      // Force the alt attribute onto the rendered image array
+      $variables['image']['#attributes']['alt'] = t('Cover for @title', ['@title' => $media_title]);
+    }
+  }
+}
+
+/* if alt is STILL empty */
+
+function iied_tw_preprocess_image(&$variables) {
+  if (empty($variables['attributes']['alt'])) {
+    $variables['attributes']['alt'] = "Cover image";
+  }
+}
