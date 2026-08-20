@@ -7,4 +7,6 @@ label: 'Media: Document'
 tags:
   image_src: '[media_pdf_thumbnail:field_media_document:1:image_uri]'
   og_image: '[media_pdf_thumbnail:field_media_document:1:image_url]'
+  og_image_alt: 'Cover for [media:name]'
   twitter_cards_image: '[media_pdf_thumbnail:field_media_document:1:image_url]'
+  twitter_cards_image_alt: 'Cover for [media:name]'
