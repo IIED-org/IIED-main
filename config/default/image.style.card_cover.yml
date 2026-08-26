@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 name: card_cover
-label: 'Card cover'
+label: 'Card cover (180)'
 effects:
   8bb80c5d-9e71-4eb6-b1cc-522d226cde27:
     uuid: 8bb80c5d-9e71-4eb6-b1cc-522d226cde27

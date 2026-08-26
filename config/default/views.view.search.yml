@@ -664,6 +664,7 @@ display:
                 soft_limit: 5
                 soft_limit_label_less: 'Show less'
                 soft_limit_label_more: 'Show more'
+                soft_limit_include_children: false
                 scrollable: false
                 scrollable_height: 300
               facets_item_bundle:
@@ -684,6 +685,7 @@ display:
                 soft_limit: 5
                 soft_limit_label_less: 'Show less'
                 soft_limit_label_more: 'Show more'
+                soft_limit_include_children: false
                 scrollable: false
                 scrollable_height: 300
               facets_field_document_type:
@@ -704,6 +706,7 @@ display:
                 soft_limit: 5
                 soft_limit_label_less: 'Show less'
                 soft_limit_label_more: 'Show more'
+                soft_limit_include_children: false
                 scrollable: false
                 scrollable_height: 300
               facets_field_area_list:
@@ -724,6 +727,7 @@ display:
                 soft_limit: 5
                 soft_limit_label_less: 'Show less'
                 soft_limit_label_more: 'Show more'
+                soft_limit_include_children: false
                 scrollable: false
                 scrollable_height: 300
               search_api_fulltext:
