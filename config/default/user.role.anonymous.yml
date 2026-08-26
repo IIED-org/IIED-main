@@ -9,6 +9,7 @@ dependencies:
     - contact
     - klaro
     - media
+    - media_pdf_thumbnail
     - readonlymode
     - search_api_autocomplete
     - system
@@ -28,3 +29,4 @@ permissions:
   - 'use klaro'
   - 'use search_api_autocomplete for search'
   - 'view media'
+  - 'view published pdf image entity entities'

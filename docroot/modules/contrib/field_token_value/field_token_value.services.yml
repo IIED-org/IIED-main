@@ -1,7 +1,0 @@
-services:
-  field_token_value.wrapper_manager:
-    class: Drupal\field_token_value\WrapperManager
-    arguments: ['@module_handler', '@theme_handler', '@cache.discovery']
-  field_token_value.field_value_generator:
-    class: Drupal\field_token_value\FieldValueGenerator
-    arguments: ['@entity_field.manager', '@plugin.manager.field.field_type', '@token', '@token.entity_mapper', '@messenger']

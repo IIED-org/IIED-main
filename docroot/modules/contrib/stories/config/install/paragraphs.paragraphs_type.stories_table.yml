@@ -1,8 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: stories_table
-label: Table
-icon_uuid: null
-description: null
-behavior_plugins: {  }

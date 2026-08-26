@@ -8,3 +8,24 @@ entity_type_groups:
       facebook: facebook
       pinterest: pinterest
       twitter_cards: twitter_cards
+      schema_article: schema_article
+      schema_organization: schema_organization
+      schema_person: schema_person
+separator: ','
+tag_trim_method: beforeValue
+use_maxlength: true
+tag_trim_maxlength:
+  metatag_maxlength_title: null
+  metatag_maxlength_description: null
+  metatag_maxlength_abstract: null
+  metatag_maxlength_og_site_name: null
+  metatag_maxlength_og_title: null
+  metatag_maxlength_og_description: null
+  metatag_maxlength_dcterms_title: null
+  metatag_maxlength_dcterms_description: null
+  metatag_maxlength_pinterest_description: null
+  metatag_maxlength_twitter_cards_title: null
+  metatag_maxlength_twitter_cards_description: null
+tag_scroll_max_height: ''
+tag_trim_end: ''
+trim_suffix: ''

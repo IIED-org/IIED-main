@@ -1,6 +1,0 @@
-tablefield.admin:
-  title: 'Tablefield settings'
-  description: 'Set the CSV separator, default number of rows and cols.'
-  route_name: tablefield.admin
-  parent: 'system.admin_config_content'
-  menu_name: tablefield

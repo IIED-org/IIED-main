@@ -1,6 +1,0 @@
-charts_api_example:
-  version: VERSION
-  js:
-    js/charts_api_example_js_override.js: { weight: -5 }
-  dependencies:
-    - charts/global

@@ -101,6 +101,7 @@ module:
   media_entity_file_replace: 0
   media_file_delete: 0
   media_library: 0
+  media_pdf_thumbnail: 0
   memcache: 0
   menu_link_content: 0
   menu_ui: 0
@@ -110,6 +111,7 @@ module:
   metatag_open_graph: 0
   metatag_pinterest: 0
   metatag_twitter_cards: 0
+  metatag_views: 0
   multiple_registration: 0
   mysql: 0
   name: 0
@@ -124,16 +126,9 @@ module:
   password_policy_username: 0
   path: 0
   path_alias: 0
-  pdfpreview: 0
+  pdf_thumbnail_token: 0
   phpass: 0
   publishcontent: 0
-  purge: 0
-  purge_drush: 0
-  purge_file: 0
-  purge_processor_cron: 0
-  purge_queuer_coretags: 0
-  purge_tokens: 0
-  purge_ui: 0
   rabbit_hole: 0
   readmore_js: 0
   real_aes: 0
@@ -143,6 +138,14 @@ module:
   rh_media: 0
   rh_node: 0
   rh_taxonomy: 0
+  schema_article: 0
+  schema_event: 0
+  schema_item_list: 0
+  schema_metatag: 0
+  schema_organization: 0
+  schema_person: 0
+  schema_web_page: 0
+  schema_web_site: 0
   search404: 0
   search_api: 0
   search_api_autocomplete: 0
@@ -169,14 +172,12 @@ module:
   text: 0
   tfa: 0
   token: 0
+  token_or: 0
   toolbar: 0
   twig_field_value: 0
   twig_tweak: 0
   update: 0
   user: 0
-  varnish_focal_point_purge: 0
-  varnish_purge_tags: 0
-  varnish_purger: 0
   video_embed_field: 0
   video_embed_wysiwyg: 0
   view_unpublished: 0

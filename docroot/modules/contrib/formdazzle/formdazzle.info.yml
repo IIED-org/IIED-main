@@ -1,9 +1,0 @@
-name: 'Formdazzle!'
-type: module
-description: 'Provides a set of utilities that make form theming easier.'
-core_version_requirement: ^10.1 || ^11 || ^12
-
-# Information added by Drupal.org packaging script on 2026-06-17
-version: '4.0.1'
-project: 'formdazzle'
-datestamp: 1781720488

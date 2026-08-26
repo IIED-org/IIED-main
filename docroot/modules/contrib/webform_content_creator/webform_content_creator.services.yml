@@ -1,4 +1,0 @@
-services:
-  plugin.manager.webform_content_creator.field_mapping:
-    class: Drupal\webform_content_creator\Plugin\WebformContentCreatorFieldMappingManager
-    parent: default_plugin_manager

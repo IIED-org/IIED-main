@@ -4,17 +4,17 @@
 {% if content.field_cover_image[0] and node.field_cover_image|file_uri %}
 	{% set image_uri = node.field_cover_image|file_uri %}
 	{% if (content.field_cover_image['#items'].entity.field_media_image.alt is empty)  %}
-		{% set image_alt = "Preview of '" ~ alt_text ~ "'" %}
+		{% set image_alt = alt_text %}
 	{% else %}
 		{% set image_alt = content.field_cover_image['#items'].entity.field_media_image.alt %}
 	{% endif %}
-	<img src="{{ image_uri|image_style(img_style) }}" alt="Preview of {{ image_alt }}"/>
+	<img src="{{ image_uri|image_style(img_style) }}" alt="{{ image_alt }}"/>
 {% else %}
   {% set media_uri = node.field_media[0]|file_uri %}
   {% if (media_uri is not null) %}
 		{{ (node.field_media[0].entity|view(display_mode)) }}
   {% else %}
-	<svg alt="Default document cover" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="flex-no-shrink w-full fill-current" viewbox="0 0 256 256" xml:space="preserve">
+	<svg alt="Default document cover icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="w-full fill-current flex-no-shrink" viewbox="0 0 256 256" xml:space="preserve">
 		<defs></defs>
 		<g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
 			<path d="M 63.089 1.483 H 15.755 c -1.551 0 -2.808 1.257 -2.808 2.808 v 81.418 c 0 1.551 1.257 2.808 2.808 2.808 h 58.49 c 1.551 0 2.808 -1.257 2.808 -2.808 V 14.927 L 63.089 1.483 z M 65.896 14.927 c -1.551 0 -2.808 -1.257 -2.808 -2.808 V 1.483 l 13.964 13.444 H 65.896 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/>

@@ -1,6 +1,0 @@
-arctor
-argaven
-deckard
-deutsch
-estraven
-mymodule

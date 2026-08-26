@@ -1,0 +1,10 @@
+name: PDF Thumbnail Token Bridge
+type: module
+description: 'Bridges node-level tokens to the Media PDF Thumbnail image generated from a media entity referenced by the node, for use in Metatag/metadata token fields.'
+package: IIED
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - drupal:node
+  - media_pdf_thumbnail:media_pdf_thumbnail
+# Information added by cb 20260819
+version: "1.1"

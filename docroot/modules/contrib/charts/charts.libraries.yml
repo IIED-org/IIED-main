@@ -1,7 +1,0 @@
-
-global:
-  version: VERSION
-  js:
-    js/charts.js: {}
-  dependencies:
-    - core/drupal

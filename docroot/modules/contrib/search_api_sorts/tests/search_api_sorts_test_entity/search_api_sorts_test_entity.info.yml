@@ -1,4 +1,0 @@
-name: 'Search API sorts test entity'
-type: module
-description: 'Support module for search_api_sorts, tests that entity queries are efficient.'
-package: Testing

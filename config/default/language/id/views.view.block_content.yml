@@ -1,7 +1,17 @@
+label: 'Custom block library'
+description: 'Find and manage custom blocks.'
 display:
   default:
     display_title: Default
     display_options:
+      title: 'Custom block library'
       fields:
         operations:
           label: Operasi-operasi
+      empty:
+        area_text_custom:
+          content: 'There are no custom blocks available.'
+  page_1:
+    display_options:
+      menu:
+        description: 'Create and edit block content.'

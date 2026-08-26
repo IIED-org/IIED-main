@@ -1,5 +1,0 @@
-webform_content_creator.add_form:
-  route_name: 'entity.webform_content_creator.add_form'
-  title: 'Add configuration'
-  appears_on:
-    - entity.webform_content_creator.collection

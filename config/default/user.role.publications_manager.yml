@@ -12,12 +12,15 @@ dependencies:
     - file
     - form_mode_control
     - media
+    - media_pdf_thumbnail
 id: publications_manager
 label: 'Publications manager'
 weight: -4
 is_admin: null
 permissions:
   - 'access media overview'
+  - 'add pdf image entity entities'
+  - 'administer pdf image entity entities'
   - 'create document media'
   - 'create image media'
   - 'delete any document media'
@@ -30,3 +33,5 @@ permissions:
   - 'use  The form mode default linked to  media entity( remote_video )'
   - 'use  The form mode default linked to  media entity( video )'
   - 'use  The form mode manager_admin linked to  node entity( publication )'
+  - 'view private pdf thumbnails'
+  - 'view unpublished pdf image entity entities'

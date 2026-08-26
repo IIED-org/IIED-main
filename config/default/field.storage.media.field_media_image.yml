@@ -18,14 +18,14 @@ type: image
 settings:
   target_type: file
   display_field: false
-  display_default: false
+  display_default: true
   uri_scheme: public
   default_image:
-    uuid: null
+    uuid: 35921806-4efa-472e-a53d-a52d0223f761
     alt: ''
     title: ''
-    width: null
-    height: null
+    width: 370
+    height: 499
 module: image
 locked: false
 cardinality: 1

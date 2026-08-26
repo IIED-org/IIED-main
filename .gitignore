@@ -3,11 +3,11 @@
 /bin/
 /drush/contrib/
 /vendor/
-/docroot/core/
+# /docroot/core/
 /docroot/modules/contrib/
 /docroot/themes/contrib/
 /docroot/profiles/contrib/
-/docroot/libraries/
+# /docroot/libraries/
 
 # Ignore Drupal's file directory
 /docroot/sites/*/files/

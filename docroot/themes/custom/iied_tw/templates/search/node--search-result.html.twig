@@ -7,13 +7,13 @@
 
 <a href="{{ url }}" class="hover:no-underline">
   <div
-    class="flex h-full p-2 overflow-hidden bg-white border-b border-stone-300 grow hover:bg-stone-100"
+    class="border-stone-300 grow hover:bg-stone-100 flex h-full p-2 overflow-hidden bg-white border-b"
   >
     <div class="w-3/12 p-2">
       {% block image %} 
       {% set image_uri = node.field_main_image|file_uri %}
-      {% set image_alt = node.field_main_image.alt %} {% if image_uri is not
-      null %}
+      {% set image_alt = (node.field_main_image.entity.field_media_image.alt is not null) ? node.field_main_image.entity.field_media_image.alt : "Cover image" %} 
+      {% if image_uri is not null %}
       <img
         class="object-cover h-auto rounded"
         src="{{ image_uri|image_style('card_256') }}"
@@ -24,10 +24,10 @@
 
     <div class="flex flex-col justify-between w-9/12 p-2">
     {% block main %} 
-      <h5 class="mb-2 text-xl leading-relaxed text-stone-900">
+      <h5 class="text-stone-900 mb-2 text-xl leading-relaxed">
         {{ node.label }}
       </h5>
-      <div class="mb-2 text-stone-700">
+      <div class="text-stone-700 mb-2">
       {{ content.search_api_excerpt }} 
       </div>
       {% endblock %}

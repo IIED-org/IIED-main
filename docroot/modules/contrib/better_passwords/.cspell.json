@@ -1,9 +1,0 @@
-{
-  "version": "0.1",
-  "language": "en",
-  "ignoreWords": [
-    "bruteforce",
-    "genpass",
-    "zxcvbn"
-  ]
-}

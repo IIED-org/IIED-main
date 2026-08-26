@@ -1,5 +1,0 @@
-workflow: queue
-wildcard: false
-debug: false
-base_urls: ''
-invalidation_type: 'url'
