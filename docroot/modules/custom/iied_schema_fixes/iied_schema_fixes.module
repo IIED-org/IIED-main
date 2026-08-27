@@ -4,7 +4,8 @@
  * @file
  * Adds properties schema_metatag's UI can't map on Article/Report
  * (isbn, numberOfPages, productCode), rebuilds 'author' directly from
- * field_author_s_ to remove the UI's ~6-author token-row cap, and
+ * field_author_s_ to remove the UI's ~6-author token-row cap, adds
+ * 'alternateName' to the sitewide Organization schema, and
  * defensively cleans up a config bug where a second Metatag group
  * ('schema_digital_document') was left with @type => Article,
  * producing a duplicate/conflicting Article node in the JSON-LD
@@ -25,49 +26,33 @@
  * tag at all here — we just add more items in the same shape, and
  * they'll be picked up in whichever group we assign them to.
  *
- * The PROPER long-term fix for the duplicate-node problem is a config
- * change, not this module: in the Metatag UI, either delete the
- * 'schema_digital_document' group or fix its @type, and move its
- * useful 'associatedMedia' data into 'schema_article' as 'encoding'.
- * This module strips that group defensively either way, so it's safe
- * to enable before or after you make that config change.
- *
- * ADAPT BEFORE USE: bundle name ('publication') and field machine
- * names (field_isbn, field_pdf_pages, field_product_code_new,
- * field_media / field_media_document) should be checked against your
- * site.
  */
-
 use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_page_attachments_alter().
  */
 function iied_schema_fixes_page_attachments_alter(array &$attachments) {
-  $node = \Drupal::routeMatch()->getParameter('node');
-
-  if (!$node instanceof NodeInterface || $node->bundle() !== 'publication') {
-    return;
-  }
-
   if (empty($attachments['#attached']['html_head'])) {
     return;
   }
 
   $head = &$attachments['#attached']['html_head'];
 
-  // 1. Strip the duplicate/misconfigured 'schema_digital_document'
-  // group. If you've already deleted it in the Metatag UI this is a
-  // harmless no-op; if not, this prevents the second conflicting
-  // Article node from ever reaching the page.
-  // foreach ($head as $key => $item) {
-  //   $group = $item[0]['#attributes']['group'] ?? NULL;
-  //   if ($group === 'schema_digital_document') {
-  //     unset($head[$key]);
-  //   }
-  // }
+  // The Organization block (schema_organization group) renders
+  // sitewide, on every page — so these fixes run unconditionally,
+  // before the publication-only bundle check below.
+  iied_schema_fixes_add_organization_alternate_name($head);
+  iied_schema_fixes_normalize_group($head, 'schema_organization');
 
-  // 2. Replace the UI-built 'author' property with one derived
+  $node = \Drupal::routeMatch()->getParameter('node');
+
+  if (!$node instanceof NodeInterface || $node->bundle() !== 'publication') {
+    return;
+  }
+
+ 
+  // Replace the UI-built 'author' property with one derived
   // directly from field_author_s_. The Metatag UI maps author name/url
   // pairs via a fixed set of manually-added token rows, currently
   // capped at 6 — any node with more authors than that silently loses
@@ -99,7 +84,7 @@ function iied_schema_fixes_page_attachments_alter(array &$attachments) {
     ];
   }
 
-  // 3. Ensure 'encoding' exists on schema_article. If you've already
+  // Ensure 'encoding' exists on schema_article. If you've already
   // added it via the Metatag UI (the recommended config fix), this
   // is skipped. Otherwise it's built directly from the node's PDF
   // field so the PDF is still attached even before that config
@@ -128,7 +113,7 @@ function iied_schema_fixes_page_attachments_alter(array &$attachments) {
     }
   }
 
-  // 4. Add ISBN as a PropertyValue-typed identifier. Not valid as a
+  // Add ISBN as a PropertyValue-typed identifier. Not valid as a
   // top-level Article/Report property in schema.org, so schema_metatag
   // has nothing to map it to in the UI — identifier (from Thing) is
   // the sanctioned generic extension point.
@@ -155,7 +140,7 @@ function iied_schema_fixes_page_attachments_alter(array &$attachments) {
     ];
   }
 
-  // 5. Add page count and product code as additionalProperty entries
+  // Add page count and product code as additionalProperty entries
   // (same reasoning as identifier — numberOfPages is Book-only in
   // schema.org, so additionalProperty is the correct generic route).
   if (!iied_schema_fixes_group_has_property($head, 'schema_article', 'additionalProperty')) {
@@ -193,17 +178,26 @@ function iied_schema_fixes_page_attachments_alter(array &$attachments) {
     }
   }
 
-  // 6. Normalize "True"/"False" strings into real booleans wherever
-  // they show up in schema_article's existing content (e.g.
-  // isAccessibleForFree, image.representativeOfPage,
-  // publisher.logo.representativeOfPage/width/height). These were
-  // typed as literal text into schema_metatag's fields rather than
-  // through a boolean-aware widget, so the module passes them
-  // straight through as strings — worth checking on the config side
-  // too, but this guarantees the JSON is typed correctly regardless.
+  // Normalize "True"/"False" strings into real booleans, and
+  // numeric strings into real numbers, in schema_article's content
+  // (e.g. isAccessibleForFree, image.representativeOfPage,
+  // publisher.logo.width/height). schema_organization gets the same
+  // treatment above, unconditionally, since it renders sitewide.
+  iied_schema_fixes_normalize_group($head, 'schema_article');
+}
+
+/**
+ * Casts string-typed booleans/numbers to real JSON types within a
+ * given Metatag group's rendered content. These come through as
+ * literal text ("True", "280") because the fields were populated
+ * with plain text tokens rather than a boolean/number-aware widget —
+ * worth checking on the config side too, but this guarantees the
+ * final JSON is typed correctly regardless.
+ */
+function iied_schema_fixes_normalize_group(array &$head, string $group): void {
   foreach ($head as &$item) {
     $attrs = &$item[0]['#attributes'];
-    if (($attrs['group'] ?? NULL) !== 'schema_article') {
+    if (($attrs['group'] ?? NULL) !== $group) {
       continue;
     }
     if (!isset($attrs['content'])) {
@@ -259,6 +253,44 @@ function iied_schema_fixes_normalize_value($value) {
   unset($sub_value);
 
   return $value;
+}
+
+/**
+ * Adds 'alternateName' => 'IIED' to the sitewide Organization node,
+ * if not already present. Hardcoded rather than pulled from a field,
+ * since the Organization schema is a single sitewide entity rather
+ * than something that varies per node.
+ */
+function iied_schema_fixes_add_organization_alternate_name(array &$head): void {
+  if (iied_schema_fixes_group_has_property($head, 'schema_organization', 'alternateName')) {
+    return;
+  }
+
+  // Only add it if the schema_organization group is actually present
+  // on this page (it may not be, depending on page/route).
+  $has_organization_group = FALSE;
+  foreach ($head as $item) {
+    if (($item[0]['#attributes']['group'] ?? NULL) === 'schema_organization') {
+      $has_organization_group = TRUE;
+      break;
+    }
+  }
+  if (!$has_organization_group) {
+    return;
+  }
+
+  $head[] = [
+    [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'alternateName',
+        'content' => 'IIED',
+        'group' => 'schema_organization',
+        'schema_metatag' => 1,
+      ],
+    ],
+    'iied_schema_organization_alternate_name',
+  ];
 }
 
 /**
