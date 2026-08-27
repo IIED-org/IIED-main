@@ -262,7 +262,9 @@
         "Migrate using country names": "https://www.drupal.org/files/issues/2020-02-21/country_lookup_migrate_process_plugin-3114991-2.patch"
       },
       "drupal/facets": {
-        "Update aborted 3492410": "https://www.drupal.org/files/issues/2024-12-11/264.patch"
+        "Update aborted 3492410": "https://www.drupal.org/files/issues/2024-12-11/264.patch",
+        "Call to a member function error 3617839":"https://git.drupalcode.org/project/facets/-/merge_requests/395.diff",
+        "Error offset of type string 3494590":"https://www.drupal.org/files/issues/2026-03-27/3494590-12-rerolled-for-current-branch.patch"
       },
       "drupal/facets_pretty_paths": {
         "3608564":"https://www.drupal.org/files/issues/2026-07-14/facets_pretty_paths_contextual_links_constructor.patch"
