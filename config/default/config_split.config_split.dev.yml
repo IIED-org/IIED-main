@@ -11,6 +11,7 @@ no_patching: false
 storage: folder
 folder: ../config/splits/dev
 module:
+  dblog: 0
   webform_ui: 0
   field_ui: 0
   stage_file_proxy: 0
