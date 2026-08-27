@@ -10,6 +10,24 @@ entity_type_groups:
       twitter_cards: twitter_cards
       schema_article: schema_article
       schema_organization: schema_organization
+  taxonomy_term:
+    organisation:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+      dublin_core: dublin_core
+      facebook: facebook
+      twitter_cards: twitter_cards
+      schema_organization: schema_organization
+    person:
+      basic: basic
+      advanced: advanced
+      google_scholar: google_scholar
+      open_graph: open_graph
+      dublin_core: dublin_core
+      facebook: facebook
+      twitter_cards: twitter_cards
+      schema_person: schema_person
 separator: ','
 tag_trim_method: beforeValue
 use_maxlength: true

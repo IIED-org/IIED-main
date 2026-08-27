@@ -8,7 +8,7 @@ tags:
   book_isbn: '[node:field_isbn]'
   citation_author: '[node:field_author_s_]'
   citation_isbn: '[node:field_isbn]'
-  citation_pdf_url: '[node:field_media:entity:field_media_document:entity:url]'
+  citation_pdf_url: '[node:field_media:entity:field_media_document:entity:url|node:field_external_url:uri]'
   citation_publication_date: '[node:field_date_published:date:html_date]'
   citation_title: '[current-page:title]'
   dcterms_creator: '[node:field_author_s_]'
