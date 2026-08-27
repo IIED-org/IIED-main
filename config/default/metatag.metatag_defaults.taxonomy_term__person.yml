@@ -1,0 +1,21 @@
+uuid: 2b9955d2-12a4-4045-951b-4ea648643d9f
+langcode: en
+status: true
+dependencies: {  }
+id: taxonomy_term__person
+label: 'Taxonomy term: People'
+tags:
+  schema_person_additional_name: '[term:field_name:middle]'
+  schema_person_description: '[term:field_standfirst]'
+  schema_person_email: '[term:field_email]'
+  schema_person_family_name: '[term:field_name:family]'
+  schema_person_given_name: '[term:field_name:given]'
+  schema_person_id: '[term:url]'
+  schema_person_image: 'a:5:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:4:"True";s:3:"url";s:63:"[term:field_author_picture:entity:field_media_image:medium:url]";s:5:"width";s:65:"[term:field_author_picture:entity:field_media_image:medium:width]";s:6:"height";s:66:"[term:field_author_picture:entity:field_media_image:medium:height]";}'
+  schema_person_job_title: '[term:field_position]'
+  schema_person_name: '[term:field_name]'
+  schema_person_same_as: '[term:field_researcher_profiles:0:entity:field_link],[term:field_researcher_profiles:1:entity:field_link],[term:field_researcher_profiles:2:entity:field_link],[term:field_researcher_profiles:3:entity:field_link]'
+  schema_person_telephone: '+442034637399'
+  schema_person_type: Person
+  schema_person_url: '[term:url]'
+  schema_person_works_for: 'a:4:{s:5:"@type";s:12:"Organization";s:3:"@id";s:42:"[term:field_organisation:entity:field_url]";s:4:"name";s:84:"[term:field_organisation:entity:field_full_name|term:field_organisation:entity:name]";s:3:"url";s:42:"[term:field_organisation:entity:field_url]";}'

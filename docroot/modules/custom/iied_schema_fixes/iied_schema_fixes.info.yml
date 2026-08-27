@@ -1,0 +1,8 @@
+name: IIED Schema.org Fixes
+type: module
+description: 'Corrects and augments the schema_metatag JSON-LD output for publication nodes (encoding, identifier, additionalProperty, scalar types).'
+package: IIED
+core_version_requirement: ^10 || ^11
+dependencies:
+  - metatag:metatag
+  - node:node

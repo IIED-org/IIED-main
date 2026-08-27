@@ -2,4 +2,3 @@ label: Contenido
 tags:
   title: '[node:title] | [site:name]'
   description: '[node:summary]'
-  canonical_url: '[node:url]'

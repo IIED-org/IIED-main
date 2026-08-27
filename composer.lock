@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "884b2c7cd00ce30cebbb0ec4c2944ca1",
+    "content-hash": "995339101cec64d2c7d965a95fd6c7ab",
     "packages": [
         {
             "name": "apvarun/toastify-js",
@@ -7582,6 +7582,63 @@
             }
         },
         {
+            "name": "drupal/metatag_google_scholar",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/metatag_google_scholar.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/metatag_google_scholar-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "111d0a1a8f52ee1e52d822cd9e22b298165c1a62"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/metatag": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1723418275",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "adcillc",
+                    "homepage": "https://www.drupal.org/user/366450"
+                },
+                {
+                    "name": "antongp",
+                    "homepage": "https://www.drupal.org/user/1060446"
+                },
+                {
+                    "name": "hxdef",
+                    "homepage": "https://www.drupal.org/user/2622115"
+                }
+            ],
+            "description": "Provides meta tags for indexing scholarly articles in Google Scholar.",
+            "homepage": "https://www.drupal.org/project/metatag_google_scholar",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/metatag_google_scholar",
+                "issues": "https://www.drupal.org/project/issues/metatag_google_scholar"
+            }
+        },
+        {
             "name": "drupal/multiple_registration",
             "version": "3.4.0",
             "source": {
@@ -8703,6 +8760,65 @@
             "homepage": "https://www.drupal.org/project/redirect",
             "support": {
                 "source": "https://git.drupalcode.org/project/redirect"
+            }
+        },
+        {
+            "name": "drupal/schema_digital_document",
+            "version": "1.1.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/schema_digital_document.git",
+                "reference": "1.1.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/schema_digital_document-1.1.0-alpha1.zip",
+                "reference": "1.1.0-alpha1",
+                "shasum": "251d5c1ba17e22c56768ca0a6619df88955ae2fe"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11",
+                "drupal/schema_metatag": "^2.3 || ^3"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.1.0-alpha1",
+                    "datestamp": "1743014321",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "claudiu.cristea",
+                    "homepage": "https://www.drupal.org/user/56348"
+                },
+                {
+                    "name": "dimilias",
+                    "homepage": "https://www.drupal.org/user/2578708"
+                },
+                {
+                    "name": "pfrenssen",
+                    "homepage": "https://www.drupal.org/user/382067"
+                }
+            ],
+            "description": "Adds Schema.org/DigitalDocument to the JSON-LD array. Provides DigitalDocument, NoteDigitalDocument, PresentationDigitalDocument, SpreadsheetDigitalDocument, TextDigitalDocument.",
+            "homepage": "https://www.drupal.org/project/schema_digital_document",
+            "keywords": [
+                "Drupal",
+                "metatag",
+                "schema"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/schema_digital_document",
+                "issues": "https://www.drupal.org/project/issues/schema_digital_document"
             }
         },
         {
@@ -24615,6 +24731,7 @@
         "drupal/linkchecker": 15,
         "drupal/name": 5,
         "drupal/rabbit_hole": 10,
+        "drupal/schema_digital_document": 15,
         "drupal/search404": 5,
         "drupal/search_api_sorts": 20,
         "drupal/term_merge": 10,

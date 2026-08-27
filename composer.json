@@ -109,6 +109,7 @@
     "drupal/media_pdf_thumbnail": "^7.0",
     "drupal/memcache": "^2.5",
     "drupal/metatag": "^2.1",
+    "drupal/metatag_google_scholar": "^1.2",
     "drupal/multiple_registration": "^3.2",
     "drupal/name": "^1.0@RC",
     "drupal/optional_end_date": "^1.2",
@@ -124,6 +125,7 @@
     "drupal/readonlymode": "^1.1",
     "drupal/real_aes": "^2.5",
     "drupal/redirect": "^1.7",
+    "drupal/schema_digital_document": "^1.1@alpha",
     "drupal/schema_metatag": "^3.0",
     "drupal/search404": "^2.2@RC",
     "drupal/search_api": "^1.23",
@@ -260,7 +262,9 @@
         "Migrate using country names": "https://www.drupal.org/files/issues/2020-02-21/country_lookup_migrate_process_plugin-3114991-2.patch"
       },
       "drupal/facets": {
-        "Update aborted 3492410": "https://www.drupal.org/files/issues/2024-12-11/264.patch"
+        "Update aborted 3492410": "https://www.drupal.org/files/issues/2024-12-11/264.patch",
+        "Call to a member function error 3617839":"https://git.drupalcode.org/project/facets/-/merge_requests/395.diff",
+        "Error offset of type string 3494590":"https://www.drupal.org/files/issues/2026-03-27/3494590-12-rerolled-for-current-branch.patch"
       },
       "drupal/facets_pretty_paths": {
         "3608564":"https://www.drupal.org/files/issues/2026-07-14/facets_pretty_paths_contextual_links_constructor.patch"
