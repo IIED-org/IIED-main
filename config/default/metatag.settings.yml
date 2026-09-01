@@ -1,5 +1,10 @@
 entity_type_groups:
   node:
+    event:
+      advanced: advanced
+      open_graph: open_graph
+      dublin_core: dublin_core
+      schema_event: schema_event
     publication:
       basic: basic
       advanced: advanced

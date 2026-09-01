@@ -84,14 +84,14 @@ function iied_schema_fixes_page_attachments_alter(array &$attachments) {
     ];
   }
 
-  // Ensure 'encoding' exists on schema_article. If you've already
-  // added it via the Metatag UI (the recommended config fix), this
-  // is skipped. Otherwise it's built directly from the node's PDF
-  // field so the PDF is still attached even before that config
-  // change is made.
+// Ensure 'encoding' exists on schema_article. If added via the
+// Metatag UI, this is skipped. Otherwise it's built from the 
+// node's PDF field. unless there is an external URL present
+// (which would be the canonical link to the article or PDF).
+
   if (!iied_schema_fixes_group_has_property($head, 'schema_article', 'encoding')) {
     $pdf_url = iied_schema_fixes_get_pdf_url($node);
-    if ($pdf_url) {
+    if ($pdf_url && $node->get('field_external_url')->isEmpty()) {
       $head[] = [
         [
           '#tag' => 'meta',
