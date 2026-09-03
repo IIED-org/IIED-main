@@ -1,0 +1,13 @@
+uuid: 71c9f720-56bd-42c6-9bf7-0bba4d2ab8bf
+langcode: en
+status: true
+dependencies: {  }
+id: taxonomy_term__theme
+label: 'Taxonomy term: Theme'
+tags:
+  schema_web_page_about: '[term:name]'
+  schema_web_page_description: '[term:description]'
+  schema_web_page_id: '[current-page:url]'
+  schema_web_page_image: 'a:5:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:4:"True";s:3:"url";s:36:"[term:field_term_image:scale_md:uri]";s:5:"width";s:38:"[term:field_term_image:scale_md:width]";s:6:"height";s:39:"[term:field_term_image:scale_md:height]";}'
+  schema_web_page_name: '[term:name]'
+  schema_web_page_type: CollectionPage

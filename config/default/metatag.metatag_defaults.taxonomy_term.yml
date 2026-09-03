@@ -10,6 +10,7 @@ tags:
   canonical_url: '[term:url]'
   description: '[term:description]'
   image_src: '[term:field_term_image]'
+  og_description: '[term:description]'
   og_image: '[term:field_term_image]'
   title: '[term:name] | [site:name]'
   twitter_cards_image: '[term:field_term_image]'

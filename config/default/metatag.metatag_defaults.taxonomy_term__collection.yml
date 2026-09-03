@@ -5,8 +5,10 @@ dependencies: {  }
 id: taxonomy_term__collection
 label: 'Taxonomy term: Collection'
 tags:
-  schema_web_page_description: '[term:field_overview]'
+  schema_web_page_about: '[term:field_theme]'
+  schema_web_page_description: '[term:description]'
   schema_web_page_id: '[current-page:url]'
-  schema_web_page_is_accessible_for_free: 'True'
-  schema_web_page_publisher: 'a:4:{s:5:"@type";s:12:"Organization";s:3:"@id";s:20:"https://www.iied.org";s:4:"name";s:11:"[site:name]";s:3:"url";s:20:"https://www.iied.org";}'
+  schema_web_page_image: 'a:5:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:4:"True";s:3:"url";s:29:"[term:field_badge:medium:uri]";s:5:"width";s:31:"[term:field_badge:medium:width]";s:6:"height";s:32:"[term:field_badge:medium:height]";}'
+  schema_web_page_name: '[term:name]'
+  schema_web_page_primaryimageofpage: 'a:5:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:4:"True";s:3:"url";s:36:"[term:field_term_image:scale_md:uri]";s:5:"width";s:38:"[term:field_term_image:scale_md:width]";s:6:"height";s:39:"[term:field_term_image:scale_md:height]";}'
   schema_web_page_type: CollectionPage
