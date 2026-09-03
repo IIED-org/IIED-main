@@ -1,0 +1,15 @@
+uuid: c421b3af-02de-4ffe-8079-cc5df0d47346
+langcode: en
+status: true
+dependencies: {  }
+id: node__event
+label: 'Content: Event'
+tags:
+  schema_event_description: '[node:field_standfirst]'
+  schema_event_end_date: '[node:field_daterange:end_value:custom:html_datetime]'
+  schema_event_id: '[current-page:url:absolute]'
+  schema_event_image: 'a:5:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:4:"True";s:3:"url";s:59:"[node:field_main_image:entity:field_media_image:entity:url]";s:5:"width";s:61:"[node:field_main_image:entity:field_media_image:entity:width]";s:6:"height";s:62:"[node:field_main_image:entity:field_media_image:entity:height]";}'
+  schema_event_name: '[node:title]'
+  schema_event_start_date: '[node:field_daterange:value:custom:html_datetime]'
+  schema_event_type: Event
+  schema_event_url: '[current-page:url:absolute]'

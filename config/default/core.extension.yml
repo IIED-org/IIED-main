@@ -71,6 +71,8 @@ module:
   honeypot: 0
   iied_filters: 0
   iied_schema_fixes: 0
+  iied_schema_organization_researchproject: 0
+  iied_schema_webpage_fields: 0
   iied_slider: 0
   iied_utils: 0
   image: 0

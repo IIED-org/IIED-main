@@ -1,0 +1,20 @@
+uuid: 9c41fcb1-dbe9-4360-b91a-249bb8b7df7b
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: rpwvgyEURXLz_JjgMCrkS1rUv-0k3L79BpO-ReN7fDI
+id: node__article
+label: 'Content: Article'
+tags:
+  schema_article_about: '[node:field_theme_s_]'
+  schema_article_author: 'a:4:{s:5:"@type";s:12:"Organization";s:3:"@id";s:20:"https://www.iied.org";s:4:"name";s:11:"[site:name]";s:3:"url";s:20:"https://www.iied.org";}'
+  schema_article_date_modified: '[node:changed:html_datetime]'
+  schema_article_date_published: '[node:created:html_datetime]'
+  schema_article_description: '[node:field_standfirst|node:summary]'
+  schema_article_headline: '[node:title]'
+  schema_article_id: '[current-page:url:absolute]'
+  schema_article_image: 'a:5:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:4:"True";s:3:"url";s:68:"[node:field_main_image:0:entity:field_media_image:scale_md:uri]";s:5:"width";s:70:"[node:field_main_image:0:entity:field_media_image:scale_md:width]";s:6:"height";s:71:"[node:field_main_image:0:entity:field_media_image:scale_md:height]";}'
+  schema_article_name: '[node:title]'
+  schema_article_publisher: 'a:4:{s:5:"@type";s:12:"Organization";s:3:"@id";s:20:"https://www.iied.org";s:4:"name";s:11:"[site:name]";s:3:"url";s:20:"https://www.iied.org";}'
+  schema_article_type: Article
