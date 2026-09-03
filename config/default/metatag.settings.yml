@@ -1,10 +1,24 @@
 entity_type_groups:
   node:
+    article:
+      schema_article: schema_article
+    blog:
+      schema_article: schema_article
     event:
       advanced: advanced
       open_graph: open_graph
       dublin_core: dublin_core
       schema_event: schema_event
+    impact_story:
+      schema_article: schema_article
+    long_read:
+      schema_article: schema_article
+    news:
+      schema_article: schema_article
+    page:
+      schema_article: schema_article
+    project:
+      schema_organization: schema_organization
     publication:
       basic: basic
       advanced: advanced
@@ -15,7 +29,12 @@ entity_type_groups:
       twitter_cards: twitter_cards
       schema_article: schema_article
       schema_organization: schema_organization
+    series_page:
+      schema_article: schema_article
   taxonomy_term:
+    collection:
+      schema_item_list: schema_item_list
+      schema_web_page: schema_web_page
     organisation:
       basic: basic
       advanced: advanced

@@ -1,0 +1,18 @@
+uuid: 71518273-3d02-4bbc-ad59-a3494ca94637
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: rpwvgyEURXLz_JjgMCrkS1rUv-0k3L79BpO-ReN7fDI
+id: node__project
+label: 'Content: Project'
+tags:
+  schema_organization_additional_type: ResearchProject
+  schema_organization_contact_point: 'a:3:{s:5:"@type";s:12:"ContactPoint";s:9:"telephone";s:13:"+442034637399";s:5:"email";s:50:"[node:field_project_contacts:0:entity:field_email]";}'
+  schema_organization_description: '[node:field_standfirst]'
+  schema_organization_id: '[current-page:url:absolute]'
+  schema_organization_image: 'a:5:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:4:"True";s:3:"url";s:63:"[node:field_main_image:0:entity:field_media_image:scale_md:uri]";s:5:"width";s:65:"[node:field_main_image:0:entity:field_media_image:scale_md:width]";s:6:"height";s:66:"[node:field_main_image:0:entity:field_media_image:scale_md:height]";}'
+  schema_organization_name: '[node:title]'
+  schema_organization_telephone: '+442034637399'
+  schema_organization_type: Project
+  schema_organization_url: '[current-page:url:absolute]'

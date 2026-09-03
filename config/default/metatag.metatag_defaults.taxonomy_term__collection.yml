@@ -1,0 +1,12 @@
+uuid: ed605984-20e5-4f42-ae5a-66050254a0a4
+langcode: en
+status: true
+dependencies: {  }
+id: taxonomy_term__collection
+label: 'Taxonomy term: Collection'
+tags:
+  schema_web_page_description: '[term:field_overview]'
+  schema_web_page_id: '[current-page:url]'
+  schema_web_page_is_accessible_for_free: 'True'
+  schema_web_page_publisher: 'a:4:{s:5:"@type";s:12:"Organization";s:3:"@id";s:20:"https://www.iied.org";s:4:"name";s:11:"[site:name]";s:3:"url";s:20:"https://www.iied.org";}'
+  schema_web_page_type: CollectionPage
