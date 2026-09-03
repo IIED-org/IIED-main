@@ -47,11 +47,14 @@ function iied_schema_fixes_page_attachments_alter(array &$attachments) {
 
   $node = \Drupal::routeMatch()->getParameter('node');
 
-  if (!$node instanceof NodeInterface || $node->bundle() !== 'publication') {
+  // if (!$node instanceof NodeInterface || $node->bundle() !== 'publication') {
+  //   return;
+  // }
+
+  if (!$node instanceof NodeInterface) {
     return;
   }
 
- 
   // Replace the UI-built 'author' property with one derived
   // directly from field_author_s_. The Metatag UI maps author name/url
   // pairs via a fixed set of manually-added token rows, currently
