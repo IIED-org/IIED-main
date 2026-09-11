@@ -1,0 +1,84 @@
+{#
+/**
+ * @file
+ * Contents list: builds itself from the page's contents headings.
+ *
+ * Editors place it in the aside of an 'IIED main with aside' section, last in
+ * the aside. Like the in-page menu, it sticks at xl wherever it is placed, so
+ * anywhere else it would slide over the items below it – the editorial
+ * guidance says where it goes.
+ *
+ * The list is gathered here rather than in a preprocess function, so the
+ * explainer needs no change to iied_tw.theme:
+ * - getParentEntity() gives the page. It loads the saved page, so a new page
+ *   lists nothing until its first save; the box then shows its title only.
+ * - Layout paragraphs stores everything on the page, sections included, as
+ *   flat items in field_content, in the order the builder shows them – so one
+ *   loop gives the headings in reading order.
+ * - Each heading is fetched in the page's current language with Twig Tweak's
+ *   translation filter. Not this paragraph's language: the list has no fields
+ *   and isn't translated, so it stays in the original language.
+ * - Headings the page doesn't show are skipped: unpublished, or parked by
+ *   layout paragraphs in its '_disabled' region.
+ * - Each id goes through clean_id, exactly as paragraph--toc-heading does, so
+ *   every link matches its heading.
+ * - The Twig sandbox allows every call used here: methods starting get, has
+ *   or is, and bundle.
+ *
+ * Box markup follows paragraph--in-page-menu.html.twig. data-toc is what
+ * dist/js/toc.js looks for.
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'py-6',
+    'xl:sticky',
+    'top-0',
+    'z-20',
+  ]
+%}
+{% set heading_id = 'toc-heading-' ~ paragraph.id() %}
+
+{#-- The page's contents headings, in page order --#}
+{% set host = paragraph.getParentEntity() %}
+{% set toc = [] %}
+{% if host and host.hasField('field_content') %}
+  {% for item in host.field_content %}
+    {% if item.entity and item.entity.bundle == 'toc_heading' %}
+      {% set heading = item.entity|translation %}
+      {% set region = heading.getAllBehaviorSettings().layout_paragraphs.region|default('') %}
+      {% if heading.isPublished() and region != '_disabled' %}
+        {% set toc = toc|merge([{
+          id: heading.field_toc_id.value,
+          label: heading.field_toc_label.value ?: heading.field_heading.value
+        }]) %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% if toc %}
+  {{ attach_library('iied_tw/toc') }}
+{% endif %}
+
+{% block paragraph %}
+  <nav{{ attributes.addClass(classes).setAttribute('aria-labelledby', heading_id) }} data-toc>
+    <div class="p-4 xl:mr-8 min-w-56 bg-stone-100 rounded-xl">
+      <h2 id="{{ heading_id }}" class="mb-3 text-stone-700">
+        {% trans %}Contents{% endtrans %}
+      </h2>
+      {% if toc %}
+        <ol class="space-y-2 text-base list-none">
+          {% for item in toc %}
+            <li>
+              <a href="#{{ item.id|clean_id }}" class="block pl-4 border-l-2 border-transparent text-link-text hover:text-link-hover hover:no-underline aria-[current=true]:border-iiedblue-500 aria-[current=true]:font-bold aria-[current=true]:text-stone-900">{{ item.label }}</a>
+            </li>
+          {% endfor %}
+        </ol>
+      {% endif %}
+    </div>
+  </nav>
+{% endblock paragraph %}

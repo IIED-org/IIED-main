@@ -1,0 +1,19 @@
+{#
+  Explainer card, md. Same as node--article--card-md without the hide-date test:
+  an explainer always shows its published date.
+#}
+{% extends '@iied_tw/node/card/node--card-md.html.twig' %}
+
+  {% block label %}
+    <div class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-stone-900 bg-iiedblue-500 rounded-tr-xl">
+      {% if node.field_alternative_label is not empty %}
+        {{ node.field_alternative_label.0.value|striptags }}
+      {% else %}
+        {{ node.type.entity.label() }}
+      {% endif %}
+    </div>
+  {% endblock %}
+
+  {% block date %}
+    <p class="text-stone-500">{{ node.getCreatedTime|format_date('custom', 'd F Y') }}</p>
+  {% endblock %}

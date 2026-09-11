@@ -1,0 +1,56 @@
+{#
+/**
+ * @file
+ * Person quote: a quote, the person's photo and a citation.
+ *
+ * Boxed quote's three fields, with their storages reused:
+ * - field_quote_text: the quote.
+ * - quote_author: optional person term, rendered in the term's 'avatar' view
+ *   mode – a round photo, no name.
+ * - field_quote_citation: free text naming the person and their role. The
+ *   photo is not captioned, so the citation is what says who is speaking.
+ *
+ * Colours and type follow paragraph--boxed-quote.html.twig. Differences:
+ * - figure, blockquote and figcaption rather than cite, which is for the
+ *   titles of works, not people
+ * - the photo shows with or without a citation, and nothing prints for an
+ *   empty field
+ * - no photo for a person without one: the avatar template has no check of
+ *   its own for a missing picture. quote_author is still rendered first,
+ *   unprinted, so the term's cache tags reach the page and a photo added
+ *   later shows up
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'mb-12',
+  ]
+%}
+{% set author = content.quote_author|render %}
+{% set has_photo = paragraph.quote_author.entity.field_author_picture.entity is not empty %}
+{% set has_citation = paragraph.field_quote_citation.value is not empty %}
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }}>
+    {% block content %}
+      <figure class="p-6 border border-stone-300 rounded-xl">
+        <blockquote class="text-xl md:text-2xl font-headline text-iiedpink-700">
+          {{ content.field_quote_text }}
+        </blockquote>
+        {% if has_photo or has_citation %}
+          <figcaption class="flex items-center gap-3 mt-6 font-sans text-base text-stone-700">
+            {% if has_photo %}
+              <div class="shrink-0">{{ author }}</div>
+            {% endif %}
+            {% if has_citation %}
+              <div>{{ content.field_quote_citation }}</div>
+            {% endif %}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% endblock %}
+  </div>
+{% endblock paragraph %}

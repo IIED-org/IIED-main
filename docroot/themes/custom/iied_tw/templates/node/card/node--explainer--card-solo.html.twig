@@ -1,0 +1,9 @@
+{#
+  Explainer card, solo (related content). No caption-date field on explainer, so
+  the date is always the published date.
+#}
+{% extends '@iied_tw/node/card/node--card-solo.html.twig' %}
+
+  {% block date %}
+    <p class="text-stone-500">{{ node.type.entity.label() }}, {{ node.getCreatedTime|format_date('custom', 'd F Y') }}</p>
+  {% endblock %}

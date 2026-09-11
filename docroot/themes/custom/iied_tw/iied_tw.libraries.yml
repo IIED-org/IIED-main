@@ -58,3 +58,9 @@ advanced_charts:
     - core/drupal
     - core/once
     - core/drupalSettings
+toc:
+  js:
+    dist/js/toc.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

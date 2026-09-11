@@ -1,0 +1,15 @@
+{#
+  Explainer card, horizontal. Same as node--article--card without the hide-date
+  test; the kicker is the alternative label if set, else the type label.
+#}
+{% extends '@iied_tw/node/card/node--card.html.twig' %}
+
+  {% block date %}
+    <p class="text-stone-500">
+      {% if node.field_alternative_label is not empty %}
+        {{ node.field_alternative_label.0.value|striptags }}
+      {% else %}
+        {{ node.type.entity.label() }}
+      {% endif %}, {{ node.getCreatedTime|format_date('custom', 'd F Y') }}
+    </p>
+  {% endblock %}

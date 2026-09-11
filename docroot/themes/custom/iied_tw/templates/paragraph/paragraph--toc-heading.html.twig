@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Contents heading: an h2 that also gets an entry in the page's contents list.
+ *
+ * One component, one heading. The answer follows in its own basic_text item,
+ * as elsewhere on the site – nothing is nested inside this paragraph.
+ *
+ * - The id is field_toc_id, typed by the editor and the same in every
+ *   language. clean_id tidies it (lowercase, hyphens, a–z and 0–9 only)
+ *   exactly as the contents list does, so the heading and its link always
+ *   agree. It does not make ids unique: two headings with the same id are an
+ *   editorial error.
+ * - field_toc_label is not printed here. It is the shorter wording the
+ *   contents list uses when set.
+ * - scroll-mt-8 leaves room above the heading when it is jumped to; revisit if
+ *   the site header becomes sticky.
+ * - The coloured left rule is the type's visual signature.
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'mt-12',
+    'mb-4',
+    'first:mt-0',
+  ]
+%}
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }}>
+    {% block content %}
+      <h2 id="{{ paragraph.field_toc_id.value|clean_id }}" class="scroll-mt-8">
+        {{- paragraph.field_heading.value -}}
+      </h2>
+    {% endblock %}
+  </div>
+{% endblock paragraph %}
