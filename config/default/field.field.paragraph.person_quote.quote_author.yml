@@ -1,15 +1,15 @@
-uuid: 5f085a99-e7c4-49e3-8c5c-384f32f67e4f
+uuid: 5ab4854a-dc0b-40e0-b635-0993d1374391
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.paragraph.quote_author
-    - paragraphs.paragraphs_type.boxed_quote
+    - paragraphs.paragraphs_type.person_quote
     - taxonomy.vocabulary.person
-id: paragraph.boxed_quote.quote_author
+id: paragraph.person_quote.quote_author
 field_name: quote_author
 entity_type: paragraph
-bundle: boxed_quote
+bundle: person_quote
 label: 'Quote author'
 description: ''
 required: false

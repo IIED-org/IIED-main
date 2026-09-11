@@ -6,6 +6,7 @@ dependencies:
     - node.type.article
     - node.type.blog
     - node.type.event
+    - node.type.explainer
     - node.type.impact_story
     - node.type.long_read
     - node.type.news
@@ -27,6 +28,7 @@ selection_criteria:
       article: article
       blog: blog
       event: event
+      explainer: explainer
       impact_story: impact_story
       long_read: long_read
       news: news

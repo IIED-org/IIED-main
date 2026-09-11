@@ -1,0 +1,240 @@
+uuid: 5e708413-22f3-49ff-9fa7-b0a9f82a0e31
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_content
+    - node.type.explainer
+    - paragraphs.paragraphs_type.about_the_author
+    - paragraphs.paragraphs_type.accordion_box
+    - paragraphs.paragraphs_type.advanced_chart
+    - paragraphs.paragraphs_type.basic_text
+    - paragraphs.paragraphs_type.box
+    - paragraphs.paragraphs_type.boxed_quote
+    - paragraphs.paragraphs_type.gallery
+    - paragraphs.paragraphs_type.highchart
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_small
+    - paragraphs.paragraphs_type.image_wide
+    - paragraphs.paragraphs_type.info_box
+    - paragraphs.paragraphs_type.key_points
+    - paragraphs.paragraphs_type.media_embed
+    - paragraphs.paragraphs_type.media_list
+    - paragraphs.paragraphs_type.modal_image
+    - paragraphs.paragraphs_type.person_quote
+    - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.related_card
+    - paragraphs.paragraphs_type.related_content
+    - paragraphs.paragraphs_type.related_content_no_image
+    - paragraphs.paragraphs_type.related_project
+    - paragraphs.paragraphs_type.related_publication_inline
+    - paragraphs.paragraphs_type.section
+    - paragraphs.paragraphs_type.stories_block
+    - paragraphs.paragraphs_type.stories_cta
+    - paragraphs.paragraphs_type.stories_table
+    - paragraphs.paragraphs_type.tab_box
+    - paragraphs.paragraphs_type.timeline
+    - paragraphs.paragraphs_type.toc_heading
+    - paragraphs.paragraphs_type.toc_list
+    - paragraphs.paragraphs_type.video_embed
+  module:
+    - entity_reference_revisions
+id: node.explainer.field_content
+field_name: field_content
+entity_type: node
+bundle: explainer
+label: Content
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      section: section
+      toc_list: toc_list
+      toc_heading: toc_heading
+      basic_text: basic_text
+      key_points: key_points
+      image: image
+      image_wide: image_wide
+      image_small: image_small
+      modal_image: modal_image
+      box: box
+      info_box: info_box
+      media_list: media_list
+      quote: quote
+      boxed_quote: boxed_quote
+      person_quote: person_quote
+      media_embed: media_embed
+      related_content: related_content
+      related_project: related_project
+      related_publication_inline: related_publication_inline
+      stories_block: stories_block
+      stories_cta: stories_cta
+      about_the_author: about_the_author
+      accordion_box: accordion_box
+      gallery: gallery
+      stories_table: stories_table
+      highchart: highchart
+      advanced_chart: advanced_chart
+      tab_box: tab_box
+      timeline: timeline
+      video_embed: video_embed
+      related_content_no_image: related_content_no_image
+      related_card: related_card
+    negate: 0
+    target_bundles_drag_drop:
+      about_the_author:
+        weight: -65
+        enabled: true
+      accordion_box:
+        weight: -64
+        enabled: true
+      accordion_section:
+        weight: -63
+        enabled: false
+      advanced_chart:
+        weight: -59
+        enabled: true
+      basic_text:
+        weight: -92
+        enabled: true
+      box:
+        weight: -86
+        enabled: true
+      boxed_quote:
+        weight: -82
+        enabled: true
+      file_upload:
+        weight: -69
+        enabled: false
+      form:
+        weight: -51
+        enabled: false
+      gallery:
+        weight: -62
+        enabled: true
+      highchart:
+        weight: -60
+        enabled: true
+      image:
+        weight: -90
+        enabled: true
+      image_small:
+        weight: -88
+        enabled: true
+      image_wide:
+        weight: -89
+        enabled: true
+      in_page_menu:
+        weight: -71
+        enabled: false
+      info_box:
+        weight: -85
+        enabled: true
+      key_figure:
+        weight: -50
+        enabled: false
+      key_points:
+        weight: -91
+        enabled: true
+      linked_person:
+        weight: -79
+        enabled: false
+      logo_block:
+        weight: -72
+        enabled: false
+      media_embed:
+        weight: -80
+        enabled: true
+      media_list:
+        weight: -84
+        enabled: true
+      modal_image:
+        weight: -87
+        enabled: true
+      organisation_logo_list:
+        weight: -46
+        enabled: false
+      person_quote:
+        weight: -81
+        enabled: true
+      quote:
+        weight: -83
+        enabled: true
+      related_card:
+        weight: -48
+        enabled: true
+      related_content:
+        weight: -78
+        enabled: true
+      related_content_no_image:
+        weight: -49
+        enabled: true
+      related_link:
+        weight: -70
+        enabled: false
+      related_project:
+        weight: -77
+        enabled: true
+      related_publication_inline:
+        weight: -76
+        enabled: true
+      researcher_profiles:
+        weight: -57
+        enabled: false
+      section:
+        weight: -95
+        enabled: true
+      sticky_box:
+        weight: -47
+        enabled: false
+      stories_block:
+        weight: -75
+        enabled: true
+      stories_cta:
+        weight: -73
+        enabled: true
+      stories_curated_content:
+        weight: -68
+        enabled: false
+      stories_link_list:
+        weight: -67
+        enabled: false
+      stories_quote:
+        weight: -66
+        enabled: false
+      stories_table:
+        weight: -61
+        enabled: true
+      stories_text:
+        weight: -58
+        enabled: false
+      stories_views:
+        weight: -74
+        enabled: false
+      tab:
+        weight: -56
+        enabled: false
+      tab_box:
+        weight: -55
+        enabled: true
+      timeline:
+        weight: -54
+        enabled: true
+      toc_heading:
+        weight: -93
+        enabled: true
+      toc_list:
+        weight: -94
+        enabled: true
+      unstyled:
+        weight: -52
+        enabled: false
+      video_embed:
+        weight: -53
+        enabled: true
+field_type: entity_reference_revisions

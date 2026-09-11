@@ -1,0 +1,25 @@
+uuid: ab2327c1-f180-41d7-afd5-dd6a9bda78c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.key_points.field_key_points
+    - paragraphs.paragraphs_type.key_points
+  module:
+    - text
+id: paragraph.key_points.default
+targetEntityType: paragraph
+bundle: key_points
+mode: default
+content:
+  field_key_points:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

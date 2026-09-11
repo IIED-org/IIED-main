@@ -1,0 +1,53 @@
+uuid: 2cd8a38d-6d94-47e2-b12b-50bf38fa056c
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_result
+    - field.field.node.explainer.field_additional_resources
+    - field.field.node.explainer.field_author_s_
+    - field.field.node.explainer.field_content
+    - field.field.node.explainer.field_date_updated
+    - field.field.node.explainer.field_display_image
+    - field.field.node.explainer.field_image_caption
+    - field.field.node.explainer.field_main_image
+    - field.field.node.explainer.field_review_date
+    - field.field.node.explainer.field_standfirst
+    - field.field.node.explainer.field_tagline
+    - field.field.node.explainer.field_tags
+    - field.field.node.explainer.field_theme_s_
+    - node.type.explainer
+  module:
+    - user
+id: node.explainer.search_result
+targetEntityType: node
+bundle: explainer
+mode: search_result
+content:
+  field_main_image:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  search_api_excerpt:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_additional_resources: true
+  field_author_s_: true
+  field_content: true
+  field_date_updated: true
+  field_display_image: true
+  field_image_caption: true
+  field_review_date: true
+  field_standfirst: true
+  field_tagline: true
+  field_tags: true
+  field_theme_s_: true
+  langcode: true
+  links: true

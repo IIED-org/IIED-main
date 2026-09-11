@@ -1,19 +1,19 @@
-uuid: 5f085a99-e7c4-49e3-8c5c-384f32f67e4f
+uuid: 8ff37125-3fc5-4b4d-880d-343fc331adbf
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.quote_author
-    - paragraphs.paragraphs_type.boxed_quote
+    - field.storage.node.field_author_s_
+    - node.type.explainer
     - taxonomy.vocabulary.person
-id: paragraph.boxed_quote.quote_author
-field_name: quote_author
-entity_type: paragraph
-bundle: boxed_quote
-label: 'Quote author'
+id: node.explainer.field_author_s_
+field_name: field_author_s_
+entity_type: node
+bundle: explainer
+label: Author(s)
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

@@ -1,16 +1,16 @@
-uuid: e7513d8f-6d47-47fa-a01c-9b55c6740133
+uuid: 14008265-1cf4-4afb-90ba-e0486d1bd87f
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.paragraph.field_quote_citation
-    - paragraphs.paragraphs_type.boxed_quote
+    - paragraphs.paragraphs_type.person_quote
   module:
     - text
-id: paragraph.boxed_quote.field_quote_citation
+id: paragraph.person_quote.field_quote_citation
 field_name: field_quote_citation
 entity_type: paragraph
-bundle: boxed_quote
+bundle: person_quote
 label: 'Quote citation'
 description: ''
 required: false

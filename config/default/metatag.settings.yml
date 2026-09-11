@@ -1,5 +1,12 @@
 entity_type_groups:
   node:
+    explainer:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+      twitter_cards: twitter_cards
+      schema_article: schema_article
+      schema_organization: schema_organization
     publication:
       basic: basic
       advanced: advanced
@@ -41,8 +48,8 @@ tag_trim_maxlength:
   metatag_maxlength_dcterms_title: null
   metatag_maxlength_dcterms_description: null
   metatag_maxlength_pinterest_description: null
-  metatag_maxlength_twitter_cards_title: null
   metatag_maxlength_twitter_cards_description: null
+  metatag_maxlength_twitter_cards_title: null
 tag_scroll_max_height: ''
 tag_trim_end: ''
 trim_suffix: ''

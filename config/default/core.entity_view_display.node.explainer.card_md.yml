@@ -1,0 +1,66 @@
+uuid: 0ccc4c5f-d8ec-4f5e-8fb3-318e54bf2ca8
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card_md
+    - field.field.node.explainer.field_additional_resources
+    - field.field.node.explainer.field_author_s_
+    - field.field.node.explainer.field_content
+    - field.field.node.explainer.field_date_updated
+    - field.field.node.explainer.field_display_image
+    - field.field.node.explainer.field_image_caption
+    - field.field.node.explainer.field_main_image
+    - field.field.node.explainer.field_review_date
+    - field.field.node.explainer.field_standfirst
+    - field.field.node.explainer.field_tagline
+    - field.field.node.explainer.field_tags
+    - field.field.node.explainer.field_theme_s_
+    - node.type.explainer
+  module:
+    - user
+id: node.explainer.card_md
+targetEntityType: node
+bundle: explainer
+mode: card_md
+content:
+  field_main_image:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_tagline:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_theme_s_:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_additional_resources: true
+  field_author_s_: true
+  field_content: true
+  field_date_updated: true
+  field_display_image: true
+  field_image_caption: true
+  field_review_date: true
+  field_standfirst: true
+  field_tags: true
+  langcode: true
+  search_api_excerpt: true
