@@ -60,7 +60,7 @@
         </div>
 
         {#-- authors --#}
-        {% if content.field_author_s_ %}
+        {% if node.field_author_s_.0.entity %}
         <div class="flex flex-wrap items-center pb-6 gap-x-1 gap-y-2">
          {% trans %}By{% endtrans %} {{ node.field_author_s_[0].entity|view('name') }} 
               {% if node.field_author_s_[1] %}
