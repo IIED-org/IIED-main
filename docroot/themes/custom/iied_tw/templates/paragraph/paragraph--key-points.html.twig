@@ -33,9 +33,9 @@
 {% block paragraph %}
   <section{{ attributes.addClass(classes).setAttribute('aria-labelledby', heading_id) }}>
     {% block content %}
-      <div class="p-6 border-l-4 rounded-xl bg-iiedgreen-5 border-iiedgreen-500">
-        <h2 id="{{ heading_id }}" class="mt-0 mb-3 text-xl">{% trans %}Key points{% endtrans %}</h2>
-        <div class="keypoint text-base md:text-lg [&_li]:mb-2">
+      <div class="p-6 border-2 rounded-xl border-iiedgreen-500">
+        <h2 id="{{ heading_id }}" class="mt-0 mb-4 text-xl">{% trans %}Key points{% endtrans %}</h2>
+        <div class="prose keypoint md:prose-lg">
           {{ content }}
         </div>
       </div>

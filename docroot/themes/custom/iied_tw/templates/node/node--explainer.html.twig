@@ -49,7 +49,7 @@
             <p class="text-stone-700">
               <time datetime="{{ node.getCreatedTime|date('Y-m-d') }}">{% trans %}Published {{ published }}{% endtrans %}</time>
               {% if updated %}
-                <span aria-hidden="true">·</span>
+                <br />
                 <time datetime="{{ node.field_date_updated.value }}">{% trans %}Updated {{ updated }}{% endtrans %}</time>
               {% endif %}
             </p>
@@ -58,6 +58,17 @@
             {% include '@iied_tw/partials/_share_links.html.twig' %}
           </div>
         </div>
+
+        {#-- authors --#}
+        {% if content.field_author_s_ %}
+        <div class="flex flex-wrap items-center pb-6 gap-x-1 gap-y-2">
+         {% trans %}By{% endtrans %} {{ node.field_author_s_[0].entity|view('name') }} 
+              {% if node.field_author_s_[1] %}
+              {% trans %}and{% endtrans %} {{ node.field_author_s_[1].entity|view('name') }} 
+              {% endif %}
+            </div>
+        {% endif %}
+
 
       </div>
     </div>

@@ -2,23 +2,10 @@
 /**
  * @file
  * Person quote: a quote, the person's photo and a citation.
- *
- * Boxed quote's three fields, with their storages reused:
- * - field_quote_text: the quote.
- * - quote_author: optional person term, rendered in the term's 'avatar' view
- *   mode – a round photo, no name.
- * - field_quote_citation: free text naming the person and their role. The
- *   photo is not captioned, so the citation is what says who is speaking.
- *
- * Colours and type follow paragraph--boxed-quote.html.twig. Differences:
- * - figure, blockquote and figcaption rather than cite, which is for the
- *   titles of works, not people
- * - the photo shows with or without a citation, and nothing prints for an
- *   empty field
- * - no photo for a person without one: the avatar template has no check of
- *   its own for a missing picture. quote_author is still rendered first,
- *   unprinted, so the term's cache tags reach the page and a photo added
- *   later shows up
+ * you can use this to make the photo bigger:
+    {% if has_photo %}
+      <div class="shrink-0">{{ paragraph.quote_author.entity|view('avatar_md') }}</div>
+    {% endif %}
  */
 #}
 {%
@@ -27,7 +14,8 @@
     'paragraph--type--' ~ paragraph.bundle|clean_class,
     view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     not paragraph.isPublished() ? 'paragraph--unpublished',
-    'mb-12',
+    'my-12',
+    'group',
   ]
 %}
 {% set author = content.quote_author|render %}
@@ -36,12 +24,15 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-      <figure class="p-6 border border-stone-300 rounded-xl">
+      <figure class="text-iiedpink-500">
+        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="48" height="38" viewBox="0 0 47.948 37.814" class="mb-2 transition-transform duration-150 -rotate-5 group-hover:rotate-0">
+          <path fill="currentColor" d="M11.369,37.814a10.3,10.3,0,0,1-8.28-3.645Q0,30.526,0,24.22A23.081,23.081,0,0,1,5.067,9.762Q10.132,3.214,22.12,0V6.426a34.183,34.183,0,0,0-8.094,4.015,6.59,6.59,0,0,0-2.781,5.623A3.021,3.021,0,0,0,12.6,18.719q1.359.927,3.152,1.976a10.262,10.262,0,0,1,3.151,2.962,9.684,9.684,0,0,1,1.359,5.622,7.906,7.906,0,0,1-2.533,6.365,9.461,9.461,0,0,1-6.365,2.162m25.828,0a10.3,10.3,0,0,1-8.28-3.645q-3.089-3.643-3.089-9.948a23.271,23.271,0,0,1,5-14.459Q35.838,3.214,47.948,0V6.426a32.449,32.449,0,0,0-8.156,4.015,6.638,6.638,0,0,0-2.719,5.623,3.021,3.021,0,0,0,1.359,2.655q1.359.927,3.152,1.976a10.262,10.262,0,0,1,3.151,2.962,9.684,9.684,0,0,1,1.359,5.622,7.906,7.906,0,0,1-2.533,6.365A9.46,9.46,0,0,1,37.2,37.806"/>
+        </svg>
         <blockquote class="text-xl md:text-2xl font-headline text-iiedpink-700">
           {{ content.field_quote_text }}
         </blockquote>
         {% if has_photo or has_citation %}
-          <figcaption class="flex items-center gap-3 mt-6 font-sans text-base text-stone-700">
+          <figcaption class="flex items-center gap-4 mt-6 font-sans text-base text-stone-700 [&_img]:w-16 [&_img]:h-16">
             {% if has_photo %}
               <div class="shrink-0">{{ author }}</div>
             {% endif %}
@@ -54,3 +45,4 @@
     {% endblock %}
   </div>
 {% endblock paragraph %}
+
