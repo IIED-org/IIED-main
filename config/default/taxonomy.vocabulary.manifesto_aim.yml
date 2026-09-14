@@ -4,6 +4,6 @@ status: true
 dependencies: {  }
 name: 'Manifesto aim'
 vid: manifesto_aim
-description: "Propositions from IIED's manifesto for a thriving world"
+description: 'From the manifesto for a thriving world. Supplementary framing for content, not a subject category.'
 weight: 0
 new_revision: false
