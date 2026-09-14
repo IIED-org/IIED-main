@@ -1,0 +1,29 @@
+uuid: 4a03c265-f366-44aa-9044-50d46ff60f16
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_manifesto_aim
+    - node.type.impact_story
+    - taxonomy.vocabulary.manifesto_aim
+id: node.impact_story.field_manifesto_aim
+field_name: field_manifesto_aim
+entity_type: node
+bundle: impact_story
+label: 'Manifesto aim'
+description: 'The aim(s) this story is evidence for. Leave empty where none fits.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      manifesto_aim: manifesto_aim
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

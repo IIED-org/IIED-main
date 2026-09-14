@@ -1,0 +1,9 @@
+uuid: 1f829107-58a2-48e6-85dc-25f9af02127a
+langcode: en
+status: true
+dependencies: {  }
+name: 'Manifesto aim'
+vid: manifesto_aim
+description: "Propositions from IIED's manifesto for a thriving world"
+weight: 0
+new_revision: false

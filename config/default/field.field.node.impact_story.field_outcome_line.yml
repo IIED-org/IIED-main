@@ -1,0 +1,19 @@
+uuid: b9169777-6c55-471b-a7cc-d2cecbd66f25
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_outcome_line
+    - node.type.impact_story
+id: node.impact_story.field_outcome_line
+field_name: field_outcome_line
+entity_type: node
+bundle: impact_story
+label: 'Outcome line'
+description: "One sentence, about 20 words, saying what changed – a claim someone could check. Shown under the title, and wherever this story appears in a What we've changed block."
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

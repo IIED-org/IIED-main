@@ -1,0 +1,63 @@
+uuid: 6cfe71a6-4e1a-4051-9adf-eaeb3e60338a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.manifesto_aim.layout_builder__layout
+    - taxonomy.vocabulary.manifesto_aim
+  module:
+    - layout_builder
+    - layout_builder_restrictions
+    - layout_discovery
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          5842c20e-bbd6-4e75-9850-1a7d8e4a84ef:
+            uuid: 5842c20e-bbd6-4e75-9850-1a7d8e4a84ef
+            region: content
+            configuration:
+              id: 'field_block:taxonomy_term:manifesto_aim:description'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts:
+        - tw-1-2-col-grid
+        - tw-1-2-4-col-grid
+        - tw-container
+      denylisted_blocks: {  }
+      allowlisted_blocks: {  }
+      restricted_categories:
+        - 'Chaos Tools'
+        - Dashboard
+        - Help
+        - 'IIED Utilities'
+        - System
+        - User
+id: taxonomy_term.manifesto_aim.default
+targetEntityType: taxonomy_term
+bundle: manifesto_aim
+mode: default
+content: {  }
+hidden:
+  description: true
+  langcode: true
+  layout_builder__layout: true
+  search_api_excerpt: true

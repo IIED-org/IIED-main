@@ -1,0 +1,14 @@
+uuid: cacaf802-04c9-4d4e-886e-678c895f323d
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.manifesto_aim
+id: taxonomy_vocabulary_manifesto_aim
+entity_type_id: taxonomy_vocabulary
+entity_id: manifesto_aim
+action: display_page
+allow_override: 1
+redirect: ''
+redirect_code: 301
+redirect_fallback_action: access_denied
