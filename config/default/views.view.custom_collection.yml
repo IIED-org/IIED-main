@@ -441,6 +441,18 @@ display:
     display_plugin: block
     position: 1
     display_options:
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: '<div class="font-bold" id="filters">No results found. <a href="/collection/forest-farm-facility-impact-stories#all-content">Reset filters to start over</a>.</div>'
+          tokenize: false
       filters:
         field_collections_target_id:
           id: field_collections_target_id
@@ -644,29 +656,249 @@ display:
             remember_roles:
               authenticated: authenticated
             reduce: false
-          is_grouped: false
+          is_grouped: true
           group_info:
-            label: ''
+            label: Country
             description: ''
-            identifier: ''
+            identifier: field_country_value
             optional: true
             widget: select
             multiple: false
             remember: false
             default_group: All
             default_group_multiple: {  }
-            group_items: {  }
+            group_items:
+              1:
+                title: Bolivia
+                operator: in
+                value:
+                  BO: BO
+                  all: '0'
+                  EC: '0'
+                  GM: '0'
+                  GH: '0'
+                  KE: '0'
+                  LR: '0'
+                  MG: '0'
+                  NP: '0'
+                  TZ: '0'
+                  TG: '0'
+                  VN: '0'
+                  ZM: '0'
+              2:
+                title: Ecuador
+                operator: in
+                value:
+                  EC: EC
+                  all: '0'
+                  BO: '0'
+                  GM: '0'
+                  GH: '0'
+                  KE: '0'
+                  LR: '0'
+                  MG: '0'
+                  NP: '0'
+                  TZ: '0'
+                  TG: '0'
+                  VN: '0'
+                  ZM: '0'
+              3:
+                title: Ghana
+                operator: in
+                value:
+                  GH: GH
+                  all: '0'
+                  BO: '0'
+                  EC: '0'
+                  GM: '0'
+                  KE: '0'
+                  LR: '0'
+                  MG: '0'
+                  NP: '0'
+                  TZ: '0'
+                  TG: '0'
+                  VN: '0'
+                  ZM: '0'
+              4:
+                title: Kenya
+                operator: in
+                value:
+                  KE: KE
+                  all: '0'
+                  BO: '0'
+                  EC: '0'
+                  GM: '0'
+                  GH: '0'
+                  LR: '0'
+                  MG: '0'
+                  NP: '0'
+                  TZ: '0'
+                  TG: '0'
+                  VN: '0'
+                  ZM: '0'
+              5:
+                title: Liberia
+                operator: in
+                value:
+                  LR: LR
+                  all: '0'
+                  BO: '0'
+                  EC: '0'
+                  GM: '0'
+                  GH: '0'
+                  KE: '0'
+                  MG: '0'
+                  NP: '0'
+                  TZ: '0'
+                  TG: '0'
+                  VN: '0'
+                  ZM: '0'
+              6:
+                title: Madagascar
+                operator: in
+                value:
+                  MG: MG
+                  all: '0'
+                  BO: '0'
+                  EC: '0'
+                  GM: '0'
+                  GH: '0'
+                  KE: '0'
+                  LR: '0'
+                  NP: '0'
+                  TZ: '0'
+                  TG: '0'
+                  VN: '0'
+                  ZM: '0'
+              7:
+                title: Nepal
+                operator: in
+                value:
+                  NP: NP
+                  all: '0'
+                  BO: '0'
+                  EC: '0'
+                  GM: '0'
+                  GH: '0'
+                  KE: '0'
+                  LR: '0'
+                  MG: '0'
+                  TZ: '0'
+                  TG: '0'
+                  VN: '0'
+                  ZM: '0'
+              8:
+                title: Tanzania
+                operator: in
+                value:
+                  TZ: TZ
+                  all: '0'
+                  BO: '0'
+                  EC: '0'
+                  GM: '0'
+                  GH: '0'
+                  KE: '0'
+                  LR: '0'
+                  MG: '0'
+                  NP: '0'
+                  TG: '0'
+                  VN: '0'
+                  ZM: '0'
+              9:
+                title: 'The Gambia'
+                operator: in
+                value:
+                  GM: GM
+                  all: '0'
+                  BO: '0'
+                  EC: '0'
+                  GH: '0'
+                  KE: '0'
+                  LR: '0'
+                  MG: '0'
+                  NP: '0'
+                  TZ: '0'
+                  TG: '0'
+                  VN: '0'
+                  ZM: '0'
+              10:
+                title: Togo
+                operator: in
+                value:
+                  TG: TG
+                  all: '0'
+                  BO: '0'
+                  EC: '0'
+                  GM: '0'
+                  GH: '0'
+                  KE: '0'
+                  LR: '0'
+                  MG: '0'
+                  NP: '0'
+                  TZ: '0'
+                  VN: '0'
+                  ZM: '0'
+              11:
+                title: 'Viet Nam'
+                operator: in
+                value:
+                  VN: VN
+                  all: '0'
+                  BO: '0'
+                  EC: '0'
+                  GM: '0'
+                  GH: '0'
+                  KE: '0'
+                  LR: '0'
+                  MG: '0'
+                  NP: '0'
+                  TZ: '0'
+                  TG: '0'
+                  ZM: '0'
+              12:
+                title: Zambia
+                operator: in
+                value:
+                  ZM: ZM
+                  all: '0'
+                  BO: '0'
+                  EC: '0'
+                  GM: '0'
+                  GH: '0'
+                  KE: '0'
+                  LR: '0'
+                  MG: '0'
+                  NP: '0'
+                  TZ: '0'
+                  TG: '0'
+                  VN: '0'
       filter_groups:
         operator: AND
         groups:
           1: AND
       defaults:
+        empty: false
         use_ajax: false
         filters: false
         filter_groups: false
+        header: false
       use_ajax: true
       display_description: ''
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: "<div>\r\n<h3 class=\"mb-4\" id=\"all-content\">All content</h3>\r\n<p class=\"mb-4\">Explore @total resources</p>\r\n</div>"
       display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
         matomo:
           enabled: false
           keyword_gets: ''

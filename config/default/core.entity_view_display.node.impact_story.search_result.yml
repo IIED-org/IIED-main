@@ -12,6 +12,8 @@ dependencies:
     - field.field.node.impact_story.field_hero_image
     - field.field.node.impact_story.field_image_caption
     - field.field.node.impact_story.field_main_image
+    - field.field.node.impact_story.field_manifesto_aim
+    - field.field.node.impact_story.field_outcome_line
     - field.field.node.impact_story.field_project
     - field.field.node.impact_story.field_read_length
     - field.field.node.impact_story.field_second_image
@@ -49,6 +51,8 @@ hidden:
   field_global_term: true
   field_hero_image: true
   field_image_caption: true
+  field_manifesto_aim: true
+  field_outcome_line: true
   field_project: true
   field_read_length: true
   field_second_image: true

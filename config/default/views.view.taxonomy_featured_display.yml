@@ -318,7 +318,10 @@ display:
       display_description: ''
       show_admin_links: true
       header: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: true
       block_description: 'Collection featured'
     cache_metadata:
       max-age: -1
