@@ -1,0 +1,45 @@
+uuid: 3e295439-6e2f-4972-8d41-a6a1191318e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.search_autocomplete
+    - field.field.taxonomy_term.manifesto_aim.layout_builder__layout
+    - taxonomy.vocabulary.manifesto_aim
+  module:
+    - layout_builder
+    - layout_builder_restrictions
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts:
+        - tw-1-2-col-grid
+        - tw-1-2-4-col-grid
+        - tw-container
+      denylisted_blocks: {  }
+      allowlisted_blocks: {  }
+      restricted_categories:
+        - 'Chaos Tools'
+        - Dashboard
+        - Help
+        - 'IIED Utilities'
+        - System
+        - User
+id: taxonomy_term.manifesto_aim.search_autocomplete
+targetEntityType: taxonomy_term
+bundle: manifesto_aim
+mode: search_autocomplete
+content:
+  search_api_excerpt:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  description: true
+  langcode: true
+  layout_builder__layout: true
