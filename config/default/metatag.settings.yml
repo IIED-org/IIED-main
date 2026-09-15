@@ -18,7 +18,7 @@ entity_type_groups:
     page:
       schema_article: schema_article
     project:
-      schema_organization: schema_organization
+      schema_article: schema_article
     publication:
       basic: basic
       advanced: advanced
