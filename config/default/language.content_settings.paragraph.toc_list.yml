@@ -1,0 +1,18 @@
+uuid: 0f4ed005-2a0e-40f8-9ca7-61d4d0134619
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.toc_list
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: paragraph.toc_list
+target_entity_type_id: paragraph
+target_bundle: toc_list
+default_langcode: site_default
+language_alterable: false

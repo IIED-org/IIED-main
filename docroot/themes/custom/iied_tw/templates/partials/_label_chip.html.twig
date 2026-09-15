@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Label chip: a short uppercase label in an outlined tag with a tail at the
+ * bottom left. Drafted 11 September 2026 for explainers, meant for reuse on the
+ * proposition pages.
+ *
+ * Variables:
+ * - label: the text, already translated by the caller – for example
+ *   'Explainer'|t. Shown in capitals by CSS, so translations stay as typed.
+ * - colour: optional text colour class for the outline, which is drawn in
+ *   currentColor. Defaults to text-iiedgreen-500. Pass a full class name
+ *   written out in the calling template, so Tailwind finds it when it scans.
+ *
+ * The width follows the text. The outline is two pieces:
+ * - an SVG, fixed at 18 × 40, for the tail, the left edge and the top-left
+ *   corner. Its path is the design file's own outline (the 137 × 40 SVG),
+ *   moved so the tail tip sits at x = 0: a 2px band whose left edge flares
+ *   into a point about 9.4px out at the bottom
+ * - a span that stretches with the text, carrying the top and bottom edges and
+ *   the right end with 8px corners (rounded-lg), matching the design. It
+ *   starts at 17px so it overlaps the SVG by 1px and no seam shows
+ * Both are aria-hidden; only the label is read out.
+ */
+#}
+<span class="relative inline-flex items-center h-10 max-w-full pl-6 pr-4 whitespace-nowrap {{ colour|default('text-iiedgreen-500') }}">
+  <svg aria-hidden="true" focusable="false" viewBox="0 0 18 40" class="absolute top-0 left-0 w-[18px] h-10 overflow-visible pointer-events-none">
+    <path fill="currentColor" d="M18 0H17.43A8 8 0 0 0 9.43 8V32C9.43 36.42 7.37 40 0 40H18V38H9.8C10.88 36.4 11.43 34.4 11.43 32V8A6 6 0 0 1 17.43 2H18Z"/>
+  </svg>
+  <span aria-hidden="true" class="absolute inset-y-0 right-0 left-[17px] border-y-2 border-r-2 border-current rounded-r-lg pointer-events-none"></span>
+  <span class="relative text-sm tracking-wider uppercase text-stone-500">{{ label }}</span>
+</span>

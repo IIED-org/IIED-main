@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Key points: three to five bullets that summarise the page.
+ *
+ * A paragraph rather than a node field, so it sits at the top of the main
+ * column with the contents list beside it in the aside. Editors place it first
+ * in the first 'IIED main with aside' section. The standfirst answers the
+ * title; key points summarise what follows.
+ *
+ * - Assumes the type has one text field holding a <ul>, with its label hidden
+ *   in the display, printed with {{ content }}. If the type gains a second
+ *   field, print the list field by name instead.
+ * - The list uses the theme's existing .keypoint style (src/tailwind.pcss): no
+ *   bullets, the keypoint icon before each item. Outside prose, Tailwind's
+ *   reset already removes the list's own bullets and indent.
+ * - The box takes the explainer's green, as the pill and the standfirst rule
+ *   in node--explainer.html.twig do.
+ * - The heading id carries the paragraph id, so two key points boxes on one
+ *   page can't clash.
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'mb-12',
+  ]
+%}
+{% set heading_id = 'key-points-' ~ paragraph.id() %}
+{% block paragraph %}
+  <section{{ attributes.addClass(classes).setAttribute('aria-labelledby', heading_id) }}>
+    {% block content %}
+      <div class="p-6 border-2 rounded-xl border-iiedgreen-500">
+        <h2 id="{{ heading_id }}" class="mt-0 mb-4 text-xl">{% trans %}Key points{% endtrans %}</h2>
+        <div class="prose keypoint md:prose-lg">
+          {{ content }}
+        </div>
+      </div>
+    {% endblock %}
+  </section>
+{% endblock paragraph %}

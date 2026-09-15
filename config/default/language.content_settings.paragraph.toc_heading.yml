@@ -1,0 +1,18 @@
+uuid: ef1df05f-e840-403b-92ec-561bc8d6be8c
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.toc_heading
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: paragraph.toc_heading
+target_entity_type_id: paragraph
+target_bundle: toc_heading
+default_langcode: site_default
+language_alterable: true

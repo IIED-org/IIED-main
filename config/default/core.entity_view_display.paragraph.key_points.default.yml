@@ -1,0 +1,23 @@
+uuid: 2651f27c-2b24-4c48-b8fb-711202705b35
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.key_points.field_key_points
+    - paragraphs.paragraphs_type.key_points
+  module:
+    - text
+id: paragraph.key_points.default
+targetEntityType: paragraph
+bundle: key_points
+mode: default
+content:
+  field_key_points:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

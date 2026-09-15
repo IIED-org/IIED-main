@@ -1,0 +1,41 @@
+uuid: a59e25cb-210a-4752-a495-3b326c52cd44
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.toc_heading.field_heading
+    - field.field.paragraph.toc_heading.field_toc_id
+    - field.field.paragraph.toc_heading.field_toc_label
+    - paragraphs.paragraphs_type.toc_heading
+id: paragraph.toc_heading.default
+targetEntityType: paragraph
+bundle: toc_heading
+mode: default
+content:
+  field_heading:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_toc_id:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_toc_label:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

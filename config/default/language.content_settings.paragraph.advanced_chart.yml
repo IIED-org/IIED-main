@@ -1,0 +1,18 @@
+uuid: 41f02b72-5a54-440f-9b83-0a33b50ec01c
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.advanced_chart
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: paragraph.advanced_chart
+target_entity_type_id: paragraph
+target_bundle: advanced_chart
+default_langcode: site_default
+language_alterable: false
