@@ -43,6 +43,11 @@ User-agent: Bytespider
 Disallow: /
 
 User-agent: *
+# Content Signals - declares content-use preferences to crawlers that honor
+# the standard (https://contentsignals.org/). This is a signal, not an
+# access control - it sits alongside, and does not change, the
+# Allow/Disallow rules below or the crawler-specific blocks above.
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 # CSS, JS, Images
 Allow: /core/*.css$
 Allow: /core/*.css?
