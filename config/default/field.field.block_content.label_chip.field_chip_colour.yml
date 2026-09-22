@@ -13,7 +13,7 @@ entity_type: block_content
 bundle: label_chip
 label: Colour
 description: ''
-required: false
+required: true
 translatable: false
 default_value:
   -
