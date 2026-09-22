@@ -1,0 +1,33 @@
+uuid: 22ef2068-6cac-4c16-aa94-28c929716cfc
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+    - options
+id: block_content.field_chip_placement
+field_name: field_chip_placement
+entity_type: block_content
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: left_straight
+      label: 'Left, straight'
+    -
+      value: left_tilted
+      label: 'Left, tilted'
+    -
+      value: right_straight
+      label: 'Right, straight'
+    -
+      value: right_tilted
+      label: 'Right, tilted'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

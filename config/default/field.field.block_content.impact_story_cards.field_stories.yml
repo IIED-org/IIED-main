@@ -23,7 +23,7 @@ settings:
       impact_story: impact_story
     sort:
       field: title
-      direction: DESC
+      direction: ASC
     auto_create: false
     auto_create_bundle: ''
 field_type: entity_reference

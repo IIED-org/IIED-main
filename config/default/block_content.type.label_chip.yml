@@ -1,0 +1,8 @@
+uuid: a15824d7-6109-4529-b989-788f6b5bfa31
+langcode: en
+status: true
+dependencies: {  }
+id: label_chip
+label: 'Label chip'
+revision: false
+description: "A short label in an outlined tag, above a section's heading. Names the part of the site the section draws from, never the section itself. Doesn't link."

@@ -1,0 +1,23 @@
+uuid: cc5d354f-7be7-4653-935a-3c911f485d5f
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.label_chip
+    - field.storage.block_content.field_chip_colour
+  module:
+    - options
+id: block_content.label_chip.field_chip_colour
+field_name: field_chip_colour
+entity_type: block_content
+bundle: label_chip
+label: Colour
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: green
+default_value_callback: ''
+settings: {  }
+field_type: list_string
