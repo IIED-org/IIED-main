@@ -155,19 +155,15 @@
             />
           </svg>
         </div>
-        <div
-          class="container flex flex-col flex-wrap px-5 py-4 mx-auto sm:flex-row"
-        >
-        <p class="w-full mt-2 text-sm text-center sm:mr-auto sm:mt-0 sm:w-auto sm:text-left text-stone-700">© {{ 'now' | date('Y') }} International Institute for Environment and Development (IIED)</p>
-          <p
-            class="w-full mt-2 text-sm text-center sm:ml-auto sm:mt-0 sm:w-auto sm:text-left text-stone-700"
-          >
-            <span class="mr-4"><a href="/accessibility">Accessibility</a></span>
-            <span class="mr-4"><a href="/privacy-policy">Privacy&nbsp;policy</a></span>
-            <span class="mr-4"><a href="/website-terms-conditions">Terms&nbsp;and&nbsp;conditions</a></span>
-            <span class="mr-4"><a href="#" rel="open-consent-manager">Cookie&nbsp;preferences</a></span>
-          </p>
+        <div class="container flex flex-col items-center gap-4 p-4 mx-auto text-sm text-stone-700 lg:flex-row lg:justify-between">
+          <p class="text-center lg:text-left">{{ '© @year International Institute for Environment and Development (IIED)'|t({'@year': 'now'|date('Y')}) }}</p>
+          <ul class="flex flex-wrap justify-center gap-x-5 gap-y-2 lg:justify-end">
+            <li><a class="inline-block py-1 whitespace-nowrap" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license">{{ 'Creative Commons licence'|t }}</a></li>
+            <li><a class="inline-block py-1 whitespace-nowrap" href="/accessibility">{{ 'Accessibility'|t }}</a></li>
+            <li><a class="inline-block py-1 whitespace-nowrap" href="/privacy-policy">{{ 'Privacy policy'|t }}</a></li>
+            <li><a class="inline-block py-1 whitespace-nowrap" href="/website-terms-conditions">{{ 'Terms and conditions'|t }}</a></li>
+            <li><a class="inline-block py-1 whitespace-nowrap" href="#" rel="open-consent-manager">{{ 'Cookie preferences'|t }}</a></li>
+          </ul>
         </div>
-      </div>
     </footer>
 {% endif %}
