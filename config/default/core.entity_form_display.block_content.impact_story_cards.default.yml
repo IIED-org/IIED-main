@@ -1,0 +1,61 @@
+uuid: e2578180-a9c4-4274-bc6f-a4791ba05f95
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.impact_story_cards
+    - field.field.block_content.impact_story_cards.body
+    - field.field.block_content.impact_story_cards.field_link
+    - field.field.block_content.impact_story_cards.field_stories
+  module:
+    - link
+    - text
+id: block_content.impact_story_cards.default
+targetEntityType: block_content
+bundle: impact_story_cards
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 4
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_link:
+    type: link_default
+    weight: 27
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_stories:
+    type: entity_reference_autocomplete
+    weight: 26
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+hidden: {  }

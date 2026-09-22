@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 id: divider_above
 label: 'Divider above'
-classes: 'border-t-2 border-iiedgreen-500 mt-6'
+classes: 'border-t-2 border-iiedgreen-500'
 type: section
 group: default
 block_restrictions: {  }

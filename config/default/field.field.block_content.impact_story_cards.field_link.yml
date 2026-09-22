@@ -1,0 +1,28 @@
+uuid: 396888a4-40e9-4c0c-845b-42d4b4d59bdc
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.impact_story_cards
+    - field.storage.block_content.field_link
+  module:
+    - link
+id: block_content.impact_story_cards.field_link
+field_name: field_link
+entity_type: block_content
+bundle: impact_story_cards
+label: Link
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    attributes: {  }
+    uri: 'internal:/impact'
+    title: 'Our impact'
+    options: {  }
+default_value_callback: ''
+settings:
+  title: 2
+  link_type: 1
+field_type: link

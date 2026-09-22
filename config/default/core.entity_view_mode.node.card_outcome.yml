@@ -1,0 +1,11 @@
+uuid: ddc3432b-ab1d-4fc8-8a29-aac3b22f42f9
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.card_outcome
+label: 'Card with outcome line'
+description: null
+targetEntityType: node
+cache: true
