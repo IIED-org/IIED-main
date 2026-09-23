@@ -1,0 +1,12 @@
+uuid: b9c79170-62b4-464f-825f-1de60827c431
+langcode: en
+status: true
+dependencies: {  }
+id: pointer
+label: Pointer
+classes: section-pointer
+type: section
+group: pointer
+block_restrictions: {  }
+layout_restrictions: {  }
+weight: 0
