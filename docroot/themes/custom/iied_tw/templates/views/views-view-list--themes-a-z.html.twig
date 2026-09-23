@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Theme override for the Themes A to Z view: Everything we work on.
+ *
+ * The themes run alphabetically down each of four columns, which is what CSS
+ * columns do. One column on a phone, two from sm, four from lg.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the container.
+ * - rows: A list of rows for this list.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's contents.
+ * - title: The title of this group of rows. May be empty.
+ * - list:
+ *   - type: Starting tag will be either a ul or ol.
+ *   - attributes: HTML attributes for the list element.
+ *
+ * @see template_preprocess_views_view_list()
+ * @see views-view-list.html.twig
+ */
+#}
+{% if attributes -%}
+  <div{{ attributes }}>
+{% endif %}
+  {% if title %}
+    <h3>{{ title }}</h3>
+  {% endif %}
+
+  <{{ list.type }}{{ list.attributes.addClass('columns-1', 'sm:columns-2', 'lg:columns-4', 'gap-8') }}>
+
+    {% for row in rows %}
+      <li{{ row.attributes.addClass('break-inside-avoid', 'mb-4') }}>
+        {{- row.content -}}
+      </li>
+    {% endfor %}
+
+  </{{ list.type }}>
+
+{% if attributes -%}
+  </div>
+{% endif %}

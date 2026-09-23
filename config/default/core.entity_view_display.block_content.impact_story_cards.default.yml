@@ -1,0 +1,48 @@
+uuid: 1200348d-9cfc-4d99-bd94-7f2875120fe2
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.impact_story_cards
+    - field.field.block_content.impact_story_cards.body
+    - field.field.block_content.impact_story_cards.field_link
+    - field.field.block_content.impact_story_cards.field_stories
+  module:
+    - link
+    - text
+id: block_content.impact_story_cards.default
+targetEntityType: block_content
+bundle: impact_story_cards
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_stories:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: card_outcome
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

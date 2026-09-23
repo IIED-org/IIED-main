@@ -1,0 +1,29 @@
+uuid: 9df3884f-6c1b-4da1-803d-dcc367779213
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.impact_story_cards
+    - field.storage.block_content.field_stories
+    - node.type.impact_story
+id: block_content.impact_story_cards.field_stories
+field_name: field_stories
+entity_type: block_content
+bundle: impact_story_cards
+label: Stories
+description: 'Two to four impact stories in the order they should appear.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      impact_story: impact_story
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

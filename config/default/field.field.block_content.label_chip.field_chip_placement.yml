@@ -1,0 +1,23 @@
+uuid: 0a7ce197-9700-4084-9474-3a693b0bc19b
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.label_chip
+    - field.storage.block_content.field_chip_placement
+  module:
+    - options
+id: block_content.label_chip.field_chip_placement
+field_name: field_chip_placement
+entity_type: block_content
+bundle: label_chip
+label: Placement
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: left_straight
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,32 @@
+uuid: 780bcd0d-ba6e-4c27-8421-0775e73b73df
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.label_chip
+    - field.field.block_content.label_chip.field_chip_colour
+    - field.field.block_content.label_chip.field_chip_placement
+  module:
+    - options
+id: block_content.label_chip.default
+targetEntityType: block_content
+bundle: label_chip
+mode: default
+content:
+  field_chip_colour:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_chip_placement:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

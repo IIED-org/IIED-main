@@ -138,6 +138,20 @@
     @apply border-b-2 border-iiedgreen-500 mb-6;
   }
 
+  /* Section pointer – the layout builder Pointer style (class section-pointer) */
+  .section-pointer {
+    @apply relative;
+    &::before {
+      content: "";
+      @apply absolute top-0 left-1/2 -translate-x-1/2 w-15 bg-stone-100 pointer-events-none;
+      aspect-ratio: 59.4 / 30.12;
+      mask: url(/themes/custom/iied_tw/images/section-pointer.svg?v=2) no-repeat center / contain;
+    }
+    &.bg-stone-100::before {
+      @apply bg-white;
+    }
+  }
+
   .paragraph--type--image-wide img, .img-full img {
     @apply w-full;
   }

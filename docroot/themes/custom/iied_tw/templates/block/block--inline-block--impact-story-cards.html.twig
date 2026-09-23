@@ -1,0 +1,55 @@
+{#
+/**
+ * @file
+ * Theme override for the Impact story cards block: What we've changed.
+ *
+ * Two columns from md up, stacked below. On the left the block's title as the
+ * heading, the explanation and the link; on the right the chosen stories, each
+ * rendered in the 'Card with outcome line' view mode.
+ *
+ * The cards are looped rather than printed as one field, so they can be spaced
+ * apart; each card carries its own cache data.
+ *
+ * Available variables:
+ * - label: The configured label of the block, shown when 'Display title' is
+ *   ticked when the block is placed.
+ * - content: The content of this block.
+ * - attributes: HTML attributes for the containing element.
+ *
+ * @see template_preprocess_block()
+ * @see block--inline-block--banner.html.twig
+ * @see node--impact-story--card-outcome.html.twig
+ */
+#}
+<div{{ attributes.addClass('my-12') }}>
+  <div class="grid items-start grid-cols-1 gap-8 md:gap-12 lg:gap-24 md:grid-cols-2">
+
+    <div>
+      {{ title_prefix }}
+      {% if label %}
+        <h2{{ title_attributes.addClass('my-6', 'max-w-screen-md', ' md:text-4xl') }}>{{ label }}</h2>
+      {% endif %}
+      {{ title_suffix }}
+
+      {% block content %}
+        <div class="mb-6 prose prose-lg">
+          {{ content.body }}
+        </div>
+
+        {% if content.field_link[0] is defined %}
+          {% include '@iied_tw/partials/_button_mini.html.twig' with {
+            'button_title': content.field_link[0]['#title'],
+            'url': content.field_link[0]['#url'],
+          } %}
+        {% endif %}
+      {% endblock %}
+    </div>
+
+    <div class="space-y-8">
+      {% for story in content.field_stories|children %}
+        {{ story }}
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
