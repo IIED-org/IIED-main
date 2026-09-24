@@ -45,8 +45,11 @@ services:
       ports:
       - 3000:3000
       - 3001:3001
-    # build:
-       # cmd: cd /app/docroot/themes/custom/iied_tw && npm install && npm run dev
+    # Compile the iied_tw Tailwind stylesheet on build. dist/styles.css is
+    # gitignored, so without this a fresh clone renders unstyled.
+    build:
+      - cd /app/docroot/themes/custom/iied_tw && npm install --no-audit --no-fund
+      - cd /app/docroot/themes/custom/iied_tw && npm run build:dev
   solr:
     type: solr:8.11
     portforward: true
@@ -79,6 +82,16 @@ tooling:
     service: node
   gulp:
     service: node
+  theme:
+    service: node
+    description: Recompile the iied_tw Tailwind stylesheet. Run after pulling theme changes.
+    cmd:
+      - cd /app/docroot/themes/custom/iied_tw && npm install --no-audit --no-fund && npm run build:dev
+  theme-watch:
+    service: node
+    description: Watch iied_tw sources and recompile, with browser-sync on bs.iied-main.lndo.site.
+    cmd:
+      - cd /app/docroot/themes/custom/iied_tw && npm run watch
   xdebug-on:
     service: appserver
     description: Enable xdebug for apache.
