@@ -20,7 +20,6 @@
 #}
 
 <div class="container px-5 py-12 mx-auto">
-  
 
     {% import _self as menus %}
 
@@ -34,21 +33,20 @@
       {% import _self as menus %}
       {% if items %}
         {% if menu_level == 0 %}
-          <ul{{ attributes.addClass('flex flex-wrap -mx-4 -mb-10 text-left') }}>
+          <ul{{ attributes.addClass('flex', 'flex-wrap', '-mx-4', '-mb-10', 'text-left') }}>
         {% else %}
-          <ul>
+          <ul class="mt-1 space-y-1">
         {% endif %}
         {% for item in items %}
-          <li{{ attributes.addClass('w-full px-4 mb-10 lg:w-1/4 sm:w-1/2').removeClass('flex flex-wrap -mx-4 -mb-10 text-left') }}>
-            {{ link(item.title, item.url) }}
+          <li{{ menu_level == 0 ? item.attributes.addClass('w-1/2', 'px-4', 'mb-10', 'lg:w-1/4') : item.attributes }}>
+            {{ link(item.title, item.url, { 'class': ['inline-block', 'py-1'] }) }}
             {% if item.below %}
-              {{ menus.menu_links(item.below, menu_level + 1) }}
+              {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
             {% endif %}
           </li>
         {% endfor %}
         </ul>
       {% endif %}
     {% endmacro %}
-
 
 </div>
