@@ -27,4 +27,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: "/our-approach\r\n/partnerships\r\n/process\r\n/impact\r\n/node/81741\r\n/what-we-do\r\n/how-we-work"
+    pages: "/what-we-do\r\n/node/81741\r\n/partnerships\r\n/how-we-work\r\n/impact"
