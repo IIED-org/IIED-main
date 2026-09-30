@@ -12,7 +12,19 @@
 ```
 
 ## Issue management
-New issues should be associated with the [IIED-main project](https://github.com/orgs/IIED-org/projects/2/views/2). Status columns are as follows:
+New issues should be associated with the [IIED-main project](https://github.com/orgs/IIED-org/projects/2/views/2). 
+
+Branch naming convention:
+
+`[type-]issue#-short-description[-yyyymmdd]`
+
+e.g.
+
+`1119-fixes-countries`
+
+The `type` prefix is optional, except for `hotfix` branches. The creation date suffix is optional, unless an issue branch with the same name has already been merged, or if subsequent branches are created for the same issue.
+
+[Project](https://github.com/orgs/IIED-org/projects/2/views/2) status columns are as follows:
 
 - **Backlog**: Issues go here when initially created. Assign the issue to the project and tag it with the relevant milestone.
 - **Todo**: Issues go into this column when prioritised and optionally assigned
@@ -44,6 +56,7 @@ cd IIED-main
 ```
 ddev import-db -f iied-prod-yyyymmdd.sql.gz
 ddev drush cr
+ddev drush cim    ## Import local config_split to retain split settings on export (see 6. below)
 ```
 
 4. To modify the theme, including tailwind.pcss and twig templates, move into the theme directory, install the necessary node modules, and run the watch command:
@@ -80,8 +93,7 @@ $config['config_split.config_split.prod']['status'] = FALSE;
 ```
 
 This set the 'local' split to active and the 'live' and 'dev' to inactive. With
-this setup, running `ddev drush cr` then `ddev drush cim` will import the local split configuration as well as the default configuration. In our case, this will
-enable other modules useful for developers like devel and stage_file_proxy.
+this setup, running `ddev drush cr` then `ddev drush cim` will import the local split configuration as well as the default configuration. In our case, this enables other modules useful for developers like devel and stage_file_proxy.
 
 To enable a module on the current (probably local) split and not have it enabled
 by default. As an example, we'll try this with the help_topics module.
@@ -94,7 +106,7 @@ ddev drush en help_topics
 
 Then add it to the complete split at:
 
-https://iied-main.lndo.site/admin/config/development/configuration/config-split/local/edit
+https://iied-main.ddev.site/admin/config/development/configuration/config-split/local/edit
 
 Clear the cache and export the config.
 
