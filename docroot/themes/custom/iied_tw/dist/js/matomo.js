@@ -1,38 +1,38 @@
-<!-- Matomo self-hosted -->
-<script>
-  var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(["setDomains", ["*.www.iied.org","*.pubs.iied.org"]]);
-  _paq.push(["disableCookies"]);
+var _paq = window._paq = window._paq || [];
+_paq.push(["disableCookies"]);
+_paq.push(["setDomains", ["*.iied.org"]]);
+
+(function () {
+  // 1. Locate the article element containing the Drupal node classes
+  const nodeElement = document.querySelector('article.node');
+  
+  if (nodeElement) {
+    // 2. Scan the element's classes for the 'node--type-' prefix
+    const typeClass = Array.from(nodeElement.classList).find(cls => cls.startsWith('node--type-'));
+    
+    if (typeClass) {
+      // 3. Extract the content type (e.g., 'node--type-article' -> 'article')
+      const contentType = typeClass.replace('node--type-', '');
+    _paq.push(['setCustomDimension', 2, contentType]);
+
+    }
+  }
+
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="https://matomo.iied.org/";
+
+  var u="//matomo.iied.org/";
     _paq.push(['setTrackerUrl', u+'matomo.php']);
     _paq.push(['setSiteId', '2']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<noscript><p><img referrerpolicy="no-referrer-when-downgrade" src="https://matomo.iied.org/matomo.php?idsite=2&amp;rec=1" style="border:0;" alt="" /></p></noscript>
-<!-- End Matomo Code -->
 
-<!-- Matomo cloud -->
-<script>
-  var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(["setCookieDomain", "*.www.iied.org"]);
-  _paq.push(["setDomains", ["*.www.iied.org"]]);
-  _paq.push(["disableCookies"]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="https://iied.matomo.cloud/";
-    _paq.push(['setTrackerUrl', u+'matomo.php']);
-    _paq.push(['setSiteId', '1']);
+    // Add this code below within the Matomo JavaScript tracker code
+    // Important: the tracker url includes the /matomo.php
+    var secondaryTrackerUrl = 'https://iied.matomo.cloud/matomo.php';
+    var secondaryWebsiteId = 1;
+    // Also send all of the tracking data to this other Matomo server, in website ID 77
+    _paq.push(['addTracker', secondaryTrackerUrl, secondaryWebsiteId]);
+    // That's it!
+
     var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.async=true; g.src='https://cdn.matomo.cloud/iied.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<noscript><p><img referrerpolicy="no-referrer-when-downgrade" src="https://iied.matomo.cloud/matomo.php?idsite=1&amp;rec=1" style="border:0;" alt="" /></p></noscript>
-<!-- End Matomo Code -->
+    g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+})();

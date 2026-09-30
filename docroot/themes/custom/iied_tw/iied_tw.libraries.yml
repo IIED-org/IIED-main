@@ -34,7 +34,7 @@ paypal:
   js: 
     https://www.paypalobjects.com/donate/sdk/donate-sdk.js: { type: external }
 bg-colour:
-  js:
+   js:
     dist/js/bg-colour.js: { async: true }
 scroll-nav:
   header: true
