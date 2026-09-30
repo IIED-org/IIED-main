@@ -498,7 +498,7 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: "<div class=\"flex flex-wrap justify-between\">\r\n<h2 class=\"mb-6\">Our latest publications</h2>\r\n<a href=\"/publications\" class=\"mt-2 mb-4\">View more publications</a>\r\n</div>"
+            value: "<div class=\"flex flex-wrap justify-between\">\r\n<h2 class=\"mb-6 md:text-4xl\">Our latest publications</h2>\r\n<a href=\"/publications\" class=\"mt-2 mb-4\">View more publications</a>\r\n</div>"
             format: full_html
           tokenize: true
       display_extenders: {  }
