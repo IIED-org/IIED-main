@@ -14,17 +14,21 @@ alpine-focus:
   js:
     https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js: { type: external, minified: true }
 copyprint:
-   js:
+  js:
     dist/js/copyprint.js: { async: true }
 copycite:
-   js:
+  js:
     dist/js/copycite.js: { async: true }
 counter:
-   js:
+  js:
     dist/js/counter.js: {}
 init:
-   js:
+  js:
     dist/js/init.js: {}
+matomo:
+  header: true
+  js:
+    dist/js/matomo.js: { async: true }
 paypal:
   header: true
   js: 
