@@ -16,7 +16,7 @@ New issues should be associated with the [IIED-main project](https://github.com/
 
 Branch naming convention:
 
-`[type-]issue#-short-description[-yyyymmdd]`
+`[type/]issue#-short-description[-yyyymmdd]`
 
 e.g.
 
