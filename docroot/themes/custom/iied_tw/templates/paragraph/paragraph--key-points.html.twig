@@ -1,23 +1,27 @@
 {#
 /**
  * @file
- * Key points: three to five bullets that summarise the page.
+ * Key points: three to five points that summarise the page, and an optional
+ * footer line on a pale green band.
  *
  * A paragraph rather than a node field, so it sits at the top of the main
  * column with the contents list beside it in the aside. Editors place it first
  * in the first 'IIED main with aside' section. The standfirst answers the
  * title; key points summarise what follows.
  *
- * - Assumes the type has one text field holding a <ul>, with its label hidden
- *   in the display, printed with {{ content }}. If the type gains a second
- *   field, print the list field by name instead.
- * - The list uses the theme's existing .keypoint style (src/tailwind.pcss): no
- *   bullets, the keypoint icon before each item. Outside prose, Tailwind's
- *   reset already removes the list's own bullets and indent.
- * - The box takes the explainer's green, as the pill and the standfirst rule
- *   in node--explainer.html.twig do.
- * - The heading id carries the paragraph id, so two key points boxes on one
- *   page can't clash.
+ * - field_key_points: normally a <ul>. Each item is a band with no bullet,
+ *   padded on its own and divided from the next by a rule that runs edge to
+ *   edge, so the box itself has no padding. Text typed without a list is
+ *   padded as one block instead.
+ * - field_key_points_footer: optional, on iiedgreen-10 with a rule above it.
+ * - The heading takes a rule beneath it only when something follows; an empty
+ *   box is the heading alone, padded p-6.
+ * - prose keeps the site's type and link styles; its list margins, indents and
+ *   bullets are switched off with [&_…] variants, which outrank prose's
+ *   :where() rules.
+ * - The field template wraps its output in a div, so prose's first- and
+ *   last-child margin rules miss the paragraphs; [&_p:first-child] and
+ *   [&_p:last-child] stand in for them.
  */
 #}
 {%
@@ -29,16 +33,26 @@
     'mb-12',
   ]
 %}
-{% set heading_id = 'key-points-' ~ paragraph.id() %}
+{% set points = paragraph.field_key_points.value %}
+{% set has_points = points is not empty %}
+{% set is_list = has_points and '<li' in points %}
+{% set has_footer = paragraph.field_key_points_footer.value is not empty %}
 {% block paragraph %}
-  <section{{ attributes.addClass(classes).setAttribute('aria-labelledby', heading_id) }}>
+  <div{{ attributes.addClass(classes) }}>
     {% block content %}
-      <div class="p-6 border-2 rounded-xl border-iiedgreen-500">
-        <h2 id="{{ heading_id }}" class="mt-0 mb-4 text-xl">{% trans %}Key points{% endtrans %}</h2>
-        <div class="prose keypoint md:prose-lg">
-          {{ content }}
-        </div>
+      <div class="overflow-hidden border-2 rounded-xl border-iiedgreen-500">
+        <h2 class="m-0 text-2xl text-iiedgreen-950 {{ has_points or has_footer ? 'px-6 pt-4 pb-4 border-b border-iiedgreen-500' : 'p-6' }}">{% trans %}Key points{% endtrans %}</h2>
+        {% if has_points %}
+          <div class="prose md:prose-lg max-w-none {{ is_list ? '[&_ul]:list-none [&_ul]:m-0 [&_ul]:p-0 [&_li]:m-0 [&_li]:px-6 [&_li]:py-4 [&_li]:border-b [&_li]:border-iiedgreen-500 [&_li:last-child]:border-b-0 [&_li_p]:m-0' : 'px-6 py-4 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0' }}">
+            {{ content.field_key_points }}
+          </div>
+        {% endif %}
+        {% if has_footer %}
+          <div class="px-6 py-6 prose md:prose-lg max-w-none bg-iiedgreen-10 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 {{ has_points ? 'border-t border-iiedgreen-500' }}">
+            {{ content.field_key_points_footer }}
+          </div>
+        {% endif %}
       </div>
     {% endblock %}
-  </section>
+  </div>
 {% endblock paragraph %}

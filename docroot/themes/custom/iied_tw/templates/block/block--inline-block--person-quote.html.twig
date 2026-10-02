@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Theme override for the 'Quote with a person' block.
+ *
+ * The block's title is not printed: a quote carries no heading of its own. The
+ * photo shows only when the person has one, so a quote from someone without a
+ * photo, or from no one in the People list, reads as the citation alone. Width
+ * is read from the block itself, so the field stays hidden in its display.
+ *
+ * The person is rendered whether or not they have a photo, so their cache tags
+ * reach the page and adding a photo later shows without a cache clear.
+ *
+ * No margin of its own – the Layout Builder section's padding spaces it.
+ *
+ * @see template_preprocess_block()
+ * @see partials/_person_quote.html.twig
+ */
+#}
+{% set entity = content['#block_content'] %}
+{% set author = content.quote_author|render %}
+{% set has_photo = entity.quote_author.entity.field_author_picture.entity is not empty %}
+{% set has_citation = entity.quote_citation.value is not empty %}
+
+<div{{ attributes }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  {% include '@iied_tw/partials/_person_quote.html.twig' with {
+    'quote': content.quote_text,
+    'author': has_photo ? author,
+    'citation': has_citation ? content.quote_citation,
+    'width': entity.field_quote_width.value|default('standard'),
+  } only %}
+</div>
