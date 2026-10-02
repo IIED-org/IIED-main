@@ -200,10 +200,10 @@ display:
       style:
         type: iied_slider
         options:
-          grouping: {  }
           row_class: ''
           default_row_class: true
-          loop: 'true'
+          uses_fields: false
+          loop: 'false'
           breakpoint_sm: '640'
           breakpoint_md: '768'
           breakpoint_lg: '1024'
@@ -251,7 +251,10 @@ display:
     position: 1
     display_options:
       display_description: ''
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
       block_description: 'History slider block'
     cache_metadata:
       max-age: -1

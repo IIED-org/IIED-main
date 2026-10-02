@@ -1,0 +1,8 @@
+uuid: 52f1255a-e609-4bbc-afca-bcd429df2275
+langcode: en
+status: true
+dependencies: {  }
+id: impact_story_cards
+label: 'Impact story cards'
+revision: false
+description: "Two to four impact stories, each shown by its outcome line and image, with a line of context and a link showing what we've changed."

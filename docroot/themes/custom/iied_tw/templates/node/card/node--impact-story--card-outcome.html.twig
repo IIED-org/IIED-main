@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Theme override for an impact story in the 'Card with outcome line' view mode.
+ *
+ * Used by the Impact story cards block, for What we've changed. The whole card
+ * is one link to the story: a square photograph beside the story's outcome
+ * line, set in the headline serif. A story with no outcome line yet shows its
+ * title instead.
+ *
+ * The image's alt is deliberately empty: the outcome line is the link text, so
+ * alt text would make a screen reader read the story twice.
+ *
+ * @see node--impact-story--card-md.html.twig
+ */
+#}
+{% set image_uri = node.field_main_image|file_uri %}
+
+<article{{ attributes }}>
+  <a href="{{ url }}"
+    class="flex items-center gap-4 p-2 pr-4 transition-shadow bg-white border border-stone-300 group sm:gap-6 rounded-3xl hover:shadow-lg hover:no-underline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-stone-900">
+
+    {% if image_uri is not null %}
+      <img class="object-cover shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-2xl"
+        src="{{ image_uri|image_style('square_thumbnail') }}" alt="" width="200" height="200" loading="lazy">
+    {% endif %}
+
+    <h3 class="text-lg font-headline sm:text-xl text-stone-900">
+      {{ node.field_outcome_line.value|default(label) }}
+    </h3>
+
+  </a>
+</article>
+

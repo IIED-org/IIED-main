@@ -1,0 +1,24 @@
+uuid: 4fcd33fb-25a3-4078-a4c5-a2019b5b86ee
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.impact_story_cards
+    - field.storage.block_content.body
+  module:
+    - text
+id: block_content.impact_story_cards.body
+field_name: body
+entity_type: block_content
+bundle: impact_story_cards
+label: Explanation
+description: 'One or two sentences – what these are and where they come from.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

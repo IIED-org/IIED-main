@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Theme override for the Label chip block.
+ *
+ * The chip's words are the block's own title, printed whether or not 'Display
+ * title' is ticked, because the title is the chip. Colour and placement come
+ * from the block's two fields; the colour keys are mapped to class names here,
+ * written out in full so Tailwind finds them when it scans.
+ *
+ * A tilted chip keeps its upright box, so the block carries a margin beneath
+ * it to keep it clear of the heading it sits above.
+ *
+ * @see template_preprocess_block()
+ * @see partials/_label_chip.html.twig
+ */
+#}
+{% set colours = {
+  'blue': 'text-iiedblue-500',
+  'green': 'text-iiedgreen-500',
+  'orange': 'text-iiedorange-500',
+  'pink': 'text-iiedpink-500',
+} %}
+{% set chip_colour = content.field_chip_colour['#items'].getString() %}
+{% set chip_placement = content.field_chip_placement['#items'].getString() %}
+
+<div{{ attributes.addClass('mb-4') }}>
+  {{ title_prefix }}
+  {% include '@iied_tw/partials/_label_chip.html.twig' with {
+    'label': label ?: configuration.label,
+    'colour': colours[chip_colour]|default('text-iiedgreen-500'),
+    'placement': chip_placement|default('left-straight'),
+  } only %}
+  {{ title_suffix }}
+</div>

@@ -1,0 +1,96 @@
+{#
+/**
+ * @file
+ * Theme override for the history_slider view: About's 'Our history' carousel.
+ *
+ * One slide at a time, with previous and next buttons and a pager of one
+ * button per slide. Beside the slide from lg up; in the pager row below that.
+ * The heading and line of context above the carousel are content, typed into
+ * the layout, not printed here.
+ *
+ * Available variables:
+ * - options: View plugin style options. Only 'loop' is used here; the
+ *   breakpoint and slides-per-view options are ignored, because the pager
+ *   assumes one slide per view.
+ * - rows: A list of the view's row items.
+ *   - content: The row's content.
+ *
+ * @see template_preprocess_views_view_iied_slider()
+ * @see views-view-iied-slider.html.twig
+ */
+#}
+{# The view option is a text field, so anything but true is off. #}
+{% set looping = options.loop == 'true' ? 'true' : 'false' %}
+{% set prev_next = 'flex shrink-0 items-center justify-center rounded-full bg-white border-2 border-iiedblue-500 text-stone-800 hover:bg-iiedblue-500 hover:text-white transition-colors focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-stone-900 disabled:opacity-35 disabled:hover:bg-white disabled:hover:text-stone-800 disabled:cursor-default' %}
+{% set chevron_left %}
+  <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="w-7 h-7"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+{% endset %}
+{% set chevron_right %}
+  <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="w-7 h-7"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+{% endset %}
+
+<div{{ attributes }}
+  x-data="{ swiper: null, looping: {{ looping }}, active: 0, atStart: !{{ looping }}, atEnd: false }"
+  x-init="
+    const s = new Swiper($refs.container, {
+      loop: looping,
+      slidesPerView: 1,
+      spaceBetween: 48,
+      speed: matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 450,
+    });
+    const sync = () => {
+      active = s.realIndex;
+      atStart = !looping && s.isBeginning;
+      atEnd = !looping && s.isEnd;
+      s.slides.forEach((el, i) => { el.inert = i !== s.activeIndex; });
+    };
+    s.on('slideChange', sync);
+    sync();
+    swiper = s;
+  "
+>
+
+  <div class="relative lg:px-24">
+
+    <div class="absolute left-0 z-10 hidden -translate-y-1/2 lg:block top-1/2">
+      <button type="button" class="{{ prev_next }} w-16 h-16" aria-label="{{ 'Previous'|t }}" :disabled="atStart" @click="swiper.slidePrev()">{{ chevron_left }}</button>
+    </div>
+
+    <div class="swiper-container" x-ref="container">
+      <div class="swiper-wrapper" aria-live="polite">
+        {% for row in rows %}
+          <div class="swiper-slide h-auto! flex items-start md:items-center" role="group" aria-roledescription="{{ 'slide'|t }}" aria-label="{{ '@n of @total'|t({'@n': loop.index, '@total': rows|length}) }}">
+            <div class="w-full">
+              {{ row.content }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="absolute right-0 z-10 hidden -translate-y-1/2 lg:block top-1/2">
+      <button type="button" class="{{ prev_next }} w-16 h-16" aria-label="{{ 'Next'|t }}" :disabled="atEnd" @click="swiper.slideNext()">{{ chevron_right }}</button>
+    </div>
+
+  </div>
+
+  <div class="flex items-center justify-center gap-2 pb-6 sm:gap-4">
+    <button type="button" class="{{ prev_next }} w-12 h-12 lg:hidden" aria-label="{{ 'Previous'|t }}" :disabled="atStart" @click="swiper.slidePrev()">{{ chevron_left }}</button>
+
+    <ul class="flex items-center gap-0.5 sm:gap-1" aria-label="{{ 'Slides'|t }}">
+      {% for row in rows %}
+        <li>
+          <button type="button" class="flex items-center justify-center h-8 px-1.5 rounded-full focus-visible:outline-3 focus-visible:outline-offset-0 focus-visible:outline-stone-900"
+            aria-label="{{ 'Go to slide @n'|t({'@n': loop.index}) }}"
+            :aria-current="active === {{ loop.index0 }} ? 'true' : null"
+            @click="looping ? swiper.slideToLoop({{ loop.index0 }}) : swiper.slideTo({{ loop.index0 }})">
+            <span class="block h-3 transition-all duration-300 rounded-full" :class="active === {{ loop.index0 }} ? 'w-8 bg-iiedblue-900' : 'w-3 bg-stone-500 hover:bg-stone-700'"></span>
+          </button>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <button type="button" class="{{ prev_next }} w-12 h-12 lg:hidden" aria-label="{{ 'Next'|t }}" :disabled="atEnd" @click="swiper.slideNext()">{{ chevron_right }}</button>
+  </div>
+
+</div>

@@ -1,0 +1,10 @@
+uuid: 34511ea1-e571-4080-867c-b3c0ffd8b499
+langcode: en
+status: true
+dependencies: {  }
+id: pointer
+label: Pointer
+multiselect: single
+form_type: checkboxes
+required: false
+weight: 0

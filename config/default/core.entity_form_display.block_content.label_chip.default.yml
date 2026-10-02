@@ -1,0 +1,41 @@
+uuid: 3e1c1f37-a271-4822-8d2e-757d445d4da6
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.label_chip
+    - field.field.block_content.label_chip.field_chip_colour
+    - field.field.block_content.label_chip.field_chip_placement
+id: block_content.label_chip.default
+targetEntityType: block_content
+bundle: label_chip
+mode: default
+content:
+  field_chip_colour:
+    type: options_select
+    weight: 26
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_chip_placement:
+    type: options_select
+    weight: 27
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+hidden: {  }
