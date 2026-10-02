@@ -1,0 +1,50 @@
+uuid: 24728380-f35b-4b90-92f6-8796f51175ee
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.person_quote
+    - field.field.block_content.person_quote.field_quote_author
+    - field.field.block_content.person_quote.field_quote_width
+    - field.field.block_content.person_quote.quote_citation
+    - field.field.block_content.person_quote.quote_text
+  module:
+    - options
+    - text
+id: block_content.person_quote.default
+targetEntityType: block_content
+bundle: person_quote
+mode: default
+content:
+  field_quote_author:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_quote_width:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  quote_citation:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  quote_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

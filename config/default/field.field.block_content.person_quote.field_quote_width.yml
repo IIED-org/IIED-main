@@ -1,0 +1,23 @@
+uuid: 22e5bc8e-fbb6-41a0-aef2-80b31fbc12a6
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.person_quote
+    - field.storage.block_content.field_quote_width
+  module:
+    - options
+id: block_content.person_quote.field_quote_width
+field_name: field_quote_width
+entity_type: block_content
+bundle: person_quote
+label: 'Quote width'
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: standard
+default_value_callback: ''
+settings: {  }
+field_type: list_string

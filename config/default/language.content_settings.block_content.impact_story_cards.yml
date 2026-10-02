@@ -1,18 +1,18 @@
-uuid: 64a4093d-69c1-4ca2-a13b-9d5fa9976e79
+uuid: 0bdaddca-9ad4-49be-b0a3-c7f562af7aff
 langcode: en
 status: true
 dependencies:
   config:
-    - taxonomy.vocabulary.manifesto_aim
+    - block_content.type.impact_story_cards
   module:
     - content_translation
 third_party_settings:
   content_translation:
-    enabled: true
+    enabled: false
     bundle_settings:
       untranslatable_fields_hide: '0'
-id: taxonomy_term.manifesto_aim
-target_entity_type_id: taxonomy_term
-target_bundle: manifesto_aim
+id: block_content.impact_story_cards
+target_entity_type_id: block_content
+target_bundle: impact_story_cards
 default_langcode: site_default
 language_alterable: false

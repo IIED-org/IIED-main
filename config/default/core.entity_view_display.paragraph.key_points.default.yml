@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.key_points.field_key_points
+    - field.field.paragraph.key_points.field_key_points_footer
     - paragraphs.paragraphs_type.key_points
   module:
     - text
@@ -18,6 +19,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_key_points_footer:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   search_api_excerpt: true

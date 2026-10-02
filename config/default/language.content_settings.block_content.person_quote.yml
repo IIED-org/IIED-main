@@ -1,9 +1,9 @@
-uuid: eb63bccb-88fe-481b-8af8-1c06ebceb277
+uuid: 83aa9423-f46c-4f9f-97c5-78c70ab17428
 langcode: en
 status: true
 dependencies:
   config:
-    - paragraphs.paragraphs_type.key_points
+    - block_content.type.person_quote
   module:
     - content_translation
 third_party_settings:
@@ -11,8 +11,8 @@ third_party_settings:
     enabled: true
     bundle_settings:
       untranslatable_fields_hide: '0'
-id: paragraph.key_points
-target_entity_type_id: paragraph
-target_bundle: key_points
+id: block_content.person_quote
+target_entity_type_id: block_content
+target_bundle: person_quote
 default_langcode: site_default
 language_alterable: true

@@ -14,6 +14,7 @@ dependencies:
     - node.type.article
     - node.type.blog
     - node.type.event
+    - node.type.explainer
     - node.type.external_resource
     - node.type.hidden_handbrake
     - node.type.hidden_page
@@ -116,6 +117,7 @@ permissions:
   - 'create content translations'
   - 'create document media'
   - 'create event content'
+  - 'create explainer content'
   - 'create external_resource content'
   - 'create form_block block content'
   - 'create hidden_handbrake content'
@@ -144,6 +146,7 @@ permissions:
   - 'delete any blog content'
   - 'delete any document media'
   - 'delete any event content'
+  - 'delete any explainer content'
   - 'delete any external_resource content'
   - 'delete any file'
   - 'delete any form_block block content'
@@ -169,6 +172,7 @@ permissions:
   - 'delete own blog content'
   - 'delete own document media'
   - 'delete own event content'
+  - 'delete own explainer content'
   - 'delete own external_resource content'
   - 'delete own files'
   - 'delete own hidden_handbrake content'
@@ -195,6 +199,7 @@ permissions:
   - 'edit any blog content'
   - 'edit any document media'
   - 'edit any event content'
+  - 'edit any explainer content'
   - 'edit any external_resource content'
   - 'edit any form_block block content'
   - 'edit any hidden_handbrake content'
@@ -214,6 +219,7 @@ permissions:
   - 'edit own comments'
   - 'edit own document media'
   - 'edit own event content'
+  - 'edit own explainer content'
   - 'edit own external_resource content'
   - 'edit own hidden_handbrake content'
   - 'edit own hidden_page content'
@@ -261,6 +267,7 @@ permissions:
   - 'revert article revisions'
   - 'revert blog revisions'
   - 'revert event revisions'
+  - 'revert explainer revisions'
   - 'revert external_resource revisions'
   - 'revert hidden_handbrake revisions'
   - 'revert hidden_page revisions'
@@ -306,6 +313,7 @@ permissions:
   - 'view article revisions'
   - 'view blog revisions'
   - 'view event revisions'
+  - 'view explainer revisions'
   - 'view external_resource revisions'
   - 'view hidden_handbrake revisions'
   - 'view hidden_page revisions'

@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.key_points.field_key_points
+    - field.field.paragraph.key_points.field_key_points_footer
     - paragraphs.paragraphs_type.key_points
   module:
     - text
@@ -15,6 +16,14 @@ content:
   field_key_points:
     type: text_textarea
     weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_key_points_footer:
+    type: text_textarea
+    weight: 1
     region: content
     settings:
       rows: 5
