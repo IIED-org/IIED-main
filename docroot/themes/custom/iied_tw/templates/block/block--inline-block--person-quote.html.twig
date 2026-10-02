@@ -18,8 +18,8 @@
  */
 #}
 {% set entity = content['#block_content'] %}
-{% set author = content.quote_author|render %}
-{% set has_photo = entity.quote_author.entity.field_author_picture.entity is not empty %}
+{% set author = content.field_quote_author|render %}
+{% set has_photo = entity.field_quote_author.entity.field_author_picture.entity is not empty %}
 {% set has_citation = entity.quote_citation.value is not empty %}
 
 <div{{ attributes }}>
