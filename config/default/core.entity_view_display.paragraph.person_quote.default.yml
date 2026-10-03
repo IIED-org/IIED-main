@@ -1,0 +1,41 @@
+uuid: cf75cb72-2726-49c4-a41f-ea1284fb49a9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.person_quote.field_quote_citation
+    - field.field.paragraph.person_quote.field_quote_text
+    - field.field.paragraph.person_quote.quote_author
+    - paragraphs.paragraphs_type.person_quote
+  module:
+    - text
+id: paragraph.person_quote.default
+targetEntityType: paragraph
+bundle: person_quote
+mode: default
+content:
+  field_quote_citation:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_quote_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  quote_author:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: avatar
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

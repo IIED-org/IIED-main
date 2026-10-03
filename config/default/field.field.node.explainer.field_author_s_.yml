@@ -1,0 +1,29 @@
+uuid: 8ff37125-3fc5-4b4d-880d-343fc331adbf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_author_s_
+    - node.type.explainer
+    - taxonomy.vocabulary.person
+id: node.explainer.field_author_s_
+field_name: field_author_s_
+entity_type: node
+bundle: explainer
+label: Author(s)
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      person: person
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

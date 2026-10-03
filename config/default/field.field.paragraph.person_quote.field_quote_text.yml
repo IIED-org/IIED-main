@@ -1,0 +1,22 @@
+uuid: 3b8d7d95-02d1-4938-a7d7-4383f4011aff
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_quote_text
+    - paragraphs.paragraphs_type.person_quote
+  module:
+    - text
+id: paragraph.person_quote.field_quote_text
+field_name: field_quote_text
+entity_type: paragraph
+bundle: person_quote
+label: Quote
+description: 'Quote marks will be added'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

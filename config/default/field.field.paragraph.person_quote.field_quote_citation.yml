@@ -1,0 +1,22 @@
+uuid: 14008265-1cf4-4afb-90ba-e0486d1bd87f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_quote_citation
+    - paragraphs.paragraphs_type.person_quote
+  module:
+    - text
+id: paragraph.person_quote.field_quote_citation
+field_name: field_quote_citation
+entity_type: paragraph
+bundle: person_quote
+label: 'Quote citation'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text

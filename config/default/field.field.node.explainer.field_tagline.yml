@@ -1,0 +1,19 @@
+uuid: 3b509088-151e-4b3f-b1d2-290efaf61310
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tagline
+    - node.type.explainer
+id: node.explainer.field_tagline
+field_name: field_tagline
+entity_type: node
+bundle: explainer
+label: Tagline
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

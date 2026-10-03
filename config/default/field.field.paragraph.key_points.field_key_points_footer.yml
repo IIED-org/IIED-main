@@ -1,0 +1,22 @@
+uuid: 397c0e1b-3f52-42f6-92b2-cbc477226e05
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_key_points_footer
+    - paragraphs.paragraphs_type.key_points
+  module:
+    - text
+id: paragraph.key_points.field_key_points_footer
+field_name: field_key_points_footer
+entity_type: paragraph
+bundle: key_points
+label: 'Key points footer'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

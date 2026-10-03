@@ -1,0 +1,19 @@
+uuid: 8f6916f0-0d43-4b54-a277-2d23dd145606
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_heading
+    - paragraphs.paragraphs_type.toc_heading
+id: paragraph.toc_heading.field_heading
+field_name: field_heading
+entity_type: paragraph
+bundle: toc_heading
+label: Heading
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
