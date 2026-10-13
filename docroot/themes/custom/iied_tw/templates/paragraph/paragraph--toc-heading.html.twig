@@ -32,7 +32,7 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-      <h2 id="{{ paragraph.field_toc_id.value|clean_id }}" class="scroll-mt-8">
+      <h2 id="{{ paragraph.field_toc_id.value|clean_id }}" class="rounded-sm w-fit scroll-mt-8 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-stone-900">
         {{- paragraph.field_heading.value -}}
       </h2>
     {% endblock %}
