@@ -1,0 +1,22 @@
+uuid: 2f82da7e-1303-4905-9111-eab2d9e44fc2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_additional_resources
+    - node.type.explainer
+  module:
+    - text
+id: node.explainer.field_additional_resources
+field_name: field_additional_resources
+entity_type: node
+bundle: explainer
+label: Sources
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

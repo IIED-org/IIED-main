@@ -14,7 +14,7 @@ bundle: label_chip
 label: Colour
 description: ''
 required: true
-translatable: false
+translatable: true
 default_value:
   -
     value: green

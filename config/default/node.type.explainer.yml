@@ -1,0 +1,17 @@
+uuid: f91e0e3b-6650-4c97-ba2b-0252a8c34210
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Explainer
+type: explainer
+description: 'A question-led, reference page for an informed public. Built to be understood by search engines and answer engines.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

@@ -1,0 +1,45 @@
+uuid: 90f6684a-7bdb-4d78-b7a7-ca844d901ead
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.person_quote.field_quote_citation
+    - field.field.paragraph.person_quote.field_quote_text
+    - field.field.paragraph.person_quote.quote_author
+    - paragraphs.paragraphs_type.person_quote
+  module:
+    - text
+id: paragraph.person_quote.default
+targetEntityType: paragraph
+bundle: person_quote
+mode: default
+content:
+  field_quote_citation:
+    type: text_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_quote_text:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  quote_author:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

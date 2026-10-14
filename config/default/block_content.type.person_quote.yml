@@ -1,0 +1,8 @@
+uuid: e1c33d88-331c-48e2-9bd0-ae6266828556
+langcode: en
+status: true
+dependencies: {  }
+id: person_quote
+label: 'Quote with a person'
+revision: false
+description: "A quote with the speaker's photo and a citation. Standard width, or wide for a two-column section."

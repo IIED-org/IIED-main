@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Further reading for an explainer: related nodes by tag, four card_md cards.
+ * Copy of _related_nodes_research.html.twig with one display and a translated
+ * heading (the research partial's heading is an untranslated string in the view
+ * header; see config/related-nodes-block-ex.md).
+ */
+#}
+{% if drupal_view_result('related_nodes', 'block_ex') is not empty %}
+<section class="py-12 bg-stone-100">
+  <div class="container">
+    <h2 class="mb-6 text-2xl">{% trans %}Further reading{% endtrans %}</h2>
+    {{ drupal_view('related_nodes', 'block_ex') }}
+  </div>
+</section>
+{% endif %}

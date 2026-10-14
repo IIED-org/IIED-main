@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Person quote paragraph: a quote, the person's photo and a citation.
+ *
+ * The figure itself is the shared partial, so this paragraph and the 'Quote
+ * with a person' block cannot drift apart. Always standard width: beside an
+ * explainer's aside the main column is too narrow for two columns.
+ *
+ * The person is rendered whether or not they have a photo, so their cache tags
+ * reach the page and adding a photo later shows without a cache clear. It is
+ * passed to the partial only when there is a photo.
+ *
+ * @see partials/_person_quote.html.twig
+ */
+#}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'my-12',
+  ]
+%}
+{% set author = content.quote_author|render %}
+{% set has_photo = paragraph.quote_author.entity.field_author_picture.entity is not empty %}
+{% set has_citation = paragraph.field_quote_citation.value is not empty %}
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }}>
+    {% block content %}
+      {% include '@iied_tw/partials/_person_quote.html.twig' with {
+        'quote': content.field_quote_text,
+        'author': has_photo ? author,
+        'citation': has_citation ? content.field_quote_citation,
+        'width': 'standard',
+      } only %}
+    {% endblock %}
+  </div>
+{% endblock paragraph %}

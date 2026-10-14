@@ -1,0 +1,22 @@
+uuid: 79b3f92c-4ab7-42c8-af45-b6d4b7a013e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.explainer
+id: node.explainer.status
+field_name: status
+entity_type: node
+bundle: explainer
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

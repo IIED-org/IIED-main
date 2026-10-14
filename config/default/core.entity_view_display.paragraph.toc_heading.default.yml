@@ -1,0 +1,43 @@
+uuid: 3826e31c-8e54-413b-bed0-3780d896b73d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.toc_heading.field_heading
+    - field.field.paragraph.toc_heading.field_toc_id
+    - field.field.paragraph.toc_heading.field_toc_label
+    - paragraphs.paragraphs_type.toc_heading
+id: paragraph.toc_heading.default
+targetEntityType: paragraph
+bundle: toc_heading
+mode: default
+content:
+  field_heading:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_toc_id:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_toc_label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

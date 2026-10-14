@@ -1,0 +1,18 @@
+uuid: ac602209-c39f-4c01-bee4-19004e36c41f
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.label_chip
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: block_content.label_chip
+target_entity_type_id: block_content
+target_bundle: label_chip
+default_langcode: site_default
+language_alterable: true

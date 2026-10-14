@@ -1,0 +1,18 @@
+uuid: 0bdaddca-9ad4-49be-b0a3-c7f562af7aff
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.impact_story_cards
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: block_content.impact_story_cards
+target_entity_type_id: block_content
+target_bundle: impact_story_cards
+default_langcode: site_default
+language_alterable: false

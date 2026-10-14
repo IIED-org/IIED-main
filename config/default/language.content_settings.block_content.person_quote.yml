@@ -1,0 +1,18 @@
+uuid: 83aa9423-f46c-4f9f-97c5-78c70ab17428
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.person_quote
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: block_content.person_quote
+target_entity_type_id: block_content
+target_bundle: person_quote
+default_langcode: site_default
+language_alterable: true
