@@ -5,7 +5,7 @@
         <header class="">
             <nav aria-label="breadcrumb">
                 {{ drupal_block('language_block:language_interface', wrapper=false) }}
-                <div class="flex my-4 space-x-1">
+                <div class="flex mt-4 mb-6 space-x-1 lg:mt-0">
                     {% if parent_term_name %}
                     <span><a href="{{ parent_term_url }}">{{ parent_term_name }}</a> > </span>
                     {% endif %}
@@ -23,7 +23,7 @@
             
             <div class="flex mb-2 space-x-1 text-stone-500">
             {% if content.field_date_or_caption|render|striptags|trim is not empty %}
-                <div class="mr-1">{{ content.field_date_or_caption }}</div> •
+                <div>{{ content.field_date_or_caption }}</div><span> • </span>
             {% endif %}
             {{ content.field_read_length }}
             </div>

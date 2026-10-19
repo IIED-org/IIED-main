@@ -4,7 +4,7 @@
         <header class="">
             <nav aria-label="breadcrumb sm:flex sm:justify-between">
                 {{ drupal_block('language_block:language_interface', wrapper=false) }}
-                <div class="flex my-4 space-x-1">
+                <div class="flex my-4 space-x-1 lg:mt-0">
                 {% if parent_term_name %}
                     <span><a href="{{ parent_term_url }}">{{ parent_term_name }}</a> > </span>
                 {% endif %}
