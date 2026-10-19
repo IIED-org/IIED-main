@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.article.field_contact
     - field.field.node.article.field_content
     - field.field.node.article.field_date_or_caption
+    - field.field.node.article.field_date_updated
     - field.field.node.article.field_display_image
     - field.field.node.article.field_hide_date
     - field.field.node.article.field_image
@@ -18,6 +19,7 @@ dependencies:
     - field.field.node.article.field_main_image
     - field.field.node.article.field_paragraphs
     - field.field.node.article.field_project
+    - field.field.node.article.field_review_date
     - field.field.node.article.field_standfirst
     - field.field.node.article.field_tagline
     - field.field.node.article.field_tags
@@ -25,6 +27,7 @@ dependencies:
     - node.type.article
   module:
     - comment
+    - datetime
     - field_group
     - layout_paragraphs
     - media_library
@@ -77,8 +80,9 @@ third_party_settings:
         required_fields: true
     group_attribution:
       children:
+        - field_date_updated
+        - field_review_date
         - field_article_type
-        - translation
         - field_theme_s_
         - field_collections
         - field_tags
@@ -135,13 +139,13 @@ content:
     third_party_settings: {  }
   field_article_type:
     type: options_select
-    weight: 4
+    weight: 31
     region: content
     settings: {  }
     third_party_settings: {  }
   field_collections:
     type: entity_reference_autocomplete
-    weight: 8
+    weight: 33
     region: content
     settings:
       match_operator: CONTAINS
@@ -162,7 +166,9 @@ content:
     weight: 40
     region: content
     settings:
+      view_mode: default
       preview_view_mode: default
+      form_display_mode: default
       nesting_depth: 0
       require_layouts: 1
       empty_message: ''
@@ -174,6 +180,12 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_date_updated:
+    type: datetime_default
+    weight: 29
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_display_image:
     type: boolean_checkbox
@@ -224,13 +236,19 @@ content:
     third_party_settings: {  }
   field_project:
     type: entity_reference_autocomplete
-    weight: 10
+    weight: 35
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_review_date:
+    type: datetime_default
+    weight: 30
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_standfirst:
     type: text_textarea
@@ -250,7 +268,7 @@ content:
     third_party_settings: {  }
   field_tags:
     type: entity_reference_autocomplete_tags
-    weight: 9
+    weight: 34
     region: content
     settings:
       match_operator: CONTAINS
@@ -260,7 +278,7 @@ content:
     third_party_settings: {  }
   field_theme_s_:
     type: entity_reference_autocomplete
-    weight: 6
+    weight: 32
     region: content
     settings:
       match_operator: CONTAINS
@@ -270,7 +288,7 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 11
+    weight: 36
     region: content
     settings:
       include_locked: true

@@ -7,6 +7,7 @@ dependencies:
     - node.type.article
     - node.type.blog
     - node.type.event
+    - node.type.explainer
     - node.type.impact_story
     - node.type.long_read
     - node.type.news
@@ -27,9 +28,10 @@ settings:
   handler_settings:
     target_bundles:
       article: article
-      blog: blog
       event: event
+      explainer: explainer
       impact_story: impact_story
+      blog: blog
       long_read: long_read
       news: news
       page: page

@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.article.field_contact
     - field.field.node.article.field_content
     - field.field.node.article.field_date_or_caption
+    - field.field.node.article.field_date_updated
     - field.field.node.article.field_display_image
     - field.field.node.article.field_hide_date
     - field.field.node.article.field_image
@@ -19,12 +20,14 @@ dependencies:
     - field.field.node.article.field_main_image
     - field.field.node.article.field_paragraphs
     - field.field.node.article.field_project
+    - field.field.node.article.field_review_date
     - field.field.node.article.field_standfirst
     - field.field.node.article.field_tagline
     - field.field.node.article.field_tags
     - field.field.node.article.field_theme_s_
     - node.type.article
   module:
+    - datetime
     - ds
     - layout_builder
     - layout_paragraphs
@@ -125,6 +128,15 @@ content:
             classes: {  }
     weight: 8
     region: content
+  field_date_updated:
+    type: datetime_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: published_date
+    third_party_settings: {  }
+    weight: 0
+    region: content
   field_display_image:
     type: boolean
     label: hidden
@@ -207,6 +219,7 @@ hidden:
   field_date_or_caption: true
   field_image: true
   field_project: true
+  field_review_date: true
   field_tagline: true
   langcode: true
   links: true
