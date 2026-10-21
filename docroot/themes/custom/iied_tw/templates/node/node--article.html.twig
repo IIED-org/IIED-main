@@ -110,11 +110,23 @@
          <div
           class="flex flex-col flex-wrap justify-between pb-6 border-b border-stone-300 xl:border-none sm:flex-row"
         >
-        {% if "On" in content.field_hide_date.0 %}          
+
+        {% set updated = node.field_date_updated.value
+          ? node.field_date_updated.date.getTimestamp()|format_date('custom', 'd F Y') %}
+        <div>
+          {% if "On" in content.field_hide_date.0 %}
+            {{ node.type.entity.label() }}
+          {% else %}
+            {{ node.type.entity.label() }}, <time datetime="{{ node.getCreatedTime|date('Y-m-d') }}">{{ node.getCreatedTime|date('d F Y') }}</time>{% if updated %}. <time datetime="{{ node.field_date_updated.value }}">{% trans %}Updated {{ updated }}{% endtrans %}</time>{% endif %}
+          {% endif %}
+        </div>
+
+        {# {% if "On" in content.field_hide_date.0 %}          
           {{ node.type.entity.label() }}
           {% else %}
           {{ node.type.entity.label() }}, {{ node.getCreatedTime|date('d F Y') }}
-        {% endif %}
+        {% endif %} #}
+
           <div class="flex items-center">
             {% include '@iied_tw/partials/_share_links.html.twig' %}
           </div>

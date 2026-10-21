@@ -50,3 +50,9 @@
 @media (min-width: 96rem) {
   .\32xl\:grid { display: grid; }
 }
+
+/* State variants lose to core's unlayered .hidden in the same way */
+@media (hover: hover) {
+  .group:hover .group-hover\:block { display: block; }
+}
+.group:focus-within .group-focus-within\:block { display: block; }

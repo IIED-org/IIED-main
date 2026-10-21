@@ -1,0 +1,21 @@
+uuid: 9c98012e-0125-44ec-a4c1-2495d347c6d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_review_date
+    - node.type.article
+  module:
+    - datetime
+id: node.article.field_review_date
+field_name: field_review_date
+entity_type: node
+bundle: article
+label: 'Review date'
+description: 'Set a date for when this page should be reviewed.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -533,12 +533,6 @@
     display: none !important;
   }
 
-  /* sets top margin for info boxes */
-  .paragraph--type--info-box aside .relative h2:first-of-type, 
-  .paragraph--type--info-box aside .relative h3:first-of-type {
-    @apply mt-4;
-  }
-
   /* Klaro override default styles */
   #klaro {
     #klaro-cookie-notice {
@@ -576,7 +570,13 @@
 
 } /*-- end layer components --*/
 
-  /* over rides moved outside @layer */
+  /* over rides moved outside @layer move to here if not working */
+
+  /* sets top margin for info boxes */
+  .paragraph--type--info-box aside .relative h2:first-of-type, 
+  .paragraph--type--info-box aside .relative h3:first-of-type {
+    @apply mt-4;
+  }
 
   /*-- search --*/
   .ui-widget.search-api-autocomplete-search { 
