@@ -1,0 +1,30 @@
+uuid: 89904bc3-38d4-4e63-866c-8bb915ae068e
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_mode
+field_name: field_mode
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: OfflineEventAttendanceMode
+      label: In-person
+    -
+      value: OnlineEventAttendanceMode
+      label: Online-only
+    -
+      value: MixedEventAttendanceMode
+      label: Hybrid
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
