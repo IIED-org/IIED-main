@@ -163,6 +163,7 @@ module:
   session_limit: 0
   shortcut: 0
   shs: 0
+  smart_date: 0
   sophron: 0
   svg_image: 0
   svg_image_responsive: 0

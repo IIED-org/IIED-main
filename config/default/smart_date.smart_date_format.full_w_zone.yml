@@ -1,0 +1,15 @@
+uuid: 7fba29f5-acf5-4252-a31a-7052ac767a1a
+langcode: en
+status: true
+dependencies: {  }
+id: full_w_zone
+label: 'Full w/zone'
+date_format: 'D, j F Y'
+time_format: 'H:i T'
+time_hour_format: ''
+allday_label: 'All day'
+separator: ' - '
+join: ' '
+ampm_reduce: '1'
+date_first: '1'
+site_time_toggle: '1'

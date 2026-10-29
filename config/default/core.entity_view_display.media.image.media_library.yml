@@ -8,7 +8,7 @@ dependencies:
     - image.style.medium
     - media.type.image
   module:
-    - image
+    - media_pdf_thumbnail
 _core:
   default_config_hash: PaGXvzRcL9eII--JV4eCVfObjrNo0l-u1dB_WJtB9ig
 id: media.image.media_library
@@ -17,13 +17,70 @@ bundle: image
 mode: media_library
 content:
   thumbnail:
-    type: image
+    type: media_pdf_thumbnail_image_field_formatter
     label: hidden
     settings:
       image_link: ''
       image_style: medium
       image_loading:
         attribute: lazy
+      pdf_file_field: ''
+      image_format: ''
+      image_link_attributes_target: ''
+      image_link_attributes_rel: ''
+      default_bundle_image_style: ''
+      default_bundle_link: ''
+      pdf_page: 1
+      image_link_attributes_download: ''
+      use_cron: ''
+      audio_page: ''
+      audio_field: ''
+      audio_link: ''
+      audio_attributes_target: ''
+      audio_attributes_rel: ''
+      audio_format: ''
+      audio_image_style: ''
+      audio_enable: ''
+      audio_use_cron: ''
+      audio_attributes_download: ''
+      document_page: ''
+      document_field: ''
+      document_link: ''
+      document_attributes_target: ''
+      document_attributes_rel: ''
+      document_format: ''
+      document_image_style: ''
+      document_enable: ''
+      document_use_cron: ''
+      document_attributes_download: ''
+      image_page: ''
+      image_field: ''
+      image_attributes_target: ''
+      image_attributes_rel: ''
+      image_image_style: ''
+      image_enable: ''
+      image_use_cron: ''
+      image_attributes_download: ''
+      remote_video_page: ''
+      remote_video_field: ''
+      remote_video_link: ''
+      remote_video_attributes_target: ''
+      remote_video_attributes_rel: ''
+      remote_video_format: ''
+      remote_video_image_style: ''
+      remote_video_enable: ''
+      remote_video_use_cron: ''
+      remote_video_attributes_download: ''
+      video_page: ''
+      video_field: ''
+      video_link: ''
+      video_attributes_target: ''
+      video_attributes_rel: ''
+      video_format: ''
+      video_image_style: ''
+      video_enable: ''
+      video_use_cron: ''
+      video_attributes_download: ''
     third_party_settings: {  }
     weight: 0
     region: content
