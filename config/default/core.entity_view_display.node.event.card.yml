@@ -14,6 +14,7 @@ dependencies:
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
     - field.field.node.event.field_display_time
+    - field.field.node.event.field_event_dates
     - field.field.node.event.field_event_location
     - field.field.node.event.field_event_organiser
     - field.field.node.event.field_event_status
@@ -88,6 +89,7 @@ hidden:
   field_dates: true
   field_direct_link: true
   field_display_time: true
+  field_event_dates: true
   field_event_location: true
   field_event_organiser: true
   field_event_status: true

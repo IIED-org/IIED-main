@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# cb 20261029
+## Description: Run npm watch and load broswer-sync in the web container
+## Usage: watch
+## Example: "ddev watch"
+## ExecRaw: true
+
+cd web/themes/custom/iied_tw && npm run watch

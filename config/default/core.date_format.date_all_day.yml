@@ -1,0 +1,10 @@
+uuid: 24513ed0-54af-41d2-981a-408f48cf54f2
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: agD29H4KUJC10z7besk_Rc3EO3yK2OOZvTw3jAM1qhI
+id: date_all_day
+label: 'Date all day'
+locked: true
+pattern: Y-m-d
