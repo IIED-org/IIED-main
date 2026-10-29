@@ -115,16 +115,18 @@
       {% else %}
         {{ content.field_daterange }}  {{ content.field_display_time }}
       {% endif %}
-				{{ content.field_where_and_how }}
+			{{ content.field_where_and_how }}
 
-				{#-- register link (TODO refactor using partial, additional classes needed when within prose) --#}
-				{% if node.field_registration_link.title %}
-					<div class="flex flex-col items-center justify-center">
-						<button class="bg-iiedorange-500 hover:bg-iiedorange-600 focus:shadow-outline h-12 max-w-xs px-6 py-2 m-2 mb-1 text-lg transition-colors duration-150 rounded-full shadow-sm">
-							<a class="text-stone-800 hover:border-b-0 hover:no-underline hover:text-stone-900 font-semibold no-underline border-b-0" href="{{ node.field_registration_link.0.url }}" title="{{ node.field_registration_link.title }}">{{ node.field_registration_link.title }}</a>
-						</button>
-					</div>
-				{% endif %}
+			{#-- register link (TODO refactor using partial, additional classes needed when within prose) --#}
+      {% if node.field_event_dates is empty or node.field_event_dates.end_value|date('U') > 'now'|date('U') %}
+        {% if node.field_registration_link.title %}
+        <div class="flex flex-col items-center justify-center">
+          <button class="bg-iiedorange-500 hover:bg-iiedorange-600 focus:shadow-outline h-12 max-w-xs px-6 py-2 m-2 mb-1 text-lg transition-colors duration-150 rounded-full shadow-sm">
+            <a class="text-stone-800 hover:border-b-0 hover:no-underline hover:text-stone-900 font-semibold no-underline border-b-0" href="{{ node.field_registration_link.0.url }}" title="{{ node.field_registration_link.title }}">{{ node.field_registration_link.title }}</a>
+          </button>
+        </div>
+        {% endif %}
+      {% endif %}
 
 			</div>
 
