@@ -5,7 +5,7 @@ dependencies: {  }
 id: full_w_zone
 label: 'Full w/zone'
 date_format: 'D, j F Y'
-time_format: 'H:i e'
+time_format: 'H:i T'
 time_hour_format: ''
 allday_label: 'All day'
 separator: ' - '
