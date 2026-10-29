@@ -36,6 +36,7 @@ dependencies:
     - node.type.event
   module:
     - address
+    - datetime_range
     - field_group
     - link
     - media_library
@@ -97,6 +98,7 @@ third_party_settings:
         - field_display_time
         - field_direct_link
         - field_event_dates
+        - field_daterange
       label: 'Basic info'
       region: content
       parent_name: group_tabs
@@ -234,15 +236,21 @@ content:
     third_party_settings: {  }
   field_contact:
     type: text_textarea
-    weight: 6
+    weight: 5
     region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  field_daterange:
+    type: daterange_default
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_dates:
     type: string_textfield
-    weight: 7
+    weight: 6
     region: content
     settings:
       size: 60
@@ -250,7 +258,7 @@ content:
     third_party_settings: {  }
   field_direct_link:
     type: link_default
-    weight: 9
+    weight: 8
     region: content
     settings:
       placeholder_url: ''
@@ -258,7 +266,7 @@ content:
     third_party_settings: {  }
   field_display_time:
     type: string_textarea
-    weight: 8
+    weight: 7
     region: content
     settings:
       rows: 5
@@ -266,7 +274,7 @@ content:
     third_party_settings: {  }
   field_event_dates:
     type: smartdate_timezone
-    weight: 56
+    weight: 9
     region: content
     settings:
       modal: false
@@ -496,5 +504,4 @@ content:
     third_party_settings: {  }
 hidden:
   field_date: true
-  field_daterange: true
   field_series_badge: true

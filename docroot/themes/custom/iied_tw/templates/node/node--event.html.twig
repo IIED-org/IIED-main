@@ -110,8 +110,11 @@
 				<p>{{ content.field_tagline }}</p>
 			</div>
 			<div class="border-iiedblue-500 max-w-none pb-4 mb-4 prose border-b-2">
-
+      {% if node.field_event_dates is not empty %}
 				{{ content.field_event_dates }}
+      {% else %}
+        {{ content.field_daterange }}  {{ content.field_display_time }}
+      {% endif %}
 				{{ content.field_where_and_how }}
 
 				{#-- register link (TODO refactor using partial, additional classes needed when within prose) --#}
