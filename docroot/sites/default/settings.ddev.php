@@ -190,3 +190,5 @@ $config['search_api.server.solr'] = [
     ]
   ],
 ];
+
+$settings['container_yamls'][] = DRUPAL_ROOT . '/sites/development.services.yml';   

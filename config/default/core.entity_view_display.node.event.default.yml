@@ -13,10 +13,15 @@ dependencies:
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
     - field.field.node.event.field_display_time
+    - field.field.node.event.field_event_dates
+    - field.field.node.event.field_event_location
+    - field.field.node.event.field_event_organiser
+    - field.field.node.event.field_event_status
     - field.field.node.event.field_event_type
     - field.field.node.event.field_hero_media
     - field.field.node.event.field_image_caption
     - field.field.node.event.field_main_image
+    - field.field.node.event.field_mode
     - field.field.node.event.field_paragraphs
     - field.field.node.event.field_project
     - field.field.node.event.field_registration_link
@@ -30,11 +35,13 @@ dependencies:
     - field.field.node.event.field_where_and_how
     - node.type.event
   module:
+    - address
     - datetime
     - datetime_range
     - entity_reference_revisions
     - link
     - options
+    - smart_date
     - text
     - user
 id: node.event.default
@@ -126,6 +133,50 @@ content:
     third_party_settings: {  }
     weight: 125
     region: content
+  field_event_dates:
+    type: smartdate_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      format: default
+      force_chronological: false
+      add_classes: false
+      time_wrapper: true
+      localize: false
+      parts:
+        - start
+        - end
+      duration:
+        separator: ' | '
+        unit: ''
+        decimals: 2
+        suffix: h
+    third_party_settings: {  }
+    weight: 134
+    region: content
+  field_event_location:
+    type: address_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 132
+    region: content
+  field_event_organiser:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 133
+    region: content
+  field_event_status:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 130
+    region: content
   field_event_type:
     type: list_default
     label: above
@@ -154,6 +205,13 @@ content:
       link: true
     third_party_settings: {  }
     weight: 102
+    region: content
+  field_mode:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 131
     region: content
   field_paragraphs:
     type: entity_reference_revisions_entity_view

@@ -11,7 +11,7 @@ id: node.event.field_daterange
 field_name: field_daterange
 entity_type: node
 bundle: event
-label: 'Date range'
+label: 'Date range (deprecated)'
 description: 'Times and end date and are optional'
 required: false
 translatable: false

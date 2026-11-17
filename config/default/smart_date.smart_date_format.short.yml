@@ -1,0 +1,15 @@
+uuid: 5de7e92b-440d-411e-b68b-55e725783e01
+langcode: en
+status: true
+dependencies: {  }
+id: short
+label: Short
+date_format: 'D, j M Y'
+time_format: 'H:i'
+time_hour_format: H
+allday_label: 'All day'
+separator: ' – '
+join: ' |  '
+ampm_reduce: '1'
+date_first: '1'
+site_time_toggle: '0'

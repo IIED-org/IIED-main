@@ -14,10 +14,15 @@ dependencies:
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
     - field.field.node.event.field_display_time
+    - field.field.node.event.field_event_dates
+    - field.field.node.event.field_event_location
+    - field.field.node.event.field_event_organiser
+    - field.field.node.event.field_event_status
     - field.field.node.event.field_event_type
     - field.field.node.event.field_hero_media
     - field.field.node.event.field_image_caption
     - field.field.node.event.field_main_image
+    - field.field.node.event.field_mode
     - field.field.node.event.field_paragraphs
     - field.field.node.event.field_project
     - field.field.node.event.field_registration_link
@@ -38,6 +43,7 @@ dependencies:
     - layout_builder
     - link
     - options
+    - smart_date
     - text
     - user
 third_party_settings:
@@ -95,6 +101,7 @@ content:
     settings:
       timezone_override: ''
       format_type: date_only
+      from_to: both
       separator: '-'
     third_party_settings:
       ds:
@@ -111,6 +118,7 @@ content:
     label: hidden
     settings:
       link_to_entity: false
+      link_rel: canonical
     third_party_settings: {  }
     weight: 6
     region: content
@@ -132,6 +140,29 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 14
+    region: content
+  field_event_dates:
+    type: smartdate_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: medium
+      format: full_w_zone
+      force_chronological: false
+      add_classes: false
+      time_wrapper: true
+      localize: false
+      parts:
+        start: start
+        end: end
+        duration: '0'
+      duration:
+        separator: ' | '
+        unit: ''
+        decimals: 2
+        suffix: h
+    third_party_settings: {  }
+    weight: 4
     region: content
   field_event_type:
     type: list_default
@@ -184,6 +215,13 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
+  field_tagline:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
   field_tags:
     type: entity_reference_label
     label: hidden
@@ -210,12 +248,15 @@ content:
 hidden:
   field_alternative_label: true
   field_alternative_title: true
+  field_event_location: true
+  field_event_organiser: true
+  field_event_status: true
   field_hero_media: true
+  field_mode: true
   field_project: true
   field_second_image: true
   field_second_image_caption: true
   field_series_badge: true
-  field_tagline: true
   langcode: true
   links: true
   search_api_excerpt: true

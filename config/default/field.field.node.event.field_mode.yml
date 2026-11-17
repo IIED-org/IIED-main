@@ -1,0 +1,23 @@
+uuid: 533aae5e-b8b8-4f91-93a2-6de600335721
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_mode
+    - node.type.event
+  module:
+    - options
+id: node.event.field_mode
+field_name: field_mode
+entity_type: node
+bundle: event
+label: 'Attendance mode'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: OfflineEventAttendanceMode
+default_value_callback: ''
+settings: {  }
+field_type: list_string

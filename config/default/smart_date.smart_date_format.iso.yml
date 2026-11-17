@@ -1,0 +1,15 @@
+uuid: 66911590-69bc-4b91-b453-ed047ed7271f
+langcode: en
+status: true
+dependencies: {  }
+id: iso
+label: iso
+date_format: Y-m-d
+time_format: 'H:i:sP'
+time_hour_format: ''
+allday_label: ''
+separator: ' – '
+join: T
+ampm_reduce: '0'
+date_first: '1'
+site_time_toggle: '0'

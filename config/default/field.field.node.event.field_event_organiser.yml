@@ -1,0 +1,33 @@
+uuid: 03255b30-1db6-4117-ad59-42238341814d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_event_organiser
+    - node.type.event
+    - taxonomy.vocabulary.organisation
+  content:
+    - 'taxonomy_term:organisation:e058508f-b366-4a77-9f8a-453061d098ce'
+id: node.event.field_event_organiser
+field_name: field_event_organiser
+entity_type: node
+bundle: event
+label: 'Event organiser'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    target_uuid: e058508f-b366-4a77-9f8a-453061d098ce
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      organisation: organisation
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
