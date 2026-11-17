@@ -171,7 +171,7 @@ third_party_settings:
         label_as_html: false
         formatter: closed
         description: ''
-        required_fields: false
+        required_fields: true
     group_where_and_how:
       children: {  }
       label: 'Where and how'
