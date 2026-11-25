@@ -1,4 +1,19 @@
 {% extends '@iied_tw/node/card/node--card-md.html.twig' %}
+   
+    {% block label %}
+        <div class="absolute bottom-0 left-0 z-10 px-4 pt-2 pb-5 text-stone-900 bg-iiedblue-500 rounded-tr-xl">
+            {% if node.field_alternative_label is not empty %}
+            {{ node.field_alternative_label.0.value|striptags }}
+            {% else %}
+            {{ node.type.entity.label() }}
+            {% endif %}
+        </div>
+    {% endblock %}
+
+
     {% block date %}
-        <p class="text-stone-500">{{ node.type.entity.label() }} on {{ node.field_daterange.0.value|date('d F Y') }} </p>
+        {% set event_date = include('@iied_tw/partials/_event_date.html.twig', { node: node }, with_context = false)|trim %}
+        {% if event_date %}
+            <p class="text-stone-500">{{ node.type.entity.label() }} on {{ event_date }}</p>
+        {% endif %}
     {% endblock %}

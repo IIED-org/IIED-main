@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1b9ab67adfb376924e4eb0b9b131b42",
+    "content-hash": "1db2e56d6429c5da4216353b080e7495",
     "packages": [
         {
             "name": "apvarun/toastify-js",
@@ -132,12 +132,12 @@
             "version": "v0.7.20",
             "source": {
                 "type": "git",
-                "url": "git@github.com:masayuki0812/c3.git",
+                "url": "https://github.com/c3js/c3.git",
                 "reference": "2f3cddb818065f1d0c45f562745d4249e12980ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/masayuki0812/c3/zipball/2f3cddb818065f1d0c45f562745d4249e12980ff",
+                "url": "https://api.github.com/repos/c3js/c3/zipball/2f3cddb818065f1d0c45f562745d4249e12980ff",
                 "reference": "2f3cddb818065f1d0c45f562745d4249e12980ff"
             },
             "require": {
@@ -3131,6 +3131,61 @@
             ],
             "support": {
                 "source": "https://git.drupalcode.org/project/configurable_views_filter_block"
+            }
+        },
+        {
+            "name": "drupal/contact",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/contact.git",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/contact-1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": "baf3c8f1cc56c5ecca513f646fd9aaa5c6db5295"
+            },
+            "require": {
+                "drupal/core": ">11.3"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0",
+                    "datestamp": "1769226328",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "andypost",
+                    "homepage": "https://www.drupal.org/user/118908"
+                },
+                {
+                    "name": "dave reid",
+                    "homepage": "https://www.drupal.org/user/53892"
+                },
+                {
+                    "name": "larowlan",
+                    "homepage": "https://www.drupal.org/user/395439"
+                }
+            ],
+            "description": "Provides site-wide contact forms and forms to contact individual users.",
+            "homepage": "https://www.drupal.org/project/contact",
+            "keywords": [
+                "Actively maintained"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/contact"
             }
         },
         {
@@ -13730,7 +13785,8 @@
             "version": "2.0.2",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/desandro-matches-selector/-/desandro-matches-selector-2.0.2.tgz"
+                "url": "https://registry.npmjs.org/desandro-matches-selector/-/desandro-matches-selector-2.0.2.tgz",
+                "shasum": "717beed4dc13e7d8f3762f707a6d58a6774218e1"
             },
             "type": "npm-asset",
             "license": [
@@ -13742,7 +13798,8 @@
             "version": "1.1.1",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/ev-emitter/-/ev-emitter-1.1.1.tgz"
+                "url": "https://registry.npmjs.org/ev-emitter/-/ev-emitter-1.1.1.tgz",
+                "shasum": "8f18b0ce5c76a5d18017f71c0a795c65b9138f2a"
             },
             "type": "npm-asset",
             "license": [
@@ -13754,7 +13811,8 @@
             "version": "2.0.7",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/fizzy-ui-utils/-/fizzy-ui-utils-2.0.7.tgz"
+                "url": "https://registry.npmjs.org/fizzy-ui-utils/-/fizzy-ui-utils-2.0.7.tgz",
+                "shasum": "7df45dcc4eb374a08b65d39bb9a4beedf7330505"
             },
             "require": {
                 "npm-asset/desandro-matches-selector": ">=2.0.0,<3.0.0"
@@ -13769,7 +13827,8 @@
             "version": "2.0.3",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/get-size/-/get-size-2.0.3.tgz"
+                "url": "https://registry.npmjs.org/get-size/-/get-size-2.0.3.tgz",
+                "shasum": "54a1d0256b20ea7ac646516756202769941ad2ef"
             },
             "type": "npm-asset",
             "license": [
@@ -13781,7 +13840,8 @@
             "version": "4.1.4",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/imagesloaded/-/imagesloaded-4.1.4.tgz"
+                "url": "https://registry.npmjs.org/imagesloaded/-/imagesloaded-4.1.4.tgz",
+                "shasum": "1376efcd162bb768c34c3727ac89cc04051f3cc7"
             },
             "require": {
                 "npm-asset/ev-emitter": ">=1.0.0,<2.0.0"
@@ -13796,7 +13856,8 @@
             "version": "4.2.2",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/masonry-layout/-/masonry-layout-4.2.2.tgz"
+                "url": "https://registry.npmjs.org/masonry-layout/-/masonry-layout-4.2.2.tgz",
+                "shasum": "d57b44af13e601bfcdc423f1dd8348b5524de348"
             },
             "require": {
                 "npm-asset/get-size": ">=2.0.2,<3.0.0",
@@ -13812,7 +13873,8 @@
             "version": "2.1.1",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/outlayer/-/outlayer-2.1.1.tgz"
+                "url": "https://registry.npmjs.org/outlayer/-/outlayer-2.1.1.tgz",
+                "shasum": "29863b6de10ea5dadfffcadfa0d728907387e9a2"
             },
             "require": {
                 "npm-asset/ev-emitter": ">=1.0.0,<2.0.0",

@@ -306,6 +306,9 @@
       },
       "drupal/search_api": {
         "SearchApiException 3352150":"https://www.drupal.org/files/issues/2025-03-26/3352150-15--add_field_instance_dependencies.patch"
+      },
+      "drupal/smart_date": {
+        "Skip unfinished dates in tokens": "patches/smart_date-tokens-non-numeric.patch"
       }
     },
     "drupal-lenient": {
