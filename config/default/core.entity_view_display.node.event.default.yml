@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.event.field_daterange
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
+    - field.field.node.event.field_display_image
     - field.field.node.event.field_display_time
     - field.field.node.event.field_event_dates
     - field.field.node.event.field_event_location
@@ -125,6 +126,16 @@ content:
       target: ''
     third_party_settings: {  }
     weight: 116
+    region: content
+  field_display_image:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 11
     region: content
   field_display_time:
     type: basic_string

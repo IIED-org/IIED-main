@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.explainer.field_additional_resources
     - field.field.node.explainer.field_author_s_
+    - field.field.node.explainer.field_collections
     - field.field.node.explainer.field_content
     - field.field.node.explainer.field_date_updated
     - field.field.node.explainer.field_display_image
@@ -50,6 +51,14 @@ content:
             lb-col: false
             classes: {  }
     weight: 2
+    region: content
+  field_collections:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 17
     region: content
   field_content:
     type: entity_reference_revisions_entity_view

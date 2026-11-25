@@ -11,7 +11,7 @@ field_name: field_main_image
 entity_type: node
 bundle: event
 label: 'Main image'
-description: ''
+description: "Landscape 16:9, at least 1200 × 675 px. A smaller image won't fill the width of the page."
 required: false
 translatable: true
 default_value: {  }

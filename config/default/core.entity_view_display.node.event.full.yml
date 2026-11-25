@@ -13,6 +13,7 @@ dependencies:
     - field.field.node.event.field_daterange
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
+    - field.field.node.event.field_display_image
     - field.field.node.event.field_display_time
     - field.field.node.event.field_event_dates
     - field.field.node.event.field_event_location
@@ -66,17 +67,9 @@ content:
     type: entity_reference_entity_view
     label: hidden
     settings:
-      view_mode: icon
+      view_mode: link_back
       link: false
-    third_party_settings:
-      ds:
-        ds_limit: ''
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
+    third_party_settings: {  }
     weight: 13
     region: content
   field_contact:
@@ -133,6 +126,16 @@ content:
       target: ''
     third_party_settings: {  }
     weight: 8
+    region: content
+  field_display_image:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 11
     region: content
   field_display_time:
     type: basic_string

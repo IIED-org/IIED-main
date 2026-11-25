@@ -13,6 +13,7 @@ dependencies:
     - field.field.node.event.field_daterange
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
+    - field.field.node.event.field_display_image
     - field.field.node.event.field_display_time
     - field.field.node.event.field_event_dates
     - field.field.node.event.field_event_location
@@ -99,6 +100,7 @@ hidden:
   field_contact: true
   field_dates: true
   field_direct_link: true
+  field_display_image: true
   field_display_time: true
   field_event_dates: true
   field_event_location: true
