@@ -11,8 +11,8 @@ id: node.event.field_daterange
 field_name: field_daterange
 entity_type: node
 bundle: event
-label: 'Date range (deprecated)'
-description: 'Times and end date and are optional'
+label: 'Date range (legacy)'
+description: 'For events made before Event dates. A new event uses Event dates.'
 required: false
 translatable: false
 default_value: {  }

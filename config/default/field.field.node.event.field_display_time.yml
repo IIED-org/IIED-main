@@ -9,8 +9,8 @@ id: node.event.field_display_time
 field_name: field_display_time
 entity_type: node
 bundle: event
-label: 'Display time'
-description: ''
+label: 'Display time (legacy)'
+description: 'Fallback text only for use with Date range.'
 required: false
 translatable: true
 default_value: {  }

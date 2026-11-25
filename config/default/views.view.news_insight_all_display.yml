@@ -17,6 +17,7 @@ dependencies:
     - datetime
     - node
     - options
+    - smart_date
     - taxonomy
     - user
 id: news_insight_all_display
@@ -85,6 +86,7 @@ display:
         type: full
         options:
           offset: 8
+          pagination_heading_level: h4
           items_per_page: 24
           total_pages: null
           id: 0
@@ -102,7 +104,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -252,6 +253,7 @@ display:
         type: full
         options:
           offset: 8
+          pagination_heading_level: h4
           items_per_page: 10
           total_pages: null
           id: 0
@@ -269,7 +271,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       filters:
         status:
           id: status
@@ -571,6 +572,7 @@ display:
         type: full
         options:
           offset: 8
+          pagination_heading_level: h4
           items_per_page: 24
           total_pages: null
           id: 0
@@ -588,7 +590,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       filters:
         status:
           id: status
@@ -719,6 +720,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 24
           total_pages: null
           id: 0
@@ -736,7 +738,35 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
+      sorts:
+        field_event_dates_value:
+          id: field_event_dates_value
+          table: node__field_event_dates
+          field: field_event_dates_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: date
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          granularity: second
+        field_daterange_value:
+          id: field_daterange_value
+          table: node__field_daterange
+          field: field_daterange_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: datetime
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          granularity: hour
       filters:
         status:
           id: status
@@ -793,6 +823,48 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        langcode:
+          id: langcode
+          table: node_field_data
+          field: langcode
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: langcode
+          plugin_id: language
+          operator: in
+          value:
+            '***LANGUAGE_language_content***': '***LANGUAGE_language_content***'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
         field_daterange_value:
           id: field_daterange_value
           table: node__field_daterange
@@ -801,13 +873,59 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: datetime
-          operator: '<='
+          operator: '<'
           value:
             min: ''
             max: ''
             value: today
-            type: date
-          group: 1
+            type: offset
+          group: 2
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_event_dates_end_value:
+          id: field_event_dates_end_value
+          table: node__field_event_dates
+          field: field_event_dates_end_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: date
+          operator: '<'
+          value:
+            min: ''
+            max: ''
+            value: now
+            type: offset
+            granularity: second
+          group: 2
           exposed: false
           expose:
             operator_id: ''
@@ -842,9 +960,11 @@ display:
         operator: AND
         groups:
           1: AND
+          2: OR
       defaults:
         show_admin_links: false
         pager: false
+        sorts: false
         filters: false
         filter_groups: false
         header: false
@@ -885,6 +1005,7 @@ display:
         type: full
         options:
           offset: 8
+          pagination_heading_level: h4
           items_per_page: 24
           total_pages: null
           id: 0
@@ -902,7 +1023,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       filters:
         status:
           id: status
@@ -1078,6 +1198,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 24
           total_pages: null
           id: 0
@@ -1095,7 +1216,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       exposed_form:
         type: bef
         options:
@@ -1111,17 +1231,17 @@ display:
           bef:
             general:
               autosubmit: true
+              auto_submit_sort_only: false
+              autosubmit_breakpoint: ''
               autosubmit_exclude_textfield: false
               autosubmit_textfield_delay: 500
+              autosubmit_textfield_minimum_length: 3
               autosubmit_hide: true
               input_required: false
               allow_secondary: false
               secondary_label: 'Advanced options'
               secondary_open: false
               reset_button_always_show: false
-              autosubmit_textfield_minimum_length: 3
-              autosubmit_breakpoint: ''
-              auto_submit_sort_only: false
             pager:
               plugin_id: default
               advanced:

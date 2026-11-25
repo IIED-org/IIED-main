@@ -1,0 +1,23 @@
+uuid: 88672d82-4478-4308-ab22-4cdf29d8add3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.session.field_basic_text
+    - paragraphs.paragraphs_type.session
+  module:
+    - text
+id: paragraph.session.default
+targetEntityType: paragraph
+bundle: session
+mode: default
+content:
+  field_basic_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

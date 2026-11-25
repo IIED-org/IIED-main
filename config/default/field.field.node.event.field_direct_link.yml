@@ -12,12 +12,12 @@ field_name: field_direct_link
 entity_type: node
 bundle: event
 label: 'Direct link'
-description: ''
+description: 'Quick links to closely related pages.'
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
   title: 2
-  link_type: 17
+  link_type: 1
 field_type: link
