@@ -15,9 +15,7 @@ label: 'Attendance mode'
 description: ''
 required: true
 translatable: false
-default_value:
-  -
-    value: OfflineEventAttendanceMode
+default_value: {  }
 default_value_callback: ''
 settings: {  }
 field_type: list_string

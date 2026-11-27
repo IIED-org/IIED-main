@@ -12,19 +12,19 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: EventScheduled
+      value: 'https://schema.org/EventScheduled'
       label: Scheduled
     -
-      value: EventCancelled
+      value: 'https://schema.org/EventCancelled'
       label: Cancelled
     -
-      value: EventMovedOnline
+      value: 'https://schema.org/EventMovedOnline'
       label: 'Moved online'
     -
-      value: EventPostponed
+      value: 'https://schema.org/EventPostponed'
       label: Postponed
     -
-      value: EventRescheduled
+      value: 'https://schema.org/EventRescheduled'
       label: Rescheduled
   allowed_values_function: ''
 module: options
