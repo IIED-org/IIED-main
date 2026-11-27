@@ -1,0 +1,19 @@
+uuid: 4f989b7b-84f6-4d85-bc00-9e0db5ee8659
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - text
+id: node.field_event_essentials
+field_name: field_event_essentials
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

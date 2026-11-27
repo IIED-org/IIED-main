@@ -12,7 +12,7 @@ field_name: field_direct_link
 entity_type: node
 bundle: event
 label: 'Direct link'
-description: ''
+description: 'Quick links to closely related pages. Start with / and leave out the domain name (e.g., /contact).'
 required: false
 translatable: false
 default_value: {  }

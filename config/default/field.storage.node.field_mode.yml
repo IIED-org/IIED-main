@@ -12,13 +12,13 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: OfflineEventAttendanceMode
+      value: 'https://schema.org/OfflineEventAttendanceMode'
       label: 'In person'
     -
-      value: OnlineEventAttendanceMode
+      value: 'https://schema.org/OnlineEventAttendanceMode'
       label: Online-only
     -
-      value: MixedEventAttendanceMode
+      value: 'https://schema.org/MixedEventAttendanceMode'
       label: Hybrid
   allowed_values_function: ''
 module: options

@@ -13,8 +13,10 @@ dependencies:
     - field.field.node.event.field_daterange
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
+    - field.field.node.event.field_display_image
     - field.field.node.event.field_display_time
     - field.field.node.event.field_event_dates
+    - field.field.node.event.field_event_essentials
     - field.field.node.event.field_event_location
     - field.field.node.event.field_event_organiser
     - field.field.node.event.field_event_status
@@ -23,6 +25,7 @@ dependencies:
     - field.field.node.event.field_image_caption
     - field.field.node.event.field_main_image
     - field.field.node.event.field_mode
+    - field.field.node.event.field_notes
     - field.field.node.event.field_paragraphs
     - field.field.node.event.field_project
     - field.field.node.event.field_registration_link
@@ -60,31 +63,23 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 11
+    weight: 13
     region: content
   field_collections:
     type: entity_reference_entity_view
     label: hidden
     settings:
-      view_mode: icon
+      view_mode: link_back
       link: false
-    third_party_settings:
-      ds:
-        ds_limit: ''
-        ft:
-          id: default
-          settings:
-            lb: ''
-            lb-col: false
-            classes: {  }
-    weight: 13
+    third_party_settings: {  }
+    weight: 15
     region: content
   field_contact:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 15
+    weight: 17
     region: content
   field_date:
     type: datetime_default
@@ -93,7 +88,7 @@ content:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 1
+    weight: 19
     region: content
   field_daterange:
     type: daterange_default
@@ -120,7 +115,7 @@ content:
       link_to_entity: false
       link_rel: canonical
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
   field_direct_link:
     type: link
@@ -132,14 +127,14 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 8
+    weight: 9
     region: content
   field_display_time:
     type: basic_string
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 14
+    weight: 16
     region: content
   field_event_dates:
     type: smartdate_default
@@ -162,7 +157,14 @@ content:
         decimals: 2
         suffix: h
     third_party_settings: {  }
-    weight: 4
+    weight: 1
+    region: content
+  field_event_essentials:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
     region: content
   field_event_type:
     type: list_default
@@ -176,7 +178,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 10
+    weight: 12
     region: content
   field_main_image:
     type: entity_reference_entity_view
@@ -185,7 +187,14 @@ content:
       view_mode: default
       link: true
     third_party_settings: {  }
-    weight: 9
+    weight: 10
+    region: content
+  field_notes:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
     region: content
   field_paragraphs:
     type: entity_reference_revisions_entity_view
@@ -194,7 +203,7 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 12
+    weight: 14
     region: content
   field_registration_link:
     type: link
@@ -206,21 +215,14 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 7
+    weight: 8
     region: content
   field_standfirst:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 5
-    region: content
-  field_tagline:
-    type: basic_string
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
+    weight: 6
     region: content
   field_tags:
     type: entity_reference_label
@@ -228,7 +230,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 16
+    weight: 18
     region: content
   field_theme_s_:
     type: entity_reference_label
@@ -248,6 +250,7 @@ content:
 hidden:
   field_alternative_label: true
   field_alternative_title: true
+  field_display_image: true
   field_event_location: true
   field_event_organiser: true
   field_event_status: true
@@ -257,6 +260,7 @@ hidden:
   field_second_image: true
   field_second_image_caption: true
   field_series_badge: true
+  field_tagline: true
   langcode: true
   links: true
   search_api_excerpt: true

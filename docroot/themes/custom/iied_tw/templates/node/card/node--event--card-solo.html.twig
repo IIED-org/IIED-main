@@ -1,6 +1,10 @@
 
 {% extends '@iied_tw/node/card/node--card-solo.html.twig' %}
+
     {% block date %}
-        <p class="text-stone-500">{{ node.type.entity.label() }} on {{ node.field_daterange.0.value|date('d F Y') }} </p>
+        {% set event_date = include('@iied_tw/partials/_event_date.html.twig', { node: node }, with_context = false)|trim %}
+        {% if event_date %}
+            <p class="text-stone-500">{{ node.type.entity.label() }} on {{ event_date }}</p>
+        {% endif %}
     {% endblock %}
 

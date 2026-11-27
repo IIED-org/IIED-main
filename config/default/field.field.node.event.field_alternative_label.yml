@@ -10,7 +10,7 @@ field_name: field_alternative_label
 entity_type: node
 bundle: event
 label: 'Alternative label'
-description: ''
+description: "Appears on card. Leave blank to show 'Event'"
 required: false
 translatable: false
 default_value: {  }

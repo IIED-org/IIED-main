@@ -12,8 +12,10 @@ dependencies:
     - field.field.node.event.field_daterange
     - field.field.node.event.field_dates
     - field.field.node.event.field_direct_link
+    - field.field.node.event.field_display_image
     - field.field.node.event.field_display_time
     - field.field.node.event.field_event_dates
+    - field.field.node.event.field_event_essentials
     - field.field.node.event.field_event_location
     - field.field.node.event.field_event_organiser
     - field.field.node.event.field_event_status
@@ -22,6 +24,7 @@ dependencies:
     - field.field.node.event.field_image_caption
     - field.field.node.event.field_main_image
     - field.field.node.event.field_mode
+    - field.field.node.event.field_notes
     - field.field.node.event.field_paragraphs
     - field.field.node.event.field_project
     - field.field.node.event.field_registration_link
@@ -53,7 +56,6 @@ third_party_settings:
         - group_event_hero
         - group_copy
         - group_taxonomy
-        - group_where_and_how
       label: Details
       region: content
       parent_name: ''
@@ -68,15 +70,15 @@ third_party_settings:
         width_breakpoint: 640
     group_copy:
       children:
-        - field_alternative_title
-        - field_tagline
         - field_standfirst
+        - field_direct_link
         - body
         - field_paragraphs
+        - group_where_and_how
       label: Copy
       region: content
       parent_name: group_tabs
-      weight: 40
+      weight: 13
       format_type: tab
       format_settings:
         classes: ''
@@ -90,15 +92,13 @@ third_party_settings:
     group_information_card:
       children:
         - langcode
-        - field_event_organiser
         - field_event_type
-        - field_alternative_label
-        - field_contact
-        - field_dates
-        - field_display_time
-        - field_direct_link
         - field_event_dates
         - field_daterange
+        - field_display_time
+        - field_contact
+        - field_event_essentials
+        - field_dates
       label: 'Basic info'
       region: content
       parent_name: group_tabs
@@ -115,14 +115,12 @@ third_party_settings:
     group_event_hero:
       children:
         - field_main_image
+        - field_display_image
         - field_image_caption
-        - field_hero_media
-        - field_second_image
-        - field_second_image_caption
-      label: 'Event images'
+      label: Image
       region: content
       parent_name: group_tabs
-      weight: 31
+      weight: 12
       format_type: tab
       format_settings:
         classes: ''
@@ -132,10 +130,10 @@ third_party_settings:
         formatter: closed
         description: ''
         required_fields: true
-        open: false
     group_taxonomy:
       children:
         - field_event_status
+        - field_event_organiser
         - field_theme_s_
         - field_tags
         - field_project
@@ -143,7 +141,7 @@ third_party_settings:
       label: Meta
       region: content
       parent_name: group_tabs
-      weight: 50
+      weight: 15
       format_type: tab
       format_settings:
         classes: ''
@@ -162,21 +160,6 @@ third_party_settings:
       label: 'Where and how'
       region: content
       parent_name: group_tabs
-      weight: 21
-      format_type: tab
-      format_settings:
-        classes: ''
-        show_empty_fields: false
-        id: ''
-        label_as_html: false
-        formatter: closed
-        description: ''
-        required_fields: true
-    group_where_and_how:
-      children: {  }
-      label: 'Where and how'
-      region: hidden
-      parent_name: group_tabs
       weight: 11
       format_type: tab
       format_settings:
@@ -187,6 +170,23 @@ third_party_settings:
         formatter: closed
         description: ''
         required_fields: true
+    group_where_and_how:
+      children:
+        - field_alternative_label
+        - field_tagline
+      label: Card
+      region: content
+      parent_name: group_copy
+      weight: 11
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: true
+        formatter: closed
 id: node.event.default
 targetEntityType: node
 bundle: event
@@ -194,7 +194,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 44
+    weight: 9
     region: content
     settings:
       rows: 9
@@ -210,15 +210,7 @@ content:
     third_party_settings: {  }
   field_alternative_label:
     type: string_textfield
-    weight: 4
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_alternative_title:
-    type: string_textfield
-    weight: 41
+    weight: 12
     region: content
     settings:
       size: 60
@@ -226,7 +218,7 @@ content:
     third_party_settings: {  }
   field_collections:
     type: entity_reference_autocomplete
-    weight: 54
+    weight: 17
     region: content
     settings:
       match_operator: CONTAINS
@@ -236,7 +228,7 @@ content:
     third_party_settings: {  }
   field_contact:
     type: text_textarea
-    weight: 5
+    weight: 6
     region: content
     settings:
       rows: 5
@@ -244,13 +236,13 @@ content:
     third_party_settings: {  }
   field_daterange:
     type: daterange_default
-    weight: 11
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
   field_dates:
     type: string_textfield
-    weight: 6
+    weight: 8
     region: content
     settings:
       size: 60
@@ -264,9 +256,16 @@ content:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
+  field_display_image:
+    type: boolean_checkbox
+    weight: 33
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   field_display_time:
     type: string_textarea
-    weight: 7
+    weight: 5
     region: content
     settings:
       rows: 5
@@ -274,7 +273,7 @@ content:
     third_party_settings: {  }
   field_event_dates:
     type: smartdate_timezone
-    weight: 9
+    weight: 3
     region: content
     settings:
       modal: false
@@ -287,14 +286,22 @@ content:
         custom
       show_extra: false
       hide_date: false
-      allday: false
+      allday: true
       remove_seconds: false
       duration_overlay: false
       separator: to
-      default_tz: ''
-      custom_tz: ''
+      default_tz: custom
+      custom_tz: Europe/London
       allowed_timezones: {  }
       add_abbreviations: ''
+    third_party_settings: {  }
+  field_event_essentials:
+    type: text_textarea
+    weight: 7
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
     third_party_settings: {  }
   field_event_location:
     type: address_default
@@ -305,7 +312,7 @@ content:
     third_party_settings: {  }
   field_event_organiser:
     type: entity_reference_autocomplete
-    weight: 2
+    weight: 13
     region: content
     settings:
       match_operator: CONTAINS
@@ -321,21 +328,13 @@ content:
     third_party_settings: {  }
   field_event_type:
     type: options_select
-    weight: 3
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_hero_media:
-    type: text_textarea
-    weight: 34
-    region: content
-    settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
   field_image_caption:
     type: text_textarea
-    weight: 33
+    weight: 34
     region: content
     settings:
       rows: 5
@@ -354,9 +353,17 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_notes:
+    type: text_textarea
+    weight: 10
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_paragraphs:
     type: paragraphs
-    weight: 45
+    weight: 10
     region: content
     settings:
       title: Paragraph
@@ -374,7 +381,7 @@ content:
     third_party_settings: {  }
   field_project:
     type: entity_reference_autocomplete
-    weight: 53
+    weight: 16
     region: content
     settings:
       match_operator: CONTAINS
@@ -390,24 +397,9 @@ content:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-  field_second_image:
-    type: media_library_widget
-    weight: 35
-    region: content
-    settings:
-      media_types: {  }
-    third_party_settings: {  }
-  field_second_image_caption:
-    type: text_textarea
-    weight: 36
-    region: content
-    settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
   field_standfirst:
     type: text_textarea
-    weight: 43
+    weight: 7
     region: content
     settings:
       rows: 5
@@ -415,7 +407,7 @@ content:
     third_party_settings: {  }
   field_tagline:
     type: string_textarea
-    weight: 42
+    weight: 13
     region: content
     settings:
       rows: 5
@@ -423,7 +415,7 @@ content:
     third_party_settings: {  }
   field_tags:
     type: entity_reference_autocomplete
-    weight: 52
+    weight: 15
     region: content
     settings:
       match_operator: CONTAINS
@@ -433,7 +425,7 @@ content:
     third_party_settings: {  }
   field_theme_s_:
     type: options_buttons
-    weight: 51
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -503,5 +495,9 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_alternative_title: true
   field_date: true
+  field_hero_media: true
+  field_second_image: true
+  field_second_image_caption: true
   field_series_badge: true

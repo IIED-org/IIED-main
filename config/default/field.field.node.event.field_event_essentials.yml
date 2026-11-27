@@ -1,0 +1,22 @@
+uuid: 4ec03179-0e63-4614-9f95-9114632852f1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_event_essentials
+    - node.type.event
+  module:
+    - text
+id: node.event.field_event_essentials
+field_name: field_event_essentials
+entity_type: node
+bundle: event
+label: 'Event essentials'
+description: 'Essential information about venue, tickets etc. For example limited tickets available.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

@@ -24,40 +24,39 @@
  */
 #}
           
-<div class="xl:pb-6">
+          
+<div class="@container xl:pb-4">
+  <div class="grid grid-cols-[1fr_auto] gap-x-4">
 
-  {% set link_back_text = content.link_back_text|render %}
+    {% set link_back_text = content.link_back_text|render %}
 
-  {% if link_back_text %}
-    <div class="mb-4">
-      <a class="inline-flex items-start gap-2 rounded-sm underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40" href="{{ url }}">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
-          <path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd" />
-        </svg>
-         {{ link_back_text }}
+    {% if link_back_text %}
+      <div class="col-span-2 row-start-1 mb-4 @md:col-span-1">
+        <a class="inline-flex items-start gap-2 rounded-sm underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40" href="{{ url }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+            <path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd" />
+          </svg>
+           {{ link_back_text }}
+          </a>
+      </div>
+    {% else %}
+      <div class="col-span-2 row-start-1 mb-2 text-base leading-tight tracking-wider uppercase text-stone-500 @md:col-span-1">{{ content.field_collection_type }}</div>
+    {% endif %}
+
+    <div class="col-span-2 row-start-2 mb-4 prose text-stone-500 @md:col-span-1">
+        <a class="text-lg font-semibold leading-tight border-b rounded-sm text-stone-700 border-stone-300 hover:border-iiedblue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40" href="{{ url }}">{{ name.0 }}
         </a>
     </div>
-  {% else %}
-    <div class="mb-4 text-base font-medium leading-tight tracking-wider text-stone-500 uppercase">{{ content.field_collection_type }}</div>
-  {% endif %}
 
-  <div class="mb-4 prose text-stone-500">
-      <a class="text-lg leading-tight text-stone-900 border-b border-stone-300 rounded-sm font-headline hover:border-iiedblue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40" href="{{ url }}">{{ name.0 }}
-      </a>
-  </div>
-          
-  <div class="flex flex-col items-start justify-between gap-4 md:items-center xl:items-end md:flex-row">      
-      
-      <div class="prose text-stone-500">{{ content.field_short_description }}</div>
+    <div class="self-end col-start-1 row-start-3 prose text-stone-500">{{ content.field_short_description }}</div>
 
-      {% if content.field_badge|render %}
-      <div class="not-prose shrink-0">
-        <div class="w-16 h-auto">{{ content.field_badge }}</div>
-      </div>  
-      {% endif %}
+    {% if content.field_badge|render %}
+    <div class="self-end col-start-2 row-start-3 not-prose shrink-0 @md:row-start-1 @md:row-end-4">
+      <div class="w-16 h-auto">{{ content.field_badge }}</div>
+    </div>
+    {% endif %}
 
   </div>
-
 </div>
 
 

@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * An event's date as text – '2 December 2026' – for cards and search results.
+ * Drafted 25 November 2026 for event pages, branch 1 (build plan 1.10).
+ *
+ * Event dates (Smart Date) if it's filled, in the event's own time zone; else
+ * the old Date range. Prints nothing when neither is – Twig's date filter would
+ * otherwise print today's date for an empty value.
+ *
+ * Goes in templates/partials/. Called with include(), so the caller can test
+ * whether there's a date before printing the line around it:
+ *
+ *   {% set event_date = include('@iied_tw/partials/_event_date.html.twig', { node: node }, with_context = false)|trim %}
+ */
+#}
+{%- if node.field_event_dates.value -%}
+  {{- node.field_event_dates.value|date('j F Y', node.field_event_dates.timezone ?: null) -}}
+{%- elseif node.field_daterange.value -%}
+  {{- node.field_daterange.value|date('j F Y') -}}
+{%- endif -%}

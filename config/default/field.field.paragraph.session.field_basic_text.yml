@@ -1,0 +1,22 @@
+uuid: ee4ddcb6-e231-4a12-8a58-b7a8aa3f22a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_basic_text
+    - paragraphs.paragraphs_type.session
+  module:
+    - text
+id: paragraph.session.field_basic_text
+field_name: field_basic_text
+entity_type: paragraph
+bundle: session
+label: 'Basic text'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

@@ -1,0 +1,25 @@
+uuid: 4ca6b7e4-e739-4e6f-a5f9-37adccd909c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.session.field_basic_text
+    - paragraphs.paragraphs_type.session
+  module:
+    - text
+id: paragraph.session.default
+targetEntityType: paragraph
+bundle: session
+mode: default
+content:
+  field_basic_text:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

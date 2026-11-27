@@ -1,0 +1,31 @@
+--- a/src/Hook/SmartDateTokensHooks.php
++++ b/src/Hook/SmartDateTokensHooks.php
+@@ -136,6 +136,10 @@
+         // Get the requested property and apply the provided format.
+         if ($name_parts && $prop_needed = array_pop($name_parts)) {
+           $field_ts = $field->get($prop_needed)->getValue();
++          // An unfinished value, such as a form that failed validation.
++          if (!is_numeric($field_ts)) {
++            continue;
++          }
+           $replacements[$original] = $this->dateFormatter->format($field_ts, '', $format_value);
+         }
+       }
+@@ -165,11 +169,17 @@
+         // If a property was specified, only use that.
+         if ($name_parts && $prop_needed = array_pop($name_parts)) {
+           $field_ts = $field->get($prop_needed)->getValue();
++          if (!is_numeric($field_ts)) {
++            continue;
++          }
+           $replacements[$original] = $this->smartDateManager->formatSmartDate($field_ts, $field_ts, $settings, NULL, 'string');
+         }
+         else {
+           $start = $field->get('value')->getValue();
+           $end = $field->get('end_value')->getValue();
++          if (!is_numeric($start) || !is_numeric($end)) {
++            continue;
++          }
+           $replacements[$original] = $this->smartDateManager->formatSmartDate($start, $end, $settings, NULL, 'string');
+         }
+       }

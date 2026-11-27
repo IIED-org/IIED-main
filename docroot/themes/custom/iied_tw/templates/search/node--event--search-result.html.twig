@@ -1,9 +1,5 @@
 {% extends '@iied_tw/search/node--search-result.html.twig' %}
 {% block meta %}
-    {% if node.field_daterange[0].value is not empty %}
-        {% set eventDate = node.field_daterange[0].value %}
-    {% else %}
-        {% set eventDate = node.getCreatedTime %}
-    {% endif %}
-    <div class="text-stone-500">{{ node.type.entity.label() }}, {{ eventDate|date('d F Y') }} </div>
+  {% set event_date = include('@iied_tw/partials/_event_date.html.twig', { node: node }, with_context = false)|trim %}
+  <div class="text-stone-500">{{ node.type.entity.label() }}, {{ event_date ?: node.getCreatedTime|date('j F Y') }}</div>
 {% endblock %}
