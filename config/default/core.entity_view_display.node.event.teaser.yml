@@ -16,6 +16,7 @@ dependencies:
     - field.field.node.event.field_display_image
     - field.field.node.event.field_display_time
     - field.field.node.event.field_event_dates
+    - field.field.node.event.field_event_essentials
     - field.field.node.event.field_event_location
     - field.field.node.event.field_event_organiser
     - field.field.node.event.field_event_status
@@ -24,6 +25,7 @@ dependencies:
     - field.field.node.event.field_image_caption
     - field.field.node.event.field_main_image
     - field.field.node.event.field_mode
+    - field.field.node.event.field_notes
     - field.field.node.event.field_paragraphs
     - field.field.node.event.field_project
     - field.field.node.event.field_registration_link
@@ -74,6 +76,7 @@ hidden:
   field_display_image: true
   field_display_time: true
   field_event_dates: true
+  field_event_essentials: true
   field_event_location: true
   field_event_organiser: true
   field_event_status: true
@@ -82,6 +85,7 @@ hidden:
   field_image_caption: true
   field_main_image: true
   field_mode: true
+  field_notes: true
   field_paragraphs: true
   field_project: true
   field_registration_link: true

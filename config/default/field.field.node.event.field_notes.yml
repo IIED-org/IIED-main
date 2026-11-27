@@ -1,0 +1,22 @@
+uuid: 01095c84-38ca-4396-9874-a1e23ee4090d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_notes
+    - node.type.event
+  module:
+    - text
+id: node.event.field_notes
+field_name: field_notes
+entity_type: node
+bundle: event
+label: 'Notes to editors'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

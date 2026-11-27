@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.event.field_display_image
     - field.field.node.event.field_display_time
     - field.field.node.event.field_event_dates
+    - field.field.node.event.field_event_essentials
     - field.field.node.event.field_event_location
     - field.field.node.event.field_event_organiser
     - field.field.node.event.field_event_status
@@ -23,6 +24,7 @@ dependencies:
     - field.field.node.event.field_image_caption
     - field.field.node.event.field_main_image
     - field.field.node.event.field_mode
+    - field.field.node.event.field_notes
     - field.field.node.event.field_paragraphs
     - field.field.node.event.field_project
     - field.field.node.event.field_registration_link
@@ -166,6 +168,13 @@ content:
     third_party_settings: {  }
     weight: 134
     region: content
+  field_event_essentials:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 135
+    region: content
   field_event_location:
     type: address_default
     label: above
@@ -223,6 +232,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 131
+    region: content
+  field_notes:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 109
     region: content
   field_paragraphs:
     type: entity_reference_revisions_entity_view

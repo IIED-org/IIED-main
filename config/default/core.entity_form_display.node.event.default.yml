@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.event.field_display_image
     - field.field.node.event.field_display_time
     - field.field.node.event.field_event_dates
+    - field.field.node.event.field_event_essentials
     - field.field.node.event.field_event_location
     - field.field.node.event.field_event_organiser
     - field.field.node.event.field_event_status
@@ -23,6 +24,7 @@ dependencies:
     - field.field.node.event.field_image_caption
     - field.field.node.event.field_main_image
     - field.field.node.event.field_mode
+    - field.field.node.event.field_notes
     - field.field.node.event.field_paragraphs
     - field.field.node.event.field_project
     - field.field.node.event.field_registration_link
@@ -90,12 +92,12 @@ third_party_settings:
     group_information_card:
       children:
         - langcode
-        - field_event_organiser
         - field_event_type
         - field_event_dates
         - field_daterange
         - field_display_time
         - field_contact
+        - field_event_essentials
         - field_dates
       label: 'Basic info'
       region: content
@@ -131,6 +133,7 @@ third_party_settings:
     group_taxonomy:
       children:
         - field_event_status
+        - field_event_organiser
         - field_theme_s_
         - field_tags
         - field_project
@@ -215,7 +218,7 @@ content:
     third_party_settings: {  }
   field_collections:
     type: entity_reference_autocomplete
-    weight: 54
+    weight: 17
     region: content
     settings:
       match_operator: CONTAINS
@@ -225,7 +228,7 @@ content:
     third_party_settings: {  }
   field_contact:
     type: text_textarea
-    weight: 7
+    weight: 6
     region: content
     settings:
       rows: 5
@@ -233,7 +236,7 @@ content:
     third_party_settings: {  }
   field_daterange:
     type: daterange_default
-    weight: 5
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -262,7 +265,7 @@ content:
     third_party_settings: {  }
   field_display_time:
     type: string_textarea
-    weight: 6
+    weight: 5
     region: content
     settings:
       rows: 5
@@ -270,7 +273,7 @@ content:
     third_party_settings: {  }
   field_event_dates:
     type: smartdate_timezone
-    weight: 4
+    weight: 3
     region: content
     settings:
       modal: false
@@ -292,6 +295,14 @@ content:
       allowed_timezones: {  }
       add_abbreviations: ''
     third_party_settings: {  }
+  field_event_essentials:
+    type: text_textarea
+    weight: 7
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_event_location:
     type: address_default
     weight: 15
@@ -301,7 +312,7 @@ content:
     third_party_settings: {  }
   field_event_organiser:
     type: entity_reference_autocomplete
-    weight: 2
+    weight: 13
     region: content
     settings:
       match_operator: CONTAINS
@@ -317,7 +328,7 @@ content:
     third_party_settings: {  }
   field_event_type:
     type: options_select
-    weight: 3
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -342,6 +353,14 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_notes:
+    type: text_textarea
+    weight: 10
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_paragraphs:
     type: paragraphs
     weight: 10
@@ -362,7 +381,7 @@ content:
     third_party_settings: {  }
   field_project:
     type: entity_reference_autocomplete
-    weight: 53
+    weight: 16
     region: content
     settings:
       match_operator: CONTAINS
@@ -396,7 +415,7 @@ content:
     third_party_settings: {  }
   field_tags:
     type: entity_reference_autocomplete
-    weight: 52
+    weight: 15
     region: content
     settings:
       match_operator: CONTAINS
@@ -406,7 +425,7 @@ content:
     third_party_settings: {  }
   field_theme_s_:
     type: options_buttons
-    weight: 51
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
